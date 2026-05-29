@@ -1,0 +1,6 @@
+interface:
+  display_name: "Apple 24H News"
+  short_description: "Apple 24-hour software and hardware brief"
+  default_prompt: "Use $apple-news-24h to generate the latest 24-hour Apple software and hardware news brief."
+policy:
+  allow_implicit_invocation: false
