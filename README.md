@@ -47,7 +47,7 @@ You can also give this repository URL to Codex and ask it to install the skill a
 https://github.com/yuehunai/apple-news-24h
 ```
 
-Then invoke it explicitly:
+Then invoke it explicitly, or call it directly from an automation:
 
 ```text
 $apple-news-24h
@@ -90,7 +90,7 @@ By default, the cache directory is `apple-news-24h` under Python's platform temp
 
 ## Network Permission
 
-The crawler needs live network access to fetch feeds, channel pages, and article pages. In sandboxed agent environments, the first run may fail with DNS or network-permission errors. If the result is empty or suspiciously sparse, rerun the same command with network approval before using diagnostics or fallback discovery.
+The crawler needs live network access to fetch feeds, channel pages, and article pages. In sandboxed agent environments, the first run may fail with DNS or network-permission errors. If the result is empty or suspiciously sparse, this skill will first rerun the same command with network approval. If it still fails, it will inspect diagnostics or use fallback discovery. Make sure your sandbox network setting is set to automatic review.
 
 ## Sources
 

@@ -47,7 +47,7 @@ git clone https://github.com/yuehunai/apple-news-24h ~/.codex/skills/apple-news-
 https://github.com/yuehunai/apple-news-24h
 ```
 
-安装后显式调用：
+安装后显式调用，或通过自动化直接调用：
 
 ```text
 $apple-news-24h
@@ -90,7 +90,7 @@ python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --out
 
 ## 网络权限
 
-抓取器需要实时网络访问 RSS、频道页和文章详情页。在沙盒化 agent 环境中，首次运行可能因 DNS 或网络权限被拦截。如果结果为空或异常稀疏，应先用网络批准重跑同一命令，再查看 diagnostics 或走兜底发现流程。
+抓取器需要实时网络访问 RSS、频道页和文章详情页。在沙盒化 agent 环境中，首次运行可能因 DNS 或网络权限被拦截。如果结果为空或异常稀疏，本 skill 会先用网络批准重跑同一命令。如果仍然失败，会查看 diagnostics 或走兜底发现流程。请确保您的沙盒网络设置为自动审核。
 
 ## 来源
 
