@@ -7,12 +7,12 @@ Primary English sources:
 - MacRumors: `https://feeds.macrumors.com/MacRumors-All`
 - 9to5Mac: `https://9to5mac.com/feed/`
 - AppleInsider: `https://appleinsider.com/rss/news/`
-- The Verge: `https://www.theverge.com/rss/index.xml`, plus Apple channel pages when RSS is sparse
+- The Verge: `https://www.theverge.com/rss/index.xml`, `https://www.theverge.com/rss/apple/index.xml`, plus Apple and Tech channel pages when RSS is sparse
 - Apple Newsroom: `https://www.apple.com/newsroom/rss-feed.rss`
 
 Primary Chinese sources:
 
-- IT之家: `https://www.ithome.com/rss/`
+- IT之家: `https://www.ithome.com/rss/`, `https://www.ithome.com/apple/`, `https://www.ithome.com/tags/%E8%8B%B9%E6%9E%9C/`
 - 爱范儿: `https://www.ifanr.com/feed`, `http://live.ifanr.com/feed`
 - 快科技: `https://rss.mydrivers.com/opml.xml`
 - cnBeta: `https://www.cnbeta.com.tw/backend.php`

@@ -10,6 +10,16 @@ The skill discovers candidates from selected English and Chinese technology sour
 
 This project is experimental. News sites change markup, feeds can fail, and inclusion rules need ongoing maintenance. Treat the output as a structured brief draft that still benefits from editorial review.
 
+## Latest Update
+
+### 0.2.0 - 2026-06-02
+
+- Expanded source discovery with deeper channel-page scanning, The Verge Apple RSS, and IT之家 Apple channel/tag pages.
+- Improved relevance detection for Apple market data, shipment reports, Apple TV+ rankings and original films, Apple retail-store news, research stories, and service updates.
+- Added support for slash-formatted Chinese timestamps such as `2026/6/1 21:46:34`.
+- Improved summary quality by preserving important numeric facts, lists, feature names, rollout details, eligibility rules, and official-data bullets while suppressing unrelated page headings.
+- Added regression tests for source configuration, late channel links, timestamp parsing, Apple Store categorization, and expanded relevance rules.
+
 ## What It Does
 
 - Collects recent Apple-related software, systems, services, hardware, accessories, health, research, legal, and company-action news.

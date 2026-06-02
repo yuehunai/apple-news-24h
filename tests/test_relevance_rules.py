@@ -58,6 +58,106 @@ class RelevanceRuleTests(unittest.TestCase):
             module.is_key_fact("h2", "iOS 27 leak reveals new Siri design, Camera app, more")
         )
 
+    def test_market_share_shipment_story_is_relevant_hardware_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/01/counterpoint-iphone-shipments-grew-8-in-latin-america-during-q1/",
+            title="Counterpoint: iPhone shipments grew 8% in Latin America during Q1",
+            summary=(
+                "A new Counterpoint Research report shows Apple saw iPhone shipments grow "
+                "8% year over year in Latin America during Q1 2026."
+            ),
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "hardware_products")
+
+    def test_apple_tv_quality_ranking_is_relevant_service_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/01/apple-tv-ranks-higher-than-netflix-in-new-quality-ranking/",
+            title="Apple TV ranks higher than Netflix in new quality ranking",
+            summary=(
+                "Research firm MoffetNathanson has developed a new quality index for "
+                "streaming services, and Apple TV beat out Netflix in the first rankings."
+            ),
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+
+    def test_apple_tv_original_film_casting_is_relevant_service_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/01/zoe-kravitz-to-star-in-upcoming-untitled-apple-tv-movie/",
+            title="Zoë Kravitz to star in upcoming untitled Apple TV movie",
+            summary=(
+                "Apple TV confirmed that Zoë Kravitz will star in a new Apple Original "
+                "Film from writer and director Megan Park and LuckyChap."
+            ),
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+
+    def test_apple_retail_store_business_action_is_hardware_category(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/958/424.htm",
+            title="疑似苹果 Apple Store 西安万象城零售店进行申报",
+            summary=(
+                "陕西政务服务网显示，名称为西安万象城购物中心苹果店室内装修及幕墙改造工程的项目"
+                "于 2026 年 6 月 1 日进行申报。"
+            ),
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "hardware_products")
+
+    def test_source_configuration_includes_required_apple_channels(self):
+        module = load_module()
+        sources = {source.name: source for source in module.build_sources(datetime.now().astimezone())}
+
+        self.assertIn("https://www.theverge.com/rss/apple/index.xml", sources["The Verge"].feeds)
+        self.assertIn("https://www.ithome.com/apple/", sources["IT之家"].pages)
+
+    def test_html_link_parser_keeps_late_apple_homepage_links(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        early_links = "".join(
+            f'<a href="https://www.ithome.com/0/958/{index:03d}.htm">普通科技新闻 {index}</a>'
+            for index in range(100)
+        )
+        html = (
+            early_links
+            + '<a href="https://www.ithome.com/0/958/424.htm">'
+            + "疑似苹果 Apple Store 西安万象城零售店进行申报</a>"
+        )
+
+        candidates = module.parse_html_links(html, "https://www.ithome.com/", source)
+
+        self.assertTrue(any(candidate.url.endswith("/0/958/424.htm") for candidate in candidates))
+
+    def test_non_official_related_headings_do_not_become_key_facts(self):
+        module = load_module()
+        html = """
+        <article>
+          <h1>MacBook Neo rival launched at $599</h1>
+          <p>Dell launched a new rival to Apple's MacBook Neo at the same price.</p>
+          <h3>Report: New Apple TV, HomePod mini set to launch this fall; Siri Remote refresh possible</h3>
+        </article>
+        """
+
+        self.assertEqual(module.extract_key_facts(html, "MacBook Neo rival launched at $599", "9to5Mac"), [])
+
 
 if __name__ == "__main__":
     unittest.main()

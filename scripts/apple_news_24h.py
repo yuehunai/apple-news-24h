@@ -48,7 +48,7 @@ USER_AGENT = (
 
 MAX_RESPONSE_BYTES = 4_000_000
 MAX_FEEDS_FROM_OPML = 20
-MAX_PAGE_LINKS = 80
+MAX_PAGE_LINKS = 240
 DEFAULT_MAX_DETAIL_PAGES = 180
 FETCH_TIMEOUT = 8.0
 FETCH_RETRIES = 1
@@ -204,6 +204,29 @@ POSITIVE_ACTION_TERMS = [
     "shipment",
     "manufacturing",
     "factory",
+    "grow",
+    "grew",
+    "growth",
+    "increase",
+    "increased",
+    "gain",
+    "gained",
+    "market share",
+    "shipments",
+    "rank",
+    "ranks",
+    "ranking",
+    "quality index",
+    "confirmed",
+    "cast",
+    "casting",
+    "star",
+    "starring",
+    "original film",
+    "movie",
+    "series",
+    "season",
+    "streaming",
     "tariff",
     "donation",
     "executive",
@@ -235,6 +258,15 @@ POSITIVE_ACTION_TERMS = [
     "供应",
     "量产",
     "出货",
+    "出货量",
+    "份额",
+    "增长",
+    "排名",
+    "榜单",
+    "主演",
+    "参演",
+    "电影",
+    "剧集",
     "下架",
     "恢复",
     "政策",
@@ -363,6 +395,19 @@ STRONG_NEWS_ACTION_TERMS = [
     "patch",
     "patched",
     "production",
+    "grow",
+    "grew",
+    "growth",
+    "increase",
+    "increased",
+    "gain",
+    "gained",
+    "market share",
+    "shipments",
+    "rank",
+    "ranks",
+    "ranking",
+    "quality index",
     "release",
     "released",
     "roll out",
@@ -371,6 +416,16 @@ STRONG_NEWS_ACTION_TERMS = [
     "supplier",
     "support",
     "testing",
+    "confirmed",
+    "cast",
+    "casting",
+    "star",
+    "starring",
+    "original film",
+    "movie",
+    "series",
+    "season",
+    "streaming",
     "update",
     "updated",
     "vulnerability",
@@ -378,6 +433,15 @@ STRONG_NEWS_ACTION_TERMS = [
     "推出",
     "上线",
     "更新",
+    "出货量",
+    "份额",
+    "增长",
+    "排名",
+    "榜单",
+    "主演",
+    "参演",
+    "电影",
+    "剧集",
     "修复",
     "漏洞",
     "安全",
@@ -1034,7 +1098,10 @@ def build_sources(now_local: datetime) -> list[Source]:
         Source(
             name="The Verge",
             default_tz="America/New_York",
-            feeds=["https://www.theverge.com/rss/index.xml"],
+            feeds=[
+                "https://www.theverge.com/rss/index.xml",
+                "https://www.theverge.com/rss/apple/index.xml",
+            ],
             pages=["https://www.theverge.com/apple", "https://www.theverge.com/tech"],
             domains=("theverge.com", "www.theverge.com"),
         ),
@@ -1049,7 +1116,11 @@ def build_sources(now_local: datetime) -> list[Source]:
             name="IT之家",
             default_tz="Asia/Shanghai",
             feeds=["https://www.ithome.com/rss/"],
-            pages=["https://www.ithome.com/"],
+            pages=[
+                "https://www.ithome.com/",
+                "https://www.ithome.com/apple/",
+                "https://www.ithome.com/tags/%E8%8B%B9%E6%9E%9C/",
+            ],
             domains=("ithome.com", "www.ithome.com"),
         ),
         Source(
@@ -1449,6 +1520,23 @@ def parse_datetime_value(raw_value: str, default_tz_name: str) -> datetime | Non
             return parsed
         except ValueError:
             pass
+
+    slash_match = re.search(
+        r"(\d{4})/(\d{1,2})/(\d{1,2})\s+"
+        r"(\d{1,2}):(\d{2})(?::(\d{2}))?",
+        raw,
+    )
+    if slash_match:
+        year_s, month_s, day_s, hour_s, minute_s, second_s = slash_match.groups()
+        parsed = datetime(
+            int(year_s),
+            int(month_s),
+            int(day_s),
+            int(hour_s),
+            int(minute_s),
+            int(second_s or 0),
+        )
+        return localize_naive(parsed, default_tz_name)
 
     month_pattern = (
         r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
@@ -1883,6 +1971,12 @@ def extract_key_facts(text: str, title: str, source_name: str) -> list[str]:
         if title_text and cleaned.lower() == title_text.lower():
             continue
         for candidate in split_fact_candidates(tag, cleaned):
+            if (
+                source_name not in OFFICIAL_FACT_SOURCES
+                and tag in {"h2", "h3"}
+                and data_value_count(candidate) == 0
+            ):
+                continue
             if is_key_fact(tag, candidate):
                 add_unique_text(facts, seen, candidate)
                 if len(facts) >= limit:
@@ -1992,6 +2086,8 @@ def extract_time_candidates(text: str) -> list[tuple[str, str]]:
         r"(?:PST|PDT|PT|EST|EDT|ET|GMT|UTC|[+-]\d{2}:?\d{2})?",
         r"(?:\d{4}\s*年\s*)?\d{1,2}\s*月\s*\d{1,2}\s*日\s*"
         r"\d{1,2}[:：]\d{2}(?:[:：]\d{2})?",
+        r"\d{4}/\d{1,2}/\d{1,2}\s+"
+        r"\d{1,2}:\d{2}(?::\d{2})?",
         r"\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}(?::\d{2})?"
         r"(?:Z|[+-]\d{2}:?\d{2})?",
     ]
@@ -2158,6 +2254,11 @@ def article_tokens(title: str, summary: str) -> set[str]:
 def choose_category(title: str, summary: str) -> str:
     text = f"{title} {summary}"
     title_text = title.lower()
+    if (
+        score_terms(title_text, ["apple store", "retail store", "苹果店", "零售店"]) > 0
+        and score_terms(title_text, ["app store"]) == 0
+    ):
+        return "hardware_products"
     if score_terms(title_text, ["game", "games", "edition", "steam", "apple tv"]) > 0:
         return "software_systems"
     if is_apple_health_data_research_candidate(text):
