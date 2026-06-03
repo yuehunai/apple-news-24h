@@ -1,6 +1,6 @@
 # apple-news-24h
 
-[English](README.md) | [简体中文](README.zh-CN.md)
+**English** | [简体中文](README.zh-CN.md)
 
 A Codex skill and standalone Python crawler for generating a recent 24-hour Apple software and hardware news brief.
 

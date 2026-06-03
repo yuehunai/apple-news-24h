@@ -1,6 +1,6 @@
 # apple-news-24h
 
-[English](README.md) | [简体中文](README.zh-CN.md)
+[English](README.md) | **简体中文**
 
 一个 Codex skill 和独立 Python 抓取器，用于生成最近 24 小时 Apple 软硬件新闻简报。
 
