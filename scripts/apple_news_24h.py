@@ -125,6 +125,8 @@ APPLE_TERMS = [
     "safari",
     "siri",
     "icloud",
+    "airdrop",
+    "隔空投送",
     "imessage",
     "facetime",
     "app store",
@@ -318,6 +320,7 @@ URL_EXCLUDE_FRAGMENTS = [
     "/buyersguide",
     "buyersguide.",
     "forums.",
+    "/guide/",
     "/guides/",
     "/review/",
     "review",
@@ -484,6 +487,8 @@ SOFTWARE_TERMS = [
     "apple one",
     "apple pay",
     "apple card",
+    "airdrop",
+    "隔空投送",
     "carplay",
     "apple intelligence",
     "hls",
@@ -962,6 +967,10 @@ class Article:
     published_source: str
     confidence: str
     tokens: set[str]
+    event_kind: str = "general_company"
+    relevance_tier: str = "strong"
+    relevance_reason: str = ""
+    regions: set[str] = field(default_factory=set)
 
 
 @dataclass
@@ -977,6 +986,11 @@ class Event:
     confidence: str
     articles: list[Article]
     tokens: set[str]
+    event_kind: str = "general_company"
+    relevance_tier: str = "strong"
+    relevance_reason: str = ""
+    regions: set[str] = field(default_factory=set)
+    merge_warnings: list[str] = field(default_factory=list)
 
 
 def utc_now() -> datetime:
@@ -1444,6 +1458,8 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
         return True
     if is_apple_health_data_research_candidate(text):
         return True
+    if detect_event_kind(candidate.title, candidate.summary) == "ecosystem_interop":
+        return True
     official_service_promo = (
         score_terms(
             lower_text,
@@ -1789,12 +1805,32 @@ def extract_title(text: str, fallback: str) -> str:
     return fallback.strip()
 
 
+def remove_noise_blocks(text: str) -> str:
+    noisy_attr = (
+        r"(?:related|recirc|recommend|featured|newsletter|subscribe|comment|"
+        r"advertis|ad-container|affiliate|post-nav|sharedaddy|social|share)"
+    )
+    pattern = (
+        r"(?is)<(?P<tag>aside|section|div|nav)\b(?=[^>]*(?:class|id)=['\"][^'\"]*"
+        + noisy_attr
+        + r"[^'\"]*['\"])[^>]*>.*?</(?P=tag)>"
+    )
+    previous = None
+    cleaned = text
+    for _ in range(4):
+        if cleaned == previous:
+            break
+        previous = cleaned
+        cleaned = re.sub(pattern, " ", cleaned)
+    return cleaned
+
+
 def article_scope(text: str) -> str:
     for tag in ["article", "main"]:
         match = re.search(rf"(?is)<{tag}\b[^>]*>(.*?)</{tag}>", text)
         if match:
-            return match.group(1)
-    return text
+            return remove_noise_blocks(match.group(1))
+    return remove_noise_blocks(text)
 
 
 class ArticleTextExtractor(HTMLParser):
@@ -2251,9 +2287,234 @@ def article_tokens(title: str, summary: str) -> set[str]:
     return tokens
 
 
+REGION_TERMS = {
+    "india": ["india", "indian", "cci", "印度"],
+    "texas": ["texas", "德州", "得州"],
+    "germany": ["germany", "german", "berlin", "德国", "柏林"],
+    "europe": ["europe", "european", "eu", "欧盟", "欧洲"],
+    "china": ["china", "chinese", "mainland china", "中国", "大陆"],
+    "japan": ["japan", "japanese", "yokohama", "日本", "横滨"],
+    "united-states": ["united states", "u.s.", "us ", "usa", "america", "美国"],
+    "latin-america": ["latin america", "拉美", "拉丁美洲"],
+    "united-kingdom": ["united kingdom", "uk", "britain", "英国"],
+}
+
+REGION_SENSITIVE_EVENT_KINDS = {
+    "legal_antitrust",
+    "regional_regulation",
+    "developer_program",
+    "retail_store",
+    "hardware_market",
+}
+
+def extract_regions(text: str) -> set[str]:
+    lower = re.sub(r"\s+", " ", text.lower())
+    regions: set[str] = set()
+    for region, terms in REGION_TERMS.items():
+        for term in terms:
+            if term.endswith(" "):
+                if term in lower:
+                    regions.add(region)
+                    break
+            elif term_present(lower, term):
+                regions.add(region)
+                break
+    if score_terms(lower, ["countries", "regions", "markets", "全球", "多国", "多个国家"]) > 0:
+        regions.add("multi-region")
+    return regions
+
+
+def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = None) -> str:
+    facts = " ".join(key_facts or [])
+    text = f"{title} {summary} {facts}"
+    lower = text.lower()
+    if (
+        score_terms(lower, ["airdrop", "隔空投送"]) > 0
+        and score_terms(
+            lower,
+            ["quick share", "nearby share", "google", "pixel", "android", "cross-platform", "interoperability", "谷歌", "安卓", "互通"],
+        )
+        > 0
+    ):
+        return "ecosystem_interop"
+    if is_apple_health_data_research_candidate(text):
+        return "health_research"
+    if is_apple_research_candidate(text):
+        return "apple_research"
+    if score_terms(lower, ["age assurance", "age verification", "child safety", "state law", "texas", "年龄验证", "儿童安全"]) > 0:
+        return "regional_regulation"
+    if score_terms(lower, ["antitrust", "competition regulator", "cci", "doj", "subpoena", "lawsuit", "court", "investigation", "probe", "反垄断", "司法部", "传票", "法院", "监管调查"]) > 0:
+        return "legal_antitrust"
+    if score_terms(lower, ["developer center", "developer academy", "developer lab", "开发者中心", "开发者学院"]) > 0:
+        return "developer_program"
+    if score_terms(lower, ["fraud", "fraudulent", "app review", "developer account", "submission", "ratings and reviews", "欺诈", "应用审核", "开发者账户"]) > 0:
+        return "app_store_trust"
+    if (
+        score_terms(lower, ["vision pro"]) > 0
+        and score_terms(lower, ["app", "application", "native app", "free app", "应用", "原生应用", "免费应用"]) > 0
+        and score_terms(lower, ["apple releases", "apple launches", "apple announces", "苹果发布", "苹果推出", "苹果宣布"]) == 0
+    ):
+        return "third_party_ecosystem"
+    if score_terms(lower, ["privacy", "security", "vulnerability", "exploit", "mythos", "data protection", "隐私", "安全", "漏洞"]) > 0:
+        return "security_privacy"
+    if score_terms(lower, ["ad", "advertisement", "campaign", "commercial", "广告", "营销"]) > 0:
+        return "marketing_ad"
+    service_core_score = score_terms(
+        lower,
+        ["apple tv", "apple tv+", "apple music", "apple arcade", "streaming", "movie", "film", "classical", "original film", "苹果电视", "苹果音乐", "电影"],
+    )
+    service_series_score = score_terms(lower, ["series", "season", "剧集"])
+    if service_core_score > 0 or (service_series_score > 0 and score_terms(lower, ["apple tv", "streaming", "original", "苹果电视"]) > 0):
+        return "service_content"
+    if (
+        score_terms(lower, ["apple store", "retail store", "store closure", "store closures", "store opening", "opens store", "零售店", "苹果店"]) > 0
+        and score_terms(lower, ["app store"]) == 0
+    ):
+        return "retail_store"
+    if score_terms(lower, ["vision products", "vision pro series", "smart glasses", "ai glasses", "product roadmap", "roadmap", "产品路线图", "智能眼镜"]) > 0:
+        return "hardware_market"
+    if (
+        score_terms(lower, ["iphone", "iphones", "ipad", "ipads", "mac", "macs", "macbook", "macbooks", "imac", "imacs"]) > 0
+        and score_terms(lower, ["support", "compatible", "compatibility", "drop support", "not support", "won't support", "不支持", "兼容", "无缘"]) > 0
+        and score_terms(lower, ["ios", "ipados", "macos", "software", "系统"]) > 0
+    ):
+        return "os_compatibility"
+    if score_terms(lower, ["apple wallet", "wallet", "passport", "id support", "driver's license", "钱包", "护照", "证件"]) > 0:
+        return "wallet_feature"
+    if (
+        score_terms(lower, ["iphone", "ipad", "mac", "macbook", "airpods", "apple watch", "vision pro"]) > 0
+        and score_terms(lower, ["launch", "launches", "coming", "rumor", "rumors", "reportedly", "新品", "发布", "推出", "传闻"]) > 0
+        and score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos"]) == 0
+    ):
+        return "hardware_market"
+    if score_terms(lower, ["shipment", "shipments", "market share", "counterpoint", "supplier", "production", "manufacturing", "factory", "chip", "modem", "出货", "份额", "供应", "量产", "生产", "芯片"]) > 0:
+        return "hardware_market"
+    if score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos", "safari", "siri", "wallet", "app store", "apple card", "apple pay", "airdrop", "系统", "应用商店", "钱包"]) > 0:
+        return "os_app"
+    if score_terms(lower, ["google", "nvidia", "microsoft", "meta", "samsung", "wechat", "harmonyos", "third-party", "app for vision pro", "vision pro app", "英伟达", "微信", "鸿蒙", "第三方"]) > 0:
+        return "third_party_ecosystem"
+    return "general_company"
+
+
+def classify_relevance_tier(
+    title: str,
+    summary: str,
+    key_facts: list[str] | None = None,
+    source_name: str = "",
+) -> tuple[str, str]:
+    facts = " ".join(key_facts or [])
+    text = f"{title} {summary} {facts}"
+    lower = text.lower()
+    event_kind = detect_event_kind(title, summary, key_facts)
+    apple_score = score_terms(text, APPLE_TERMS)
+    title_apple_score = score_terms(title, APPLE_TERMS)
+    third_party_score = score_terms(
+        lower,
+        [
+            "google",
+            "pixel",
+            "android",
+            "nvidia",
+            "huawei",
+            "vivo",
+            "mediatek",
+            "dimensity",
+            "microsoft",
+            "meta",
+            "samsung",
+            "suno",
+            "wechat",
+            "harmonyos",
+            "third-party",
+            "app for vision pro",
+            "vision pro app",
+            "cirrus",
+            "谷歌",
+            "安卓",
+            "英伟达",
+            "华为",
+            "荣耀",
+            "vivo",
+            "联发科",
+            "天玑",
+            "微信",
+            "鸿蒙",
+            "第三方",
+            "西锐",
+            "音乐生成",
+        ],
+    )
+    if source_name == "Apple Newsroom":
+        return "strong", "official Apple source"
+    if event_kind == "ecosystem_interop":
+        return "ecosystem", "direct Apple ecosystem interoperability or compatibility impact"
+    if third_party_score > 0 and apple_score > 0 and score_terms(
+        lower,
+        [
+            "apple will use",
+            "apple to use",
+            "apple taps",
+            "apple adopts",
+            "apple supplier",
+            "苹果将调用",
+            "苹果采用",
+            "苹果供应商",
+        ],
+    ) == 0:
+        if title_apple_score == 0 or event_kind == "third_party_ecosystem" or score_terms(
+            lower,
+            ["rival", "compared", "competes", "versus", "alternative to", "对标", "媲美", "竞品", "硬刚", "反超"],
+        ) > 0:
+            return "weak", "third-party or competitor story with Apple used mainly as context"
+        if score_terms(
+            lower,
+            ["app", "application", "available on", "launches to", "mac users", "run on mac", "登陆", "上架", "支持 macos", "mac 用户"],
+        ) > 0:
+            return "weak", "third-party app or service availability on Apple platforms"
+    if event_kind == "marketing_ad":
+        return "weak", "routine marketing or advertisement without a material Apple product change"
+    if event_kind in {
+        "health_research",
+        "apple_research",
+        "regional_regulation",
+        "legal_antitrust",
+        "developer_program",
+        "app_store_trust",
+        "security_privacy",
+        "service_content",
+        "os_compatibility",
+        "wallet_feature",
+        "retail_store",
+        "hardware_market",
+        "os_app",
+    } and apple_score > 0:
+        return "strong", f"Apple-specific {event_kind.replace('_', ' ')} event"
+    if third_party_score > 0 and apple_score > 0:
+        return "weak", "third-party or competitor story with Apple used mainly as context"
+    return "strong" if apple_score > 0 else "weak", "Apple term match" if apple_score > 0 else "no strong Apple action"
+
+
 def choose_category(title: str, summary: str) -> str:
     text = f"{title} {summary}"
     title_text = title.lower()
+    event_kind = detect_event_kind(title, summary)
+    if event_kind in {
+        "ecosystem_interop",
+        "health_research",
+        "apple_research",
+        "regional_regulation",
+        "legal_antitrust",
+        "developer_program",
+        "app_store_trust",
+        "security_privacy",
+        "service_content",
+        "os_compatibility",
+        "wallet_feature",
+        "os_app",
+    }:
+        return "software_systems"
+    if event_kind in {"retail_store", "hardware_market"}:
+        return "hardware_products"
     if (
         score_terms(title_text, ["apple store", "retail store", "苹果店", "零售店"]) > 0
         and score_terms(title_text, ["app store"]) == 0
@@ -2444,6 +2705,52 @@ def jaccard(a: set[str], b: set[str]) -> float:
     return len(a & b) / len(a | b)
 
 
+def event_kind_compatible(article: Article, event: Event) -> bool:
+    if article.event_kind == event.event_kind:
+        return True
+    if "general_company" in {article.event_kind, event.event_kind}:
+        return True
+    return False
+
+
+def relevance_tier_compatible(article: Article, event: Event) -> bool:
+    if article.relevance_tier == event.relevance_tier:
+        return True
+    return "weak" not in {article.relevance_tier, event.relevance_tier}
+
+
+def regions_compatible(article: Article, event: Event) -> bool:
+    kind = article.event_kind if article.event_kind == event.event_kind else event.event_kind
+    if kind not in REGION_SENSITIVE_EVENT_KINDS:
+        return True
+    article_regions = article.regions - {"multi-region"}
+    event_regions = event.regions - {"multi-region"}
+    if not article_regions or not event_regions:
+        return True
+    return bool(article_regions & event_regions)
+
+
+def event_relevance_tier(articles: list[Article]) -> tuple[str, str]:
+    priority = {"weak": 0, "ecosystem": 1, "strong": 2}
+    selected = max(articles, key=lambda item: priority.get(item.relevance_tier, 0))
+    return selected.relevance_tier, selected.relevance_reason
+
+
+def event_merge_warnings(articles: list[Article]) -> list[str]:
+    warnings: list[str] = []
+    kinds = {item.event_kind for item in articles if item.event_kind != "general_company"}
+    regions = set().union(*(item.regions for item in articles)) if articles else set()
+    normalized_regions = regions - {"multi-region"}
+    if len(kinds) > 1:
+        warnings.append("mixed event kinds")
+    if len(normalized_regions) > 1 and not any(item.event_kind not in REGION_SENSITIVE_EVENT_KINDS for item in articles):
+        warnings.append("multiple region-specific markers")
+    tiers = {item.relevance_tier for item in articles}
+    if "weak" in tiers and len(tiers) > 1:
+        warnings.append("mixed relevance tiers")
+    return warnings
+
+
 def should_merge(article: Article, event: Event) -> bool:
     shared = article.tokens & event.tokens
     similarity = jaccard(article.tokens, event.tokens)
@@ -2477,6 +2784,12 @@ def should_merge(article: Article, event: Event) -> bool:
     if article_health_research and event_health_research:
         if (HEALTH_RESEARCH_DATA_TOKENS & shared) and (HEALTH_RESEARCH_CONTEXT_TOKENS & shared):
             return True
+    if not event_kind_compatible(article, event):
+        return False
+    if not relevance_tier_compatible(article, event):
+        return False
+    if not regions_compatible(article, event):
+        return False
     strong_shared = {
         token
         for token in shared
@@ -2633,6 +2946,11 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
             if matched.category != article.category:
                 categories = [item.category for item in matched.articles]
                 matched.category = max(set(categories), key=categories.count)
+            kinds = [item.event_kind for item in matched.articles]
+            matched.event_kind = max(set(kinds), key=kinds.count)
+            matched.relevance_tier, matched.relevance_reason = event_relevance_tier(matched.articles)
+            matched.regions = set().union(*(item.regions for item in matched.articles))
+            matched.merge_warnings = event_merge_warnings(matched.articles)
             matched.title, matched.summary, matched.key_facts = build_event_summary(matched.articles)
         else:
             title, summary, key_facts = build_event_summary([article])
@@ -2652,6 +2970,11 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
                     confidence=article.confidence,
                     articles=[article],
                     tokens=set(article.tokens),
+                    event_kind=article.event_kind,
+                    relevance_tier=article.relevance_tier,
+                    relevance_reason=article.relevance_reason,
+                    regions=set(article.regions),
+                    merge_warnings=event_merge_warnings([article]),
                 )
             )
     return sorted(events, key=lambda event: event.published_utc)
@@ -2679,6 +3002,11 @@ def event_to_dict(event: Event, local_tz: Any) -> dict[str, Any]:
     return {
         "id": event.event_id,
         "category": event.category,
+        "event_kind": event.event_kind,
+        "relevance_tier": event.relevance_tier,
+        "relevance_reason": event.relevance_reason,
+        "regions": sorted(event.regions),
+        "merge_warnings": event.merge_warnings,
         "title": event.title,
         "summary": event.summary,
         "key_facts": event.key_facts,
@@ -2840,6 +3168,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         category = choose_category(title, summary)
         token_summary = " ".join([candidate.summary or summary[:700], *key_facts[:5]])
         tokens = article_tokens(title, token_summary)
+        event_kind = detect_event_kind(title, summary, key_facts)
+        relevance_tier, relevance_reason = classify_relevance_tier(
+            title,
+            summary,
+            key_facts,
+            candidate.source,
+        )
+        regions = extract_regions(" ".join([title, summary, *key_facts[:5]]))
         articles.append(
             Article(
                 source=candidate.source,
@@ -2853,13 +3189,24 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 published_source=published_source,
                 confidence=confidence,
                 tokens=tokens,
+                event_kind=event_kind,
+                relevance_tier=relevance_tier,
+                relevance_reason=relevance_reason,
+                regions=regions,
             )
         )
         diagnostics["source_article_counts"][candidate.source] = (
             diagnostics["source_article_counts"].get(candidate.source, 0) + 1
         )
 
-    events = cluster_articles(articles)
+    events_all = cluster_articles(articles)
+    events = [event for event in events_all if event.relevance_tier != "weak"]
+    deferred_events = [event for event in events_all if event.relevance_tier == "weak"]
+    diagnostics["event_counts"] = {
+        "total": len(events_all),
+        "included": len(events),
+        "deferred": len(deferred_events),
+    }
     data: dict[str, Any] = {
         "generated_at": now_utc.isoformat(),
         "timezone": {
@@ -2876,6 +3223,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "end_local": now_utc.astimezone(local_tz).isoformat(),
         },
         "events": [event_to_dict(event, local_tz) for event in events],
+        "deferred_events": [event_to_dict(event, local_tz) for event in deferred_events],
     }
 
     if args.include_diagnostics:

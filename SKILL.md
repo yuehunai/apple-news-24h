@@ -27,6 +27,8 @@ python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format markdown
 
 Use `--include-diagnostics` only while debugging. Diagnostics are not part of the final user-visible brief. When `--output` is set, stdout prints only a short status JSON and the full result is written atomically to the output file. The cache directory is for saving successful responses for inspection; by default it is `apple-news-24h` under Python's platform temporary directory. The script clears that cache directory at startup before writing the current run's responses, and old cached pages must never be used as a freshness fallback. Use `--cache-dir` and `--output` when an automation needs fixed paths.
 
+JSON output uses `events` as the default final-brief candidate list. `events` contains `strong` Apple stories plus `ecosystem` stories that have a concrete Apple ecosystem impact, such as AirDrop/Quick Share interoperability. Weak Apple-adjacent stories are preserved in `deferred_events` for inspection and should not be added to the final brief unless source review shows the crawler clearly misclassified a direct Apple action.
+
 ## Network Permission
 
 The crawler requires live network access because it fetches RSS feeds, source home/channel pages, and article detail pages. In sandboxed Codex runs, the first attempt may be blocked across all sources with DNS or network-permission errors. If that happens, do not accept the empty result and do not switch to the reference document as the answer source. Immediately rerun the same crawler command while requesting network approval.
@@ -37,22 +39,29 @@ Only after a live approved run still cannot collect enough source pages should y
 
 ## Workflow
 
-1. Run the crawler with JSON output and a fixed `--output` path; read that file for the full event list.
+1. Run the crawler with JSON output and a fixed `--output` path; read that file for the full event list and metadata.
 2. The crawler prepares the cache directory first. By default it uses `apple-news-24h` under Python's platform temporary directory, clears previous files, and keeps only the current run's cache plus the marker file. For deterministic automation paths, set `--cache-dir` explicitly.
 3. If the first run returns no events, both categories are empty, or the result is clearly too sparse, do not start diagnostics yet. Rerun the same crawler command immediately while requesting network approval.
 4. If the approved rerun is still empty or suspiciously sparse, rerun with `--include-diagnostics` and check `failed_sources`, `failed_fetches`, and `low_confidence_articles`.
 5. If important required sources still failed after the approved rerun and diagnostics pass, use the fallback rules in `references/news_policy.md`: try the site homepage/channel page, site search, and web search for the current and previous local dates.
-6. Use event-level grouping from the JSON as the starting point, then merge or split events when the same product/function/action was incorrectly clustered.
+6. Use `events` as the starting point for the final brief. Check `deferred_events` only as a review queue for weak Apple-adjacent stories; do not include those items unless they are clearly misclassified direct Apple product/service/company actions.
+7. Use event-level grouping from the JSON as the starting point, then merge or split events when the same product/function/action was incorrectly clustered.
+   - Use `event_kind`, `regions`, `relevance_tier`, and `merge_warnings` as the first clues for cluster review.
+   - If `merge_warnings` indicates mixed event kinds, mixed relevance tiers, or multiple incompatible region markers, inspect the source titles and split the item when it combines distinct events.
+   - Do not merge articles solely because they share broad tokens such as Apple, App Store, developer, legal, regulation, Vision Pro, or AI.
    - Treat each event's `key_facts` field as mandatory source material for the brief. It preserves numeric facts, listed features, country/region lists, terms, eligibility, and other enumerated details from source pages.
    - Do not replace a source's data list or feature list with a vague sentence such as "Apple highlighted several protections/features." You may compress wording, but keep the actual material numbers and listed items.
-7. Produce the final brief in Chinese:
+8. Produce the final brief in Chinese:
    - Start with `**软件与系统**`, then `**硬件与产品**`.
-   - Coverage comes before brevity. Include every event that passes the rules unless it clearly matches an exclusion rule; do not silently shorten the brief to only a few top stories.
+   - Coverage comes before brevity. Include every event in `events` that passes the rules unless it clearly matches an exclusion rule; do not silently shorten the brief to only a few top stories.
+   - Before finalizing, compare the event count in JSON against the number of bullets you wrote. If you skipped an `events` item, it must be because of a clear exclusion rule, not because it looked niche, less important, competitor-adjacent, or third-party-adjacent.
+   - Include `strong` and `ecosystem` events. Keep `weak` events out of the final brief by default; they belong in `deferred_events` for traceability.
+   - Do not omit `ecosystem` items such as AirDrop/Quick Share interoperability. They are intentionally in `events` because they materially affect the Apple ecosystem.
    - Each item should read like a daily news brief, with important details integrated in the body.
    - Each item must include the important details that make the story useful: what changed, affected product/service/version/model, key numbers or countries when available, rollout status, uncertainty, and practical significance.
    - For official Apple announcements, reports, and feature launches, preserve all material enumerated figures and feature names surfaced in `key_facts`; do not omit later paragraphs just because the lead already summarizes the story.
    - Avoid overly short summaries. Prefer 2-4 substantial Chinese sentences per item when the source material supports it. If the crawler's summary is too thin, open the event's source pages and enrich the item before final output.
-   - Put sources only at the end of each item, in parentheses.
+   - Put sources only at the end of each item, in parentheses, and keep each source as a Markdown link using `event.sources[].url`, for example `（来源：[MacRumors](...), [9to5Mac](...)）`. Never replace source links with plain source names.
    - Do not add diagnostics, methodology notes, or extra closing explanation.
    - If a category is empty, write: `在指定时间窗口内，该分类下没有发现符合条件的新闻。`
 

@@ -72,6 +72,16 @@ Exclude:
 
 Exception: include official Apple Card, Apple Pay, App Store, Apple services, and Apple retail/customer acquisition promotions when the story reveals a new or materially changed Apple business offer. These are service/business news, not ordinary affiliate deals, and summaries should include value, eligibility, timing, source confidence, and unresolved terms.
 
+## Relevance Tiers
+
+Keep candidate discovery broad. After detail-page verification, classify events by relevance tier:
+
+- `strong`: direct Apple product, service, platform, retail, research, legal, regulatory, supply-chain, security, or company action.
+- `ecosystem`: third-party or competitor action with a concrete Apple ecosystem effect, such as AirDrop/Quick Share interoperability or direct App Store platform compatibility.
+- `weak`: Apple is mainly used as context, comparison, or device target, such as routine third-party Vision Pro apps, competitor hardware comparisons, or unrelated non-Apple apps.
+
+Final Markdown briefs include `strong` and `ecosystem` events. `weak` events may remain in JSON `deferred_events` for inspection so broad coverage is preserved without adding low-value items to the brief.
+
 ## Event-Level Merge Rules
 
 Merge articles when they describe the same core event:
@@ -79,6 +89,8 @@ Merge articles when they describe the same core event:
 - Same product/function/service plus same action, such as release, rollout, expansion, legal action, production test, policy change.
 - Same version number or country rollout.
 - Same original report repeated by other outlets with little added information.
+
+Do not merge articles solely because they share generic tokens such as Apple, App Store, developer, legal, or regulation. When event kind or region-specific markers conflict, keep the articles as separate events and surface `merge_warnings` in JSON if a grouped event still looks mixed.
 
 Use the earliest precise public timestamp among merged articles to decide whether the event is inside the 24-hour window. If a later article has a clearly timestamped `Update:` with substantive new information, treat that update as a new candidate event.
 

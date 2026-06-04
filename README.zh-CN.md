@@ -12,13 +12,13 @@
 
 ## 最新更新
 
-### 0.2.0 - 2026-06-02
+### 0.3.0 - 2026-06-04
 
-- 扩展来源发现能力，增加更深的频道页扫描、The Verge Apple RSS，以及 IT之家 Apple 频道和标签页。
-- 改进 Apple 市场数据、出货报告、Apple TV+ 排名和原创影视、Apple 零售店、研究报道及服务更新的相关性识别。
-- 增加对 `2026/6/1 21:46:34` 这类中文斜杠日期时间格式的解析支持。
-- 改进摘要质量，保留重要数字、列表、功能名称、上线细节、资格规则和官方数据要点，同时抑制无关页面标题。
-- 增加来源配置、频道页靠后链接、时间解析、Apple Store 分类和扩展相关性规则的回归测试。
+- 新增事件元信息和相关性层级，包括 `event_kind`、`relevance_tier`、`regions`、`merge_warnings` 和 JSON `deferred_events`。
+- 保持宽抓取范围，同时把竞品对比、常规第三方应用、旧 guide 页面、普通产品广告等弱 Apple 关联候选从最终简报中分离出来。
+- 改进事件聚类，避免 AirDrop/Quick Share 互通、Apple Wallet 功能传闻、系统兼容性传闻、硬件传闻、法律/监管动作和开发者中心新闻被误合并。
+- 更新 skill 指引，要求最终简报覆盖所有符合条件的 `events`、保留 Markdown 来源链接、纳入 `strong` 和 `ecosystem` 项，并默认排除 `weak` 项。
+- 增加相关性层级、生态互通、Apple Wallet 聚类、Markdown 来源链接、弱候选延后、guide 页面过滤和分类规则的回归测试。
 
 ## 它会做什么
 
@@ -27,6 +27,7 @@
 - 尽可能进入文章详情页读取精确发布时间。
 - 将文章时间统一转换到 UTC 后执行 24 小时窗口判断。
 - 将多家媒体报道的同一实质事件归并成一条。
+- 标注事件类型和相关性层级，保留宽抓取范围下的弱 Apple 关联候选，但避免它们污染最终简报。
 - 抽取关键数字、列表、功能名、国家/地区、条款、资格条件和上线限制，用于生成更完整的摘要。
 - 支持 Markdown 和 JSON 输出。
 
@@ -80,6 +81,8 @@ JSON 输出：
 ```bash
 python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json
 ```
+
+JSON 会将进入简报的项目放在 `events` 中。第三方应用、竞品对比等未描述 Apple 直接动作的弱 Apple 关联候选，可能保留在 `deferred_events` 中供审查。事件对象可包含 `event_kind`、`relevance_tier`、`relevance_reason`、`regions` 和 `merge_warnings`。
 
 调试来源失败时启用 diagnostics：
 

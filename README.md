@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 0.2.0 - 2026-06-02
+### 0.3.0 - 2026-06-04
 
-- Expanded source discovery with deeper channel-page scanning, The Verge Apple RSS, and IT之家 Apple channel/tag pages.
-- Improved relevance detection for Apple market data, shipment reports, Apple TV+ rankings and original films, Apple retail-store news, research stories, and service updates.
-- Added support for slash-formatted Chinese timestamps such as `2026/6/1 21:46:34`.
-- Improved summary quality by preserving important numeric facts, lists, feature names, rollout details, eligibility rules, and official-data bullets while suppressing unrelated page headings.
-- Added regression tests for source configuration, late channel links, timestamp parsing, Apple Store categorization, and expanded relevance rules.
+- Added event metadata and relevance tiers, including `event_kind`, `relevance_tier`, `regions`, `merge_warnings`, and JSON `deferred_events`.
+- Kept broad discovery while separating final-brief events from weak Apple-adjacent candidates such as competitor comparisons, routine third-party app stories, evergreen guide pages, and ordinary product ads.
+- Improved event clustering for AirDrop/Quick Share interoperability, Apple Wallet feature rumors, OS compatibility rumors, hardware rumors, legal/regulatory actions, and developer-center news.
+- Updated skill guidance so final briefs preserve all eligible `events`, include Markdown source links, include `strong` and `ecosystem` items, and keep `weak` items out by default.
+- Added regression tests for relevance tiers, ecosystem interoperability, Apple Wallet clustering, Markdown source links, weak-candidate deferral, guide-page filtering, and category assignment.
 
 ## What It Does
 
@@ -27,6 +27,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - Opens article detail pages to verify precise publication times whenever possible.
 - Converts article times to UTC for the 24-hour window comparison.
 - Deduplicates multiple reports into event-level items.
+- Labels event kind and relevance tier so broad discovery can preserve weak Apple-adjacent candidates without polluting the final brief.
 - Extracts key numeric facts, lists, feature names, countries, terms, eligibility details, and rollout limits for richer summaries.
 - Emits Markdown or JSON.
 
@@ -80,6 +81,8 @@ JSON output:
 ```bash
 python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json
 ```
+
+JSON keeps included brief items in `events`. Weak Apple-adjacent candidates, such as third-party app stories or competitor comparisons that do not describe a direct Apple action, may be kept in `deferred_events` for review. Event objects can include `event_kind`, `relevance_tier`, `relevance_reason`, `regions`, and `merge_warnings`.
 
 Diagnostics for debugging source failures:
 
