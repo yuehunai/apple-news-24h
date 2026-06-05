@@ -12,13 +12,14 @@
 
 ## 最新更新
 
-### 0.3.0 - 2026-06-04
+### 0.4.0 - 2026-06-05
 
-- 新增事件元信息和相关性层级，包括 `event_kind`、`relevance_tier`、`regions`、`merge_warnings` 和 JSON `deferred_events`。
-- 保持宽抓取范围，同时把竞品对比、常规第三方应用、旧 guide 页面、普通产品广告等弱 Apple 关联候选从最终简报中分离出来。
-- 改进事件聚类，避免 AirDrop/Quick Share 互通、Apple Wallet 功能传闻、系统兼容性传闻、硬件传闻、法律/监管动作和开发者中心新闻被误合并。
-- 更新 skill 指引，要求最终简报覆盖所有符合条件的 `events`、保留 Markdown 来源链接、纳入 `strong` 和 `ecosystem` 项，并默认排除 `weak` 项。
-- 增加相关性层级、生态互通、Apple Wallet 聚类、Markdown 来源链接、弱候选延后、guide 页面过滤和分类规则的回归测试。
+- 新增 feed 和页面上下文抽取，让 Apple TV 等来源栏目能把标题未直接写 Apple 品牌的服务内容新闻保留到最终简报。
+- 改进 Apple Messages for Business 和 iMessage AI 智能体相关性判断，加入受保护的平台/动作组合、否定语境处理，以及 Poke 这类跨来源报道的事件归并。
+- 保持宽抓取范围，同时将仅面向 iPhone 或 Mac、但不描述 Apple 直接动作的第三方本地 AI 应用新闻延后到弱相关队列。
+- 改进 IT之家等页面的正文清理，避免“相关文章”、站点页脚和相关文章标题片段进入 `key_facts`。
+- 更新 skill 指引，要求 `$apple-news-24h` 最终回复只能包含双板块简报，不追加运行状态、诊断、缓存路径或权限说明。
+- 增加 Apple TV 来源上下文、消息平台匹配与归并、第三方 AI 应用延后、IT之家噪音过滤和最终来源链接的回归测试。
 
 ## 它会做什么
 

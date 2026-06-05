@@ -49,7 +49,7 @@ USER_AGENT = (
 MAX_RESPONSE_BYTES = 4_000_000
 MAX_FEEDS_FROM_OPML = 20
 MAX_PAGE_LINKS = 240
-DEFAULT_MAX_DETAIL_PAGES = 180
+DEFAULT_MAX_DETAIL_PAGES = 260
 FETCH_TIMEOUT = 8.0
 FETCH_RETRIES = 1
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "apple-news-24h"
@@ -128,6 +128,9 @@ APPLE_TERMS = [
     "airdrop",
     "隔空投送",
     "imessage",
+    "messages app",
+    "apple messages",
+    "apple messages for business",
     "facetime",
     "app store",
     "apple music",
@@ -160,6 +163,8 @@ APPLE_TERMS = [
     "苹果手表",
     "苹果芯片",
     "苹果应用商店",
+    "苹果商务消息",
+    "商务消息",
     "库克",
 ]
 
@@ -220,6 +225,11 @@ POSITIVE_ACTION_TERMS = [
     "ranking",
     "quality index",
     "confirmed",
+    "approved",
+    "approval",
+    "integrate",
+    "integrated",
+    "integration",
     "cast",
     "casting",
     "star",
@@ -272,6 +282,11 @@ POSITIVE_ACTION_TERMS = [
     "下架",
     "恢复",
     "政策",
+    "批准",
+    "接入",
+    "智能体",
+    "成为首个",
+    "首个",
 ]
 
 EXCLUDE_TERMS = [
@@ -623,6 +638,48 @@ OFFICIAL_FACT_SOURCES = {"Apple Newsroom"}
 MAX_KEY_FACTS = 10
 MAX_OFFICIAL_KEY_FACTS = 18
 
+MESSAGE_PLATFORM_TERMS = [
+    "imessage",
+    "messages app",
+    "apple messages",
+    "apple messages for business",
+    "messages business chat",
+    "apple's messages",
+    "苹果商务消息",
+    "商务消息",
+    "苹果信息",
+    "信息应用",
+]
+
+MESSAGE_AGENT_TERMS = [
+    "ai agent",
+    "ai assistant",
+    "third-party ai",
+    "proactive ai assistant",
+    "poke",
+    "智能体",
+    "ai 助手",
+    "第三方 ai",
+]
+
+MESSAGE_PLATFORM_ACTION_TERMS = [
+    "approved",
+    "approved for use",
+    "available via",
+    "officially available",
+    "integrate",
+    "integrated",
+    "integration",
+    "now has",
+    "first third-party",
+    "become the first",
+    "批准",
+    "接入",
+    "成为首个",
+    "首个接入",
+    "首次接入",
+]
+
 DATA_VALUE_PATTERN = re.compile(
     r"(?i)(?:more than|over|nearly|about|approximately|around|at least|up to|"
     r"超过|逾|近|约|至少|高达|累计)?\s*(?:US\$|[$€£¥￥])?\s*"
@@ -952,6 +1009,7 @@ class Candidate:
     summary: str = ""
     feed_time_raw: str = ""
     discovered_from: str = ""
+    context: str = ""
 
 
 @dataclass
@@ -1306,6 +1364,37 @@ def xml_text(element: ET.Element, names: set[str]) -> str:
     return ""
 
 
+def xml_text_raw(element: ET.Element, names: set[str]) -> str:
+    for child in list(element):
+        name = child.tag.rsplit("}", 1)[-1].lower()
+        if name in names and child.text:
+            return child.text
+    return ""
+
+
+def source_context_terms(raw_html: str, categories: list[str]) -> str:
+    terms: list[str] = []
+
+    def add(value: str) -> None:
+        normalized = html.unescape(value).strip().lower()
+        if not normalized:
+            return
+        normalized = normalized.replace("_", "-")
+        for part in re.split(r"[,;/|]+", normalized):
+            part = part.strip()
+            if not part or part == "news":
+                continue
+            plain = part.replace("-", " ")
+            if plain not in terms:
+                terms.append(plain)
+
+    for category in categories:
+        add(category)
+    for match in re.finditer(r"""data-layer-postcategory\s*=\s*['"]([^'"]+)['"]""", raw_html, re.I):
+        add(match.group(1))
+    return " ".join(terms)
+
+
 def atom_link(element: ET.Element) -> str:
     for child in list(element):
         name = child.tag.rsplit("}", 1)[-1].lower()
@@ -1336,8 +1425,15 @@ def parse_xml_feed(text: str, source: Source, feed_url: str) -> list[Candidate]:
         link = xml_text(item, {"link"})
         if not link:
             link = atom_link(item)
-        summary = xml_text(item, {"description", "summary", "content", "encoded"})
+        raw_summary = xml_text_raw(item, {"description", "summary", "content", "encoded"})
+        summary = strip_tags(raw_summary)
         published = xml_text(item, {"pubdate", "published", "updated", "dc:date"})
+        categories = [
+            strip_tags(child.text)
+            for child in list(item)
+            if child.tag.rsplit("}", 1)[-1].lower() == "category" and child.text
+        ]
+        context = source_context_terms(raw_summary, categories)
         if title and link:
             candidates.append(
                 Candidate(
@@ -1347,6 +1443,7 @@ def parse_xml_feed(text: str, source: Source, feed_url: str) -> list[Candidate]:
                     summary=summary,
                     feed_time_raw=published,
                     discovered_from=feed_url,
+                    context=context,
                 )
             )
     return candidates
@@ -1396,6 +1493,7 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
                 url=url,
                 title=label,
                 discovered_from=page_url,
+                context=source_context_terms(attrs, []),
             )
         )
         if len(candidates) >= MAX_PAGE_LINKS:
@@ -1436,11 +1534,58 @@ def is_apple_health_data_research_candidate(text: str) -> bool:
     return product_score > 0 and data_score > 0 and research_score > 0
 
 
+def is_messages_platform_candidate(text: str) -> bool:
+    if score_terms(text, APPLE_TERMS) <= 0:
+        return False
+    message_score = score_messages_platform_terms(text)
+    agent_score = score_terms(text, MESSAGE_AGENT_TERMS)
+    action_score = score_messages_platform_actions(text)
+    return message_score > 0 and agent_score > 0 and action_score > 0
+
+
+def score_messages_platform_terms(text: str) -> int:
+    lower = text.lower()
+    score = 0
+    for term in MESSAGE_PLATFORM_TERMS:
+        if not term_present(lower, term.lower()):
+            continue
+        pattern = re.compile(
+            r"(?:no|not|without|never|没有|未|尚未|无|并未|不(?:会|能|是)?)"
+            r"[^。.!?]{0,32}"
+            r"(?:integrat\w*|available|support\w*|use|接入|支持|可用)?"
+            r"[^。.!?]{0,32}"
+            + re.escape(term.lower()),
+            re.I,
+        )
+        if pattern.search(lower):
+            continue
+        score += 1
+    return score
+
+
+def score_messages_platform_actions(text: str) -> int:
+    lower = text.lower()
+    score = 0
+    for term in MESSAGE_PLATFORM_ACTION_TERMS:
+        if not term_present(lower, term.lower()):
+            continue
+        pattern = re.compile(
+            r"(?:no|not|without|never|没有|未|尚未|无|并未|不(?:会|能|是)?)"
+            r"[^。.!?]{0,32}"
+            + re.escape(term.lower()),
+            re.I,
+        )
+        if pattern.search(lower):
+            continue
+        score += 1
+    return score
+
+
 def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     url_lower = candidate.url.lower()
     if any(fragment in url_lower for fragment in URL_EXCLUDE_FRAGMENTS):
         return False
-    text = f"{candidate.title} {candidate.summary}"
+    text = f"{candidate.title} {candidate.summary} {candidate.context}"
     lower_text = text.lower()
     if any(term in lower_text for term in HARD_EXCLUDE_TERMS):
         return False
@@ -1457,6 +1602,8 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     if is_apple_research_candidate(text):
         return True
     if is_apple_health_data_research_candidate(text):
+        return True
+    if is_messages_platform_candidate(text):
         return True
     if detect_event_kind(candidate.title, candidate.summary) == "ecosystem_interop":
         return True
@@ -1806,6 +1953,22 @@ def extract_title(text: str, fallback: str) -> str:
 
 
 def remove_noise_blocks(text: str) -> str:
+    cleaned = re.sub(
+        r"(?is)<!--\s*相关文章\s*-->.*?(?=<!--\s*评论\s*-->|<div\b[^>]+id=['\"]post_comm['\"]|</article>|</main>|$)",
+        " ",
+        text,
+    )
+    cleaned = re.sub(
+        r"(?is)<div\b(?=[^>]*class=['\"][^'\"]*related_post[^'\"]*['\"])[^>]*>.*?"
+        r"(?=<!--\s*评论\s*-->|<div\b[^>]+id=['\"]post_comm['\"]|</article>|</main>|$)",
+        " ",
+        cleaned,
+    )
+    cleaned = re.sub(
+        r"(?is)<div\b(?=[^>]*id=['\"]fls['\"])[^>]*>.*?(?:</div>|$)",
+        " ",
+        cleaned,
+    )
     noisy_attr = (
         r"(?:related|recirc|recommend|featured|newsletter|subscribe|comment|"
         r"advertis|ad-container|affiliate|post-nav|sharedaddy|social|share)"
@@ -1816,7 +1979,6 @@ def remove_noise_blocks(text: str) -> str:
         + r"[^'\"]*['\"])[^>]*>.*?</(?P=tag)>"
     )
     previous = None
-    cleaned = text
     for _ in range(4):
         if cleaned == previous:
             break
@@ -1914,6 +2076,20 @@ def extract_text_units(text: str) -> list[tuple[str, str]]:
 
 def fact_noise(value: str) -> bool:
     lower = value.lower()
+    if re.match(r"^[a-z]{3} [a-z]{3} \d{2} \d{4}, \d{1,2}:\d{2} [ap]m [a-z]{3}\b", lower) and "minute read" in lower:
+        return True
+    if lower.startswith(("worth checking out", "related:", "related stories")):
+        return True
+    if (
+        len(value) < 140
+        and not re.search(r"[.!?。！？]$", value)
+        and re.search(
+            r"\b(will reportedly|reportedly add|here'?s|every new feature|new features to|what rumors say|"
+            r"coming soon|launch later|set to launch|feature release timing)\b",
+            lower,
+        )
+    ):
+        return True
     if len(value) < 120 and lower.endswith(", more") and "more than" not in lower:
         return True
     if len(value) < 120 and lower.endswith(" and more") and "more than" not in lower:
@@ -2341,6 +2517,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "health_research"
     if is_apple_research_candidate(text):
         return "apple_research"
+    if is_messages_platform_candidate(text):
+        return "messages_platform"
     if score_terms(lower, ["age assurance", "age verification", "child safety", "state law", "texas", "年龄验证", "儿童安全"]) > 0:
         return "regional_regulation"
     if score_terms(lower, ["antitrust", "competition regulator", "cci", "doj", "subpoena", "lawsuit", "court", "investigation", "probe", "反垄断", "司法部", "传票", "法院", "监管调查"]) > 0:
@@ -2389,7 +2567,7 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if score_terms(lower, ["shipment", "shipments", "market share", "counterpoint", "supplier", "production", "manufacturing", "factory", "chip", "modem", "出货", "份额", "供应", "量产", "生产", "芯片"]) > 0:
         return "hardware_market"
-    if score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos", "safari", "siri", "wallet", "app store", "apple card", "apple pay", "airdrop", "系统", "应用商店", "钱包"]) > 0:
+    if score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos", "safari", "siri", "wallet", "app store", "apple card", "apple pay", "airdrop", "imessage", "messages app", "系统", "应用商店", "钱包"]) > 0:
         return "os_app"
     if score_terms(lower, ["google", "nvidia", "microsoft", "meta", "samsung", "wechat", "harmonyos", "third-party", "app for vision pro", "vision pro app", "英伟达", "微信", "鸿蒙", "第三方"]) > 0:
         return "third_party_ecosystem"
@@ -2428,6 +2606,12 @@ def classify_relevance_tier(
             "third-party",
             "app for vision pro",
             "vision pro app",
+            "lm studio",
+            "locally app",
+            "local model",
+            "local models",
+            "llm",
+            "llms",
             "cirrus",
             "谷歌",
             "安卓",
@@ -2448,6 +2632,8 @@ def classify_relevance_tier(
         return "strong", "official Apple source"
     if event_kind == "ecosystem_interop":
         return "ecosystem", "direct Apple ecosystem interoperability or compatibility impact"
+    if event_kind == "messages_platform":
+        return "strong", "Apple Messages or iMessage platform capability change"
     if third_party_score > 0 and apple_score > 0 and score_terms(
         lower,
         [
@@ -2481,6 +2667,7 @@ def classify_relevance_tier(
         "developer_program",
         "app_store_trust",
         "security_privacy",
+        "messages_platform",
         "service_content",
         "os_compatibility",
         "wallet_feature",
@@ -2507,6 +2694,7 @@ def choose_category(title: str, summary: str) -> str:
         "developer_program",
         "app_store_trust",
         "security_privacy",
+        "messages_platform",
         "service_content",
         "os_compatibility",
         "wallet_feature",
@@ -2669,6 +2857,67 @@ def normalize_url(url: str) -> str:
     )
 
 
+def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]:
+    text = f"{candidate.title} {candidate.summary} {candidate.context}"
+    kind = detect_event_kind(candidate.title, candidate.summary, [candidate.context])
+    tier, _ = classify_relevance_tier(
+        candidate.title,
+        candidate.summary,
+        [candidate.context],
+        candidate.source,
+    )
+    score = 0
+    if tier == "strong":
+        score += 40
+    elif tier == "ecosystem":
+        score += 30
+    if kind in {
+        "messages_platform",
+        "service_content",
+        "security_privacy",
+        "wallet_feature",
+        "os_app",
+        "os_compatibility",
+        "hardware_market",
+        "legal_antitrust",
+        "regional_regulation",
+        "developer_program",
+        "app_store_trust",
+        "retail_store",
+        "health_research",
+        "apple_research",
+        "ecosystem_interop",
+    }:
+        score += 20
+    if score_terms(
+        text,
+        [
+            "apple tv",
+            "apple music",
+            "apple arcade",
+            "imessage",
+            "messages app",
+            "apple messages",
+            "apple wallet",
+            "app store",
+            "ios",
+            "macos",
+            "iphone",
+            "macbook",
+            "苹果商务消息",
+            "苹果电视",
+        ],
+    ) > 0:
+        score += 10
+    if candidate.feed_time_raw:
+        score += 5
+    date_match = re.search(r"/(20\d{2})/(\d{2})/(\d{2})/", candidate.url)
+    date_score = 0
+    if date_match:
+        date_score = int("".join(date_match.groups()))
+    return score, date_score, len(candidate.summary or candidate.context), candidate.url
+
+
 def select_detail_candidates(
     candidates: list[Candidate],
     sources_by_name: dict[str, Source],
@@ -2677,6 +2926,9 @@ def select_detail_candidates(
     by_source: dict[str, list[Candidate]] = {name: [] for name in sources_by_name}
     for candidate in candidates:
         by_source.setdefault(candidate.source, []).append(candidate)
+
+    for bucket in by_source.values():
+        bucket.sort(key=candidate_detail_priority, reverse=True)
 
     source_order = sorted(
         by_source,
@@ -2708,6 +2960,9 @@ def jaccard(a: set[str], b: set[str]) -> float:
 def event_kind_compatible(article: Article, event: Event) -> bool:
     if article.event_kind == event.event_kind:
         return True
+    strict_kinds = {"messages_platform"}
+    if article.event_kind in strict_kinds or event.event_kind in strict_kinds:
+        return False
     if "general_company" in {article.event_kind, event.event_kind}:
         return True
     return False
@@ -2790,6 +3045,14 @@ def should_merge(article: Article, event: Event) -> bool:
         return False
     if not regions_compatible(article, event):
         return False
+    if article.event_kind == event.event_kind == "messages_platform":
+        if "poke" in shared:
+            return True
+        platform_shared = {"imessage", "messages", "messages-app", "apple-messages", "apple-messages-for-business"} & shared
+        agent_shared = {"ai", "agent", "assistant", "智能体"} & (article.tokens | event.tokens)
+        action_shared = {"approved", "integration", "integrated", "接入", "批准"} & (article.tokens | event.tokens)
+        if platform_shared and agent_shared and action_shared:
+            return True
     strong_shared = {
         token
         for token in shared
@@ -3161,21 +3424,23 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 title=title,
                 summary=summary,
                 feed_time_raw=candidate.feed_time_raw,
+                context=candidate.context,
             ),
             source,
         ):
             continue
-        category = choose_category(title, summary)
-        token_summary = " ".join([candidate.summary or summary[:700], *key_facts[:5]])
+        event_context_summary = " ".join(part for part in [summary, candidate.context] if part)
+        category = choose_category(title, event_context_summary)
+        token_summary = " ".join([candidate.summary or summary[:700], candidate.context, *key_facts[:5]])
         tokens = article_tokens(title, token_summary)
-        event_kind = detect_event_kind(title, summary, key_facts)
+        event_kind = detect_event_kind(title, event_context_summary, key_facts)
         relevance_tier, relevance_reason = classify_relevance_tier(
             title,
-            summary,
+            event_context_summary,
             key_facts,
             candidate.source,
         )
-        regions = extract_regions(" ".join([title, summary, *key_facts[:5]]))
+        regions = extract_regions(" ".join([title, summary, candidate.context, *key_facts[:5]]))
         articles.append(
             Article(
                 source=candidate.source,

@@ -46,6 +46,8 @@ Use RSS/Atom first. If a required source fails or looks sparse:
 3. Use web search with `site:<domain>` and the current/previous local date.
 4. For Chinese daily digests such as morning briefings, extract only Apple-specific subitems and treat them as candidates.
 
+When feeds or pages expose source-side category hints, keep those hints as candidate context. Category labels such as Apple TV, Apple Music, App Store, iMessage, Apple Wallet, or equivalent Chinese terms may establish Apple service context for a story whose title is otherwise too short or brand-light. Use that context for relevance, event kind, and detail-page prioritization, but do not print raw category labels as standalone facts.
+
 ## Cache Handling
 
 The script cache is only for inspecting the current run's successful HTTP responses. By default, the crawler uses `apple-news-24h` under Python's platform temporary directory, clears the directory at startup, and writes a marker file plus fresh responses. For automation runs, write the full JSON result with a fixed `--output` path; the script writes this file after cache cleanup and uses atomic replacement. Use `--cache-dir` when an automation needs a predictable cache location. Do not read old cache files as source material or use cache contents to decide whether an event is inside the current 24-hour window.
@@ -61,6 +63,7 @@ Keep new or materially updated news about:
 - Company actions tied to Apple products/services, including legal, regulatory, donations, partnerships, executive changes, retail/product availability, and regional business moves.
 - Apple research disclosures where Apple publishes, presents, previews, or showcases research papers/studies at a recognized technical or academic venue. Require concrete anchors such as research, paper, study, CVPR, computer vision, or equivalent Chinese terms; generic AI strategy or WWDC positioning is not enough by itself.
 - Medical or health research where Apple Watch, Apple Health, ResearchKit, or Apple-collected health/activity/sensor data is central to a newly published or materially updated study. Require both an Apple health data/product anchor and a research/study anchor; do not include generic sleep tips, wellness guides, or app usage advice.
+- Apple Messages for Business, iMessage, or Messages platform capability changes when the story combines a concrete Apple messaging-platform anchor, an AI agent/assistant or similar capability anchor, and a positive approval, integration, or availability action. Do not promote stories where that platform/action context is negated, such as "not integrated with iMessage" or "没有接入 iMessage".
 
 Exclude:
 
@@ -79,6 +82,7 @@ Keep candidate discovery broad. After detail-page verification, classify events 
 - `strong`: direct Apple product, service, platform, retail, research, legal, regulatory, supply-chain, security, or company action.
 - `ecosystem`: third-party or competitor action with a concrete Apple ecosystem effect, such as AirDrop/Quick Share interoperability or direct App Store platform compatibility.
 - `weak`: Apple is mainly used as context, comparison, or device target, such as routine third-party Vision Pro apps, competitor hardware comparisons, or unrelated non-Apple apps.
+- Local AI apps, third-party utilities, or competitor services that merely run on iPhone, iPad, or Mac should remain `weak` unless the article describes a direct Apple platform change, Apple approval/integration, or concrete Apple ecosystem interoperability.
 
 Final Markdown briefs include `strong` and `ecosystem` events. `weak` events may remain in JSON `deferred_events` for inspection so broad coverage is preserved without adding low-value items to the brief.
 
@@ -92,6 +96,8 @@ Merge articles when they describe the same core event:
 
 Do not merge articles solely because they share generic tokens such as Apple, App Store, developer, legal, or regulation. When event kind or region-specific markers conflict, keep the articles as separate events and surface `merge_warnings` in JSON if a grouped event still looks mixed.
 
+For Apple Messages for Business or iMessage AI-agent stories, merge cross-source coverage only when the stories share a specific entity such as Poke, or when they share the messaging-platform anchor plus AI-agent and approval/integration action anchors. Do not merge those stories with generic local AI apps or third-party tools just because they mention iPhone, Mac, AI, or Messages in passing.
+
 Use the earliest precise public timestamp among merged articles to decide whether the event is inside the 24-hour window. If a later article has a clearly timestamped `Update:` with substantive new information, treat that update as a new candidate event.
 
 ## Final Brief Style
@@ -104,4 +110,4 @@ Use the earliest precise public timestamp among merged articles to decide whethe
 - Coverage comes before brevity: include every eligible event, not just a hand-picked top set.
 - Prefer 2-4 substantial Chinese sentences per item when source detail supports it.
 - Source links go only at the end of each item: `（来源：[MacRumors](...), [9to5Mac](...)）`
-- Do not append diagnostics, methodology notes, or source-by-source explanations.
+- Do not append diagnostics, methodology notes, source-by-source explanations, run status, network permission notes, cache paths, or memory-update status.

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 0.4.0 - 2026-06-05
+
+- Added feed and page context extraction so source categories such as Apple TV can keep service-content stories in the final brief even when titles omit Apple branding.
+- Improved Apple Messages for Business and iMessage AI-agent relevance with guarded platform/action matching, negation handling, and cross-source event merging for Poke-style coverage.
+- Kept broad discovery while deferring weak third-party local AI app stories that only target iPhone or Mac, rather than describing a direct Apple action.
+- Improved article cleanup for IT之家 and similar pages by suppressing related-post blocks, site footers, and related-title fragments from `key_facts`.
+- Updated skill guidance so `$apple-news-24h` final responses contain only the two-section brief, with no run status, diagnostics, cache notes, or permission commentary.
+- Added regression tests for Apple TV source context, messages-platform matching and merging, third-party AI app deferral, IT之家 noise filtering, and final source-link behavior.
+
 ## 0.3.0 - 2026-06-04
 
 - Added event metadata and relevance tiers, including `event_kind`, `relevance_tier`, `relevance_reason`, `regions`, `merge_warnings`, and JSON `deferred_events`.

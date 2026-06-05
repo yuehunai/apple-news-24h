@@ -141,6 +141,140 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertTrue(module.is_relevant_candidate(candidate, source))
         self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
 
+    def test_9to5_feed_category_context_makes_apple_tv_casting_relevant(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        feed = """
+        <rss><channel><item>
+          <title>Your Friends &amp; Neighbors adds yet another star for season 3</title>
+          <link>https://9to5mac.com/2026/06/04/your-friends-neighbors-adds-yet-another-star-for-season-3/</link>
+          <description><![CDATA[
+            <p>Apple TV's acclaimed drama continues building out its season 3 cast.</p>
+            <span data-layer-postcategory="apple-tv"></span>
+          ]]></description>
+          <pubDate>Thu, 04 Jun 2026 18:30:00 +0000</pubDate>
+        </item></channel></rss>
+        """
+
+        candidates = module.parse_xml_feed(feed, source, "https://9to5mac.com/feed/")
+
+        self.assertEqual(len(candidates), 1)
+        self.assertIn("apple tv", candidates[0].context)
+        self.assertTrue(module.is_relevant_candidate(candidates[0], source))
+        self.assertEqual(
+            module.detect_event_kind(candidates[0].title, f"{candidates[0].summary} {candidates[0].context}"),
+            "service_content",
+        )
+        self.assertEqual(
+            module.choose_category(candidates[0].title, f"{candidates[0].summary} {candidates[0].context}"),
+            "software_systems",
+        )
+
+    def test_messages_platform_ai_agent_is_relevant_strong_software_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/04/apples-messages-app-on-iphone-now-has-a-third-party-ai-agent/",
+            title="Apple’s Messages app on iPhone now has a third-party AI agent",
+            summary=(
+                "Poke says Apple approved its proactive AI assistant for Messages for Business, "
+                "letting iPhone users ask it to manage messages and reminders."
+            ),
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "messages_platform")
+        self.assertEqual(tier, "strong")
+        self.assertIn("Messages", reason)
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+
+    def test_ithome_messages_platform_title_is_relevant_without_summary(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/960/194.htm",
+            title="苹果批准首个 iMessage AI 智能体，Poke 可回邮件也能设提醒",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "messages_platform")
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+
+    def test_messages_platform_rule_requires_message_agent_and_action_context(self):
+        module = load_module()
+
+        self.assertNotEqual(
+            module.detect_event_kind(
+                "苹果批准第三方 AI 应用登陆 iPhone",
+                "这款应用可在 iOS 上运行，但没有接入 iMessage 或 Apple Messages for Business。",
+            ),
+            "messages_platform",
+        )
+        self.assertNotEqual(
+            module.detect_event_kind(
+                "Poke AI assistant updates its iPhone app",
+                "The app mentions Apple Messages but has no approval or integration change.",
+            ),
+            "messages_platform",
+        )
+
+    def test_messages_platform_story_does_not_merge_with_local_ai_app_story(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple’s Messages app on iPhone now has a third-party AI agent",
+                "Third-party AI service Poke was approved for use in Apple’s Messages app on iPhone.",
+            ),
+            article_for(
+                module,
+                "LM Studio now lets you use your iPhone to talk to local models on your Mac",
+                "LM Studio’s Locally app lets users talk to LLMs running on their Macs from iPhones.",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertIn("messages_platform", {event.event_kind for event in events})
+
+    def test_messages_platform_same_poke_event_merges_across_languages(self):
+        module = load_module()
+        long_background = (
+            "The article also explains enterprise messaging workflows, customer service use cases, "
+            "startup history, reminder management, calendar coordination, email triage, proactive suggestions, "
+            "privacy boundaries, notification behavior, and account setup details."
+        )
+        articles = [
+            article_for(
+                module,
+                "Apple’s Messages app on iPhone now has a third-party AI agent",
+                "Third-party AI service Poke was approved for use in Apple’s Messages app on iPhone, bringing an AI agent directly into iMessage for the first time. "
+                + long_background,
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果批准首个 iMessage AI 智能体，Poke 可回邮件也能设提醒",
+                "苹果批准 Poke 成为首个接入 Apple Messages for Business 平台的第三方 AI 智能体。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "messages_platform")
+
     def test_apple_retail_store_business_action_is_hardware_category(self):
         module = load_module()
         source = source_named(module, "IT之家")
@@ -323,6 +457,19 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(tier, "weak")
         self.assertIn("third-party app", reason)
 
+    def test_local_ai_app_for_iphone_and_mac_is_deferred_as_weak(self):
+        module = load_module()
+
+        tier, reason = module.classify_relevance_tier(
+            "LM Studio now lets you use your iPhone to talk to local models on your Mac",
+            "LM Studio’s Locally app lets users talk to LLMs running on their Macs right from their iPhones.",
+            [],
+            "9to5Mac",
+        )
+
+        self.assertEqual(tier, "weak")
+        self.assertIn("third-party app", reason)
+
     def test_routine_product_ad_is_deferred_but_privacy_campaign_remains_strong(self):
         module = load_module()
 
@@ -371,6 +518,33 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertTrue(any("12 vulnerabilities" in fact for fact in facts))
         self.assertFalse(any("Counterpoint" in fact for fact in facts))
+
+    def test_ithome_related_posts_and_site_footer_do_not_become_key_facts(self):
+        module = load_module()
+        html = """
+        <div class="post_content">
+          <p>IT之家 6 月 5 日消息，苹果批准 Poke 成为首个接入 Apple Messages for Business 平台的第三方 AI 智能体。</p>
+          <p>IT之家援引博文介绍，Poke 由加州初创公司打造，已在 2026 年 3 月公开发布。</p>
+        </div>
+        <!-- 相关文章 -->
+        <div class="related_post">
+          <div class="title"><h2>相关文章</h2></div>
+          <ul class="list_3">
+            <li><a href="https://www.ithome.com/0/945/784.htm">苹果 FY2026Q2 研发支出 114 亿美元创新高，同比增长 34% 加码 AI</a></li>
+            <li><a href="https://www.ithome.com/0/932/734.htm">苹果联合打造 RubiCap 框架：让 AI 描述图像每个细节，性能击败 10 倍体量对手</a></li>
+          </ul>
+        </div>
+        <div id="fls" class="bb">
+          <p><strong>软媒旗下网站：</strong> IT之家 最会买 iPhone之家 Win7之家 Win10之家 Win11之家</p>
+        </div>
+        """
+
+        facts = module.extract_key_facts(html, "苹果批准首个 iMessage AI 智能体", "IT之家")
+
+        self.assertTrue(any("Apple Messages for Business" in fact for fact in facts))
+        self.assertFalse(any("FY2026Q2" in fact for fact in facts))
+        self.assertFalse(any("RubiCap" in fact for fact in facts))
+        self.assertFalse(any("软媒旗下网站" in fact for fact in facts))
 
     def test_service_privacy_and_retail_categories_follow_output_taxonomy(self):
         module = load_module()

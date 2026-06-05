@@ -63,6 +63,7 @@ Only after a live approved run still cannot collect enough source pages should y
    - Avoid overly short summaries. Prefer 2-4 substantial Chinese sentences per item when the source material supports it. If the crawler's summary is too thin, open the event's source pages and enrich the item before final output.
    - Put sources only at the end of each item, in parentheses, and keep each source as a Markdown link using `event.sources[].url`, for example `（来源：[MacRumors](...), [9to5Mac](...)）`. Never replace source links with plain source names.
    - Do not add diagnostics, methodology notes, or extra closing explanation.
+   - The assistant's final response after `$apple-news-24h` must contain only the two-section brief. Do not append run status, network permission notes, rerun history, cache paths, diagnostics, memory-update status, or any other operational note.
    - If a category is empty, write: `在指定时间窗口内，该分类下没有发现符合条件的新闻。`
 
 ## Rules
