@@ -103,6 +103,7 @@ MONTHS = {
 
 APPLE_TERMS = [
     "apple",
+    "wwdc",
     "iphone",
     "ipad",
     "mac",
@@ -428,6 +429,7 @@ STRONG_NEWS_ACTION_TERMS = [
     "quality index",
     "release",
     "released",
+    "wwdc",
     "roll out",
     "rolling out",
     "security",
@@ -1469,9 +1471,46 @@ def same_domain(url: str, domains: tuple[str, ...]) -> bool:
     return any(host == domain or host.endswith(f".{domain}") for domain in domains)
 
 
+def extract_ithome_listing_metadata(text: str, page_url: str, source: Source) -> dict[str, dict[str, str]]:
+    metadata: dict[str, dict[str, str]] = {}
+    for item_match in re.finditer(r"(?is)<li\b[^>]*>.*?</li>", text):
+        item_html = item_match.group(0)
+        summary = ""
+        summary_match = re.search(
+            r"""(?is)<div\b(?=[^>]*class\s*=\s*['"][^'"]*\bm\b[^'"]*['"])[^>]*>(.*?)</div>""",
+            item_html,
+        )
+        if summary_match:
+            summary = strip_tags(summary_match.group(1))
+        feed_time_raw = ""
+        time_match = re.search(r"""data-ot\s*=\s*['"]([^'"]+)['"]""", item_html, re.I)
+        if time_match:
+            feed_time_raw = html.unescape(time_match.group(1)).strip()
+        if not summary and not feed_time_raw:
+            continue
+        for link_match in re.finditer(r"(?is)<a\b([^>]+)>(.*?)</a>", item_html):
+            attrs, label_html = link_match.groups()
+            href_match = re.search(r"""href\s*=\s*['"]([^'"]+)['"]""", attrs, re.I)
+            if not href_match:
+                continue
+            label = strip_tags(label_html)
+            if not label or len(label) < 8:
+                continue
+            url = urllib.parse.urljoin(page_url, html.unescape(href_match.group(1)))
+            if not url.startswith(("http://", "https://")):
+                continue
+            if not same_domain(url, source.domains):
+                continue
+            metadata[normalize_url(url)] = {"summary": summary, "feed_time_raw": feed_time_raw}
+    return metadata
+
+
 def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate]:
     candidates: list[Candidate] = []
     seen: set[str] = set()
+    listing_metadata = (
+        extract_ithome_listing_metadata(text, page_url, source) if source.name == "IT之家" else {}
+    )
     for match in re.finditer(r"(?is)<a\b([^>]+)>(.*?)</a>", text):
         attrs, label_html = match.groups()
         href_match = re.search(r"""href\s*=\s*['"]([^'"]+)['"]""", attrs, re.I)
@@ -1486,12 +1525,15 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
             continue
         if not same_domain(url, source.domains):
             continue
+        metadata = listing_metadata.get(normalize_url(url), {})
         seen.add(url)
         candidates.append(
             Candidate(
                 source=source.name,
                 url=url,
                 title=label,
+                summary=metadata.get("summary", ""),
+                feed_time_raw=metadata.get("feed_time_raw", ""),
                 discovered_from=page_url,
                 context=source_context_terms(attrs, []),
             )
@@ -1502,6 +1544,8 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
 
 
 def term_present(text: str, term: str) -> bool:
+    if term.lower() == "wwdc":
+        return re.search(r"(?<![a-z0-9])wwdc(?:\d{0,4})?(?![a-z0-9])", text.lower()) is not None
     if any(ord(ch) > 127 for ch in term):
         return term in text
     escaped = re.escape(term.lower())
@@ -1969,6 +2013,11 @@ def remove_noise_blocks(text: str) -> str:
         " ",
         cleaned,
     )
+    cleaned = re.sub(
+        r"(?is)<p\b(?=[^>]*(?:class|id)=['\"][^'\"]*(?:ad-tips|advertis|newsletter|subscribe)[^'\"]*['\"])[^>]*>.*?</p>",
+        " ",
+        cleaned,
+    )
     noisy_attr = (
         r"(?:related|recirc|recommend|featured|newsletter|subscribe|comment|"
         r"advertis|ad-container|affiliate|post-nav|sharedaddy|social|share)"
@@ -2076,6 +2125,8 @@ def extract_text_units(text: str) -> list[tuple[str, str]]:
 
 def fact_noise(value: str) -> bool:
     lower = value.lower()
+    if re.search(r"广告声明|文内含有的对外跳转链接|it之家所有文章均包含本声明", lower, re.I):
+        return True
     if re.match(r"^[a-z]{3} [a-z]{3} \d{2} \d{4}, \d{1,2}:\d{2} [ap]m [a-z]{3}\b", lower) and "minute read" in lower:
         return True
     if lower.startswith(("worth checking out", "related:", "related stories")):
@@ -2213,7 +2264,8 @@ def extract_summary(text: str, fallback: str) -> str:
         cleaned = strip_tags(match.group(1))
         if len(cleaned) >= 60 and not re.search(
             r"newsletter|subscribe|advertis|open menu|front page|login register|"
-            r"visit forums|roundups|buyer'?s guide|direct messages|anonymous form",
+            r"visit forums|roundups|buyer'?s guide|direct messages|anonymous form|"
+            r"广告声明|文内含有的对外跳转链接|IT之家所有文章均包含本声明",
             cleaned,
             re.I,
         ):
@@ -2821,18 +2873,27 @@ def collect_candidates(
     if not source_success:
         diagnostics.setdefault("failed_sources", []).append(source.name)
 
-    filtered: list[Candidate] = []
-    seen: set[str] = set()
+    filtered_by_url: dict[str, Candidate] = {}
+
+    def candidate_completeness(candidate: Candidate) -> tuple[int, int, int, int]:
+        return (
+            1 if candidate.summary else 0,
+            1 if candidate.feed_time_raw else 0,
+            len(candidate.summary),
+            len(candidate.context),
+        )
+
     for candidate in candidates:
         normalized_url = normalize_url(candidate.url)
-        if normalized_url in seen:
-            continue
         if not same_domain(candidate.url, source.domains):
             continue
         if not is_relevant_candidate(candidate, source):
             continue
-        seen.add(normalized_url)
-        filtered.append(candidate)
+        existing = filtered_by_url.get(normalized_url)
+        if existing is not None and candidate_completeness(existing) >= candidate_completeness(candidate):
+            continue
+        filtered_by_url[normalized_url] = candidate
+    filtered = list(filtered_by_url.values())
     diagnostics.setdefault("source_candidate_counts", {})[source.name] = len(filtered)
     return filtered
 
@@ -2904,11 +2965,18 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
             "macos",
             "iphone",
             "macbook",
+            "wwdc",
+            "developer app",
+            "developer conference",
             "苹果商务消息",
             "苹果电视",
+            "苹果开发者 app",
+            "开发者大会",
         ],
     ) > 0:
         score += 10
+    if score_terms(text, ["wwdc", "worldwide developers conference", "开发者大会"]) > 0:
+        score += 20
     if candidate.feed_time_raw:
         score += 5
     date_match = re.search(r"/(20\d{2})/(\d{2})/(\d{2})/", candidate.url)

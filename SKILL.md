@@ -41,17 +41,18 @@ Only after a live approved run still cannot collect enough source pages should y
 
 1. Run the crawler with JSON output and a fixed `--output` path; read that file for the full event list and metadata.
 2. The crawler prepares the cache directory first. By default it uses `apple-news-24h` under Python's platform temporary directory, clears previous files, and keeps only the current run's cache plus the marker file. For deterministic automation paths, set `--cache-dir` explicitly.
-3. If the first run returns no events, both categories are empty, or the result is clearly too sparse, do not start diagnostics yet. Rerun the same crawler command immediately while requesting network approval.
-4. If the approved rerun is still empty or suspiciously sparse, rerun with `--include-diagnostics` and check `failed_sources`, `failed_fetches`, and `low_confidence_articles`.
-5. If important required sources still failed after the approved rerun and diagnostics pass, use the fallback rules in `references/news_policy.md`: try the site homepage/channel page, site search, and web search for the current and previous local dates.
-6. Use `events` as the starting point for the final brief. Check `deferred_events` only as a review queue for weak Apple-adjacent stories; do not include those items unless they are clearly misclassified direct Apple product/service/company actions.
-7. Use event-level grouping from the JSON as the starting point, then merge or split events when the same product/function/action was incorrectly clustered.
+3. Wait for the crawler command to finish before judging the result. When there are many source pages or slow detail-page responses, a live crawl can legitimately run for more than 5 minutes. This is normal; do not interrupt the process, kill the script, inspect partial output, or switch to diagnostics merely because the command is taking a long time.
+4. If the first completed run returns no events, both categories are empty, or the result is clearly too sparse, do not start diagnostics yet. Rerun the same crawler command immediately while requesting network approval.
+5. If the approved rerun is still empty or suspiciously sparse, rerun with `--include-diagnostics` and check `failed_sources`, `failed_fetches`, and `low_confidence_articles`.
+6. If important required sources still failed after the approved rerun and diagnostics pass, use the fallback rules in `references/news_policy.md`: try the site homepage/channel page, site search, and web search for the current and previous local dates.
+7. Use `events` as the starting point for the final brief. Check `deferred_events` only as a review queue for weak Apple-adjacent stories; do not include those items unless they are clearly misclassified direct Apple product/service/company actions.
+8. Use event-level grouping from the JSON as the starting point, then merge or split events when the same product/function/action was incorrectly clustered.
    - Use `event_kind`, `regions`, `relevance_tier`, and `merge_warnings` as the first clues for cluster review.
    - If `merge_warnings` indicates mixed event kinds, mixed relevance tiers, or multiple incompatible region markers, inspect the source titles and split the item when it combines distinct events.
    - Do not merge articles solely because they share broad tokens such as Apple, App Store, developer, legal, regulation, Vision Pro, or AI.
    - Treat each event's `key_facts` field as mandatory source material for the brief. It preserves numeric facts, listed features, country/region lists, terms, eligibility, and other enumerated details from source pages.
    - Do not replace a source's data list or feature list with a vague sentence such as "Apple highlighted several protections/features." You may compress wording, but keep the actual material numbers and listed items.
-8. Produce the final brief in Chinese:
+9. Produce the final brief in Chinese:
    - Start with `**软件与系统**`, then `**硬件与产品**`.
    - Coverage comes before brevity. Include every event in `events` that passes the rules unless it clearly matches an exclusion rule; do not silently shorten the brief to only a few top stories.
    - Before finalizing, compare the event count in JSON against the number of bullets you wrote. If you skipped an `events` item, it must be because of a clear exclusion rule, not because it looked niche, less important, competitor-adjacent, or third-party-adjacent.
@@ -74,6 +75,7 @@ Only after a live approved run still cannot collect enough source pages should y
 - For Apple Newsroom pages, use the article's `NewsArticle.datePublished` or visible publication date as the publication authority. Do not use Newsroom `dateModified`, `article:modified_time`, generic page `lastmod`, or `VideoObject.uploadDate` to pull an older article into the 24-hour window.
 - Convert all article times to UTC before comparison, then render local display times in the detected timezone.
 - Keep only Apple software, services, operating systems, hardware, accessories, health features, Apple business actions, and closely related regulatory/legal/company developments.
+- Keep WWDC-related events when they pass the crawler's normal relevance and time-window rules, including keynote, schedule, OS-preview, developer, Apple executive, attendee gift/swag, badge, sticker, Developer app, mascot, and official conference-material stories. Do not downgrade or omit them merely because they look light, promotional, or less important than product rumors.
 - Keep Apple research disclosures when Apple is publishing, presenting, previewing, or showcasing research papers/studies at a recognized technical or academic venue such as CVPR. Require concrete research anchors such as `research`, `paper`, `study`, `CVPR`, `computer vision`, or equivalent Chinese terms; do not treat generic AI/WWDC positioning as a research-disclosure event by itself.
 - Keep medical/health research stories when Apple Watch, Apple Health, ResearchKit, or other Apple health data is a core subject of a newly published or materially updated study. Require both a concrete Apple health data/product anchor and a research/study anchor; generic wellness tips, app advice, or sleep guides are not enough.
 - Exclude tutorials, buying guides, routine deals, pure roundups without new information, podcasts without new reporting, and simple reposts.

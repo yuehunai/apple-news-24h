@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 0.4.0 - 2026-06-05
+### 0.5.0 - 2026-06-08
 
-- Added feed and page context extraction so source categories such as Apple TV can keep service-content stories in the final brief even when titles omit Apple branding.
-- Improved Apple Messages for Business and iMessage AI-agent relevance with guarded platform/action matching, negation handling, and cross-source event merging for Poke-style coverage.
-- Kept broad discovery while deferring weak third-party local AI app stories that only target iPhone or Mac, rather than describing a direct Apple action.
-- Improved article cleanup for IT之家 and similar pages by suppressing related-post blocks, site footers, and related-title fragments from `key_facts`.
-- Updated skill guidance so `$apple-news-24h` final responses contain only the two-section brief, with no run status, diagnostics, cache notes, or permission commentary.
-- Added regression tests for Apple TV source context, messages-platform matching and merging, third-party AI app deferral, IT之家 noise filtering, and final source-link behavior.
+- Added IT之家 listing metadata extraction so Apple channel and tag pages can pass article summaries and `data-ot` timestamps into candidate filtering.
+- Improved duplicate candidate handling by preserving the richest same-URL discovery item instead of keeping the first sparse homepage link.
+- Improved WWDC relevance and detail-page priority so conference materials, attendee gifts, badges, stickers, Developer app items, mascots, and official event stories are not dropped as lightweight items.
+- Improved IT之家 article cleanup by suppressing mandatory ad-disclosure text from summaries and `key_facts`.
+- Updated skill and source-policy guidance to wait for long live crawls, including runs over 5 minutes, before judging results or starting diagnostics.
+- Added regression tests for IT之家 listing summaries, richer duplicate candidates, WWDC priority, ad-disclosure filtering, and related-page noise suppression.
 
 ## What It Does
 

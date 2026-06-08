@@ -3,6 +3,7 @@ import sys
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "apple_news_24h.py"
@@ -92,6 +93,167 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertFalse(
             module.is_key_fact("h2", "iOS 27 leak reveals new Siri design, Camera app, more")
         )
+
+    def test_ithome_ad_tips_do_not_make_article_marketing_ad(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        page = """
+        <html>
+          <head>
+            <meta name="description" content="苹果为 WWDC26 参会者准备了包含托特包、水杯、贴纸套装和珐琅徽章的礼品礼包。苹果开发者 App 也上线了同款主题虚拟贴纸。" />
+          </head>
+          <body>
+            <h1>苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章</h1>
+            <span id="pubtime_baidu">2026/6/8 6:56:55</span>
+            <div id="paragraph">
+              <p>IT之家 6 月 8 日消息，苹果推出了“小小访达精灵（Lil Finder Guy）”实体徽章。这个可爱的吉祥物以 Mac 系统的访达功能为原型，最初亮相于 MacBook Neo 的宣传活动中。</p>
+              <p>IT之家注意到，今年的礼包内含托特包、水杯、贴纸套装以及珐琅徽章。苹果也在本年度的苹果开发者 App 内上线了同款主题虚拟贴纸，以此呼应这些趣味形象。</p>
+              <p class="ad-tips">广告声明：文内含有的对外跳转链接（包括不限于超链接、二维码、口令等形式），用于传递更多信息，节省甄选时间，结果仅供参考，IT之家所有文章均包含本声明。</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/961/195.htm",
+            title="苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "IT之家")
+
+        self.assertNotIn("广告声明", summary)
+        self.assertNotEqual(module.detect_event_kind(title, summary, facts), "marketing_ad")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_9to5_related_and_subscription_copy_do_not_enter_summary_or_facts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-06-08T01:00:00+00:00" />
+            <meta property="og:description" content="Apple is preparing a new Wallet feature for iOS 27 that will let users manage more identity and travel documents." />
+          </head>
+          <body>
+            <article>
+              <h1>iOS 27 will reportedly add two major new features to Apple Wallet</h1>
+              <p>Apple is preparing a new Wallet feature for iOS 27 that will let users manage more identity and travel documents.</p>
+              <div class="related-guide">
+                <p class="related-guide__desc">iOS is Apple's mobile operating system that runs on the iPhone and iPod touch.</p>
+              </div>
+              <div class="newsletter-signup">
+                <p>Subscribe to 9to5Mac on YouTube for more Apple news and reviews.</p>
+              </div>
+            </article>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/03/ios-27-wallet-features/",
+            title="iOS 27 will reportedly add two major new features to Apple Wallet",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+
+        combined = " ".join([summary, *facts])
+        self.assertNotIn("related-guide", combined)
+        self.assertNotIn("mobile operating system", combined)
+        self.assertNotIn("Subscribe to 9to5Mac", combined)
+
+    def test_ithome_listing_summary_is_attached_to_html_candidate(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        page = """
+        <ul class="bl">
+          <li>
+            <a href="https://www.ithome.com/0/961/195.htm" target="_blank" class="img">
+              <img alt="苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章" />
+            </a>
+            <div class="c" data-ot="2026-06-08T06:56:55.3100000+08:00">
+              <h2>
+                <a title="苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章" target="_blank" href="https://www.ithome.com/0/961/195.htm" class="title">苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章</a>
+              </h2>
+              <div class="m">苹果为 WWDC26 参会者准备了包含托特包、水杯、贴纸套装和珐琅徽章的礼品礼包。苹果开发者 App 也上线了同款主题虚拟贴纸。</div>
+            </div>
+          </li>
+        </ul>
+        """
+
+        candidates = module.parse_html_links(page, "https://www.ithome.com/apple/", source)
+        target = next(item for item in candidates if item.url == "https://www.ithome.com/0/961/195.htm")
+
+        self.assertIn("苹果开发者 App", target.summary)
+        self.assertEqual(target.feed_time_raw, "2026-06-08T06:56:55.3100000+08:00")
+        self.assertTrue(module.is_relevant_candidate(target, source))
+
+    def test_wwdc_apple_gift_reveal_title_is_relevant_without_listing_summary(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/961/195.htm",
+            title="苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
+    def test_wwdc_candidate_gets_detail_priority_bonus(self):
+        module = load_module()
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/961/195.htm",
+            title="苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章",
+            summary="苹果为 WWDC26 参会者准备了包含托特包、水杯、贴纸套装和珐琅徽章的礼品礼包。",
+        )
+
+        self.assertGreaterEqual(module.candidate_detail_priority(candidate)[0], 70)
+
+    def test_collect_candidates_prefers_richer_ithome_duplicate_listing(self):
+        module = load_module()
+        source = module.Source(
+            name="IT之家",
+            default_tz="Asia/Shanghai",
+            feeds=[],
+            pages=["https://www.ithome.com/", "https://www.ithome.com/apple/"],
+            domains=("ithome.com", "www.ithome.com"),
+        )
+        compact_page = """
+        <ul class="nl">
+          <li class="n"><a href="https://www.ithome.com/0/961/195.htm" target="_blank">苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章</a><b>06:56</b></li>
+        </ul>
+        """
+        rich_page = """
+        <ul class="bl">
+          <li>
+            <a href="https://www.ithome.com/0/961/195.htm" target="_blank" class="img"><img alt="苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章" /></a>
+            <div class="c" data-ot="2026-06-08T06:56:55.3100000+08:00">
+              <h2><a title="苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章" target="_blank" href="https://www.ithome.com/0/961/195.htm" class="title">苹果 WWDC26 参会礼品曝光：内含“小小访达精灵”实体徽章</a></h2>
+              <div class="m">苹果为 WWDC26 参会者准备了包含托特包、水杯、贴纸套装和珐琅徽章的礼品礼包。苹果开发者 App 也上线了同款主题虚拟贴纸。</div>
+            </div>
+          </li>
+        </ul>
+        """
+        original_fetch_url = module.fetch_url
+        module.fetch_url = lambda url, *_args, **_kwargs: {
+            "https://www.ithome.com/": compact_page,
+            "https://www.ithome.com/apple/": rich_page,
+        }.get(url)
+
+        try:
+            with TemporaryDirectory() as cache_dir:
+                candidates = module.collect_candidates(
+                    source,
+                    Path(cache_dir),
+                    {"failed_sources": [], "source_candidate_counts": {}},
+                )
+        finally:
+            module.fetch_url = original_fetch_url
+
+        self.assertEqual(len(candidates), 1)
+        self.assertIn("苹果开发者 App", candidates[0].summary)
+        self.assertEqual(candidates[0].feed_time_raw, "2026-06-08T06:56:55.3100000+08:00")
 
     def test_market_share_shipment_story_is_relevant_hardware_news(self):
         module = load_module()
