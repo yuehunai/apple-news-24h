@@ -162,6 +162,103 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotIn("mobile operating system", combined)
         self.assertNotIn("Subscribe to 9to5Mac", combined)
 
+    def test_9to5_post_content_is_preferred_over_sidebar_article_cards(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-06-08T20:34:43+00:00" />
+            <meta property="og:description" content="Apple unveiled iOS 27 today during its WWDC keynote, here's what's new for the Wallet app." />
+          </head>
+          <body>
+            <article class="article feature sidebar flex is-clickable-card">
+              <h3>Apple officially announces iOS 27, the next major iPhone update</h3>
+            </article>
+            <div id="content" class="container flex-lg">
+              <div class="container med post-content">
+                <p>Apple Wallet is continually improving, and iOS 27 will bring more new features to Wallet users.</p>
+                <p><strong>Create a Pass</strong> is a new feature inside iOS 27's Wallet app that lets users turn physical cards and tickets into Wallet passes.</p>
+                <ol>
+                  <li>Scan a physical pass to import it using the iPhone camera and Visual Intelligence.</li>
+                  <li>Create a pass manually with Standard, Membership, and Event options.</li>
+                </ol>
+              </div>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/08/heres-everything-new-for-apple-wallet-in-ios-27/",
+            title="Here's everything new for Apple Wallet in iOS 27",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("Create a Pass", combined)
+        self.assertIn("Standard, Membership, and Event", combined)
+        self.assertNotIn("Apple officially announces iOS 27", combined)
+
+    def test_selected_candidate_with_feed_time_survives_detail_fetch_failure(self):
+        module = load_module()
+        source = module.Source(
+            name="IT之家",
+            default_tz="Asia/Shanghai",
+            feeds=["https://www.ithome.com/rss/"],
+            pages=[],
+            domains=("ithome.com", "www.ithome.com"),
+        )
+        feed = """
+        <rss><channel><item>
+          <title>苹果 iOS 27 悄悄更新中文输入法：标点建议和联想词更准确，找生僻字更方便</title>
+          <link>https://www.ithome.com/0/961/716.htm</link>
+          <description><![CDATA[
+            IT之家 6 月 9 日消息，苹果今日正式公布了 iOS 27 系统更新。iOS 27 悄悄更新优化了中文输入法，带来中文标点建议，根据上下文联想词语的准确度也得到了提升。此外，iOS 27 的输入法优化了汉字拆字逻辑，用户可以通过输入两个部分的拼音，来查找一个生僻字。
+          ]]></description>
+          <pubDate>Mon, 08 Jun 2026 22:16:48 GMT</pubDate>
+        </item></channel></rss>
+        """
+        original_build_sources = module.build_sources
+        original_fetch_url = module.fetch_url
+        module.build_sources = lambda _now_local: [source]
+
+        def fake_fetch_url(url, _cache_dir, diagnostics, *_args, **_kwargs):
+            if url == "https://www.ithome.com/rss/":
+                return feed
+            diagnostics.setdefault("failed_fetches", []).append(
+                {"url": url, "error": "TimeoutError: simulated detail fetch failure"}
+            )
+            return None
+
+        module.fetch_url = fake_fetch_url
+        args = type(
+            "Args",
+            (),
+            {
+                "timeout": 1.0,
+                "retries": 0,
+                "timezone": "UTC",
+                "hours": 24 * 3650,
+                "cache_dir": "",
+                "max_detail_pages": 300,
+                "include_diagnostics": True,
+            },
+        )()
+
+        try:
+            with TemporaryDirectory() as cache_dir:
+                args.cache_dir = cache_dir
+                data = module.run(args)
+        finally:
+            module.build_sources = original_build_sources
+            module.fetch_url = original_fetch_url
+
+        titles = [event["title"] for event in data["events"]]
+        self.assertTrue(any("中文输入法" in title for title in titles))
+        self.assertEqual(data["diagnostics"]["selected_detail_fetch_failures"][0]["source"], "IT之家")
+
     def test_ithome_listing_summary_is_attached_to_html_candidate(self):
         module = load_module()
         source = source_named(module, "IT之家")

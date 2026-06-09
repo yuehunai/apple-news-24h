@@ -48,6 +48,8 @@ Use RSS/Atom first. If a required source fails or looks sparse:
 
 When feeds or pages expose source-side category hints, keep those hints as candidate context. Category labels such as Apple TV, Apple Music, App Store, iMessage, Apple Wallet, or equivalent Chinese terms may establish Apple service context for a story whose title is otherwise too short or brand-light. Use that context for relevance, event kind, and detail-page prioritization, but do not print raw category labels as standalone facts.
 
+When a candidate is selected for detail-page fetching but that detail request fails, do not automatically discard the story if it is not an Apple Newsroom page and the feed or listing already provides a parseable timestamp plus useful summary/context. The crawler may keep the item as a low-confidence discovery fallback and record it in `selected_detail_fetch_failures` and `source_discovery_fallback_counts`. This is a reliability fallback for transient detail-page failures; it is not a substitute for detail-page time verification when the detail page is available.
+
 ## Cache Handling
 
 The script cache is only for inspecting the current run's successful HTTP responses. By default, the crawler uses `apple-news-24h` under Python's platform temporary directory, clears the directory at startup, and writes a marker file plus fresh responses. For automation runs, write the full JSON result with a fixed `--output` path; the script writes this file after cache cleanup and uses atomic replacement. Use `--cache-dir` when an automation needs a predictable cache location. Do not read old cache files as source material or use cache contents to decide whether an event is inside the current 24-hour window.
@@ -109,6 +111,10 @@ Use the earliest precise public timestamp among merged articles to decide whethe
 - Use each event's `key_facts` before writing the brief. These facts are extracted generically from numeric paragraphs, list items, tables, and feature lists; they are not optional background.
 - Preserve material enumerations from official sources. Examples of enumeration types include fraud/safety report figures, App Store review counts, eligible countries or regions, device model lists, feature names, terms, dates, and rollout limits. Compress phrasing when needed, but do not collapse the list into a vague summary.
 - Coverage comes before brevity: include every eligible event, not just a hand-picked top set.
+- Treat JSON `events` as an eligible-event queue, not as a ranking of top stories. A smaller event that has a concrete Apple product, system, service, local-language, regional-availability, developer-platform, privacy/security, health/accessibility, or built-in-app change must still appear in the final brief when it passed inclusion.
+- Do not drop eligible granular events just because a same-day major OS, WWDC, service, or platform story is more prominent. When volume is high, combine related events into one fuller bullet with distinct subfacts, but preserve each event's concrete change and source link.
+- If compressing a long brief, merge adjacent eligible events by shared product/version/theme instead of removing localized features, input methods, regional rollouts, compatibility lists, feature lists, or other implementation details surfaced in `title`, `summary`, or `key_facts`.
 - Prefer 2-4 substantial Chinese sentences per item when source detail supports it.
 - Source links go only at the end of each item: `（来源：[MacRumors](...), [9to5Mac](...)）`
+- Retain any source link that contributes independent facts, feature lists, compatibility details, implementation details, local context, or materially different framing unless another retained source fully duplicates those same details.
 - Do not append diagnostics, methodology notes, source-by-source explanations, run status, network permission notes, cache paths, or memory-update status.

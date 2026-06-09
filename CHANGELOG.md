@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 0.6.0 - 2026-06-09
+
+- Added preferred article-body extraction for 9to5Mac and similar pages so related-card or sidebar markup does not replace the real story body.
+- Added diagnostics and low-confidence discovery fallback for selected detail pages that fail after candidate selection, preserving useful feed/listing items with parseable timestamps.
+- Improved high-volume OS and WWDC coverage by raising the detail-page limit and broadening action matching for feature additions, compatibility changes, customization, and developer beta stories.
+- Improved key-fact extraction for short list and table rows so feature lists, implementation options, and localized product details survive into summaries.
+- Updated skill and source-policy guidance to treat JSON `events` as an eligible-event queue, retain granular product/platform changes, and preserve source links that add independent details.
+- Added regression tests for preferred article-body selection and detail-fetch fallback after candidate selection.
+
 ## 0.5.0 - 2026-06-08
 
 - Added IT之家 listing metadata extraction so Apple channel and tag pages can pass article summaries and `data-ot` timestamps into candidate filtering.

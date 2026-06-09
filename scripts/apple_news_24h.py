@@ -49,7 +49,7 @@ USER_AGENT = (
 MAX_RESPONSE_BYTES = 4_000_000
 MAX_FEEDS_FROM_OPML = 20
 MAX_PAGE_LINKS = 240
-DEFAULT_MAX_DETAIL_PAGES = 260
+DEFAULT_MAX_DETAIL_PAGES = 300
 FETCH_TIMEOUT = 8.0
 FETCH_RETRIES = 1
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "apple-news-24h"
@@ -191,6 +191,25 @@ POSITIVE_ACTION_TERMS = [
     "fix",
     "bug",
     "feature",
+    "features",
+    "add",
+    "adds",
+    "added",
+    "revamp",
+    "revamps",
+    "revamped",
+    "drop support",
+    "drops support",
+    "resize",
+    "resizes",
+    "customize",
+    "customise",
+    "customization",
+    "customisation",
+    "let you",
+    "lets you",
+    "will let",
+    "developer beta",
     "service",
     "support",
     "legal",
@@ -249,6 +268,11 @@ POSITIVE_ACTION_TERMS = [
     "推出",
     "上线",
     "更新",
+    "新增",
+    "优化",
+    "改进",
+    "调整",
+    "适配",
     "修复",
     "漏洞",
     "安全",
@@ -448,11 +472,34 @@ STRONG_NEWS_ACTION_TERMS = [
     "streaming",
     "update",
     "updated",
+    "add",
+    "adds",
+    "added",
+    "revamp",
+    "revamps",
+    "revamped",
+    "drop support",
+    "drops support",
+    "resize",
+    "resizes",
+    "customize",
+    "customise",
+    "customization",
+    "customisation",
+    "let you",
+    "lets you",
+    "will let",
+    "developer beta",
     "vulnerability",
     "发布",
     "推出",
     "上线",
     "更新",
+    "新增",
+    "优化",
+    "改进",
+    "调整",
+    "适配",
     "出货量",
     "份额",
     "增长",
@@ -2036,7 +2083,63 @@ def remove_noise_blocks(text: str) -> str:
     return cleaned
 
 
+PREFERRED_CONTENT_CLASS_FRAGMENTS = (
+    "post-content",
+    "entry-content",
+    "article-content",
+    "article-body",
+    "article__body",
+    "single__content",
+    "story-content",
+    "pagebody-copy",
+    "article-copy",
+    "body-copy",
+)
+
+
+def balanced_element_inner(text: str, start_index: int, tag_name: str) -> str:
+    start_match = re.match(rf"(?is)<{tag_name}\b[^>]*>", text[start_index:])
+    if not start_match:
+        return ""
+    inner_start = start_index + start_match.end()
+    depth = 1
+    for match in re.finditer(rf"(?is)</?{tag_name}\b[^>]*>", text[inner_start:]):
+        token = match.group(0)
+        if token.startswith("</"):
+            depth -= 1
+            if depth == 0:
+                return text[inner_start : inner_start + match.start()]
+        elif not token.endswith("/>"):
+            depth += 1
+    return text[inner_start:]
+
+
+def preferred_content_scope(text: str) -> str:
+    candidates: list[tuple[int, str]] = []
+    pattern = re.compile(r"(?is)<(?P<tag>div|section|article|main)\b(?P<attrs>[^>]*)>")
+    for match in pattern.finditer(text):
+        attrs = match.group("attrs").lower()
+        if not any(fragment in attrs for fragment in PREFERRED_CONTENT_CLASS_FRAGMENTS):
+            continue
+        inner = balanced_element_inner(text, match.start(), match.group("tag").lower())
+        if not inner:
+            continue
+        plain = strip_tags(remove_noise_blocks(inner))
+        paragraph_score = len(re.findall(r"(?is)<(?:p|li)\b", inner)) * 200
+        heading_penalty = 250 if "sidebar" in attrs or "is-clickable-card" in attrs else 0
+        score = paragraph_score + min(len(plain), 4000) - heading_penalty
+        if len(plain) >= 80:
+            candidates.append((score, inner))
+    if not candidates:
+        return ""
+    candidates.sort(key=lambda item: item[0], reverse=True)
+    return remove_noise_blocks(candidates[0][1])
+
+
 def article_scope(text: str) -> str:
+    preferred = preferred_content_scope(text)
+    if preferred:
+        return preferred
     for tag in ["article", "main"]:
         match = re.search(rf"(?is)<{tag}\b[^>]*>(.*?)</{tag}>", text)
         if match:
@@ -2191,6 +2294,8 @@ def is_key_fact(tag: str, value: str) -> bool:
     if numbers and (has_context or has_list_shape or has_feature_list):
         return True
     if tag in {"li", "tr"} and has_context and (has_feature_list or len(value) <= 500):
+        return True
+    if tag in {"li", "tr"} and len(value) <= 500 and (has_feature_list or has_list_shape):
         return True
     if has_context and has_feature_list and has_list_shape:
         return True
@@ -2476,6 +2581,54 @@ def extract_article(
         {"url": candidate.url, "source": source.name, "reason": "No parseable timestamp."}
     )
     return title, summary, key_facts, None, "", "", "missing"
+
+
+def discovery_key_facts(candidate: Candidate) -> list[str]:
+    facts: list[str] = []
+    seen: set[str] = set()
+    for value in [candidate.summary, candidate.context]:
+        cleaned = clean_fact_text(value)
+        if not cleaned:
+            continue
+        for fact in split_fact_candidates("p", cleaned):
+            if is_key_fact("p", fact) or (
+                score_terms(fact, APPLE_TERMS) > 0
+                and score_terms(fact, POSITIVE_ACTION_TERMS + STRONG_NEWS_ACTION_TERMS) > 0
+            ):
+                add_unique_text(facts, seen, fact)
+    if not facts and candidate.summary:
+        add_unique_text(facts, seen, candidate.summary)
+    return facts
+
+
+def fallback_article_from_discovery(
+    candidate: Candidate,
+    source: Source,
+    diagnostics: dict[str, Any],
+) -> tuple[str, str, list[str], datetime | None, str, str, str]:
+    if source.name == "Apple Newsroom" or not candidate.feed_time_raw:
+        return candidate.title, candidate.summary, [], None, "", "", "missing"
+    parsed = parse_datetime_value(candidate.feed_time_raw, source.default_tz)
+    if parsed is None:
+        return candidate.title, candidate.summary, [], None, "", "", "missing"
+    summary = clean_fact_text(candidate.summary)
+    key_facts = discovery_key_facts(candidate)
+    diagnostics.setdefault("low_confidence_articles", []).append(
+        {
+            "url": candidate.url,
+            "source": source.name,
+            "reason": "Used discovery timestamp and listing/feed summary because selected detail page fetch failed.",
+        }
+    )
+    return (
+        candidate.title,
+        summary,
+        key_facts,
+        parsed.astimezone(timezone.utc),
+        candidate.feed_time_raw,
+        "discovery fallback",
+        "discovery",
+    )
 
 
 def article_tokens(title: str, summary: str) -> set[str]:
@@ -3442,6 +3595,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "failed_sources": [],
         "failed_fetches": [],
         "low_confidence_articles": [],
+        "selected_detail_fetch_failures": [],
+        "source_detail_selection_counts": {},
+        "source_discovery_fallback_counts": {},
         "source_candidate_counts": {},
         "source_article_counts": {},
     }
@@ -3471,15 +3627,48 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         source = sources_by_name.get(candidate.source)
         if source is None:
             continue
+        diagnostics["source_detail_selection_counts"][candidate.source] = (
+            diagnostics["source_detail_selection_counts"].get(candidate.source, 0) + 1
+        )
         page_text = fetch_url(candidate.url, cache_dir, diagnostics)
         if page_text is None:
-            continue
-        title, summary, key_facts, published_utc, published_raw, published_source, confidence = extract_article(
-            candidate,
-            source,
-            page_text,
-            diagnostics,
-        )
+            diagnostics["selected_detail_fetch_failures"].append(
+                {
+                    "source": candidate.source,
+                    "url": candidate.url,
+                    "title": candidate.title,
+                    "feed_time_raw": candidate.feed_time_raw,
+                    "discovered_from": candidate.discovered_from,
+                }
+            )
+            (
+                title,
+                summary,
+                key_facts,
+                published_utc,
+                published_raw,
+                published_source,
+                confidence,
+            ) = fallback_article_from_discovery(candidate, source, diagnostics)
+            if published_utc is not None:
+                diagnostics["source_discovery_fallback_counts"][candidate.source] = (
+                    diagnostics["source_discovery_fallback_counts"].get(candidate.source, 0) + 1
+                )
+        else:
+            (
+                title,
+                summary,
+                key_facts,
+                published_utc,
+                published_raw,
+                published_source,
+                confidence,
+            ) = extract_article(
+                candidate,
+                source,
+                page_text,
+                diagnostics,
+            )
         summary = combine_summaries(summary, candidate.summary)
         if published_utc is None:
             continue

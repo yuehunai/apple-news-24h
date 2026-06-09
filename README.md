@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 0.5.0 - 2026-06-08
+### 0.6.0 - 2026-06-09
 
-- Added IT之家 listing metadata extraction so Apple channel and tag pages can pass article summaries and `data-ot` timestamps into candidate filtering.
-- Improved duplicate candidate handling by preserving the richest same-URL discovery item instead of keeping the first sparse homepage link.
-- Improved WWDC relevance and detail-page priority so conference materials, attendee gifts, badges, stickers, Developer app items, mascots, and official event stories are not dropped as lightweight items.
-- Improved IT之家 article cleanup by suppressing mandatory ad-disclosure text from summaries and `key_facts`.
-- Updated skill and source-policy guidance to wait for long live crawls, including runs over 5 minutes, before judging results or starting diagnostics.
-- Added regression tests for IT之家 listing summaries, richer duplicate candidates, WWDC priority, ad-disclosure filtering, and related-page noise suppression.
+- Added preferred article-body extraction for 9to5Mac and similar pages so related-card or sidebar markup does not replace the real story body.
+- Added diagnostics and low-confidence discovery fallback for selected detail pages that fail after candidate selection, preserving useful feed/listing items with parseable timestamps.
+- Improved high-volume OS and WWDC coverage by raising the detail-page limit and broadening action matching for feature additions, compatibility changes, customization, and developer beta stories.
+- Improved key-fact extraction for short list and table rows so feature lists, implementation options, and localized product details survive into summaries.
+- Updated skill and source-policy guidance to treat JSON `events` as an eligible-event queue, retain granular product/platform changes, and preserve source links that add independent details.
+- Added regression tests for preferred article-body selection and detail-fetch fallback after candidate selection.
 
 ## What It Does
 
@@ -98,7 +98,7 @@ Useful options:
 - `--format markdown|json`: choose final output format.
 - `--cache-dir PATH`: save successful HTTP responses for current-run inspection.
 - `--output PATH`: atomically write full output to a file and print only a compact status JSON.
-- `--include-diagnostics`: include failed fetches, source failures, and low-confidence timestamp notes.
+- `--include-diagnostics`: include failed fetches, source failures, selected-detail fetch failures, discovery fallback counts, and low-confidence timestamp notes.
 
 By default, the cache directory is `apple-news-24h` under Python's platform temporary directory. The crawler clears that directory at startup and writes a marker file plus current-run responses. Old cache files must not be used as a freshness fallback.
 
