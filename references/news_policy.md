@@ -67,6 +67,7 @@ Keep new or materially updated news about:
 - Apple research disclosures where Apple publishes, presents, previews, or showcases research papers/studies at a recognized technical or academic venue. Require concrete anchors such as research, paper, study, CVPR, computer vision, or equivalent Chinese terms; generic AI strategy or WWDC positioning is not enough by itself.
 - Medical or health research where Apple Watch, Apple Health, ResearchKit, or Apple-collected health/activity/sensor data is central to a newly published or materially updated study. Require both an Apple health data/product anchor and a research/study anchor; do not include generic sleep tips, wellness guides, or app usage advice.
 - Apple Messages for Business, iMessage, or Messages platform capability changes when the story combines a concrete Apple messaging-platform anchor, an AI agent/assistant or similar capability anchor, and a positive approval, integration, or availability action. Do not promote stories where that platform/action context is negated, such as "not integrated with iMessage" or "没有接入 iMessage".
+- Third-party Apple-platform availability stories when they describe an app, service, carrier offer, or utility becoming available on an Apple platform or App Store. Routine third-party availability should remain `weak` unless Apple approval, Apple platform policy, Apple interoperability, or a direct Apple product/service change makes it stronger.
 
 Exclude:
 
@@ -86,6 +87,7 @@ Keep candidate discovery broad. After detail-page verification, classify events 
 - `ecosystem`: third-party or competitor action with a concrete Apple ecosystem effect, such as AirDrop/Quick Share interoperability or direct App Store platform compatibility.
 - `weak`: Apple is mainly used as context, comparison, or device target, such as routine third-party Vision Pro apps, competitor hardware comparisons, or unrelated non-Apple apps.
 - Local AI apps, third-party utilities, or competitor services that merely run on iPhone, iPad, or Mac should remain `weak` unless the article describes a direct Apple platform change, Apple approval/integration, or concrete Apple ecosystem interoperability.
+- Third-party apps/services that are simply listed on or compatible with an Apple platform should be retained for JSON traceability as `weak`, not promoted into the final brief by default.
 
 Final Markdown briefs include `strong` and `ecosystem` events. `weak` events may remain in JSON `deferred_events` for inspection so broad coverage is preserved without adding low-value items to the brief.
 
@@ -100,6 +102,12 @@ Merge articles when they describe the same core event:
 Do not merge articles solely because they share generic tokens such as Apple, App Store, developer, legal, or regulation. When event kind or region-specific markers conflict, keep the articles as separate events and surface `merge_warnings` in JSON if a grouped event still looks mixed.
 
 For Apple Messages for Business or iMessage AI-agent stories, merge cross-source coverage only when the stories share a specific entity such as Poke, or when they share the messaging-platform anchor plus AI-agent and approval/integration action anchors. Do not merge those stories with generic local AI apps or third-party tools just because they mention iPhone, Mac, AI, or Messages in passing.
+
+During high-volume WWDC or OS-preview windows, do not merge separate micro-events merely because they share the same OS version, WWDC context, or generic Apple platform terms. Keep distinct topic anchors separate, including App Store policy, App Store subscriptions/discovery, Apple Music, Apple TV Remote, AirPods firmware/settings, Sidecar touch, iPhone Mirroring, macOS performance/user-feedback reports, system wallpapers, AI wallpapers, OS adoption stats, Apple Wallet, MacBook memory/local-AI spec reports, and iPad/iPhone carrier data plans. Broad compatibility context is not enough to merge two articles when their concrete feature topics differ.
+
+When condensing adjacent eligible events into the final brief, do not merge distinct event types merely because they share a product family or roadmap context. Keep hardware roadmap/interface clues, hardware specification or memory/AI-capability rumors, OS feature changes, service policy changes, and app/service launches as separate bullets unless they are clearly the same reported change.
+
+Before extracting summary and key facts, remove source-tail affiliate recommendation blocks that follow the real article body. Common anchors include `My favorite Apple accessory recommendations`, `Worth checking out on Amazon`, `Chance's favorites`, `Official Apple Store on Amazon`, `Amazon Prime Day`, and `Best ... accessories/deals`. Do not remove the actual body before those anchors.
 
 Use the earliest precise public timestamp among merged articles to decide whether the event is inside the 24-hour window. If a later article has a clearly timestamped `Update:` with substantive new information, treat that update as a new candidate event.
 

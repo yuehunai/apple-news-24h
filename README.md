@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 0.6.0 - 2026-06-09
+### 0.7.0 - 2026-06-10
 
-- Added preferred article-body extraction for 9to5Mac and similar pages so related-card or sidebar markup does not replace the real story body.
-- Added diagnostics and low-confidence discovery fallback for selected detail pages that fail after candidate selection, preserving useful feed/listing items with parseable timestamps.
-- Improved high-volume OS and WWDC coverage by raising the detail-page limit and broadening action matching for feature additions, compatibility changes, customization, and developer beta stories.
-- Improved key-fact extraction for short list and table rows so feature lists, implementation options, and localized product details survive into summaries.
-- Updated skill and source-policy guidance to treat JSON `events` as an eligible-event queue, retain granular product/platform changes, and preserve source links that add independent details.
-- Added regression tests for preferred article-body selection and detail-fetch fallback after candidate selection.
+- Added guarded third-party Apple-platform availability handling so routine app or service listings stay in `deferred_events` while direct Apple platform approvals and interoperability stories remain eligible.
+- Improved high-volume WWDC and OS-preview clustering with topic facets for App Store policy, subscription bundles, discovery, Apple services, AirPods firmware and settings, Sidecar, iPhone Mirroring, wallpapers, macOS performance feedback, and MacBook memory or local-AI reports.
+- Improved final-brief guidance so hardware roadmap clues, hardware specification rumors, OS feature changes, service policy changes, and app or service launches stay separate when condensing long briefs.
+- Improved source cleanup by trimming article-tail affiliate recommendation blocks before summary and `key_facts` extraction.
+- Fixed macOS performance feedback classification so performance and bug wording remains in software/system coverage instead of security or hardware buckets.
+- Added regression tests for third-party deferral, affiliate cleanup, micro-event clustering, macOS performance classification, MacBook memory/local-AI splitting, and final source-link behavior.
 
 ## What It Does
 

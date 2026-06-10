@@ -1634,6 +1634,117 @@ def is_messages_platform_candidate(text: str) -> bool:
     return message_score > 0 and agent_score > 0 and action_score > 0
 
 
+THIRD_PARTY_PLATFORM_TERMS = [
+    "app store",
+    "mac app store",
+    "apple app store",
+    "iphone app",
+    "ipad app",
+    "mac app",
+    "watchos app",
+    "watchos platform",
+    "apple watch app",
+    "apple watch client",
+    "vision pro app",
+    "app for vision pro",
+    "macos app",
+    "苹果应用商店",
+    "苹果 app store",
+    "mac app store",
+    "iphone 应用",
+    "ipad 应用",
+    "mac 应用",
+    "watchos 应用",
+    "watchos 平台",
+    "apple watch 应用",
+    "apple watch 客户端",
+    "vision pro 应用",
+]
+
+THIRD_PARTY_PLATFORM_ACTION_TERMS = [
+    "available on",
+    "available for",
+    "launches on",
+    "launched on",
+    "launches for",
+    "released on",
+    "released for",
+    "listed on",
+    "comes to",
+    "support for",
+    "supports",
+    "上架",
+    "登陆",
+    "登录",
+    "上线",
+    "支持",
+    "可用",
+    "适配",
+    "重返",
+    "回归",
+    "重新推出",
+]
+
+APPLE_FIRST_PARTY_RELEASE_TERMS = [
+    "apple announces",
+    "apple announced",
+    "apple introduces",
+    "apple introduced",
+    "apple launches",
+    "apple launched",
+    "apple releases",
+    "apple released",
+    "apple unveils",
+    "apple unveiled",
+    "苹果宣布",
+    "苹果推出",
+    "苹果发布",
+    "苹果上线",
+    "苹果带来",
+]
+
+APPLE_FIRST_PARTY_APP_TERMS = [
+    "apple developer app",
+    "apple sports",
+    "apple invites",
+    "apple music",
+    "apple tv",
+    "apple arcade",
+    "苹果开发者 app",
+    "苹果音乐",
+    "苹果电视",
+]
+
+
+def has_apple_first_party_release_context(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, APPLE_FIRST_PARTY_RELEASE_TERMS + APPLE_FIRST_PARTY_APP_TERMS) > 0:
+        return True
+    if re.search(
+        r"\bapple\b[^.!?。！？]{0,48}\b(?:announc\w*|introduc\w*|launch\w*|releas\w*|unveil\w*|bring\w*)\b",
+        lower,
+    ):
+        return True
+    if re.search(r"苹果(?:公司)?[^。！？.!?，,；;：:]{0,32}(?:宣布|推出|发布|上线|带来|引入|新增)", lower):
+        return True
+    return False
+
+
+def is_third_party_platform_availability_candidate(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, APPLE_TERMS) <= 0:
+        return False
+    if app_store_policy_score(lower) > 0:
+        return False
+    if score_terms(lower, THIRD_PARTY_PLATFORM_TERMS) <= 0:
+        return False
+    if score_terms(lower, THIRD_PARTY_PLATFORM_ACTION_TERMS) <= 0:
+        return False
+    if has_apple_first_party_release_context(lower):
+        return False
+    return True
+
+
 def score_messages_platform_terms(text: str) -> int:
     lower = text.lower()
     score = 0
@@ -1697,6 +1808,8 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     if is_messages_platform_candidate(text):
         return True
     if detect_event_kind(candidate.title, candidate.summary) == "ecosystem_interop":
+        return True
+    if is_third_party_platform_availability_candidate(text):
         return True
     official_service_promo = (
         score_terms(
@@ -2043,7 +2156,35 @@ def extract_title(text: str, fallback: str) -> str:
     return fallback.strip()
 
 
+TRAILING_PROMO_SECTION_PATTERNS = (
+    r"my\s+favorite\s+apple\s+accessory\s+recommendations",
+    r"worth\s+checking\s+out\s+on\s+amazon",
+    r"chance(?:'|’|&#8217;|&rsquo;)s\s+favorites",
+    r"official\s+apple\s+store\s+on\s+amazon",
+    r"amazon\s+prime\s+day\s+\d{4}",
+    r"best\s+(?:iphone|ipad|mac|airpods|apple\s+tv\s+4k|apple\s+watch|vision\s+pro|apple)\s+"
+    r"(?:accessories|deals\s+and\s+accessories)",
+)
+
+
+def remove_trailing_promo_sections(text: str) -> str:
+    """Cut 9to5-style affiliate recommendation blocks after the real article body."""
+    earliest: int | None = None
+    for pattern in TRAILING_PROMO_SECTION_PATTERNS:
+        match = re.search(pattern, text, re.I)
+        if not match:
+            continue
+        leading_text = strip_tags(text[: match.start()])
+        if len(leading_text) < 120:
+            continue
+        earliest = match.start() if earliest is None else min(earliest, match.start())
+    if earliest is None:
+        return text
+    return text[:earliest]
+
+
 def remove_noise_blocks(text: str) -> str:
+    text = remove_trailing_promo_sections(text)
     cleaned = re.sub(
         r"(?is)<!--\s*相关文章\s*-->.*?(?=<!--\s*评论\s*-->|<div\b[^>]+id=['\"]post_comm['\"]|</article>|</main>|$)",
         " ",
@@ -2080,7 +2221,7 @@ def remove_noise_blocks(text: str) -> str:
             break
         previous = cleaned
         cleaned = re.sub(pattern, " ", cleaned)
-    return cleaned
+    return remove_trailing_promo_sections(cleaned)
 
 
 PREFERRED_CONTENT_CLASS_FRAGMENTS = (
@@ -2705,6 +2846,264 @@ def extract_regions(text: str) -> set[str]:
     return regions
 
 
+APP_STORE_POLICY_TERMS = [
+    "app store review guidelines",
+    "review guidelines",
+    "guideline",
+    "guidelines",
+    "rule",
+    "rules",
+    "low-quality",
+    "low quality",
+    "low-effort",
+    "low effort",
+    "spam",
+    "spamming",
+    "app review",
+    "developer program",
+    "removal",
+    "remove",
+    "rejection",
+    "reject",
+    "submission",
+    "submissions",
+    "fraud",
+    "fraudulent",
+    "应用审核",
+    "审核指南",
+    "审核规则",
+    "开发者指南",
+    "低质量",
+    "低价值",
+    "垃圾应用",
+    "开发者计划",
+    "开发者账户",
+    "移除",
+    "拒绝",
+    "提交",
+    "欺诈",
+]
+
+
+def app_store_policy_score(text: str) -> int:
+    if score_terms(text, ["app store", "应用商店"]) <= 0:
+        return 0
+    return score_terms(text, APP_STORE_POLICY_TERMS)
+
+
+def topic_facets_from_text(text: str) -> set[str]:
+    lower = text.lower()
+    facets: set[str] = set()
+    if app_store_policy_score(lower) > 0:
+        facets.add("app-store-policy")
+    if (
+        score_terms(lower, ["app store", "应用商店"]) > 0
+        and score_terms(
+            lower,
+            [
+                "subscription",
+                "subscriptions",
+                "subscription bundle",
+                "subscription bundles",
+                "bundle",
+                "bundles",
+                "suite",
+                "suites",
+                "in-app purchase",
+                "auto-renewable",
+                "订阅",
+                "捆绑",
+                "套装",
+                "应用内购买",
+            ],
+        )
+        > 0
+    ):
+        facets.add("app-store-subscriptions")
+    if score_terms(lower, ["apple music", "music app", "苹果音乐"]) > 0:
+        facets.add("apple-music")
+    if (
+        score_terms(lower, ["apple tv", "苹果电视"]) > 0
+        and score_terms(lower, ["remote", "siri remote", "home screen", "遥控器", "主屏幕"]) > 0
+    ):
+        facets.add("apple-tv-remote")
+    elif score_terms(lower, ["apple tv", "apple tv+", "苹果电视"]) > 0:
+        facets.add("apple-tv-content")
+    if (
+        score_terms(lower, ["pull-to-refresh", "swipe down to refresh", "refresh gesture", "下拉刷新"]) > 0
+        and score_terms(lower, ["macos", "mac"]) > 0
+    ):
+        facets.add("macos-pull-refresh")
+    if (
+        score_terms(
+            lower,
+            [
+                "performance",
+                "smoothness",
+                "fluidity",
+                "responsive",
+                "responsiveness",
+                "lag",
+                "lags",
+                "stutter",
+                "stuttering",
+                "slowdown",
+                "slowdowns",
+                "snappier",
+                "user feedback",
+                "reddit",
+                "流畅度",
+                "流畅",
+                "卡顿",
+                "掉帧",
+                "反应迟缓",
+                "响应速度",
+                "用户反馈",
+                "社区用户",
+                "像是换了台",
+            ],
+        )
+        > 0
+        and score_terms(lower, ["macos", "mac"]) > 0
+    ):
+        facets.add("macos-performance-feedback")
+    if (
+        score_terms(lower, ["sidecar", "direct touch", "touch input", "随航", "直接触控", "触控输入"]) > 0
+        and score_terms(lower, ["macos", "ipados", "ipad", "mac"]) > 0
+    ):
+        facets.add("sidecar-touch")
+    if (
+        score_terms(lower, ["iphone mirroring", "resize", "window size", "iphone 镜像", "窗口", "调整大小"]) > 0
+        and score_terms(lower, ["macos", "iphone"]) > 0
+    ):
+        facets.add("iphone-mirroring")
+    if (
+        score_terms(lower, ["menu icon", "menu icons", "menu bar", "菜单图标", "无图标菜单"]) > 0
+        and score_terms(lower, ["macos", "mac"]) > 0
+    ):
+        facets.add("macos-menu-icons")
+    if (
+        score_terms(lower, ["adoption rate", "adoption rates", "install rate", "install rates", "installed on", "采用率", "安装率", "装机率"]) > 0
+        and score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos", "iphone", "ipad"]) > 0
+    ):
+        facets.add("os-adoption")
+    if (
+        score_terms(lower, ["airpods"]) > 0
+        and score_terms(lower, ["firmware", "beta firmware", "测试版固件", "固件"]) > 0
+    ):
+        facets.add("airpods-firmware")
+    if (
+        score_terms(lower, ["wallpaper", "壁纸"]) > 0
+        and score_terms(lower, ["ai", "apple intelligence", "extend", "expansion", "扩图", "扩展"]) > 0
+    ):
+        facets.add("ai-wallpaper")
+    elif (
+        score_terms(lower, ["wallpaper", "celosia", "壁纸"]) > 0
+        and score_terms(lower, ["ios", "ipados", "macos", "carplay", "system", "系统"]) > 0
+    ):
+        facets.add("system-wallpaper")
+    if (
+        score_terms(lower, ["siri", "apple intelligence", "ai credibility", "ai strategy", "ai 可信度", "人工智能"]) > 0
+        and score_terms(lower, ["wwdc", "ios", "ipados", "macos", "watchos", "visionos", "生态系统", "ecosystem"]) > 0
+    ):
+        facets.add("apple-ai-platform")
+    if (
+        score_terms(lower, ["app store", "应用商店"]) > 0
+        and score_terms(
+            lower,
+            [
+                "app discovery",
+                "discover",
+                "discovery",
+                "personalized recommendation",
+                "personalized recommendations",
+                "recommendation",
+                "recommendations",
+                "search",
+                "应用发现",
+                "个性化推荐",
+                "推荐",
+                "搜索",
+                "获客",
+            ],
+        )
+        > 0
+    ):
+        facets.add("app-store-discovery")
+    if (
+        score_terms(lower, ["compatibility", "compatible", "support", "drop support", "not support", "兼容", "支持", "无缘"]) > 0
+        and score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos"]) > 0
+    ):
+        facets.add("os-compatibility")
+    if (
+        score_terms(lower, ["touch macbook", "touchscreen macbook", "touch-screen macbook", "触控 macbook"]) > 0
+        or (
+            score_terms(lower, ["macbook ultra", "macbook"]) > 0
+            and score_terms(lower, ["touch", "touchscreen", "touch-screen", "oled", "dynamic island", "m6", "触控", "灵动岛"]) > 0
+        )
+    ):
+        facets.add("macbook-touch-roadmap")
+    if (
+        score_terms(lower, ["macbook", "macbook neo", "macbook air", "macbook pro"]) > 0
+        and score_terms(
+            lower,
+            [
+                "memory",
+                "ram",
+                "12gb",
+                "16gb",
+                "24gb",
+                "local ai",
+                "local model",
+                "on-device ai",
+                "on-device model",
+                "afm",
+                "core advanced",
+                "内存",
+                "本地 ai",
+                "本地模型",
+                "端侧",
+                "容量",
+            ],
+        )
+        > 0
+    ):
+        facets.add("macbook-memory-ai")
+    if score_terms(lower, ["macbook ultra", "foldable iphone", "dynamic island", "oled", "m6", "触控 macbook", "折叠 iphone", "灵动岛"]) > 0:
+        facets.add("hardware-roadmap")
+    if score_terms(lower, ["apple wallet", "wallet", "passport", "driver's license", "id support", "钱包", "护照", "证件"]) > 0:
+        facets.add("apple-wallet")
+    if score_terms(lower, ["call context", "phone app", "customer service calls", "通话", "来电", "订单号"]) > 0:
+        facets.add("phone-call-context")
+    return facets
+
+
+def primary_topic_facets(title: str, summary: str = "") -> set[str]:
+    title_facets = topic_facets_from_text(title)
+    if title_facets:
+        return title_facets
+    return topic_facets_from_text(f"{title} {summary}")
+
+
+def article_primary_facets(article: Article) -> set[str]:
+    return primary_topic_facets(article.title, article.summary)
+
+
+def event_primary_facets(event: Event) -> set[str]:
+    facets: set[str] = set()
+    for article in event.articles:
+        facets |= article_primary_facets(article)
+    return facets
+
+
+BROAD_TOPIC_FACETS = {"os-compatibility", "hardware-roadmap"}
+
+
+def effective_topic_facets(facets: set[str]) -> set[str]:
+    specific = facets - BROAD_TOPIC_FACETS
+    return specific or facets
+
+
 def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = None) -> str:
     facts = " ".join(key_facts or [])
     text = f"{title} {summary} {facts}"
@@ -2724,14 +3123,18 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "apple_research"
     if is_messages_platform_candidate(text):
         return "messages_platform"
+    if is_third_party_platform_availability_candidate(text):
+        return "third_party_ecosystem"
     if score_terms(lower, ["age assurance", "age verification", "child safety", "state law", "texas", "年龄验证", "儿童安全"]) > 0:
         return "regional_regulation"
     if score_terms(lower, ["antitrust", "competition regulator", "cci", "doj", "subpoena", "lawsuit", "court", "investigation", "probe", "反垄断", "司法部", "传票", "法院", "监管调查"]) > 0:
         return "legal_antitrust"
     if score_terms(lower, ["developer center", "developer academy", "developer lab", "开发者中心", "开发者学院"]) > 0:
         return "developer_program"
-    if score_terms(lower, ["fraud", "fraudulent", "app review", "developer account", "submission", "ratings and reviews", "欺诈", "应用审核", "开发者账户"]) > 0:
+    if app_store_policy_score(lower) > 0:
         return "app_store_trust"
+    if "macos-performance-feedback" in topic_facets_from_text(text):
+        return "os_app"
     if (
         score_terms(lower, ["vision pro"]) > 0
         and score_terms(lower, ["app", "application", "native app", "free app", "应用", "原生应用", "免费应用"]) > 0
@@ -2764,6 +3167,27 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "os_compatibility"
     if score_terms(lower, ["apple wallet", "wallet", "passport", "id support", "driver's license", "钱包", "护照", "证件"]) > 0:
         return "wallet_feature"
+    if (
+        score_terms(lower, ["iphone", "ipad", "apple watch"]) > 0
+        and score_terms(
+            lower,
+            [
+                "carrier",
+                "cellular data",
+                "data plan",
+                "unlimited data",
+                "monthly plan",
+                "wireless carrier",
+                "network",
+                "运营商",
+                "蜂窝数据",
+                "流量套餐",
+                "无限流量",
+            ],
+        )
+        > 0
+    ):
+        return "hardware_market"
     if (
         score_terms(lower, ["iphone", "ipad", "mac", "macbook", "airpods", "apple watch", "vision pro"]) > 0
         and score_terms(lower, ["launch", "launches", "coming", "rumor", "rumors", "reportedly", "新品", "发布", "推出", "传闻"]) > 0
@@ -2839,6 +3263,8 @@ def classify_relevance_tier(
         return "ecosystem", "direct Apple ecosystem interoperability or compatibility impact"
     if event_kind == "messages_platform":
         return "strong", "Apple Messages or iMessage platform capability change"
+    if is_third_party_platform_availability_candidate(text):
+        return "weak", "third-party app or service availability on Apple platforms"
     if third_party_score > 0 and apple_score > 0 and score_terms(
         lower,
         [
@@ -3085,6 +3511,8 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
         score += 40
     elif tier == "ecosystem":
         score += 30
+    if is_third_party_platform_availability_candidate(text):
+        score += 70
     if kind in {
         "messages_platform",
         "service_content",
@@ -3184,6 +3612,17 @@ def event_kind_compatible(article: Article, event: Event) -> bool:
     strict_kinds = {"messages_platform"}
     if article.event_kind in strict_kinds or event.event_kind in strict_kinds:
         return False
+    boundary_kinds = {
+        "legal_antitrust",
+        "regional_regulation",
+        "developer_program",
+        "retail_store",
+    }
+    if not ({article.event_kind, event.event_kind} & boundary_kinds):
+        article_facets = effective_topic_facets(article_primary_facets(article))
+        event_facets = effective_topic_facets(event_primary_facets(event))
+        if article_facets and event_facets and article_facets & event_facets:
+            return True
     if "general_company" in {article.event_kind, event.event_kind}:
         return True
     return False
@@ -3206,6 +3645,14 @@ def regions_compatible(article: Article, event: Event) -> bool:
     return bool(article_regions & event_regions)
 
 
+def topic_facets_compatible(article: Article, event: Event) -> bool:
+    article_facets = effective_topic_facets(article_primary_facets(article))
+    event_facets = effective_topic_facets(event_primary_facets(event))
+    if not article_facets or not event_facets:
+        return True
+    return bool(article_facets & event_facets)
+
+
 def event_relevance_tier(articles: list[Article]) -> tuple[str, str]:
     priority = {"weak": 0, "ecosystem": 1, "strong": 2}
     selected = max(articles, key=lambda item: priority.get(item.relevance_tier, 0))
@@ -3217,13 +3664,19 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
     kinds = {item.event_kind for item in articles if item.event_kind != "general_company"}
     regions = set().union(*(item.regions for item in articles)) if articles else set()
     normalized_regions = regions - {"multi-region"}
-    if len(kinds) > 1:
+    facet_sets = [effective_topic_facets(article_primary_facets(item)) for item in articles]
+    explicit_facet_sets = [facets for facets in facet_sets if facets]
+    common_facets = set.intersection(*explicit_facet_sets) if len(explicit_facet_sets) > 1 else set()
+    if len(kinds) > 1 and not common_facets:
         warnings.append("mixed event kinds")
     if len(normalized_regions) > 1 and not any(item.event_kind not in REGION_SENSITIVE_EVENT_KINDS for item in articles):
         warnings.append("multiple region-specific markers")
     tiers = {item.relevance_tier for item in articles}
     if "weak" in tiers and len(tiers) > 1:
         warnings.append("mixed relevance tiers")
+    if len(explicit_facet_sets) > 1:
+        if not common_facets:
+            warnings.append("mixed primary topic facets")
     return warnings
 
 
@@ -3265,6 +3718,8 @@ def should_merge(article: Article, event: Event) -> bool:
     if not relevance_tier_compatible(article, event):
         return False
     if not regions_compatible(article, event):
+        return False
+    if not topic_facets_compatible(article, event):
         return False
     if article.event_kind == event.event_kind == "messages_platform":
         if "poke" in shared:

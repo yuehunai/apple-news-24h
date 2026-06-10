@@ -201,6 +201,81 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertIn("Standard, Membership, and Event", combined)
         self.assertNotIn("Apple officially announces iOS 27", combined)
 
+    def test_9to5_trailing_affiliate_recommendations_do_not_enter_article_facts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-06-09T20:00:00+00:00" />
+            <meta property="og:description" content="Apple is adding Call Context in iOS 27 to reduce the friction of customer service calls." />
+          </head>
+          <body>
+            <div class="container med post-content">
+              <p>Apple is adding Call Context in iOS 27, using Siri AI to summarize why a user is calling and keep relevant account details available during customer service calls.</p>
+              <p>The feature is limited to devices that support Siri AI, including iPhone 15 Pro or later, and is designed to reduce repeated explanations during support calls.</p>
+              <p>My favorite Apple accessory recommendations:</p>
+              <ul>
+                <li>Anker MagSafe/Qi2 Ultra-Slim Battery Pack</li>
+                <li>AirPods Pro 3 (2x ANC vs AirPods Pro 2!)</li>
+                <li>Anker Nano 45W Fast Charger with Smart Display</li>
+              </ul>
+              <p>FTC: We use income earning auto affiliate links.</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/09/ios-27-call-context-makes-phone-calls-much-easier-siri-ai/",
+            title="iOS 27 Call Context makes phone calls much easier with Siri AI",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("Call Context", combined)
+        self.assertIn("iPhone 15 Pro", combined)
+        self.assertNotIn("AirPods Pro 3", combined)
+        self.assertNotIn("45W Fast Charger", combined)
+
+    def test_9to5_worth_checking_out_on_amazon_section_is_removed(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-06-09T18:00:00+00:00" />
+            <meta property="og:description" content="Apple is bringing pull-to-refresh to macOS 27 across several built-in apps." />
+          </head>
+          <body>
+            <div class="container med post-content">
+              <p>macOS 27 Golden Gate adds pull-to-refresh support to the Mac in Safari, Mail, News, Podcasts, and Calendar.</p>
+              <p>The gesture brings a familiar iPhone and iPad interaction to Apple’s desktop platform.</p>
+              <p>Worth checking out on Amazon</p>
+              <ul>
+                <li>MacBook Neo</li>
+                <li>Logitech MX Master 4</li>
+                <li>AirTag (2nd Generation) – 4 Pack</li>
+              </ul>
+              <p>FTC: We use income earning auto affiliate links.</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/09/macos-27-golden-gate-pull-to-refresh-support/",
+            title="macOS 27 Golden Gate adopts iPhone-like pull-to-refresh support",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("Safari, Mail, News, Podcasts, and Calendar", combined)
+        self.assertNotIn("MacBook Neo", combined)
+        self.assertNotIn("Logitech MX Master", combined)
+
     def test_selected_candidate_with_feed_time_survives_detail_fetch_failure(self):
         module = load_module()
         source = module.Source(
@@ -612,6 +687,340 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(
             {event.event_kind for event in events},
             {"legal_antitrust", "regional_regulation", "developer_program"},
+        )
+
+    def test_app_store_guideline_update_does_not_merge_with_wwdc_os_features(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Updates App Store Guidelines With Stricter Rules for Low-Quality Apps",
+                "Apple updated the App Store Review Guidelines at WWDC for low-quality apps, spam submissions, and possible Developer Program removal.",
+                facts=[
+                    "Certain app categories such as dating, flashlight, sound effects, wallpaper, simple timers, and fortune telling require a meaningfully different or improved experience.",
+                    "Repeated low-effort App Store submissions could lead to removal from the Apple Developer Program.",
+                ],
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 macOS 27 引入“下拉刷新”手势",
+                "苹果在 WWDC 期间为 macOS 27 Golden Gate 增加下拉刷新手势，Safari、邮件、新闻、播客和日历等内置 App 支持该功能。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "iOS 27 and iPadOS 27 adoption rate appears in App Store developer data",
+                "Apple shared iOS and iPadOS adoption numbers for developers during WWDC, but the story is about operating system install rates.",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3)
+        self.assertIn("app_store_trust", {event.event_kind for event in events})
+
+    def test_app_store_listing_with_generic_guide_text_is_not_policy_update(self):
+        module = load_module()
+
+        event_kind = module.detect_event_kind(
+            "小米智能存储App上架！首款NAS有望登场：外观提前揭晓",
+            "小米智能存储 App 提前上架了苹果应用商店，目前已经隐藏。操作指南显示该机背部有电源、网线、USB、HDMI 接口。",
+            [],
+        )
+
+        self.assertNotEqual(event_kind, "app_store_trust")
+
+    def test_third_party_app_store_listing_is_deferred_weak_ecosystem_candidate(self):
+        module = load_module()
+        source = source_named(module, "快科技")
+        candidate = module.Candidate(
+            source="快科技",
+            url="https://news.mydrivers.com/1/1128/1128311.htm",
+            title="小米智能存储App上架！首款NAS有望登场：外观提前揭晓",
+            summary="小米智能存储 App 提前上架了苹果应用商店，不过目前已经隐藏。",
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak")
+        self.assertIn("third-party app", reason)
+
+    def test_chinese_third_party_watchos_app_availability_is_deferred_weak(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/962/150.htm",
+            title="Telegram App 重返苹果 watchOS 平台，上线全新原生 Apple Watch 应用",
+            summary=(
+                "Telegram CEO 宣布，App 已正式重返 watchOS 平台，上线全新原生 Apple Watch 客户端。"
+                "用户可在 Apple Watch 上访问联系人和聊天记录，同时支持 GIF 动图与视频播放、语音和文字消息收发、位置共享、贴纸等功能。"
+            ),
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak")
+        self.assertIn("third-party app", reason)
+
+    def test_official_app_store_personalization_feature_is_not_third_party_listing(self):
+        module = load_module()
+        source = source_named(module, "cnBeta")
+        candidate = module.Candidate(
+            source="cnBeta",
+            url="https://www.cnbeta.com.tw/articles/tech/1565186.htm",
+            title="苹果在App Store推出个性化推荐功能 提升应用发现效率",
+            summary="苹果公司近日宣布，将在 App Store 引入一系列全新的应用发现功能，通过个性化推荐帮助用户更高效地找到适合自己的应用和游戏。这一更新首先在美国地区以英文形式上线，未来还将扩展至更多国家和语言。",
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertFalse(module.is_third_party_platform_availability_candidate(f"{candidate.title} {candidate.summary}"))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "os_app")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_ipad_cellular_data_plan_is_relevant_hardware_strategy(self):
+        module = load_module()
+        source = source_named(module, "AppleInsider")
+        candidate = module.Candidate(
+            source="AppleInsider",
+            url="https://appleinsider.com/articles/26/06/09/you-can-buy-unlimited-att-data-for-your-ipad-for-3-a-day?utm_source=rss",
+            title="You can buy unlimited AT&T data for your iPad for $3 a day",
+            summary="AT&T will let iPad owners buy a day of unlimited cellular data without a monthly plan, contract, subscription, or credit check.",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "hardware_market")
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "hardware_products")
+
+    def test_app_store_subscription_bundles_do_not_merge_with_apple_music_or_tv_features(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple introduces new subscription bundles coming to App Store",
+                "At WWDC, Apple introduced App Store subscription Bundles and Suites so developers can sell access to multiple subscriptions through In-App Purchase.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 为 Apple Music 增加横屏播放界面",
+                "iOS 27 中 Apple Music 获得新的横屏播放界面，用户可以在 iPhone 横向使用音乐应用。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "iOS 27 lets Apple TV remote stay pinned on the Home Screen",
+                "Apple TV remote controls can be pinned to the iPhone Home Screen in iOS 27.",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3)
+        self.assertTrue(all(event.category == "software_systems" for event in events))
+
+    def test_app_store_subscription_bundle_sources_merge_despite_policy_background(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple introduces new subscription bundles coming to App Store",
+                "At WWDC, Apple introduced App Store subscription Bundles and Suites so developers can sell access to multiple subscriptions through In-App Purchase.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "The App Store is going to add subscription bundles soon",
+                "Streaming-style bundles for iPhone app subscriptions were announced during WWDC, along with other App Store changes like new guidelines about removing opportunistic apps.",
+                source="The Verge",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertIn("app-store-subscriptions", module.event_primary_facets(events[0]))
+
+    def test_wwdc_os_app_micro_updates_do_not_merge_when_primary_topics_differ(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Reveals How Many iPhones Were Running iOS 26 Before WWDC",
+                "Apple shared iOS 26 and iPadOS 26 adoption rates ahead of WWDC.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果为三款 AirPods 推出测试版固件 9A5292e",
+                "Apple released new AirPods beta firmware with iOS 27 features.",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "iOS 27 lets Apple TV remote stay pinned on the Home Screen",
+                "Apple TV remote controls can be pinned to the iPhone Home Screen in iOS 27.",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果在App Store推出个性化推荐功能 提升应用发现效率",
+                "苹果公司近日宣布，将在 App Store 引入全新的应用发现功能，通过个性化推荐帮助用户找到应用和游戏。",
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "苹果 iPhone 国行机型升级 iOS 27 后可使用 AI 壁纸扩图功能",
+                "iOS 27 开发者预览版让部分国行 iPhone 用户通过锁屏壁纸启用 AI 扩图功能。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果统一 iOS 27、macOS 27 及 CarPlay 壁纸设计 “Celosia”",
+                "Apple unified the default wallpaper design across iOS 27, macOS 27, and CarPlay with the Celosia theme.",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 6)
+        self.assertEqual(
+            {
+                tuple(sorted(module.event_primary_facets(event)))
+                for event in events
+            },
+            {
+                ("os-adoption",),
+                ("airpods-firmware",),
+                ("apple-tv-remote",),
+                ("app-store-discovery",),
+                ("ai-wallpaper",),
+                ("system-wallpaper",),
+            },
+        )
+
+    def test_broad_os_compatibility_facet_does_not_merge_distinct_feature_topics(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "七年之痒终得解，苹果 macOS 27 系统“随航”功能终于支持手指触控",
+                "At WWDC, Apple's iOS 27, iPadOS 27, and macOS 27 developer beta update Sidecar with direct touch support for iPad.",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "操控 Apple TV 更方便，iOS 27 支持将“遥控器”功能固定到主屏幕",
+                "At WWDC, Apple's iOS 27 and iPadOS 27 developer beta support pinning the Apple TV remote shortcut to the iPhone Home Screen.",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_macos_performance_feedback_does_not_merge_with_touch_macbook_roadmap(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "有望为触控 MacBook 铺路：苹果 macOS 27 引入“下拉刷新”手势",
+                (
+                    "苹果在 macOS 27 Golden Gate 中引入 Swipe down to refresh 下拉刷新手势，"
+                    "Safari、邮件、新闻、播客和日历等应用已确认支持；报道认为这项设计变化"
+                    "可能为后续触控 MacBook Ultra 铺路。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "用户反馈苹果 macOS 27 大幅提升流畅度，像是换了台 Mac",
+                (
+                    "macOS 27 Golden Gate Beta 1 赢得社区用户积极反馈，多名用户称其大幅改善"
+                    "老设备运行流畅度；M1 Pro MacBook Pro 用户称升级后未遇到卡顿、掉帧和反应迟缓。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual(
+            {tuple(sorted(module.effective_topic_facets(module.event_primary_facets(event)))) for event in events},
+            {("macbook-touch-roadmap", "macos-pull-refresh"), ("macos-performance-feedback",)},
+        )
+
+    def test_macos_performance_feedback_is_software_not_security_or_hardware(self):
+        module = load_module()
+        title = "用户反馈苹果 macOS 27 大幅提升流畅度，像是换了台 Mac"
+        summary = (
+            "macOS 27 Golden Gate Beta 1 赢得社区用户积极反馈，多名用户称其大幅改善老设备运行流畅度。"
+            "M1 Pro MacBook Pro 用户称升级后没有遇到 macOS 26 Tahoe 稳定版存在的卡顿、掉帧和整体反应迟缓问题。"
+        )
+        facts = [
+            "按照以往经验，macOS 开发者测试版通常会伴随大量漏洞和性能问题，上一代正式版 macOS Tahoe 也因卡顿和性能退步饱受诟病。"
+        ]
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "os_app")
+        self.assertEqual(module.choose_category(title, " ".join([summary, *facts])), "software_systems")
+        self.assertEqual(module.classify_relevance_tier(title, summary, facts, "IT之家")[0], "strong")
+
+    def test_macbook_memory_ai_specs_do_not_merge_with_macos_touch_gesture(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "有望为触控 MacBook 铺路：苹果 macOS 27 引入“下拉刷新”手势",
+                (
+                    "苹果在 macOS 27 Golden Gate 中引入下拉刷新手势，报道认为这项设计变化"
+                    "可能为后续触控 MacBook Ultra 铺路，相关机型或配备触控 OLED 屏幕和 M6 芯片。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "容量增幅 50%：消息称 MacBook Neo 2 配 12GB 内存，支持苹果最强本地 AI 模型",
+                (
+                    "MacBook Neo 2 据称配备 12GB 内存，容量较前代增加 50%，并将支持 AFM 3 Core Advanced"
+                    " 本地 AI 模型；消息称该设备使用 A19 Pro 芯片。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual(
+            {tuple(sorted(module.effective_topic_facets(module.event_primary_facets(event)))) for event in events},
+            {("macbook-touch-roadmap", "macos-pull-refresh"), ("macbook-memory-ai",)},
         )
 
     def test_quick_share_airdrop_story_is_ecosystem_relevant(self):

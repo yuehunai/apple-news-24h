@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 0.7.0 - 2026-06-10
+
+- Added guarded third-party Apple-platform availability handling so routine app or service listings stay in `deferred_events` while direct Apple platform approvals and interoperability stories remain eligible.
+- Improved high-volume WWDC and OS-preview clustering with topic facets for App Store policy, subscription bundles, discovery, Apple services, AirPods firmware and settings, Sidecar, iPhone Mirroring, wallpapers, macOS performance feedback, and MacBook memory or local-AI reports.
+- Improved final-brief guidance so hardware roadmap clues, hardware specification rumors, OS feature changes, service policy changes, and app or service launches stay separate when condensing long briefs.
+- Improved source cleanup by trimming article-tail affiliate recommendation blocks before summary and `key_facts` extraction.
+- Fixed macOS performance feedback classification so performance and bug wording remains in software/system coverage instead of security or hardware buckets.
+- Added regression tests for third-party deferral, affiliate cleanup, micro-event clustering, macOS performance classification, MacBook memory/local-AI splitting, and final source-link behavior.
+
 ## 0.6.0 - 2026-06-09
 
 - Added preferred article-body extraction for 9to5Mac and similar pages so related-card or sidebar markup does not replace the real story body.
