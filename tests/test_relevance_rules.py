@@ -1266,6 +1266,290 @@ class RelevanceRuleTests(unittest.TestCase):
             markdown,
         )
 
+    def test_competitor_background_does_not_hard_exclude_direct_apple_thread_story(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/962/726.htm",
+            title="苹果谷歌智能家居设备升级 Thread 1.4 协议，统一网络凭证共享迈出关键一步",
+            summary=(
+                "Apple TV 在 tvOS 27 开发者测试版中已接入 Thread 1.4，Google TV Streamer 也升级。"
+                "报道还提到三星 SmartThings、宜家 Dirigera 和亚马逊等智能家居生态。"
+            ),
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "os_app")
+
+    def test_specific_os_app_removal_does_not_merge_with_general_ios_summary(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Removes Walkie-Talkie From Apple Watch in watchOS 27 Beta",
+                "Apple removed the Walkie-Talkie app from watchOS 27 beta. The article mentions a previous security vulnerability only as historical background.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 Beta 1 发布，主要更新点一文汇总",
+                "苹果 iOS 27 Beta 1 带来 Apple Intelligence、Safari、Messages、Phone、Wallet、App Store 和通信安全等多项系统更新。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual(
+            module.detect_event_kind(articles[0].title, articles[0].summary, articles[0].key_facts),
+            "os_app",
+        )
+
+    def test_broad_multi_platform_os_summary_does_not_bridge_specific_platform_events(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果 iOS 27 五千人投票结果出炉，近六成升级用户对首个预览版很满意",
+                "iOS 27 首个预览版用户投票结果出炉，开发者预览版 Beta 1 已面向全球用户推出。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果找到了软件更新的完美节奏：一年堆功能 一年做优化",
+                "文章回顾 iOS 27、iPadOS 27、macOS 27、watchOS 27、tvOS 27 和 visionOS 27 的整体更新节奏。",
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "苹果 watchOS 27 测试版悄然移除 Apple Watch 对讲机应用",
+                "watchOS 27 首个开发者测试版悄然移除了 Apple Watch 上的对讲机应用，该应用已从应用列表和控制中心内彻底消失。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3)
+
+    def test_ios_recovery_carplay_route_and_ipados_restore_image_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "似曾相识的感觉：苹果 iOS 27 系统新增 Recovery 修复模式，支持诊断、抹除等功能",
+                "IT之家实测发现，iOS 27 新增 Recovery 修复模式，支持恢复助理、软件更新、诊断模式、抹掉所有内容和设置、恢复模式等功能。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 版 CarPlay 新增路线共享功能，将解决特斯拉 FSD 导航同步难题",
+                "苹果公司推出路线共享 Route Sharing 功能，支持导航应用以路段坐标数组的形式，把路线数据传递给车辆。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果手滑：为非兼容 iPad Pro 机型提供 iPadOS 27 镜像下载链接",
+                "苹果开发者网站短暂上架了针对不在 iPadOS 27 官方兼容列表内的旧款 iPad Pro 的恢复镜像，随后删除。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3)
+
+    def test_communication_framework_and_facetime_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果 iOS 27 升级 LiveCommunicationKit：锁屏时支持全屏来电显示等",
+                "LiveCommunicationKit 现已支持全屏显示在锁定屏幕上，包含联系人姓名、照片以及一套标准操作控件，与来电时的界面完全一致。该框架为开发者提供 VoIP 通话交互接口，并支持将应用程序设置为系统默认通话应用。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果升级 iOS 27 版 FaceTime 视频通话：iPhone 17 系列可同时调用前后摄像头",
+                "在 iOS 27 系统中，苹果计划为 FaceTime 引入双摄像头功能，在视频通话中让 iPhone 17 系列用户同时调用前后摄像头。用户在 FaceTime 通话界面点击“翻转”按钮，系统自动切换为双摄像头模式。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_macos_afp_and_boot_partition_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "macOS 27 终止支持 AFP 协议：苹果 Time Capsule 失去官方备份支持",
+                "在 macOS 27 系统中，苹果公司终止支持 AFP 协议，导致已停产的 Time Capsule 无法继续用于 Time Machine 备份。从 macOS 27 开始，Time Machine 将强制要求使用 SMBv2 或 SMBv3 协议的存储设备。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Asahi Linux 反馈称苹果 macOS 27 调整启动盘检测机制，影响多系统用户",
+                "macOS 27 开发者测试版调整启动选择器检测有效操作系统引导卷的方式，导致部分用户无法选择备用分区或磁盘启动，Asahi Linux 用户受影响尤为严重。团队已向苹果提交编号为 FB22994760 的错误报告。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_wallet_feature_roundup_and_tap_to_share_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 27 Adds Six New Features to Apple Wallet on Your iPhone",
+                "Apple Wallet gets enhanced passes, digital hotel keys, four new barcode types, bill splitting powered by Apple Cash and Apple Intelligence, and order tracking in Australia and Canada.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iOS 27 Introduces New 'Tap to Share' Feature, But Not Available in EU",
+                "Tap to Share lets merchants use an iPhone NFC tap to exchange membership information, shipping addresses, contact details, and order information while completing payment.",
+                source="MacRumors",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_xcode_gemini_integration_is_strong_developer_tool_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/10/xcode-27-expands-agentic-coding-toolset-with-gemini-integration/",
+            title="Xcode 27 expands agentic coding toolset with Gemini integration",
+            summary=(
+                "Starting with Xcode 27, developers can natively use Google Gemini, "
+                "in addition to Claude Code and OpenAI Codex, to plan, write, and review code."
+            ),
+            feed_time_raw="Wed, 10 Jun 2026 21:00:00 +0000",
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+        self.assertGreaterEqual(module.candidate_detail_priority(candidate)[0], 80)
+
+    def test_apple_leak_lawsuit_candidate_gets_high_detail_priority(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/10/jon-prosser-seeks-another-shot-to-respond-to-apples-liquid-glass-leak-lawsuit/",
+            title="Jon Prosser seeks another shot to respond to Apple’s Liquid Glass leak lawsuit",
+            summary=(
+                "Apple's lawsuit over Liquid Glass leaks may see a default ruling reversed "
+                "after Jon Prosser asked the court for another chance to respond."
+            ),
+            feed_time_raw="Wed, 10 Jun 2026 20:30:00 +0000",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "legal_antitrust")
+        self.assertGreaterEqual(module.candidate_detail_priority(candidate)[0], 80)
+
+    def test_official_vision_pro_accessory_discontinuation_is_strong_hardware_news(self):
+        module = load_module()
+        title = "Apple Seemingly Discontinuing Vision Pro Travel Case Around the World"
+        summary = (
+            "Apple's official Vision Pro Travel Case appears to be unavailable from Apple Store "
+            "online in multiple countries. The article mentions Meta and Ray-Ban smart glasses only as market background."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_detail_selection_prefers_in_window_candidate_over_old_high_score_candidate(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        old_high_score = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/08/ios-27-announcement/",
+            title="Apple officially announces iOS 27, the next major iPhone update",
+            summary="Apple announced iOS 27 at WWDC with new features, Siri AI, and Liquid Glass.",
+            feed_time_raw="Mon, 08 Jun 2026 18:00:00 +0000",
+        )
+        current_legal_story = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/10/jon-prosser-seeks-another-shot-to-respond-to-apples-liquid-glass-leak-lawsuit/",
+            title="Jon Prosser seeks another shot to respond to Apple’s Liquid Glass leak lawsuit",
+            summary="Apple's lawsuit over Liquid Glass leaks may see a default ruling reversed.",
+            feed_time_raw="Wed, 10 Jun 2026 20:30:00 +0000",
+        )
+
+        selected = module.select_detail_candidates(
+            [old_high_score, current_legal_story],
+            {"9to5Mac": source},
+            1,
+            datetime(2026, 6, 10, 0, 0, tzinfo=timezone.utc),
+            datetime(2026, 6, 11, 0, 0, tzinfo=timezone.utc),
+        )
+
+        self.assertEqual(selected, [current_legal_story])
+
+    def test_deal_roundup_remains_filtered_even_when_current_and_apple_product_heavy(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/10/deals-airpods-pro-240w-beats-cable-macbook-pro/",
+            title="Deals: AirPods Max 2, 240W Beats cable, MacBook Pro, more",
+            summary=(
+                "Today’s 9to5Toys Lunch Break is headlined by AirPods Pro 3 dropping "
+                "to the best price ever at $179, with MacBook Pro, Apple Watch, and Beats accessories available on Amazon."
+            ),
+            feed_time_raw="Wed, 10 Jun 2026 18:30:00 +0000",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(candidate, source))
+
+    def test_routine_third_party_apple_platform_tool_update_stays_weak(self):
+        module = load_module()
+        title = "OmniOutliner 6.2 is now available in 11 languages"
+        summary = (
+            "OmniGroup's outlining tool expanded localization support across Mac, iPad, "
+            "iPhone, and Apple Vision Pro, and mentions Apple Intelligence support."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_watchos_app_removal_with_official_release_word_is_not_accessory_market_news(self):
+        module = load_module()
+        title = "A dedicated Apple Watch communication app is missing in watchOS 27"
+        summary = (
+            "watchOS 27 beta no longer includes the Walkie-Talkie app or Control Center tile. "
+            "Walkie-Talkie app appears to be discontinued, and a public beta follows in July ahead of the official release this fall."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(module.classify_relevance_tier(title, summary, [], "9to5Mac")[0], "strong")
+
 
 if __name__ == "__main__":
     unittest.main()

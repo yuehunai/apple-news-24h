@@ -63,6 +63,7 @@ Keep new or materially updated news about:
 - Hardware and accessories: iPhone, iPad, Mac, Apple Watch, AirPods, Vision Pro, HomePod, official accessories, Apple silicon, modems, displays, cameras, supply-chain production shifts.
 - Health/accessibility features and country availability changes.
 - Company actions tied to Apple products/services, including legal, regulatory, donations, partnerships, executive changes, retail/product availability, and regional business moves.
+- Apple official accessory availability changes, including Apple Store removal, regional unavailability, discontinuation, or suspected discontinuation. Treat these as hardware/product news even if the article mentions third-party headset, glasses, or broader market context.
 - WWDC-related events when they pass the normal relevance and time-window rules, including keynote, schedule, OS-preview, developer, Apple executive, attendee gift/swag, badge, sticker, Developer app, mascot, and official conference-material stories. Do not downgrade or omit them merely because they look light, promotional, or less important than product rumors.
 - Apple research disclosures where Apple publishes, presents, previews, or showcases research papers/studies at a recognized technical or academic venue. Require concrete anchors such as research, paper, study, CVPR, computer vision, or equivalent Chinese terms; generic AI strategy or WWDC positioning is not enough by itself.
 - Medical or health research where Apple Watch, Apple Health, ResearchKit, or Apple-collected health/activity/sensor data is central to a newly published or materially updated study. Require both an Apple health data/product anchor and a research/study anchor; do not include generic sleep tips, wellness guides, or app usage advice.
@@ -78,6 +79,8 @@ Exclude:
 - Simple rewrites or reposts without new details.
 
 Exception: include official Apple Card, Apple Pay, App Store, Apple services, and Apple retail/customer acquisition promotions when the story reveals a new or materially changed Apple business offer. These are service/business news, not ordinary affiliate deals, and summaries should include value, eligibility, timing, source confidence, and unresolved terms.
+
+Competitor, third-party, or partner names in the body should not by themselves weaken or exclude a clear Apple-subject event. Judge by the article's main subject and lead action: Apple OS/platform changes, Apple services, Apple official accessories, Apple legal actions, Apple developer tools, and Apple ecosystem interoperability remain Apple news even when the article supplies Google, Samsung, Meta, Amazon, or other market background. Keep the existing exclusions for routine deals, affiliate roundups, and non-Apple product stories.
 
 ## Relevance Tiers
 
@@ -105,7 +108,13 @@ For Apple Messages for Business or iMessage AI-agent stories, merge cross-source
 
 During high-volume WWDC or OS-preview windows, do not merge separate micro-events merely because they share the same OS version, WWDC context, or generic Apple platform terms. Keep distinct topic anchors separate, including App Store policy, App Store subscriptions/discovery, Apple Music, Apple TV Remote, AirPods firmware/settings, Sidecar touch, iPhone Mirroring, macOS performance/user-feedback reports, system wallpapers, AI wallpapers, OS adoption stats, Apple Wallet, MacBook memory/local-AI spec reports, and iPad/iPhone carrier data plans. Broad compatibility context is not enough to merge two articles when their concrete feature topics differ.
 
-When condensing adjacent eligible events into the final brief, do not merge distinct event types merely because they share a product family or roadmap context. Keep hardware roadmap/interface clues, hardware specification or memory/AI-capability rumors, OS feature changes, service policy changes, and app/service launches as separate bullets unless they are clearly the same reported change.
+Do not allow a broad multi-platform OS summary or recap to bridge unrelated specific platform events. Platform family, concrete component, and action type should be compatible before merging: for example, watchOS app removal, iOS input-method changes, Apple Wallet features, Xcode/developer-tool integrations, App Store policy changes, and broad system summaries are separate unless the sources clearly cover the same product/component/action.
+
+When writing the final brief, use JSON `events` as the default bullet unit. Do not combine separate JSON events into one bullet merely to shorten the brief or create broader themes. Merge final bullets only after source review shows two JSON events are duplicate coverage of the same core product, function, and action.
+
+Do not merge distinct event types merely because they share a product family, OS version, WWDC context, Apple Intelligence context, roadmap context, source timing, or same-day news cycle. Keep hardware roadmap/interface clues, hardware specification or memory/AI-capability rumors, OS feature changes, built-in app changes, service policy changes, app/service launches, and platform API changes as separate bullets unless they are clearly the same reported change.
+
+Keep distinct built-in apps, OS components, and platform capabilities in separate bullets when their concrete action differs. A Notes feature update, Shortcuts workflow builder, device Recovery mode, CarPlay route-sharing API, Wallet feature, FaceTime camera feature, or restore-image availability change should stay separate unless the sources explicitly describe one combined change.
 
 Before extracting summary and key facts, remove source-tail affiliate recommendation blocks that follow the real article body. Common anchors include `My favorite Apple accessory recommendations`, `Worth checking out on Amazon`, `Chance's favorites`, `Official Apple Store on Amazon`, `Amazon Prime Day`, and `Best ... accessories/deals`. Do not remove the actual body before those anchors.
 
@@ -119,9 +128,9 @@ Use the earliest precise public timestamp among merged articles to decide whethe
 - Use each event's `key_facts` before writing the brief. These facts are extracted generically from numeric paragraphs, list items, tables, and feature lists; they are not optional background.
 - Preserve material enumerations from official sources. Examples of enumeration types include fraud/safety report figures, App Store review counts, eligible countries or regions, device model lists, feature names, terms, dates, and rollout limits. Compress phrasing when needed, but do not collapse the list into a vague summary.
 - Coverage comes before brevity: include every eligible event, not just a hand-picked top set.
-- Treat JSON `events` as an eligible-event queue, not as a ranking of top stories. A smaller event that has a concrete Apple product, system, service, local-language, regional-availability, developer-platform, privacy/security, health/accessibility, or built-in-app change must still appear in the final brief when it passed inclusion.
-- Do not drop eligible granular events just because a same-day major OS, WWDC, service, or platform story is more prominent. When volume is high, combine related events into one fuller bullet with distinct subfacts, but preserve each event's concrete change and source link.
-- If compressing a long brief, merge adjacent eligible events by shared product/version/theme instead of removing localized features, input methods, regional rollouts, compatibility lists, feature lists, or other implementation details surfaced in `title`, `summary`, or `key_facts`.
+- Treat JSON `events` as an eligible-event queue and as the default unit for final bullets, not as loose source material for freeform recombination. A smaller event that has a concrete Apple product, system, service, local-language, regional-availability, developer-platform, privacy/security, health/accessibility, or built-in-app change must still appear in the final brief when it passed inclusion.
+- Do not drop eligible granular events just because a same-day major OS, WWDC, service, or platform story is more prominent. When volume is high, shorten wording within each event's bullet instead of combining independent events into broad theme paragraphs.
+- If compressing a long brief, do not remove localized features, input methods, regional rollouts, compatibility lists, feature lists, or other implementation details surfaced in `title`, `summary`, or `key_facts`.
 - Prefer 2-4 substantial Chinese sentences per item when source detail supports it.
 - Source links go only at the end of each item: `（来源：[MacRumors](...), [9to5Mac](...)）`
 - Retain any source link that contributes independent facts, feature lists, compatibility details, implementation details, local context, or materially different framing unless another retained source fully duplicates those same details.

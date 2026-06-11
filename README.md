@@ -12,14 +12,15 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 0.7.0 - 2026-06-10
+### 1.0.0 - 2026-06-11
 
-- Added guarded third-party Apple-platform availability handling so routine app or service listings stay in `deferred_events` while direct Apple platform approvals and interoperability stories remain eligible.
-- Improved high-volume WWDC and OS-preview clustering with topic facets for App Store policy, subscription bundles, discovery, Apple services, AirPods firmware and settings, Sidecar, iPhone Mirroring, wallpapers, macOS performance feedback, and MacBook memory or local-AI reports.
-- Improved final-brief guidance so hardware roadmap clues, hardware specification rumors, OS feature changes, service policy changes, and app or service launches stay separate when condensing long briefs.
-- Improved source cleanup by trimming article-tail affiliate recommendation blocks before summary and `key_facts` extraction.
-- Fixed macOS performance feedback classification so performance and bug wording remains in software/system coverage instead of security or hardware buckets.
-- Added regression tests for third-party deferral, affiliate cleanup, micro-event clustering, macOS performance classification, MacBook memory/local-AI splitting, and final source-link behavior.
+This is the first formal major release. The skill matured during the WWDC news surge, which acted as a real pressure test: unusually dense Apple coverage exposed weak spots in discovery, clustering, and final-brief compression, and drove the fixes and hardening included in this version.
+
+- Improved OS and WWDC micro-event clustering with component-level facets for communication frameworks, FaceTime camera features, Time Machine/AFP changes, boot-volume detection, Rosetta support, and Mac hardware reliability reports.
+- Tightened final-brief guidance so separate JSON `events` stay as separate bullets unless source review confirms duplicate coverage of the same core event.
+- Improved direct Apple-subject handling so competitor, third-party, or partner background no longer suppresses Apple OS, developer-tool, legal, service, official-accessory, or ecosystem-interoperability stories.
+- Kept source cleanup details in fallback policy while simplifying `SKILL.md` to emphasize automation workflow and final-output constraints.
+- Added regression tests for developer-tool relevance, official accessory availability, in-window detail selection, third-party deferral, and OS-component de-clustering.
 
 ## What It Does
 

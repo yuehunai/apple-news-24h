@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.0.0 - 2026-06-11
+
+- Improved OS and WWDC micro-event clustering with component-level facets for communication frameworks, FaceTime camera features, Time Machine/AFP changes, boot-volume detection, Rosetta support, and Mac hardware reliability reports.
+- Tightened final-brief guidance so separate JSON `events` stay as separate bullets unless source review confirms duplicate coverage of the same core event.
+- Improved direct Apple-subject handling so competitor, third-party, or partner background no longer suppresses Apple OS, developer-tool, legal, service, official-accessory, or ecosystem-interoperability stories.
+- Kept source cleanup details in fallback policy while simplifying `SKILL.md` to emphasize automation workflow and final-output constraints.
+- Added regression tests for developer-tool relevance, official accessory availability, in-window detail selection, third-party deferral, and OS-component de-clustering.
+
 ## 0.7.0 - 2026-06-10
 
 - Added guarded third-party Apple-platform availability handling so routine app or service listings stay in `deferred_events` while direct Apple platform approvals and interoperability stories remain eligible.

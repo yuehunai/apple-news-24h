@@ -412,6 +412,20 @@ HARD_EXCLUDE_TERMS = [
     "微软确认",
 ]
 
+NON_OVERRIDABLE_HARD_EXCLUDE_TERMS = [
+    "appleinsider podcast",
+    "deals:",
+    "giveaway",
+    "record low",
+    "upgrade decision",
+    "amazon",
+    "best buy",
+    "switchbot",
+    "homekit weekly",
+    "macrumors show",
+    "mactracker",
+]
+
 STRONG_NEWS_ACTION_TERMS = [
     "adopt",
     "adopts",
@@ -1715,6 +1729,111 @@ APPLE_FIRST_PARTY_APP_TERMS = [
     "苹果电视",
 ]
 
+APPLE_DEVELOPER_TOOL_TERMS = [
+    "xcode",
+    "swift",
+    "testflight",
+    "developer tools",
+    "developer tool",
+    "coding tool",
+    "coding tools",
+    "agentic coding",
+    "开发者工具",
+    "开发工具",
+]
+
+APPLE_DEVELOPER_TOOL_ACTION_TERMS = [
+    "integration",
+    "integrate",
+    "integrated",
+    "support for",
+    "supports",
+    "adds",
+    "expands",
+    "native support",
+    "plan, write, and review",
+    "集成",
+    "接入",
+    "支持",
+    "新增",
+    "扩展",
+]
+
+OFFICIAL_APPLE_ACCESSORY_TERMS = [
+    "travel case",
+    "case",
+    "accessory",
+    "accessories",
+    "apple store online",
+    "保护套",
+    "旅行保护套",
+    "配件",
+]
+
+OFFICIAL_APPLE_ACCESSORY_ACTION_TERMS = [
+    "discontinuing",
+    "discontinued",
+    "unavailable",
+    "no longer available",
+    "removed from",
+    "pulled from",
+    "sold out",
+    "下架",
+    "停售",
+    "停产",
+    "不可用",
+    "缺货",
+]
+
+OS_FEATURE_ACTION_TERMS = [
+    "add",
+    "adds",
+    "added",
+    "remove",
+    "removes",
+    "removed",
+    "missing",
+    "drops",
+    "drop",
+    "change",
+    "changes",
+    "changed",
+    "update",
+    "updates",
+    "updated",
+    "revamp",
+    "revamps",
+    "integration",
+    "integrate",
+    "integrated",
+    "feature",
+    "features",
+    "新增",
+    "移除",
+    "删除",
+    "缺失",
+    "取消",
+    "调整",
+    "改进",
+    "优化",
+    "集成",
+    "接入",
+    "功能",
+]
+
+OS_SUMMARY_TERMS = [
+    "roundup",
+    "recap",
+    "everything new",
+    "all the new",
+    "feature list",
+    "features list",
+    "主要更新点",
+    "一文汇总",
+    "汇总",
+    "总览",
+]
+
 
 def has_apple_first_party_release_context(text: str) -> bool:
     lower = text.lower()
@@ -1730,6 +1849,69 @@ def has_apple_first_party_release_context(text: str) -> bool:
     return False
 
 
+def is_apple_developer_tool_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, APPLE_DEVELOPER_TOOL_TERMS) <= 0:
+        return False
+    return score_terms(lower, APPLE_DEVELOPER_TOOL_ACTION_TERMS) > 0
+
+
+def is_official_apple_accessory_market_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, APPLE_TERMS) <= 0:
+        return False
+    if score_terms(lower, OFFICIAL_APPLE_ACCESSORY_TERMS) <= 0:
+        return False
+    return score_terms(lower, OFFICIAL_APPLE_ACCESSORY_ACTION_TERMS) > 0
+
+
+def has_direct_apple_subject_context(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, APPLE_TERMS) <= 0:
+        return False
+    if is_apple_developer_tool_story(lower) or is_official_apple_accessory_market_story(lower):
+        return True
+    product_or_platform_score = score_terms(
+        lower,
+        [
+            "iphone",
+            "ipad",
+            "mac",
+            "macbook",
+            "apple watch",
+            "airpods",
+            "vision pro",
+            "homepod",
+            "apple tv",
+            "ios",
+            "ipados",
+            "macos",
+            "watchos",
+            "tvos",
+            "visionos",
+            "app store",
+            "apple wallet",
+            "apple music",
+            "xcode",
+            "苹果",
+            "苹果电视",
+            "苹果手表",
+            "苹果应用商店",
+        ],
+    )
+    action_score = score_terms(lower, POSITIVE_ACTION_TERMS + STRONG_NEWS_ACTION_TERMS)
+    return product_or_platform_score > 0 and action_score > 0
+
+
+def should_hard_exclude_candidate(text: str) -> bool:
+    lower = text.lower()
+    if not any(term in lower for term in HARD_EXCLUDE_TERMS):
+        return False
+    if any(term in lower for term in NON_OVERRIDABLE_HARD_EXCLUDE_TERMS):
+        return True
+    return not has_direct_apple_subject_context(text)
+
+
 def is_third_party_platform_availability_candidate(text: str) -> bool:
     lower = text.lower()
     if score_terms(lower, APPLE_TERMS) <= 0:
@@ -1743,6 +1925,69 @@ def is_third_party_platform_availability_candidate(text: str) -> bool:
     if has_apple_first_party_release_context(lower):
         return False
     return True
+
+
+def is_routine_third_party_apple_platform_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, APPLE_TERMS) <= 0:
+        return False
+    if has_apple_first_party_release_context(lower) or is_apple_developer_tool_story(lower):
+        return False
+    platform_score = score_terms(
+        lower,
+        [
+            "iphone",
+            "ipad",
+            "mac",
+            "apple watch",
+            "vision pro",
+            "ios",
+            "ipados",
+            "macos",
+            "watchos",
+            "visionos",
+            "app store",
+            "苹果应用商店",
+        ],
+    )
+    third_party_subject_score = score_terms(
+        lower,
+        [
+            "third-party",
+            "third party",
+            "omnigroup",
+            "omnioutliner",
+            "whatsapp",
+            "msi",
+            "benq",
+            "第三方",
+        ],
+    )
+    action_score = score_terms(
+        lower,
+        [
+            "available",
+            "availability",
+            "launch",
+            "launches",
+            "released",
+            "updated",
+            "update",
+            "version",
+            "support",
+            "supports",
+            "localization",
+            "languages",
+            "上架",
+            "上线",
+            "发布",
+            "更新",
+            "支持",
+            "适配",
+            "语言",
+        ],
+    )
+    return platform_score > 0 and third_party_subject_score > 0 and action_score > 0
 
 
 def score_messages_platform_terms(text: str) -> int:
@@ -1789,7 +2034,7 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
         return False
     text = f"{candidate.title} {candidate.summary} {candidate.context}"
     lower_text = text.lower()
-    if any(term in lower_text for term in HARD_EXCLUDE_TERMS):
+    if should_hard_exclude_candidate(text):
         return False
     apple_score = score_terms(text, APPLE_TERMS)
     action_score = score_terms(text, POSITIVE_ACTION_TERMS)
@@ -1801,6 +2046,10 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
 
     if apple_score <= 0:
         return False
+    if is_apple_developer_tool_story(text):
+        return True
+    if is_official_apple_accessory_market_story(text):
+        return True
     if is_apple_research_candidate(text):
         return True
     if is_apple_health_data_research_candidate(text):
@@ -1810,6 +2059,8 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     if detect_event_kind(candidate.title, candidate.summary) == "ecosystem_interop":
         return True
     if is_third_party_platform_availability_candidate(text):
+        return True
+    if is_routine_third_party_apple_platform_story(text):
         return True
     official_service_promo = (
         score_terms(
@@ -2891,9 +3142,82 @@ def app_store_policy_score(text: str) -> int:
     return score_terms(text, APP_STORE_POLICY_TERMS)
 
 
+def os_feature_component_facets_from_text(text: str) -> set[str]:
+    lower = text.lower()
+    facets: set[str] = set()
+    if (
+        score_terms(lower, ["carplay"]) > 0
+        and score_terms(lower, ["route sharing", "route", "navigation", "路线共享", "路线", "导航"]) > 0
+    ):
+        facets.add("carplay-route-sharing")
+    if score_terms(
+        lower,
+        [
+            "recovery mode",
+            "recovery repair mode",
+            "recovery 修复模式",
+            "恢复模式",
+            "恢复助理",
+            "diagnostic",
+            "diagnostics",
+            "诊断",
+            "抹掉所有内容",
+            "nearby device recovery",
+            "附近设备恢复",
+        ],
+    ) > 0:
+        facets.add("device-recovery-mode")
+    if (
+        score_terms(lower, ["restore image", "recovery image", "ipsw", "image download", "download link", "镜像下载", "恢复镜像", "下载链接"]) > 0
+        and score_terms(lower, ["ios", "ipados", "iphone", "ipad"]) > 0
+    ):
+        facets.add("restore-image-availability")
+    if (
+        score_terms(lower, ["apple notes", "notes app", "notes", "备忘录", "笔记"]) > 0
+        and score_terms(lower, ["divider", "dividers", "markdown", "siri", "image playground", "分隔线", "图像生成"]) > 0
+    ):
+        facets.add("notes-app-update")
+    if (
+        score_terms(lower, ["shortcuts", "shortcut builder", "shortcut", "快捷指令"]) > 0
+        and score_terms(lower, ["workflow", "automation", "plain english", "natural language", "apple intelligence", "工作流", "自动化", "自然语言", "生成"]) > 0
+    ):
+        facets.add("shortcuts-automation-builder")
+    if score_terms(lower, ["livecommunicationkit", "callkit", "voip", "全屏来电", "锁屏", "来电显示", "默认通话应用"]) > 0:
+        facets.add("communication-framework-callkit")
+    if (
+        score_terms(lower, ["facetime"]) > 0
+        and score_terms(lower, ["dual camera", "dual capture", "front and rear", "前后摄像头", "双摄像头", "双摄", "翻转"]) > 0
+    ):
+        facets.add("facetime-dual-camera")
+    if (
+        score_terms(lower, ["afp", "apple filing protocol", "time capsule", "time machine", "airport disk"]) > 0
+        and score_terms(lower, ["smb", "smbv2", "smbv3", "network backup", "网络备份", "备份", "协议"]) > 0
+    ):
+        facets.add("time-machine-afp-smb")
+    if (
+        score_terms(lower, ["asahi linux", "startup disk", "startup volume", "bootable volume", "boot volume", "启动盘", "启动卷", "引导卷", "磁盘启动"]) > 0
+        and score_terms(lower, ["partition", "volume", "detect", "detection", "分区", "检测", "启动选择器"]) > 0
+    ):
+        facets.add("boot-volume-detection")
+    if (
+        score_terms(lower, ["rosetta", "rosetta 2", "intel app", "intel apps", "intel-built", "intel-compiled", "英特尔架构应用"]) > 0
+        and score_terms(lower, ["support", "last", "final", "remove", "removes", "end", "支持", "最后", "停用", "取消"]) > 0
+    ):
+        facets.add("rosetta-intel-app-support")
+    if (
+        score_terms(lower, ["hardware fault", "fault rate", "failure rate", "reliable", "reliability", "返修率", "硬件故障", "可靠性"]) > 0
+        and score_terms(lower, ["apple silicon", "macbook", "intel mac", "苹果芯片", "英特尔机型"]) > 0
+    ):
+        facets.add("mac-hardware-reliability")
+    return facets
+
+
 def topic_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
+    facets |= os_feature_component_facets_from_text(lower)
+    if is_apple_developer_tool_story(lower):
+        facets.add("developer-tool-integration")
     if app_store_policy_score(lower) > 0:
         facets.add("app-store-policy")
     if (
@@ -3078,11 +3402,53 @@ def topic_facets_from_text(text: str) -> set[str]:
     return facets
 
 
+def merge_guard_facets_from_text(text: str) -> set[str]:
+    lower = text.lower()
+    facets: set[str] = set()
+    facets |= os_feature_component_facets_from_text(lower)
+    platform_groups = {
+        "platform-ios": ["ios", "iphone"],
+        "platform-ipados": ["ipados", "ipad"],
+        "platform-macos": ["macos", "mac"],
+        "platform-watchos": ["watchos", "apple watch"],
+        "platform-tvos": ["tvos", "apple tv"],
+        "platform-visionos": ["visionos", "vision pro"],
+    }
+    for facet, terms in platform_groups.items():
+        if score_terms(lower, terms) > 0:
+            facets.add(facet)
+    if facets & {"platform-ios", "platform-ipados"}:
+        facets.add("platform-mobile-os")
+    if score_terms(lower, OS_SUMMARY_TERMS) > 0 and facets:
+        facets.add("system-summary")
+    if (
+        score_terms(lower, OS_FEATURE_ACTION_TERMS) > 0
+        and score_terms(lower, ["app", "application", "built-in app", "messages app", "phone app", "walkie-talkie", "应用", "内置应用", "对讲机"]) > 0
+        and facets
+    ):
+        facets.add("built-in-app-change")
+    if (
+        score_terms(lower, ["input method", "keyboard", "typing", "输入法", "键盘", "联想词", "标点", "生僻字"]) > 0
+        and facets
+    ):
+        facets.add("input-method-change")
+    if is_apple_developer_tool_story(lower):
+        facets.add("developer-tool-integration")
+    return facets
+
+
 def primary_topic_facets(title: str, summary: str = "") -> set[str]:
     title_facets = topic_facets_from_text(title)
     if title_facets:
         return title_facets
     return topic_facets_from_text(f"{title} {summary}")
+
+
+def primary_merge_guard_facets(title: str, summary: str = "") -> set[str]:
+    title_facets = merge_guard_facets_from_text(title)
+    if title_facets:
+        return title_facets
+    return merge_guard_facets_from_text(f"{title} {summary}")
 
 
 def article_primary_facets(article: Article) -> set[str]:
@@ -3096,6 +3462,17 @@ def event_primary_facets(event: Event) -> set[str]:
     return facets
 
 
+def article_merge_guard_facets(article: Article) -> set[str]:
+    return primary_merge_guard_facets(article.title, article.summary)
+
+
+def event_merge_guard_facets(event: Event) -> set[str]:
+    facets: set[str] = set()
+    for article in event.articles:
+        facets |= article_merge_guard_facets(article)
+    return facets
+
+
 BROAD_TOPIC_FACETS = {"os-compatibility", "hardware-roadmap"}
 
 
@@ -3104,10 +3481,39 @@ def effective_topic_facets(facets: set[str]) -> set[str]:
     return specific or facets
 
 
+def merge_guard_platform_facets(facets: set[str]) -> set[str]:
+    return {facet for facet in facets if facet.startswith("platform-")}
+
+
+def merge_guard_action_facets(facets: set[str]) -> set[str]:
+    return facets - merge_guard_platform_facets(facets)
+
+
+def merge_guard_facets_compatible(article_facets: set[str], event_facets: set[str]) -> bool:
+    if not article_facets or not event_facets:
+        return True
+    if not (article_facets & event_facets):
+        return False
+    article_platforms = merge_guard_platform_facets(article_facets)
+    event_platforms = merge_guard_platform_facets(event_facets)
+    article_actions = merge_guard_action_facets(article_facets)
+    event_actions = merge_guard_action_facets(event_facets)
+    if len(article_platforms) > 2 and event_platforms and article_platforms != event_platforms:
+        return False
+    if len(event_platforms) > 2 and article_platforms and article_platforms != event_platforms:
+        return False
+    if article_actions and not (article_actions & event_actions):
+        return False
+    if event_actions and not (article_actions & event_actions):
+        return False
+    return True
+
+
 def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = None) -> str:
     facts = " ".join(key_facts or [])
     text = f"{title} {summary} {facts}"
     lower = text.lower()
+    title_lower = title.lower()
     if (
         score_terms(lower, ["airdrop", "隔空投送"]) > 0
         and score_terms(
@@ -3117,22 +3523,41 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         > 0
     ):
         return "ecosystem_interop"
+    if is_apple_developer_tool_story(text):
+        return "developer_tool"
+    if is_official_apple_accessory_market_story(text):
+        return "hardware_market"
     if is_apple_health_data_research_candidate(text):
         return "health_research"
     if is_apple_research_candidate(text):
         return "apple_research"
     if is_messages_platform_candidate(text):
         return "messages_platform"
+    if app_store_policy_score(lower) > 0:
+        return "app_store_trust"
     if is_third_party_platform_availability_candidate(text):
         return "third_party_ecosystem"
+    if is_routine_third_party_apple_platform_story(text):
+        return "third_party_ecosystem"
+    if score_terms(lower, ["apple wallet", "wallet", "passport", "id support", "driver's license", "钱包", "护照", "证件"]) > 0:
+        return "wallet_feature"
+    if (
+        score_terms(title_lower, ["ios", "ipados", "macos", "watchos", "tvos", "visionos", "系统"]) > 0
+        and score_terms(title_lower, OS_FEATURE_ACTION_TERMS) > 0
+    ):
+        return "os_app"
+    if (
+        score_terms(lower, ["thread", "matter", "homekit", "smart home", "home app", "tvos", "homepod", "智能家居", "家庭 app"]) > 0
+        and score_terms(lower, ["apple tv", "tvos", "homepod", "homekit", "苹果电视", "苹果"]) > 0
+        and score_terms(lower, OS_FEATURE_ACTION_TERMS + POSITIVE_ACTION_TERMS) > 0
+    ):
+        return "os_app"
     if score_terms(lower, ["age assurance", "age verification", "child safety", "state law", "texas", "年龄验证", "儿童安全"]) > 0:
         return "regional_regulation"
     if score_terms(lower, ["antitrust", "competition regulator", "cci", "doj", "subpoena", "lawsuit", "court", "investigation", "probe", "反垄断", "司法部", "传票", "法院", "监管调查"]) > 0:
         return "legal_antitrust"
     if score_terms(lower, ["developer center", "developer academy", "developer lab", "开发者中心", "开发者学院"]) > 0:
         return "developer_program"
-    if app_store_policy_score(lower) > 0:
-        return "app_store_trust"
     if "macos-performance-feedback" in topic_facets_from_text(text):
         return "os_app"
     if (
@@ -3165,8 +3590,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         and score_terms(lower, ["ios", "ipados", "macos", "software", "系统"]) > 0
     ):
         return "os_compatibility"
-    if score_terms(lower, ["apple wallet", "wallet", "passport", "id support", "driver's license", "钱包", "护照", "证件"]) > 0:
-        return "wallet_feature"
     if (
         score_terms(lower, ["iphone", "ipad", "apple watch"]) > 0
         and score_terms(
@@ -3261,10 +3684,16 @@ def classify_relevance_tier(
         return "strong", "official Apple source"
     if event_kind == "ecosystem_interop":
         return "ecosystem", "direct Apple ecosystem interoperability or compatibility impact"
+    if is_apple_developer_tool_story(text):
+        return "strong", "Apple first-party developer tool or Xcode capability change"
+    if is_official_apple_accessory_market_story(text):
+        return "strong", "Apple official hardware accessory availability change"
     if event_kind == "messages_platform":
         return "strong", "Apple Messages or iMessage platform capability change"
     if is_third_party_platform_availability_candidate(text):
         return "weak", "third-party app or service availability on Apple platforms"
+    if event_kind == "third_party_ecosystem" or is_routine_third_party_apple_platform_story(text):
+        return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
     if third_party_score > 0 and apple_score > 0 and score_terms(
         lower,
         [
@@ -3296,6 +3725,7 @@ def classify_relevance_tier(
         "regional_regulation",
         "legal_antitrust",
         "developer_program",
+        "developer_tool",
         "app_store_trust",
         "security_privacy",
         "messages_platform",
@@ -3323,6 +3753,7 @@ def choose_category(title: str, summary: str) -> str:
         "regional_regulation",
         "legal_antitrust",
         "developer_program",
+        "developer_tool",
         "app_store_trust",
         "security_privacy",
         "messages_platform",
@@ -3513,6 +3944,13 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
         score += 30
     if is_third_party_platform_availability_candidate(text):
         score += 70
+    if is_apple_developer_tool_story(text):
+        score += 30
+    if (
+        score_terms(candidate.title, ["ios", "ipados", "macos", "watchos", "tvos", "visionos", "系统"]) > 0
+        and score_terms(candidate.title, OS_FEATURE_ACTION_TERMS) > 0
+    ):
+        score += 20
     if kind in {
         "messages_platform",
         "service_content",
@@ -3524,6 +3962,7 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
         "legal_antitrust",
         "regional_regulation",
         "developer_program",
+        "developer_tool",
         "app_store_trust",
         "retail_store",
         "health_research",
@@ -3531,6 +3970,8 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
         "ecosystem_interop",
     }:
         score += 20
+    if kind == "legal_antitrust":
+        score += 15
     if score_terms(
         text,
         [
@@ -3567,17 +4008,84 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
     return score, date_score, len(candidate.summary or candidate.context), candidate.url
 
 
+def candidate_url_date_bucket(
+    candidate: Candidate,
+    source: Source,
+    window_start_utc: datetime,
+    now_utc: datetime,
+) -> int:
+    match = re.search(r"/(20\d{2})/(\d{2})/(\d{2})/", candidate.url)
+    if not match:
+        return 0
+    try:
+        source_tz = ZoneInfo(source.default_tz) if ZoneInfo is not None else timezone.utc
+    except ZoneInfoNotFoundError:
+        source_tz = timezone.utc
+    year, month, day = (int(value) for value in match.groups())
+    start = datetime(year, month, day, 0, 0, tzinfo=source_tz).astimezone(timezone.utc)
+    end = start + timedelta(days=1)
+    if end <= window_start_utc:
+        return -2
+    if start <= now_utc and end > window_start_utc:
+        return 1
+    return 0
+
+
+def candidate_time_bucket(
+    candidate: Candidate,
+    source: Source,
+    window_start_utc: datetime | None,
+    now_utc: datetime | None,
+) -> int:
+    if window_start_utc is None or now_utc is None:
+        return 0
+    if candidate.feed_time_raw:
+        parsed = parse_datetime_value(candidate.feed_time_raw, source.default_tz)
+        if parsed is not None:
+            published = parsed.astimezone(timezone.utc)
+            if window_start_utc < published <= now_utc:
+                return 2
+            if published <= window_start_utc:
+                return -2
+            return -1
+    return candidate_url_date_bucket(candidate, source, window_start_utc, now_utc)
+
+
+def candidate_detail_sort_key(
+    candidate: Candidate,
+    source: Source,
+    window_start_utc: datetime | None,
+    now_utc: datetime | None,
+) -> tuple[int, int, int, int, str]:
+    score, date_score, detail_len, url = candidate_detail_priority(candidate)
+    return candidate_time_bucket(candidate, source, window_start_utc, now_utc), score, date_score, detail_len, url
+
+
 def select_detail_candidates(
     candidates: list[Candidate],
     sources_by_name: dict[str, Source],
     limit: int,
+    window_start_utc: datetime | None = None,
+    now_utc: datetime | None = None,
 ) -> list[Candidate]:
     by_source: dict[str, list[Candidate]] = {name: [] for name in sources_by_name}
     for candidate in candidates:
         by_source.setdefault(candidate.source, []).append(candidate)
 
-    for bucket in by_source.values():
-        bucket.sort(key=candidate_detail_priority, reverse=True)
+    for source_name, bucket in by_source.items():
+        source = sources_by_name.get(source_name)
+        if source is None:
+            bucket.sort(key=candidate_detail_priority, reverse=True)
+            continue
+        bucket.sort(
+            key=lambda item: candidate_detail_sort_key(
+                item,
+                source,
+                window_start_utc,
+                now_utc,
+            ),
+            reverse=True,
+        )
 
     source_order = sorted(
         by_source,
@@ -3649,8 +4157,16 @@ def topic_facets_compatible(article: Article, event: Event) -> bool:
     article_facets = effective_topic_facets(article_primary_facets(article))
     event_facets = effective_topic_facets(event_primary_facets(event))
     if not article_facets or not event_facets:
-        return True
-    return bool(article_facets & event_facets)
+        topic_match = True
+    else:
+        topic_match = bool(article_facets & event_facets)
+    if not topic_match:
+        return False
+    article_guard_facets = article_merge_guard_facets(article)
+    event_guard_facets = event_merge_guard_facets(event)
+    if not merge_guard_facets_compatible(article_guard_facets, event_guard_facets):
+        return False
+    return True
 
 
 def event_relevance_tier(articles: list[Article]) -> tuple[str, str]:
@@ -4078,6 +4594,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         deduped_candidates,
         sources_by_name,
         args.max_detail_pages,
+        window_start_utc,
+        now_utc,
     ):
         source = sources_by_name.get(candidate.source)
         if source is None:
