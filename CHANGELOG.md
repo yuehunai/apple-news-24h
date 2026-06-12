@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented here.
 
+## 1.0.1 - 2026-06-12
+
+- Improved `SKILL.md` guidance by consolidating inclusion/exclusion, event grouping, `key_facts`, and final bullet-count rules without narrowing coverage.
+- Updated `references/news_policy.md` to match the skill guidance while retaining fallback-specific messaging, third-party availability, affiliate cleanup, and timestamp guidance.
+- Tightened final-brief instructions around one eligible JSON `events` item per bullet, duplicate-only merging, and preserving concrete details from `title`, `summary`, and `key_facts`.
+- Kept crawler and runtime behavior unchanged; this release is documentation-only and uses the existing verification suite.
+
 ## 1.0.0 - 2026-06-11
 
 - Improved OS and WWDC micro-event clustering with component-level facets for communication frameworks, FaceTime camera features, Time Machine/AFP changes, boot-volume detection, Rosetta support, and Mac hardware reliability reports.

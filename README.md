@@ -12,15 +12,12 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.0.0 - 2026-06-11
+### 1.0.1 - 2026-06-12
 
-This is the first formal major release. The skill matured during the WWDC news surge, which acted as a real pressure test: unusually dense Apple coverage exposed weak spots in discovery, clustering, and final-brief compression, and drove the fixes and hardening included in this version.
-
-- Improved OS and WWDC micro-event clustering with component-level facets for communication frameworks, FaceTime camera features, Time Machine/AFP changes, boot-volume detection, Rosetta support, and Mac hardware reliability reports.
-- Tightened final-brief guidance so separate JSON `events` stay as separate bullets unless source review confirms duplicate coverage of the same core event.
-- Improved direct Apple-subject handling so competitor, third-party, or partner background no longer suppresses Apple OS, developer-tool, legal, service, official-accessory, or ecosystem-interoperability stories.
-- Kept source cleanup details in fallback policy while simplifying `SKILL.md` to emphasize automation workflow and final-output constraints.
-- Added regression tests for developer-tool relevance, official accessory availability, in-window detail selection, third-party deferral, and OS-component de-clustering.
+- Improved `SKILL.md` guidance by consolidating inclusion/exclusion, event grouping, `key_facts`, and final bullet-count rules without narrowing coverage.
+- Updated `references/news_policy.md` to match the skill guidance while retaining fallback-specific messaging, third-party availability, affiliate cleanup, and timestamp guidance.
+- Tightened final-brief instructions around one eligible JSON `events` item per bullet, duplicate-only merging, and preserving concrete details from `title`, `summary`, and `key_facts`.
+- Kept crawler and runtime behavior unchanged; this release is documentation-only and uses the existing verification suite.
 
 ## What It Does
 
