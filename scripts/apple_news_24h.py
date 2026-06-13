@@ -685,6 +685,23 @@ STOPWORDS = {
     "your",
 }
 
+GENERIC_MERGE_TOKENS = STOPWORDS | {
+    "article",
+    "blog",
+    "media",
+    "post",
+    "published",
+    "showcase",
+    "shown",
+    "today",
+    "yesterday",
+    "发布",
+    "报道",
+    "消息",
+    "展示",
+    "苹果",
+}
+
 SOURCE_PRIORITY = {
     "MacRumors": 1,
     "9to5Mac": 2,
@@ -1038,6 +1055,16 @@ CROSS_LANGUAGE_TOKEN_MAP = {
     "论文": "paper",
     "研究": "research",
     "研究人员": "researcher",
+    "迪士尼": "disney",
+    "主题乐园": "theme-park",
+    "乐园": "theme-park",
+    "飞行项目": "ride",
+    "景观": "landmark",
+    "沉浸式": "immersive",
+    "沉浸": "immersive",
+    "空间计算": "spatial-computing",
+    "美国": "america",
+    "佛罗里达": "florida",
     "苹果手表": "apple-watch",
     "健康应用": "health-app",
     "苹果健康": "apple-health",
@@ -2413,7 +2440,7 @@ TRAILING_PROMO_SECTION_PATTERNS = (
     r"chance(?:'|’|&#8217;|&rsquo;)s\s+favorites",
     r"official\s+apple\s+store\s+on\s+amazon",
     r"amazon\s+prime\s+day\s+\d{4}",
-    r"best\s+(?:iphone|ipad|mac|airpods|apple\s+tv\s+4k|apple\s+watch|vision\s+pro|apple)\s+"
+    r"best\s+(?:iphone|ipad|mac|airpods|apple\s+tv\s+4k|apple\s+watch(?:\s+and\s+iphone)?|iphone\s+and\s+apple\s+watch|vision\s+pro|apple)\s+"
     r"(?:accessories|deals\s+and\s+accessories)",
 )
 
@@ -3146,6 +3173,31 @@ def os_feature_component_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
     if (
+        score_terms(lower, ["weather app", "weather", "天气应用", "天气"]) > 0
+        and score_terms(lower, ["forecast", "precipitation", "wind", "highlights", "hourly", "10-day", "降水", "风力", "亮点", "小时", "10 天"]) > 0
+    ):
+        facets.add("weather-app-forecast")
+    if (
+        score_terms(lower, ["keyboard", "input method", "typing", "chinese input", "language support", "输入法", "键盘", "中文输入", "拼音", "候选词", "标点", "生僻字"]) > 0
+        and score_terms(lower, ["ios", "ipados", "iphone", "ipad", "system", "系统"]) > 0
+    ):
+        facets.add("keyboard-input-method")
+    if (
+        score_terms(lower, ["messages app", "messages", "imessage", "信息应用", "信息 app", "信息"]) > 0
+        and score_terms(lower, ["drawing", "markup", "sketch", "annotate", "绘图", "标注", "涂鸦"]) > 0
+    ):
+        facets.add("messages-drawing-markup")
+    if (
+        score_terms(lower, ["safari", "safari browser", "浏览器"]) > 0
+        and score_terms(lower, ["tab", "tabs", "extension", "extensions", "notify me", "apple intelligence", "ai", "标签页", "扩展", "网页监控", "自动整理"]) > 0
+    ):
+        facets.add("safari-browser-features")
+    if (
+        score_terms(lower, ["watchos", "apple watch"]) > 0
+        and score_terms(lower, ["siri app", "find my app", "find devices", "find items", "find people", "siri 应用", "查找应用"]) > 0
+    ):
+        facets.add("watchos-siri-findmy-apps")
+    if (
         score_terms(lower, ["carplay"]) > 0
         and score_terms(lower, ["route sharing", "route", "navigation", "路线共享", "路线", "导航"]) > 0
     ):
@@ -3212,10 +3264,55 @@ def os_feature_component_facets_from_text(text: str) -> set[str]:
     return facets
 
 
+def is_vision_pro_spatial_experience_story(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["vision pro"]) > 0
+        and score_terms(
+            lower,
+            [
+                "attraction",
+                "disney",
+                "epcot",
+                "enterprise",
+                "immersive",
+                "ride",
+                "simulation",
+                "soarin",
+                "spatial",
+                "theme park",
+                "training",
+                "主题乐园",
+                "乐园",
+                "迪士尼",
+                "飞行项目",
+                "空间计算",
+                "沉浸",
+                "沉浸式",
+                "仿真",
+                "培训",
+            ],
+        )
+        > 0
+    )
+
+
 def topic_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
     facets |= os_feature_component_facets_from_text(lower)
+    if is_vision_pro_spatial_experience_story(lower):
+        facets.add("vision-pro-spatial-experience")
+    if (
+        score_terms(lower, ["beats"]) > 0
+        and score_terms(lower, ["headphone", "headphones", "earbuds", "耳机", "耳罩"]) > 0
+    ):
+        facets.add("beats-headphones")
+    if (
+        score_terms(lower, ["iphone"]) > 0
+        and score_terms(lower, ["dummy", "mockup", "color", "colors", "dark cherry", "机模", "配色", "颜色", "深樱桃", "浅蓝", "深灰"]) > 0
+    ):
+        facets.add("iphone-color-mockup")
     if is_apple_developer_tool_story(lower):
         facets.add("developer-tool-integration")
     if app_store_policy_score(lower) > 0:
@@ -3437,18 +3534,23 @@ def merge_guard_facets_from_text(text: str) -> set[str]:
     return facets
 
 
+BROAD_TOPIC_FACETS = {"os-compatibility", "hardware-roadmap"}
+
+
 def primary_topic_facets(title: str, summary: str = "") -> set[str]:
     title_facets = topic_facets_from_text(title)
-    if title_facets:
+    if title_facets and (title_facets - BROAD_TOPIC_FACETS):
         return title_facets
-    return topic_facets_from_text(f"{title} {summary}")
+    combined_facets = topic_facets_from_text(f"{title} {summary}")
+    return combined_facets or title_facets
 
 
 def primary_merge_guard_facets(title: str, summary: str = "") -> set[str]:
     title_facets = merge_guard_facets_from_text(title)
-    if title_facets:
+    if title_facets and merge_guard_action_facets(title_facets):
         return title_facets
-    return merge_guard_facets_from_text(f"{title} {summary}")
+    combined_facets = merge_guard_facets_from_text(f"{title} {summary}")
+    return combined_facets or title_facets
 
 
 def article_primary_facets(article: Article) -> set[str]:
@@ -3471,9 +3573,6 @@ def event_merge_guard_facets(event: Event) -> set[str]:
     for article in event.articles:
         facets |= article_merge_guard_facets(article)
     return facets
-
-
-BROAD_TOPIC_FACETS = {"os-compatibility", "hardware-roadmap"}
 
 
 def effective_topic_facets(facets: set[str]) -> set[str]:
@@ -4248,19 +4347,15 @@ def should_merge(article: Article, event: Event) -> bool:
     strong_shared = {
         token
         for token in shared
-        if token
-        not in {
-            "iphone",
-            "ipad",
-            "mac",
-            "ios",
-            "macos",
-            "update",
-            "new",
-            "apple",
-        }
+        if token not in GENERIC_MERGE_TOKENS
+        and not re.fullmatch(r"\d{1,4}", token)
+        and token
+        not in {"iphone", "ipad", "mac", "ios", "ipados", "macos", "watchos", "tvos", "visionos", "update", "new"}
     }
     if similarity >= 0.38 and len(shared) >= 3:
+        return True
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if common_facets and len(strong_shared) >= 3 and similarity >= 0.08:
         return True
     if len(strong_shared) >= 3 and similarity >= 0.18:
         return True

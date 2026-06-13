@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.1.0 - 2026-06-13
+
+- Improved event clustering with more specific topic facets for built-in app changes, Safari, Messages, Weather, input methods, Beats/headphone sightings, iPhone color mockups, and Vision Pro spatial-experience projects.
+- Fixed Vision Pro professional and immersive-experience coverage so cross-source Disney/EPCOT reports merge together while unrelated Beats or hardware-rumor stories stay separate.
+- Tightened merge scoring by ignoring generic publication and source words such as Apple, published, showcase, dates, and Chinese equivalents when deciding whether events are duplicates.
+- Improved 9to5Mac article cleanup by removing additional article-tail affiliate recommendation blocks before summary and `key_facts` extraction.
+- Updated `SKILL.md` and `references/news_policy.md` guidance to preserve granular high-volume Apple events while keeping fallback merge rules aligned with crawler behavior.
+- Added regression tests for the new clustering facets, Vision Pro cross-language merging, Beats separation, and source-tail promotion cleanup.
+
 ## 1.0.1 - 2026-06-12
 
 - Improved `SKILL.md` guidance by consolidating inclusion/exclusion, event grouping, `key_facts`, and final bullet-count rules without narrowing coverage.

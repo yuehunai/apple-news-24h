@@ -12,12 +12,14 @@
 
 ## 最新更新
 
-### 1.0.1 - 2026-06-12
+### 1.1.0 - 2026-06-13
 
-- 改进 `SKILL.md` 指引，合并纳入/排除、事件归并、`key_facts` 和最终要点数量规则，同时不缩窄覆盖约束。
-- 更新 `references/news_policy.md` 以同步 skill 指引，并保留兜底流程中的消息平台、第三方平台可用性、推广清理和时间规则细节。
-- 收紧最终简报说明，强调 eligible JSON `events` 默认一条对应一条要闻，只有确认重复事件才能合并，并保留 `title`、`summary` 和 `key_facts` 的具体细节。
-- 保持抓取器和运行时行为不变；本版本仅包含文档维护，并沿用现有验证套件。
+- 改进事件聚类，为内置 App 变化、Safari、Messages、天气、输入法、Beats / 耳机曝光、iPhone 配色机模和 Vision Pro 空间体验项目增加更具体的话题特征。
+- 修复 Vision Pro 专业和沉浸式体验报道的归并逻辑，使 Disney / EPCOT 跨来源报道能合并到同一事件，同时避免与 Beats 或无关硬件传闻混合。
+- 收紧合并评分，判断重复事件时忽略 Apple、published、showcase、日期以及中文“发布”“展示”“苹果”等泛化来源/发布词。
+- 改进 9to5Mac 正文清理，在摘要和 `key_facts` 抽取前移除更多文章尾部的 affiliate 推荐区块。
+- 更新 `SKILL.md` 和 `references/news_policy.md` 指引，在保留高新闻量 Apple 细粒度事件的同时，让兜底归并规则与抓取器行为保持一致。
+- 增加回归测试，覆盖新增聚类特征、Vision Pro 跨语种合并、Beats 拆分和文章来源尾部推广清理。
 
 ## 它会做什么
 

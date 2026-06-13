@@ -276,6 +276,44 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotIn("MacBook Neo", combined)
         self.assertNotIn("Logitech MX Master", combined)
 
+    def test_9to5_best_apple_watch_accessories_section_is_removed(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-06-12T18:00:00+00:00" />
+            <meta property="og:description" content="Apple is adding two first-party apps to watchOS 27." />
+          </head>
+          <body>
+            <div class="container med post-content">
+              <p>watchOS 27 will add a dedicated Siri app that keeps conversations available across Apple Watch, iPhone, Mac, and other devices.</p>
+              <p>Apple is also streamlining Find Devices, Find Items, and Find People into a unified Find My app on Apple Watch.</p>
+              <p>Best Apple Watch and iPhone accessories</p>
+              <ul>
+                <li>AirPods Pro 3 (now only $179, down from $249)</li>
+                <li>Portable USB-C charger for Apple Watch</li>
+                <li>Retro Mac stand for Apple Watch Nightstand Mode</li>
+              </ul>
+              <p>FTC: We use income earning auto affiliate links.</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/12/watchos-27-will-add-two-new-apps-to-your-apple-watch/",
+            title="watchOS 27 will add two new apps to your Apple Watch",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("dedicated Siri app", combined)
+        self.assertIn("unified Find My app", combined)
+        self.assertNotIn("AirPods Pro 3", combined)
+        self.assertNotIn("Retro Mac stand", combined)
+
     def test_selected_candidate_with_feed_time_survives_detail_fetch_failure(self):
         module = load_module()
         source = module.Source(
@@ -1424,6 +1462,69 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 2)
 
+    def test_weather_and_keyboard_input_updates_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果升级 iOS 27 版天气应用：可简要显示未来几天重要天气事件",
+                "iOS 27 版天气应用新增亮点版块，并引入每小时和 10 天降水、风力概览。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 键盘输入法扩展支持 10 种语言，优化简体中文输入",
+                "iOS 27 Beta 1 升级键盘输入法，新增 10 种语言，并改进拼音转换、上下文候选词和中文标点建议。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_iphone_color_dummy_and_beats_headphones_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果 iPhone 18 Pro Max 机模曝光：深樱桃色、浅蓝、深灰颜色亮相",
+                "消息源分享 iPhone 18 Pro Max 机模照片，展示深樱桃色、浅蓝色和深灰版本。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "韩国球员李刚仁佩戴苹果新款 Beats 耳机现身",
+                "继西班牙球员拉明·亚马尔之后，韩国球员李刚仁在世界杯期间佩戴新款 Beats 耳机现身。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_messages_drawing_and_safari_ai_features_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果升级 iOS 27 版信息应用，上线绘图工具",
+                "iOS 27 和 macOS 27 Golden Gate 的信息应用新增绘图选项，集成 Markup 标注工具。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 版 Safari 浏览器新增 AI 自动整理标签页、自定义扩展等功能",
+                "iOS 27 版 Safari 可按主题自动分类标签页，并支持用自然语言创建扩展和 Notify Me 网页监控。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
     def test_xcode_gemini_integration_is_strong_developer_tool_news(self):
         module = load_module()
         source = source_named(module, "9to5Mac")
@@ -1549,6 +1650,88 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(module.detect_event_kind(title, summary), "os_app")
         self.assertEqual(module.classify_relevance_tier(title, summary, [], "9to5Mac")[0], "strong")
+
+    def test_vision_pro_disney_story_does_not_merge_with_beats_headphones(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果 Beats 新耳机再度曝光：撞色设计，预估支持定制耳罩等",
+                (
+                    "科技媒体 9to5Mac 昨日（6 月 11 日）发布博文，报道称继西班牙球员拉明 · 亚马尔"
+                    "之后，韩国球员李刚仁在世界杯开赛期间佩戴新款 Beats 耳机现身。亚马尔此前展示的两款 "
+                    "Beats 耳机中，耳罩、头带与机身颜色一致，而本次李刚仁佩戴的耳机耳罩与头带为霓虹黄。"
+                    "该媒体认为 Beats 近期通过球员街拍持续制造悬念，预热新品发布。"
+                ),
+                source="IT之家",
+                facts=[
+                    "IT之家 6 月 13 日消息，科技媒体 9to5Mac 昨日（6 月 11 日）发布博文，报道称继西班牙球员拉明 · 亚马尔之后，韩国球员李刚仁在世界杯开赛期间佩戴新款 Beats 耳机现身。"
+                ],
+            ),
+            article_for(
+                module,
+                "苹果 Vision Pro 头显成最大功臣：助力迪士尼改造乐园项目，献礼美国 250 周年",
+                (
+                    "科技媒体 Appleinsider 昨日（6 月 12 日）发布博文，报道称迪士尼为迎接美国建国 250 周年，"
+                    "借助苹果 Vision Pro 头显，改造 EPCOT 经典飞行项目 Soarin，并将其更名为 Soarin' Across "
+                    "America，带领游客飞跃美国标志性景观。迪士尼 Disney Unscripted 昨日放出幕后花絮视频，"
+                    "展示了团队如何通过苹果 Vision Pro 头显改造该项目。"
+                ),
+                source="IT之家",
+                facts=[
+                    "IT之家 6 月 13 日消息，科技媒体 Appleinsider 昨日（6 月 12 日）发布博文，报道称迪士尼为迎接美国建国 250 周年，借助苹果 Vision Pro 头显，改造 EPCOT 经典飞行项目 Soarin，并将其更名为 Soarin' Across America，带领游客飞跃美国标志性景观。",
+                    "IT之家注：EPCOT 位于佛罗里达 Walt Disney World，于 1982 年开放，设有众多未来科技主题项目与文化展馆，是迪士尼四大主题乐园之一。",
+                ],
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        event_titles = " ".join(event.title for event in events)
+        self.assertIn("Vision Pro", event_titles)
+        self.assertIn("Beats", event_titles)
+
+    def test_vision_pro_disney_chinese_followup_merges_with_english_original(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Vision Pro helped Disney re-engineer a classic EPCOT ride",
+                (
+                    "Just in time for America's 250th anniversary, Disney Imagineers tapped Apple Vision Pro "
+                    "to help give one of their most iconic flight rides a patriotic makeover. The attraction "
+                    "in question is Soarin, at EPCOT, which has been rebranded to Soarin' Across America. "
+                    "Rather than focusing on wonders around the world or California, the ride takes guests "
+                    "on an airborne adventure across the United States with new aerial footage, sound design, "
+                    "projection checks, engineering work, and on-site previews at Walt Disney World in Florida."
+                ),
+                source="AppleInsider",
+                facts=[
+                    "Just in time for America's 250th anniversary, Disney Imagineers tapped Apple Vision Pro to help give one of their most iconic flight rides a patriotic makeover.",
+                    "The attraction in question is Soarin, at EPCOT, which has been rebranded to Soarin' Across America for the 250th anniversary of the United States of America.",
+                ],
+            ),
+            article_for(
+                module,
+                "苹果 Vision Pro 头显成最大功臣：助力迪士尼改造乐园项目，献礼美国 250 周年",
+                (
+                    "科技媒体 Appleinsider 昨日（6 月 12 日）发布博文，报道称迪士尼为迎接美国建国 250 周年，"
+                    "借助苹果 Vision Pro 头显，改造 EPCOT 经典飞行项目 Soarin，并将其更名为 Soarin' Across "
+                    "America，带领游客飞跃美国标志性景观。"
+                ),
+                source="IT之家",
+                facts=[
+                    "IT之家 6 月 13 日消息，科技媒体 Appleinsider 昨日（6 月 12 日）发布博文，报道称迪士尼为迎接美国建国 250 周年，借助苹果 Vision Pro 头显，改造 EPCOT 经典飞行项目 Soarin，并将其更名为 Soarin' Across America，带领游客飞跃美国标志性景观。",
+                    "IT之家注：EPCOT 位于佛罗里达 Walt Disney World，于 1982 年开放，设有众多未来科技主题项目与文化展馆，是迪士尼四大主题乐园之一。",
+                ],
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "IT之家"})
 
 
 if __name__ == "__main__":
