@@ -169,6 +169,26 @@ APPLE_TERMS = [
     "库克",
 ]
 
+BARE_APPLE_CHIP_TERMS = {"m1", "m2", "m3", "m4", "m5", "m6", "c1", "c2"}
+
+APPLE_CHIP_CONTEXT_TERMS = [
+    "apple",
+    "apple silicon",
+    "mac",
+    "macbook",
+    "imac",
+    "mac mini",
+    "mac studio",
+    "mac pro",
+    "ipad",
+    "iphone",
+    "vision pro",
+    "苹果",
+    "苹果芯片",
+    "苹果电脑",
+    "苹果手机",
+]
+
 POSITIVE_ACTION_TERMS = [
     "release",
     "released",
@@ -702,6 +722,29 @@ GENERIC_MERGE_TOKENS = STOPWORDS | {
     "苹果",
 }
 
+BEATS_HARDWARE_MERGE_TOKENS = {
+    "antonee",
+    "robinson",
+    "lamine",
+    "yamal",
+    "kang-in",
+    "fcc",
+    "studio",
+    "studio-pro",
+    "unreleased",
+    "new-product",
+    "next-generation",
+    "two-tone",
+    "royal-blue",
+    "white",
+    "headband",
+    "ear-cup",
+    "headphone",
+    "headphones",
+    "over-ear",
+    "world-cup",
+}
+
 SOURCE_PRIORITY = {
     "MacRumors": 1,
     "9to5Mac": 2,
@@ -1055,6 +1098,20 @@ CROSS_LANGUAGE_TOKEN_MAP = {
     "论文": "paper",
     "研究": "research",
     "研究人员": "researcher",
+    "头戴式耳机": "headphones",
+    "耳机": "headphones",
+    "耳罩": "ear-cup",
+    "头梁": "headband",
+    "撞色": "two-tone",
+    "皇家蓝": "royal-blue",
+    "白色": "white",
+    "未发布": "unreleased",
+    "尚未发布": "unreleased",
+    "新一代": "next-generation",
+    "新款": "new-product",
+    "世界杯": "world-cup",
+    "球员": "athlete",
+    "球星": "athlete",
     "迪士尼": "disney",
     "主题乐园": "theme-park",
     "乐园": "theme-park",
@@ -1647,8 +1704,43 @@ def score_terms(text: str, terms: list[str]) -> int:
     return sum(1 for term in terms if term_present(lower, term.lower()))
 
 
+def has_apple_chip_context(text: str) -> bool:
+    lower = text.lower()
+    return score_terms(lower, APPLE_CHIP_CONTEXT_TERMS) > 0
+
+
+def effective_apple_term_score(text: str) -> int:
+    lower = text.lower()
+    score = 0
+    for term in APPLE_TERMS:
+        normalized = term.lower()
+        if normalized in BARE_APPLE_CHIP_TERMS and not has_apple_chip_context(lower):
+            continue
+        if term_present(lower, normalized):
+            score += 1
+    return score
+
+
+def loose_apple_product_marker(text: str) -> bool:
+    lower = text.lower()
+    return any(
+        marker in lower
+        for marker in [
+            "apple",
+            "iphone",
+            "ipad",
+            "macbook",
+            "macos",
+            "airpods",
+            "vision pro",
+            "apple watch",
+            "苹果",
+        ]
+    )
+
+
 def is_apple_research_candidate(text: str) -> bool:
-    if score_terms(text, APPLE_TERMS) <= 0:
+    if effective_apple_term_score(text) <= 0:
         return False
     research_score = score_terms(text, APPLE_RESEARCH_ANCHOR_TERMS)
     action_score = score_terms(text, APPLE_RESEARCH_ACTION_TERMS)
@@ -1658,7 +1750,7 @@ def is_apple_research_candidate(text: str) -> bool:
 
 
 def is_apple_health_data_research_candidate(text: str) -> bool:
-    if score_terms(text, APPLE_TERMS) <= 0:
+    if effective_apple_term_score(text) <= 0:
         return False
     product_score = score_terms(text, APPLE_HEALTH_RESEARCH_PRODUCT_TERMS)
     data_score = score_terms(text, APPLE_HEALTH_DATA_TERMS)
@@ -1667,7 +1759,7 @@ def is_apple_health_data_research_candidate(text: str) -> bool:
 
 
 def is_messages_platform_candidate(text: str) -> bool:
-    if score_terms(text, APPLE_TERMS) <= 0:
+    if effective_apple_term_score(text) <= 0:
         return False
     message_score = score_messages_platform_terms(text)
     agent_score = score_terms(text, MESSAGE_AGENT_TERMS)
@@ -1885,18 +1977,359 @@ def is_apple_developer_tool_story(text: str) -> bool:
 
 def is_official_apple_accessory_market_story(text: str) -> bool:
     lower = text.lower()
-    if score_terms(lower, APPLE_TERMS) <= 0:
+    if effective_apple_term_score(lower) <= 0:
         return False
     if score_terms(lower, OFFICIAL_APPLE_ACCESSORY_TERMS) <= 0:
         return False
     return score_terms(lower, OFFICIAL_APPLE_ACCESSORY_ACTION_TERMS) > 0
 
 
+def is_unreleased_beats_hardware_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["beats"]) <= 0:
+        return False
+    if score_terms(lower, ["deal", "deals", "discount", "coupon", "sale", "record low", "amazon", "best buy", "优惠", "促销", "降价"]) > 0:
+        return False
+    hardware_score = score_terms(
+        lower,
+        [
+            "headphone",
+            "headphones",
+            "over-ear",
+            "earbuds",
+            "earphones",
+            "speaker",
+            "ear cups",
+            "headband",
+            "housings",
+            "头戴式耳机",
+            "耳机",
+            "耳罩",
+            "头梁",
+            "机身",
+        ],
+    )
+    if hardware_score <= 0:
+        return False
+    product_detail_score = score_terms(
+        lower,
+        [
+            "unreleased",
+            "upcoming",
+            "new product",
+            "new version",
+            "new model",
+            "fcc",
+            "fcc database",
+            "certification",
+            "beats studio pro",
+            "studio pro",
+            "product line",
+            "availability",
+            "release timing",
+            "two-tone",
+            "color",
+            "colors",
+            "royal blue",
+            "white headband",
+            "ear cups",
+            "customizable",
+            "customization",
+            "design",
+            "尚未发布",
+            "未发布",
+            "新品",
+            "新款",
+            "新一代",
+            "fcc 数据库",
+            "fcc",
+            "认证",
+            "型号",
+            "产品线",
+            "发布时间",
+            "撞色",
+            "配色",
+            "颜色",
+            "皇家蓝",
+            "白色头梁",
+            "耳罩",
+            "设计",
+            "定制",
+        ],
+    )
+    return product_detail_score >= 2
+
+
+def is_apple_wallet_feature_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(
+        lower,
+        [
+            "magsafe wallet",
+            "magnetic wallet",
+            "wallet attachment",
+            "wallet case",
+            "钱包配件",
+            "磁吸钱包",
+        ],
+    ) > 0 and score_terms(lower, ["apple wallet", "apple pay", "apple cash", "wallet app", "钱包 app", "钱包应用"]) == 0:
+        return False
+    if score_terms(lower, ["apple wallet", "apple pay", "apple cash", "wallet app", "钱包 app", "钱包应用"]) > 0:
+        return True
+    wallet_feature_terms = [
+        "passport",
+        "driver's license",
+        "digital id",
+        "id support",
+        "boarding pass",
+        "passes",
+        "hotel key",
+        "car key",
+        "transit card",
+        "payment card",
+        "tap to share",
+        "护照",
+        "驾驶证",
+        "数字证件",
+        "证件",
+        "登机牌",
+        "票卡",
+        "酒店钥匙",
+        "车钥匙",
+        "交通卡",
+        "支付卡",
+    ]
+    return (
+        score_terms(lower, wallet_feature_terms) > 0
+        and score_terms(lower, ["ios", "iphone", "apple", "苹果"]) > 0
+        and score_terms(lower, ["wallet", "钱包", "pay", "支付"]) > 0
+    )
+
+
+def is_apple_os_support_compatibility_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if is_competitor_apple_marketing_comparison(text):
+        return False
+    return (
+        score_terms(
+            lower,
+            [
+                "iphone",
+                "iphones",
+                "ipad",
+                "ipads",
+                "mac",
+                "macs",
+                "macbook",
+                "macbooks",
+                "imac",
+                "imacs",
+                "apple watch",
+                "apple tv",
+                "homepod",
+                "vision pro",
+            ],
+        )
+        > 0
+        and score_terms(
+            lower,
+            [
+                "software support",
+                "support ends",
+                "end software support",
+                "drop support",
+                "drops support",
+                "dropped",
+                "not support",
+                "won't support",
+                "no longer support",
+                "losing support",
+                "compatibility list",
+                "compatible",
+                "unsupported",
+                "停止支持",
+                "结束支持",
+                "不再支持",
+                "无缘",
+                "兼容列表",
+                "兼容性",
+            ],
+        )
+        > 0
+        and score_terms(lower, ["ios", "ipados", "macos", "watchos", "tvos", "visionos", "software", "系统"])
+        > 0
+    )
+
+
+def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
+    lower = text.lower()
+    title_lower = title.lower()
+    if score_terms(
+        title_lower,
+        ["top stories", "recap", "weekly recap", "roundup", "this week", "本周回顾", "一周", "汇总"],
+    ) > 0:
+        return True
+    if is_apple_os_support_compatibility_story(text):
+        return False
+    if is_competitor_apple_marketing_comparison(text):
+        return True
+    if has_apple_first_party_release_context(lower) or is_apple_developer_tool_story(lower):
+        return False
+    if is_official_apple_accessory_market_story(lower) or is_unreleased_beats_hardware_story(lower):
+        return False
+    if score_terms(
+        lower,
+        [
+            "buying advice",
+            "buying guide",
+            "should you buy",
+            "bad time to buy",
+            "want to upgrade",
+            "upgrade decision",
+            "购机",
+            "购买建议",
+            "换机周期",
+            "几年换",
+            "最划算",
+            "保值率",
+        ],
+    ) > 0:
+        return True
+    if re.search(r"(?i)(?:\bvs\.?\b|\bversus\b|compared|comparison|对比|较量)", title):
+        return True
+    if "hands-on" in title_lower and score_terms(
+        lower,
+        ["third-party", "belkin", "anker", "satechi", "amazon", "pricing", "price", "第三方", "售价"],
+    ) > 0:
+        return True
+    return False
+
+
+def is_competitor_apple_marketing_comparison(text: str) -> bool:
+    lower = text.lower()
+    competitor_text = lower
+    for phrase in [
+        "intel mac",
+        "intel macs",
+        "intel-based mac",
+        "intel-based macs",
+        "intel machines",
+        "intel apps",
+        "intel app",
+        "intel-compiled",
+        "pre-apple silicon mac",
+        "pre-apple silicon macs",
+    ]:
+        competitor_text = competitor_text.replace(phrase, "")
+    competitor = any(
+        marker in competitor_text
+        for marker in [
+            "amd",
+            "nvidia",
+            "intel",
+            "dell",
+            "windows",
+            "winpc",
+            "radeon",
+            "ryzen",
+            "惠普",
+            "锐龙",
+            "英伟达",
+        ]
+    )
+    apple_subject = loose_apple_product_marker(lower) or "macos" in lower
+    comparison_or_marketing = any(
+        marker in lower
+        for marker in [
+            "marketing",
+            "promotional",
+            "compared",
+            "comparison",
+            " vs ",
+            "battle",
+            "rival",
+            "game compatibility",
+            "营销",
+            "嘲讽",
+            "矛头对准",
+            "平台之争",
+            "游戏兼容",
+            "逐项对比",
+            "给不了你的",
+            "舍弃",
+        ]
+    )
+    return competitor and apple_subject and comparison_or_marketing
+
+
+def is_generic_consumer_electronics_health_safety_story(title: str, text: str) -> bool:
+    lower = text.lower()
+    title_lower = title.lower()
+    if effective_apple_term_score(title) > 0:
+        return False
+    return (
+        score_terms(
+            lower,
+            [
+                "consumer electronics",
+                "smartphones",
+                "smartphone",
+                "earbuds",
+                "headphones",
+                "smartwatch",
+                "消费电子",
+                "消费类电子",
+                "智能手机",
+                "耳机",
+                "智能手表",
+            ],
+        )
+        > 0
+        and score_terms(
+            lower,
+            [
+                "fda",
+                "pacemaker",
+                "defibrillator",
+                "magnetic field",
+                "magnet",
+                "heart implant",
+                "心脏起搏器",
+                "起搏器",
+                "除颤器",
+                "植入式器械",
+                "磁场",
+            ],
+        )
+        > 0
+        and score_terms(title_lower, ["fda", "pacemaker", "磁场", "起搏器", "消费电子", "电子产品"]) > 0
+    )
+
+
+def is_apple_car_asset_story(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["apple car", "project titan", "苹果汽车", "苹果造车", "自动驾驶项目", "汽车项目"]) > 0
+        and score_terms(
+            lower,
+            ["test site", "testing site", "proving ground", "test track", "facility", "site", "测试场", "试验场", "测试设施", "场地"],
+        )
+        > 0
+        and score_terms(lower, ["bought", "acquired", "sold", "sale", "purchase", "waymo", "买下", "收购", "出售", "购入"]) > 0
+    )
+
+
 def has_direct_apple_subject_context(text: str) -> bool:
     lower = text.lower()
-    if score_terms(lower, APPLE_TERMS) <= 0:
+    if effective_apple_term_score(lower) <= 0:
         return False
-    if is_apple_developer_tool_story(lower) or is_official_apple_accessory_market_story(lower):
+    if (
+        is_apple_developer_tool_story(lower)
+        or is_official_apple_accessory_market_story(lower)
+        or is_unreleased_beats_hardware_story(lower)
+    ):
         return True
     product_or_platform_score = score_terms(
         lower,
@@ -1941,7 +2374,7 @@ def should_hard_exclude_candidate(text: str) -> bool:
 
 def is_third_party_platform_availability_candidate(text: str) -> bool:
     lower = text.lower()
-    if score_terms(lower, APPLE_TERMS) <= 0:
+    if effective_apple_term_score(lower) <= 0:
         return False
     if app_store_policy_score(lower) > 0:
         return False
@@ -1956,7 +2389,7 @@ def is_third_party_platform_availability_candidate(text: str) -> bool:
 
 def is_routine_third_party_apple_platform_story(text: str) -> bool:
     lower = text.lower()
-    if score_terms(lower, APPLE_TERMS) <= 0:
+    if effective_apple_term_score(lower) <= 0:
         return False
     if has_apple_first_party_release_context(lower) or is_apple_developer_tool_story(lower):
         return False
@@ -2063,7 +2496,7 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     lower_text = text.lower()
     if should_hard_exclude_candidate(text):
         return False
-    apple_score = score_terms(text, APPLE_TERMS)
+    apple_score = effective_apple_term_score(text)
     action_score = score_terms(text, POSITIVE_ACTION_TERMS)
     strong_score = score_terms(text, STRONG_NEWS_ACTION_TERMS)
     exclude_score = score_terms(text, EXCLUDE_TERMS)
@@ -2076,6 +2509,8 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     if is_apple_developer_tool_story(text):
         return True
     if is_official_apple_accessory_market_story(text):
+        return True
+    if is_unreleased_beats_hardware_story(text):
         return True
     if is_apple_research_candidate(text):
         return True
@@ -2649,6 +3084,38 @@ def fact_noise(value: str) -> bool:
     lower = value.lower()
     if re.search(r"广告声明|文内含有的对外跳转链接|it之家所有文章均包含本声明", lower, re.I):
         return True
+    if re.search(r"当前位置[:：]|当前位置：首页|相关阅读[:：]|相关文章[:：]|延伸阅读[:：]|更多阅读[:：]|豫icp备|icp备|公网安备", lower, re.I):
+        return True
+    if re.match(r"^apple (?:music|arcade|news\+|tv\+|one(?: bundle)?)\s+[–-]\s*[$￥¥€£]?\d", lower) and "after free trial" in lower:
+        return True
+    if len(value) < 140 and re.match(r"^《.+》$", value.strip()):
+        return True
+    if (
+        len(value) < 120
+        and not re.search(r"[，,。；;]", value)
+        and score_terms(
+            lower,
+            ["首发", "铺路", "嘲笑", "反转", "退场", "曝光", "前瞻", "发布"],
+        )
+        > 0
+        and (effective_apple_term_score(value) > 0 or loose_apple_product_marker(value))
+    ):
+        return True
+    if (
+        len(value) < 120
+        and not re.search(r"[，,。；;]", value)
+        and (effective_apple_term_score(value) > 0 or loose_apple_product_marker(value))
+        and ("！" in value or "!" in value)
+        and ("：" in value or ":" in value)
+    ):
+        return True
+    if (
+        len(value) < 100
+        and not re.search(r"[，,。；;]", value)
+        and (effective_apple_term_score(value) > 0 or loose_apple_product_marker(value))
+        and ("：" in value or ":" in value)
+    ):
+        return True
     if re.match(r"^[a-z]{3} [a-z]{3} \d{2} \d{4}, \d{1,2}:\d{2} [ap]m [a-z]{3}\b", lower) and "minute read" in lower:
         return True
     if lower.startswith(("worth checking out", "related:", "related stories")):
@@ -2786,10 +3253,11 @@ def extract_summary(text: str, fallback: str) -> str:
             seen.add(cleaned_description.lower()[:120])
     for match in re.finditer(r"(?is)<p[^>]*>(.*?)</p>", scoped_text):
         cleaned = strip_tags(match.group(1))
-        if len(cleaned) >= 60 and not re.search(
+        if len(cleaned) >= 60 and not fact_noise(cleaned) and not re.search(
             r"newsletter|subscribe|advertis|open menu|front page|login register|"
             r"visit forums|roundups|buyer'?s guide|direct messages|anonymous form|"
-            r"广告声明|文内含有的对外跳转链接|IT之家所有文章均包含本声明",
+            r"广告声明|文内含有的对外跳转链接|IT之家所有文章均包含本声明|"
+            r"当前位置[:：]|相关阅读[:：]|相关文章[:：]|延伸阅读[:：]|ICP备|公网安备",
             cleaned,
             re.I,
         ):
@@ -3011,7 +3479,7 @@ def discovery_key_facts(candidate: Candidate) -> list[str]:
             continue
         for fact in split_fact_candidates("p", cleaned):
             if is_key_fact("p", fact) or (
-                score_terms(fact, APPLE_TERMS) > 0
+                effective_apple_term_score(fact) > 0
                 and score_terms(fact, POSITIVE_ACTION_TERMS + STRONG_NEWS_ACTION_TERMS) > 0
             ):
                 add_unique_text(facts, seen, fact)
@@ -3075,6 +3543,8 @@ def article_tokens(title: str, summary: str) -> set[str]:
         + APPLE_HEALTH_DATA_TERMS
         + APPLE_HEALTH_RESEARCH_ANCHOR_TERMS
     ):
+        if term.lower() in BARE_APPLE_CHIP_TERMS and not has_apple_chip_context(lower):
+            continue
         if term_present(lower, term.lower()):
             normalized = term.lower().replace(" ", "-")
             if normalized not in STOPWORDS:
@@ -3490,9 +3960,34 @@ def topic_facets_from_text(text: str) -> set[str]:
         > 0
     ):
         facets.add("macbook-memory-ai")
+    if (
+        score_terms(lower, ["macbook", "macbook pro"]) > 0
+        and score_terms(
+            lower,
+            [
+                "overheat",
+                "overheating",
+                "thermal",
+                "heat",
+                "screen discoloration",
+                "discoloration",
+                "color distortion",
+                "hardware fault",
+                "高负载",
+                "过热",
+                "发热",
+                "屏幕变色",
+                "颜色失真",
+                "色偏",
+                "故障",
+            ],
+        )
+        > 0
+    ):
+        facets.add("macbook-thermal-defect")
     if score_terms(lower, ["macbook ultra", "foldable iphone", "dynamic island", "oled", "m6", "触控 macbook", "折叠 iphone", "灵动岛"]) > 0:
         facets.add("hardware-roadmap")
-    if score_terms(lower, ["apple wallet", "wallet", "passport", "driver's license", "id support", "钱包", "护照", "证件"]) > 0:
+    if is_apple_wallet_feature_story(lower):
         facets.add("apple-wallet")
     if score_terms(lower, ["call context", "phone app", "customer service calls", "通话", "来电", "订单号"]) > 0:
         facets.add("phone-call-context")
@@ -3626,6 +4121,12 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "developer_tool"
     if is_official_apple_accessory_market_story(text):
         return "hardware_market"
+    if is_unreleased_beats_hardware_story(text):
+        return "hardware_market"
+    if is_apple_car_asset_story(text):
+        return "hardware_market"
+    if is_routine_recap_comparison_or_buying_advice(title, text):
+        return "general_company"
     if is_apple_health_data_research_candidate(text):
         return "health_research"
     if is_apple_research_candidate(text):
@@ -3638,8 +4139,15 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "third_party_ecosystem"
     if is_routine_third_party_apple_platform_story(text):
         return "third_party_ecosystem"
-    if score_terms(lower, ["apple wallet", "wallet", "passport", "id support", "driver's license", "钱包", "护照", "证件"]) > 0:
+    if is_apple_wallet_feature_story(text):
         return "wallet_feature"
+    if is_apple_os_support_compatibility_story(text):
+        return "os_compatibility"
+    if (
+        score_terms(lower, ["rosetta", "rosetta 2", "intel app", "intel apps", "intel-built", "intel-compiled", "英特尔架构应用", "intel 架构应用"]) > 0
+        and score_terms(lower, ["macos", "mac", "support", "end", "remove", "淘汰", "提醒", "支持", "无法运行", "未来"]) > 0
+    ):
+        return "os_compatibility"
     if (
         score_terms(title_lower, ["ios", "ipados", "macos", "watchos", "tvos", "visionos", "系统"]) > 0
         and score_terms(title_lower, OS_FEATURE_ACTION_TERMS) > 0
@@ -3718,7 +4226,7 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if score_terms(lower, ["shipment", "shipments", "market share", "counterpoint", "supplier", "production", "manufacturing", "factory", "chip", "modem", "出货", "份额", "供应", "量产", "生产", "芯片"]) > 0:
         return "hardware_market"
-    if score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos", "safari", "siri", "wallet", "app store", "apple card", "apple pay", "airdrop", "imessage", "messages app", "系统", "应用商店", "钱包"]) > 0:
+    if score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos", "safari", "siri", "apple wallet", "app store", "apple card", "apple pay", "airdrop", "imessage", "messages app", "系统", "应用商店"]) > 0:
         return "os_app"
     if score_terms(lower, ["google", "nvidia", "microsoft", "meta", "samsung", "wechat", "harmonyos", "third-party", "app for vision pro", "vision pro app", "英伟达", "微信", "鸿蒙", "第三方"]) > 0:
         return "third_party_ecosystem"
@@ -3735,8 +4243,8 @@ def classify_relevance_tier(
     text = f"{title} {summary} {facts}"
     lower = text.lower()
     event_kind = detect_event_kind(title, summary, key_facts)
-    apple_score = score_terms(text, APPLE_TERMS)
-    title_apple_score = score_terms(title, APPLE_TERMS)
+    apple_score = effective_apple_term_score(text)
+    title_apple_score = effective_apple_term_score(title)
     third_party_score = score_terms(
         lower,
         [
@@ -3744,6 +4252,7 @@ def classify_relevance_tier(
             "pixel",
             "android",
             "nvidia",
+            "amd",
             "huawei",
             "vivo",
             "mediatek",
@@ -3764,14 +4273,21 @@ def classify_relevance_tier(
             "llm",
             "llms",
             "cirrus",
+            "steam",
+            "rx",
+            "minimax",
+            "moore threads",
+            "mthreads",
             "谷歌",
             "安卓",
             "英伟达",
+            "amd",
             "华为",
             "荣耀",
             "vivo",
             "联发科",
             "天玑",
+            "摩尔线程",
             "微信",
             "鸿蒙",
             "第三方",
@@ -3787,6 +4303,12 @@ def classify_relevance_tier(
         return "strong", "Apple first-party developer tool or Xcode capability change"
     if is_official_apple_accessory_market_story(text):
         return "strong", "Apple official hardware accessory availability change"
+    if is_apple_car_asset_story(text):
+        return "strong", "Apple vehicle testing asset or hardware-related company action"
+    if is_routine_recap_comparison_or_buying_advice(title, text):
+        return "weak", "third-party or routine recap, comparison, hands-on, or buying advice without a new Apple action"
+    if is_generic_consumer_electronics_health_safety_story(title, text):
+        return "weak", "generic consumer-electronics safety story with Apple products used as examples"
     if event_kind == "messages_platform":
         return "strong", "Apple Messages or iMessage platform capability change"
     if is_third_party_platform_availability_candidate(text):
@@ -4295,6 +4817,18 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
     return warnings
 
 
+def same_beats_hardware_sighting(article: Article, event: Event, shared: set[str]) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "beats-headphones" not in common_facets:
+        return False
+    shared_anchors = shared & BEATS_HARDWARE_MERGE_TOKENS
+    if {"antonee", "robinson"} <= shared_anchors:
+        return True
+    if len(shared_anchors) >= 2:
+        return True
+    return False
+
+
 def should_merge(article: Article, event: Event) -> bool:
     shared = article.tokens & event.tokens
     similarity = jaccard(article.tokens, event.tokens)
@@ -4344,6 +4878,8 @@ def should_merge(article: Article, event: Event) -> bool:
         action_shared = {"approved", "integration", "integrated", "接入", "批准"} & (article.tokens | event.tokens)
         if platform_shared and agent_shared and action_shared:
             return True
+    if same_beats_hardware_sighting(article, event, shared):
+        return True
     strong_shared = {
         token
         for token in shared

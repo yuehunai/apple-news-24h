@@ -84,7 +84,7 @@ Only after a live approved run still cannot collect enough source pages should y
 - Prefer 3-5 substantial Chinese sentences per item when source detail supports it. If the crawler's summary is too thin, open the event's source pages and enrich the item before final output.
 - Retain any source link that contributes independent facts, feature lists, compatibility details, implementation details, local context, or materially different framing unless another retained source fully duplicates those same details.
 - Put sources only at the end of each item, in parentheses, and keep each source as a Markdown link using `event.sources[].url`, for example `（来源：[MacRumors](...), [9to5Mac](...)）`. Never replace source links with plain source names.
-- Do not add diagnostics, methodology notes, source-by-source explanations, run status, network permission notes, rerun history, cache paths, memory-update status, or any other operational note.
+- Do not add diagnostics, methodology notes, source-by-source explanations, run status, network permission notes, rerun history, cache paths, memory-update status, event-grouping/debug judgments, or any other operational note. When you split a mixed or suspicious cluster, write the resulting item as a clean standalone news brief; never say it was `mismerged`, `mistakenly merged`, `被误并入`, `误聚类`, or similar.
 - The assistant's final response after `$apple-news-24h` must contain only the two-section brief.
 - If a category is empty, write: `在指定时间窗口内，该分类下没有发现符合条件的新闻。`
 

@@ -12,14 +12,14 @@
 
 ## 最新更新
 
-### 1.1.0 - 2026-06-13
+### 1.2.0 - 2026-06-14
 
-- 改进事件聚类，为内置 App 变化、Safari、Messages、天气、输入法、Beats / 耳机曝光、iPhone 配色机模和 Vision Pro 空间体验项目增加更具体的话题特征。
-- 修复 Vision Pro 专业和沉浸式体验报道的归并逻辑，使 Disney / EPCOT 跨来源报道能合并到同一事件，同时避免与 Beats 或无关硬件传闻混合。
-- 收紧合并评分，判断重复事件时忽略 Apple、published、showcase、日期以及中文“发布”“展示”“苹果”等泛化来源/发布词。
-- 改进 9to5Mac 正文清理，在摘要和 `key_facts` 抽取前移除更多文章尾部的 affiliate 推荐区块。
-- 更新 `SKILL.md` 和 `references/news_policy.md` 指引，在保留高新闻量 Apple 细粒度事件的同时，让兜底归并规则与抓取器行为保持一致。
-- 增加回归测试，覆盖新增聚类特征、Vision Pro 跨语种合并、Beats 拆分和文章来源尾部推广清理。
+- 改进相关性评分，使 Apple OS 支持和兼容性变化、Apple 汽车项目资产出售、未发布 Beats 硬件曝光保持可进入简报，同时继续延后常规回顾、购买建议、竞品对比和泛消费电子安全新闻。
+- 收紧 Apple 关键词处理，让 `M3`、`C1` 等裸芯片式名称只有在附近上下文明确指向 Apple 芯片或 Apple 产品时才作为 Apple 锚点。
+- 改进事件聚类，拆分 MacBook 散热缺陷与 MacBook Ultra 显示传闻、iPhone 材质或生物识别传闻、iPhone Ultra 折叠屏报道、Beats 曝光和硬件相关公司动作。
+- 改进来源清理，在生成 `summary`、`key_facts`、分类和归并前过滤 Apple 服务 affiliate 价格行、中文站点样板文案和同站相关文章标题碎片。
+- 更新 `SKILL.md` 和 `references/news_policy.md`，要求最终简报不夹带诊断、调试聚类判断和来源处理说明，同时继续保留符合条件的细粒度事件。
+- 增加回归测试，覆盖 OS 支持终止相关性、竞品营销延后、Beats 硬件处理、Apple Car 资产出售、affiliate 清理、相关文章噪声和新的归并保护规则。
 
 ## 它会做什么
 

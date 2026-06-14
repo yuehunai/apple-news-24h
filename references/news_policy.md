@@ -77,6 +77,12 @@ Exclude:
 
 Do not let exclusion rules hide a clear Apple-subject event. Competitor, third-party, or partner names in the body should not by themselves weaken or exclude a story whose main subject and lead action is about Apple OS/platform changes, Apple services, Apple official accessories, Apple legal actions, Apple developer tools, or Apple ecosystem interoperability, even when the article supplies Google, Samsung, Meta, Amazon, or other market background. Keep the existing exclusions for routine deals, affiliate roundups, and non-Apple product stories, but include official Apple Card, Apple Pay, App Store, Apple services, and Apple retail/customer acquisition promotions when they reveal a new or materially changed Apple business offer; these are service/business news, not ordinary affiliate deals, and summaries should include value, eligibility, timing, source confidence, and unresolved terms.
 
+Do not promote third-party or competitor comparison/marketing stories just because they mention an Apple product, Apple chip-like model string, or macOS/iOS compatibility. Bare model names such as `M3` or `C1` only count as Apple anchors when the surrounding context clearly identifies Apple silicon or an Apple product. Rival marketing, buying advice, `vs`/comparison pieces, hands-on reviews, weekly recaps, and generic consumer-electronics safety stories should remain `weak` unless they contain a new Apple action, direct Apple policy/platform change, or concrete Apple ecosystem interoperability.
+
+Marketing language should not override material first-party hardware news. Apple or Beats unreleased hardware sightings are eligible hardware/product events when the report includes concrete product details such as model or product-line clues, FCC/certification records, design or color changes, availability or release timing, or other hardware facts. Pure ads, celebrity campaigns, social posts, sponsorships, and commercial promos that lack those product details remain excluded or `weak`.
+
+During fact extraction, remove article-tail service affiliate blocks and related-link headline clusters before summarization. Examples include Apple service price rows such as `Apple Music - $10.99/mo after free trial`, short title-only related links, site breadcrumb/ICP boilerplate, and same-site recommendation titles. These fragments can mention Apple products and numbers, but they should not create facts, classifications, or event merges.
+
 ## Relevance Tiers
 
 Keep candidate discovery broad. After detail-page verification, classify events by relevance tier:
@@ -119,4 +125,4 @@ Use the earliest precise public timestamp among merged articles to decide whethe
 - Prefer 3-5 substantial Chinese sentences per item when source detail supports it.
 - Source links go only at the end of each item: `（来源：[MacRumors](...), [9to5Mac](...)）`
 - Retain any source link that contributes independent facts, feature lists, compatibility details, implementation details, local context, or materially different framing unless another retained source fully duplicates those same details.
-- Do not append diagnostics, methodology notes, source-by-source explanations, run status, network permission notes, cache paths, or memory-update status.
+- Do not append diagnostics, methodology notes, source-by-source explanations, run status, network permission notes, cache paths, memory-update status, event-grouping/debug judgments, or any other operational note. When you split a mixed or suspicious cluster, write the resulting item as a clean standalone news brief; never say it was `mismerged`, `mistakenly merged`, `被误并入`, `误聚类`, or similar.

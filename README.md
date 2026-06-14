@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.1.0 - 2026-06-13
+### 1.2.0 - 2026-06-14
 
-- Improved event clustering with more specific topic facets for built-in app changes, Safari, Messages, Weather, input methods, Beats/headphone sightings, iPhone color mockups, and Vision Pro spatial-experience projects.
-- Fixed Vision Pro professional and immersive-experience coverage so cross-source Disney/EPCOT reports merge together while unrelated Beats or hardware-rumor stories stay separate.
-- Tightened merge scoring by ignoring generic publication and source words such as Apple, published, showcase, dates, and Chinese equivalents when deciding whether events are duplicates.
-- Improved 9to5Mac article cleanup by removing additional article-tail affiliate recommendation blocks before summary and `key_facts` extraction.
-- Updated `SKILL.md` and `references/news_policy.md` guidance to preserve granular high-volume Apple events while keeping fallback merge rules aligned with crawler behavior.
-- Added regression tests for the new clustering facets, Vision Pro cross-language merging, Beats separation, and source-tail promotion cleanup.
+- Improved relevance scoring so Apple OS support and compatibility changes, Apple vehicle-project asset sales, and unreleased Beats hardware sightings stay eligible while routine recaps, buying advice, competitor comparisons, and generic safety stories remain deferred.
+- Tightened Apple-term handling so bare chip-like names such as `M3` or `C1` only count as Apple anchors when nearby context identifies Apple silicon or Apple products.
+- Improved event clustering for MacBook thermal defects versus MacBook Ultra display rumors, iPhone material or biometric rumors, iPhone Ultra foldable reports, Beats sightings, and hardware-adjacent company actions.
+- Improved source cleanup by filtering Apple service affiliate rows, Chinese site boilerplate, and same-site related-link headline fragments before `summary`, `key_facts`, classification, and merging.
+- Updated `SKILL.md` and `references/news_policy.md` to keep final briefs free of diagnostics, debug grouping notes, and source-processing commentary while preserving granular eligible events.
+- Added regression tests for OS support-drop relevance, competitor-marketing deferral, Beats hardware handling, Apple Car asset sales, affiliate cleanup, related-link noise, and new merge guards.
 
 ## What It Does
 

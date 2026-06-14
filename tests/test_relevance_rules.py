@@ -1137,6 +1137,100 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(tier, "weak")
         self.assertIn("third-party", reason)
 
+    def test_non_apple_m3_model_name_does_not_create_apple_relevance(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/example/minimax-m3.htm",
+            title="Day-0 支持，摩尔线程完成 MiniMax M3 大模型适配",
+            summary="摩尔线程宣布其 GPU 已完成 MiniMax M3 大模型适配，支持本地部署和推理。",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(
+            module.classify_relevance_tier(candidate.title, candidate.summary, [], candidate.source)[0],
+            "weak",
+        )
+
+    def test_appleinsider_vs_comparison_is_deferred_as_weak(self):
+        module = load_module()
+        title = "MacBook Neo vs Dell XPS 13: $599 budget battle, compared"
+        summary = "A comparison of a rumored MacBook Neo against Dell's XPS 13, with buying advice and benchmark discussion."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_intel_pc_macbook_marketing_comparison_stays_weak(self):
+        module = load_module()
+        title = "Intel compares Core Ultra laptops against Apple's MacBook Pro"
+        summary = "Intel's marketing material positions new Windows PCs as rivals to Apple's MacBook Pro in performance and gaming compatibility."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_top_stories_recap_is_deferred_as_weak(self):
+        module = load_module()
+        title = "Top Stories: WWDC 2026 Recap, iOS 27 Features, Apple Wallet, and More"
+        summary = "A weekly recap links to Apple's WWDC announcements, iOS 27 features, Apple Wallet changes, and other previously reported stories."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_os_support_drop_not_deferred_by_intel_comparison_context(self):
+        module = load_module()
+        title = "Have One of These 16 Apple Devices? Software Support Ends This Fall"
+        summary = (
+            "Apple will end software support for 16 devices this fall across four product lines. "
+            "The full extent of this year's software drops became clear with macOS 27 Golden Gate, "
+            "iPadOS 27, tvOS 27, and watchOS 27. By comparison, iPadOS 26 cut only a single device. "
+            "macOS Golden Gate brings the era of Intel Macs to a close, and Apple TV sees two models "
+            "dropped with tvOS 27."
+        )
+        key_facts = [
+            "watchOS 27 drops Series 6, Series 7, Series 8, Apple Watch Ultra (first generation), and Apple Watch SE (second generation).",
+            "iPadOS 27 raises the floor to the A14 Bionic chip or the M1 chip, dropping five iPad models.",
+            "The remaining Intel Macs supported by macOS Tahoe do not make the cut for macOS 27.",
+        ]
+
+        self.assertEqual(module.detect_event_kind(title, summary, key_facts), "os_compatibility")
+        tier, reason = module.classify_relevance_tier(title, summary, key_facts, "MacRumors")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_chinese_buying_advice_is_not_promoted_to_security_news(self):
+        module = load_module()
+        title = "避开购机亏空 解析苹果几年换最划算"
+        summary = "文章分析 iPhone、MacBook 和 Apple Watch 的换机周期、保值率和购买建议，帮助用户避免购机亏空。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_amd_hardware_chart_with_macos_context_stays_weak(self):
+        module = load_module()
+        title = "历史新高！AMD显卡占比破19%：RX 9070 XT/9060 XT首次登上Steam硬件榜"
+        summary = "Steam 硬件榜显示 AMD 显卡占比继续提升，文章背景提到 macOS 和 Linux 用户占比变化。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_generic_consumer_electronics_fda_magnet_story_stays_weak_despite_airpods_context(self):
+        module = load_module()
+        title = "消费电子产品磁场可干扰心脏起搏器，FDA 建议保持 15 厘米安全距离"
+        summary = (
+            "FDA 建议佩戴心脏起搏器或除颤器的患者，将智能手机、耳机和智能手表等电子设备与植入器械保持至少 15 厘米距离。"
+            "文章提到 2022 年研究曾测试 AirPods、iPhone 12 Pro Max、Apple Pencil 和微软 Surface Pen。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
     def test_chinese_competitor_hardware_comparison_is_deferred_as_weak(self):
         module = load_module()
 
@@ -1194,6 +1288,61 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(beats_tier, "weak")
         self.assertEqual(privacy_tier, "strong")
+
+    def test_magsafe_accessory_wallet_word_does_not_become_apple_wallet_feature(self):
+        module = load_module()
+        title = "Hands-on: Belkin's new 25W MagSafe battery pack and wallet are great travel accessories"
+        summary = "The third-party Belkin accessories include a MagSafe battery and a magnetic wallet attachment, with Amazon pricing and hands-on impressions."
+
+        self.assertNotEqual(module.detect_event_kind(title, summary), "wallet_feature")
+        self.assertEqual(module.classify_relevance_tier(title, summary, [], "9to5Mac")[0], "weak")
+
+    def test_belkin_hands_on_stays_weak_even_with_apple_service_affiliate_tail(self):
+        module = load_module()
+        title = "Hands-on: Belkin's new 25W MagSafe battery packs 10,000mAh for your iPhone"
+        summary = "Belkin's third-party MagSafe battery is now available on Amazon for $84.99 after a 15% discount."
+        facts = [
+            "The Belkin UltraCharge Pro comes in two colors: Black and Sand. It’s available on Amazon for $84.99, a 15% discount from its typical pricing.",
+            "Apple Music – $10.99/mo after free trial",
+            "Apple TV+ – $12.99/mo after free trial",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "9to5Mac")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_service_affiliate_tail_is_fact_noise(self):
+        module = load_module()
+
+        self.assertTrue(module.fact_noise("Apple Music – $10.99/mo after free trial"))
+        self.assertTrue(module.fact_noise("Apple One bundle – $19.95/mo after free trial"))
+
+    def test_rosetta_retirement_warning_is_software_not_hardware(self):
+        module = load_module()
+        title = "Apple says Rosetta 2 support for Intel Mac apps will end after macOS 28"
+        summary = "Apple's developer documentation warns that Rosetta 2 remains available in macOS 27 and macOS 28 but will be removed in a later macOS release."
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_compatibility")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+
+    def test_chinese_rosetta_retirement_warning_is_software_not_hardware(self):
+        module = load_module()
+        title = "苹果 macOS 27 系统强化 Rosetta 2 淘汰提醒，Intel 架构应用未来将无法在新系统运行"
+        summary = "苹果在 macOS 27 中继续提供 Rosetta 2，但开发者文档提示 Intel 架构应用未来会失去支持，用户需要迁移到 Apple Silicon 原生版本。"
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_compatibility")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+
+    def test_apple_car_test_site_asset_sale_is_strong_hardware_company_news(self):
+        module = load_module()
+        title = "Waymo bought Apple's former car testing site in Arizona"
+        summary = "Waymo acquired the Arizona proving ground Apple used for its canceled Apple Car project, marking a disposition of Apple vehicle testing assets."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
 
     def test_third_party_vision_pro_app_is_deferred_as_weak(self):
         module = load_module()
@@ -1504,6 +1653,170 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 2)
 
+    def test_macbook_heat_defect_does_not_merge_with_amd_game_comparison(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果 M5 Max MacBook Pro 被曝过热后屏幕变色，疑似硬件缺陷",
+                "用户反馈 M5 Max MacBook Pro 在高负载时过热，并出现屏幕边缘变色问题，苹果支持建议送修检测。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "AMD 新掌机运行游戏表现反超 MacBook Neo，Windows 兼容性优势明显",
+                "测试对比 AMD Windows 设备和传闻中的 MacBook Neo，讨论游戏兼容性和性能差异。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_chinese_amd_windows_macbook_marketing_comparison_stays_weak(self):
+        module = load_module()
+        title = "Windows与macOS之争再起！AMD公开放话：苹果笔记本给不了你的 我们都能给"
+        summary = (
+            "AMD官网发布全新营销物料，直接将矛头对准苹果最新推出的高性价比MacBook Neo，"
+            "突出自己的游戏兼容性优势，称20款热门PC游戏中MacBook Neo仅能原生运行5款。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_chinese_amd_windows_macbook_marketing_comparison_with_fact_details_stays_weak(self):
+        module = load_module()
+        title = "Windows与macOS之争再起！AMD公开放话：苹果笔记本给不了你的 我们都能给"
+        summary = "AMD官网发布全新营销物料，直接将矛头对准苹果最新推出的高性价比MacBook Neo。"
+        facts = [
+            "AMD官网发布全新营销物料，直接将矛头对准苹果最新推出的高性价比MacBook Neo，突出自己的游戏兼容性优势，打出“MacBook Neo舍弃的一切，AMD锐龙AI处理器都为你内置”的宣传口号。",
+            "在官方宣传中，AMD强调，在20款全球最热门的PC游戏中，MacBook Neo仅能原生运行其中5款，其余15款均不支持原生运行。",
+            "除了游戏兼容性，AMD还拿出搭载锐龙5 220处理器的惠普Omnibook X翻转本与MacBook Neo进行逐项对比。",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_macbook_ultra_touch_rumor_does_not_merge_with_m5_heat_defect(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "消息称苹果 MacBook Ultra 屏幕“百分百确认要上触控”，有望今年底至明年初登场",
+                (
+                    "博主透露苹果 MacBook 屏幕确认要上触控，预计相应机型为 MacBook Ultra，"
+                    "并可能搭载 M6 Pro 与 M6 Max 处理器，同时升级为主动均热板散热设计。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "网友反馈其苹果 M5 Max MacBook Pro 高负载运行过热导致屏幕变色",
+                (
+                    "用户反馈 M5 Max MacBook Pro 在执行本地大语言模型高负载任务时过热，"
+                    "屏幕出现区域性颜色失真，芯片温度可突破 100 摄氏度。"
+                ),
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_iphone_material_rumor_does_not_merge_with_foldable_shipments_or_pc_memory_comparison(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果 iPhone 18 Pro 或改用铝合金工艺，新增深樱桃配色",
+                "供应链称 iPhone 18 Pro 机身将调整为铝合金工艺，并测试深樱桃、浅蓝等配色。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "苹果折叠 iPhone Ultra 备货量曝光，国行版本同步推进",
+                "供应链消息称折叠 iPhone Ultra 初期备货量有限，苹果正在推进国行认证和生产节奏。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "WinPC 厂商学习 MacBook 内存策略，8GB 机型仍用于入门市场",
+                "行业观察称部分 Windows PC 厂商借鉴 MacBook 入门内存定位，但用户仍建议选择 16GB。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3)
+
+    def test_fasttech_iphone_material_foldable_and_winpc_titles_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果听劝！17 Pro掉漆被吐槽：iPhone 18 Pro全面改进铝合金工艺",
+                (
+                    "最新的供应链爆料显示，iPhone 18 Pro没有换回钛金属机身，将继续沿用铝合金材质，"
+                    "苹果针对掉漆痛点研发全新的铝合金精炼工艺，并提供浅蓝色、黑色、银色以及樱桃红版本。"
+                ),
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "苹果为折叠屏iPhone Ultra铺路：iOS 27新增多款原生应用横屏模式",
+                (
+                    "苹果首款折叠屏iPhone Ultra将在今年秋季亮相，配备5.49英寸外屏和7.76英寸内屏，"
+                    "iOS 27新增多款原生应用横屏模式，为折叠屏体验铺路。"
+                ),
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "反转来得太快 刚嘲笑MacBook 8GB内存不够用：WinPC这就学上了",
+                "Windows PC 厂商开始在入门机型采用 8GB 内存策略，文章把它与 MacBook 入门配置作行业对比。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3)
+
+    def test_iphone_material_finish_and_iphone_ultra_biometric_change_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果听劝！17 Pro掉漆被吐槽：iPhone 18 Pro全面改进铝合金工艺",
+                "iPhone 18 Pro 将继续沿用铝合金材质，并针对掉漆痛点研发新的铝合金精炼工艺和樱桃红配色。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "iPhone Ultra取消Face ID：改用侧边指纹 博主感叹像是在做梦",
+                "爆料称 iPhone Ultra 砍掉 Face ID 人脸识别方案，回归 Touch ID，并将指纹识别集成到电源键。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_fasttech_related_headline_fragments_are_fact_noise(self):
+        module = load_module()
+
+        self.assertTrue(module.fact_noise("苹果显示技术大转向！MacBook Ultra首发三星8.6代OLED：Mini-LED退场"))
+        self.assertTrue(module.fact_noise("《苹果 M6 MacBook Pro（MacBook Ultra）前瞻：首搭 OLED 触摸屏、配 2nm 工艺芯片，最快 2026 年底发布》"))
+        self.assertTrue(module.fact_noise("比华为三折叠还稀缺！iPhone Ultra国行备货量不足：博主直言抢到赚到"))
+        self.assertTrue(module.fact_noise("iPhone Ultra取消Face ID：改用侧边指纹 博主感叹像是在做梦"))
+        self.assertTrue(module.fact_noise("反转来得太快 刚嘲笑MacBook 8GB内存不够用：WinPC这就学上了"))
+
     def test_messages_drawing_and_safari_ai_features_do_not_merge(self):
         module = load_module()
         articles = [
@@ -1732,6 +2045,85 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 1)
         self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "IT之家"})
+
+    def test_unreleased_beats_headphones_with_product_details_is_strong_hardware_news(self):
+        module = load_module()
+        title = "Antonee Robinson Shows Off Unreleased Two-Tone Beats Over-Ear Headphones at the World Cup"
+        summary = (
+            "Apple-owned Beats appears to be running an influencer seeding campaign for unreleased over-ear headphones through athletes, "
+            "including Antonee Robinson. The pair has a white headband and housings with royal blue ear cups, "
+            "new Beats headphones appeared in the FCC database last month, and it is unclear whether this is "
+            "a new Beats Studio Pro version or a new product."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_pure_beats_marketing_without_product_details_stays_weak(self):
+        module = load_module()
+        title = "Beats launches World Cup campaign with Antonee Robinson"
+        summary = (
+            "Beats published a new commercial and social campaign starring football players, "
+            "with Apple mentioned only as the parent company and no new model, certification, "
+            "design, availability, or product-line details."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "marketing_ad")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_same_unreleased_beats_headphones_story_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Antonee Robinson Shows Off Unreleased Two-Tone Beats Over-Ear Headphones at the World Cup",
+                (
+                    "Apple-owned Beats appears to be running an influencer seeding campaign for unreleased over-ear headphones through athletes, "
+                    "including Antonee Robinson. The pair has a white headband and housings with royal blue ear cups, "
+                    "new Beats headphones appeared in the FCC database last month, and it is unclear whether this is "
+                    "a new Beats Studio Pro version or a new product."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "多名球星发图展示新款 Beats 头戴式耳机：提供撞色设计，有望为 Studio Pro 新一代产品",
+                (
+                    "美国男足球员 Antonee Robinson 展示了一款尚未发布的 Beats 头戴式耳机，采用白色头梁和皇家蓝耳罩的撞色设计。"
+                    "近期多名世界杯球员佩戴新款 Beats 耳机，相关设备已经现身 FCC 数据库，外界猜测可能是新一代 Beats Studio Pro。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+
+    def test_chinese_site_boilerplate_is_not_extracted_as_key_facts(self):
+        module = load_module()
+        html = """
+        <article>
+          <p>IT之家 6 月 14 日消息，苹果今日宣布停止支持 16 款旧设备，涉及 iPhone、iPad、Mac 和 Apple Watch，多数设备将停留在当前系统版本。</p>
+          <p>官方清单包括 iPhone X、iPhone 8、iPhone 8 Plus、第一代 iPad Pro、Apple Watch Series 3 等 16 款设备。</p>
+          <p>当前位置：首页 &gt; Apple &gt; 文章详情</p>
+          <p>相关阅读：苹果 iPhone 18 Pro 新配色曝光</p>
+          <p>豫ICP备2023000000号-1，本站所有文章均包含本声明。</p>
+        </article>
+        """
+
+        facts = module.extract_key_facts(html, "苹果停止支持 16 款旧设备", "IT之家")
+
+        self.assertTrue(any("16 款" in fact for fact in facts))
+        self.assertFalse(any("当前位置" in fact for fact in facts))
+        self.assertFalse(any("相关阅读" in fact for fact in facts))
+        self.assertFalse(any("ICP备" in fact for fact in facts))
 
 
 if __name__ == "__main__":
