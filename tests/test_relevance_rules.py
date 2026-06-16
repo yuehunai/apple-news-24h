@@ -2125,6 +2125,52 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertFalse(any("相关阅读" in fact for fact in facts))
         self.assertFalse(any("ICP备" in fact for fact in facts))
 
+    def test_iphone_mirroring_feature_update_is_os_app_not_compatibility(self):
+        module = load_module()
+        title = "macOS 27 brings three key upgrades to iPhone Mirroring"
+        summary = (
+            "iOS 27 and macOS 27 Golden Gate bring three updates to iPhone Mirroring: "
+            "a resizable iPhone Mirroring window, Control Center access with CMD+4, "
+            "and a refreshed app icon. The article notes that the feature currently works "
+            "with iOS 27-compatible apps."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(module.classify_relevance_tier(title, summary, [], "9to5Mac")[0], "strong")
+
+    def test_third_party_dock_macos_compatibility_stays_weak_and_does_not_merge_with_terminal_security(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "倍思推出 Spacemate RD1 Pro 扩展坞：15 合 1 设计，支持 Qi2.2 25W 磁吸无线充电",
+                (
+                    "这款第三方扩展坞集成 15 个接口，支持单屏 4K 120Hz 输出和双屏 4K 60Hz 输出，"
+                    "Windows 系统下支持镜像、双屏扩展模式；macOS 平台则支持镜像、单屏扩展模式。"
+                    "顶部带有 Qi2.2 磁吸无线充电模块，最高输出功率 25W。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果解释 macOS 为何会拦截终端命令粘贴",
+                (
+                    "苹果更新支持文档，解释称在 macOS 26.4 中，若用户不常用终端，"
+                    "且命令来自网站、聊天智能体、信息或邮件应用，系统可能阻止粘贴，"
+                    "以防范依托 Terminal 传播的恶意软件。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        self.assertEqual(articles[0].relevance_tier, "weak")
+        self.assertEqual(module.detect_event_kind(articles[1].title, articles[1].summary), "security_privacy")
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertTrue(any("扩展坞" in event.title for event in events))
+        self.assertTrue(any("终端" in event.title for event in events))
+
 
 if __name__ == "__main__":
     unittest.main()

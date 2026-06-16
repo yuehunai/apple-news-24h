@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.2.0 - 2026-06-14
+### 1.3.0 - 2026-06-16
 
-- Improved relevance scoring so Apple OS support and compatibility changes, Apple vehicle-project asset sales, and unreleased Beats hardware sightings stay eligible while routine recaps, buying advice, competitor comparisons, and generic safety stories remain deferred.
-- Tightened Apple-term handling so bare chip-like names such as `M3` or `C1` only count as Apple anchors when nearby context identifies Apple silicon or Apple products.
-- Improved event clustering for MacBook thermal defects versus MacBook Ultra display rumors, iPhone material or biometric rumors, iPhone Ultra foldable reports, Beats sightings, and hardware-adjacent company actions.
-- Improved source cleanup by filtering Apple service affiliate rows, Chinese site boilerplate, and same-site related-link headline fragments before `summary`, `key_facts`, classification, and merging.
-- Updated `SKILL.md` and `references/news_policy.md` to keep final briefs free of diagnostics, debug grouping notes, and source-processing commentary while preserving granular eligible events.
-- Added regression tests for OS support-drop relevance, competitor-marketing deferral, Beats hardware handling, Apple Car asset sales, affiliate cleanup, related-link noise, and new merge guards.
+- Improved event classification so iPhone Mirroring feature updates are treated as OS/app changes instead of broad compatibility stories.
+- Added a dedicated macOS Terminal paste-protection signal so support-document and security coverage stays separate from macOS beta or filesystem update events.
+- Deferred routine third-party accessory and consumer-electronics stories that only mention Apple-platform compatibility, while preserving official Apple/Beats hardware and direct Apple-platform actions.
+- Tightened final-brief guidance around `event.id` boundaries so independent JSON events are not recombined with transition phrases to shorten long briefs.
+- Updated `SKILL.md` and `references/news_policy.md` with aligned fallback rules for accessory compatibility, security/support-document changes, and granular event grouping.
+- Added regression tests for iPhone Mirroring classification, Terminal security de-clustering, and third-party dock compatibility deferral.
 
 ## What It Does
 

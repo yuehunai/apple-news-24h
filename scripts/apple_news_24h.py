@@ -2321,6 +2321,108 @@ def is_apple_car_asset_story(text: str) -> bool:
     )
 
 
+def is_macos_terminal_paste_security_story(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["macos", "mac"]) > 0
+        and score_terms(lower, ["terminal", "终端"]) > 0
+        and score_terms(lower, ["paste", "command", "script", "粘贴", "命令", "脚本"]) > 0
+        and score_terms(
+            lower,
+            [
+                "block",
+                "blocks",
+                "warning",
+                "warnings",
+                "popup",
+                "security",
+                "malware",
+                "protect",
+                "拦截",
+                "阻止",
+                "弹窗",
+                "警告",
+                "安全",
+                "恶意软件",
+                "防范",
+            ],
+        )
+        > 0
+    )
+
+
+def is_third_party_accessory_platform_compatibility_story(title: str, text: str) -> bool:
+    lower = text.lower()
+    title_lower = title.lower()
+    if effective_apple_term_score(title) > 0:
+        return False
+    if is_official_apple_accessory_market_story(lower) or is_unreleased_beats_hardware_story(lower):
+        return False
+    if score_terms(title_lower, ["apple", "beats", "苹果", "官方"]) > 0:
+        return False
+    accessory_score = score_terms(
+        lower,
+        [
+            "dock",
+            "hub",
+            "charger",
+            "charging station",
+            "power bank",
+            "adapter",
+            "keyboard",
+            "mouse",
+            "monitor",
+            "display",
+            "扩展坞",
+            "充电器",
+            "充电站",
+            "移动电源",
+            "适配器",
+            "键盘",
+            "鼠标",
+            "显示器",
+        ],
+    )
+    platform_compatibility_score = score_terms(
+        lower,
+        [
+            "macos",
+            "ios",
+            "ipados",
+            "iphone",
+            "ipad",
+            "mac",
+            "compatible",
+            "compatibility",
+            "support",
+            "supports",
+            "platform",
+            "平台",
+            "兼容",
+            "适配",
+            "支持",
+        ],
+    )
+    first_party_action_score = score_terms(
+        lower,
+        [
+            "apple announces",
+            "apple announced",
+            "apple releases",
+            "apple released",
+            "apple launches",
+            "apple launched",
+            "apple store removes",
+            "apple store removed",
+            "苹果发布",
+            "苹果推出",
+            "苹果宣布",
+            "苹果下架",
+        ],
+    )
+    return accessory_score > 0 and platform_compatibility_score > 0 and first_party_action_score == 0
+
+
 def has_direct_apple_subject_context(text: str) -> bool:
     lower = text.lower()
     if effective_apple_term_score(lower) <= 0:
@@ -3868,6 +3970,8 @@ def topic_facets_from_text(text: str) -> set[str]:
         and score_terms(lower, ["macos", "iphone"]) > 0
     ):
         facets.add("iphone-mirroring")
+    if is_macos_terminal_paste_security_story(lower):
+        facets.add("macos-terminal-paste-protection")
     if (
         score_terms(lower, ["menu icon", "menu icons", "menu bar", "菜单图标", "无图标菜单"]) > 0
         and score_terms(lower, ["macos", "mac"]) > 0
@@ -4139,8 +4243,14 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "third_party_ecosystem"
     if is_routine_third_party_apple_platform_story(text):
         return "third_party_ecosystem"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "third_party_ecosystem"
     if is_apple_wallet_feature_story(text):
         return "wallet_feature"
+    if "iphone-mirroring" in topic_facets_from_text(text):
+        return "os_app"
+    if is_macos_terminal_paste_security_story(text):
+        return "security_privacy"
     if is_apple_os_support_compatibility_story(text):
         return "os_compatibility"
     if (
@@ -4313,6 +4423,8 @@ def classify_relevance_tier(
         return "strong", "Apple Messages or iMessage platform capability change"
     if is_third_party_platform_availability_candidate(text):
         return "weak", "third-party app or service availability on Apple platforms"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
     if event_kind == "third_party_ecosystem" or is_routine_third_party_apple_platform_story(text):
         return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
     if third_party_score > 0 and apple_score > 0 and score_terms(

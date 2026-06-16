@@ -81,6 +81,8 @@ Do not promote third-party or competitor comparison/marketing stories just becau
 
 Marketing language should not override material first-party hardware news. Apple or Beats unreleased hardware sightings are eligible hardware/product events when the report includes concrete product details such as model or product-line clues, FCC/certification records, design or color changes, availability or release timing, or other hardware facts. Pure ads, celebrity campaigns, social posts, sponsorships, and commercial promos that lack those product details remain excluded or `weak`.
 
+Routine third-party accessory or consumer-electronics stories that only mention Apple-platform compatibility, such as a dock, charger, hub, monitor, keyboard, or other accessory supporting macOS, iOS, iPhone, iPad, or Mac, should remain `weak` unless the article's subject is Apple/Beats hardware, an official Apple accessory, an unreleased first-party hardware detail, Apple Store availability, Apple certification/policy, or a direct Apple platform action. Do not let these compatibility mentions merge with unrelated OS, security, or support-document events.
+
 During fact extraction, remove article-tail service affiliate blocks and related-link headline clusters before summarization. Examples include Apple service price rows such as `Apple Music - $10.99/mo after free trial`, short title-only related links, site breadcrumb/ICP boilerplate, and same-site recommendation titles. These fragments can mention Apple products and numbers, but they should not create facts, classifications, or event merges.
 
 ## Relevance Tiers
@@ -92,12 +94,13 @@ Keep candidate discovery broad. After detail-page verification, classify events 
 - `weak`: Apple is mainly used as context, comparison, or device target, such as routine third-party Vision Pro apps, competitor hardware comparisons, or unrelated non-Apple apps.
 - Local AI apps, third-party utilities, or competitor services that merely run on iPhone, iPad, or Mac should remain `weak` unless the article describes a direct Apple platform change, Apple approval/integration, or concrete Apple ecosystem interoperability.
 - Third-party apps/services that are simply listed on or compatible with an Apple platform should be retained for JSON traceability as `weak`, not promoted into the final brief by default.
+- Third-party accessories or consumer-electronics products that only cite Apple-platform compatibility should also remain `weak`; keep them in JSON traceability, but do not promote them into the final brief as Apple hardware news unless a direct Apple/Beats or Apple-platform action is the subject.
 
 Final Markdown briefs include `strong` and `ecosystem` events. `weak` events may remain in JSON `deferred_events` for inspection so broad coverage is preserved without adding low-value items to the brief.
 
 ## Event-Level Merge Rules
 
-Use crawler event groups as the starting point, then merge or split by the same standard used for the final brief. Default to one eligible JSON `events` item becoming one final bullet.
+Use crawler event groups as the starting point, then merge or split by the same standard used for the final brief. Treat each eligible JSON `event.id` as a hard boundary by default: one event becomes one bullet, and separate events must not be recombined with transition phrases such as `另有`, `同时`, `同一轮更新`, or `同属` merely to shorten the brief.
 
 Merge articles or final bullets only after source review shows duplicate coverage of the same core subject and action: the same product, app, service, component, feature, policy, legal/company move, hardware item, region rollout, or official announcement. Shared Apple context, OS version, WWDC timing, product family, Apple Intelligence theme, source timing, broad event kind, or generic terms such as Apple, App Store, developer, legal, regulation, Vision Pro, or AI are never enough.
 
@@ -107,7 +110,7 @@ For Apple Messages for Business or iMessage AI-agent stories, merge cross-source
 
 For Vision Pro stories where Apple's headset is the core tool behind a third-party professional, enterprise, medical, training, theme-park, or spatial/immersive experience, preserve the concrete project or venue as the event subject. Merge cross-source coverage that shares the same project/entity, but do not merge it with unrelated Vision Pro rumors, Apple hardware sightings, Beats/headphone stories, or other items merely because they share Apple, Vision Pro, publication timing, or generic action words.
 
-Preserve granular events during high-volume WWDC, OS-preview, and roadmap windows. Built-in apps, OS components, platform APIs, developer tools, service/content items, hardware rumors, regional rollouts, compatibility lists, and feature lists stay separate when their concrete action differs. For example, Mail search, Weather forecasts, Safari browser features, Messages drawing/Markup changes, Notes features, Shortcuts generation, Recovery mode, Apple Wallet, Xcode integration, Apple TV Remote, App Store subscriptions, watchOS app removal, iOS input-method changes, CarPlay route-sharing APIs, device color/mockup rumors, and Beats/headphone hardware sightings are separate topics unless the sources explicitly report one combined change.
+Preserve granular events during high-volume WWDC, OS-preview, and roadmap windows. Built-in apps, OS components, platform APIs, developer tools, service/content items, hardware rumors, regional rollouts, compatibility lists, feature lists, security/support-document changes, and third-party accessory compatibility stories stay separate when their concrete action differs. For example, Mail search, Weather forecasts, Safari browser features, Messages drawing/Markup changes, Notes features, Shortcuts generation, Recovery mode, Apple Wallet, Xcode integration, Apple TV Remote, App Store subscriptions, watchOS app removal, iOS input-method changes, CarPlay route-sharing APIs, Terminal paste protection, device color/mockup rumors, and Beats/headphone hardware sightings are separate topics unless the sources explicitly report one combined change.
 
 If the brief is long, condense wording inside each event bullet. Never shorten the brief by creating theme bullets that span independent JSON events, and never drop concrete details from `title`, `summary`, or `key_facts`.
 

@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.3.0 - 2026-06-16
+
+- Improved event classification so iPhone Mirroring feature updates are treated as OS/app changes instead of broad compatibility stories.
+- Added a dedicated macOS Terminal paste-protection signal so support-document and security coverage stays separate from macOS beta or filesystem update events.
+- Deferred routine third-party accessory and consumer-electronics stories that only mention Apple-platform compatibility, while preserving official Apple/Beats hardware and direct Apple-platform actions.
+- Tightened final-brief guidance around `event.id` boundaries so independent JSON events are not recombined with transition phrases to shorten long briefs.
+- Updated `SKILL.md` and `references/news_policy.md` with aligned fallback rules for accessory compatibility, security/support-document changes, and granular event grouping.
+- Added regression tests for iPhone Mirroring classification, Terminal security de-clustering, and third-party dock compatibility deferral.
+
 ## 1.2.0 - 2026-06-14
 
 - Improved relevance scoring so Apple OS support and compatibility changes, Apple vehicle-project asset sales, and unreleased Beats hardware sightings stay eligible while routine recaps, buying advice, competitor comparisons, and generic safety stories remain deferred.

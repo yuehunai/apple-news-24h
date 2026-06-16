@@ -12,14 +12,14 @@
 
 ## 最新更新
 
-### 1.2.0 - 2026-06-14
+### 1.3.0 - 2026-06-16
 
-- 改进相关性评分，使 Apple OS 支持和兼容性变化、Apple 汽车项目资产出售、未发布 Beats 硬件曝光保持可进入简报，同时继续延后常规回顾、购买建议、竞品对比和泛消费电子安全新闻。
-- 收紧 Apple 关键词处理，让 `M3`、`C1` 等裸芯片式名称只有在附近上下文明确指向 Apple 芯片或 Apple 产品时才作为 Apple 锚点。
-- 改进事件聚类，拆分 MacBook 散热缺陷与 MacBook Ultra 显示传闻、iPhone 材质或生物识别传闻、iPhone Ultra 折叠屏报道、Beats 曝光和硬件相关公司动作。
-- 改进来源清理，在生成 `summary`、`key_facts`、分类和归并前过滤 Apple 服务 affiliate 价格行、中文站点样板文案和同站相关文章标题碎片。
-- 更新 `SKILL.md` 和 `references/news_policy.md`，要求最终简报不夹带诊断、调试聚类判断和来源处理说明，同时继续保留符合条件的细粒度事件。
-- 增加回归测试，覆盖 OS 支持终止相关性、竞品营销延后、Beats 硬件处理、Apple Car 资产出售、affiliate 清理、相关文章噪声和新的归并保护规则。
+- 改进事件分类，使 iPhone Mirroring 功能更新归为 OS / 内置应用变化，而不是泛兼容性新闻。
+- 新增 macOS Terminal 粘贴保护信号，让支持文档和安全防护报道与 macOS beta 或文件系统更新事件保持分离。
+- 延后仅提到 Apple 平台兼容性的常规第三方配件和消费电子新闻，同时继续保留 Apple / Beats 官方硬件和直接 Apple 平台动作。
+- 收紧最终简报的 `event.id` 边界，避免为缩短长简报而用过渡句把独立 JSON 事件重新合并。
+- 更新 `SKILL.md` 和 `references/news_policy.md`，同步配件兼容性、安全/支持文档变化和细粒度事件归并的兜底规则。
+- 增加回归测试，覆盖 iPhone Mirroring 分类、Terminal 安全事件拆分和第三方扩展坞兼容性延后。
 
 ## 它会做什么
 
