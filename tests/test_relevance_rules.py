@@ -2172,5 +2172,160 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertTrue(any("终端" in event.title for event in events))
 
 
+    def test_service_content_events_do_not_merge_on_generic_service_boilerplate(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "New 'Apple One' Perk Extends to Chase's Sapphire Reserve Credit Card",
+                (
+                    "Chase's Sapphire Reserve credit card now includes a complimentary Apple TV subscription "
+                    "or an Apple One discount. Apple TV is available for $12.99 per month and Apple Music "
+                    "requires a subscription."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple TV releases massive Widow's Bay themed playlist on Apple Music",
+                (
+                    "Apple TV has published Patricia's Sunset Cocktails, a 300-track Apple Music playlist "
+                    "tied to episode 4 of the Apple TV series Widow's Bay. Apple Music requires a subscription."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Eugene Levy's Apple TV travel series is coming back for season 4",
+                (
+                    "Apple TV renewed The Reluctant Traveler With Eugene Levy for season 4. "
+                    "The travel series follows Levy visiting new destinations and will return on Apple TV."
+                ),
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3)
+        self.assertTrue(any("Chase" in event.title for event in events))
+        self.assertTrue(any("Widow" in event.title for event in events))
+        self.assertTrue(any("Eugene" in event.title for event in events))
+
+    def test_ithome_listing_noise_does_not_merge_watchos_design_with_macos_naming(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果逐渐弱化 macOS 27 独立代号“Golden Gate”，转向强调数字版本号",
+                (
+                    "苹果在 WWDC 后逐渐弱化 macOS 27 的 Golden Gate 代号，更多强调数字版本号。"
+                    "列表页附近还出现 iOS、watchOS、Liquid Glass 等系统更新相关新闻。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 watchOS 27 微调 Apple Watch 液态玻璃设计，暂未引入透明度滑块",
+                (
+                    "9to5Mac 发现 watchOS 27 没有提供类似 iOS 27、iPadOS 27 和 macOS 27 的 Liquid Glass 透明度滑块，"
+                    "但 Apple Watch 的通知、控制中心和系统控件外观已有细微变化。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertTrue(any("Golden Gate" in event.title for event in events))
+        self.assertTrue(any("液态玻璃" in event.title for event in events))
+
+    def test_9to5_service_subscription_boilerplate_is_not_key_fact(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-06-16T15:00:00+00:00" />
+            <meta property="og:description" content="Apple TV renewed Eugene Levy's travel series for season 4." />
+          </head>
+          <body>
+            <div class="container med post-content">
+              <p>Apple TV renewed The Reluctant Traveler With Eugene Levy for season 4, continuing the unscripted travel series with new destinations.</p>
+              <p>The show follows Levy as he visits hotels, local communities, and travel destinations outside his comfort zone.</p>
+              <p>Apple TV is available for $12.99 per month after a seven-day free trial. Apple Music is available for $10.99 per month after free trial.</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/16/eugene-levys-apple-tv-travel-series-is-coming-back-for-season-4/",
+            title="Eugene Levy's Apple TV travel series is coming back for season 4",
+        )
+
+        _title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("season 4", combined)
+        self.assertNotIn("$12.99", combined)
+        self.assertNotIn("$10.99", combined)
+
+    def test_apple_service_offer_discount_fact_is_not_treated_as_subscription_boilerplate(self):
+        module = load_module()
+        fact = (
+            "For example, a Reddit user showed that their Apple One Premier plan has been discounted "
+            "to $21.95 per month, down from the regular price of $37.95 per month. "
+            "This is actually a $16/month discount, which is slightly higher than advertised."
+        )
+
+        self.assertFalse(module.fact_noise(fact))
+
+    def test_ithome_post_content_scope_ignores_sidebar_or_related_paragraphs(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        page = """
+        <html>
+          <head>
+            <meta name="description" content="苹果正在弱化 macOS 27 Golden Gate 代号，转向更强调数字版本号。" />
+          </head>
+          <body>
+            <div class="post_content" id="paragraph">
+              <p>IT之家 6 月 17 日消息，苹果在官网文档中逐渐弱化 macOS 27 Golden Gate 代号，转向更强调数字版本号。</p>
+              <p>苹果把部分支持文档中的 macOS Sequoia、macOS Ventura 等名称替换为 macOS 15、macOS 13 等数字版本。</p>
+            </div>
+            <div class="fr fx">
+              <p>苹果 watchOS 27 微调 Apple Watch 液态玻璃设计，暂未引入透明度滑块。</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/965/150.htm",
+            title="苹果逐渐弱化 macOS 27 独立代号“Golden Gate”，转向强调数字版本号",
+        )
+
+        _title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("Golden Gate", combined)
+        self.assertNotIn("液态玻璃", combined)
+
+    def test_official_apple_store_third_party_accessory_is_hardware_market(self):
+        module = load_module()
+        title = "398 元：苹果上架 PopSockets 新手柄兼支架，兼容 iPhone 17 等"
+        summary = (
+            "苹果中国在线官网上线 PopSockets Low-Pro Grip & Stand 手柄兼支架，"
+            "兼容 MagSafe，适用于 iPhone 17、iPhone Air 等机型，售价为 398 元，厚度仅 2.5 毫米。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+
 if __name__ == "__main__":
     unittest.main()

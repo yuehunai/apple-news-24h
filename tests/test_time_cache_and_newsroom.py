@@ -73,6 +73,13 @@ class TimeCacheAndNewsroomTests(unittest.TestCase):
 
         self.assertEqual(value.astimezone(timezone.utc).isoformat(), "2026-06-01T13:46:34+00:00")
 
+    def test_parse_datetime_value_handles_long_fractional_iso_offsets(self):
+        module = load_module()
+
+        value = module.parse_datetime_value("2026-06-17T07:59:34.8400000+08:00", "Asia/Shanghai")
+
+        self.assertEqual(value.astimezone(timezone.utc).isoformat(), "2026-06-16T23:59:34.840000+00:00")
+
     def test_extract_time_candidates_finds_slash_dates_from_article_body(self):
         module = load_module()
         page = '<span id="pubtime_baidu">2026/6/1 21:46:34</span>'

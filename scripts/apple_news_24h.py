@@ -722,6 +722,36 @@ GENERIC_MERGE_TOKENS = STOPWORDS | {
     "苹果",
 }
 
+GENERIC_SERVICE_CONTENT_MERGE_TOKENS = GENERIC_MERGE_TOKENS | {
+    "and",
+    "apple-music",
+    "apple-one",
+    "apple-tv",
+    "content",
+    "episode",
+    "episodes",
+    "film",
+    "for",
+    "movie",
+    "music",
+    "playlist",
+    "require",
+    "requires",
+    "release",
+    "releases",
+    "return",
+    "season",
+    "series",
+    "service",
+    "show",
+    "streaming",
+    "subscription",
+    "subscriptions",
+    "sery",
+    "the",
+    "trial",
+}
+
 BEATS_HARDWARE_MERGE_TOKENS = {
     "antonee",
     "robinson",
@@ -1883,13 +1913,26 @@ OFFICIAL_APPLE_ACCESSORY_TERMS = [
     "case",
     "accessory",
     "accessories",
+    "magsafe",
+    "grip",
+    "stand",
     "apple store online",
+    "apple online store",
     "保护套",
     "旅行保护套",
     "配件",
+    "手柄",
+    "支架",
+    "磁吸",
 ]
 
 OFFICIAL_APPLE_ACCESSORY_ACTION_TERMS = [
+    "added to apple",
+    "added to apple's online store",
+    "added to apple online store",
+    "available exclusively from apple",
+    "launched on apple",
+    "now available from apple",
     "discontinuing",
     "discontinued",
     "unavailable",
@@ -1898,6 +1941,10 @@ OFFICIAL_APPLE_ACCESSORY_ACTION_TERMS = [
     "pulled from",
     "sold out",
     "下架",
+    "上架",
+    "上线",
+    "开售",
+    "新增",
     "停售",
     "停产",
     "不可用",
@@ -1981,7 +2028,27 @@ def is_official_apple_accessory_market_story(text: str) -> bool:
         return False
     if score_terms(lower, OFFICIAL_APPLE_ACCESSORY_TERMS) <= 0:
         return False
-    return score_terms(lower, OFFICIAL_APPLE_ACCESSORY_ACTION_TERMS) > 0
+    official_store_context = score_terms(
+        lower,
+        [
+            "apple store",
+            "apple's online store",
+            "apple online store",
+            "apple store online",
+            "apple.com",
+            "苹果中国在线官网",
+            "苹果在线官网",
+            "苹果官网",
+            "苹果官方商城",
+            "苹果在线商店",
+        ],
+    ) > 0 or re.search(r"苹果[^。！？.!?]{0,24}(?:在线官网|官网|官方商城|在线商店)", lower) is not None
+    if not official_store_context:
+        return False
+    return score_terms(lower, OFFICIAL_APPLE_ACCESSORY_ACTION_TERMS) > 0 or re.search(
+        r"苹果[^。！？.!?]{0,32}(?:上架|上线|开售|新增|推出)",
+        lower,
+    ) is not None
 
 
 def is_unreleased_beats_hardware_story(text: str) -> bool:
@@ -2695,6 +2762,11 @@ def parse_datetime_value(raw_value: str, default_tz_name: str) -> datetime | Non
             iso_text = iso_text.replace(" ", "T", 1)
         if re.search(r"[+-]\d{4}$", iso_text):
             iso_text = f"{iso_text[:-2]}:{iso_text[-2:]}"
+        iso_text = re.sub(
+            r"(\.\d{6})\d+(?=(?:[+-]\d{2}:?\d{2})?$)",
+            r"\1",
+            iso_text,
+        )
         try:
             parsed = datetime.fromisoformat(iso_text)
             if parsed.tzinfo is None:
@@ -2975,6 +3047,7 @@ TRAILING_PROMO_SECTION_PATTERNS = (
     r"my\s+favorite\s+apple\s+accessory\s+recommendations",
     r"worth\s+checking\s+out\s+on\s+amazon",
     r"chance(?:'|’|&#8217;|&rsquo;)s\s+favorites",
+    r"do\s+more\s+with\s+your\s+apple\s+products",
     r"official\s+apple\s+store\s+on\s+amazon",
     r"amazon\s+prime\s+day\s+\d{4}",
     r"best\s+(?:iphone|ipad|mac|airpods|apple\s+tv\s+4k|apple\s+watch(?:\s+and\s+iphone)?|iphone\s+and\s+apple\s+watch|vision\s+pro|apple)\s+"
@@ -3041,6 +3114,7 @@ def remove_noise_blocks(text: str) -> str:
 
 PREFERRED_CONTENT_CLASS_FRAGMENTS = (
     "post-content",
+    "post_content",
     "entry-content",
     "article-content",
     "article-body",
@@ -3189,6 +3263,38 @@ def fact_noise(value: str) -> bool:
     if re.search(r"当前位置[:：]|当前位置：首页|相关阅读[:：]|相关文章[:：]|延伸阅读[:：]|更多阅读[:：]|豫icp备|icp备|公网安备", lower, re.I):
         return True
     if re.match(r"^apple (?:music|arcade|news\+|tv\+|one(?: bundle)?)\s+[–-]\s*[$￥¥€£]?\d", lower) and "after free trial" in lower:
+        return True
+    if (
+        re.search(r"\bapple (?:music|arcade|news\+|tv\+?|one(?: bundle)?)\b", lower)
+        and re.search(r"\b(?:available|requires|subscription|sign up|per month|free trial)\b", lower)
+        and re.search(r"(?:[$€£¥￥]\d|\bfree trial\b|\bsubscription\b)", lower)
+        and score_terms(
+            lower,
+            [
+                "cash back",
+                "chase",
+                "credit card",
+                "daily cash",
+                "discount",
+                "offer",
+                "perk",
+                "promo",
+                "promotion",
+                "reserve",
+                "sapphire",
+                "优惠",
+                "折扣",
+                "促销",
+                "权益",
+            ],
+        )
+        == 0
+    ):
+        return True
+    if (
+        re.search(r"\b(?:amazon|amzn\.to|best buy)\b", lower)
+        and re.search(r"\b(?:priced from|currently priced|reg\.|record low|discount|deal)\b", lower)
+    ):
         return True
     if len(value) < 140 and re.match(r"^《.+》$", value.strip()):
         return True
@@ -4941,6 +5047,23 @@ def same_beats_hardware_sighting(article: Article, event: Event, shared: set[str
     return False
 
 
+def service_content_title_tokens_from_text(text: str) -> set[str]:
+    return {
+        token
+        for token in article_tokens(text, "")
+        if token not in GENERIC_SERVICE_CONTENT_MERGE_TOKENS
+        and not re.fullmatch(r"\d{1,4}", token)
+    }
+
+
+def service_content_title_shared_tokens(article: Article, event: Event, shared: set[str]) -> set[str]:
+    article_title_tokens = service_content_title_tokens_from_text(article.title)
+    event_title_tokens: set[str] = set()
+    for item in event.articles:
+        event_title_tokens |= service_content_title_tokens_from_text(item.title)
+    return shared & article_title_tokens & event_title_tokens
+
+
 def should_merge(article: Article, event: Event) -> bool:
     shared = article.tokens & event.tokens
     similarity = jaccard(article.tokens, event.tokens)
@@ -5000,6 +5123,18 @@ def should_merge(article: Article, event: Event) -> bool:
         and token
         not in {"iphone", "ipad", "mac", "ios", "ipados", "macos", "watchos", "tvos", "visionos", "update", "new"}
     }
+    if article.event_kind == event.event_kind == "service_content":
+        service_shared = {
+            token
+            for token in strong_shared
+            if token not in GENERIC_SERVICE_CONTENT_MERGE_TOKENS
+        }
+        title_shared = service_content_title_shared_tokens(article, event, service_shared)
+        if len(title_shared) >= 2 and similarity >= 0.06:
+            return True
+        if title_shared and len(service_shared) >= 3:
+            return True
+        return False
     if similarity >= 0.38 and len(shared) >= 3:
         return True
     common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))

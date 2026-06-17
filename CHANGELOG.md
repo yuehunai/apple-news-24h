@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.4.0 - 2026-06-17
+
+- Improved official Apple Store accessory handling so third-party accessories newly available through Apple channels are treated as hardware/product news without promoting routine retailer deals.
+- Tightened Apple services and content clustering so Apple TV renewals, Apple Music playlists, Apple One offers, and credit-card perks remain separate unless they share title-level entities.
+- Improved source cleanup for 9to5Mac and IT之家 by trimming additional promotional sections, generic service subscription boilerplate, and unrelated page/sidebar content before summaries and `key_facts`.
+- Fixed parsing for long fractional ISO timestamps such as IT之家 `data-ot` values with seven decimal places.
+- Preserved material Apple service-offer facts, including subscription prices, discounts, eligibility terms, and card benefits, while filtering generic subscription templates.
+- Added regression tests for official accessory availability, service de-clustering, source cleanup, service-offer facts, IT之家 article scope, and long ISO timestamp parsing.
+
 ## 1.3.0 - 2026-06-16
 
 - Improved event classification so iPhone Mirroring feature updates are treated as OS/app changes instead of broad compatibility stories.

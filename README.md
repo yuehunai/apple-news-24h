@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.3.0 - 2026-06-16
+### 1.4.0 - 2026-06-17
 
-- Improved event classification so iPhone Mirroring feature updates are treated as OS/app changes instead of broad compatibility stories.
-- Added a dedicated macOS Terminal paste-protection signal so support-document and security coverage stays separate from macOS beta or filesystem update events.
-- Deferred routine third-party accessory and consumer-electronics stories that only mention Apple-platform compatibility, while preserving official Apple/Beats hardware and direct Apple-platform actions.
-- Tightened final-brief guidance around `event.id` boundaries so independent JSON events are not recombined with transition phrases to shorten long briefs.
-- Updated `SKILL.md` and `references/news_policy.md` with aligned fallback rules for accessory compatibility, security/support-document changes, and granular event grouping.
-- Added regression tests for iPhone Mirroring classification, Terminal security de-clustering, and third-party dock compatibility deferral.
+- Improved official Apple Store accessory handling so third-party accessories newly available through Apple channels are treated as hardware/product news without promoting routine retailer deals.
+- Tightened Apple services and content clustering so Apple TV renewals, Apple Music playlists, Apple One offers, and credit-card perks remain separate unless they share title-level entities.
+- Improved source cleanup for 9to5Mac and IT之家 by trimming additional promotional sections, generic service subscription boilerplate, and unrelated page/sidebar content before summaries and `key_facts`.
+- Fixed parsing for long fractional ISO timestamps such as IT之家 `data-ot` values with seven decimal places.
+- Preserved material Apple service-offer facts, including subscription prices, discounts, eligibility terms, and card benefits, while filtering generic subscription templates.
+- Added regression tests for official accessory availability, service de-clustering, source cleanup, service-offer facts, IT之家 article scope, and long ISO timestamp parsing.
 
 ## What It Does
 
