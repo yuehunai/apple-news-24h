@@ -126,6 +126,41 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotEqual(module.detect_event_kind(title, summary, facts), "marketing_ad")
         self.assertEqual(tier, "strong", reason)
 
+    def test_roundup_article_focuses_on_apple_item_instead_of_whole_brief(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        page = """
+        <html>
+          <head>
+            <meta name="description" content="IT早报：DeepSeek 完成融资；库克称苹果将因内存芯片短缺涨价；微信支付推 AI 专属卡。" />
+            <span id="pubtime_baidu">2026/6/18 07:01:00</span>
+          </head>
+          <body>
+            <h1>IT早报 0618：DeepSeek 以 4000 亿元估值完成首轮融资；库克称苹果将因内存芯片短缺涨价；微信支付推 AI 专属卡...</h1>
+            <div id="paragraph">
+              <p>“IT早报”时间，大家好，现在是 2026 年 6 月 18 日星期四，今天的重要科技资讯有：</p>
+              <p>1、DeepSeek 以 4000 亿元估值完成首轮外部融资：510 亿元到账，投资方含腾讯、宁德时代、京东、网易等。</p>
+              <p>3、库克：AI 浪潮引发存储芯片价格暴涨，iPhone 等苹果产品涨价已“不可避免”。华尔街日报报道称，苹果 CEO Tim Cook 确认苹果公司为应对 AI 需求导致的存储芯片成本飙升，计划上调产品售价。</p>
+              <p>4、给 Agent 留的指定“办事钱包”：微信支付 AI 专属卡发布，实现从智能推荐到下单支付的自动化消费。</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/965/709.htm",
+            title="IT早报 0618：DeepSeek 以 4000 亿元估值完成首轮融资；库克称苹果将因内存芯片短缺涨价；微信支付推 AI 专属卡...",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([title, summary, *facts])
+
+        self.assertIn("库克", title)
+        self.assertIn("苹果", combined)
+        self.assertIn("涨价", combined)
+        self.assertNotIn("DeepSeek", combined)
+        self.assertNotIn("微信支付", combined)
+
     def test_9to5_related_and_subscription_copy_do_not_enter_summary_or_facts(self):
         module = load_module()
         source = source_named(module, "9to5Mac")
@@ -1520,6 +1555,299 @@ class RelevanceRuleTests(unittest.TestCase):
         events = module.cluster_articles(articles)
 
         self.assertEqual(len(events), 3)
+
+    def test_ios_performance_optimization_merges_across_sources_not_with_future_hardware_testing(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Is Already Testing Four New Products With iOS 28",
+                (
+                    "Apple is testing a HomePod with a screen, a foldable iPhone, and camera-equipped "
+                    "AirPods with iOS 28. The report says the AirPods could become Apple's first wearable "
+                    "AI product and feed surroundings to Siri."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iOS 27 makes your iPhone faster in 40+ ways, here’s the full list",
+                (
+                    "While Apple Intelligence and Siri AI are the biggest additions to iOS 27, "
+                    "the update will also make your iPhone noticeably faster in more than 40 ways. "
+                    "Apple says apps launch up to 30 percent faster, Photos content can load up to "
+                    "70 percent faster, and AirDrop transfers can be up to 80 percent faster."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 引入 40+ 底层优化：App 启动提速 30%、隔空投送最高提速 80%",
+                (
+                    "苹果 iOS 27 带来 40 多项底层性能优化，覆盖 App 启动、照片加载、键盘响应、"
+                    "表情键盘、锁屏、语音控制和隔空投送等系统体验。App 启动最高提速 30%，"
+                    "照片内容加载最高提速 70%，隔空投送最高提速 80%。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "iPhone更快了！iOS 27带来超40+底层优化：APP提速超30%",
+                (
+                    "苹果在最新的 iOS 27 系统中带来超过 40 项底层优化，包括相机启动速度、"
+                    "浏览器页面加载速度、窗口切换速度等。APP 启动速度最高提升 30%，"
+                    "隔空投送传输速度最高提升 80%，相册加载新拍摄内容速度最高提升 70%。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        hardware_events = [event for event in events if "iOS 28" in event.title]
+        performance_events = [event for event in events if "40" in event.title or any("40" in fact for fact in event.key_facts)]
+        self.assertEqual(len(hardware_events), 1)
+        self.assertEqual(len(hardware_events[0].articles), 1)
+        self.assertEqual({article.source for article in performance_events[0].articles}, {"9to5Mac", "IT之家", "快科技"})
+
+    def test_event_summary_level_consolidates_same_performance_event(self):
+        module = load_module()
+        english_article = article_for(
+            module,
+            "iOS 27 makes your iPhone faster",
+            "Apple says iOS 27 improves iPhone performance.",
+            facts=[
+                "Apple outlined more than 40 ways iOS 27 makes iPhone faster.",
+                "Apps launch up to 30% faster, Photos content loads up to 70% faster, and AirDrop transfers can be up to 80% faster.",
+            ],
+            source="9to5Mac",
+        )
+        chinese_article = article_for(
+            module,
+            "iPhone 更快了，iOS 27 带来底层优化",
+            "苹果在 iOS 27 中改善 iPhone 性能。",
+            facts=[
+                "iOS 27 带来超过 40 项底层性能优化。",
+                "App 启动最高提速 30%，相册加载最高提升 70%，隔空投送最高提升 80%。",
+            ],
+            source="快科技",
+        )
+        english_article.tokens = module.article_tokens(english_article.title, english_article.summary)
+        chinese_article.tokens = module.article_tokens(chinese_article.title, chinese_article.summary)
+        english_event = module.Event(
+            event_id="english-performance",
+            category=english_article.category,
+            title=english_article.title,
+            summary=" ".join([english_article.summary, *english_article.key_facts]),
+            key_facts=english_article.key_facts,
+            published_utc=english_article.published_utc,
+            published_raw=english_article.published_raw,
+            published_source=english_article.published_source,
+            confidence=english_article.confidence,
+            articles=[english_article],
+            tokens=set(english_article.tokens),
+            event_kind=english_article.event_kind,
+            relevance_tier=english_article.relevance_tier,
+            relevance_reason=english_article.relevance_reason,
+            regions=set(english_article.regions),
+        )
+        chinese_event = module.Event(
+            event_id="chinese-performance",
+            category=chinese_article.category,
+            title=chinese_article.title,
+            summary=" ".join([chinese_article.summary, *chinese_article.key_facts]),
+            key_facts=chinese_article.key_facts,
+            published_utc=chinese_article.published_utc,
+            published_raw=chinese_article.published_raw,
+            published_source=chinese_article.published_source,
+            confidence=chinese_article.confidence,
+            articles=[chinese_article],
+            tokens=set(chinese_article.tokens),
+            event_kind=chinese_article.event_kind,
+            relevance_tier=chinese_article.relevance_tier,
+            relevance_reason=chinese_article.relevance_reason,
+            regions=set(chinese_article.regions),
+        )
+
+        self.assertFalse(module.should_merge(english_article, chinese_event))
+        self.assertTrue(module.events_should_merge(english_event, chinese_event))
+
+    def test_apple_product_price_increase_reports_merge_across_languages(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Tim Cook Says Apple Price Increases Are 'Unavoidable' Due to Memory Costs",
+                (
+                    "Tim Cook said Apple price increases are unavoidable because AI demand is "
+                    "driving memory and storage chip shortages. The iPhone 18 Pro, iPad, and Mac "
+                    "could get more expensive, and Apple already raised the Mac mini from $599 to $799."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "AI-driven chip shortages to cause Apple product price increase, says Cook",
+                (
+                    "Cook said Apple product price increases are unavoidable as memory and storage "
+                    "costs rise. The Wall Street Journal estimated a price-inflated iPhone 18 Pro "
+                    "could start around $1,299."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "内存、存储成本持续飙升！库克确认：苹果产品涨价不可避免",
+                (
+                    "苹果 CEO 蒂姆・库克表示，受内存和存储成本持续上涨影响，苹果产品涨价已不可避免。"
+                    "iPhone 18 Pro、iPad、Mac 等产品未来存在涨价可能，TechInsights 认为 iPhone 18 Pro "
+                    "售价可能需要上调约 270 美元。"
+                ),
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "苹果计划上调多款硬件售价 Tim Cook称内存成本“已不可持续”",
+                (
+                    "受全球存储芯片持续短缺及成本飙升影响，苹果计划上调多款硬件产品价格，包括 iPhone、iPad 和 Mac。"
+                    "Tim Cook 直言当前内存相关支出已不可持续，价格上调在所难免。"
+                ),
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "库克：AI 浪潮引发存储芯片价格暴涨，iPhone 等苹果产品涨价已“不可避免”",
+                (
+                    "华尔街日报报道称，苹果 CEO Tim Cook 确认苹果公司为应对 AI 需求导致的存储芯片成本飙升，"
+                    "计划上调产品售价。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider", "快科技", "cnBeta", "IT之家"})
+        self.assertEqual(events[0].category, "hardware_products")
+        self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
+
+    def test_iphone_air_successor_does_not_merge_with_foldable_iphone_render_leak(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "消息称苹果 iPhone Air 2 明年春季发售：升级双摄、换用 A20 芯片",
+                (
+                    "彭博社报道称，iPhone Air 2 已进入高级测试阶段，将于 2027 年春季发售。"
+                    "新机主要升级后置双摄，新增超广角镜头，并将采用 2nm 工艺 A20 芯片提升能效和续航。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "被起诉的爆料人 Jon Prosser 再现身，发布苹果首款折叠屏 iPhone Ultra 手机渲染图",
+                (
+                    "Jon Prosser 根据最新传闻制作了苹果首款折叠屏手机 iPhone Ultra 的全新渲染图。"
+                    "新图调整了 USB-C 接口和扬声器格栅位置，展示相机控制按钮，并重申 7.8 英寸内屏、"
+                    "5.5 英寸外屏、9mm 厚度和四枚摄像头等参数。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual(
+            {
+                tuple(sorted(module.effective_topic_facets(module.event_primary_facets(event))))
+                for event in events
+            },
+            {("iphone-air-successor",), ("foldable-iphone-render-leak",)},
+        )
+
+    def test_mixed_hardware_roadmap_event_splits_by_specific_topic(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "消息称苹果 iPhone Air 2 明年春季发售：升级双摄、换用 A20 芯片",
+                (
+                    "彭博社报道称，iPhone Air 2 已进入高级测试阶段，将于 2027 年春季发售。"
+                    "新机主要升级后置双摄，新增超广角镜头，并将采用 2nm 工艺 A20 芯片提升能效和续航。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "被起诉的爆料人 Jon Prosser 再现身，发布苹果首款折叠屏 iPhone Ultra 手机渲染图",
+                (
+                    "Jon Prosser 根据最新传闻制作了苹果首款折叠屏手机 iPhone Ultra 的全新渲染图。"
+                    "新图调整了 USB-C 接口和扬声器格栅位置，展示相机控制按钮，并重申 7.8 英寸内屏、"
+                    "5.5 英寸外屏、9mm 厚度和四枚摄像头等参数。"
+                ),
+                source="IT之家",
+            ),
+        ]
+        mixed = module.Event(
+            event_id="mixed-hardware-roadmap",
+            category="hardware_products",
+            title=articles[0].title,
+            summary=" ".join(article.summary for article in articles),
+            key_facts=[],
+            published_utc=articles[0].published_utc,
+            published_raw=articles[0].published_raw,
+            published_source=articles[0].published_source,
+            confidence=articles[0].confidence,
+            articles=articles,
+            tokens=set().union(*(article.tokens for article in articles)),
+            event_kind="hardware_market",
+            relevance_tier="strong",
+            regions=set(),
+            merge_warnings=["mixed primary topic facets"],
+        )
+
+        split_events = module.split_mixed_topic_events([mixed])
+
+        self.assertEqual(len(split_events), 2)
+        self.assertEqual(
+            {
+                tuple(sorted(module.effective_topic_facets(module.event_primary_facets(event))))
+                for event in split_events
+            },
+            {("iphone-air-successor",), ("foldable-iphone-render-leak",)},
+        )
+
+    def test_price_increase_region_warning_is_exempt_for_global_product_pricing(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Tim Cook Says Apple Price Increases Are 'Unavoidable' Due to Memory Costs",
+                (
+                    "In the United States, Cook said Apple price increases are unavoidable because AI demand "
+                    "is driving memory and storage chip shortages. The iPhone 18 Pro, iPad, Mac, and Mac mini "
+                    "could get more expensive as Apple absorbs higher component costs."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "库克：苹果产品涨价已不可避免",
+                (
+                    "中国媒体报道称，苹果 CEO Tim Cook 确认内存和存储成本上涨将推动 iPhone、iPad 和 Mac "
+                    "等产品价格上调，iPhone 18 Pro 和 Mac mini 也可能受到成本压力影响。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
 
     def test_ios_recovery_carplay_route_and_ipados_restore_image_do_not_merge(self):
         module = load_module()

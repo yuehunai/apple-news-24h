@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.5.0 - 2026-06-18
+
+- Added specific hardware-roadmap facets and conservative mixed-topic splitting so iPhone Air successor reports, foldable iPhone render leaks, and related tag/list pages no longer collapse into one event.
+- Improved iOS performance coverage by merging data-rich 40-plus optimization reports across 9to5Mac, IT之家, and 快科技 while keeping unrelated future-hardware testing separate.
+- Improved Apple product price-increase clustering with cross-language price, cost, memory, storage, and Tim Cook anchors, while suppressing misleading multi-region warnings for one global pricing event.
+- Focused IT之家-style roundup articles on their Apple-specific item so unrelated daily-brief topics do not dominate titles, summaries, or `key_facts`.
+- Added cached term, topic-facet, and research-candidate checks to keep event consolidation responsive during high-volume crawls.
+- Added regression tests for roundup focusing, summary-level performance merging, product-price clustering, hardware-roadmap splitting, and region-warning handling.
+
 ## 1.4.0 - 2026-06-17
 
 - Improved official Apple Store accessory handling so third-party accessories newly available through Apple channels are treated as hardware/product news without promoting routine retailer deals.

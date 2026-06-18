@@ -27,6 +27,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any, Iterable
@@ -706,14 +707,24 @@ STOPWORDS = {
 }
 
 GENERIC_MERGE_TOKENS = STOPWORDS | {
+    "and",
+    "are",
     "article",
     "blog",
+    "for",
+    "its",
     "media",
     "post",
     "published",
+    "said",
+    "software",
     "showcase",
     "shown",
+    "the",
     "today",
+    "when",
+    "which",
+    "year",
     "yesterday",
     "发布",
     "报道",
@@ -1102,7 +1113,16 @@ CROSS_LANGUAGE_TOKEN_MAP = {
     "联网": "coverage",
     "信号": "coverage",
     "降价": "price",
+    "涨价": "price-increase",
     "价格": "price",
+    "售价": "price",
+    "上调": "increase",
+    "成本": "cost",
+    "内存": "memory",
+    "存储": "storage",
+    "短缺": "shortage",
+    "库克": "cook",
+    "不可避免": "unavoidable",
     "中国": "china",
     "国行": "china",
     "股价": "stock",
@@ -1718,6 +1738,7 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
     return candidates
 
 
+@lru_cache(maxsize=16384)
 def term_present(text: str, term: str) -> bool:
     if term.lower() == "wwdc":
         return re.search(r"(?<![a-z0-9])wwdc(?:\d{0,4})?(?![a-z0-9])", text.lower()) is not None
@@ -1769,6 +1790,7 @@ def loose_apple_product_marker(text: str) -> bool:
     )
 
 
+@lru_cache(maxsize=4096)
 def is_apple_research_candidate(text: str) -> bool:
     if effective_apple_term_score(text) <= 0:
         return False
@@ -1779,6 +1801,7 @@ def is_apple_research_candidate(text: str) -> bool:
     return research_score >= 2 and action_score > 0
 
 
+@lru_cache(maxsize=4096)
 def is_apple_health_data_research_candidate(text: str) -> bool:
     if effective_apple_term_score(text) <= 0:
         return False
@@ -3501,6 +3524,92 @@ def combine_summaries(primary: str, secondary: str) -> str:
     return " ".join(parts)
 
 
+def is_roundup_article_title(title: str) -> bool:
+    lower = title.lower()
+    return score_terms(
+        lower,
+        [
+            "it早报",
+            "早报",
+            "科技早报",
+            "科技早参",
+            "每日早报",
+            "daily brief",
+            "daily briefing",
+            "morning brief",
+            "morning briefing",
+            "roundup",
+        ],
+    ) > 0
+
+
+def split_roundup_item_candidates(value: str) -> list[str]:
+    cleaned = clean_fact_text(value)
+    if not cleaned:
+        return []
+    cleaned = re.sub(r">>\s*查看详情", "", cleaned)
+    rough_parts = re.split(r"[；;]\s*|(?=\b\d{1,2}[、.．])|(?=\s\d{1,2}[、.．])", cleaned)
+    parts: list[str] = []
+    for part in rough_parts:
+        part = clean_fact_text(part)
+        part = re.sub(r"^\d{1,2}[、.．]\s*", "", part)
+        part = re.sub(r"^IT早报[:：]\s*", "", part, flags=re.I)
+        if len(part) >= 18:
+            parts.append(part)
+    return parts or [cleaned]
+
+
+def is_apple_roundup_item(value: str) -> bool:
+    lower = value.lower()
+    apple_score = effective_apple_term_score(value) + score_terms(lower, ["tim cook", "库克"])
+    if apple_score <= 0 and not loose_apple_product_marker(value):
+        return False
+    action_score = score_terms(
+        lower,
+        POSITIVE_ACTION_TERMS
+        + STRONG_NEWS_ACTION_TERMS
+        + [
+            "price increase",
+            "price increases",
+            "cost increase",
+            "memory shortage",
+            "chip shortage",
+            "storage shortage",
+            "涨价",
+            "上调",
+            "短缺",
+            "成本",
+            "不可避免",
+        ],
+    )
+    return action_score > 0
+
+
+def roundup_title_from_item(value: str) -> str:
+    cleaned = clean_fact_text(value)
+    first_sentence = re.split(r"(?<=[.!?。！？])\s+", cleaned)[0]
+    first_sentence = re.sub(r"\s*>>\s*查看详情.*$", "", first_sentence)
+    if len(first_sentence) <= 140:
+        return first_sentence
+    return first_sentence[:137].rstrip() + "..."
+
+
+def focus_roundup_article(title: str, summary: str, key_facts: list[str]) -> tuple[str, str, list[str]]:
+    if not is_roundup_article_title(title):
+        return title, summary, key_facts
+    focused: list[str] = []
+    seen: set[str] = set()
+    for value in [title, summary, *key_facts]:
+        for item in split_roundup_item_candidates(value):
+            if is_apple_roundup_item(item):
+                add_unique_text(focused, seen, item)
+    if not focused:
+        return title, summary, key_facts
+    focused_title = roundup_title_from_item(focused[0])
+    focused_summary = " ".join(focused[:5])
+    return focused_title, focused_summary, focused[:MAX_KEY_FACTS]
+
+
 def extract_time_candidates(text: str) -> list[tuple[str, str]]:
     candidates: list[tuple[str, str]] = []
     for obj in json_ld_objects(text):
@@ -3628,6 +3737,7 @@ def extract_article(
     title = extract_title(text, candidate.title)
     summary = extract_summary(text, candidate.summary)
     key_facts = extract_key_facts(text, title, source.name)
+    title, summary, key_facts = focus_roundup_article(title, summary, key_facts)
     default_tz = source.default_tz
 
     if source.name == "Apple Newsroom":
@@ -3785,6 +3895,33 @@ REGION_SENSITIVE_EVENT_KINDS = {
     "hardware_market",
 }
 
+REGION_WARNING_EXEMPT_FACETS = {
+    "apple-product-price-increase",
+}
+
+SUMMARY_LEVEL_EVENT_MERGE_FACETS = {
+    "apple-product-price-increase",
+    "system-performance-optimization",
+}
+
+SYSTEM_PERFORMANCE_MERGE_TOKENS = {
+    "30",
+    "40",
+    "40+",
+    "70",
+    "80",
+    "airdrop",
+    "app",
+    "faster",
+    "launch",
+    "load",
+    "performance",
+    "speed",
+    "优化",
+    "提速",
+    "隔空投送",
+}
+
 def extract_regions(text: str) -> set[str]:
     lower = re.sub(r"\s+", " ", text.lower())
     regions: set[str] = set()
@@ -3851,6 +3988,32 @@ def os_feature_component_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
     if (
+        score_terms(
+            lower,
+            [
+                "performance optimization",
+                "performance optimizations",
+                "faster",
+                "speed up",
+                "speed improvements",
+                "app launch",
+                "launch faster",
+                "load faster",
+                "airdrop transfers",
+                "底层优化",
+                "性能优化",
+                "提速",
+                "启动提速",
+                "加载提速",
+                "隔空投送",
+            ],
+        )
+        > 0
+        and score_terms(lower, ["ios", "ipados", "macos", "watchos", "visionos", "iphone", "ipad", "mac"]) > 0
+        and score_terms(lower, ["up to", "ways", "percent", "%", "30%", "70%", "80%", "40+", "40 多", "多项", "最高"]) > 0
+    ):
+        facets.add("system-performance-optimization")
+    if (
         score_terms(lower, ["weather app", "weather", "天气应用", "天气"]) > 0
         and score_terms(lower, ["forecast", "precipitation", "wind", "highlights", "hourly", "10-day", "降水", "风力", "亮点", "小时", "10 天"]) > 0
     ):
@@ -3912,7 +4075,13 @@ def os_feature_component_facets_from_text(text: str) -> set[str]:
         and score_terms(lower, ["workflow", "automation", "plain english", "natural language", "apple intelligence", "工作流", "自动化", "自然语言", "生成"]) > 0
     ):
         facets.add("shortcuts-automation-builder")
-    if score_terms(lower, ["livecommunicationkit", "callkit", "voip", "全屏来电", "锁屏", "来电显示", "默认通话应用"]) > 0:
+    if (
+        score_terms(lower, ["livecommunicationkit", "callkit", "voip", "全屏来电", "来电显示", "默认通话应用"]) > 0
+        or (
+            score_terms(lower, ["锁屏", "lock screen", "locked screen"]) > 0
+            and score_terms(lower, ["call", "calling", "phone", "voip", "来电", "通话"]) > 0
+        )
+    ):
         facets.add("communication-framework-callkit")
     if (
         score_terms(lower, ["facetime"]) > 0
@@ -3975,10 +4144,73 @@ def is_vision_pro_spatial_experience_story(text: str) -> bool:
     )
 
 
-def topic_facets_from_text(text: str) -> set[str]:
+def is_apple_product_price_increase_story(text: str) -> bool:
+    lower = text.lower()
+    apple_product_score = score_terms(
+        lower,
+        [
+            "apple",
+            "tim cook",
+            "iphone",
+            "ipad",
+            "mac",
+            "mac mini",
+            "mac studio",
+            "苹果",
+            "库克",
+        ],
+    )
+    price_increase_score = score_terms(
+        lower,
+        [
+            "price increase",
+            "price increases",
+            "prices go up",
+            "more expensive",
+            "increase device costs",
+            "price-inflated",
+            "price hike",
+            "涨价",
+            "上调",
+            "提高",
+            "更贵",
+            "成本转嫁",
+            "价格上涨",
+        ],
+    )
+    cost_driver_score = score_terms(
+        lower,
+        [
+            "memory",
+            "storage",
+            "dram",
+            "nand",
+            "ssd",
+            "chip shortage",
+            "chip shortages",
+            "shortage",
+            "shortages",
+            "cost",
+            "costs",
+            "ai demand",
+            "内存",
+            "存储",
+            "存储芯片",
+            "短缺",
+            "成本",
+            "ai 需求",
+            "芯片",
+        ],
+    )
+    return apple_product_score > 0 and price_increase_score > 0 and cost_driver_score > 0
+
+
+def _topic_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
     facets |= os_feature_component_facets_from_text(lower)
+    if is_apple_product_price_increase_story(lower):
+        facets.add("apple-product-price-increase")
     if is_vision_pro_spatial_experience_story(lower):
         facets.add("vision-pro-spatial-experience")
     if (
@@ -3991,6 +4223,59 @@ def topic_facets_from_text(text: str) -> set[str]:
         and score_terms(lower, ["dummy", "mockup", "color", "colors", "dark cherry", "机模", "配色", "颜色", "深樱桃", "浅蓝", "深灰"]) > 0
     ):
         facets.add("iphone-color-mockup")
+    if (
+        score_terms(lower, ["iphone air 2", "iphone air successor", "next iphone air", "苹果 iPhone Air 2"]) > 0
+        and score_terms(
+            lower,
+            [
+                "dual lens",
+                "dual-lens",
+                "two cameras",
+                "a20",
+                "advanced testing",
+                "spring 2027",
+                "successor",
+                "双摄",
+                "超广角",
+                "高级测试",
+                "明年春季",
+                "春季发售",
+            ],
+        )
+        > 0
+    ):
+        facets.add("iphone-air-successor")
+    if (
+        (
+            score_terms(lower, ["foldable iphone", "iphone fold", "iphone ultra", "折叠屏 iphone", "折叠屏手机", "折叠 iphone"]) > 0
+            or (
+                score_terms(lower, ["iphone"]) > 0
+                and score_terms(lower, ["foldable", "fold", "折叠屏", "折叠"]) > 0
+            )
+        )
+        and score_terms(
+            lower,
+            [
+                "render",
+                "renders",
+                "rendering",
+                "jon prosser",
+                "prosser",
+                "usb-c",
+                "camera control",
+                "7.8-inch",
+                "7.8 英寸",
+                "9mm",
+                "渲染图",
+                "爆料人",
+                "相机控制按钮",
+                "接口",
+                "扬声器格栅",
+            ],
+        )
+        > 0
+    ):
+        facets.add("foldable-iphone-render-leak")
     if is_apple_developer_tool_story(lower):
         facets.add("developer-tool-integration")
     if app_store_policy_score(lower) > 0:
@@ -4204,10 +4489,21 @@ def topic_facets_from_text(text: str) -> set[str]:
     return facets
 
 
-def merge_guard_facets_from_text(text: str) -> set[str]:
+@lru_cache(maxsize=4096)
+def cached_topic_facets_from_text(text: str) -> frozenset[str]:
+    return frozenset(_topic_facets_from_text(text))
+
+
+def topic_facets_from_text(text: str) -> set[str]:
+    return set(cached_topic_facets_from_text(text))
+
+
+def _merge_guard_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
     facets |= os_feature_component_facets_from_text(lower)
+    if is_apple_product_price_increase_story(lower):
+        facets.add("apple-product-price-increase")
     platform_groups = {
         "platform-ios": ["ios", "iphone"],
         "platform-ipados": ["ipados", "ipad"],
@@ -4223,10 +4519,15 @@ def merge_guard_facets_from_text(text: str) -> set[str]:
         facets.add("platform-mobile-os")
     if score_terms(lower, OS_SUMMARY_TERMS) > 0 and facets:
         facets.add("system-summary")
+    component_action_facets = {
+        facet
+        for facet in facets
+        if not facet.startswith("platform-") and facet != "system-performance-optimization"
+    }
     if (
         score_terms(lower, OS_FEATURE_ACTION_TERMS) > 0
         and score_terms(lower, ["app", "application", "built-in app", "messages app", "phone app", "walkie-talkie", "应用", "内置应用", "对讲机"]) > 0
-        and facets
+        and component_action_facets
     ):
         facets.add("built-in-app-change")
     if (
@@ -4239,7 +4540,27 @@ def merge_guard_facets_from_text(text: str) -> set[str]:
     return facets
 
 
+@lru_cache(maxsize=4096)
+def cached_merge_guard_facets_from_text(text: str) -> frozenset[str]:
+    return frozenset(_merge_guard_facets_from_text(text))
+
+
+def merge_guard_facets_from_text(text: str) -> set[str]:
+    return set(cached_merge_guard_facets_from_text(text))
+
+
 BROAD_TOPIC_FACETS = {"os-compatibility", "hardware-roadmap"}
+LOW_CONFIDENCE_MERGE_FACETS = {"apple-ai-platform"}
+SPLITTABLE_HARDWARE_TOPIC_FACETS = {
+    "beats-headphones",
+    "foldable-iphone-render-leak",
+    "iphone-air-successor",
+    "iphone-color-mockup",
+    "macbook-memory-ai",
+    "macbook-thermal-defect",
+    "macbook-touch-roadmap",
+    "vision-pro-spatial-experience",
+}
 
 
 def primary_topic_facets(title: str, summary: str = "") -> set[str]:
@@ -4267,6 +4588,11 @@ def event_primary_facets(event: Event) -> set[str]:
     for article in event.articles:
         facets |= article_primary_facets(article)
     return facets
+
+
+def article_splittable_topic_facets(article: Article) -> set[str]:
+    facets = effective_topic_facets(article_primary_facets(article))
+    return facets & SPLITTABLE_HARDWARE_TOPIC_FACETS
 
 
 def article_merge_guard_facets(article: Article) -> set[str]:
@@ -4302,6 +4628,8 @@ def merge_guard_facets_compatible(article_facets: set[str], event_facets: set[st
     event_platforms = merge_guard_platform_facets(event_facets)
     article_actions = merge_guard_action_facets(article_facets)
     event_actions = merge_guard_action_facets(event_facets)
+    if (article_actions & event_actions) & {"apple-product-price-increase"}:
+        return True
     if len(article_platforms) > 2 and event_platforms and article_platforms != event_platforms:
         return False
     if len(event_platforms) > 2 and article_platforms and article_platforms != event_platforms:
@@ -4334,6 +4662,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if is_unreleased_beats_hardware_story(text):
         return "hardware_market"
     if is_apple_car_asset_story(text):
+        return "hardware_market"
+    if is_apple_product_price_increase_story(text):
         return "hardware_market"
     if is_routine_recap_comparison_or_buying_advice(title, text):
         return "general_company"
@@ -4982,6 +5312,9 @@ def relevance_tier_compatible(article: Article, event: Event) -> bool:
 
 
 def regions_compatible(article: Article, event: Event) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "apple-product-price-increase" in common_facets:
+        return True
     kind = article.event_kind if article.event_kind == event.event_kind else event.event_kind
     if kind not in REGION_SENSITIVE_EVENT_KINDS:
         return True
@@ -5024,7 +5357,11 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
     common_facets = set.intersection(*explicit_facet_sets) if len(explicit_facet_sets) > 1 else set()
     if len(kinds) > 1 and not common_facets:
         warnings.append("mixed event kinds")
-    if len(normalized_regions) > 1 and not any(item.event_kind not in REGION_SENSITIVE_EVENT_KINDS for item in articles):
+    if (
+        len(normalized_regions) > 1
+        and not any(item.event_kind not in REGION_SENSITIVE_EVENT_KINDS for item in articles)
+        and not (common_facets & REGION_WARNING_EXEMPT_FACETS)
+    ):
         warnings.append("multiple region-specific markers")
     tiers = {item.relevance_tier for item in articles}
     if "weak" in tiers and len(tiers) > 1:
@@ -5042,6 +5379,57 @@ def same_beats_hardware_sighting(article: Article, event: Event, shared: set[str
     shared_anchors = shared & BEATS_HARDWARE_MERGE_TOKENS
     if {"antonee", "robinson"} <= shared_anchors:
         return True
+    if len(shared_anchors) >= 2:
+        return True
+    return False
+
+
+def same_system_performance_optimization(article: Article, event: Event, shared: set[str]) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "system-performance-optimization" not in common_facets:
+        return False
+    shared_anchors = shared & SYSTEM_PERFORMANCE_MERGE_TOKENS
+    if len(shared_anchors) >= 2:
+        return True
+    return False
+
+
+def same_apple_product_price_increase(article: Article, event: Event, shared: set[str]) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "apple-product-price-increase" not in common_facets:
+        return False
+    price_anchors = {
+        "1299",
+        "270",
+        "599",
+        "799",
+        "chip",
+        "chips",
+        "cook",
+        "cost",
+        "costs",
+        "dram",
+        "increase",
+        "increases",
+        "memory",
+        "nand",
+        "price",
+        "price-increase",
+        "shortage",
+        "shortages",
+        "storage",
+        "unavoidable",
+        "成本",
+        "短缺",
+        "芯片",
+        "涨价",
+        "价格",
+        "内存",
+        "存储",
+        "库克",
+        "不可避免",
+    }
+    shared_anchors = shared & price_anchors
     if len(shared_anchors) >= 2:
         return True
     return False
@@ -5115,6 +5503,10 @@ def should_merge(article: Article, event: Event) -> bool:
             return True
     if same_beats_hardware_sighting(article, event, shared):
         return True
+    if same_system_performance_optimization(article, event, shared):
+        return True
+    if same_apple_product_price_increase(article, event, shared):
+        return True
     strong_shared = {
         token
         for token in shared
@@ -5138,7 +5530,8 @@ def should_merge(article: Article, event: Event) -> bool:
     if similarity >= 0.38 and len(shared) >= 3:
         return True
     common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
-    if common_facets and len(strong_shared) >= 3 and similarity >= 0.08:
+    common_specific_facets = common_facets - LOW_CONFIDENCE_MERGE_FACETS
+    if common_specific_facets and len(strong_shared) >= 3 and similarity >= 0.08:
         return True
     if len(strong_shared) >= 3 and similarity >= 0.18:
         return True
@@ -5260,6 +5653,221 @@ def build_event_summary(articles: list[Article]) -> tuple[str, str, list[str]]:
     return title, summary, key_facts
 
 
+def rebuild_event_from_articles(event: Event, articles: list[Article]) -> Event:
+    event.articles = sorted(articles, key=lambda item: item.published_utc)
+    event.tokens = set().union(*(item.tokens for item in event.articles))
+    representative = min(event.articles, key=lambda item: item.published_utc)
+    event.published_utc = representative.published_utc
+    event.published_raw = representative.published_raw
+    event.published_source = representative.published_source
+    event.confidence = representative.confidence
+    categories = [item.category for item in event.articles]
+    event.category = max(set(categories), key=categories.count)
+    kinds = [item.event_kind for item in event.articles]
+    event.event_kind = max(set(kinds), key=kinds.count)
+    event.relevance_tier, event.relevance_reason = event_relevance_tier(event.articles)
+    event.regions = set().union(*(item.regions for item in event.articles))
+    event.merge_warnings = event_merge_warnings(event.articles)
+    event.title, event.summary, event.key_facts = build_event_summary(event.articles)
+    return event
+
+
+def event_summary_article(event: Event) -> Article:
+    token_summary = " ".join([event.summary, *event.key_facts[:8]])
+    return Article(
+        source="event-summary",
+        url=f"event:{event.event_id}",
+        title=event.title,
+        summary=event.summary,
+        key_facts=list(event.key_facts),
+        category=event.category,
+        published_utc=event.published_utc,
+        published_raw=event.published_raw,
+        published_source=event.published_source,
+        confidence=event.confidence,
+        tokens=article_tokens(event.title, token_summary),
+        event_kind=event.event_kind,
+        relevance_tier=event.relevance_tier,
+        relevance_reason=event.relevance_reason,
+        regions=set(event.regions),
+    )
+
+
+def event_summary_event(event: Event) -> Event:
+    article = event_summary_article(event)
+    return Event(
+        event_id=event.event_id,
+        category=event.category,
+        title=event.title,
+        summary=event.summary,
+        key_facts=list(event.key_facts),
+        published_utc=event.published_utc,
+        published_raw=event.published_raw,
+        published_source=event.published_source,
+        confidence=event.confidence,
+        articles=[article],
+        tokens=set(article.tokens),
+        event_kind=event.event_kind,
+        relevance_tier=event.relevance_tier,
+        relevance_reason=event.relevance_reason,
+        regions=set(event.regions),
+        merge_warnings=list(event.merge_warnings),
+    )
+
+
+def event_summary_primary_facets(event: Event) -> set[str]:
+    context = " ".join([event.summary, *event.key_facts[:8]])
+    return effective_topic_facets(primary_topic_facets(event.title, context))
+
+
+def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
+    keys: set[tuple[str, tuple[str, ...]]] = set()
+    facets = event_summary_primary_facets(event)
+    if not facets:
+        return keys
+    summary_article = event_summary_article(event)
+    guard_facets = primary_merge_guard_facets(
+        summary_article.title,
+        " ".join([summary_article.summary, *summary_article.key_facts[:8]]),
+    )
+    platforms = tuple(
+        sorted(
+            facet
+            for facet in merge_guard_platform_facets(guard_facets)
+            if facet != "platform-mobile-os"
+        )
+    )
+    if "apple-product-price-increase" in facets:
+        keys.add(("apple-product-price-increase", ()))
+    if "system-performance-optimization" in facets:
+        anchors = summary_article.tokens & SYSTEM_PERFORMANCE_MERGE_TOKENS
+        if len(anchors) >= 2 and platforms:
+            keys.add(("system-performance-optimization", platforms))
+    return keys
+
+
+def events_summary_merge_allowed(left: Event, right: Event) -> bool:
+    left_facets = event_summary_primary_facets(left)
+    right_facets = event_summary_primary_facets(right)
+    common_facets = left_facets & right_facets
+    if not (common_facets & SUMMARY_LEVEL_EVENT_MERGE_FACETS):
+        return False
+    left_guard_facets = event_merge_guard_facets(left)
+    right_guard_facets = event_merge_guard_facets(right)
+    return merge_guard_facets_compatible(left_guard_facets, right_guard_facets)
+
+
+def events_should_merge(left: Event, right: Event) -> bool:
+    if any(should_merge(article, right) for article in left.articles) or any(
+        should_merge(article, left) for article in right.articles
+    ):
+        return True
+    if event_summary_merge_keys(left) & event_summary_merge_keys(right):
+        return True
+    if not events_summary_merge_allowed(left, right):
+        return False
+    left_summary = event_summary_article(left)
+    right_summary = event_summary_article(right)
+    left_event = event_summary_event(left)
+    right_event = event_summary_event(right)
+    return should_merge(left_summary, right_event) or should_merge(
+        right_summary, left_event
+    )
+
+
+def consolidate_events(events: list[Event]) -> list[Event]:
+    changed = True
+    while changed:
+        changed = False
+        consolidated: list[Event] = []
+        for event in sorted(events, key=lambda item: item.published_utc):
+            matched: Event | None = None
+            for existing in consolidated:
+                if events_should_merge(event, existing):
+                    matched = existing
+                    break
+            if matched is None:
+                consolidated.append(event)
+                continue
+            rebuild_event_from_articles(matched, [*matched.articles, *event.articles])
+            changed = True
+        events = consolidated
+    return events
+
+
+def event_from_article_group(source_event: Event, articles: list[Article]) -> Event:
+    event_id = hashlib.sha1(
+        " ".join(sorted(normalize_url(article.url) for article in articles)).encode("utf-8")
+    ).hexdigest()[:12]
+    event = Event(
+        event_id=event_id,
+        category=source_event.category,
+        title=source_event.title,
+        summary=source_event.summary,
+        key_facts=list(source_event.key_facts),
+        published_utc=source_event.published_utc,
+        published_raw=source_event.published_raw,
+        published_source=source_event.published_source,
+        confidence=source_event.confidence,
+        articles=[],
+        tokens=set(),
+        event_kind=source_event.event_kind,
+        relevance_tier=source_event.relevance_tier,
+        relevance_reason=source_event.relevance_reason,
+        regions=set(source_event.regions),
+        merge_warnings=[],
+    )
+    return rebuild_event_from_articles(event, articles)
+
+
+def best_topic_group_for_article(article: Article, groups: dict[tuple[str, ...], list[Article]]) -> tuple[str, ...] | None:
+    best_key: tuple[str, ...] | None = None
+    best_score = 0.0
+    for key, group in groups.items():
+        group_tokens = set().union(*(item.tokens for item in group))
+        score = jaccard(article.tokens, group_tokens)
+        if score > best_score:
+            best_score = score
+            best_key = key
+    if best_score < 0.04:
+        return None
+    return best_key
+
+
+def split_mixed_topic_event(event: Event) -> list[Event]:
+    if "mixed primary topic facets" not in event.merge_warnings:
+        return [event]
+    if event.category != "hardware_products" and event.event_kind != "hardware_market":
+        return [event]
+
+    groups: dict[tuple[str, ...], list[Article]] = {}
+    unassigned: list[Article] = []
+    for article in event.articles:
+        facets = article_splittable_topic_facets(article)
+        if not facets:
+            unassigned.append(article)
+            continue
+        groups.setdefault(tuple(sorted(facets)), []).append(article)
+
+    if len(groups) < 2:
+        return [event]
+
+    for article in unassigned:
+        key = best_topic_group_for_article(article, groups)
+        if key is None:
+            return [event]
+        groups[key].append(article)
+
+    return [event_from_article_group(event, articles) for articles in groups.values()]
+
+
+def split_mixed_topic_events(events: list[Event]) -> list[Event]:
+    split_events: list[Event] = []
+    for event in events:
+        split_events.extend(split_mixed_topic_event(event))
+    return split_events
+
+
 def cluster_articles(articles: list[Article]) -> list[Event]:
     events: list[Event] = []
     for article in sorted(articles, key=lambda item: item.published_utc):
@@ -5310,7 +5918,8 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
                     merge_warnings=event_merge_warnings([article]),
                 )
             )
-    return sorted(events, key=lambda event: event.published_utc)
+    consolidated = consolidate_events(events)
+    return sorted(split_mixed_topic_events(consolidated), key=lambda event: event.published_utc)
 
 
 def source_link(source: str, url: str, markdown: bool = True) -> str:
