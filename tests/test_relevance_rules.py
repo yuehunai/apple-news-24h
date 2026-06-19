@@ -2654,6 +2654,266 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(tier, "strong", reason)
         self.assertEqual(module.choose_category(title, summary), "hardware_products")
 
+    def test_service_content_cluster_requires_specific_content_anchor(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "You Can Watch All of F1's 2026 Austrian Grand Prix For Free on Apple TV",
+                "Apple announced every part of Formula 1's 2026 Austrian Grand Prix will stream live on Apple TV for free.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Formula 1 Austrian Grand Prix will be free on Apple TV in the US",
+                "Apple TV will stream an entire Formula 1 race weekend free to U.S. viewers for the first time.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Apple Music Reveals Top 20 Most-Streamed Artists of All Time",
+                "Apple teamed with Chart Data to share the top 20 most-streamed artists of all time, led by Drake, Taylor Swift, and Future.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Top 20 most streamed artists on Apple Music revealed",
+                "The new Apple Music chart lists the top 20 artists of all time, including Taylor Swift, Bad Bunny, Ariana Grande, and Kendrick Lamar.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Drake, Taylor Swift, and Future are the 3 most streamed artists in Apple Music history",
+                "ChartData published Apple Music's Top 20 most streamed artists of all time.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple TV reveals new comedy series with Matthew McConaughey coming soon",
+                "Apple TV announced the release date for Brothers, a new comedy series starring Matthew McConaughey and Woody Harrelson.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                'Apple TV comedy "Brothers" gets fall 2026 debut',
+                'The Apple TV comedy "Brothers" starring Woody Harrelson and Matthew McConaughey premieres in fall 2026. The plot mentions a Texas governor as story background.',
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Vince Gilligan reveals the current status of ‘Pluribus’ season 2",
+                "Vince Gilligan offered an update on the progress of season 2, which is still being written and produced.",
+                facts=["Pluribus is an Apple TV series, but this article is a distinct production-status update."],
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 4)
+        event_sources = [{article.source for article in event.articles} for event in events]
+        event_texts = [" ".join([event.title, event.summary, *event.key_facts]) for event in events]
+        self.assertIn({"MacRumors", "AppleInsider"}, event_sources)
+        self.assertIn({"MacRumors", "AppleInsider", "9to5Mac"}, event_sources)
+        self.assertTrue(
+            any(sources == {"9to5Mac", "AppleInsider"} and "Brothers" in text for sources, text in zip(event_sources, event_texts))
+        )
+        self.assertTrue(
+            any(sources == {"9to5Mac"} and "Pluribus" in text for sources, text in zip(event_sources, event_texts))
+        )
+        self.assertNotIn("mixed primary topic facets", {warning for event in events for warning in event.merge_warnings})
+
+    def test_apple_tv_series_plot_region_does_not_become_regional_regulation(self):
+        module = load_module()
+        title = 'Apple TV comedy "Brothers" gets fall 2026 debut'
+        summary = (
+            'The Apple TV comedy "Brothers" stars Woody Harrelson and Matthew McConaughey. '
+            "Its fictional plot mentions a Texas governor, but the story is about an Apple TV premiere."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "service_content")
+        self.assertEqual(module.classify_relevance_tier(title, summary, [], "AppleInsider")[0], "strong")
+
+    def test_a12_a13_bootrom_exploit_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple's A12 and A13 Chips Facing New Unpatchable Exploit",
+                "Paradigm Shift published details of usbliter8, a BootROM vulnerability affecting Apple's A12 and A13 chips.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "A12 & A13 Apple devices face an unpatchable SecureROM vulnerability",
+                "Security researchers published a new unpatchable SecureROM exploit for Apple's A12 and A13 chips.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "New unpatchable exploit targets Apple devices with A12 and A13 chips",
+                "Researchers at Paradigm Shift published technical details of usbliter8, a new iPhone BootROM vulnerability.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "无法软件修复：苹果 A12/A13 芯片曝新漏洞，影响 iPhone 11 系列等",
+                "安全公司 Paradigm Shift 发布影响苹果 A12 和 A13 芯片的 BootROM 漏洞 usbliter8，因固化在芯片中无法通过软件修复。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider", "9to5Mac", "IT之家"})
+
+    def test_find_my_hide_location_features_merge_across_languages(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 27 Adds These New Features to Find My, Including 'Hide Location'",
+                "iOS 27 adds Find My improvements including Hide Location, custom sharing durations, and landscape support.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "初探苹果 iOS 27 系统“查找”App：支持隐藏共享位置、自定义共享时长",
+                "iOS 27 的查找应用新增隐藏位置功能，可暂停共享位置，并支持自定义共享时长和横屏模式。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 的查找应用支持隐藏位置和自定义共享时长",
+                "报道称 iOS 27 Find My 支持 Hide Location、15 分钟到 30 天的共享时长以及横屏界面。",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家", "cnBeta"})
+
+    def test_brazil_app_store_policy_is_strong_and_merges_direct_policy_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Announces Major App Store Changes on iOS in Brazil",
+                "Apple announced that developers in Brazil can distribute iPhone apps through alternative app marketplaces and accept payments through third-party platforms.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple announces changes to iOS in Brazil",
+                "Apple said Brazil developers may use alternative app marketplaces, external links, and new payment options under a CADE agreement.",
+                source="Apple Newsroom",
+            ),
+            article_for(
+                module,
+                "Apple announces major App Store changes for Brazil, including alternative app marketplaces",
+                "Apple is making iOS App Store changes in Brazil, adding alternative marketplaces, web distribution, and third-party payment options.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果巴西 App Store 重大调整落地：开放第三方应用商店与内购，全新佣金体系公布",
+                "苹果在巴西落地 App Store 政策调整，允许第三方应用商店分发应用，并开放多种内购方式和全新佣金体系。",
+                source="IT之家",
+            ),
+        ]
+
+        tiers = [module.classify_relevance_tier(article.title, article.summary, article.key_facts, article.source)[0] for article in articles]
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(tiers, ["strong", "strong", "strong", "strong"])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "Apple Newsroom", "9to5Mac", "IT之家"})
+
+    def test_third_party_or_legacy_context_stories_are_deferred_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "How to update an iPad with your Mac when Software Update fails",
+                "A Mac can update an iPad using the same iPadOS software Apple delivers through Software Update. Here's how Finder can help recover failed installs.",
+                "AppleInsider",
+            ),
+            (
+                "小米发布并开源 Xiaomi Miloco 2.0：接入 OpenClaw，让 AI 掌控全屋智能",
+                "小米发布全屋智能 AI 开源方案 Xiaomi Miloco 2.0，底层由小米自研 MiMo 大模型驱动，页面模板提到苹果客户端。",
+                "快科技",
+            ),
+            (
+                "AI 公司 Midjourney 跨界发布首款硬件“全身超声波扫描仪”：前苹果 Vision Pro 工程师带队",
+                "Midjourney 成立医疗部门并推出全身超声波扫描仪，项目由前苹果 Vision Pro 工程师带队，但不是 Apple 产品或服务。",
+                "IT之家",
+            ),
+            (
+                "诞生至今已有 41 年，Linux 7.2 内核将移除苹果 AppleTalk 协议",
+                "Linux 上游开发者将移除苹果 1985 年推出的 AppleTalk 网络协议，苹果官方早已停止支持该历史协议。",
+                "IT之家",
+            ),
+        ]
+
+        for title, summary, source in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_swift_observatory_link_story_is_not_developer_tool(self):
+        module = load_module()
+        title = "Link 卫星 6 月 27 日发射：10 个月打造，拯救 5 亿美元价值雨燕天文卫星"
+        summary = (
+            "NASA 的 Neil Gehrels Swift Observatory 轨道高度持续衰减，Katalyst 将发射 Link 卫星执行救援任务。"
+            "文章主题是航天器轨道救援、合同金额和发射窗口。"
+        )
+
+        self.assertFalse(module.is_apple_developer_tool_story(f"{title} {summary}"))
+        self.assertNotEqual(module.detect_event_kind(title, summary), "developer_tool")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_xr_smart_glasses_iphone_moment_is_deferred_weak(self):
+        module = load_module()
+        title = "2026 最强智能眼镜发布，但「iPhone 时刻」还没到来"
+        summary = (
+            "Xreal Aura 搭载 Android XR、Gemini 和高通 XR 芯片，Snap SPECS 也公布了更长续航。"
+            "文章用 iPhone 时刻作为行业拐点类比，但没有 Apple 新产品、Vision Pro 策略或苹果官方动作。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "爱范儿")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_music_top_artists_chart_merges_cnbeta_followup(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Music Reveals Top 20 Most-Streamed Artists of All Time",
+                "Apple teamed with Chart Data to share the top 20 most-streamed artists of all time, led by Drake, Taylor Swift, and Future.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Top 20 most streamed artists on Apple Music revealed",
+                "The new Apple Music chart lists the top 20 artists of all time, including Taylor Swift, Bad Bunny, Ariana Grande, and Kendrick Lamar.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Apple Music公布最常被收听艺术家前二十名 Drake居首 Taylor Swift紧随其后",
+                "苹果与 Chart Data 合作首次公布 Apple Music 平台史上最常被串流收听艺术家前二十名，Drake 第一，Taylor Swift 第二，Future 第三。",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider", "cnBeta"})
+
 
 if __name__ == "__main__":
     unittest.main()

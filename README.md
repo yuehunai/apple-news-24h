@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.5.0 - 2026-06-18
+### 1.6.0 - 2026-06-19
 
-- Added specific hardware-roadmap facets and conservative mixed-topic splitting so iPhone Air successor reports, foldable iPhone render leaks, and related tag/list pages no longer collapse into one event.
-- Improved iOS performance coverage by merging data-rich 40-plus optimization reports across 9to5Mac, IT之家, and 快科技 while keeping unrelated future-hardware testing separate.
-- Improved Apple product price-increase clustering with cross-language price, cost, memory, storage, and Tim Cook anchors, while suppressing misleading multi-region warnings for one global pricing event.
-- Focused IT之家-style roundup articles on their Apple-specific item so unrelated daily-brief topics do not dominate titles, summaries, or `key_facts`.
-- Added cached term, topic-facet, and research-candidate checks to keep event consolidation responsive during high-volume crawls.
-- Added regression tests for roundup focusing, summary-level performance merging, product-price clustering, hardware-roadmap splitting, and region-warning handling.
+- Improved Apple service-content clustering so Apple TV series updates, F1 free-streaming news, Apple Music charts, and separate production-status items no longer collapse into one service bucket.
+- Added Apple Music top-artist chart facets and cross-language anchors so MacRumors, AppleInsider, and cnBeta follow-ups merge into one event when they cover the same historical ranking.
+- Tightened Apple-term handling so `Swift` only counts as an Apple signal in programming or developer contexts, preventing non-Apple Swift Observatory coverage from entering `events`.
+- Deferred third-party XR and smart-glasses comparison stories that use Apple, iPhone, or Vision Pro mainly as market context while preserving Apple Vision product-roadmap coverage.
+- Improved cross-source event grouping for A12/A13 BootROM exploits, Find My location-sharing controls, and Brazil App Store policy changes without reducing source discovery breadth.
+- Added regression tests for service de-clustering, Apple Music chart merging, Swift context scoring, third-party XR deferral, and weak Apple-adjacent filtering.
 
 ## What It Does
 

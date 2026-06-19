@@ -750,7 +750,17 @@ GENERIC_SERVICE_CONTENT_MERGE_TOKENS = GENERIC_MERGE_TOKENS | {
     "requires",
     "release",
     "releases",
+    "reveal",
+    "revealed",
+    "reveals",
     "return",
+    "coming",
+    "current",
+    "debut",
+    "fall",
+    "history",
+    "soon",
+    "status",
     "season",
     "series",
     "service",
@@ -761,6 +771,13 @@ GENERIC_SERVICE_CONTENT_MERGE_TOKENS = GENERIC_MERGE_TOKENS | {
     "sery",
     "the",
     "trial",
+}
+
+SERVICE_CONTENT_TOPIC_FACETS = {
+    "apple-arcade",
+    "apple-music",
+    "apple-tv-content",
+    "apple-tv-remote",
 }
 
 BEATS_HARDWARE_MERGE_TOKENS = {
@@ -1099,6 +1116,10 @@ HEALTH_RESEARCH_CONTEXT_TOKENS = {
 }
 
 CROSS_LANGUAGE_TOKEN_MAP = {
+    "find my": "find-my",
+    "hide location": "hide-location",
+    "location sharing": "location-sharing",
+    "sharing duration": "sharing-duration",
     "英特尔": "intel",
     "台积电": "tsmc",
     "高通": "qualcomm",
@@ -1133,6 +1154,19 @@ CROSS_LANGUAGE_TOKEN_MAP = {
     "漏洞": "vulnerability",
     "安全": "security",
     "入侵": "exploit",
+    "不可修复": "unpatchable",
+    "无法软件修复": "unpatchable",
+    "查找": "find-my",
+    "隐藏位置": "hide-location",
+    "隐藏共享位置": "hide-location",
+    "共享时长": "sharing-duration",
+    "位置共享": "location-sharing",
+    "巴西": "brazil",
+    "应用商店": "app-store",
+    "第三方应用商店": "alternative-marketplace",
+    "替代应用市场": "alternative-marketplace",
+    "第三方支付": "third-party-payment",
+    "佣金": "commission",
     "欺诈": "fraud",
     "诈骗": "fraud",
     "开发者": "developer",
@@ -1760,12 +1794,44 @@ def has_apple_chip_context(text: str) -> bool:
     return score_terms(lower, APPLE_CHIP_CONTEXT_TERMS) > 0
 
 
+def has_swift_programming_context(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["swift"]) > 0
+        and score_terms(
+            lower,
+            [
+                "apple",
+                "ios",
+                "ipados",
+                "macos",
+                "watchos",
+                "visionos",
+                "xcode",
+                "developer",
+                "developers",
+                "programming",
+                "app development",
+                "swiftui",
+                "swift playgrounds",
+                "苹果",
+                "开发者",
+                "编程",
+                "应用开发",
+            ],
+        )
+        > 0
+    )
+
+
 def effective_apple_term_score(text: str) -> int:
     lower = text.lower()
     score = 0
     for term in APPLE_TERMS:
         normalized = term.lower()
         if normalized in BARE_APPLE_CHIP_TERMS and not has_apple_chip_context(lower):
+            continue
+        if normalized == "swift" and not has_swift_programming_context(lower):
             continue
         if term_present(lower, normalized):
             score += 1
@@ -2042,6 +2108,24 @@ def is_apple_developer_tool_story(text: str) -> bool:
     lower = text.lower()
     if score_terms(lower, APPLE_DEVELOPER_TOOL_TERMS) <= 0:
         return False
+    if score_terms(
+        lower,
+        [
+            "xcode",
+            "testflight",
+            "developer tools",
+            "developer tool",
+            "coding tool",
+            "coding tools",
+            "agentic coding",
+            "swiftui",
+            "swift playgrounds",
+            "开发者工具",
+            "开发工具",
+        ],
+    ) <= 0:
+        if not has_swift_programming_context(lower):
+            return False
     return score_terms(lower, APPLE_DEVELOPER_TOOL_ACTION_TERMS) > 0
 
 
@@ -3900,7 +3984,11 @@ REGION_WARNING_EXEMPT_FACETS = {
 }
 
 SUMMARY_LEVEL_EVENT_MERGE_FACETS = {
+    "apple-music-top-artists",
     "apple-product-price-increase",
+    "bootrom-secure-rom-exploit",
+    "brazil-app-store-policy",
+    "find-my-location-sharing",
     "system-performance-optimization",
 }
 
@@ -3953,6 +4041,18 @@ APP_STORE_POLICY_TERMS = [
     "spam",
     "spamming",
     "app review",
+    "alternative app marketplace",
+    "alternative app marketplaces",
+    "alternative marketplace",
+    "alternative marketplaces",
+    "third-party payment",
+    "third-party payments",
+    "external link",
+    "external links",
+    "web distribution",
+    "commission",
+    "commissions",
+    "cade",
     "developer program",
     "removal",
     "remove",
@@ -3963,6 +4063,13 @@ APP_STORE_POLICY_TERMS = [
     "fraud",
     "fraudulent",
     "应用审核",
+    "第三方应用商店",
+    "替代应用市场",
+    "第三方支付",
+    "外链",
+    "网页分发",
+    "佣金",
+    "巴西",
     "审核指南",
     "审核规则",
     "开发者指南",
@@ -3982,6 +4089,212 @@ def app_store_policy_score(text: str) -> int:
     if score_terms(text, ["app store", "应用商店"]) <= 0:
         return 0
     return score_terms(text, APP_STORE_POLICY_TERMS)
+
+
+def is_brazil_app_store_policy_story(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["brazil", "brazilian", "cade", "巴西"]) > 0
+        and score_terms(lower, ["ios", "iphone", "app", "apps", "developer", "developers", "应用", "开发者"]) > 0
+        and score_terms(lower, ["apple", "苹果"]) > 0
+        and score_terms(
+            lower,
+            [
+                "alternative app marketplace",
+                "alternative app marketplaces",
+                "alternative marketplace",
+                "alternative marketplaces",
+                "third-party payment",
+                "third-party payments",
+                "web distribution",
+                "external link",
+                "第三方应用商店",
+                "替代应用市场",
+                "第三方支付",
+                "网页分发",
+                "外链",
+            ],
+        )
+        > 0
+    )
+
+
+def is_bootrom_secure_rom_exploit_story(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["bootrom", "secure-rom", "securerom", "usbliter8"]) > 0
+        and score_terms(lower, ["a12", "a13", "iphone 11", "iphone xs", "iphone xr"]) > 0
+        and score_terms(lower, ["vulnerability", "exploit", "unpatchable", "漏洞", "无法软件修复", "不可修复"]) > 0
+    )
+
+
+def is_find_my_location_sharing_story(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["find my", "find my app", "查找"]) > 0
+        and score_terms(
+            lower,
+            [
+                "hide location",
+                "location sharing",
+                "sharing duration",
+                "custom sharing",
+                "landscape",
+                "隐藏位置",
+                "隐藏共享位置",
+                "位置共享",
+                "共享时长",
+                "横屏",
+            ],
+        )
+        > 0
+    )
+
+
+def is_how_to_guide_without_new_apple_action(title: str, text: str) -> bool:
+    title_lower = title.lower().strip()
+    if not (title_lower.startswith("how to ") or title_lower.startswith("here's how ")):
+        return False
+    return not (
+        has_apple_first_party_release_context(text)
+        or is_apple_developer_tool_story(text)
+        or app_store_policy_score(text) > 0
+    )
+
+
+def is_former_apple_staff_background_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["former apple", "ex-apple", "former vision pro", "前苹果", "前 apple"]) <= 0:
+        return False
+    if has_apple_first_party_release_context(lower) or is_apple_developer_tool_story(lower):
+        return False
+    return score_terms(
+        lower,
+        ["midjourney", "startup", "company", "medical", "ultrasound", "scanner", "公司", "医疗", "超声波", "扫描仪"],
+    ) > 0
+
+
+def is_legacy_apple_protocol_third_party_removal(text: str) -> bool:
+    lower = text.lower()
+    return (
+        score_terms(lower, ["appletalk"]) > 0
+        and score_terms(lower, ["linux", "kernel", "内核"]) > 0
+        and score_terms(lower, ["remove", "removal", "removed", "移除", "删除"]) > 0
+    )
+
+
+def is_third_party_xr_smart_glasses_context_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(
+        lower,
+        [
+            "android xr",
+            "xreal",
+            "snap specs",
+            "spectacles",
+            "meta orion",
+            "viture",
+            "xr glasses",
+            "ar glasses",
+            "smart glasses",
+            "reality elite",
+            "智能眼镜",
+            "ar 眼镜",
+            "xr 眼镜",
+        ],
+    ) <= 0:
+        return False
+    if has_apple_first_party_release_context(lower) or score_terms(
+        lower,
+        [
+            "apple smart glasses",
+            "apple glasses",
+            "apple product roadmap",
+            "apple's product roadmap",
+            "apple’s product roadmap",
+            "apple vision products",
+            "vision products roadmap",
+            "vision pro series",
+            "apple is developing",
+            "apple plans",
+            "vision pro 2",
+            "vision pro successor",
+            "苹果智能眼镜",
+            "苹果眼镜",
+            "苹果产品路线图",
+            "vision 产品路线图",
+            "苹果计划",
+            "苹果正在",
+            "vision pro 后续",
+        ],
+    ) > 0:
+        return False
+    return effective_apple_term_score(lower) > 0 or score_terms(
+        lower,
+        ["iphone moment", "iphone 时刻", "vision pro", "苹果", "iphone"],
+    ) > 0
+
+
+def is_apple_music_top_artists_chart_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple music", "苹果音乐"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "top 20",
+            "top twenty",
+            "most-streamed",
+            "most streamed",
+            "all-time artists",
+            "chart data",
+            "drake",
+            "taylor swift",
+            "future",
+            "最常被收听",
+            "串流收听",
+            "前二十名",
+            "艺术家",
+            "史上",
+        ],
+    ) > 0
+
+
+def is_service_content_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple music", "apple arcade", "classical", "苹果音乐"]) > 0:
+        return True
+    apple_tv_score = score_terms(lower, ["apple tv", "apple tv+", "苹果电视"])
+    if apple_tv_score <= 0:
+        return False
+    return (
+        score_terms(
+            lower,
+            [
+                "stream",
+                "streaming",
+                "movie",
+                "film",
+                "original film",
+                "season",
+                "episode",
+                "comedy",
+                "drama",
+                "thriller",
+                "premiere",
+                "debut",
+                "grand prix",
+                "formula 1",
+                "f1",
+                "剧集",
+                "电影",
+                "首播",
+                "大奖赛",
+                "直播",
+            ],
+        )
+        > 0
+    )
 
 
 def os_feature_component_facets_from_text(text: str) -> set[str]:
@@ -4211,6 +4524,14 @@ def _topic_facets_from_text(text: str) -> set[str]:
     facets |= os_feature_component_facets_from_text(lower)
     if is_apple_product_price_increase_story(lower):
         facets.add("apple-product-price-increase")
+    if is_brazil_app_store_policy_story(lower):
+        facets.add("brazil-app-store-policy")
+    if is_bootrom_secure_rom_exploit_story(lower):
+        facets.add("bootrom-secure-rom-exploit")
+    if is_find_my_location_sharing_story(lower):
+        facets.add("find-my-location-sharing")
+    if is_apple_music_top_artists_chart_story(lower):
+        facets.add("apple-music-top-artists")
     if is_vision_pro_spatial_experience_story(lower):
         facets.add("vision-pro-spatial-experience")
     if (
@@ -4561,13 +4882,20 @@ SPLITTABLE_HARDWARE_TOPIC_FACETS = {
     "macbook-touch-roadmap",
     "vision-pro-spatial-experience",
 }
+SPLITTABLE_SERVICE_TOPIC_FACETS = {
+    "apple-music",
+    "apple-tv-content",
+}
+SPLITTABLE_TOPIC_FACETS = SPLITTABLE_HARDWARE_TOPIC_FACETS | SPLITTABLE_SERVICE_TOPIC_FACETS
 
 
 def primary_topic_facets(title: str, summary: str = "") -> set[str]:
     title_facets = topic_facets_from_text(title)
+    combined_facets = topic_facets_from_text(f"{title} {summary}")
+    if "app-store-policy" in title_facets and "brazil-app-store-policy" in combined_facets:
+        return combined_facets
     if title_facets and (title_facets - BROAD_TOPIC_FACETS):
         return title_facets
-    combined_facets = topic_facets_from_text(f"{title} {summary}")
     return combined_facets or title_facets
 
 
@@ -4592,7 +4920,7 @@ def event_primary_facets(event: Event) -> set[str]:
 
 def article_splittable_topic_facets(article: Article) -> set[str]:
     facets = effective_topic_facets(article_primary_facets(article))
-    return facets & SPLITTABLE_HARDWARE_TOPIC_FACETS
+    return facets & SPLITTABLE_TOPIC_FACETS
 
 
 def article_merge_guard_facets(article: Article) -> set[str]:
@@ -4655,6 +4983,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         > 0
     ):
         return "ecosystem_interop"
+    if is_brazil_app_store_policy_story(text):
+        return "app_store_trust"
     if is_apple_developer_tool_story(text):
         return "developer_tool"
     if is_official_apple_accessory_market_story(text):
@@ -4673,6 +5003,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "apple_research"
     if is_messages_platform_candidate(text):
         return "messages_platform"
+    if is_service_content_story(text):
+        return "service_content"
     if app_store_policy_score(lower) > 0:
         return "app_store_trust"
     if is_third_party_platform_availability_candidate(text):
@@ -4680,6 +5012,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if is_routine_third_party_apple_platform_story(text):
         return "third_party_ecosystem"
     if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "third_party_ecosystem"
+    if is_third_party_xr_smart_glasses_context_story(text):
         return "third_party_ecosystem"
     if is_apple_wallet_feature_story(text):
         return "wallet_feature"
@@ -4723,12 +5057,7 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "security_privacy"
     if score_terms(lower, ["ad", "advertisement", "campaign", "commercial", "广告", "营销"]) > 0:
         return "marketing_ad"
-    service_core_score = score_terms(
-        lower,
-        ["apple tv", "apple tv+", "apple music", "apple arcade", "streaming", "movie", "film", "classical", "original film", "苹果电视", "苹果音乐", "电影"],
-    )
-    service_series_score = score_terms(lower, ["series", "season", "剧集"])
-    if service_core_score > 0 or (service_series_score > 0 and score_terms(lower, ["apple tv", "streaming", "original", "苹果电视"]) > 0):
+    if is_service_content_story(text):
         return "service_content"
     if (
         score_terms(lower, ["apple store", "retail store", "store closure", "store closures", "store opening", "opens store", "零售店", "苹果店"]) > 0
@@ -4812,6 +5141,7 @@ def classify_relevance_tier(
             "third-party",
             "app for vision pro",
             "vision pro app",
+            "xiaomi",
             "lm studio",
             "locally app",
             "local model",
@@ -4822,6 +5152,7 @@ def classify_relevance_tier(
             "steam",
             "rx",
             "minimax",
+            "midjourney",
             "moore threads",
             "mthreads",
             "谷歌",
@@ -4837,6 +5168,8 @@ def classify_relevance_tier(
             "微信",
             "鸿蒙",
             "第三方",
+            "小米",
+            "midjourney",
             "西锐",
             "音乐生成",
         ],
@@ -4851,12 +5184,22 @@ def classify_relevance_tier(
         return "strong", "Apple official hardware accessory availability change"
     if is_apple_car_asset_story(text):
         return "strong", "Apple vehicle testing asset or hardware-related company action"
+    if is_how_to_guide_without_new_apple_action(title, text):
+        return "weak", "how-to or troubleshooting guide without a new Apple action"
+    if is_former_apple_staff_background_story(text):
+        return "weak", "third-party company story using former Apple staff as background"
+    if is_legacy_apple_protocol_third_party_removal(text):
+        return "weak", "third-party project removing a legacy Apple protocol without a new Apple action"
+    if is_third_party_xr_smart_glasses_context_story(text):
+        return "weak", "third-party XR or smart-glasses story with Apple used mainly as context"
     if is_routine_recap_comparison_or_buying_advice(title, text):
         return "weak", "third-party or routine recap, comparison, hands-on, or buying advice without a new Apple action"
     if is_generic_consumer_electronics_health_safety_story(title, text):
         return "weak", "generic consumer-electronics safety story with Apple products used as examples"
     if event_kind == "messages_platform":
         return "strong", "Apple Messages or iMessage platform capability change"
+    if event_kind == "app_store_trust" and apple_score > 0:
+        return "strong", "Apple-specific App Store policy event"
     if is_third_party_platform_availability_candidate(text):
         return "weak", "third-party app or service availability on Apple platforms"
     if is_third_party_accessory_platform_compatibility_story(title, text):
@@ -5452,6 +5795,14 @@ def service_content_title_shared_tokens(article: Article, event: Event, shared: 
     return shared & article_title_tokens & event_title_tokens
 
 
+def article_service_topic_facets(article: Article) -> set[str]:
+    return effective_topic_facets(article_primary_facets(article)) & SERVICE_CONTENT_TOPIC_FACETS
+
+
+def event_service_topic_facets(event: Event) -> set[str]:
+    return effective_topic_facets(event_primary_facets(event)) & SERVICE_CONTENT_TOPIC_FACETS
+
+
 def should_merge(article: Article, event: Event) -> bool:
     shared = article.tokens & event.tokens
     similarity = jaccard(article.tokens, event.tokens)
@@ -5516,15 +5867,21 @@ def should_merge(article: Article, event: Event) -> bool:
         not in {"iphone", "ipad", "mac", "ios", "ipados", "macos", "watchos", "tvos", "visionos", "update", "new"}
     }
     if article.event_kind == event.event_kind == "service_content":
+        article_service_facets = article_service_topic_facets(article)
+        event_service_facets = event_service_topic_facets(event)
+        if article_service_facets and event_service_facets and not (article_service_facets & event_service_facets):
+            return False
         service_shared = {
             token
             for token in strong_shared
             if token not in GENERIC_SERVICE_CONTENT_MERGE_TOKENS
         }
         title_shared = service_content_title_shared_tokens(article, event, service_shared)
-        if len(title_shared) >= 2 and similarity >= 0.06:
+        if not title_shared:
+            return False
+        if len(title_shared) >= 2 and similarity >= 0.05:
             return True
-        if title_shared and len(service_shared) >= 3:
+        if len(title_shared) == 1 and len(service_shared) >= 4 and similarity >= 0.10:
             return True
         return False
     if similarity >= 0.38 and len(shared) >= 3:
@@ -5739,6 +6096,20 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
     )
     if "apple-product-price-increase" in facets:
         keys.add(("apple-product-price-increase", ()))
+    if "apple-music-top-artists" in facets:
+        keys.add(("apple-music-top-artists", ()))
+    if "bootrom-secure-rom-exploit" in facets:
+        anchors = summary_article.tokens & {"a12", "a13", "bootrom", "securerom", "secure-rom", "usbliter8"}
+        if len(anchors) >= 2:
+            keys.add(("bootrom-secure-rom-exploit", ()))
+    if "find-my-location-sharing" in facets:
+        anchors = summary_article.tokens & {"find-my", "hide-location", "location-sharing", "sharing-duration"}
+        if len(anchors) >= 1:
+            keys.add(("find-my-location-sharing", ()))
+    if "brazil-app-store-policy" in facets:
+        anchors = summary_article.tokens & {"brazil", "app-store", "alternative-marketplace", "third-party-payment", "commission"}
+        if len(anchors) >= 2:
+            keys.add(("brazil-app-store-policy", ()))
     if "system-performance-optimization" in facets:
         anchors = summary_article.tokens & SYSTEM_PERFORMANCE_MERGE_TOKENS
         if len(anchors) >= 2 and platforms:
@@ -5837,7 +6208,12 @@ def best_topic_group_for_article(article: Article, groups: dict[tuple[str, ...],
 def split_mixed_topic_event(event: Event) -> list[Event]:
     if "mixed primary topic facets" not in event.merge_warnings:
         return [event]
-    if event.category != "hardware_products" and event.event_kind != "hardware_market":
+    splittable_event = (
+        event.category == "hardware_products"
+        or event.event_kind == "hardware_market"
+        or event.event_kind == "service_content"
+    )
+    if not splittable_event:
         return [event]
 
     groups: dict[tuple[str, ...], list[Article]] = {}
