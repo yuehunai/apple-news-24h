@@ -12,14 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.6.0 - 2026-06-19
+### 1.7.0 - 2026-06-20
 
-- Improved Apple service-content clustering so Apple TV series updates, F1 free-streaming news, Apple Music charts, and separate production-status items no longer collapse into one service bucket.
-- Added Apple Music top-artist chart facets and cross-language anchors so MacRumors, AppleInsider, and cnBeta follow-ups merge into one event when they cover the same historical ranking.
-- Tightened Apple-term handling so `Swift` only counts as an Apple signal in programming or developer contexts, preventing non-Apple Swift Observatory coverage from entering `events`.
-- Deferred third-party XR and smart-glasses comparison stories that use Apple, iPhone, or Vision Pro mainly as market context while preserving Apple Vision product-roadmap coverage.
-- Improved cross-source event grouping for A12/A13 BootROM exploits, Find My location-sharing controls, and Brazil App Store policy changes without reducing source discovery breadth.
-- Added regression tests for service de-clustering, Apple Music chart merging, Swift context scoring, third-party XR deferral, and weak Apple-adjacent filtering.
+- Added CarPlay platform-feature handling so iOS CarPlay updates stay in the main software brief instead of being deferred as routine third-party app availability.
+- Improved event clustering for Apple pricing, visionOS device-specific AI features, watchOS compatibility, and iPhone parts factory contamination reports across English and Chinese sources.
+- Updated weak-relevance handling for competitor benchmark comparisons, third-party accessories and displays, HomePod-alternative reviews, third-party app beta updates, buying-advice posts, and tag pages.
+- Kept broad source discovery intact while moving weak Apple-adjacent items to deferred JSON traceability instead of final brief events.
+- Added regression coverage for CarPlay, benchmark comparisons, price-buying advice, third-party accessory and app updates, tag pages, visionOS M5 features, and factory contamination clustering.
 
 ## What It Does
 

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.7.0 - 2026-06-20
+
+- Added CarPlay platform-feature handling so iOS CarPlay updates stay in the main software brief instead of being deferred as routine third-party app availability.
+- Improved event clustering for Apple pricing, visionOS device-specific AI features, watchOS compatibility, and iPhone parts factory contamination reports across English and Chinese sources.
+- Updated weak-relevance handling for competitor benchmark comparisons, third-party accessories and displays, HomePod-alternative reviews, third-party app beta updates, buying-advice posts, and tag pages.
+- Kept broad source discovery intact while moving weak Apple-adjacent items to deferred JSON traceability instead of final brief events.
+- Added regression coverage for CarPlay, benchmark comparisons, price-buying advice, third-party accessory and app updates, tag pages, visionOS M5 features, and factory contamination clustering.
+
 ## 1.6.0 - 2026-06-19
 
 - Improved Apple service-content clustering so Apple TV series updates, F1 free-streaming news, Apple Music charts, and separate production-status items no longer collapse into one service bucket.

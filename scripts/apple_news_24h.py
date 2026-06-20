@@ -391,6 +391,7 @@ URL_EXCLUDE_FRAGMENTS = [
     "homekit-weekly",
     "mactracker",
     "/tag/podcast",
+    "/tags/",
     "/newsroom/apple-stories",
 ]
 
@@ -2362,12 +2363,22 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
             "bad time to buy",
             "want to upgrade",
             "upgrade decision",
+            "buy now or wait",
+            "upgrade or wait",
             "购机",
             "购买建议",
+            "换机建议",
             "换机周期",
             "几年换",
             "最划算",
             "保值率",
+            "现在上车",
+            "上车还是等",
+            "买还是等",
+            "现在买",
+            "等新机",
+            "该不该买",
+            "值不值得买",
         ],
     ) > 0:
         return True
@@ -2375,7 +2386,27 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
         return True
     if "hands-on" in title_lower and score_terms(
         lower,
-        ["third-party", "belkin", "anker", "satechi", "amazon", "pricing", "price", "第三方", "售价"],
+        [
+            "alternative",
+            "third-party",
+            "speaker",
+            "dock",
+            "hub",
+            "charger",
+            "monitor",
+            "display",
+            "belkin",
+            "anker",
+            "satechi",
+            "denon",
+            "amazon",
+            "pricing",
+            "price",
+            "替代",
+            "音箱",
+            "第三方",
+            "售价",
+        ],
     ) > 0:
         return True
     return False
@@ -2528,12 +2559,11 @@ def is_macos_terminal_paste_security_story(text: str) -> bool:
 def is_third_party_accessory_platform_compatibility_story(title: str, text: str) -> bool:
     lower = text.lower()
     title_lower = title.lower()
-    if effective_apple_term_score(title) > 0:
-        return False
     if is_official_apple_accessory_market_story(lower) or is_unreleased_beats_hardware_story(lower):
         return False
     if score_terms(title_lower, ["apple", "beats", "苹果", "官方"]) > 0:
-        return False
+        if score_terms(title_lower, ["专用", "compatible", "compatibility", "support", "supports", "适配", "支持"]) <= 0:
+            return False
     accessory_score = score_terms(
         lower,
         [
@@ -2667,7 +2697,7 @@ def is_routine_third_party_apple_platform_story(text: str) -> bool:
     lower = text.lower()
     if effective_apple_term_score(lower) <= 0:
         return False
-    if has_apple_first_party_release_context(lower) or is_apple_developer_tool_story(lower):
+    if has_apple_first_party_release_context(lower):
         return False
     platform_score = score_terms(
         lower,
@@ -2691,6 +2721,10 @@ def is_routine_third_party_apple_platform_story(text: str) -> bool:
         [
             "third-party",
             "third party",
+            "app developers",
+            "bear app",
+            "lettera",
+            "markdown editor",
             "omnigroup",
             "omnioutliner",
             "whatsapp",
@@ -2704,9 +2738,17 @@ def is_routine_third_party_apple_platform_story(text: str) -> bool:
         [
             "available",
             "availability",
+            "beta",
             "launch",
             "launches",
             "released",
+            "roll out",
+            "rolls out",
+            "rolling out",
+            "test",
+            "testing",
+            "tests",
+            "testflight",
             "updated",
             "update",
             "version",
@@ -3989,6 +4031,7 @@ SUMMARY_LEVEL_EVENT_MERGE_FACETS = {
     "bootrom-secure-rom-exploit",
     "brazil-app-store-policy",
     "find-my-location-sharing",
+    "iphone-parts-factory-contamination",
     "system-performance-optimization",
 }
 
@@ -4297,6 +4340,79 @@ def is_service_content_story(text: str) -> bool:
     )
 
 
+def is_carplay_platform_feature_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["carplay"]) <= 0:
+        return False
+    platform_context_score = score_terms(
+        lower,
+        [
+            "ios",
+            "ios update",
+            "ios release",
+            "wwdc",
+            "developer beta",
+            "public beta",
+            "apple unveiled",
+            "apple introduced",
+            "apple added",
+            "apple is allowing",
+            "苹果 ios",
+            "苹果推出",
+            "苹果新增",
+            "开发者测试版",
+            "公测版",
+        ],
+    )
+    feature_action_score = score_terms(
+        lower,
+        OS_FEATURE_ACTION_TERMS
+        + STRONG_NEWS_ACTION_TERMS
+        + [
+            "feature",
+            "features",
+            "enhancement",
+            "enhancements",
+            "interface",
+            "siri",
+            "mini player",
+            "conversation mode",
+            "airplay",
+            "route sharing",
+            "media app upgrades",
+            "功能",
+            "升级",
+            "界面",
+            "路线共享",
+            "导航",
+        ],
+    )
+    third_party_primary_score = score_terms(
+        lower,
+        [
+            "spotify",
+            "google maps",
+            "waze",
+            "third-party app",
+            "third party app",
+            "car maker",
+            "automaker",
+            "车企",
+            "第三方应用",
+        ],
+    )
+    apple_platform_score = score_terms(lower, ["apple", "苹果", "siri", "apple music", "apple tv", "podcasts"])
+    return (
+        platform_context_score > 0
+        and feature_action_score > 0
+        and (apple_platform_score > 0 or score_terms(lower, ["ios"]) > 0)
+        and not (
+            third_party_primary_score > 0
+            and score_terms(lower, ["ios", "apple introduced", "apple added", "苹果新增"]) == 0
+        )
+    )
+
+
 def os_feature_component_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
@@ -4347,6 +4463,31 @@ def os_feature_component_facets_from_text(text: str) -> set[str]:
     ):
         facets.add("safari-browser-features")
     if (
+        score_terms(lower, ["visionos", "vision pro"]) > 0
+        and score_terms(lower, ["m5 vision pro", "m5 款 vision pro", "m5 vision pro 头显"]) > 0
+        and score_terms(
+            lower,
+            [
+                "afm 3 core advanced",
+                "advanced on-device model",
+                "local ai model",
+                "on-device model",
+                "exclusive to the m5",
+                "m5 model",
+                "miss out",
+                "siri ai voice customization",
+                "two features",
+                "two unique",
+                "voice customization",
+                "本地 ai 模型",
+                "语音定制",
+                "独占",
+            ],
+        )
+        > 0
+    ):
+        facets.add("visionos-m5-ai-features")
+    if (
         score_terms(lower, ["watchos", "apple watch"]) > 0
         and score_terms(lower, ["siri app", "find my app", "find devices", "find items", "find people", "siri 应用", "查找应用"]) > 0
     ):
@@ -4356,6 +4497,8 @@ def os_feature_component_facets_from_text(text: str) -> set[str]:
         and score_terms(lower, ["route sharing", "route", "navigation", "路线共享", "路线", "导航"]) > 0
     ):
         facets.add("carplay-route-sharing")
+    if is_carplay_platform_feature_story(lower):
+        facets.add("carplay-platform-feature")
     if score_terms(
         lower,
         [
@@ -4457,6 +4600,143 @@ def is_vision_pro_spatial_experience_story(text: str) -> bool:
     )
 
 
+def is_iphone_parts_factory_contamination_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["iphone", "apple", "苹果"]) <= 0:
+        return False
+    factory_score = score_terms(
+        lower,
+        [
+            "factory",
+            "plant",
+            "supplier",
+            "parts",
+            "tata",
+            "hosur",
+            "tamil nadu",
+            "工厂",
+            "供应商",
+            "零部件",
+            "塔塔",
+            "霍苏尔",
+        ],
+    )
+    contamination_score = score_terms(
+        lower,
+        [
+            "contamination",
+            "contaminated",
+            "pollution",
+            "wastewater",
+            "water",
+            "tds",
+            "probe",
+            "investigation",
+            "污染",
+            "废水",
+            "井水",
+            "超标",
+            "调查",
+        ],
+    )
+    return factory_score > 0 and contamination_score > 0
+
+
+def is_third_party_benchmark_comparison_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    third_party_subject_score = score_terms(
+        lower,
+        [
+            "amd",
+            "core ",
+            "dell",
+            "geforce",
+            "huawei",
+            "intel",
+            "mediatek",
+            "nvidia",
+            "qualcomm",
+            "radeon",
+            "ryzen",
+            "snapdragon",
+            "windows pc",
+            "wildcat lake",
+            "xps",
+            "英特尔",
+            "酷睿",
+            "高通",
+            "骁龙",
+            "英伟达",
+            "联发科",
+            "华为",
+            "戴尔",
+            "锐龙",
+        ],
+    )
+    benchmark_score = score_terms(
+        lower,
+        [
+            "benchmark",
+            "geekbench",
+            "passmark",
+            "single-core",
+            "multi-core",
+            "score",
+            "scores",
+            "跑分",
+            "单核",
+            "多核",
+            "成绩",
+            "得分",
+        ],
+    )
+    comparison_score = score_terms(
+        lower,
+        [
+            "compared",
+            "matches",
+            "matching",
+            "outperforms",
+            "rival",
+            "versus",
+            "vs",
+            "on par",
+            "对比",
+            "相比",
+            "追平",
+            "持平",
+            "媲美",
+            "超过",
+            "反超",
+            "不输",
+        ],
+    )
+    apple_chip_score = score_terms(lower, ["apple silicon", "苹果芯片"])
+    if re.search(r"\b[am]\d{1,2}(?:\s*(?:pro|max|ultra))?\b", lower):
+        apple_chip_score += 1
+    apple_subject_score = score_terms(
+        lower,
+        [
+            "apple tests",
+            "apple tested",
+            "apple benchmark",
+            "apple's chip",
+            "apple chip",
+            "苹果测试",
+            "苹果芯片跑分",
+        ],
+    )
+    return (
+        third_party_subject_score > 0
+        and benchmark_score > 0
+        and comparison_score > 0
+        and apple_chip_score > 0
+        and apple_subject_score == 0
+    )
+
+
 def is_apple_product_price_increase_story(text: str) -> bool:
     lower = text.lower()
     apple_product_score = score_terms(
@@ -4534,6 +4814,8 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("apple-music-top-artists")
     if is_vision_pro_spatial_experience_story(lower):
         facets.add("vision-pro-spatial-experience")
+    if is_iphone_parts_factory_contamination_story(lower):
+        facets.add("iphone-parts-factory-contamination")
     if (
         score_terms(lower, ["beats"]) > 0
         and score_terms(lower, ["headphone", "headphones", "earbuds", "耳机", "耳罩"]) > 0
@@ -4894,6 +5176,8 @@ def primary_topic_facets(title: str, summary: str = "") -> set[str]:
     combined_facets = topic_facets_from_text(f"{title} {summary}")
     if "app-store-policy" in title_facets and "brazil-app-store-policy" in combined_facets:
         return combined_facets
+    if "visionos-m5-ai-features" in combined_facets:
+        return combined_facets
     if title_facets and (title_facets - BROAD_TOPIC_FACETS):
         return title_facets
     return combined_facets or title_facets
@@ -4985,11 +5269,23 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "ecosystem_interop"
     if is_brazil_app_store_policy_story(text):
         return "app_store_trust"
+    if is_routine_third_party_apple_platform_story(text):
+        return "third_party_ecosystem"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "third_party_ecosystem"
     if is_apple_developer_tool_story(text):
         return "developer_tool"
     if is_official_apple_accessory_market_story(text):
         return "hardware_market"
     if is_unreleased_beats_hardware_story(text):
+        return "hardware_market"
+    if is_carplay_platform_feature_story(text):
+        return "os_app"
+    if is_third_party_benchmark_comparison_story(text):
+        return "third_party_ecosystem"
+    if "visionos-m5-ai-features" in topic_facets_from_text(text):
+        return "os_app"
+    if is_iphone_parts_factory_contamination_story(text):
         return "hardware_market"
     if is_apple_car_asset_story(text):
         return "hardware_market"
@@ -5008,10 +5304,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if app_store_policy_score(lower) > 0:
         return "app_store_trust"
     if is_third_party_platform_availability_candidate(text):
-        return "third_party_ecosystem"
-    if is_routine_third_party_apple_platform_story(text):
-        return "third_party_ecosystem"
-    if is_third_party_accessory_platform_compatibility_story(title, text):
         return "third_party_ecosystem"
     if is_third_party_xr_smart_glasses_context_story(text):
         return "third_party_ecosystem"
@@ -5178,10 +5470,18 @@ def classify_relevance_tier(
         return "strong", "official Apple source"
     if event_kind == "ecosystem_interop":
         return "ecosystem", "direct Apple ecosystem interoperability or compatibility impact"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
+    if is_routine_third_party_apple_platform_story(text):
+        return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
     if is_apple_developer_tool_story(text):
         return "strong", "Apple first-party developer tool or Xcode capability change"
     if is_official_apple_accessory_market_story(text):
         return "strong", "Apple official hardware accessory availability change"
+    if is_carplay_platform_feature_story(text):
+        return "strong", "Apple CarPlay platform feature change"
+    if is_third_party_benchmark_comparison_story(text):
+        return "weak", "third-party benchmark comparison using Apple mainly as context"
     if is_apple_car_asset_story(text):
         return "strong", "Apple vehicle testing asset or hardware-related company action"
     if is_how_to_guide_without_new_apple_action(title, text):
@@ -5194,6 +5494,8 @@ def classify_relevance_tier(
         return "weak", "third-party XR or smart-glasses story with Apple used mainly as context"
     if is_routine_recap_comparison_or_buying_advice(title, text):
         return "weak", "third-party or routine recap, comparison, hands-on, or buying advice without a new Apple action"
+    if is_apple_product_price_increase_story(text):
+        return "strong", "Apple-specific hardware pricing or cost event"
     if is_generic_consumer_electronics_health_safety_story(title, text):
         return "weak", "generic consumer-electronics safety story with Apple products used as examples"
     if event_kind == "messages_platform":
@@ -5202,9 +5504,7 @@ def classify_relevance_tier(
         return "strong", "Apple-specific App Store policy event"
     if is_third_party_platform_availability_candidate(text):
         return "weak", "third-party app or service availability on Apple platforms"
-    if is_third_party_accessory_platform_compatibility_story(title, text):
-        return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
-    if event_kind == "third_party_ecosystem" or is_routine_third_party_apple_platform_story(text):
+    if event_kind == "third_party_ecosystem":
         return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
     if third_party_score > 0 and apple_score > 0 and score_terms(
         lower,
@@ -6110,6 +6410,10 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
         anchors = summary_article.tokens & {"brazil", "app-store", "alternative-marketplace", "third-party-payment", "commission"}
         if len(anchors) >= 2:
             keys.add(("brazil-app-store-policy", ()))
+    if "iphone-parts-factory-contamination" in facets:
+        anchors = summary_article.tokens & {"iphone", "factory", "plant", "tata", "hosur", "contamination", "wastewater", "pollution", "water", "工厂", "污染", "废水", "塔塔"}
+        if len(anchors) >= 2:
+            keys.add(("iphone-parts-factory-contamination", ()))
     if "system-performance-optimization" in facets:
         anchors = summary_article.tokens & SYSTEM_PERFORMANCE_MERGE_TOKENS
         if len(anchors) >= 2 and platforms:
@@ -6129,6 +6433,8 @@ def events_summary_merge_allowed(left: Event, right: Event) -> bool:
 
 
 def events_should_merge(left: Event, right: Event) -> bool:
+    if "weak" in {left.relevance_tier, right.relevance_tier} and left.relevance_tier != right.relevance_tier:
+        return False
     if any(should_merge(article, right) for article in left.articles) or any(
         should_merge(article, left) for article in right.articles
     ):

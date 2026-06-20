@@ -12,14 +12,13 @@
 
 ## 最新更新
 
-### 1.6.0 - 2026-06-19
+### 1.7.0 - 2026-06-20
 
-- 改进 Apple 服务和内容类事件聚类，使 Apple TV 剧集更新、F1 免费直播、Apple Music 榜单和制作进度类报道不再被压成同一个服务大类。
-- 新增 Apple Music 艺人榜单 facet 和跨语言锚点，使 MacRumors、AppleInsider、cnBeta 关于同一历史榜单的跟进可归并为一个事件。
-- 收紧 Apple 关键词判断，使 `Swift` 只在编程或开发者上下文中计为 Apple 信号，避免 Swift Observatory 等非 Apple 报道进入 `events`。
-- 将主要以 Apple、iPhone 或 Vision Pro 作市场类比的第三方 XR / 智能眼镜报道降级，同时保留 Apple Vision 产品路线图报道。
-- 改进 A12/A13 BootROM 漏洞、“查找”位置共享控制和巴西 App Store 政策调整的跨源归并，并保持来源发现范围不缩窄。
-- 增加回归测试，覆盖服务去大聚类、Apple Music 榜单合并、Swift 上下文计分、第三方 XR 降级和弱 Apple 关联过滤。
+- 新增 CarPlay 平台功能识别，iOS CarPlay 更新会进入软件简报，不再被误降为普通第三方应用可用性。
+- 改进 Apple 定价、visionOS 设备专属 AI 功能、watchOS 兼容性、iPhone 零件工厂污染等中英文跨源聚类。
+- 更新弱相关判定，将竞品跑分对比、第三方配件和显示器、HomePod 替代品评测、第三方应用 beta 更新、购买建议和标签页移出最终简报。
+- 保持全源发现范围，同时把弱 Apple 邻近内容保留在 JSON 的 deferred 队列中便于追踪。
+- 增加 CarPlay、跑分对比、价格购买建议、第三方配件和应用更新、标签页、visionOS M5 功能和工厂污染聚类的回归测试。
 
 ## 它会做什么
 

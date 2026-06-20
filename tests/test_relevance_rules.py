@@ -1733,6 +1733,49 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(events[0].category, "hardware_products")
         self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
 
+    def test_direct_apple_product_price_increase_stays_strong_despite_supplier_background(self):
+        module = load_module()
+        title = "Report: iPhone 18 Pro Could Start at $1,399 Amid Price Hikes"
+        summary = (
+            "Apple price increases are coming across its lineup due to rising memory chip costs. "
+            "The Wall Street Journal estimates the iPhone 18 Pro could start as high as $1,399. "
+            "The price hikes stem from a global shortage of DRAM and NAND flash storage, with "
+            "Samsung Electronics and Micron shifting production toward enterprise-scale memory chips."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_routine_price_buying_advice_does_not_merge_with_direct_price_report(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Report: iPhone 18 Pro Could Start at $1,399 Amid Price Hikes",
+                (
+                    "Apple price increases are coming due to rising memory chip costs, and "
+                    "The Wall Street Journal estimates the iPhone 18 Pro could start as high as $1,399. "
+                    "DRAM and NAND flash storage costs are projected to rise sharply."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果全面涨价：分析一下现在上车还是等iPhone 18",
+                (
+                    "库克表示受内存和存储成本上涨影响，苹果产品未来可能涨价。"
+                    "文章主要分析用户应该现在买 iPhone 17 还是等 iPhone 18，并给出换机建议。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual({event.relevance_tier for event in events}, {"strong", "weak"})
+
     def test_iphone_air_successor_does_not_merge_with_foldable_iphone_render_leak(self):
         module = load_module()
         articles = [
@@ -2913,6 +2956,197 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 1)
         self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider", "cnBeta"})
+
+    def test_third_party_cpu_benchmark_using_apple_chip_as_comparison_stays_weak(self):
+        module = load_module()
+        title = "最弱 Wildcat Lake：英特尔酷睿 3 304 单核跑分追平苹果 A18 Pro，核心数还少一个"
+        summary = (
+            "英特尔 Wildcat Lake 入门级处理器酷睿 3 304 最新 PassMark 跑分曝光，"
+            "单核成绩跃升至 3982 分，与苹果 A18 Pro 平均分持平。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+        self.assertIn("third-party", reason)
+
+    def test_third_party_cpu_benchmark_does_not_merge_with_apple_product_price_increase(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Report: iPhone 18 Pro Could Start at $1,399 Amid Price Hikes",
+                (
+                    "Apple price increases are coming due to rising memory chip costs, and "
+                    "The Wall Street Journal estimates the iPhone 18 Pro could start as high as $1,399. "
+                    "DRAM and NAND flash storage costs are projected to rise sharply."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "最弱 Wildcat Lake：英特尔酷睿 3 304 单核跑分追平苹果 A18 Pro，核心数还少一个",
+                (
+                    "英特尔 Wildcat Lake 入门级处理器酷睿 3 304 最新 PassMark 跑分曝光，"
+                    "单核成绩跃升至 3982 分，与苹果 A18 Pro 平均分持平。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual({event.relevance_tier for event in events}, {"strong", "weak"})
+
+    def test_carplay_ios_platform_feature_update_is_strong_software_news(self):
+        module = load_module()
+        title = "What Siri AI, Apple TV, & more are like with CarPlay in iOS 27"
+        summary = (
+            "CarPlay is seeing one of its biggest updates in years thanks to iOS 27, "
+            "including the new Siri AI orb, a chat-style app interface, first-party and "
+            "third-party media app upgrades, and a mini player for Apple Music and Podcasts."
+        )
+        facts = [
+            "CarPlay, Apple's in-car UI, is powered by iOS, so iOS 27 brings enhancements to the car.",
+            "Apple is allowing any app to offer a conversation mode in CarPlay.",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "AppleInsider")
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "os_app")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+
+    def test_routine_third_party_carplay_app_availability_stays_weak(self):
+        module = load_module()
+        title = "Spotify launches redesigned app for CarPlay users"
+        summary = (
+            "Spotify's third-party app is now available with a redesigned CarPlay interface "
+            "for iPhone users, adding larger album art and queue controls."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "weak", reason)
+        self.assertIn("third-party", reason)
+
+    def test_third_party_charger_with_iphone_compatibility_stays_weak(self):
+        module = load_module()
+        title = "绿联 25W 磁吸无线充电器发售：适配苹果 iPhone 12-17 系列，139 元"
+        summary = "绿联新推出一款 25W 磁吸无线充电器，配 1.5m 编织线，适配 iPhone 12 至 iPhone 17 系列。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_mac_touch_monitor_launch_stays_weak(self):
+        module = load_module()
+        title = "制造商 Alogic 推出一系列苹果 Mac 专用触控显示器产品：协作大屏、双屏便携屏"
+        summary = (
+            "Alogic 发布面向苹果 Mac 用户的触控显示器产品，包括 FOKUS Interactive Touchscreen、"
+            "Aspekt Touch 27、Folio 和 Folio Duo，并通过自家软件为 Mac 提供触控操作。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_homepod_alternative_hands_on_stays_weak(self):
+        module = load_module()
+        title = "Hands-on: Denon Home 200 feels like a modern HomePod"
+        summary = (
+            "Denon released the Home 200 speaker with Siri and Apple ecosystem integrations, "
+            "and the review describes it as a strong HomePod alternative."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_messaging_app_beta_update_is_not_developer_tool_news(self):
+        module = load_module()
+        title = "WhatsApp tests new animated message bubbles on iPhone"
+        summary = (
+            "WhatsApp is rolling out a new animation for messages to some beta testers in "
+            "the latest iOS TestFlight build, with a dedicated setting in Chats > Animations."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_ithome_tag_page_is_not_relevant_news_candidate(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/tags/watchOS%2027/",
+            title="watchOS 27",
+            summary="苹果回应 watchOS 27 收窄兼容性，确保所有 Apple Watch 都具备最佳体验。",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(candidate, source))
+
+    def test_visionos_m5_device_specific_ai_features_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "visionOS 27 gives the M5 Vision Pro two unique new advantages",
+                (
+                    "visionOS 27 brings Siri AI voice customization and the AFM 3 Core Advanced "
+                    "on-device model to the M5 Vision Pro, while M2 Vision Pro misses those two features."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "visionOS 27 今秋推送：M5 Vision Pro 头显独占 Siri 语音定制和苹果最强本地 AI 模型",
+                (
+                    "在 visionOS 27 系统中，苹果为 M5 Vision Pro 独占推出 Siri 语音定制和 "
+                    "AFM 3 Core Advanced 本地 AI 模型。M2 款 Vision Pro 仍可获得 Siri AI、"
+                    "全景照片转空间场景和重新设计的控制中心等功能。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "IT之家"})
+
+    def test_iphone_parts_factory_contamination_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone factory right back in the spotlight as India opens new contamination probe",
+                "India opened a new investigation into alleged wastewater contamination from Tata's iPhone parts plant in Tamil Nadu.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "iPhone parts factory in India faces new water contamination probe",
+                "Health officials are investigating alleged water contamination from Tata Electronics' iPhone parts factory in Hosur, India.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果印度 iPhone 零件工厂被控废水污染农田：井水 TDS 超标 1 倍，作物枯萎",
+                "路透社报道称印度卫生部门正调查苹果供应商 Tata 位于 Hosur 的 iPhone 零部件工厂废水排放问题。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "9to5Mac", "IT之家"})
 
 
 if __name__ == "__main__":
