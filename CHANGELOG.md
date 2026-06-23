@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.8.0 - 2026-06-23
+
+- Added final-brief coverage scaffolding with `final_brief_queue`, `required_final_brief_titles`, `final_brief_markdown`, and adjacent `*.brief.md` output so automation agents can verify every eligible JSON event before writing the Chinese brief.
+- Improved 9to5Mac and high-volume OS discovery with WordPress posts API parsing, current-window guide eligibility, OS component/action detection, and stronger handling for beta roundups, productivity apps, widgets, AirPort Utility, and Apple TV Remote style platform changes.
+- Improved Chinese roundup and listing handling by splitting distinct Apple subitems into separate article variants while preventing unrelated digest headings, competitor paragraphs, or non-Apple market context from becoming Apple events.
+- Improved relevance classification for Apple company and services leadership, design-team organization changes, Apple executive service stories, Apple TV hardware versus content, Apple product price increases, broad hardware roadmaps, foldable iPhone supply-chain items, and Apple-specific market reports.
+- Updated weak-relevance and exclusion rules for third-party security software promos, routine retailer discounts, broad multi-vendor market reports, non-Apple research using Apple products as context, competitor product comparisons, and accessory compatibility stories.
+- Added regression coverage for coverage scaffolds, 9to5Mac API discovery, OS micro-events, roundup splitting, Apple Wallet Digital ID, company leadership clustering, service-executive merging, hardware roadmap grouping, price/cost separation, and weak-noise filtering.
+
 ## 1.7.0 - 2026-06-20
 
 - Added CarPlay platform-feature handling so iOS CarPlay updates stay in the main software brief instead of being deferred as routine third-party app availability.

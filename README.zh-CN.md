@@ -12,13 +12,14 @@
 
 ## 最新更新
 
-### 1.7.0 - 2026-06-20
+### 1.8.0 - 2026-06-23
 
-- 新增 CarPlay 平台功能识别，iOS CarPlay 更新会进入软件简报，不再被误降为普通第三方应用可用性。
-- 改进 Apple 定价、visionOS 设备专属 AI 功能、watchOS 兼容性、iPhone 零件工厂污染等中英文跨源聚类。
-- 更新弱相关判定，将竞品跑分对比、第三方配件和显示器、HomePod 替代品评测、第三方应用 beta 更新、购买建议和标签页移出最终简报。
-- 保持全源发现范围，同时把弱 Apple 邻近内容保留在 JSON 的 deferred 队列中便于追踪。
-- 增加 CarPlay、跑分对比、价格购买建议、第三方配件和应用更新、标签页、visionOS M5 功能和工厂污染聚类的回归测试。
+- 新增最终简报覆盖校验脚手架，输出 `final_brief_queue`、`required_final_brief_titles`、`final_brief_markdown` 和相邻 `*.brief.md`，便于自动化 agent 在撰写中文简报前核对每个合格 JSON 事件。
+- 改进 9to5Mac 和高流量 OS 新闻发现，加入 WordPress posts API 解析、当前窗口 guide 页资格判断、OS 组件/动作识别，并强化 beta 汇总、生产力应用、小组件、AirPort Utility、Apple TV Remote 等平台变化处理。
+- 改进中文汇总和列表页处理，将不同 Apple 子条目拆成独立文章候选，同时避免无关日报标题、竞品段落或非 Apple 市场背景被误识别成 Apple 事件。
+- 改进 Apple 公司与服务领导层、设计团队组织变化、Apple 高管服务新闻、Apple TV 硬件与内容区分、Apple 产品涨价、硬件路线图、折叠屏 iPhone 供应链和 Apple 专属市场报告的相关性分类。
+- 更新弱相关和排除规则，将第三方安全软件促销、常规零售降价、泛多厂商市场报告、仅把 Apple 产品作为研究对象的非 Apple 研究、竞品对比和配件兼容性文章降级。
+- 增加覆盖脚手架、9to5Mac API 发现、OS 微事件、汇总拆分、Apple Wallet Digital ID、公司领导层聚类、服务高管归并、硬件路线图分组、价格/成本拆分和弱噪声过滤的回归测试。
 
 ## 它会做什么
 
@@ -83,6 +84,8 @@ python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --out
 ```
 
 JSON 会将进入简报的项目放在 `events` 中。第三方应用、竞品对比等未描述 Apple 直接动作的弱 Apple 关联候选，可能保留在 `deferred_events` 中供审查。事件对象可包含 `event_kind`、`relevance_tier`、`relevance_reason`、`regions` 和 `merge_warnings`。
+
+JSON 输出还可能包含 `final_brief_queue`、`required_final_brief_titles`、`final_brief_markdown`，并在使用 `--output` 时写入相邻的 `*.brief.md` 文件。这些字段是给自动化 agent 使用的覆盖校验清单；最终简报仍应根据完整 `events` 摘要、`key_facts` 和来源链接撰写。
 
 调试来源失败时启用 diagnostics：
 

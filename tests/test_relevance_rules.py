@@ -63,6 +63,31 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertTrue(module.is_relevant_candidate(candidate, source))
         self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
 
+    def test_apple_showcased_research_paper_is_apple_research(self):
+        module = load_module()
+        title = "Apple to showcase computer vision studies at annual conference in June"
+        summary = (
+            "Apple will present several computer vision research papers at CVPR, "
+            "including studies from Apple's machine learning researchers."
+        )
+
+        self.assertTrue(module.is_apple_research_candidate(f"{title} {summary}"))
+        self.assertEqual(module.detect_event_kind(title, summary), "apple_research")
+
+    def test_non_apple_societal_iphone_research_stays_weak(self):
+        module = load_module()
+        title = "最新研究：iPhone是一种高级避孕工具"
+        summary = (
+            "NBER 最新发表的论文称，2007 年 iPhone 发布后美国生育率开始下降，"
+            "研究人员对比 AT&T 覆盖率和生育率变化，认为 iPhone 普及可以解释部分下降。"
+            "另一项大学研究覆盖 128 个国家，讨论智能手机普及和青少年生育率。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertFalse(module.is_apple_research_candidate(f"{title} {summary}"))
+        self.assertEqual(tier, "weak", reason)
+
     def test_generic_apple_watch_sleep_advice_remains_filtered(self):
         module = load_module()
         source = source_named(module, "9to5Mac")
@@ -160,6 +185,151 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertIn("涨价", combined)
         self.assertNotIn("DeepSeek", combined)
         self.assertNotIn("微信支付", combined)
+
+    def test_ithome_roundup_heading_blocks_do_not_drag_unrelated_items_into_apple_story(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        page = """
+        <html>
+          <head>
+            <meta name="description" content="IT早报：马斯克薪酬、黑鲨社区关闭、折叠屏 iPhone 供应链供货、廉价充电宝安全提醒。" />
+            <span id="pubtime_baidu">2026/6/22 07:00:00</span>
+          </head>
+          <body>
+            <h1>IT早报 0622：马斯克拿下天价薪酬；黑鲨社区关闭访问；供应链称已向苹果首款折叠屏供货</h1>
+            <div id="paragraph">
+              <h2>马斯克拿下人民币 7800 亿元天价薪酬</h2>
+              <p>特斯拉股东批准薪酬方案，马斯克账面收益高达 1160 亿美元。</p>
+              <h2>黑鲨社区关闭访问</h2>
+              <p>黑鲨社区 App 和网页端已经停止访问，用户数据也无法继续查看。</p>
+              <h2>供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布</h2>
+              <p>供应链消息称，相关厂商已向苹果首款折叠屏 iPhone 小批量供货，外界预计新机仍会在 9 月发布。</p>
+              <h2>廉价充电宝安全隐患</h2>
+              <p>多款低价充电宝存在标称容量虚高和安全风险，与苹果产品无直接关系。</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/966/746.htm",
+            title="IT早报 0622：马斯克拿下天价薪酬；黑鲨社区关闭访问；供应链称已向苹果首款折叠屏供货",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([title, summary, *facts])
+
+        self.assertIn("折叠屏 iPhone", combined)
+        self.assertIn("小批量供货", combined)
+        self.assertNotIn("马斯克", combined)
+        self.assertNotIn("黑鲨", combined)
+        self.assertNotIn("充电宝", combined)
+
+    def test_roundup_apple_items_expand_to_separate_article_variants(self):
+        module = load_module()
+        original_title = "IT早报 0622：供应链称已向苹果首款折叠屏供货；苹果美国关闭三家 Apple Store"
+        title = "供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布"
+        summary = (
+            "4、供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布。"
+            "19、苹果美国关闭三家 Apple Store，部分门店员工遭区别对待引争议。"
+        )
+        facts = [
+            "4、供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布。",
+            "19、苹果美国关闭三家 Apple Store，部分门店员工遭区别对待引争议。",
+        ]
+
+        variants = module.roundup_article_variants(original_title, title, summary, facts)
+
+        self.assertEqual(len(variants), 2)
+        self.assertIn("折叠屏 iPhone", variants[0][0])
+        self.assertFalse(variants[0][0].startswith("4、"))
+        self.assertFalse(variants[0][1].startswith("4、"))
+        self.assertNotIn("Apple Store", variants[0][1])
+        self.assertIn("Apple Store", variants[1][0])
+        self.assertFalse(variants[1][0].startswith("19、"))
+        self.assertFalse(variants[1][1].startswith("19、"))
+        self.assertNotIn("折叠屏 iPhone", variants[1][1])
+
+    def test_foldable_iphone_supply_chain_roundup_item_merges_with_standalone_story(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布",
+                "供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布",
+                "一位苹果供应链公司人士表示，截至目前，其得到的目标指引是，首款折叠屏 iPhone 将于 2026 年秋季发布。",
+                source="IT之家",
+                facts=[
+                    "一位苹果供应链公司人士表示，截至目前，其得到的目标指引是，首款折叠屏 iPhone 将于 2026 年秋季发布。"
+                ],
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertIn("foldable-iphone-supply-chain", module.event_primary_facets(events[0]))
+
+    def test_foldable_iphone_supply_chain_merges_when_wording_differs(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布",
+                "相关厂商已向苹果首款折叠屏 iPhone 小批量供货，目标指引是 2026 年秋季发布。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Apple foldable phone suppliers enter early production stage",
+                "Multiple suppliers have started small-batch production work for Apple's first folding iPhone ahead of a planned fall launch.",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+
+    def test_non_apple_title_with_apple_pricing_background_stays_weak(self):
+        module = load_module()
+        title = "消息称今年 Q3-Q4 的安卓旗舰 SoC 机型起步价可能接近 6 开头"
+        summary = (
+            "供应链消息称，安卓旗舰 SoC 机型起步价可能上调。文章后文顺带提到，"
+            "苹果 CEO Tim Cook 计划因存储芯片成本上升而上调 iPhone 等产品售价。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_product_price_increase_story_stays_hardware_before_os_feature_rules(self):
+        module = load_module()
+        title = "等不到今年的秋季发布会 古尔曼预判苹果很快涨价"
+        summary = (
+            "苹果 CEO Tim Cook 表示，受 AI 热潮驱动，DRAM 与 NAND 存储器芯片短缺及价格暴涨，"
+            "苹果产品涨价不可避免。TechInsights 估算，若全部转嫁成本，下一代 iPhone 18 Pro "
+            "起售价或升至 1299 美元，Mac 与 iPad 产品线同样面临调价压力。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_english_apple_price_increase_story_is_hardware_even_without_product_in_title(self):
+        module = load_module()
+        title = "Three reasons to suspect the Apple price increases could be imminent"
+        summary = (
+            "Tim Cook said price increases are unavoidable. The price hikes could affect iPhone, "
+            "iPad, and Mac products sooner than the fall launch."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
 
     def test_9to5_related_and_subscription_copy_do_not_enter_summary_or_facts(self):
         module = load_module()
@@ -547,6 +717,63 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertTrue(module.is_relevant_candidate(candidate, source))
         self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+
+    def test_apple_tv_4k_device_story_is_hardware_news(self):
+        module = load_module()
+        title = "New Apple TV 4K is coming this fall with three new features: report"
+        summary = (
+            "A report says Apple is preparing a new Apple TV 4K set-top box for the fall, "
+            "with Siri AI, Apple Intelligence features, a revised remote, possible tvOS updates, "
+            "a faster chip, Wi-Fi improvements, and Thread smart-home support."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+        self.assertIn("apple-tv-hardware", module.topic_facets_from_text(f"{title} {summary}"))
+        self.assertNotIn("apple-tv-content", module.topic_facets_from_text(f"{title} {summary}"))
+
+    def test_apple_tv_4k_device_story_does_not_merge_with_apple_tv_plus_content(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "New Apple TV 4K is coming this fall with three new features: report",
+                "A report says Apple is preparing a new Apple TV 4K set-top box for the fall, with a faster chip, Wi-Fi improvements, and Thread smart-home support.",
+            ),
+            article_for(
+                module,
+                "Apple TV+ new thriller Cape Fear adds another star",
+                "Apple TV+ is preparing a new thriller series for its streaming service, with casting updates for the upcoming season.",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual({event.event_kind for event in events}, {"hardware_market", "service_content"})
+
+    def test_apple_watch_hardware_launch_rumor_stays_hardware_despite_health_terms(self):
+        module = load_module()
+        title = "传 Apple Watch Ultra 4 将于今年晚些时候登场"
+        summary = (
+            "预计苹果将于今年晚些时候推出 Apple Watch Ultra 4，这将是 Ultra 系列一次幅度较大的更新，"
+            "重点围绕外观设计、健康传感器、身份验证和续航表现展开。新表可能加入 Touch ID，"
+            "并通过新一代芯片和重新分配内部空间改善电池表现。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_ios_home_screen_widget_story_remains_software_after_hardware_launch_rule(self):
+        module = load_module()
+        title = "iOS 27 adds brand new widgets for your iPhone's Home Screen"
+        summary = "Apple is adding new extra-large Home Screen widgets in iOS 27 for iPhone users."
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
 
     def test_9to5_feed_category_context_makes_apple_tv_casting_relevant(self):
         module = load_module()
@@ -1159,6 +1386,33 @@ class RelevanceRuleTests(unittest.TestCase):
             {"os_compatibility", "wallet_feature", "hardware_market"},
         )
 
+    def test_apple_wallet_digital_id_third_party_use_case_is_strong_and_merges(self):
+        module = load_module()
+        title = "Apple Wallet's Digital ID feature could potentially have a major new use case soon"
+        summary = (
+            "Anthropic could use Apple's Digital ID feature for nationality verification. "
+            "Digital ID lets US passport holders store an identity credential in Apple Wallet, "
+            "and Anthropic already uses Apple's age verification API."
+        )
+        chinese_title = "消息称 Anthropic 或采用苹果 Digital ID 完成用户身份核验"
+        chinese_summary = (
+            "苹果数字身份证功能或迎来首个大规模应用场景，集成到 Claude AI 中用于核验用户国籍。"
+            "该方案基于双方已有合作，但会排除无 iPhone 或非美国护照持有者。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+        events = module.cluster_articles(
+            [
+                article_for(module, title, summary, source="9to5Mac"),
+                article_for(module, chinese_title, chinese_summary, source="IT之家"),
+            ]
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "wallet_feature")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "IT之家"})
+
     def test_competitor_hardware_comparison_is_deferred_as_weak(self):
         module = load_module()
 
@@ -1212,6 +1466,18 @@ class RelevanceRuleTests(unittest.TestCase):
         summary = "A weekly recap links to Apple's WWDC announcements, iOS 27 features, Apple Wallet changes, and other previously reported stories."
 
         tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_column_commentary_about_apple_management_stays_weak(self):
+        module = load_module()
+        title = "Sunday Reboot: The right marketing, the wrong changes"
+        summary = (
+            "A columnist argues about Apple's marketing, management changes, and product decisions "
+            "without reporting a new Apple announcement, filing, executive move, or product fact."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
 
         self.assertEqual(tier, "weak", reason)
 
@@ -1461,6 +1727,78 @@ class RelevanceRuleTests(unittest.TestCase):
             "hardware_products",
         )
 
+    def test_apple_design_leadership_org_change_is_strong_company_news(self):
+        module = load_module()
+        title = "古尔曼：过去十年苹果设计部门地位持续下滑，新 CEO 特纳斯将做出改变"
+        summary = (
+            "Mark Gurman reports that Apple's design team has lost influence since Jony Ive left, "
+            "and that John Ternus may rebalance Apple's product design organization after taking over. "
+            "The article discusses a former Apple designer's startup company only as background."
+        )
+        facts = [
+            "报道认为苹果内部设计部门的地位过去十年持续下滑，产品路线更多由工程和运营团队主导。",
+            "John Ternus 可能在接任 CEO 后重新提高 Apple 设计团队在产品决策中的权重。",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "general_company")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_design_org_change_does_not_merge_with_product_price_increase(self):
+        module = load_module()
+        design_article = article_for(
+            module,
+            "古尔曼：过去十年苹果设计部门地位持续下滑，新 CEO 特努斯将做出改变",
+            "彭博社梳理了苹果过去十年管理层架构变化，指出在库克时代，设计团队话语权持续减弱，财务与运营部门决策权扩张。新任 CEO 约翰 · 特努斯或将重新确立设计团队的核心价值，并已着手与工业设计团队深入沟通。",
+            source="IT之家",
+        )
+        price_article = article_for(
+            module,
+            "别等iPhone秋季发布会！古尔曼预判苹果很快涨价",
+            "快科技6月22日消息，据媒体报道，苹果公司CEO蒂姆·库克上周公开表示，受AI热潮驱动，DRAM与NAND存储器芯片正经历严重短缺及价格暴涨，这一供应链冲击已使得苹果产品涨价不可避免。TechInsights估算下一代iPhone 18 Pro起售价或攀升至1299美元，Mac及iPad产品线同样面临调价压力。",
+            source="快科技",
+        )
+
+        events = module.cluster_articles([design_article, price_article])
+
+        self.assertEqual(len(events), 2)
+
+    def test_apple_design_org_change_merges_across_sources(self):
+        module = load_module()
+        chinese_article = article_for(
+            module,
+            "古尔曼：过去十年苹果设计部门地位持续下滑，新 CEO 特努斯将做出改变",
+            "彭博社梳理苹果过去十年管理层架构变化，称库克时代设计团队话语权减弱，新 CEO John Ternus 或将恢复设计团队决策权。",
+            source="IT之家",
+        )
+        english_article = article_for(
+            module,
+            "Incoming CEO John Ternus may be looking to fix Apple's design organization",
+            "John Ternus has taken over Apple's design team and may rebalance product decision authority after years of weaker industrial design influence.",
+            source="AppleInsider",
+        )
+
+        events = module.cluster_articles([chinese_article, english_article])
+
+        self.assertEqual(len(events), 1)
+
+    def test_apple_design_leadership_org_change_candidate_is_relevant_from_listing(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/966/745.htm",
+            title="古尔曼：过去十年苹果设计部门地位持续下滑，新 CEO 特努斯将做出改变",
+            summary=(
+                "彭博社梳理了苹果过去十年管理层架构变化，指出在库克时代，设计团队话语权持续减弱，"
+                "财务与运营部门决策权扩张。新任 CEO 约翰 · 特努斯或将重新确立设计团队的核心价值。"
+            ),
+        )
+
+        self.assertTrue(module.is_apple_company_org_change_story(f"{candidate.title} {candidate.summary}"))
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
     def test_render_markdown_keeps_source_links(self):
         module = load_module()
         data = {
@@ -1487,6 +1825,280 @@ class RelevanceRuleTests(unittest.TestCase):
             "（来源：[9to5Mac](https://9to5mac.com/2026/06/03/ios-27-will-reportedly-add-two-major-new-features-to-apple-wallet/)）",
             markdown,
         )
+
+    def test_final_brief_queue_lists_every_event_for_coverage_check(self):
+        module = load_module()
+        article_one = article_for(
+            module,
+            "Apple Wallet Digital ID may be used for verification",
+            "Apple Wallet Digital ID could be used by a partner for identity verification.",
+            source="9to5Mac",
+        )
+        article_two = article_for(
+            module,
+            "苹果美国关闭三家 Apple Store",
+            "苹果关闭美国三家 Apple Store，员工安置安排引发争议。",
+            source="IT之家",
+        )
+        events = module.cluster_articles([article_one, article_two])
+        event_dicts = [module.event_to_dict(event, timezone.utc) for event in events]
+
+        queue = module.build_final_brief_queue(event_dicts)
+
+        self.assertEqual(len(queue), len(event_dicts))
+        self.assertEqual({item["id"] for item in queue}, {event["id"] for event in event_dicts})
+        self.assertTrue(all(item["required"] for item in queue))
+        self.assertTrue(all(item["source_names"] for item in queue))
+
+    def test_final_brief_markdown_scaffold_covers_every_event(self):
+        module = load_module()
+        data = {
+            "events": [
+                {
+                    "category": "software_systems",
+                    "title": "Apple Wallet Digital ID may be used for verification",
+                    "summary": "Apple Wallet Digital ID could be used for identity verification.",
+                    "key_facts": [],
+                    "sources": [{"name": "9to5Mac", "url": "https://example.com/wallet"}],
+                },
+                {
+                    "category": "hardware_products",
+                    "title": "苹果美国关闭三家 Apple Store",
+                    "summary": "苹果关闭美国三家 Apple Store，员工安排引发争议。",
+                    "key_facts": [],
+                    "sources": [{"name": "IT之家", "url": "https://example.com/store"}],
+                },
+            ]
+        }
+
+        markdown = module.render_markdown(data)
+
+        self.assertIn("Apple Wallet Digital ID", markdown)
+        self.assertIn("苹果关闭美国三家 Apple Store", markdown)
+        self.assertIn("**软件与系统**", markdown)
+        self.assertIn("**硬件与产品**", markdown)
+
+    def test_compact_brief_scaffold_lists_titles_without_long_summaries(self):
+        module = load_module()
+        data = {
+            "events": [
+                {
+                    "category": "software_systems",
+                    "title": "Apple Wallet Digital ID may be used for verification",
+                    "summary": "This long source summary should not be copied into the coverage scaffold.",
+                    "key_facts": ["A long key fact should be reserved for final writing, not the checklist."],
+                    "sources": [{"name": "9to5Mac", "url": "https://example.com/wallet"}],
+                },
+                {
+                    "category": "hardware_products",
+                    "title": "苹果美国关闭三家 Apple Store",
+                    "summary": "苹果关闭美国三家 Apple Store，员工安排引发争议。",
+                    "key_facts": [],
+                    "sources": [{"name": "IT之家", "url": "https://example.com/store"}],
+                },
+            ]
+        }
+
+        scaffold = module.render_brief_scaffold(data)
+
+        self.assertIn("Apple Wallet Digital ID", scaffold)
+        self.assertIn("苹果美国关闭三家 Apple Store", scaffold)
+        self.assertNotIn("This long source summary", scaffold)
+        self.assertNotIn("A long key fact", scaffold)
+
+    def test_json_output_writes_adjacent_brief_scaffold(self):
+        module = load_module()
+        data = {
+            "events": [
+                {
+                    "category": "software_systems",
+                    "title": "Apple Wallet Digital ID may be used for verification",
+                    "summary": "Apple Wallet Digital ID could be used for identity verification.",
+                    "key_facts": [],
+                    "sources": [{"name": "9to5Mac", "url": "https://example.com/wallet"}],
+                },
+            ]
+        }
+        with TemporaryDirectory() as temp_dir:
+            output_path = Path(temp_dir) / "latest.json"
+            brief_path = module.write_brief_scaffold_file(output_path, data)
+
+            self.assertEqual(brief_path, Path(temp_dir) / "latest.brief.md")
+            self.assertIn("Apple Wallet Digital ID", brief_path.read_text(encoding="utf-8"))
+
+    def test_status_title_list_can_be_derived_from_final_brief_queue(self):
+        module = load_module()
+        event_dicts = [
+            {
+                "id": "event-one",
+                "category": "software_systems",
+                "event_kind": "wallet_feature",
+                "relevance_tier": "strong",
+                "relevance_reason": "Apple-specific wallet feature event",
+                "title": "Apple Wallet Digital ID may be used for verification",
+                "sources": [{"name": "9to5Mac", "url": "https://example.com/wallet"}],
+            }
+        ]
+        queue = module.build_final_brief_queue(event_dicts)
+
+        self.assertEqual(
+            module.required_final_brief_titles(queue),
+            [
+                {
+                    "index": 1,
+                    "event_id": "event-one",
+                    "required": True,
+                    "separate_bullet_by_default": True,
+                    "category": "software_systems",
+                    "title": "Apple Wallet Digital ID may be used for verification",
+                    "sources": ["9to5Mac"],
+                }
+            ],
+        )
+
+        status_titles = [
+            {
+                "index": item.get("index"),
+                "event_id": item.get("id"),
+                "required": item.get("required"),
+                "separate_bullet_by_default": True,
+                "category": item.get("category"),
+                "title": item.get("title"),
+                "sources": item.get("source_names", []),
+            }
+            for item in queue
+        ]
+
+        self.assertEqual(
+            status_titles,
+            [
+                {
+                    "index": 1,
+                    "event_id": "event-one",
+                    "required": True,
+                    "separate_bullet_by_default": True,
+                    "category": "software_systems",
+                    "title": "Apple Wallet Digital ID may be used for verification",
+                    "sources": ["9to5Mac"],
+                }
+            ],
+        )
+
+    def test_broad_multi_vendor_market_report_without_apple_metrics_is_weak(self):
+        module = load_module()
+        title = "Omdia 报告：2026 年第一季度中国大陆 PC 出货量下滑 2%，联想华为苹果前三"
+        summary = (
+            "Omdia 报告显示，中国大陆 PC 和平板电脑市场分别同比下降。"
+            "联想、华为、苹果占据 PC 市场前三，市场疲软主要受到零部件成本上涨和补贴力度减弱影响。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_specific_market_report_stays_strong(self):
+        module = load_module()
+        title = "Counterpoint: iPhone shipments grew 8% in Latin America during Q1"
+        summary = (
+            "Counterpoint says Apple's iPhone shipments grew 8% year over year in Latin America, "
+            "with Apple gaining share in premium phones."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_routine_retail_discount_story_stays_weak(self):
+        module = load_module()
+        title = "iPhone 17 全系国补再来：17 Pro Max 京东 8499 元，换新折后再降价"
+        summary = "京东国补和以旧换新活动让 iPhone 17 Pro Max 到手价降至 8499 元。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_official_apple_service_promo_is_not_treated_as_routine_retail_discount(self):
+        module = load_module()
+        title = "Apple Card Promo to Offer Free AirPods Pro 3"
+        summary = "Apple will run an Apple Card promotion offering free AirPods Pro 3 for eligible purchases."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_broad_market_report_does_not_merge_with_foldable_iphone_supply_chain(self):
+        module = load_module()
+        foldable = article_for(
+            module,
+            "供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布",
+            "苹果供应链公司人士称已开始向首款折叠屏 iPhone 小批量供货，目标指引为 2026 年秋季发布。",
+            source="IT之家",
+        )
+        broad_market = article_for(
+            module,
+            "Omdia 报告：2026 年第一季度中国大陆 PC 出货量下滑 2%，联想华为苹果前三",
+            (
+                "Omdia 报告显示中国大陆 PC 和平板电脑市场分别同比下降。"
+                "联想、华为、苹果占据 PC 市场前三，市场疲软主要受到零部件成本上涨和补贴力度减弱影响。"
+            ),
+            source="IT之家",
+        )
+
+        events = module.cluster_articles([foldable, broad_market])
+
+        self.assertEqual(len(events), 2)
+
+    def test_broad_apple_product_roadmap_merges_across_languages(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple to Release These 20 New Products Across Rest of 2026 and 2027",
+                (
+                    "Mark Gurman says Apple has around 20 new products planned across the rest of 2026 and 2027, "
+                    "including iPhone 18 Pro, foldable iPhone Ultra, MacBook Ultra, OLED iPad mini, Apple Watch, "
+                    "AirPods Ultra, HomePod, Apple TV, and Apple Glasses."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果未来两年新品大爆发！20款产品蓄势待发 首款折叠屏iPhone领衔",
+                (
+                    "古尔曼透露，苹果计划从今年下半年到 2027 年推出约 20 款新品，覆盖 iPhone、Mac、iPad、"
+                    "Apple Watch、智能家居、AirPods Ultra 和 Apple Glasses 等多个产品线。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "快科技"})
+        self.assertEqual(events[0].category, "hardware_products")
+
+    def test_broad_apple_product_roadmap_does_not_merge_with_single_iphone_air_story(self):
+        module = load_module()
+        roadmap = article_for(
+            module,
+            "Apple to Release These 20 New Products Across Rest of 2026 and 2027",
+            (
+                "Mark Gurman says Apple has around 20 new products planned across iPhone, Mac, iPad, Apple Watch, "
+                "AirPods Ultra, HomePod, Apple TV, and Apple Glasses."
+            ),
+            source="MacRumors",
+        )
+        iphone_air = article_for(
+            module,
+            "机型定位“降档”：消息称苹果 iPhone Air 2 手机仅采用 A20 标准版芯片",
+            "消息称 iPhone Air 2 将采用标准版 A20 芯片，而非 iPhone 18 Pro 系列和折叠屏 iPhone 使用的 A20 Pro。",
+            source="IT之家",
+        )
+
+        events = module.cluster_articles([roadmap, iphone_air])
+
+        self.assertEqual(len(events), 2)
 
     def test_competitor_background_does_not_hard_exclude_direct_apple_thread_story(self):
         module = load_module()
@@ -3147,6 +3759,252 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 1)
         self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "9to5Mac", "IT之家"})
+
+    def test_parse_wordpress_posts_api_discovers_9to5mac_time_window_posts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        payload = """
+        [
+          {
+            "date_gmt": "2026-06-22T12:05:59",
+            "link": "https://9to5mac.com/2026/06/22/apples-productivity-apps-have-a-small-but-useful-ai-enhancement-in-macos-27/",
+            "title": {"rendered": "Apple’s productivity apps have a small but useful AI enhancement in macOS 27"},
+            "excerpt": {"rendered": "<p>macOS 27 brings a small Apple Intelligence enhancement to Pages, Keynote, Numbers, and TextEdit.</p>"}
+          },
+          {
+            "date_gmt": "2026-06-22T14:35:00",
+            "link": "https://9to5mac.com/2026/06/22/ios-27-adds-brand-new-widgets-for-your-iphones-home-screen/",
+            "title": {"rendered": "iOS 27 adds brand new widgets for your iPhone’s Home Screen"},
+            "excerpt": {"rendered": "<p>iOS 27 beta 2 adds new Apple widgets for the iPhone Home Screen.</p>"}
+          }
+        ]
+        """
+
+        candidates = module.parse_wordpress_posts_api(payload, source, "https://9to5mac.com/wp-json/wp/v2/posts")
+
+        self.assertEqual([candidate.title for candidate in candidates], [
+            "Apple’s productivity apps have a small but useful AI enhancement in macOS 27",
+            "iOS 27 adds brand new widgets for your iPhone’s Home Screen",
+        ])
+        self.assertEqual(candidates[0].feed_time_raw, "2026-06-22T12:05:59+00:00")
+        self.assertIn("Pages", candidates[0].summary)
+
+    def test_macos_productivity_apps_enhancement_is_direct_os_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/22/apples-productivity-apps-have-a-small-but-useful-ai-enhancement-in-macos-27/",
+            title="Apple’s productivity apps have a small but useful AI enhancement in macOS 27",
+            summary="macOS 27 brings an Apple Intelligence enhancement to Pages, Keynote, Numbers, and TextEdit.",
+            feed_time_raw="2026-06-22T12:05:59+00:00",
+            context="keynote macos 27 numbers pages textedit",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "os_app")
+        tier, reason = module.classify_relevance_tier(candidate.title, candidate.summary, [], "9to5Mac")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_ios_widgets_are_not_demoted_as_third_party_platform_story(self):
+        module = load_module()
+        title = "iOS 27 adds brand new widgets for your iPhone’s Home Screen"
+        summary = "iOS 27 beta 2 adds new first-party widgets to the iPhone Home Screen."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_macrumors_system_beta_feature_guide_is_relevant_when_detail_time_is_current(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/guide/ios-27-features/",
+            title="Everything New in iOS 27 Beta 2",
+            summary="Apple's iOS 27 beta 2 includes new Wallet, Messages, RCS, widgets, and other feature changes.",
+            feed_time_raw="2026-06-22T16:02:49-07:00",
+            context="featured ios 27",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "os_app")
+
+    def test_os_beta_roundup_with_concrete_feature_changes_is_strong(self):
+        module = load_module()
+        title = "苹果 iOS 27 Beta 2 更新汇总：洞察支出、升级 AI 写作、增强 RCS 聊天"
+        summary = "iOS 27 Beta 2 带来 Apple Wallet 支出洞察、Write with Siri、RCS 内联回复和新的系统功能变化。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_airport_utility_app_retirement_is_direct_os_app_news(self):
+        module = load_module()
+        title = "苹果收尾旧网络产品支持，iOS / iPadOS 27 预告 AirPort Utility 应用退场"
+        summary = "苹果确认 AirPort Utility 将从 App Store 下架，iOS 27 和 iPadOS 27 继续移除旧 AirPort 路由器支持。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_foldable_iphone_ultra_roadmap_not_demoted_by_display_context(self):
+        module = load_module()
+        title = "Foldable iPhone 'Ultra' Still on Track for September Debut"
+        summary = (
+            "A supply-chain report says Apple's first foldable iPhone remains on track for September, "
+            "with a 7.8-inch inner display, a 5.5-inch cover display, A20 chip, C2 modem, and pricing around $2,000."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_routine_third_party_promotions_and_accessory_deals_stay_weak(self):
+        module = load_module()
+        examples = [
+            (
+                "Your Mac isn't immune to viruses, Intego One is here to help (and it's 50% off)",
+                "Intego One bundles antivirus, firewall, VPN, Mac Cleaner, and identity-protection tools for Mac users. The subscription promo offers a limited-time 50% off reader discount.",
+                "AppleInsider",
+            ),
+            (
+                "The Apple Watch SE 3 is just $199 for Prime Day",
+                "A retailer Prime Day deal discounts Apple Watch SE 3 to $199 for shoppers.",
+                "The Verge",
+            ),
+            (
+                "MagSafe Monday: Upgrade your MagSafe travel gear with the new ESR summer collection",
+                "ESR launched a third-party MagSafe travel accessory collection for iPhone users.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in examples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+        self.assertEqual(
+            module.detect_event_kind(examples[0][0], examples[0][1]),
+            "third_party_ecosystem",
+        )
+
+    def test_competitor_product_with_apple_style_context_stays_weak_before_os_feature_rules(self):
+        module = load_module()
+        title = "告别防窥膜！小米18 Pro搭载硬件级防窥屏：全方位保护隐私"
+        summary = (
+            "小米18 Pro 正在测试新一代 2K 防窥显示技术，系统方面预计搭载小米澎湃OS 4，"
+            "并引入类似苹果风格的光感 UI。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_services_executive_award_story_is_kept_and_merged(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/22/eddy-cue-accepts-entertainment-person-of-the-year-award-at-cannes-lions/",
+            title="Eddy Cue accepts Entertainment Person of the Year Award at Cannes Lions",
+            summary=(
+                "Today, Apple’s SVP of Services and Health, Eddy Cue, received the 2026 "
+                "Entertainment Person of the Year award at the Cannes Lions International "
+                "Festival of Creativity."
+            ),
+            feed_time_raw="2026-06-23T01:48:52+00:00",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        detailed_summary = (
+            "Eddy Cue, received the 2026 Entertainment Person of the Year award at the "
+            "Cannes Lions International Festival of Creativity. Eddy Cue has consistently "
+            "pushed the boundaries of entertainment and storytelling, building platforms "
+            "and experiences that have redefined how audiences engage with culture. Under "
+            "his leadership, Apple has not only produced world-class content but has also "
+            "shaped the future of entertainment through innovation, creativity and quality. "
+            "Apple added that under Cue, Apple TV, which launched just over six years ago as "
+            "a wholly original streaming platform, has become one of the industry’s most "
+            "award-winning and culture-defining services."
+        )
+        self.assertEqual(module.detect_event_kind(candidate.title, detailed_summary), "service_content")
+
+        articles = [
+            article_for(
+                module,
+                "Steve Jobs would approve of Apple TV, says Cue",
+                (
+                    "Alongside dropping yet more hints about a sequel to F1: The Movie, "
+                    "Eddy Cue has revealed why Apple TV did not just buy an existing library. "
+                    "Cue has been named the Cannes Lions Entertainment Person of the Year "
+                    "for his leadership of Apple TV and Apple Music."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Cannes Lions 2026 Entertainment Person of the Year is Apple TV chief",
+                (
+                    "The Apple TV streaming service is run by Apple SVP of Services and Health, "
+                    "Eddy Cue, and Cannes Lions has recognized him as the 2026 Entertainment "
+                    "Person of the Year thanks to his work on the platform."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                candidate.title,
+                detailed_summary,
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "AppleInsider"})
+
+    def test_mixed_hardware_topics_split_instead_of_absorbing_competitor_context(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "消息称苹果 iPhone 18 Pro / Pro Max、iPad Mini 所需 OLED 面板已量产",
+                "Samsung Display 与 LG Display 已启动苹果 iPhone 18 Pro / Pro Max 和新款 iPad Mini 所需 OLED 面板量产，后续还包括折叠屏 iPhone 和 OLED MacBook Pro 面板。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "库克时代渐远？古尔曼：苹果新CEO将重申设计团队重要性",
+                "苹果新 CEO 预计会重组工业设计团队，并把设计重新放回公司核心决策位置。",
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "苹果iPhone 17价格可能本月就要涨价 库克称无法避免",
+                "存储芯片成本上涨使苹果 iPhone 17 系列价格可能上调，库克称涨价无法避免。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "告别防窥膜！小米18 Pro搭载硬件级防窥屏：全方位保护隐私",
+                "小米18 Pro 测试防窥显示技术，并引入类似苹果风格的光感 UI。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertGreaterEqual(len(events), 3)
+        oled_events = [event for event in events if "OLED 面板" in event.summary]
+        self.assertEqual(len(oled_events), 1)
+        self.assertNotIn("小米18", oled_events[0].summary)
+        self.assertTrue(any(event.relevance_tier == "weak" and "小米18" in event.summary for event in events))
 
 
 if __name__ == "__main__":
