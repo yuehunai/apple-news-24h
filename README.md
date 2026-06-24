@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.8.0 - 2026-06-23
+### 1.9.0 - 2026-06-24
 
-- Added final-brief coverage scaffolding with `final_brief_queue`, `required_final_brief_titles`, `final_brief_markdown`, and adjacent `*.brief.md` output so automation agents can verify every eligible JSON event before writing the Chinese brief.
-- Improved 9to5Mac and high-volume OS discovery with WordPress posts API parsing, current-window guide eligibility, OS component/action detection, and stronger handling for beta roundups, productivity apps, widgets, AirPort Utility, and Apple TV Remote style platform changes.
-- Improved Chinese roundup and listing handling by splitting distinct Apple subitems into separate article variants while preventing unrelated digest headings, competitor paragraphs, or non-Apple market context from becoming Apple events.
-- Improved relevance classification for Apple company and services leadership, design-team organization changes, Apple executive service stories, Apple TV hardware versus content, Apple product price increases, broad hardware roadmaps, foldable iPhone supply-chain items, and Apple-specific market reports.
-- Updated weak-relevance and exclusion rules for third-party security software promos, routine retailer discounts, broad multi-vendor market reports, non-Apple research using Apple products as context, competitor product comparisons, and accessory compatibility stories.
-- Added regression coverage for coverage scaffolds, 9to5Mac API discovery, OS micro-events, roundup splitting, Apple Wallet Digital ID, company leadership clustering, service-executive merging, hardware roadmap grouping, price/cost separation, and weak-noise filtering.
+- Added Apple strategic transaction, merger, acquisition, and buyout relevance handling so direct Apple counterparty reports such as Apple/Disney merger discussions stay eligible.
+- Improved cross-language clustering for strategic transaction stories by requiring the same transaction counterparty and concrete action before merging reports.
+- Improved Apple developer ecosystem detection so Swift, package-index, open-source developer infrastructure, and similar projects joining Apple remain in `events`.
+- Improved early candidate relevance for Apple hardware roadmap and supply-chain stories so MacBook display-panel planning and RFI reports are not dropped before detail parsing.
+- Updated source policy guidance for strategic transactions and developer ecosystem infrastructure while keeping routine speculation and unrelated third-party stories excluded.
+- Added regression coverage for strategic transaction eligibility and merging, developer ecosystem infrastructure, and hardware roadmap candidate gating.
 
 ## What It Does
 

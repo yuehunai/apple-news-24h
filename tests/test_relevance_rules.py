@@ -718,6 +718,110 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertTrue(module.is_relevant_candidate(candidate, source))
         self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
 
+    def test_apple_disney_strategic_merger_talk_is_relevant_company_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/23/apple-and-disney-had-conversations-about-merging-says-bob-iger/",
+            title="Apple and Disney had conversations about merging, says Bob Iger",
+            summary=(
+                "Disney's former CEO Bob Iger shared new quotes about the long-discussed "
+                "idea of Apple and Disney merging, saying the companies had conversations "
+                "but Apple's interest was limited."
+            ),
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+
+    def test_apple_strategic_merger_talk_merges_across_languages_by_counterparty(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple and Disney had conversations about merging, says Bob Iger",
+                (
+                    "Disney's former CEO Bob Iger shared new quotes about Apple and Disney "
+                    "having merger conversations, but said Apple's interest was limited."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "前迪士尼 CEO 艾格：曾规划“最具变革公司合并”，但苹果兴趣不高",
+                "迪士尼前 CEO 鲍勃·艾格透露，迪士尼曾与苹果讨论过合并事宜，但苹果并未表现出太大兴趣。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Apple reportedly discussed acquiring a different AI startup",
+                "Apple executives reportedly discussed a possible acquisition of an AI startup, but no deal progressed.",
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        merged = next(event for event in events if any("Disney" in item.title for item in event.articles))
+        self.assertEqual({item.source for item in merged.articles}, {"9to5Mac", "IT之家"})
+
+    def test_swift_package_index_joining_apple_is_relevant_developer_ecosystem_news(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/23/swift-package-index-joins-apple-pledges-to-remain-open-source/",
+            title="Swift Package Index joins Apple, pledges to remain open source",
+            summary=(
+                "Community-run Swift package search engine and metadata index Swift Package "
+                "Index is joining Apple, but says little is changing for developers in the near term."
+            ),
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "developer_tool")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "software_systems")
+
+    def test_macbook_oled_panel_planning_is_relevant_hardware_roadmap_news(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/967/644.htm",
+            title='消息称苹果规划新款 13.8" OLED 面板，用于 MacBook 笔记本电脑',
+            summary="由于苹果产品开发周期通常为 2~3 年，这一新尺寸面板目前仍处于商业化的早期阶段，仍可能被搁置或放弃。",
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "hardware_market")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "hardware_products")
+
     def test_apple_tv_4k_device_story_is_hardware_news(self):
         module = load_module()
         title = "New Apple TV 4K is coming this fall with three new features: report"

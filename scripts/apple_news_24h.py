@@ -2123,6 +2123,12 @@ APPLE_DEVELOPER_TOOL_ACTION_TERMS = [
     "integration",
     "integrate",
     "integrated",
+    "join apple",
+    "joins apple",
+    "joined apple",
+    "joining apple",
+    "open source",
+    "remain open source",
     "support for",
     "supports",
     "adds",
@@ -2131,6 +2137,9 @@ APPLE_DEVELOPER_TOOL_ACTION_TERMS = [
     "plan, write, and review",
     "集成",
     "接入",
+    "加入苹果",
+    "加入 Apple",
+    "开源",
     "支持",
     "新增",
     "扩展",
@@ -3328,9 +3337,15 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
         return True
     if is_unreleased_beats_hardware_story(text):
         return True
+    if is_apple_hardware_product_launch_story(text, candidate.title):
+        return True
+    if is_broad_apple_product_roadmap_story(text):
+        return True
     if is_apple_company_org_change_story(text):
         return True
     if is_apple_executive_company_story(text):
+        return True
+    if is_apple_strategic_transaction_story(text):
         return True
     if is_apple_research_candidate(text):
         return True
@@ -4949,6 +4964,102 @@ def is_apple_executive_company_story(text: str) -> bool:
     return company_or_service_score > 0 and action_score > 0
 
 
+def is_apple_strategic_transaction_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    transaction_score = score_terms(
+        lower,
+        [
+            "merger",
+            "merge",
+            "merging",
+            "acquisition",
+            "acquire",
+            "acquired",
+            "buyout",
+            "takeover",
+            "strategic deal",
+            "transaction",
+            "合并",
+            "并购",
+            "收购",
+            "交易",
+        ],
+    )
+    if transaction_score <= 0:
+        return False
+    discussion_score = score_terms(
+        lower,
+        [
+            "conversation",
+            "conversations",
+            "talk",
+            "talks",
+            "talked",
+            "discuss",
+            "discussed",
+            "discussion",
+            "interest",
+            "interested",
+            "profile",
+            "interview",
+            "said",
+            "says",
+            "revealed",
+            "沟通",
+            "讨论",
+            "谈判",
+            "兴趣",
+            "采访",
+            "表示",
+            "透露",
+            "推进",
+        ],
+    )
+    counterparty_score = score_terms(
+        lower,
+        [
+            "company",
+            "companies",
+            "ceo",
+            "executive",
+            "disney",
+            "twitter",
+            "x corp",
+            "公司",
+            "企业",
+            "首席执行官",
+            "高管",
+            "迪士尼",
+            "推特",
+        ],
+    )
+    direct_pairing = (
+        re.search(r"\bapple\b[^.!?。！？]{0,48}\b(?:and|with)\b[^.!?。！？]{0,48}", lower)
+        is not None
+        or re.search(r"[^。！？.!?]{0,32}(?:与|和|同)苹果[^。！？.!?]{0,48}(?:合并|并购|收购|交易|沟通|讨论)", lower)
+        is not None
+        or re.search(r"苹果[^。！？.!?]{0,48}(?:与|和|同)[^。！？.!?]{0,48}(?:合并|并购|收购|交易|沟通|讨论)", lower)
+        is not None
+    )
+    return discussion_score > 0 and (counterparty_score > 0 or direct_pairing)
+
+
+def strategic_transaction_counterparty_facets(text: str) -> set[str]:
+    lower = text.lower()
+    facets: set[str] = set()
+    counterparties = {
+        "disney": ["disney", "迪士尼"],
+        "twitter": ["twitter", "x corp", "推特"],
+        "ai-startup": ["ai startup", "ai company", "人工智能初创", "ai 初创"],
+    }
+    for name, terms in counterparties.items():
+        if score_terms(lower, terms) > 0:
+            facets.add(f"transaction-counterparty-{name}")
+    return facets
+
+
 def is_former_apple_staff_background_story(text: str) -> bool:
     lower = text.lower()
     if score_terms(lower, ["former apple", "ex-apple", "former vision pro", "前苹果", "前 apple"]) <= 0:
@@ -5940,6 +6051,9 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("apple-product-roadmap-list")
     if is_apple_company_org_change_story(lower):
         facets.add("apple-company-org-change")
+    if is_apple_strategic_transaction_story(lower):
+        facets.add("apple-strategic-transaction")
+        facets |= strategic_transaction_counterparty_facets(lower)
     if is_apple_product_price_increase_story(lower):
         facets.add("apple-product-price-increase")
     if is_foldable_iphone_supply_chain_story(lower):
@@ -6456,6 +6570,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         if score_terms(lower, ["services", "apple tv", "apple tv+", "apple music", "app store", "icloud", "streaming", "服务", "苹果电视", "苹果音乐"]) > 0:
             return "service_content"
         return "general_company"
+    if is_apple_strategic_transaction_story(text):
+        return "general_company"
     if is_apple_os_feature_or_summary_story(text) and score_terms(lower, OS_SUMMARY_TERMS) > 0:
         return "os_app"
     if is_apple_wallet_feature_story(text):
@@ -6713,6 +6829,8 @@ def classify_relevance_tier(
         return "strong", "Apple company leadership, design, or organization change"
     if is_apple_executive_company_story(text):
         return "strong", "Apple executive, company, or services leadership event"
+    if is_apple_strategic_transaction_story(text):
+        return "strong", "Apple strategic transaction or merger discussion"
     if is_former_apple_staff_background_story(text):
         return "weak", "third-party company story using former Apple staff as background"
     if is_legacy_apple_protocol_third_party_removal(text):
@@ -7291,6 +7409,14 @@ def same_beats_hardware_sighting(article: Article, event: Event, shared: set[str
     return False
 
 
+def same_apple_strategic_transaction(article: Article, event: Event) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "apple-strategic-transaction" not in common_facets:
+        return False
+    counterparty_facets = {facet for facet in common_facets if facet.startswith("transaction-counterparty-")}
+    return bool(counterparty_facets)
+
+
 def same_system_performance_optimization(article: Article, event: Event, shared: set[str]) -> bool:
     common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
     if "system-performance-optimization" not in common_facets:
@@ -7417,6 +7543,8 @@ def should_merge(article: Article, event: Event) -> bool:
         if platform_shared and agent_shared and action_shared:
             return True
     if same_beats_hardware_sighting(article, event, shared):
+        return True
+    if same_apple_strategic_transaction(article, event):
         return True
     if same_system_performance_optimization(article, event, shared):
         return True

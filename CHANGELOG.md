@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.9.0 - 2026-06-24
+
+- Added Apple strategic transaction, merger, acquisition, and buyout relevance handling so direct Apple counterparty reports such as Apple/Disney merger discussions stay eligible.
+- Improved cross-language clustering for strategic transaction stories by requiring the same transaction counterparty and concrete action before merging reports.
+- Improved Apple developer ecosystem detection so Swift, package-index, open-source developer infrastructure, and similar projects joining Apple remain in `events`.
+- Improved early candidate relevance for Apple hardware roadmap and supply-chain stories so MacBook display-panel planning and RFI reports are not dropped before detail parsing.
+- Updated source policy guidance for strategic transactions and developer ecosystem infrastructure while keeping routine speculation and unrelated third-party stories excluded.
+- Added regression coverage for strategic transaction eligibility and merging, developer ecosystem infrastructure, and hardware roadmap candidate gating.
+
 ## 1.8.0 - 2026-06-23
 
 - Added final-brief coverage scaffolding with `final_brief_queue`, `required_final_brief_titles`, `final_brief_markdown`, and adjacent `*.brief.md` output so automation agents can verify every eligible JSON event before writing the Chinese brief.
