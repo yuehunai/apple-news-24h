@@ -822,6 +822,58 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(tier, "strong", reason)
         self.assertEqual(module.choose_category(candidate.title, candidate.summary), "hardware_products")
 
+    def test_apple_oled_supply_chain_title_with_boe_is_not_treated_as_jd_discount(self):
+        module = load_module()
+        title = "三星和LG包揽iPhone 18 Pro/iPad所有OLED面板订单：京东方出局"
+        summary = (
+            "据供应链消息，三星显示与LG Display已开始为苹果2026年产品线量产OLED面板。"
+            "iPhone 18 Pro、iPhone 18 Pro Max、折叠屏iPhone、新款iPad mini和MacBook Pro所需OLED面板均进入量产阶段。"
+        )
+        facts = [
+            "三星显示成为iPad mini、折叠屏iPhone以及MacBook Pro的独家OLED供应商，其中iPad mini面板供应量约为200万块，折叠屏iPhone约为1000万块。",
+            "LG Display独家供应Apple Watch Series 12所需OLED面板，预计出货量约为3400万块；iPhone 18 Pro和iPhone 18 Pro Max面板由两家公司共同供货，合计约9000万块。",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "快科技")
+
+        self.assertFalse(module.is_routine_retail_discount_story(title, f"{title} {summary}"))
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "hardware_market")
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_swift_package_index_joining_apple_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "软件包聚合平台 Swift Package Index 官宣加入苹果，承诺保持开源",
+                (
+                    "Swift Package Index 平台宣布正式加入苹果，官方承诺将保持开源，平台功能与社区参与模式不变。"
+                    "未来，苹果工程师将参与其开发，并计划推出软件包签名、身份认证等新功能。"
+                    "IT之家注：Swift Package Index 是一个开源的 Swift 软件包搜索引擎和元数据索引平台，"
+                    "支持 macOS、iOS、Linux、Android 等系统，过去一年完成超 350 万次跨平台兼容性构建测试。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Developer resource Swift Package Index to stay open source after Apple acquisition",
+                (
+                    "The Swift Package Index is no longer independent as Apple has taken control, "
+                    "but it will remain an open source search engine for third-party code. "
+                    "The Swift Package Index gave developers one trusted location to look for third-party code "
+                    "for use in their own apps. Developers can find code that works with Xcode's Swift Package Manager, "
+                    "and earlier in 2026 it had tested and indexed over 10,000 Swift packages."
+                ),
+                source="AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"IT之家", "AppleInsider"})
+
     def test_apple_tv_4k_device_story_is_hardware_news(self):
         module = load_module()
         title = "New Apple TV 4K is coming this fall with three new features: report"
@@ -1182,6 +1234,26 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "third_party_ecosystem")
         self.assertEqual(tier, "weak")
         self.assertIn("third-party app", reason)
+
+    def test_chinese_third_party_ios_app_launch_is_deferred_weak(self):
+        module = load_module()
+        examples = [
+            (
+                "迅雷光鸭云盘 iOS 版上线，适配 iOS / iPadOS 17.6 以上系统",
+                "迅雷光鸭云盘 iOS 版上线，适配 iOS / iPadOS 17.6 以上系统。",
+            ),
+            (
+                "腾讯Marvis马维斯iOS版上线 躺着掏出手机 就能远程指挥电脑桌面",
+                "腾讯 Marvis iOS 版上线，可以远程控制电脑桌面。",
+            ),
+        ]
+
+        for title, summary in examples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+                self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+                self.assertEqual(tier, "weak")
+                self.assertIn("third-party app", reason)
 
     def test_official_app_store_personalization_feature_is_not_third_party_listing(self):
         module = load_module()
@@ -3968,6 +4040,114 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
         self.assertEqual(tier, "strong", reason)
 
+    def test_broad_oled_panel_allocation_does_not_merge_with_foldable_iphone_launch(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Foldable iPhone 'Ultra' Set for Production in July Despite Hinge Issues",
+                (
+                    "Apple's rumored foldable iPhone Ultra is expected to begin mass production at the end of July. "
+                    "The report says hinge-related issues have been worked out and Apple is still targeting a September launch."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "三星和LG包揽iPhone 18 Pro/iPad所有OLED面板订单：京东方出局",
+                (
+                    "据供应链消息，三星显示与LG Display已开始为苹果2026年产品线量产OLED面板。"
+                    "iPhone 18 Pro、iPhone 18 Pro Max、折叠屏iPhone、新款iPad mini和MacBook Pro所需OLED面板均进入量产阶段。"
+                    "LG Display独家供应Apple Watch Series 12所需OLED面板，预计出货量约为3400万块。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertTrue(any("OLED面板订单" in event.title for event in events))
+        self.assertTrue(any("Foldable iPhone" in event.title for event in events))
+
+    def test_broad_oled_panel_allocation_does_not_merge_with_foldable_panel_only_story(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果今年最重磅的新品！折叠屏iPhone面板开始量产",
+                (
+                    "三星显示已正式通过苹果量产认证，获准启动折叠屏iPhone专用OLED模组生产，"
+                    "双方签订三年独家供货协议，今年首批交付订单约300万片。"
+                ),
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "三星和LG包揽iPhone 18 Pro/iPad所有OLED面板订单：京东方出局",
+                (
+                    "三星显示与LG Display已开始为苹果2026年产品线量产OLED面板，"
+                    "iPhone 18 Pro、iPhone 18 Pro Max、折叠屏iPhone、新款iPad mini、MacBook Pro和Apple Watch Series 12所需面板均进入量产或生产计划。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        self.assertTrue(any("专用OLED模组" in event.summary for event in events))
+        self.assertTrue(any("2026年产品线" in event.summary for event in events))
+
+    def test_support_document_security_guidance_stays_software_not_hardware(self):
+        module = load_module()
+        title = "What to do if your iPhone is stolen – more detailed advice from Apple"
+        summary = (
+            "Apple updated its support page with a new section warning of potential scams, "
+            "advising users not to enter contact details to display on the stolen device, "
+            "and covering Lost Mode, remote erase, trusted devices, and AppleCare+ with Theft and Loss."
+        )
+
+        event_kind = module.detect_event_kind(title, summary, [])
+
+        self.assertIn(event_kind, {"security_privacy", "os_app"})
+        self.assertEqual(
+            module.event_category_from_metadata(title, summary, [], event_kind),
+            "software_systems",
+        )
+
+    def test_title_primary_siri_ai_change_is_not_hardware_due_to_incidental_apple_tv_mention(self):
+        module = load_module()
+        title = "Apple tells Siri AI to clearly refuse requests to summarize URLs - 9to5Mac"
+        summary = (
+            "A new rule added to Siri AI's system prompt in iOS 27 beta 2 changes how it handles requests "
+            "involving URLs. The article also mentions the same beta cycle included Wallet Insights, "
+            "Write with Siri, and the possibility to update an Apple TV 4K remotely from the Home app."
+        )
+
+        event_kind = module.detect_event_kind(title, summary, [])
+
+        self.assertEqual(event_kind, "os_app")
+        self.assertEqual(
+            module.event_category_from_metadata(title, summary, [], event_kind),
+            "software_systems",
+        )
+
+    def test_first_party_calendar_update_is_not_demoted_by_wallet_or_third_party_calendar_background(self):
+        module = load_module()
+        title = "Here’s everything new for Apple Calendar in iOS 27"
+        summary = (
+            "iOS 27 is packed with new features for Apple Wallet, Messages, Notes, and other system apps, "
+            "including Apple Calendar. Calendar gains natural language event creation, a redesigned event editor, "
+            "free/busy status for iCloud calendars similar to Google calendars, larger widgets, and Siri improvements."
+        )
+
+        event_kind = module.detect_event_kind(title, summary, [])
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(event_kind, "os_app")
+        self.assertEqual(tier, "strong", reason)
+
     def test_routine_third_party_promotions_and_accessory_deals_stay_weak(self):
         module = load_module()
         examples = [
@@ -3996,6 +4176,71 @@ class RelevanceRuleTests(unittest.TestCase):
             module.detect_event_kind(examples[0][0], examples[0][1]),
             "third_party_ecosystem",
         )
+
+    def test_event_summary_reclassifies_sparse_strong_buying_advice_as_weak(self):
+        module = load_module()
+        article = module.Article(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/24/apple-watch-series-11-vs-apple-watch-se/",
+            title="Apple Watch Series 11 vs Apple Watch SE: Buying guide - 9to5Mac",
+            summary=(
+                "Compare Apple Watch SE 3 and Series 11 to see which model offers the best features, "
+                "health tracking, and value. Both models are available at big discounts for Prime Day."
+            ),
+            key_facts=[
+                "The guide compares Apple Watch SE 3 and Series 11 features, health tracking, battery life, and value.",
+                "Both Apple Watch Series 11 and Apple Watch SE 3 are available at big discounts for Prime Day this week.",
+            ],
+            category="hardware_products",
+            published_utc=datetime(2026, 6, 24, 0, 0, tzinfo=timezone.utc),
+            published_raw="2026-06-24T00:00:00Z",
+            published_source="test",
+            confidence="detail",
+            tokens=module.article_tokens("Apple Watch Series 11 vs Apple Watch SE", "buying guide value discounts"),
+            event_kind="hardware_market",
+            relevance_tier="strong",
+            relevance_reason="stale sparse article metadata",
+            regions=set(),
+        )
+
+        events = module.cluster_articles([article])
+
+        self.assertEqual(events[0].relevance_tier, "weak")
+        self.assertIn("buying advice", events[0].relevance_reason)
+
+    def test_opinion_surveillance_and_third_party_management_stay_weak(self):
+        module = load_module()
+        examples = [
+            (
+                "Apple should release the Apple Ring",
+                (
+                    "The Apple Watch is king among fitness trackers, but there is a gap in the market "
+                    "for Apple to release a ring-style tracker even though it probably will not."
+                ),
+                "AppleInsider",
+            ),
+            (
+                "Cops will soon upgrade to license plate readers that can track your iPhone and AirPods in public",
+                (
+                    "A surveillance firm with deep ties to law enforcement has developed SignalTrace, "
+                    "a technology to wirelessly identify Bluetooth devices like iPhones and AirPods."
+                ),
+                "AppleInsider",
+            ),
+            (
+                "Mosyle launches new service to help parents manage Mac and iPad screen time for K-12 devices at home",
+                (
+                    "Mosyle announced Mosyle@Home, a third-party platform replacing ScreenGuide that gives parents "
+                    "controls over school-issued Apple devices including Macs and iPads."
+                ),
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in examples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
 
     def test_competitor_product_with_apple_style_context_stays_weak_before_os_feature_rules(self):
         module = load_module()

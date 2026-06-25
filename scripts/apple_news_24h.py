@@ -2702,6 +2702,26 @@ def is_third_party_security_software_promo_story(text: str) -> bool:
 def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
     lower = text.lower()
     title_lower = title.lower()
+    if score_terms(
+        title_lower,
+        [
+            "buying advice",
+            "buying guide",
+            "should you buy",
+            "bad time to buy",
+            "buy now or wait",
+            "upgrade or wait",
+            "购机",
+            "购买建议",
+            "换机建议",
+            "买还是等",
+            "该不该买",
+            "值不值",
+            "值不值得买",
+            "值得买吗",
+        ],
+    ) > 0:
+        return True
     if is_apple_os_feature_or_summary_story(text):
         return False
     if score_terms(
@@ -2799,8 +2819,10 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
         return False
     if is_apple_product_price_increase_story(text, title):
         return False
+    retail_title_lower = title_lower.replace("京东方", "")
+    retail_lower = lower.replace("京东方", "")
     if score_terms(
-        title_lower,
+        retail_title_lower,
         [
             "deal",
             "deals",
@@ -2848,7 +2870,7 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
     ) > 0:
         return False
     return score_terms(
-        lower,
+        retail_lower,
         [
             "amazon",
             "best buy",
@@ -2868,6 +2890,119 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
             "换新",
         ],
     ) > 0
+
+
+def is_apple_opinion_without_new_reporting(title: str, text: str) -> bool:
+    lower = text.lower()
+    title_lower = title.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    opinion_title = bool(
+        re.search(r"(?i)^(?:why\s+)?apple\s+should\b", title_lower)
+        or re.search(r"(?i)^should\s+apple\b", title_lower)
+        or re.search(r"苹果[^。！？.!?]{0,12}(?:应该|该不该|要不要)", title)
+    )
+    if not opinion_title:
+        return False
+    if score_terms(
+        lower,
+        [
+            "report",
+            "reported",
+            "reportedly",
+            "source",
+            "sources",
+            "filing",
+            "document",
+            "announcement",
+            "announced",
+            "confirmed",
+            "消息称",
+            "报道称",
+            "爆料",
+            "宣布",
+            "确认",
+        ],
+    ) > 0:
+        return False
+    return True
+
+
+def is_third_party_surveillance_context_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if has_apple_first_party_release_context(lower):
+        return False
+    return (
+        score_terms(
+            lower,
+            [
+                "license plate reader",
+                "license plate readers",
+                "law enforcement",
+                "cops",
+                "police",
+                "surveillance firm",
+                "surveillance company",
+                "signaltrace",
+                "bluetooth devices",
+                "track your iphone",
+                "track your airpods",
+                "执法",
+                "警方",
+                "监控公司",
+                "车牌识别",
+                "蓝牙设备",
+                "追踪 iphone",
+                "追踪 airpods",
+            ],
+        )
+        > 0
+    )
+
+
+def is_third_party_device_management_service_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if has_apple_first_party_release_context(lower):
+        return False
+    vendor_or_service = score_terms(
+        lower,
+        [
+            "mosyle",
+            "jamf",
+            "third-party platform",
+            "third-party service",
+            "mdm",
+            "device management",
+            "第三方平台",
+            "第三方服务",
+            "设备管理",
+        ],
+    )
+    management_action = score_terms(
+        lower,
+        [
+            "launches new service",
+            "launches new platform",
+            "announces",
+            "manage mac",
+            "manage ipad",
+            "screen time",
+            "parents manage",
+            "school-issued",
+            "k-12",
+            "parental control",
+            "推出服务",
+            "推出平台",
+            "家长管理",
+            "屏幕时间",
+            "学校设备",
+        ],
+    )
+    return vendor_or_service > 0 and management_action > 0
 
 
 def is_competitor_apple_marketing_comparison(text: str) -> bool:
@@ -3281,7 +3416,7 @@ def score_messages_platform_terms(text: str) -> int:
         if not term_present(lower, term.lower()):
             continue
         pattern = re.compile(
-            r"(?:no|not|without|never|没有|未|尚未|无|并未|不(?:会|能|是)?)"
+            r"(?:\b(?:no|not|without|never)\b|没有|未|尚未|无|并未|不(?:会|能|是)?)"
             r"[^。.!?]{0,32}"
             r"(?:integrat\w*|available|support\w*|use|接入|支持|可用)?"
             r"[^。.!?]{0,32}"
@@ -3301,7 +3436,7 @@ def score_messages_platform_actions(text: str) -> int:
         if not term_present(lower, term.lower()):
             continue
         pattern = re.compile(
-            r"(?:no|not|without|never|没有|未|尚未|无|并未|不(?:会|能|是)?)"
+            r"(?:\b(?:no|not|without|never)\b|没有|未|尚未|无|并未|不(?:会|能|是)?)"
             r"[^。.!?]{0,32}"
             + re.escape(term.lower()),
             re.I,
@@ -6043,6 +6178,291 @@ def is_foldable_iphone_supply_chain_story(text: str) -> bool:
     ) > 0
 
 
+def is_apple_display_panel_supply_chain_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple", "iphone", "ipad", "macbook", "apple watch", "苹果"]) <= 0:
+        return False
+    if score_terms(lower, ["oled", "display panel", "panel", "screen", "屏幕", "面板"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "production",
+            "mass production",
+            "supplier",
+            "suppliers",
+            "supply",
+            "supplies",
+            "order",
+            "orders",
+            "rfi",
+            "量产",
+            "供应",
+            "供应商",
+            "供货",
+            "订单",
+            "包揽",
+            "出货",
+        ],
+    ) > 0
+
+
+def is_title_primary_software_system_story(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lower = text.lower()
+    if score_terms(
+        title_lower,
+        [
+            "ios",
+            "ipados",
+            "macos",
+            "watchos",
+            "visionos",
+            "tvos",
+            "siri",
+            "apple intelligence",
+            "imessage",
+            "messages",
+            "safari",
+            "mail",
+            "notes",
+            "calendar",
+            "home app",
+            "camera app",
+            "shortcuts",
+            "系统",
+            "信息",
+            "浏览器",
+            "邮件",
+            "备忘录",
+            "日历",
+        ],
+    ) <= 0:
+        return False
+    return (
+        is_apple_os_feature_or_summary_story(text)
+        or score_terms(title_lower, OS_FEATURE_ACTION_TERMS) > 0
+        or score_terms(
+            lower,
+            [
+                "system prompt",
+                "refuse",
+                "summarize urls",
+                "summarize url",
+                "url",
+                "beta",
+                "feature",
+                "change",
+                "changes",
+                "prompt",
+                "提示词",
+                "拒绝",
+                "摘要",
+                "链接",
+                "测试版",
+                "功能",
+                "变化",
+            ],
+        )
+        > 0
+    )
+
+
+def has_first_party_software_title_subject(title: str) -> bool:
+    lower = title.lower()
+    platform_app_launch = score_terms(
+        lower,
+        [
+            "ios 版",
+            "ios版",
+            "ipados 版",
+            "ipados版",
+            "mac 版",
+            "mac版",
+            "watchos 版",
+            "watchos版",
+            "客户端",
+            "上线",
+            "上架",
+            "适配",
+        ],
+    ) > 0
+    if re.search(r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*(?:\d{1,2}|beta|developer beta)\b", lower) and not platform_app_launch:
+        return True
+    return score_terms(
+        lower,
+        [
+            "apple calendar",
+            "apple mail",
+            "apple notes",
+            "apple wallet",
+            "apple messages",
+            "apple home",
+            "siri",
+            "apple intelligence",
+            "imessage",
+            "airdrop",
+            "safari",
+            "airpods feature",
+            "camera app",
+            "home app",
+            "shortcuts",
+            "find my",
+            "airport utility",
+            "苹果 ios",
+            "苹果 ipados",
+            "苹果 macos",
+            "苹果 watchos",
+            "苹果 tvos",
+            "苹果 visionos",
+            "苹果日历",
+            "苹果邮件",
+            "苹果备忘录",
+            "苹果钱包",
+            "苹果信息",
+            "苹果家庭",
+            "日历更新",
+            "邮件",
+            "备忘录",
+            "钱包",
+            "相机 app",
+            "家庭 app",
+            "快捷指令",
+            "查找",
+        ],
+    ) > 0
+
+
+def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lower = text.lower()
+    if has_first_party_software_title_subject(title):
+        return False
+    if has_apple_first_party_release_context(text):
+        return False
+    if score_terms(
+        lower,
+        ["ios", "ipados", "macos", "watchos", "visionos", "app store", "apple watch", "iphone", "ipad", "mac", "苹果应用商店"],
+    ) <= 0:
+        return False
+    if score_terms(
+        title_lower,
+        [
+            "ios version",
+            "ios app",
+            "mac app",
+            "watchos app",
+            "apple watch app",
+            "ios 版",
+            "ios版",
+            "ipados 版",
+            "ipados版",
+            "mac 版",
+            "mac版",
+            "watchos 版",
+            "watchos版",
+            "客户端",
+            "应用",
+            "app",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "launch",
+            "launches",
+            "launched",
+            "available",
+            "released",
+            "rolls out",
+            "supports",
+            "support",
+            "compatible",
+            "上线",
+            "上架",
+            "发布",
+            "推出",
+            "适配",
+            "支持",
+        ],
+    ) > 0
+
+
+def is_apple_support_security_guidance_story(title: str, text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(text) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "support page",
+            "support document",
+            "support article",
+            "support docs",
+            "support page",
+            "what to do",
+            "advice",
+            "guidance",
+            "支持页面",
+            "支持文档",
+            "官方支持",
+            "建议",
+            "指南",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "stolen",
+            "scam",
+            "scams",
+            "lost mode",
+            "remote erase",
+            "trusted devices",
+            "theft and loss",
+            "phishing",
+            "fraud",
+            "被盗",
+            "诈骗",
+            "丢失模式",
+            "远程抹掉",
+            "受信任设备",
+            "盗抢",
+            "防诈骗",
+            "钓鱼",
+        ],
+    ) > 0
+
+
+def is_primary_apple_display_panel_supply_chain_story(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    if score_terms(title_lower, ["oled", "display panel", "panel", "screen", "屏幕", "面板"]) <= 0:
+        return False
+    return is_apple_display_panel_supply_chain_story(f"{title} {text}")
+
+
+def display_panel_product_groups_from_text(text: str) -> set[str]:
+    lower = text.lower()
+    groups: set[str] = set()
+    if score_terms(lower, ["foldable iphone", "folding iphone", "iphone fold", "折叠屏 iphone", "折叠 iphone", "折叠屏iPhone".lower()]) > 0 or (
+        score_terms(lower, ["iphone"]) > 0 and score_terms(lower, ["foldable", "folding", "折叠屏", "折叠"]) > 0
+    ):
+        groups.add("foldable-iphone")
+    if score_terms(lower, ["iphone 18 pro", "iphone pro", "iphone 18", "iphone 17 pro"]) > 0:
+        groups.add("iphone-pro")
+    elif score_terms(lower, ["iphone"]) > 0 and "foldable-iphone" not in groups:
+        groups.add("iphone")
+    if score_terms(lower, ["ipad", "ipad mini", "ipad pro"]) > 0:
+        groups.add("ipad")
+    if score_terms(lower, ["macbook", "macbook pro", "macbook air"]) > 0:
+        groups.add("macbook")
+    if score_terms(lower, ["apple watch", "watch series", "苹果手表"]) > 0:
+        groups.add("apple-watch")
+    return groups
+
+
 def _topic_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
@@ -6058,11 +6478,7 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("apple-product-price-increase")
     if is_foldable_iphone_supply_chain_story(lower):
         facets.add("foldable-iphone-supply-chain")
-    if (
-        score_terms(lower, ["apple", "iphone", "ipad", "macbook", "apple watch", "苹果"]) > 0
-        and score_terms(lower, ["oled", "display", "panel", "screen", "显示", "屏幕", "面板"]) > 0
-        and score_terms(lower, ["production", "mass production", "supplier", "supply", "量产", "供应", "供货"]) > 0
-    ):
+    if is_apple_display_panel_supply_chain_story(lower):
         facets.add("apple-display-panel-supply-chain")
     if is_brazil_app_store_policy_story(lower):
         facets.add("brazil-app-store-policy")
@@ -6558,6 +6974,37 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "ecosystem_interop"
     if is_brazil_app_store_policy_story(text):
         return "app_store_trust"
+    if is_apple_support_security_guidance_story(title, text):
+        return "security_privacy"
+    if is_messages_platform_candidate(text):
+        return "messages_platform"
+    if is_routine_third_party_apple_platform_story(title):
+        return "third_party_ecosystem"
+    if is_third_party_platform_availability_candidate(title):
+        return "third_party_ecosystem"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "third_party_ecosystem"
+    if is_third_party_app_platform_launch_story(title, text):
+        return "third_party_ecosystem"
+    if is_apple_os_feature_or_summary_story(text) and score_terms(lower, OS_SUMMARY_TERMS) > 0:
+        return "os_app"
+    if is_apple_wallet_feature_story(text) and score_terms(
+        title_lower,
+        ["apple wallet", "wallet", "digital id", "digital-id", "钱包", "数字身份证", "数字身份", "身份核验"],
+    ) > 0:
+        return "wallet_feature"
+    if is_title_primary_software_system_story(title, text):
+        return "os_app"
+    if app_store_policy_score(lower) > 0:
+        return "app_store_trust"
+    if is_routine_third_party_apple_platform_story(text):
+        return "third_party_ecosystem"
+    if is_third_party_platform_availability_candidate(text):
+        return "third_party_ecosystem"
+    if is_apple_display_panel_supply_chain_story(text) or is_foldable_iphone_supply_chain_story(text):
+        return "hardware_market"
+    if is_third_party_surveillance_context_story(text) or is_third_party_device_management_service_story(text):
+        return "third_party_ecosystem"
     if is_routine_recap_comparison_or_buying_advice(title, text):
         return "general_company"
     if is_apple_tv_hardware_story(text):
@@ -6572,6 +7019,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "general_company"
     if is_apple_strategic_transaction_story(text):
         return "general_company"
+    if is_messages_platform_candidate(text):
+        return "messages_platform"
     if is_apple_os_feature_or_summary_story(text) and score_terms(lower, OS_SUMMARY_TERMS) > 0:
         return "os_app"
     if is_apple_wallet_feature_story(text):
@@ -6779,6 +7228,18 @@ def classify_relevance_tier(
         return "ecosystem", "direct Apple ecosystem interoperability or compatibility impact"
     if is_third_party_accessory_platform_compatibility_story(title, text):
         return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
+    if is_apple_display_panel_supply_chain_story(text) or is_foldable_iphone_supply_chain_story(text):
+        return "strong", "Apple hardware supply-chain or display-panel roadmap event"
+    if is_apple_opinion_without_new_reporting(title, text):
+        return "weak", "opinion or commentary without new Apple reporting"
+    if is_third_party_surveillance_context_story(text):
+        return "weak", "third-party surveillance story using Apple devices mainly as context"
+    if is_third_party_device_management_service_story(text):
+        return "weak", "third-party device-management service for Apple devices"
+    if is_third_party_app_platform_launch_story(title, text):
+        return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
+    if event_kind == "os_app" and is_title_primary_software_system_story(title, text):
+        return "strong", "Apple OS, built-in app, or feature-summary change"
     if is_routine_recap_comparison_or_buying_advice(title, text):
         return "weak", "third-party or routine recap, comparison, hands-on, or buying advice without a new Apple action"
     if event_kind == "wallet_feature":
@@ -6809,6 +7270,8 @@ def classify_relevance_tier(
         return "weak", "third-party or competitor story with Apple used mainly as context"
     if is_apple_os_feature_or_summary_story(text):
         return "strong", "Apple OS, built-in app, or feature-summary change"
+    if event_kind == "messages_platform":
+        return "strong", "Apple Messages or iMessage platform capability change"
     if is_routine_third_party_apple_platform_story(text):
         return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
     if is_apple_developer_tool_story(text):
@@ -6843,8 +7306,6 @@ def classify_relevance_tier(
         return "weak", "broad multi-vendor market report without Apple-specific shipment or share detail"
     if is_generic_consumer_electronics_health_safety_story(title, text):
         return "weak", "generic consumer-electronics safety story with Apple products used as examples"
-    if event_kind == "messages_platform":
-        return "strong", "Apple Messages or iMessage platform capability change"
     if event_kind == "app_store_trust" and apple_score > 0:
         return "strong", "Apple-specific App Store policy event"
     if is_third_party_security_software_promo_story(text):
@@ -7340,12 +7801,52 @@ def strong_shared_merge_tokens(shared: set[str]) -> set[str]:
     }
 
 
+def article_merge_context(article: Article) -> str:
+    return " ".join([article.title, article.summary, *article.key_facts[:6]])
+
+
+def event_merge_context(event: Event) -> str:
+    parts: list[str] = [event.title, event.summary, *event.key_facts[:6]]
+    for item in event.articles:
+        parts.extend([item.title, item.summary, *item.key_facts[:3]])
+    return " ".join(parts)
+
+
+def display_panel_supply_scope_compatible(article: Article, event: Event) -> bool:
+    article_context = article_merge_context(article)
+    event_context = event_merge_context(event)
+    article_primary = is_primary_apple_display_panel_supply_chain_story(article.title, article_context)
+    event_primary = is_primary_apple_display_panel_supply_chain_story(event.title, event_context)
+    if not article_primary and not event_primary:
+        return True
+    if article_primary != event_primary:
+        return False
+
+    article_groups = display_panel_product_groups_from_text(article_context)
+    event_groups = display_panel_product_groups_from_text(event_context)
+    if not article_groups or not event_groups:
+        return False
+
+    shared_groups = article_groups & event_groups
+    if not shared_groups:
+        return False
+    article_broad = len(article_groups) >= 3
+    event_broad = len(event_groups) >= 3
+    if article_broad != event_broad:
+        return False
+    if article_broad and event_broad:
+        return len(shared_groups) >= 2
+    return True
+
+
 def topic_facets_compatible(
     article: Article,
     event: Event,
     shared: set[str] | None = None,
     similarity: float | None = None,
 ) -> bool:
+    if not display_panel_supply_scope_compatible(article, event):
+        return False
     article_facets = effective_topic_facets(article_primary_facets(article))
     event_facets = effective_topic_facets(event_primary_facets(event))
     if not article_facets or not event_facets:
@@ -7370,6 +7871,52 @@ def event_relevance_tier(articles: list[Article]) -> tuple[str, str]:
     priority = {"weak": 0, "ecosystem": 1, "strong": 2}
     selected = max(articles, key=lambda item: priority.get(item.relevance_tier, 0))
     return selected.relevance_tier, selected.relevance_reason
+
+
+SOFTWARE_EVENT_KINDS = {
+    "ecosystem_interop",
+    "health_research",
+    "apple_research",
+    "regional_regulation",
+    "legal_antitrust",
+    "developer_program",
+    "developer_tool",
+    "app_store_trust",
+    "security_privacy",
+    "messages_platform",
+    "service_content",
+    "os_compatibility",
+    "wallet_feature",
+    "os_app",
+}
+
+
+HARDWARE_EVENT_KINDS = {"retail_store", "hardware_market"}
+
+
+def event_category_from_metadata(title: str, summary: str, key_facts: list[str], event_kind: str) -> str:
+    if event_kind in SOFTWARE_EVENT_KINDS:
+        return "software_systems"
+    if event_kind in HARDWARE_EVENT_KINDS:
+        return "hardware_products"
+    return choose_category(title, " ".join([summary, *key_facts[:5]]))
+
+
+def event_source_for_reclassification(event: Event) -> str:
+    if any(article.source == "Apple Newsroom" for article in event.articles):
+        return "Apple Newsroom"
+    return event.articles[0].source if event.articles else ""
+
+
+def refresh_event_metadata(event: Event) -> None:
+    event.event_kind = detect_event_kind(event.title, event.summary, event.key_facts)
+    event.relevance_tier, event.relevance_reason = classify_relevance_tier(
+        event.title,
+        event.summary,
+        event.key_facts,
+        event_source_for_reclassification(event),
+    )
+    event.category = event_category_from_metadata(event.title, event.summary, event.key_facts, event.event_kind)
 
 
 def event_merge_warnings(articles: list[Article]) -> list[str]:
@@ -7576,6 +8123,8 @@ def should_merge(article: Article, event: Event) -> bool:
         return True
     if "foldable-iphone-supply-chain" in common_facets:
         return True
+    if "developer-tool-integration" in common_facets and len(strong_shared) >= 3:
+        return True
     common_specific_facets = common_facets - LOW_CONFIDENCE_MERGE_FACETS
     if common_specific_facets and len(strong_shared) >= 3 and similarity >= 0.08:
         return True
@@ -7715,6 +8264,7 @@ def rebuild_event_from_articles(event: Event, articles: list[Article]) -> Event:
     event.regions = set().union(*(item.regions for item in event.articles))
     event.merge_warnings = event_merge_warnings(event.articles)
     event.title, event.summary, event.key_facts = build_event_summary(event.articles)
+    refresh_event_metadata(event)
     return event
 
 
@@ -7868,7 +8418,11 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
         }
         if len(anchors) >= 2:
             keys.add(("apple-wallet-digital-id", ()))
-    if "foldable-iphone-supply-chain" in facets:
+    primary_display_panel_scope = is_primary_apple_display_panel_supply_chain_story(
+        event.title,
+        " ".join([event.summary, *event.key_facts[:8]]),
+    )
+    if "foldable-iphone-supply-chain" in facets and not primary_display_panel_scope:
         anchors = summary_article.tokens & {
             "foldable",
             "foldable-iphone",
@@ -8061,31 +8615,32 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
             matched.regions = set().union(*(item.regions for item in matched.articles))
             matched.merge_warnings = event_merge_warnings(matched.articles)
             matched.title, matched.summary, matched.key_facts = build_event_summary(matched.articles)
+            refresh_event_metadata(matched)
         else:
             title, summary, key_facts = build_event_summary([article])
             event_id = hashlib.sha1(
                 f"{article.published_utc.isoformat()} {article.title}".encode("utf-8")
             ).hexdigest()[:12]
-            events.append(
-                Event(
-                    event_id=event_id,
-                    category=article.category,
-                    title=title,
-                    summary=summary,
-                    key_facts=key_facts,
-                    published_utc=article.published_utc,
-                    published_raw=article.published_raw,
-                    published_source=article.published_source,
-                    confidence=article.confidence,
-                    articles=[article],
-                    tokens=set(article.tokens),
-                    event_kind=article.event_kind,
-                    relevance_tier=article.relevance_tier,
-                    relevance_reason=article.relevance_reason,
-                    regions=set(article.regions),
-                    merge_warnings=event_merge_warnings([article]),
-                )
+            event = Event(
+                event_id=event_id,
+                category=article.category,
+                title=title,
+                summary=summary,
+                key_facts=key_facts,
+                published_utc=article.published_utc,
+                published_raw=article.published_raw,
+                published_source=article.published_source,
+                confidence=article.confidence,
+                articles=[article],
+                tokens=set(article.tokens),
+                event_kind=article.event_kind,
+                relevance_tier=article.relevance_tier,
+                relevance_reason=article.relevance_reason,
+                regions=set(article.regions),
+                merge_warnings=event_merge_warnings([article]),
             )
+            refresh_event_metadata(event)
+            events.append(event)
     consolidated = consolidate_events(events)
     return sorted(split_mixed_topic_events(consolidated), key=lambda event: event.published_utc)
 

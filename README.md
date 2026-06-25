@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.9.0 - 2026-06-24
+### 1.10.0 - 2026-06-25
 
-- Added Apple strategic transaction, merger, acquisition, and buyout relevance handling so direct Apple counterparty reports such as Apple/Disney merger discussions stay eligible.
-- Improved cross-language clustering for strategic transaction stories by requiring the same transaction counterparty and concrete action before merging reports.
-- Improved Apple developer ecosystem detection so Swift, package-index, open-source developer infrastructure, and similar projects joining Apple remain in `events`.
-- Improved early candidate relevance for Apple hardware roadmap and supply-chain stories so MacBook display-panel planning and RFI reports are not dropped before detail parsing.
-- Updated source policy guidance for strategic transactions and developer ecosystem infrastructure while keeping routine speculation and unrelated third-party stories excluded.
-- Added regression coverage for strategic transaction eligibility and merging, developer ecosystem infrastructure, and hardware roadmap candidate gating.
+- Improved Apple OLED and display-panel supply-chain handling so broad multi-product panel allocation, foldable-iPhone panel production, and foldable-iPhone launch timing stay as separate hardware events.
+- Improved first-party Apple OS, built-in app, Siri/Apple Intelligence, and support-document classification so body background such as Apple TV hardware, Wallet, App Store, or third-party calendars no longer overrides the title's main Apple action.
+- Updated weak-relevance handling for non-Apple app launches on iOS, iPadOS, macOS, watchOS, Apple Watch, iPhone, iPad, Mac, or App Store so routine platform availability stays in `deferred_events`.
+- Improved cross-language clustering for Swift Package Index and developer ecosystem infrastructure while preserving weak-noise filtering for buying guides, opinion pieces, surveillance/device-tracking stories, and third-party device-management services.
+- Updated fallback source policy for display-panel product scope, first-party software priority, and non-Apple platform-availability stories.
+- Added regression coverage for OLED scope separation, support-document and Siri classification, Calendar updates, third-party iOS app deferral, Swift Package Index merging, and weak Apple-adjacent filtering.
 
 ## What It Does
 

@@ -12,14 +12,14 @@
 
 ## 最新更新
 
-### 1.9.0 - 2026-06-24
+### 1.10.0 - 2026-06-25
 
-- 新增 Apple 战略交易、合并、收购和买断讨论的相关性处理，使 Apple 作为直接交易方的报道，例如 Apple/Disney 合并讨论，能够保留在合格事件中。
-- 改进战略交易类报道的跨语言聚类，要求共享同一交易对象和具体动作后才合并，避免不同交易或合作讨论被混在一起。
-- 改进 Apple 开发者生态识别，使 Swift、package index、开源开发者基础设施和类似项目加入 Apple 的新闻保留在 `events` 中。
-- 改进 Apple 硬件路线图和供应链新闻的早期候选判断，避免 MacBook 显示面板规划、RFI 等报道在详情解析前被丢弃。
-- 更新战略交易和开发者生态基础设施的来源政策说明，同时继续排除常规猜测和无关第三方内容。
-- 增加战略交易相关性与聚类、开发者生态基础设施、硬件路线图候选入口的回归测试。
+- 改进 Apple OLED 和显示面板供应链处理，使多产品面板订单、折叠屏 iPhone 面板量产、折叠屏 iPhone 发布时间或铰链进展保持为独立硬件事件。
+- 改进 Apple 第一方 OS、内置 App、Siri/Apple Intelligence 和支持文档分类，避免正文里的 Apple TV 硬件、Wallet、App Store 或第三方日历背景覆盖标题主事件。
+- 更新非 Apple 应用在 iOS、iPadOS、macOS、watchOS、Apple Watch、iPhone、iPad、Mac 或 App Store 上线/适配的弱相关处理，使常规平台可用性进入 `deferred_events`。
+- 改进 Swift Package Index 和开发者生态基础设施的跨语言聚类，同时保留对购买指南、观点文、执法追踪设备、第三方设备管理服务等弱噪声的过滤。
+- 更新显示面板产品范围、第一方软件优先级、非 Apple 平台可用性报道的兜底来源规则。
+- 增加 OLED 范围拆分、支持文档和 Siri 分类、Calendar 更新、第三方 iOS 应用降级、Swift Package Index 合并、弱 Apple 关联过滤的回归测试。
 
 ## 它会做什么
 
