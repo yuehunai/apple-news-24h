@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.11.0 - 2026-06-26
+
+- Improved Apple product price-increase handling with dynamic `key_facts` limits, structured price-change buckets, market and analyst reaction facts, follow-up scope facts, and compact official responses so large pricing clusters retain material numeric details.
+- Improved structured list extraction so long product tables from Chinese and English sources keep later rows such as Vision Pro, HomePod, Apple TV, regional price changes, and related product-scope details instead of being truncated.
+- Improved relevance and clustering for Apple online-store status, official refurbished product availability, third-party platform updates that directly improve Apple-device interoperability, and Apple hardware price or promotion follow-ups while keeping routine retail deals weak.
+- Tightened price-event fact filtering so unrelated high-number paragraphs such as Siri/prompt, podcast, buying-guide, or deal text do not enter pricing summaries.
+- Updated fallback policy and skill guidance for high-volume pricing, official store or refurbished stories, third-party platform interoperability, structured fact preservation, and manual recovery of direct Apple events.
+- Added regression coverage for price-event key facts, structured price lists, store and refurbished handling, interoperability updates, price/promotion separation, weak deal filtering, and large-cluster fact retention.
+
 ## 1.10.0 - 2026-06-25
 
 - Improved Apple OLED and display-panel supply-chain handling so broad multi-product panel allocation, foldable-iPhone panel production, and foldable-iPhone launch timing stay as separate hardware events.

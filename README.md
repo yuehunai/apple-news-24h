@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.10.0 - 2026-06-25
+### 1.11.0 - 2026-06-26
 
-- Improved Apple OLED and display-panel supply-chain handling so broad multi-product panel allocation, foldable-iPhone panel production, and foldable-iPhone launch timing stay as separate hardware events.
-- Improved first-party Apple OS, built-in app, Siri/Apple Intelligence, and support-document classification so body background such as Apple TV hardware, Wallet, App Store, or third-party calendars no longer overrides the title's main Apple action.
-- Updated weak-relevance handling for non-Apple app launches on iOS, iPadOS, macOS, watchOS, Apple Watch, iPhone, iPad, Mac, or App Store so routine platform availability stays in `deferred_events`.
-- Improved cross-language clustering for Swift Package Index and developer ecosystem infrastructure while preserving weak-noise filtering for buying guides, opinion pieces, surveillance/device-tracking stories, and third-party device-management services.
-- Updated fallback source policy for display-panel product scope, first-party software priority, and non-Apple platform-availability stories.
-- Added regression coverage for OLED scope separation, support-document and Siri classification, Calendar updates, third-party iOS app deferral, Swift Package Index merging, and weak Apple-adjacent filtering.
+- Improved Apple product price-increase handling with dynamic `key_facts` limits, structured price-change buckets, market and analyst reaction facts, follow-up scope facts, and compact official responses so large pricing clusters retain material numeric details.
+- Improved structured list extraction so long product tables from Chinese and English sources keep later rows such as Vision Pro, HomePod, Apple TV, regional price changes, and related product-scope details instead of being truncated.
+- Improved relevance and clustering for Apple online-store status, official refurbished product availability, third-party platform updates that directly improve Apple-device interoperability, and Apple hardware price or promotion follow-ups while keeping routine retail deals weak.
+- Tightened price-event fact filtering so unrelated high-number paragraphs such as Siri/prompt, podcast, buying-guide, or deal text do not enter pricing summaries.
+- Updated fallback policy and skill guidance for high-volume pricing, official store or refurbished stories, third-party platform interoperability, structured fact preservation, and manual recovery of direct Apple events.
+- Added regression coverage for price-event key facts, structured price lists, store and refurbished handling, interoperability updates, price/promotion separation, weak deal filtering, and large-cluster fact retention.
 
 ## What It Does
 

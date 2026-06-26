@@ -331,6 +331,392 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
         self.assertEqual(module.choose_category(title, summary), "hardware_products")
 
+    def test_ithome_apple_price_candidate_reaches_detail_review(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/968/675.htm",
+            title="苹果提高 Mac、iPad、Vision Pro、HomePod 等产品价格，以应对内存短缺",
+            summary="苹果公司称，人工智能数据中心的快速扩张导致内存需求激增。提高 Mac、iPad 等系列产品价格以应对内存短缺。",
+            feed_time_raw="2026-06-25T20:43:30.1630000+08:00",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
+    def test_ithome_official_back_to_school_candidate_reaches_detail_review(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/968/725.htm",
+            title="Mac 和 iPad 涨价后，古尔曼预测苹果下周开启返校季促销活动",
+            summary=(
+                "彭博社记者古尔曼透露，苹果一年一度的返校季促销活动预计将在下周启动。"
+                "此举或为缓冲近期 Mac、iPad 产品线大幅涨价带来的影响，符合资格的学生和教育工作者购买指定产品可获赠配件或礼品卡。"
+            ),
+            feed_time_raw="2026-06-26T00:42:39.9270000+08:00",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
+    def test_ithome_hardware_market_title_without_summary_reaches_detail_review(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/968/747.htm",
+            title="CounterPoint：苹果 iPhone Ultra 助推下，2026 全球折叠手机加权平均批发价预估上涨 18%",
+        )
+
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "hardware_market")
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
+    def test_third_party_retail_discount_candidate_stays_filtered(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/968/999.htm",
+            title="京东苹果 iPad 今日促销立减 300 元，限时优惠",
+            summary="电商平台推出普通零售促销活动，用户可领取优惠券购买 iPad。",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(candidate, source))
+
+    def test_back_to_school_promo_does_not_merge_with_current_price_increase(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                (
+                    "Apple dramatically increased device prices across multiple product lines after memory "
+                    "and storage costs rose quickly. Apple said it had shielded customers but now needs to "
+                    "raise prices on products including iPad and Mac."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Mac 和 iPad 涨价后，古尔曼预测苹果下周开启返校季促销活动",
+                (
+                    "彭博社记者古尔曼透露，苹果一年一度的返校季促销活动预计将在下周启动。"
+                    "此举或为缓冲近期 Mac、iPad 产品线大幅涨价带来的影响，符合资格的学生和教育工作者购买指定产品可获赠配件或礼品卡。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_future_iphone_price_forecast_does_not_merge_with_current_price_increase(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                (
+                    "Apple dramatically increased device prices across multiple product lines after memory "
+                    "and storage costs rose quickly. Apple said it had shielded customers but now needs to "
+                    "raise prices on products including iPad and Mac."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "消息称苹果 iPhone 18 Pro / Max 及 Ultra 阔折叠均为“万元机”",
+                (
+                    "苹果已上调 Mac、iPad 等产品售价，称涨价因存储元件成本上涨，后续或仍有调价空间。"
+                    "业内透露 iPhone 18 Pro 系列及首款折叠屏 Ultra 都将万元起售。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_future_iphone_price_forecasts_still_merge_with_each_other(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "消息称苹果 iPhone 18 Pro / Max 及 Ultra 阔折叠均为“万元机”",
+                (
+                    "苹果已上调 Mac、iPad 等产品售价，称涨价因存储元件成本上涨，后续或仍有调价空间。"
+                    "业内透露 iPhone 18 Pro 系列及首款折叠屏 Ultra 都将万元起售。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 iPhone 18 Pro 系列或全面涨价：Ultra 折叠屏起售价超万元",
+                (
+                    "供应链人士称 iPhone 18 Pro、iPhone 18 Pro Max 和折叠屏 iPhone Ultra "
+                    "会采用更贵的零部件，预计新机起售价将进入万元区间。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+
+    def test_market_share_report_does_not_merge_with_current_price_increase(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                (
+                    "Apple dramatically increased device prices across multiple product lines after memory "
+                    "and storage costs rose quickly."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Report: Apple set to reach record market share despite higher prices",
+                (
+                    "Counterpoint Research says Apple is on track for record market share this year, "
+                    "with iPhone demand remaining resilient even as premium phones become more expensive."
+                ),
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_apple_market_share_report_has_specific_topic_facet(self):
+        module = load_module()
+        title = "Apple set to reach record market share across major product categories in 2026"
+        summary = (
+            "Counterpoint Research predicts Apple will hit record market share in smartphones, "
+            "laptops, and tablets, with iPad share rising from 35% to 39%, iPhone reaching 25%, "
+            "Apple Watch reaching 23%, and Mac reaching 12%."
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("apple-market-share-report", facets)
+
+    def test_non_apple_followup_price_story_is_weak_and_separate(self):
+        module = load_module()
+        title = "微软 Xbox 主机跟进苹果涨价，海外售价上调 80 美元"
+        summary = (
+            "微软宣布 Xbox 主机海外售价上调，文章提到苹果 Mac 和 iPad 近期涨价，"
+            "但主要内容是 Xbox 硬件和游戏订阅价格变化。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_followup_price_story_with_indirect_title_is_weak(self):
+        module = load_module()
+        title = "微软紧随苹果上调Xbox主机售价 存储和内存成本已暴涨2.5倍"
+        summary = (
+            "在苹果宣布提高 MacBook 和 iPad 售价仅数小时后，微软也宣布 Xbox 主机价格上调。"
+            "文章重点列出 Xbox Series S 和 Series X 的新价格，苹果仅作为涨价背景。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_component_market_background_story_is_weak(self):
+        module = load_module()
+        title = "日本痛失国运：银行不给钱支持尔必达 内存巨头就此倒闭"
+        summary = (
+            "文章主要回顾日本内存产业和尔必达倒闭过程，只在背景段落提到苹果曾采购尔必达内存，"
+            "并用当前内存涨价说明行业利润变化。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_domestic_phone_price_wave_story_is_weak(self):
+        module = load_module()
+        title = "内存价格持续狂飙！国产手机即将掀起第二轮涨价潮"
+        summary = (
+            "文章先提到苹果 Mac 和 iPad 涨价作为行业背景，主体讨论国产安卓手机厂商很快迎来第二轮涨价，"
+            "涨幅预计在 200 元至 800 元之间。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_current_price_response_articles_still_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                (
+                    "Apple dramatically increased device prices across multiple product lines after memory "
+                    "and storage costs rose quickly."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果回应 Mac / iPad 等 14 款产品涨价：消费电子行业正面临前所未有的挑战",
+                (
+                    "苹果公司回应昨日上调 14 款产品价格，指出 AI 数据中心扩张推高内存与存储芯片需求，"
+                    "导致 RAM 和 SSD 成本快速上涨。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+
+    def test_apple_tv_price_increase_is_not_apple_tv_content_facet(self):
+        module = load_module()
+        title = "Apple TV and HomePod Just Went Up in Price Amid Wait for New Models"
+        summary = "Apple raised prices on Apple TV and HomePod hardware as part of a broader product price increase."
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("apple-current-product-price-increase", facets)
+        self.assertNotIn("apple-tv-content", facets)
+
+    def test_macbook_price_increase_due_to_memory_cost_is_not_memory_ai_facet(self):
+        module = load_module()
+        title = "Apple Hikes M4 Pro Mac Mini Starting Price Amid Rising Memory Costs"
+        summary = "Apple raised the starting price because RAM and SSD storage costs have increased sharply."
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("apple-current-product-price-increase", facets)
+        self.assertNotIn("macbook-memory-ai", facets)
+
+    def test_official_apple_refurbished_product_story_is_strong(self):
+        module = load_module()
+        title = "Refurbished MacBook Neo Models Now Available, a Day After Price Hike"
+        summary = (
+            "Apple today began selling refurbished MacBook Neo units through its Certified Refurbished store, "
+            "a day after raising prices on the laptop and several other products."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "retail_store")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_back_to_school_promo_does_not_merge_with_refurbished_price_context(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Refurbished MacBook Neo Models Now Available, a Day After Price Hike",
+                (
+                    "Apple today began selling refurbished MacBook Neo units through its Certified Refurbished store, "
+                    "a day after raising prices on the laptop and several other products."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Back to School promotion could ease the sting of Apple's higher Mac & iPad prices",
+                (
+                    "Apple's annual Back to School promotion is expected to return around July 1, "
+                    "giving eligible students a timely way to offset Apple's newly announced Mac and iPad price increases."
+                ),
+                source="AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+
+    def test_refresh_event_metadata_does_not_downgrade_strong_article_group(self):
+        module = load_module()
+        article = article_for(
+            module,
+            "Back to School promotion could ease the sting of Apple's higher Mac & iPad prices",
+            (
+                "Apple's annual Back to School promotion is expected to return around July 1, "
+                "giving eligible students a timely way to offset Apple's newly announced Mac and iPad price increases."
+            ),
+            source="AppleInsider",
+        )
+        event = module.Event(
+            event_id="promo",
+            category=article.category,
+            title="Third-party Vision Pro accessory now available",
+            summary="A third-party accessory story uses Apple products mainly as platform context.",
+            key_facts=[],
+            published_utc=article.published_utc,
+            published_raw=article.published_raw,
+            published_source=article.published_source,
+            confidence=article.confidence,
+            articles=[article],
+            tokens=set(article.tokens),
+            event_kind=article.event_kind,
+            relevance_tier=article.relevance_tier,
+            relevance_reason=article.relevance_reason,
+            regions=set(article.regions),
+        )
+
+        module.refresh_event_metadata(event)
+
+        self.assertEqual(event.relevance_tier, "strong")
+
+    def test_retail_promo_event_does_not_emit_price_response_must_include(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Back to School promotion could ease the sting of Apple's higher Mac & iPad prices",
+                (
+                    "Apple's annual Back to School promotion is expected to return around July 1, "
+                    "giving eligible students a timely way to offset Apple's newly announced Mac and iPad price increases."
+                ),
+                facts=[
+                    "Apple raised prices on several Mac and iPad models on Thursday, June 25.",
+                    "Apple said AI data centers drove extraordinary memory and storage demand and that this is not welcome news.",
+                ],
+                source="AppleInsider",
+            )
+        ]
+        event = module.cluster_articles(articles)[0]
+        event_dict = module.event_to_dict(event, timezone.utc)
+
+        self.assertNotIn("must_include_facts", event_dict)
+
+    def test_future_price_forecast_event_does_not_emit_current_price_response_must_include(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "消息称苹果 iPhone 18 Pro / Max 及 Ultra 阔折叠均为“万元机”",
+                (
+                    "业内透露 iPhone 18 Pro 系列及首款折叠屏 Ultra 都将万元起售，"
+                    "报道背景提到苹果已上调 Mac 和 iPad 等产品售价。"
+                ),
+                facts=[
+                    "苹果回应称 AI 数据中心推高内存与存储需求，这并非好消息，苹果正竭力寻找解决方案。"
+                ],
+                source="IT之家",
+            )
+        ]
+        event = module.cluster_articles(articles)[0]
+        event_dict = module.event_to_dict(event, timezone.utc)
+
+        self.assertNotIn("must_include_facts", event_dict)
+
     def test_9to5_related_and_subscription_copy_do_not_enter_summary_or_facts(self):
         module = load_module()
         source = source_named(module, "9to5Mac")
@@ -4354,6 +4740,719 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(len(oled_events), 1)
         self.assertNotIn("小米18", oled_events[0].summary)
         self.assertTrue(any(event.relevance_tier == "weak" and "小米18" in event.summary for event in events))
+
+    def test_product_price_hike_cluster_splits_chip_roadmap_and_keeps_response_facts(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                (
+                    "Apple dramatically increased device prices across multiple product lines after taking "
+                    "the online store offline. MacBook Neo is now $699, iPad starts at $449, Apple TV is "
+                    "$199, and HomePod mini is $129."
+                ),
+                source="MacRumors",
+                facts=[
+                    "HomePod mini: $129, up from $99 (+$30)",
+                    "Apple TV: $199, up from $129 (+$70)",
+                    "iPad: $449, up from $349 (+$100)",
+                    "MacBook Neo: $699, up from $599 (+$100)",
+                    "MacBook Air: $1,299, up from $1,099 (+$200)",
+                    "MacBook Pro: $1,999, up from $1,699 (+$300)",
+                    "iMac: $1,499, up from $1,299 (+$200)",
+                    "Mac mini M4 Pro: $1,599, up from $1,399 (+$200)",
+                    "Vision Pro: $3,699, up from $3,499 (+$200)",
+                    "Mac Studio M4 Max: $2,499, up from $1,999 (+$500)",
+                ],
+            ),
+            article_for(
+                module,
+                "Apple Explains Why It Raised Prices on 14 Products Today",
+                (
+                    "Apple said memory and storage component costs have risen unprecedentedly. "
+                    "The company said it has shielded customers so far, has reached a point where "
+                    "it needs to begin raising prices on products including today's iPad and Mac "
+                    "increases, knows this is not welcome news, and is working tirelessly to find solutions."
+                ),
+                source="MacRumors",
+                facts=[
+                    "Apple said memory and storage component costs have increased at unprecedented levels.",
+                    "Apple said it has shielded customers from those increases so far.",
+                    "Apple said it has reached a point where it needs to begin raising prices on a number of products, including today's increases for iPad and Mac.",
+                    "Apple said it knows this is not welcome news and is working tirelessly to find solutions.",
+                ],
+            ),
+            article_for(
+                module,
+                "2027 Macs to Get AI-Focused M7 Chips as Apple Skips High-End M6",
+                (
+                    "Apple's updated chip launch timeline points to M7 Pro and M7 Max chips in late 2027, "
+                    "with the high-end MacBook Pro skipping M6 Pro and M6 Max. The article notes this news "
+                    "arrived just after Apple raised prices across Macs and iPads."
+                ),
+                source="MacRumors",
+                facts=[
+                    "Apple is expected to skip M6 Pro and M6 Max chips for high-end Macs.",
+                    "M7 Pro and M7 Max chips are slated for late 2027.",
+                ],
+            ),
+            article_for(
+                module,
+                "M5 Ultra Mac Studio Could Launch in 2026 With Up to 768GB of RAM",
+                (
+                    "Apple may still update the Mac Studio with an M5 Ultra chip in 2026 and up to "
+                    "768GB of RAM. A footer link points readers to Apple's stock reaction after price increases."
+                ),
+                source="MacRumors",
+                facts=[
+                    "The M5 Ultra Mac Studio could launch in 2026.",
+                    "The high-end configuration could support up to 768GB of RAM.",
+                ],
+            ),
+        ]
+
+        events = module.split_mixed_topic_events(module.cluster_articles(articles))
+
+        price_events = [event for event in events if "Increased Prices" in event.title or "Raised Prices" in event.title]
+        self.assertEqual(len(price_events), 1)
+        price_event = price_events[0]
+        self.assertEqual(price_event.category, "hardware_products")
+        self.assertEqual(price_event.event_kind, "hardware_market")
+        self.assertIn("not welcome news", " ".join([price_event.summary, *price_event.key_facts]))
+        self.assertNotIn("M7 Pro", price_event.summary)
+        self.assertNotIn("M5 Ultra Mac Studio", price_event.summary)
+        self.assertTrue(any("M7" in event.summary for event in events if event is not price_event))
+        self.assertTrue(any("M5 Ultra" in event.summary for event in events if event is not price_event))
+
+    def test_current_weak_apple_adjacent_noise_stays_deferred(self):
+        module = load_module()
+        examples = [
+            (
+                "国产Pro Max扎堆亮相 这次能叫板苹果吗",
+                "多家国产手机厂商推出 Pro Max 机型，文章讨论这些安卓旗舰能否叫板苹果 iPhone。",
+                "快科技",
+            ),
+            (
+                "曾称追觅要赶超苹果等！俞浩以后不能随便发狂言了：社交账户被公司接管",
+                "追觅公司接管高管社交账号，背景提到此前曾称要赶超苹果、特斯拉和戴森。",
+                "快科技",
+            ),
+            (
+                "Notion shutting down its AI-powered email client, including Mac and iOS apps",
+                "Notion is shutting down Notion Mail across web, Mac, and iOS apps after 17 months.",
+                "9to5Mac",
+            ),
+            (
+                "Soulver 4 brings 50+ improvements, new workflows, and an agent-friendly CLI",
+                "Soulver 4 adds more than 50 improvements to the third-party calculator app on Mac.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in examples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_apple_chip_roadmap_and_wearable_rumors_stay_strong(self):
+        module = load_module()
+        examples = [
+            (
+                "2027 Macs to Get AI-Focused M7 Chips as Apple Skips High-End M6",
+                (
+                    "Apple is changing its Apple silicon launch timeline to speed up the debut of "
+                    "M7 Pro and M7 Max chips for AI workloads, while skipping M6 Pro and M6 Max."
+                ),
+                "hardware_market",
+            ),
+            (
+                "消息称苹果正开发 iRing 智能戒指，上市后将和三星 Galaxy Ring 等竞争",
+                (
+                    "消息源称苹果公司正在开发 Ring 智能戒指，上市后预估会和 Oura、三星 Galaxy Ring "
+                    "等产品竞争，但开发并不等于最终量产。"
+                ),
+                "hardware_market",
+            ),
+        ]
+
+        for title, summary, expected_kind in examples:
+            with self.subTest(title=title):
+                self.assertEqual(module.detect_event_kind(title, summary), expected_kind)
+                tier, reason = module.classify_relevance_tier(title, summary, [], "")
+                self.assertEqual(tier, "strong", reason)
+
+    def test_non_apple_pc_vendor_responses_to_macbook_stay_weak(self):
+        module = load_module()
+        title = "换名不换芯！PC厂商集体套娃卖旧货"
+        summary = (
+            "面对苹果推出 MacBook Neo 抢占入门市场，各供应商将旧芯片重新包装后推出以降低 OEM "
+            "成本压力。AMD 重新上市锐龙 100 系列处理器，并直接对比 MacBook Neo。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_price_explanation_is_not_downgraded_by_component_context(self):
+        module = load_module()
+        title = "Apple Explains Why It Raised Prices on 14 Products Today"
+        summary = (
+            "Apple said the consumer electronics industry faces an unprecedented memory and storage "
+            "component cost challenge, that it has shielded customers so far, and that it now needs "
+            "to begin raising prices on iPad and Mac products. Other companies including Microsoft "
+            "and Samsung have raised prices in response to the same shortage."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_product_data_leak_does_not_merge_with_mac_chip_roadmap(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "2027 Macs to Get AI-Focused M7 Chips as Apple Skips High-End M6",
+                (
+                    "Apple is changing its Apple silicon launch timeline to speed up the debut of M7 Pro "
+                    "and M7 Max chips while skipping M6 Pro and M6 Max chips."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro board schematics, A20 Pro data, C2 modem files stolen from Tata",
+                (
+                    "Hackers stole iPhone 18 Pro logic board schematics, A20 Pro data sheets, and C2 "
+                    "modem files from Apple supplier Tata and listed the files on the dark web. A related "
+                    "article link mentions that Apple will skip M6 Pro and M6 Max in favor of M7 chips."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "苹果代工厂塔塔电子被黑，部分 iPhone 18 Pro 与 A20 Pro 资料确认泄露",
+                "苹果代工厂塔塔电子遭黑客入侵，部分 iPhone 18 Pro、A20 Pro 和 C2 调制解调器机密文件流入暗网。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.split_mixed_topic_events(module.cluster_articles(articles))
+
+        self.assertEqual(len(events), 2)
+        leak_events = [event for event in events if "Tata" in event.summary or "塔塔" in event.summary]
+        self.assertEqual(len(leak_events), 1)
+        self.assertEqual(leak_events[0].category, "hardware_products")
+        self.assertNotIn("M7 Pro", leak_events[0].summary)
+
+    def test_product_data_leak_does_not_merge_with_iphone_product_roadmap_leak(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Leak claims iPhone Ultra 2 is already greenlit, but maybe not Air 3",
+                (
+                    "A leaker claims Apple has already greenlit iPhone Ultra 2 and that tooling for "
+                    "iPhone Air 3 has not yet begun."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro board schematics, A20 Pro data, C2 modem files stolen from Tata",
+                (
+                    "AppleInsider can exclusively confirm that logic board designs for iPhone 18 Pro, "
+                    "A20 Pro data sheets, and C2 modem files were stolen from Tata's India facility."
+                ),
+                source="AppleInsider",
+            ),
+        ]
+        self.assertNotIn(
+            "apple-product-data-leak",
+            module.primary_topic_facets(
+                "Leak claims iPhone Ultra 2 is already greenlit, but maybe not Air 3",
+                (
+                    "A leaker claims Apple has already greenlit iPhone Ultra 2 and that tooling for "
+                    "iPhone Air 3 has not yet begun."
+                ),
+            ),
+        )
+
+        events = module.split_mixed_topic_events(module.cluster_articles(articles))
+
+        self.assertEqual(len(events), 2)
+        roadmap_events = [event for event in events if "greenlit" in event.summary]
+        self.assertEqual(len(roadmap_events), 1)
+        self.assertNotIn("A20 Pro data", roadmap_events[0].summary)
+
+    def test_foldable_iphone_successor_roadmap_does_not_merge_with_first_gen_production(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone Ultra 2 Gets Green Light for Development, Says Leaker",
+                (
+                    "Apple's second-generation foldable iPhone has officially been given the go-ahead "
+                    "for development. The first foldable iPhone will use a foldable 7.8-inch OLED panel "
+                    "supplied by Samsung, based on reports. Digital Chat Station also said that the "
+                    "iPhone Air 3 has not entered the prototype stage yet."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone Ultra 2 already given go-ahead, iPhone Air 3 not, says leaker",
+                (
+                    "The iPhone Ultra2 second generation wide folding project has been confirmed, "
+                    "with a high probability of reusing this year's screen. The same post says Apple "
+                    "has not yet decided whether to proceed with an iPhone Air 3."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "曝苹果折叠屏 iPhone 七月底量产，铰链问题已大部分解决",
+                (
+                    "苹果首款折叠屏 iPhone 计划于 7 月底前后开始量产，并仍按原计划推进 9 月发布。"
+                    "首批产品将由富士康负责生产，铰链由新日兴和安费诺供应。"
+                ),
+                source="爱范儿",
+            ),
+        ]
+
+        self.assertNotIn(
+            "foldable-iphone-supply-chain",
+            module.primary_topic_facets(
+                "iPhone Ultra 2 Gets Green Light for Development, Says Leaker",
+                (
+                    "Apple's second-generation foldable iPhone has officially been given the go-ahead "
+                    "for development. The first foldable iPhone will use a foldable 7.8-inch OLED panel "
+                    "supplied by Samsung, based on reports."
+                ),
+            ),
+        )
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        successor_events = [event for event in events if "Ultra 2" in event.title or "Ultra2" in event.summary]
+        self.assertEqual(len(successor_events), 1)
+        self.assertEqual({article.source for article in successor_events[0].articles}, {"MacRumors", "9to5Mac"})
+        self.assertNotIn("七月底前后开始量产", successor_events[0].summary)
+
+    def test_product_data_leak_merges_cross_language_compact_chinese_title(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro logic board schematics, A20 Pro data sheets, C2 modem files stolen from Tata",
+                (
+                    "Hackers stole iPhone 18 Pro logic board schematics, A20 Pro data sheets, and C2 "
+                    "modem files from Apple supplier Tata and listed the files on the dark web."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "塔塔遭黑客攻击 iPhone 18 Pro主板图纸与A20 Pro芯片资料遭泄露",
+                "塔塔电子遭黑客攻击，iPhone 18 Pro 主板图纸、A20 Pro 芯片资料以及 C2 调制解调器文件遭泄露。",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.split_mixed_topic_events(module.cluster_articles(articles))
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "hardware_products")
+
+    def test_product_data_leak_summary_events_can_remerge_after_intermediate_split(self):
+        module = load_module()
+        left = module.cluster_articles(
+            [
+                article_for(
+                    module,
+                    "iPhone 18 Pro logic board schematics, A20 Pro data sheets, C2 modem files stolen from Tata",
+                    (
+                        "Hackers stole iPhone 18 Pro logic board schematics, A20 Pro data sheets, and C2 "
+                        "modem files from Apple supplier Tata and listed the files on the dark web."
+                    ),
+                    source="AppleInsider",
+                )
+            ]
+        )[0]
+        right = module.cluster_articles(
+            [
+                article_for(
+                    module,
+                    "塔塔遭黑客攻击 iPhone 18 Pro主板图纸与A20 Pro芯片资料遭泄露",
+                    (
+                        "塔塔电子遭黑客攻击，iPhone 18 Pro 主板图纸、A20 Pro 芯片资料以及 C2 调制解调器文件遭泄露。"
+                        "相关新闻还提到 M6 MacBook Pro、折叠 iPhone 和苹果设计团队调整。"
+                    ),
+                    source="cnBeta",
+                )
+            ]
+        )[0]
+
+        self.assertTrue(module.events_should_merge(left, right))
+
+    def test_product_data_leak_summary_merge_keys_use_specific_file_leak_anchors(self):
+        module = load_module()
+        event = module.cluster_articles(
+            [
+                article_for(
+                    module,
+                    "塔塔遭黑客攻击 iPhone 18 Pro主板图纸与A20 Pro芯片资料遭泄露",
+                    (
+                        "塔塔电子遭黑客攻击，iPhone 18 Pro 主板图纸、A20 Pro 芯片资料以及 "
+                        "C2 调制解调器文件遭泄露。相关新闻还提到 M6 MacBook Pro 和折叠 iPhone。"
+                    ),
+                    source="cnBeta",
+                )
+            ]
+        )[0]
+
+        self.assertIn(("apple-product-data-leak", ()), module.event_summary_merge_keys(event))
+
+    def test_product_data_leak_event_not_split_by_extra_related_hardware_facets(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro logic board schematics, A20 Pro data sheets, C2 modem files stolen from Tata",
+                (
+                    "Hackers stole iPhone 18 Pro logic board schematics, A20 Pro data sheets, and C2 "
+                    "modem files from Apple supplier Tata and listed the files on the dark web."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "塔塔遭黑客攻击 iPhone 18 Pro主板图纸与A20 Pro芯片资料遭泄露",
+                (
+                    "塔塔电子遭黑客攻击，iPhone 18 Pro 主板图纸、A20 Pro 芯片资料以及 C2 调制解调器文件遭泄露。"
+                    "页面尾部还列出 M6 MacBook Pro 和折叠 iPhone 等相关文章。"
+                ),
+                source="cnBeta",
+            ),
+        ]
+        event = module.cluster_articles(articles)[0]
+        event.merge_warnings = ["mixed primary topic facets"]
+
+        split_events = module.split_mixed_topic_event(event)
+
+        self.assertEqual(len(split_events), 1)
+
+    def test_price_event_key_facts_keep_response_from_summary_before_price_list(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                "Apple dramatically increased device prices across multiple product lines.",
+                source="MacRumors",
+                facts=[
+                    "HomePod mini: $129, up from $99 (+$30)",
+                    "Apple TV: $199, up from $129 (+$70)",
+                    "iPad mini: $599, up from $499 (+$100)",
+                    "iPad Air: $749, up from $599 (+$150)",
+                    "iPad Pro: $1,199, up from $999 (+$200)",
+                    "MacBook Neo: $699, up from $599 (+$100)",
+                    "MacBook Air: $1,299, up from $1,099 (+$200)",
+                    "MacBook Pro: $1,999, up from $1,699 (+$300)",
+                    "iMac: $1,499, up from $1,299 (+$200)",
+                    "Mac Studio M4 Max: $2,499, up from $1,999 (+$500)",
+                ],
+            ),
+            article_for(
+                module,
+                "Apple Explains Why It Raised Prices on 14 Products Today",
+                (
+                    "Apple said the consumer electronics industry is facing an unprecedented challenge "
+                    "because AI data centers have created extraordinary demand for memory and storage. "
+                    "Apple said it has shielded customers so far, but now needs to begin raising prices "
+                    "on iPad and Mac, knows this is not welcome news, and is working tirelessly to find solutions."
+                ),
+                source="MacRumors",
+                facts=[],
+            ),
+        ]
+
+        facts = module.collect_event_key_facts(articles)
+
+        combined = " ".join(facts[:4])
+        self.assertIn("not welcome news", combined)
+        self.assertIn("working tirelessly", combined)
+
+    def test_price_event_key_facts_keep_customer_response_when_many_cost_reasons_compete(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                (
+                    "Apple dramatically increased device prices across multiple product lines. "
+                    "Last week, Apple announced that price increases were inevitable, with CEO Tim Cook "
+                    "saying the move was unavoidable. The price increases "
+                    "are due to the ongoing memory chip shortage. Companies such as OpenAI and Meta have "
+                    "been purchasing large amounts of memory chips for AI servers. Apple said component "
+                    "costs have increased unusually quickly."
+                ),
+                source="MacRumors",
+                facts=[
+                    "HomePod mini: $129, up from $99 (+$30)",
+                    "Apple TV: $199, up from $129 (+$70)",
+                    "iPad mini: $599, up from $499 (+$100)",
+                    "MacBook Neo: $699, up from $599 (+$100)",
+                ],
+            ),
+            article_for(
+                module,
+                "Apple Explains Why It Raised Prices on 14 Products Today",
+                (
+                    "Last week, Apple announced that it was preparing to raise prices across its product lineup, "
+                    "with CEO Tim Cook confirming that the move was inevitable. The price increases are due to "
+                    "the ongoing memory chip shortage, which has led to skyrocketing prices for RAM and SSD storage. "
+                    "Companies such as OpenAI and Meta have been purchasing large amounts of memory chips for AI servers. "
+                    "\"We have never seen a component price increase this much, this quickly,\" said Apple. "
+                    "Apple said it knows this is not welcome news and is working tirelessly to find solutions."
+                ),
+                source="MacRumors",
+                facts=[],
+            ),
+        ]
+
+        facts = module.collect_event_key_facts(articles)
+
+        combined = " ".join(facts[:6])
+        self.assertIn("not welcome news", combined)
+        self.assertIn("working tirelessly", combined)
+
+    def test_price_event_key_facts_keep_distinct_substory_details(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                "Apple dramatically increased device prices across multiple product lines.",
+                source="MacRumors",
+                facts=[
+                    "HomePod mini: $129, up from $99 (+$30)",
+                    "Apple TV: $199, up from $129 (+$70)",
+                    "iPad mini: $599, up from $499 (+$100)",
+                    "iPad Air: $749, up from $599 (+$150)",
+                    "iPad Pro: $1,199, up from $999 (+$200)",
+                    "MacBook Neo: $699, up from $599 (+$100)",
+                    "MacBook Air: $1,299, up from $1,099 (+$200)",
+                    "MacBook Pro: $1,999, up from $1,699 (+$300)",
+                    "iMac: $1,499, up from $1,299 (+$200)",
+                    "Mac Studio M4 Max: $2,499, up from $1,999 (+$500)",
+                ],
+            ),
+            article_for(
+                module,
+                "Apple Explains Why It Raised Prices on 14 Products Today",
+                (
+                    "Apple said the consumer electronics industry is facing an unprecedented challenge "
+                    "because AI data centers have created extraordinary demand for memory and storage. "
+                    "Apple said it has shielded customers so far, but now needs to begin raising prices "
+                    "on iPad and Mac, knows this is not welcome news, and is working tirelessly to find solutions."
+                ),
+                source="MacRumors",
+                facts=[],
+            ),
+            article_for(
+                module,
+                "苹果提高 Mac、iPad、Vision Pro、HomePod 等产品价格，以应对内存短缺",
+                "苹果公司宣布上调 Mac、iPad、Vision Pro、HomePod 等产品价格。",
+                source="IT之家",
+                facts=[
+                    "MacBook Neo 的起售价从 4599 元上调至 5499 元，涨价 900 元",
+                    "MacBook Air 的起售价从 8499 元上调至 9999 元，涨价 1500 元",
+                    "MacBook Pro 的起售价从 13499 元上调至 15999 元，涨价 2500 元",
+                    "Mac Studio 的起售价从 16499 元上调至 19999 元，涨价 3500 元",
+                    "Vision Pro 的起售价从 29999 元上调至 31999 元，涨价 2000 元",
+                    "HomePod mini 的起售价从 749 元上调至 999 元，涨价 250 元",
+                ],
+            ),
+            article_for(
+                module,
+                "苹果 iPad 等硬件涨价落地：股价单日下跌 6.15%，分析师整体仍偏乐观",
+                "苹果宣布上调 Mac、iPad、Vision Pro、HomePod 硬件产品价格后，股价在周四收盘下跌约 6.15%。",
+                source="IT之家",
+                facts=[
+                    "苹果宣布上调 Mac、iPad、Vision Pro、HomePod 硬件产品价格后，股价在周四收盘下跌约 6.15%。",
+                    "Evercore ISI 分析师 Amit Daryanani 重申“跑赢大盘”评级，并维持 365 美元目标价。",
+                    "Wedbush 分析师 Dan Ives 同样维持“跑赢大盘”评级，目标价保持 400 美元不变。",
+                ],
+            ),
+            article_for(
+                module,
+                "Apple hints at more price increases coming later",
+                "Apple said it has reached a point where it needs to begin raising prices on a number of products.",
+                source="9to5Mac",
+                facts=[
+                    "Apple's wording suggests the Mac and iPad changes may be the start of a broader set of price increases.",
+                    "iPhone, Apple Watch, and AirPods were not included in this round of price increases.",
+                ],
+            ),
+        ]
+
+        facts = module.collect_event_key_facts(articles)
+        combined = " ".join(facts)
+
+        self.assertGreater(len(facts), module.MAX_KEY_FACTS)
+        self.assertIn("not welcome news", combined)
+        self.assertIn("HomePod mini: $129", combined)
+        self.assertIn("MacBook Pro 的起售价从 13499 元上调至 15999 元", combined)
+        self.assertIn("股价在周四收盘下跌约 6.15%", combined)
+        self.assertIn("365 美元目标价", combined)
+        self.assertIn("broader set of price increases", combined)
+        self.assertIn("iPhone, Apple Watch, and AirPods were not included", combined)
+
+    def test_price_event_brief_queue_marks_official_response_as_must_include(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Increased Prices on MacBooks, iPads, and More",
+                "Apple dramatically increased device prices across multiple product lines.",
+                source="MacRumors",
+                facts=[
+                    "HomePod mini: $129, up from $99 (+$30)",
+                    "Apple TV: $199, up from $129 (+$70)",
+                    "iPad mini: $599, up from $499 (+$100)",
+                    "MacBook Neo: $699, up from $599 (+$100)",
+                ],
+            ),
+            article_for(
+                module,
+                "Apple Explains Why It Raised Prices on 14 Products Today",
+                (
+                    "Apple said the consumer electronics industry is facing an unprecedented challenge "
+                    "because AI data centers have created extraordinary demand for memory and storage. "
+                    "Apple said it has shielded customers so far, but now needs to begin raising prices "
+                    "on iPad and Mac, knows this is not welcome news, and is working tirelessly to find solutions."
+                ),
+                source="MacRumors",
+                facts=[],
+            ),
+        ]
+        event = module.cluster_articles(articles)[0]
+        event_dict = module.event_to_dict(event, timezone.utc)
+
+        self.assertEqual(len(event_dict["must_include_facts"]), 1)
+        self.assertLess(len(event_dict["must_include_facts"][0]), 450)
+        combined = " ".join(event_dict["must_include_facts"])
+        self.assertIn("AI data centers", combined)
+        self.assertIn("memory and storage", combined)
+        self.assertIn("shielded customers", combined)
+        self.assertIn("iPad and Mac", combined)
+        self.assertIn("not welcome news", combined)
+        self.assertIn("working tirelessly", combined)
+
+        queue_item = module.build_final_brief_queue([event_dict])[0]
+        queue_combined = " ".join(queue_item["must_include_facts"])
+        self.assertIn("not welcome news", queue_combined)
+        self.assertIn("working tirelessly", queue_combined)
+
+    def test_price_article_extracts_statement_blockquote_as_key_fact(self):
+        module = load_module()
+        html = """
+        <article>
+          <h1>Apple Explains Why It Raised Prices on 14 Products Today</h1>
+          <p>Apple today raised prices on many of its products, including all Macs and iPads.</p>
+          <p>Apple's full statement:</p>
+          <blockquote><p>The consumer electronics industry is facing an unprecedented challenge.
+          The rapid expansion of AI data centers has created an extraordinary surge in demand for
+          memory and storage. We have never seen a component price increase this much, this quickly.
+          We have shielded our customers from these increases so far, but we have now reached a
+          point where we need to begin raising prices on a number of products, including today's
+          increases for iPad and Mac. We know this is not welcome news, and we are working
+          tirelessly to find solutions.</p></blockquote>
+        </article>
+        """
+
+        facts = module.extract_key_facts(html, "Apple Explains Why It Raised Prices on 14 Products Today", "MacRumors")
+
+        combined = " ".join(facts)
+        self.assertIn("not welcome news", combined)
+        self.assertIn("working tirelessly", combined)
+
+    def test_structured_price_list_keeps_later_product_rows(self):
+        module = load_module()
+        html = """
+        <article>
+          <h1>苹果提高 Mac、iPad、Vision Pro、HomePod 等产品价格</h1>
+          <p>苹果公司宣布上调 Mac、iPad 等产品价格，以应对内存芯片及存储器成本压力。</p>
+          <p>苹果在声明中表示，人工智能数据中心导致内存和存储需求激增，公司不得不提高部分产品价格。</p>
+          <ul>
+            <li>MacBook Neo 的起售价从 4599 元上调至 5499 元，涨价 900 元</li>
+            <li>MacBook Air 的起售价从 8499 元上调至 9999 元，涨价 1500 元</li>
+            <li>MacBook Pro 的起售价从 13499 元上调至 15999 元，涨价 2500 元</li>
+            <li>iMac 的起售价从 10999 元上调至 12499 元，涨价 1500 元</li>
+            <li>Mac mini 的起售价从 4499 元上调至 5999 元，涨价 1500 元</li>
+            <li>Mac Studio 的起售价从 16499 元上调至 19999 元，涨价 3500 元</li>
+            <li>iPad Pro 的起售价从 8999 元上调至 10799 元，涨价 1800 元</li>
+            <li>iPad Air 的起售价从 4799 元上调至 5999 元，涨价 1200 元</li>
+            <li>iPad mini 的起售价从 3999 元上调至 4799 元，涨价 800 元</li>
+            <li>iPad（A16）的起售价从 2999 元上调至 3799 元，涨价 800 元</li>
+            <li>Vision Pro 的起售价从 29999 元上调至 31999 元，涨价 2000 元</li>
+            <li>HomePod 的起售价从 2299 元上调至 2699 元，涨价 400 元</li>
+            <li>HomePod mini 的起售价从 749 元上调至 999 元，涨价 250 元</li>
+            <li>Apple TV 的起售价从 129 美元上调至 199 美元，涨价 70 美元</li>
+          </ul>
+        </article>
+        """
+
+        facts = module.extract_key_facts(html, "苹果提高 Mac、iPad、Vision Pro、HomePod 等产品价格", "IT之家")
+        combined = " ".join(facts)
+
+        self.assertIn("MacBook Pro 的起售价从 13499 元上调至 15999 元", combined)
+        self.assertIn("Vision Pro 的起售价从 29999 元上调至 31999 元", combined)
+        self.assertIn("Apple TV 的起售价从 129 美元上调至 199 美元", combined)
+
+    def test_third_party_platform_update_directly_improving_airpods_beats_is_ecosystem_relevant(self):
+        module = load_module()
+        title = "微软修复Windows 11蓝牙故障：AirPods和Beats连接更稳定"
+        summary = (
+            "微软近日对Windows 11的蓝牙功能进行系统级优化，修复长期存在的蓝牙兼容性与稳定性问题，"
+            "其中AirPods和Beats系列耳机的连接体验得到显著提升，包括减少断连、配对失败、音频不同步和麦克风失效。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "ecosystem_interop")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "ecosystem", reason)
+
+    def test_apple_online_store_status_is_retail_not_software(self):
+        module = load_module()
+        title = "Apple's Online Store Is Down"
+        summary = (
+            "Apple's online store has gone down with a We'll be right back message. "
+            "The change could be due to the Back to School program, price increases, or new product pages."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "retail_store")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_single_article_multi_region_context_does_not_create_merge_warning(self):
+        module = load_module()
+        article = article_for(
+            module,
+            "Apple's Online Store Is Down",
+            (
+                "Apple's online store is down while the annual Back to School promotion for the "
+                "United States and Canada is expected to launch soon."
+            ),
+            source="MacRumors",
+        )
+        article.event_kind = "retail_store"
+        article.regions = {"united-states", "canada"}
+
+        warnings = module.event_merge_warnings([article])
+
+        self.assertNotIn("multiple region-specific markers", warnings)
 
 
 if __name__ == "__main__":
