@@ -12,13 +12,12 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.12.0 - 2026-06-27
+### 1.12.1 - 2026-06-27
 
-- Improved candidate relevance for Apple relief donations and Apple Books/App Store platform-trust stories, including AI-generated knockoffs, fraud, copyright, and review/enforcement issues that mention other stores only as background.
-- Refined hardware roadmap clustering by product family so MacBook/M-series reports, iPhone/A-series RAM reports, future iPhone price forecasts, smart-ring rumors, and broad Apple silicon timelines stay separate unless they describe the same Apple product action.
-- Split official refurbished-store or retail availability from Apple product price/cost-pressure clusters while preserving current price increases, Micron or supplier context, Apple responses, and memory/storage shortage facts in the correct pricing event.
-- Added company-organization handling for Apple executive departures and OpenAI poaching reports without letting CEO, Gurman/Bloomberg, product-design, or industrial-design background reclassify hardware roadmap stories.
-- Added regression coverage for donation discovery, Apple Books platform trust, 9to5Mac promo-tail cleanup, smart-ring roadmap relevance, multi-vendor chip background deferral, product-family merge boundaries, and retail-vs-price event splitting.
+- Added stronger final-brief coverage metadata to `final_brief_queue`, `required_final_brief_titles`, `final_brief_coverage`, status JSON, and the adjacent `*.brief.md` scaffold so every eligible JSON event remains a hard brief boundary.
+- Improved omission guidance so automation agents do not drop eligible `events` items merely because they are single-source, speculative, rumor-framed, lower-profile, competitor-adjacent, or less prominent than same-day major news.
+- Updated skill and fallback policy wording to preserve single-source Apple hardware roadmap or product-development rumors when the crawler has already classified them as included events.
+- Added regression coverage for single-source speculative hardware events such as the MacRumors Apple iRing report to ensure they stay visible in required brief checklists.
 
 ## What It Does
 

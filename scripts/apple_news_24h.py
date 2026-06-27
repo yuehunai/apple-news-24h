@@ -55,6 +55,17 @@ FETCH_TIMEOUT = 8.0
 FETCH_RETRIES = 1
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "apple-news-24h"
 CACHE_MARKER_FILENAME = ".apple-news-24h-cache"
+FINAL_BRIEF_ITEM_COVERAGE_RULE = (
+    "Every eligible JSON event is a required final-brief boundary unless source review proves "
+    "duplicate coverage of the same subject and action or a clear exclusion rule."
+)
+FINAL_BRIEF_OMISSION_NOT_ALLOWED_FOR = [
+    "single_source",
+    "speculative_or_rumor",
+    "lower_prominence",
+    "competitor_or_third_party_context",
+    "same_day_major_news",
+]
 
 TIMEZONE_ABBREVIATIONS = {
     "UTC": timezone.utc,
@@ -10823,6 +10834,8 @@ def build_final_brief_queue(events: list[dict[str, Any]]) -> list[dict[str, Any]
             "index": index,
             "id": event.get("id"),
             "required": True,
+            "coverage_rule": FINAL_BRIEF_ITEM_COVERAGE_RULE,
+            "omission_not_allowed_for": FINAL_BRIEF_OMISSION_NOT_ALLOWED_FOR,
             "category": event.get("category"),
             "event_kind": event.get("event_kind"),
             "relevance_tier": event.get("relevance_tier"),
@@ -10846,6 +10859,8 @@ def required_final_brief_titles(queue: list[dict[str, Any]]) -> list[dict[str, A
             "event_id": item.get("id"),
             "required": item.get("required"),
             "separate_bullet_by_default": True,
+            "coverage_rule": item.get("coverage_rule"),
+            "omission_not_allowed_for": item.get("omission_not_allowed_for", []),
             "category": item.get("category"),
             "title": item.get("title"),
             "sources": item.get("source_names", []),
@@ -10867,6 +10882,7 @@ def render_brief_scaffold(data: dict[str, Any]) -> str:
         "# Apple 24H Brief Coverage Checklist",
         "",
         "Use every item below as a required final-brief boundary unless source review proves duplicate coverage of the same subject and action.",
+        "Do not omit an item merely because it is single-source, speculative, lower-profile, competitor-adjacent, or less prominent than same-day major news.",
         "",
     ]
     for category, title in category_titles:
@@ -11167,7 +11183,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "final_brief_coverage": {
             "source": "events",
             "required_event_count": len(event_dicts),
-            "rule": "Every required item in final_brief_queue must be represented by one final brief bullet or explicitly merged as duplicate coverage from the current JSON run.",
+            "rule": FINAL_BRIEF_ITEM_COVERAGE_RULE,
+            "omission_not_allowed_for": FINAL_BRIEF_OMISSION_NOT_ALLOWED_FOR,
         },
         "final_brief_queue": final_brief_queue,
         "required_final_brief_titles": required_titles,
@@ -11256,7 +11273,7 @@ def main(argv: list[str] | None = None) -> int:
             "required_final_brief_titles": data.get("required_final_brief_titles", []),
             "format": args.format,
             "output": str(output_path),
-            "coverage_source": "Use required_final_brief_titles plus brief_output as the coverage checklist, then enrich from output events/key_facts.",
+            "coverage_source": "Use required_final_brief_titles plus brief_output as the coverage checklist, then enrich from output events/key_facts; do not omit required items merely because they are single-source, speculative, lower-profile, or competitor-adjacent.",
         }
         if brief_output_path is not None:
             status["brief_output"] = str(brief_output_path)

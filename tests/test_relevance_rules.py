@@ -2511,6 +2511,8 @@ class RelevanceRuleTests(unittest.TestCase):
                     "event_id": "event-one",
                     "required": True,
                     "separate_bullet_by_default": True,
+                    "coverage_rule": module.FINAL_BRIEF_ITEM_COVERAGE_RULE,
+                    "omission_not_allowed_for": module.FINAL_BRIEF_OMISSION_NOT_ALLOWED_FOR,
                     "category": "software_systems",
                     "title": "Apple Wallet Digital ID may be used for verification",
                     "sources": ["9to5Mac"],
@@ -2524,6 +2526,8 @@ class RelevanceRuleTests(unittest.TestCase):
                 "event_id": item.get("id"),
                 "required": item.get("required"),
                 "separate_bullet_by_default": True,
+                "coverage_rule": item.get("coverage_rule"),
+                "omission_not_allowed_for": item.get("omission_not_allowed_for"),
                 "category": item.get("category"),
                 "title": item.get("title"),
                 "sources": item.get("source_names", []),
@@ -2539,12 +2543,45 @@ class RelevanceRuleTests(unittest.TestCase):
                     "event_id": "event-one",
                     "required": True,
                     "separate_bullet_by_default": True,
+                    "coverage_rule": module.FINAL_BRIEF_ITEM_COVERAGE_RULE,
+                    "omission_not_allowed_for": module.FINAL_BRIEF_OMISSION_NOT_ALLOWED_FOR,
                     "category": "software_systems",
                     "title": "Apple Wallet Digital ID may be used for verification",
                     "sources": ["9to5Mac"],
                 }
             ],
         )
+
+    def test_required_titles_warn_against_omitting_single_source_speculative_events(self):
+        module = load_module()
+        event_dicts = [
+            {
+                "id": "iring-event",
+                "category": "hardware_products",
+                "event_kind": "hardware_market",
+                "relevance_tier": "strong",
+                "relevance_reason": "Apple hardware roadmap or product-development event",
+                "title": "Apple 'iRing' Rumor Re-Emerges Amid Oura Ring Popularity",
+                "sources": [
+                    {
+                        "name": "MacRumors",
+                        "url": "https://www.macrumors.com/2026/06/26/apple-iring-rumor-returns-oura-ring-rival/",
+                    }
+                ],
+            }
+        ]
+
+        queue = module.build_final_brief_queue(event_dicts)
+        required = module.required_final_brief_titles(queue)
+        scaffold = module.render_brief_scaffold({"events": event_dicts})
+
+        self.assertEqual(required[0]["coverage_rule"], module.FINAL_BRIEF_ITEM_COVERAGE_RULE)
+        self.assertIn("single_source", required[0]["omission_not_allowed_for"])
+        self.assertIn("speculative_or_rumor", required[0]["omission_not_allowed_for"])
+        self.assertIn("competitor_or_third_party_context", required[0]["omission_not_allowed_for"])
+        self.assertIn("single-source", scaffold)
+        self.assertIn("speculative", scaffold)
+        self.assertIn("Apple 'iRing'", scaffold)
 
     def test_broad_multi_vendor_market_report_without_apple_metrics_is_weak(self):
         module = load_module()

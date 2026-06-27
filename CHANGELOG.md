@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented here.
 
+## 1.12.1 - 2026-06-27
+
+- Added stronger final-brief coverage metadata to `final_brief_queue`, `required_final_brief_titles`, `final_brief_coverage`, status JSON, and the adjacent `*.brief.md` scaffold so every eligible JSON event remains a hard brief boundary.
+- Improved omission guidance so automation agents do not drop eligible `events` items merely because they are single-source, speculative, rumor-framed, lower-profile, competitor-adjacent, or less prominent than same-day major news.
+- Updated skill and fallback policy wording to preserve single-source Apple hardware roadmap or product-development rumors when the crawler has already classified them as included events.
+- Added regression coverage for single-source speculative hardware events such as the MacRumors Apple iRing report to ensure they stay visible in required brief checklists.
+
 ## 1.12.0 - 2026-06-27
 
 - Improved candidate relevance for Apple relief donations and Apple Books/App Store platform-trust stories, including AI-generated knockoffs, fraud, copyright, and review/enforcement issues that mention other stores only as background.
