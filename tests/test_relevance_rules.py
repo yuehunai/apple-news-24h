@@ -2304,7 +2304,7 @@ class RelevanceRuleTests(unittest.TestCase):
 
         tier, reason = module.classify_relevance_tier(title, summary, facts, "IT之家")
 
-        self.assertEqual(module.detect_event_kind(title, summary, facts), "general_company")
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "company_org")
         self.assertEqual(tier, "strong", reason)
 
     def test_apple_design_org_change_does_not_merge_with_product_price_increase(self):
@@ -5453,6 +5453,213 @@ class RelevanceRuleTests(unittest.TestCase):
         warnings = module.event_merge_warnings([article])
 
         self.assertNotIn("multiple region-specific markers", warnings)
+
+    def test_apple_relief_donation_candidate_is_relevant(self):
+        module = load_module()
+        source = next(item for item in module.build_sources(datetime.now(timezone.utc)) if item.name == "MacRumors")
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/06/26/apple-donating-to-venezuela-earthquake-relief/",
+            title="Apple Donating to Relief Efforts in Venezuela Following Devastating Earthquakes",
+            summary=(
+                "In a social media post today, Apple CEO Tim Cook said Apple will be donating to "
+                "relief efforts on the ground in Venezuela after the country was hit by two catastrophic earthquakes."
+            ),
+            feed_time_raw="Fri, 26 Jun 2026 07:10:00 PDT",
+            context="apple rumors mac ios iphone ipad",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
+    def test_apple_books_platform_trust_story_is_not_blocked_by_amazon_background(self):
+        module = load_module()
+        title = "AI-generated knockoffs of Joanna Stern's book keep appearing on Apple Books - 9to5Mac"
+        summary = (
+            "Joanna Stern called out Apple over AI-generated knockoffs of her book that continue "
+            "to appear on Apple Books. A background paragraph says Kara Swisher previously raised "
+            "a similar Amazon issue, but the current story is about Apple Books platform enforcement."
+        )
+        source = next(item for item in module.build_sources(datetime.now(timezone.utc)) if item.name == "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/26/ai-generated-knockoffs-of-joanna-sterns-book-keep-appearing-on-apple-books/",
+            title=title,
+            summary=summary,
+        )
+
+        self.assertFalse(module.should_hard_exclude_candidate(f"{title} {summary}"))
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(title, summary), "app_store_trust")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_hardware_roadmap_is_not_third_party_accessory_compatibility(self):
+        module = load_module()
+        title = "MacBook Ultra and new MacBook Pro both launching this fall, per rumors - 9to5Mac"
+        summary = (
+            "Apple's high-end MacBook plans are coming into focus after recent Bloomberg reports, "
+            "including MacBook Ultra and a new M6 MacBook Pro expected to launch this fall. "
+            "The touchscreen MacBook with OLED display will use M5 Pro and M5 Max chips."
+        )
+
+        self.assertFalse(module.is_third_party_accessory_platform_compatibility_story(title, summary))
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_smart_ring_rumor_is_hardware_roadmap_not_weak_health_context(self):
+        module = load_module()
+        title = "Apple 'iRing' Rumor Re-Emerges Amid Oura Ring Popularity"
+        summary = (
+            "Apple is developing a smart ring that could potentially rival products like the Oura Ring "
+            "and Samsung Galaxy Ring, according to a leaker. The wearable could track biometrics and "
+            "expand Apple's hardware lineup beyond Apple Watch."
+        )
+
+        self.assertTrue(module.is_direct_apple_hardware_roadmap_story(summary, title))
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_9to5_prime_day_apple_gear_block_is_removed_before_fact_extraction(self):
+        module = load_module()
+        html = """
+        <div class="post-content">
+          <p>Apple's upcoming touchscreen MacBook lineup will be powered by existing M5 Pro and M5 Max chips.</p>
+          <p>These new MacBooks will also have OLED screens and come in 14-inch and 16-inch sizes.</p>
+          <h2>Prime Day savings on Apple gear</h2>
+          <ul>
+            <li>13-inch MacBook Air: $996 on Amazon (now $1,299 from Apple)</li>
+            <li>M5 MacBook Pro: $1,549 on Amazon (now $1,999 from Apple)</li>
+          </ul>
+        </div>
+        """
+
+        scoped = module.article_scope(html)
+        facts = module.extract_key_facts(scoped, "Apple's touchscreen MacBook to use M5 Pro and M5 Max chips", "9to5Mac")
+        combined = " ".join(facts)
+
+        self.assertIn("M5 Pro and M5 Max", combined)
+        self.assertNotIn("Amazon", combined)
+        self.assertNotIn("$1,299", combined)
+
+    def test_mixed_hardware_cluster_splits_price_macbook_and_company_org_events(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro and Pro Max May See $200 Price Increase",
+                "Apple's iPhone 18 Pro and Pro Max may increase by $200 because memory and storage costs are rising.",
+                source="MacRumors",
+                facts=["iPhone 18 Pro could rise from $1,099 to $1,299, while Pro Max could rise from $1,199 to $1,399."],
+            ),
+            article_for(
+                module,
+                "Apple's touchscreen MacBook to use M5 Pro and M5 Max chips, not M6",
+                "Apple's upcoming touchscreen MacBook will use M5 Pro and M5 Max chips, add OLED, and arrive in 14-inch and 16-inch sizes.",
+                source="9to5Mac",
+                facts=["The model may be branded MacBook Ultra and be positioned at the top of Apple's lineup."],
+            ),
+            article_for(
+                module,
+                "Apple Loses Another Top Executive to OpenAI",
+                "Paul Meade, who oversees Vision Pro and upcoming smart glasses work, is leaving Apple for OpenAI's hardware unit.",
+                source="MacRumors",
+                facts=["Meade has been at Apple since 2010 and in the Vision Products Group since 2017."],
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles = [event.title for event in events]
+        joined = " || ".join(titles)
+
+        self.assertEqual(len(events), 3, joined)
+        self.assertTrue(any("Price Increase" in title for title in titles), joined)
+        self.assertTrue(any("touchscreen MacBook" in title for title in titles), joined)
+        self.assertTrue(any("OpenAI" in title for title in titles), joined)
+
+    def test_iphone_ram_report_does_not_merge_with_touchscreen_macbook_roadmap(self):
+        module = load_module()
+        macbook_article = article_for(
+            module,
+            "Apple's touchscreen MacBook to use M5 Pro and M5 Max chips, not M6",
+            "Apple's upcoming touchscreen MacBook will use M5 Pro and M5 Max chips, add OLED and Dynamic Island, and arrive in 14-inch and 16-inch sizes.",
+            source="9to5Mac",
+            facts=["Bloomberg also reports that Apple is in advanced testing of follow-up MacBook models powered by M7 Pro and M7 Max chips."],
+        )
+        iphone_article = article_for(
+            module,
+            "New iPhone 18 specs report raises big question of iOS 27 limitations",
+            "Ming-Chi Kuo says Apple's lower-end iPhone 18 will use the A20 chip with 9GB of RAM, raising questions about Apple Intelligence features in iOS 27.",
+            source="9to5Mac",
+            facts=["The base iPhone 18 was previously rumored to get 12GB of RAM, but the new report says 9GB is planned instead."],
+        )
+
+        events = module.cluster_articles([macbook_article, iphone_article])
+
+        self.assertEqual(len(events), 2)
+
+    def test_multi_vendor_chip_background_story_is_deferred_weak(self):
+        module = load_module()
+        title = "联发科最强芯！天玑9600 Pro首发主机级超分插帧"
+        summary = (
+            "今年9月，高通、苹果和联发科将陆续推出各自的旗舰芯片，分别为骁龙8E6系列、"
+            "A20系列以及天玑9600系列。文章主体介绍联发科天玑9600 Pro 的 NGP 神经加速器。"
+        )
+
+        self.assertTrue(module.is_multi_vendor_chip_or_phone_roadmap_background_story(title, summary))
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_refurbished_store_availability_does_not_merge_with_memory_price_crisis(self):
+        module = load_module()
+        refurbished_article = article_for(
+            module,
+            "Refurbished MacBook Neo Models Now Available, a Day After Price Hike",
+            "Apple today began selling refurbished MacBook Neo units through its Certified Refurbished store. The base model starts at $599 after Apple raised prices on new MacBook models.",
+            source="MacRumors",
+            facts=["The refurbished MacBook Neo is available in all four colors in Apple's Certified Refurbished store."],
+        )
+        crisis_article = article_for(
+            module,
+            "Micron Suggests Apple Helped Cause Memory Price Crisis",
+            "Micron said tough supplier negotiations contributed to the memory shortage, while Apple raised Mac and iPad prices because DRAM and NAND costs increased.",
+            source="MacRumors",
+            facts=["Apple's response says AI data centers drove memory and storage demand and unusually fast component-cost increases."],
+        )
+
+        self.assertEqual(refurbished_article.event_kind, "retail_store")
+        events = module.cluster_articles([refurbished_article, crisis_article])
+
+        self.assertEqual(len(events), 2)
+
+    def test_mixed_retail_and_price_event_is_split_before_output(self):
+        module = load_module()
+        refurbished_article = article_for(
+            module,
+            "Refurbished MacBook Neo Models Now Available, a Day After Price Hike",
+            "Apple today began selling refurbished MacBook Neo units through its Certified Refurbished store. The base model starts at $599 after Apple raised prices on new MacBook models.",
+            source="MacRumors",
+            facts=["The refurbished MacBook Neo is available in all four colors in Apple's Certified Refurbished store."],
+        )
+        crisis_article = article_for(
+            module,
+            "Micron Suggests Apple Helped Cause Memory Price Crisis",
+            "Micron said tough supplier negotiations contributed to the memory shortage, while Apple raised Mac and iPad prices because DRAM and NAND costs increased.",
+            source="MacRumors",
+            facts=["Apple's response says AI data centers drove memory and storage demand and unusually fast component-cost increases."],
+        )
+        mixed_event = module.event_from_article_group(
+            module.cluster_articles([refurbished_article])[0],
+            [refurbished_article, crisis_article],
+        )
+
+        split_events = module.split_mixed_topic_event(mixed_event)
+
+        self.assertEqual(len(split_events), 2)
+        self.assertTrue(any(event.event_kind == "retail_store" for event in split_events))
+        self.assertTrue(any(event.event_kind == "hardware_market" for event in split_events))
 
 
 if __name__ == "__main__":

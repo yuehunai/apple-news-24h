@@ -12,14 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.11.0 - 2026-06-26
+### 1.12.0 - 2026-06-27
 
-- Improved Apple product price-increase handling with dynamic `key_facts` limits, structured price-change buckets, market and analyst reaction facts, follow-up scope facts, and compact official responses so large pricing clusters retain material numeric details.
-- Improved structured list extraction so long product tables from Chinese and English sources keep later rows such as Vision Pro, HomePod, Apple TV, regional price changes, and related product-scope details instead of being truncated.
-- Improved relevance and clustering for Apple online-store status, official refurbished product availability, third-party platform updates that directly improve Apple-device interoperability, and Apple hardware price or promotion follow-ups while keeping routine retail deals weak.
-- Tightened price-event fact filtering so unrelated high-number paragraphs such as Siri/prompt, podcast, buying-guide, or deal text do not enter pricing summaries.
-- Updated fallback policy and skill guidance for high-volume pricing, official store or refurbished stories, third-party platform interoperability, structured fact preservation, and manual recovery of direct Apple events.
-- Added regression coverage for price-event key facts, structured price lists, store and refurbished handling, interoperability updates, price/promotion separation, weak deal filtering, and large-cluster fact retention.
+- Improved candidate relevance for Apple relief donations and Apple Books/App Store platform-trust stories, including AI-generated knockoffs, fraud, copyright, and review/enforcement issues that mention other stores only as background.
+- Refined hardware roadmap clustering by product family so MacBook/M-series reports, iPhone/A-series RAM reports, future iPhone price forecasts, smart-ring rumors, and broad Apple silicon timelines stay separate unless they describe the same Apple product action.
+- Split official refurbished-store or retail availability from Apple product price/cost-pressure clusters while preserving current price increases, Micron or supplier context, Apple responses, and memory/storage shortage facts in the correct pricing event.
+- Added company-organization handling for Apple executive departures and OpenAI poaching reports without letting CEO, Gurman/Bloomberg, product-design, or industrial-design background reclassify hardware roadmap stories.
+- Added regression coverage for donation discovery, Apple Books platform trust, 9to5Mac promo-tail cleanup, smart-ring roadmap relevance, multi-vendor chip background deferral, product-family merge boundaries, and retail-vs-price event splitting.
 
 ## What It Does
 
