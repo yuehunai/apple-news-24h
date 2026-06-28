@@ -1906,6 +1906,59 @@ def has_swift_programming_context(text: str) -> bool:
     )
 
 
+def has_safari_browser_context(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["safari ev", "safari suv", "tata safari", "塔塔 safari"]) > 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "apple safari",
+            "safari browser",
+            "safari extension",
+            "safari extensions",
+            "mobile safari",
+            "safari technology preview",
+            "ios safari",
+            "macos safari",
+            "browser",
+            "web browser",
+            "浏览器",
+            "苹果 safari",
+            "safari 浏览器",
+        ],
+    ) > 0
+
+
+def has_tim_cook_context(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["佩尼库克"]) > 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "tim cook",
+            "timothy cook",
+            "apple ceo",
+            "apple's ceo",
+            "ceo tim",
+            "蒂姆·库克",
+            "蒂姆・库克",
+            "苹果 ceo",
+            "苹果CEO",
+            "苹果首席执行官",
+            "库克表示",
+            "库克称",
+            "库克说",
+            "库克宣布",
+            "库克回应",
+        ],
+    ) > 0 or (
+        score_terms(lower, ["库克"]) > 0
+        and score_terms(lower, ["苹果", "ceo", "首席执行官", "公司高管"]) > 0
+    )
+
+
 def effective_apple_term_score(text: str) -> int:
     lower = text.lower()
     score = 0
@@ -1914,6 +1967,10 @@ def effective_apple_term_score(text: str) -> int:
         if normalized in BARE_APPLE_CHIP_TERMS and not has_apple_chip_context(lower):
             continue
         if normalized == "swift" and not has_swift_programming_context(lower):
+            continue
+        if normalized == "safari" and not has_safari_browser_context(lower):
+            continue
+        if normalized == "库克" and not has_tim_cook_context(lower):
             continue
         if term_present(lower, normalized):
             score += 1
@@ -4195,7 +4252,8 @@ def remove_noise_blocks(text: str) -> str:
     )
     noisy_attr = (
         r"(?:related|recirc|recommend|featured|newsletter|subscribe|comment|"
-        r"advertis|ad-container|affiliate|post-nav|sharedaddy|social|share)"
+        r"advertis|ad-container|affiliate|post-nav|sharedaddy|social|share|"
+        r"navs_newsinfo|xg_newsinfo)"
     )
     pattern = (
         r"(?is)<(?P<tag>aside|section|div|nav)\b(?=[^>]*(?:class|id)=['\"][^'\"]*"
@@ -4329,7 +4387,8 @@ class ArticleTextExtractor(HTMLParser):
         if self._depth > 0:
             return
         text = re.sub(r"\s+", " ", "".join(self._parts)).strip()
-        if len(text) >= 30:
+        min_len = 20 if self._capture_kind in {"li", "tr"} else 30
+        if len(text) >= min_len:
             self.units.append((self._capture_kind, html.unescape(text)))
         self._capture_tag = None
         self._capture_kind = ""
@@ -4350,7 +4409,8 @@ def extract_text_units(text: str) -> list[tuple[str, str]]:
     fallback_units: list[tuple[str, str]] = []
     for match in re.finditer(r"(?is)<(?P<tag>p|li|h2|h3|tr)\b[^>]*>(?P<body>.*?)</(?P=tag)>", scoped_text):
         cleaned = strip_tags(match.group("body"))
-        if len(cleaned) >= 30:
+        min_len = 20 if match.group("tag").lower() in {"li", "tr"} else 30
+        if len(cleaned) >= min_len:
             fallback_units.append((match.group("tag").lower(), cleaned))
     return fallback_units
 
@@ -4476,12 +4536,20 @@ def split_fact_candidates(tag: str, value: str) -> list[str]:
 
 
 def is_key_fact(tag: str, value: str) -> bool:
-    if len(value) < 35 or fact_noise(value):
-        return False
     numbers = data_value_count(value)
+    is_short_list_fact = (
+        tag in {"li", "tr"}
+        and len(value) >= 20
+        and numbers > 0
+        and (effective_apple_term_score(value) > 0 or loose_apple_product_marker(value))
+    )
+    if (len(value) < 35 and not is_short_list_fact) or fact_noise(value):
+        return False
     has_context = score_terms(value, FACT_CONTEXT_TERMS) > 0
     has_feature_list = FEATURE_LIST_PATTERN.search(value) is not None
     has_list_shape = tag in {"li", "tr"} or len(re.findall(r"[,;；、，]", value)) >= 2
+    if is_short_list_fact:
+        return True
     if numbers >= 2:
         return True
     if numbers and (has_context or has_list_shape or has_feature_list):
@@ -4495,7 +4563,13 @@ def is_key_fact(tag: str, value: str) -> bool:
     return False
 
 
-def add_unique_text(parts: list[str], seen: set[str], value: str, max_chars: int = 900) -> bool:
+def add_unique_text(
+    parts: list[str],
+    seen: set[str],
+    value: str,
+    max_chars: int = 900,
+    min_chars: int = 35,
+) -> bool:
     cleaned = clean_fact_text(value)
     if len(cleaned) > max_chars:
         sentences = re.split(r"(?<=[.!?。！？])\s+", cleaned)
@@ -4506,7 +4580,7 @@ def add_unique_text(parts: list[str], seen: set[str], value: str, max_chars: int
                 break
             shortened = next_value
         cleaned = shortened or cleaned[:max_chars].rstrip()
-    if len(cleaned) < 35:
+    if len(cleaned) < min_chars:
         return False
     compact = re.sub(r"[^0-9a-z\u4e00-\u9fff]+", " ", cleaned.lower()).strip()
     if not compact:
@@ -4518,6 +4592,17 @@ def add_unique_text(parts: list[str], seen: set[str], value: str, max_chars: int
     parts.append(cleaned)
     seen.add(key)
     return True
+
+
+def key_fact_min_chars(value: str) -> int:
+    cleaned = clean_fact_text(value)
+    if (
+        20 <= len(cleaned) < 35
+        and data_value_count(cleaned) > 0
+        and (effective_apple_term_score(cleaned) > 0 or loose_apple_product_marker(cleaned))
+    ):
+        return 20
+    return 35
 
 
 def extract_key_facts(text: str, title: str, source_name: str) -> list[str]:
@@ -4539,7 +4624,8 @@ def extract_key_facts(text: str, title: str, source_name: str) -> list[str]:
             ):
                 continue
             if is_key_fact(tag, candidate):
-                add_unique_text(facts, seen, candidate)
+                min_chars = 20 if tag in {"li", "tr"} else key_fact_min_chars(candidate)
+                add_unique_text(facts, seen, candidate, min_chars=min_chars)
                 if len(facts) >= limit:
                     return facts
     return facts
@@ -5027,11 +5113,19 @@ def article_tokens(title: str, summary: str) -> set[str]:
     return tokens
 
 
-APPLE_PRICE_SUBTOPIC_FACETS = {
+APPLE_PRICE_TIMING_FACETS = {
     "apple-current-product-price-increase",
     "apple-future-product-price-forecast",
     "apple-retail-promotion-price-context",
 }
+
+APPLE_PRICE_DETAIL_FACETS = {
+    "apple-price-external-reaction",
+    "apple-price-supplier-cost-dispute",
+    "apple-refurbished-store-price-context",
+}
+
+APPLE_PRICE_SUBTOPIC_FACETS = APPLE_PRICE_TIMING_FACETS | APPLE_PRICE_DETAIL_FACETS
 
 
 REGION_TERMS = {
@@ -5064,6 +5158,7 @@ SUMMARY_LEVEL_EVENT_MERGE_FACETS = {
     "apple-company-org-change",
     "apple-product-data-leak",
     "apple-product-price-increase",
+    "apple-restricted-memory-supplier-approval",
     *APPLE_PRICE_SUBTOPIC_FACETS,
     "apple-product-roadmap-list",
     "apple-wallet-digital-id",
@@ -6071,6 +6166,248 @@ def is_non_apple_vendor_response_to_apple_product_story(title: str, text: str) -
     return non_apple_subject_score > 0 and response_score > 0 and apple_product_context > 0
 
 
+def has_direct_apple_subject_anchor(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lower = text.lower()
+    lead = f"{title_lower} {lower[:700]}"
+    if effective_apple_term_score(title_lower) > 0 and score_terms(
+        title_lower,
+        [
+            "apple",
+            "iphone",
+            "ipad",
+            "mac",
+            "macbook",
+            "airpods",
+            "apple watch",
+            "vision pro",
+            "homepod",
+            "apple tv",
+            "ios",
+            "ipados",
+            "macos",
+            "watchos",
+            "visionos",
+            "苹果",
+        ],
+    ) > 0:
+        return True
+    return score_terms(
+        lead,
+        [
+            "apple asks",
+            "apple asked",
+            "apple requests",
+            "apple requested",
+            "apple will",
+            "apple is",
+            "apple has",
+            "apple supplier",
+            "apple's supplier",
+            "iphone factory",
+            "iphone parts",
+            "iphone component",
+            "iphone board",
+            "iphone display",
+            "macbook",
+            "ipad",
+            "airpods",
+            "apple watch",
+            "vision pro",
+            "apple tv",
+            "ios",
+            "ipados",
+            "macos",
+            "watchos",
+            "visionos",
+            "苹果请求",
+            "苹果申请",
+            "苹果供应商",
+            "苹果在印度的主要供应商",
+            "苹果主要供应商",
+            "iphone 工厂",
+            "iphone 零件",
+            "iphone 电路板",
+            "iphone 主板",
+            "iphone 屏幕",
+            "苹果公司",
+        ],
+    ) > 0
+
+
+def is_third_party_app_usage_on_apple_platform_story(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lower = text.lower()
+    lead = f"{title_lower} {lower[:1200]}"
+    third_party_app_score = score_terms(
+        title_lower,
+        [
+            "microsoft edge",
+            "edge browser",
+            "edge",
+            "chrome",
+            "firefox",
+            "brave",
+            "browser",
+            "browsers",
+            "微软 edge",
+            "edge 浏览器",
+            "微软",
+            "浏览器",
+        ],
+    )
+    apple_platform_score = score_terms(
+        lead,
+        [
+            "mac",
+            "mac users",
+            "mac user",
+            "macos",
+            "iphone",
+            "ipad",
+            "apple device",
+            "apple devices",
+            "苹果 mac",
+            "mac 用户",
+            "mac 电脑",
+            "苹果用户",
+            "苹果设备",
+            "苹果电脑",
+        ],
+    )
+    usage_score = score_terms(
+        lead,
+        [
+            "user",
+            "users",
+            "using",
+            "use",
+            "download",
+            "performance",
+            "faster",
+            "memory",
+            "compatible",
+            "compatibility",
+            "recommend",
+            "preference",
+            "用户",
+            "使用",
+            "力挺",
+            "吐槽",
+            "辩护",
+            "更快",
+            "省内存",
+            "内存占用",
+            "兼容",
+            "体验",
+            "推荐",
+        ],
+    )
+    apple_action_score = score_terms(
+        lead,
+        [
+            "apple announced",
+            "apple released",
+            "apple allowed",
+            "apple requires",
+            "apple changed",
+            "default browser",
+            "browser engine",
+            "webkit",
+            "app store rule",
+            "platform policy",
+            "苹果宣布",
+            "苹果发布",
+            "苹果允许",
+            "苹果要求",
+            "苹果调整",
+            "默认浏览器",
+            "浏览器引擎",
+            "应用商店规则",
+            "平台政策",
+        ],
+    )
+    return third_party_app_score > 0 and apple_platform_score > 0 and usage_score > 0 and apple_action_score <= 0
+
+
+def is_non_apple_primary_subject_with_incidental_apple_context(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lower = text.lower()
+    if effective_apple_term_score(f"{title} {text}") <= 0:
+        return False
+    if is_third_party_app_usage_on_apple_platform_story(title, text):
+        return True
+    if has_direct_apple_subject_anchor(title, text):
+        return False
+    non_apple_primary_score = score_terms(
+        title_lower,
+        [
+            "qualcomm",
+            "snapdragon",
+            "xiaomi",
+            "android",
+            "samsung",
+            "huawei",
+            "lenovo",
+            "legion",
+            "tata motors",
+            "tata car",
+            "plex",
+            "supercomputer",
+            "nvidia",
+            "amd",
+            "mediatek",
+            "dimensity",
+            "oppo",
+            "vivo",
+            "honor",
+            "google",
+            "microsoft",
+            "meta",
+            "高通",
+            "骁龙",
+            "小米",
+            "安卓",
+            "三星",
+            "华为",
+            "联想",
+            "拯救者",
+            "塔塔汽车",
+            "电动汽车",
+            "超算",
+            "超级计算机",
+            "英伟达",
+            "联发科",
+            "天玑",
+            "荣耀",
+            "微软",
+        ],
+    )
+    if non_apple_primary_score <= 0:
+        return False
+    direct_apple_action_score = score_terms(
+        lower[:900],
+        [
+            "apple asks",
+            "apple requested",
+            "apple announced",
+            "apple released",
+            "apple supplier",
+            "apple's supplier",
+            "苹果请求",
+            "苹果申请",
+            "苹果宣布",
+            "苹果发布",
+            "苹果推出",
+            "苹果供应商",
+            "苹果主要供应商",
+        ],
+    )
+    if direct_apple_action_score > 0:
+        return False
+    return True
+
+
 def is_service_content_story(text: str) -> bool:
     lower = text.lower()
     if is_apple_tv_hardware_story(text):
@@ -6868,6 +7205,146 @@ def is_future_apple_product_price_forecast_story(text: str, title: str = "") -> 
     return price_forecast_score > 0
 
 
+def is_apple_price_external_reaction_story(text: str, title: str = "") -> bool:
+    lower = f"{title} {text}".lower()
+    actor_score = score_terms(
+        lower,
+        [
+            "elon musk",
+            "musk",
+            "analyst",
+            "executive",
+            "investor",
+            "industry watcher",
+            "industry executive",
+            "ceo",
+            "cfo",
+            "马斯克",
+            "分析师",
+            "高管",
+            "业内人士",
+            "行业人士",
+            "投资人",
+        ],
+    )
+    reaction_score = score_terms(
+        lower,
+        [
+            "react",
+            "reaction",
+            "respond",
+            "response",
+            "defend",
+            "backed",
+            "backs",
+            "support",
+            "supports",
+            "agrees",
+            "commented",
+            "weighs in",
+            "回应",
+            "评价",
+            "评论",
+            "表态",
+            "支持",
+            "声援",
+            "力挺",
+            "赞同",
+            "转发",
+        ],
+    )
+    return actor_score > 0 and reaction_score > 0
+
+
+def is_apple_price_supplier_cost_dispute_story(text: str, title: str = "") -> bool:
+    lower = f"{title} {text}".lower()
+    supplier_score = score_terms(
+        lower,
+        [
+            "micron",
+            "memory supplier",
+            "chip supplier",
+            "component supplier",
+            "supplier executive",
+            "chipmaker",
+            "dram supplier",
+            "nand supplier",
+            "美光",
+            "供应商",
+            "芯片厂商",
+            "内存厂商",
+            "存储厂商",
+            "高管",
+        ],
+    )
+    dispute_score = score_terms(
+        lower,
+        [
+            "criticize",
+            "criticized",
+            "criticism",
+            "dispute",
+            "pushback",
+            "pass on",
+            "passes on",
+            "passing on",
+            "cost pass-through",
+            "markup",
+            "mark up",
+            "overcharge",
+            "margin",
+            "质疑",
+            "批评",
+            "怒怼",
+            "争议",
+            "转嫁",
+            "加价",
+            "成本转嫁",
+            "终端加价",
+            "利润",
+        ],
+    )
+    return supplier_score > 0 and dispute_score > 0
+
+
+def is_apple_refurbished_store_price_context_story(text: str, title: str = "") -> bool:
+    lower = f"{title} {text}".lower()
+    refurb_score = score_terms(
+        lower,
+        [
+            "certified refurbished",
+            "official refurbished",
+            "refurbished",
+            "refurb",
+            "apple refurbished store",
+            "官翻",
+            "官方翻新",
+            "翻新版",
+            "翻新机",
+        ],
+    )
+    availability_score = score_terms(
+        lower,
+        [
+            "available",
+            "launches",
+            "launched",
+            "listed",
+            "now on sale",
+            "starts at",
+            "store",
+            "上架",
+            "开售",
+            "发售",
+            "起售价",
+            "售价",
+            "苹果官网",
+            "官方商城",
+        ],
+    )
+    return refurb_score > 0 and availability_score > 0
+
+
 def apple_product_price_topic_facets(text: str, title: str = "") -> set[str]:
     if not is_apple_product_price_increase_story(text, title):
         return set()
@@ -6878,21 +7355,142 @@ def apple_product_price_topic_facets(text: str, title: str = "") -> set[str]:
         facets.add("apple-future-product-price-forecast")
     else:
         facets.add("apple-current-product-price-increase")
+    if is_apple_price_external_reaction_story(text, title):
+        facets.add("apple-price-external-reaction")
+    if is_apple_price_supplier_cost_dispute_story(text, title):
+        facets.add("apple-price-supplier-cost-dispute")
+    if is_apple_refurbished_store_price_context_story(text, title):
+        facets.add("apple-refurbished-store-price-context")
     return facets
+
+
+def is_apple_restricted_memory_supplier_approval_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    memory_score = score_terms(
+        lower,
+        [
+            "memory",
+            "ram",
+            "dram",
+            "nand",
+            "storage chip",
+            "storage chips",
+            "memory chips",
+            "内存",
+            "存储芯片",
+            "存储",
+        ],
+    )
+    if memory_score <= 0:
+        return False
+    supplier_or_restriction_score = score_terms(
+        lower,
+        [
+            "cxmt",
+            "changxin",
+            "blacklisted supplier",
+            "blacklisted chinese supplier",
+            "blacklisted company",
+            "blacklist",
+            "entity list",
+            "chinese military company blacklist",
+            "1260h",
+            "restricted supplier",
+            "sanctioned supplier",
+            "长鑫",
+            "长鑫存储",
+            "黑名单",
+            "实体清单",
+            "受限供应商",
+            "军方背景",
+        ],
+    )
+    if supplier_or_restriction_score <= 0:
+        return False
+    approval_score = score_terms(
+        lower,
+        [
+            "ask",
+            "asks",
+            "asked",
+            "petition",
+            "petitioned",
+            "lobby",
+            "lobbies",
+            "lobbying",
+            "clearance",
+            "permission",
+            "approval",
+            "approve",
+            "allowed",
+            "allow it to buy",
+            "let it buy",
+            "blessing",
+            "申请",
+            "请求",
+            "寻求批准",
+            "获准",
+            "许可",
+            "批准",
+            "放行",
+        ],
+    )
+    authority_score = score_terms(
+        lower,
+        [
+            "trump",
+            "trump administration",
+            "white house",
+            "pentagon",
+            "commerce department",
+            "u.s. government",
+            "us government",
+            "administration",
+            "特朗普",
+            "白宫",
+            "五角大楼",
+            "美国政府",
+            "商务部",
+        ],
+    )
+    return approval_score > 0 and authority_score > 0
 
 
 def price_subtopic_facets(facets: set[str]) -> set[str]:
     return facets & APPLE_PRICE_SUBTOPIC_FACETS
 
 
+def price_detail_facets(facets: set[str]) -> set[str]:
+    return facets & APPLE_PRICE_DETAIL_FACETS
+
+
+def price_timing_facets(facets: set[str]) -> set[str]:
+    return facets & APPLE_PRICE_TIMING_FACETS
+
+
+def price_summary_key_facets(facets: set[str]) -> set[str]:
+    return price_detail_facets(facets) or price_timing_facets(facets)
+
+
 def price_facets_compatible(left: set[str], right: set[str]) -> bool:
     if "apple-product-price-increase" not in left or "apple-product-price-increase" not in right:
         return True
-    left_subtopics = price_subtopic_facets(left)
-    right_subtopics = price_subtopic_facets(right)
-    if left_subtopics and right_subtopics:
-        return bool(left_subtopics & right_subtopics)
-    return not (left_subtopics or right_subtopics)
+    left_details = price_detail_facets(left)
+    right_details = price_detail_facets(right)
+    if left_details or right_details:
+        return bool(left_details and right_details and left_details & right_details)
+    left_timing = price_timing_facets(left)
+    right_timing = price_timing_facets(right)
+    if left_timing and right_timing:
+        return bool(left_timing & right_timing)
+    return not (left_timing or right_timing)
+
+
+def restricted_memory_supplier_approval_facets_compatible(left: set[str], right: set[str]) -> bool:
+    restricted_facet = "apple-restricted-memory-supplier-approval"
+    return (restricted_facet in left) == (restricted_facet in right)
 
 
 def is_non_apple_price_followup_story(title: str, text: str) -> bool:
@@ -7971,6 +8569,8 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets |= strategic_transaction_counterparty_facets(lower)
     price_facets = apple_product_price_topic_facets(lower)
     facets |= price_facets
+    if is_apple_restricted_memory_supplier_approval_story(lower):
+        facets.add("apple-restricted-memory-supplier-approval")
     facets |= apple_chip_roadmap_facets_from_text(lower)
     if is_foldable_iphone_successor_roadmap_story(lower):
         facets.add("foldable-iphone-successor-roadmap")
@@ -8308,6 +8908,8 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
     if is_apple_company_org_change_story(lower):
         facets.add("apple-company-org-change")
     facets |= apple_product_price_topic_facets(lower)
+    if is_apple_restricted_memory_supplier_approval_story(lower):
+        facets.add("apple-restricted-memory-supplier-approval")
     if is_apple_product_data_leak_story(lower):
         facets.add("apple-product-data-leak")
     if is_apple_specific_market_share_report_story(lower):
@@ -8402,6 +9004,8 @@ def primary_topic_facets(title: str, summary: str = "") -> set[str]:
     combined_facets = topic_facets_from_text(f"{title} {summary}")
     if "app-store-policy" in title_facets and "brazil-app-store-policy" in combined_facets:
         return combined_facets
+    if "apple-restricted-memory-supplier-approval" in combined_facets:
+        return combined_facets
     if "visionos-m5-ai-features" in combined_facets:
         return combined_facets
     if title_facets and (title_facets - BROAD_TOPIC_FACETS):
@@ -8411,9 +9015,11 @@ def primary_topic_facets(title: str, summary: str = "") -> set[str]:
 
 def primary_merge_guard_facets(title: str, summary: str = "") -> set[str]:
     title_facets = merge_guard_facets_from_text(title)
+    combined_facets = merge_guard_facets_from_text(f"{title} {summary}")
+    if "apple-restricted-memory-supplier-approval" in combined_facets:
+        return combined_facets
     if title_facets and merge_guard_action_facets(title_facets):
         return title_facets
-    combined_facets = merge_guard_facets_from_text(f"{title} {summary}")
     return combined_facets or title_facets
 
 
@@ -8464,6 +9070,8 @@ def merge_guard_facets_compatible(article_facets: set[str], event_facets: set[st
         return True
     if not (article_facets & event_facets):
         return False
+    if not restricted_memory_supplier_approval_facets_compatible(article_facets, event_facets):
+        return False
     article_platforms = merge_guard_platform_facets(article_facets)
     event_platforms = merge_guard_platform_facets(event_facets)
     article_actions = merge_guard_action_facets(article_facets)
@@ -8505,6 +9113,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "app_store_trust"
     if is_apple_books_or_store_platform_trust_story(title, text):
         return "app_store_trust"
+    if is_non_apple_primary_subject_with_incidental_apple_context(title, text):
+        return "third_party_ecosystem"
     if is_apple_product_price_increase_story(text, title):
         return "hardware_market"
     if is_apple_company_org_change_story(text):
@@ -8801,6 +9411,8 @@ def classify_relevance_tier(
         return "weak", "third-party device-management service for Apple devices"
     if is_third_party_app_platform_launch_story(title, text):
         return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
+    if is_non_apple_primary_subject_with_incidental_apple_context(title, text):
+        return "weak", "non-Apple primary subject with Apple used only as incidental context"
     if event_kind == "os_app" and is_title_primary_software_system_story(title, text):
         return "strong", "Apple OS, built-in app, or feature-summary change"
     if is_direct_apple_hardware_roadmap_story(text, title):
@@ -9425,6 +10037,8 @@ def topic_facets_compatible(
         return False
     article_facets = effective_topic_facets(article_primary_facets(article))
     event_facets = effective_topic_facets(event_primary_facets(event))
+    if not restricted_memory_supplier_approval_facets_compatible(article_facets, event_facets):
+        return False
     if not article_facets or not event_facets:
         explicit_specific = specific_merge_facets(article_facets | event_facets)
         if explicit_specific and article.event_kind == event.event_kind == "hardware_market":
@@ -10182,7 +10796,7 @@ def collect_price_event_key_facts(
         for score, article_index, fact_index, fact in sorted_bucket:
             if (article_index, fact_index, fact) in used:
                 continue
-            if add_unique_text(facts, seen, fact):
+            if add_unique_text(facts, seen, fact, min_chars=key_fact_min_chars(fact)):
                 added += 1
                 used.add((article_index, fact_index, fact))
             if len(facts) >= limit:
@@ -10192,7 +10806,7 @@ def collect_price_event_key_facts(
     for score, article_index, fact_index, fact in sorted(candidates, key=lambda item: (-item[0], item[1], item[2])):
         if (article_index, fact_index, fact) in used:
             continue
-        add_unique_text(facts, seen, fact)
+        add_unique_text(facts, seen, fact, min_chars=key_fact_min_chars(fact))
         if len(facts) >= limit:
             return facts
     return facts
@@ -10224,10 +10838,10 @@ def collect_event_key_facts(articles: list[Article]) -> list[str]:
         price_candidates.sort(key=lambda item: (-item[0], item[1]))
         compact_fact = compact_price_response_must_include_fact([fact for _, _, fact in price_candidates])
         if compact_fact:
-            add_unique_text(facts, seen, compact_fact)
+            add_unique_text(facts, seen, compact_fact, min_chars=key_fact_min_chars(compact_fact))
         return collect_price_event_key_facts(ordered, facts, seen, limit)
     for fact in article_fact_round_robin(ordered, price_event):
-        add_unique_text(facts, seen, fact)
+        add_unique_text(facts, seen, fact, min_chars=key_fact_min_chars(fact))
         if len(facts) >= limit:
             return facts
     return facts
@@ -10254,7 +10868,7 @@ def event_must_include_facts(event: Event) -> list[str]:
         candidates.sort(key=lambda item: (-item[0], item[1]))
         compact_fact = compact_price_response_must_include_fact([fact for _, _, fact in candidates])
         if compact_fact:
-            add_unique_text(must_include, seen, compact_fact)
+            add_unique_text(must_include, seen, compact_fact, min_chars=key_fact_min_chars(compact_fact))
     return must_include
 
 
@@ -10387,12 +11001,17 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
         )
     )
     if "apple-product-price-increase" in facets:
-        price_subtopics = sorted(price_subtopic_facets(facets))
-        if price_subtopics:
-            for subtopic in price_subtopics:
-                keys.add((subtopic, ()))
+        if "apple-restricted-memory-supplier-approval" in facets:
+            keys.add(("apple-restricted-memory-supplier-approval", ()))
         else:
-            keys.add(("apple-product-price-increase", ()))
+            price_subtopics = sorted(price_summary_key_facets(facets))
+            if price_subtopics:
+                for subtopic in price_subtopics:
+                    keys.add((subtopic, ()))
+            else:
+                keys.add(("apple-product-price-increase", ()))
+    elif "apple-restricted-memory-supplier-approval" in facets:
+        keys.add(("apple-restricted-memory-supplier-approval", ()))
     if "apple-product-data-leak" in facets:
         context = " ".join([event.title, event.summary, *event.key_facts[:8]]).lower()
         product_score = score_terms(

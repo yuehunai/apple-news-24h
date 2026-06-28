@@ -2595,6 +2595,77 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(tier, "weak", reason)
 
+    def test_non_apple_primary_subjects_with_incidental_apple_terms_stay_weak(self):
+        module = load_module()
+        examples = [
+            (
+                "安卓最强Soc！高通骁龙8E6系列双剑齐发：小米拿到首发权",
+                (
+                    "高通下一代旗舰芯片敲定双版本规划，小米18系列拿到全球独家首发权。"
+                    "文章后文提到此前苹果 Mac、iPad 已因存储成本上调售价，安卓旗舰也可能涨价。"
+                ),
+            ),
+            (
+                "塔塔汽车公布 2031 战略：产品线扩至 25 款，电动汽车目标年销 40 万辆",
+                (
+                    "印度塔塔汽车乘用车业务公布面向 2031 财年的发展规划，"
+                    "其中一款车型可能是 Safari EV，并将扩充电动车产品线。"
+                ),
+            ),
+            (
+                "英国斥资 7.5 亿英镑新建国家级超算，能模拟量子、地震、宇宙膨胀",
+                (
+                    "该超算将部署在爱丁堡大学位于中洛锡安佩尼库克和罗斯林的校舍内，"
+                    "用于科研模拟并获得英国政府资助。"
+                ),
+            ),
+            (
+                "PSA: Lifetime Plex Plan goes from $249.99 to a painful $749.99 on July 1",
+                "Plex says its lifetime pass price will rise, and the article says users can stream a movie collection to an iPhone.",
+            ),
+            (
+                "联想拯救者神秘新平板真机曝光：50MP 单摄 + 环形 RGB",
+                (
+                    "联想拯救者新平板在展会上亮相。作为参考，在售 Y700 支持查看接收 iPhone 端短信，"
+                    "并可与联想电脑、moto 手机、iPhone 跨生态文件互传。"
+                ),
+            ),
+            (
+                "苹果 Mac 用户集体力挺微软 Edge 浏览器：比 Chrome 更快、更省内存",
+                (
+                    "一名苹果用户在社交平台吐槽 Mac 上使用微软 Edge 浏览器，评论区 Mac 用户为 Edge 辩护，"
+                    "称其内存占用低、性能出色、兼容政企网站，并可参与必应积分活动。"
+                ),
+            ),
+        ]
+
+        for title, summary in examples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_ambiguous_apple_terms_do_not_create_relevance_by_themselves(self):
+        module = load_module()
+
+        self.assertEqual(module.effective_apple_term_score("Safari EV 将作为塔塔汽车的电动车推出"), 0)
+        self.assertEqual(module.effective_apple_term_score("佩尼库克和罗斯林的校舍内建设超算"), 0)
+
+    def test_direct_apple_supplier_and_memory_policy_stories_remain_strong(self):
+        module = load_module()
+        memory_title = "Apple asks Trump to let it buy memory from a blacklisted supplier"
+        memory_summary = (
+            "Apple asked the Trump administration to approve buying RAM from Chinese supplier CXMT "
+            "after product price increases caused by memory and storage shortages."
+        )
+        leak_title = "苹果供应商发生泄密事件：630G文件被窃取 官方已展开调查"
+        leak_summary = (
+            "苹果在印度的主要供应商 Tata Electronics 遭受网络攻击，超过 20 万份文件被窃取，"
+            "其中包括 iPhone 电路板零件制造规格，并且苹果已派安全团队合作调查。"
+        )
+
+        self.assertEqual(module.classify_relevance_tier(memory_title, memory_summary, [], "AppleInsider")[0], "strong")
+        self.assertEqual(module.classify_relevance_tier(leak_title, leak_summary, [], "快科技")[0], "strong")
+
     def test_apple_specific_market_report_stays_strong(self):
         module = load_module()
         title = "Counterpoint: iPhone shipments grew 8% in Latin America during Q1"
@@ -2943,6 +3014,202 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider", "快科技", "cnBeta", "IT之家"})
         self.assertEqual(events[0].category, "hardware_products")
         self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
+
+    def test_blacklisted_memory_supplier_approval_reports_merge_with_price_context(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple asks Trump admin to approve Chinese RAM after product price increases",
+                (
+                    "Apple is lobbying the Trump administration for clearance to buy memory chips "
+                    "from CXMT, a Chinese supplier on a Pentagon blacklist. The request is intended "
+                    "to ease pressure from recent Apple product price increases caused by memory costs."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple asks Trump to let it buy memory from a blacklisted supplier",
+                (
+                    "Apple has petitioned the Trump administration to allow it to buy Mac RAM chips "
+                    "from CXMT, a Chinese memory supplier on the Chinese Military Company Blacklist, "
+                    "because the global memory crisis is increasing component costs."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro memory rumor points to 96-bit LPDDR6 support",
+                (
+                    "A separate board leak claims Apple's A20 Pro chip may use a WMCM package and "
+                    "support 96-bit LPDDR6 memory for the iPhone 18 Pro."
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2)
+        supplier_event = next(
+            event for event in events if {article.source for article in event.articles} == {"9to5Mac", "AppleInsider"}
+        )
+        self.assertEqual({article.source for article in supplier_event.articles}, {"9to5Mac", "AppleInsider"})
+
+    def test_short_list_items_after_context_lead_are_preserved_as_key_facts(self):
+        module = load_module()
+        html = """
+        <article class="post-content">
+          <p>iPadOS 27 drops support for all devices with an A12 or A12X chipset, including:</p>
+          <ul>
+            <li><a href="https://example.com/ipad">iPad (8th generation)</a> - 2020</li>
+            <li><a href="https://example.com/air">iPad Air (3rd generation)</a> - 2019</li>
+            <li><a href="https://example.com/mini">iPad mini (5th generation)</a> - 2019</li>
+            <li><a href="https://example.com/pro11">iPad Pro (11-inch, 1st generation)</a> - 2018</li>
+            <li><a href="https://example.com/pro129">iPad Pro (12.9-inch, 3rd generation)</a> - 2018</li>
+          </ul>
+          <p>iOS 27 continues to support every iPhone model that ran iOS 26.</p>
+        </article>
+        """
+
+        units = module.extract_text_units(html)
+        facts = module.extract_key_facts(
+            html,
+            "iPadOS 27: Apple is leaving these five iPad models behind",
+            "9to5Mac",
+        )
+        article = article_for(
+            module,
+            "iPadOS 27: Apple is leaving these five iPad models behind",
+            "iPadOS 27 drops support for five older iPad models while iOS 27 keeps supporting all iOS 26 iPhones.",
+            source="9to5Mac",
+            facts=facts,
+        )
+        event = module.cluster_articles([article])[0]
+        combined = " ".join(event.key_facts)
+
+        self.assertIn(("li", "iPad (8th generation) - 2020"), units)
+        for item in [
+            "iPad (8th generation) - 2020",
+            "iPad Air (3rd generation) - 2019",
+            "iPad mini (5th generation) - 2019",
+            "iPad Pro (11-inch, 1st generation) - 2018",
+            "iPad Pro (12.9-inch, 3rd generation) - 2018",
+        ]:
+            with self.subTest(item=item):
+                self.assertIn(item, combined)
+
+    def test_mydrivers_related_news_block_does_not_enter_key_facts(self):
+        module = load_module()
+        html = """
+        <html><body>
+          <div class="news_info">
+            <p>苹果自研芯片在之前在内存带宽方面的重视程度不够，但随着 M7 芯片的推出，将会有明显改善。</p>
+            <p>据称 M7 的统一内存带宽将提高到 240GB/s，仍低于目前 M5 Pro 的 307GB/s，但比 M5 的 153GB/s 提升明显。</p>
+            <div style="overflow: hidden;font-size:14px;padding-top:30px;border-bottom:1px solid #eee;">
+              <p class="zhuanzai">【本文结束】如需转载请务必注明出处：快科技</p>
+            </div>
+          </div>
+          <div class="navs_newsinfo xg_newsinfo">
+            <h6>相关资讯</h6>
+            <ul>
+              <li><a href="https://news.mydrivers.com/1/1132/1132478.htm">全系万元起步！苹果iPhone 18 Pro将迎来近十年最大涨幅</a></li>
+            </ul>
+          </div>
+        </body></html>
+        """
+
+        facts = module.extract_key_facts(
+            html,
+            "苹果M6芯片可能没有Pro/MAX M7将大幅提高AI性能",
+            "快科技",
+        )
+        combined = " ".join(facts)
+
+        self.assertIn("240GB/s", combined)
+        self.assertNotIn("全系万元起步", combined)
+
+    def test_memory_supplier_approval_does_not_absorb_distinct_price_followups(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple asks Trump admin to approve Chinese RAM after product price increases",
+                (
+                    "Apple is lobbying the Trump administration for clearance to buy memory chips "
+                    "from CXMT, a Chinese supplier on a Pentagon blacklist. The request is intended "
+                    "to ease pressure from recent Apple product price increases caused by memory costs."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple asks Trump to let it buy memory from a blacklisted supplier",
+                (
+                    "Apple has petitioned the Trump administration to allow it to buy Mac RAM chips "
+                    "from CXMT, a Chinese memory supplier on the Chinese Military Company Blacklist."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "苹果被迫游说特朗普政府放行长鑫存储芯片",
+                (
+                    "苹果正在华盛顿寻求特批通道，希望允许其从被五角大楼列入黑名单的长鑫存储 CXMT "
+                    "采购内存芯片，以缓解 iPhone 18 Pro 的成本压力。"
+                ),
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "苹果上调产品售价 马斯克公开声援库克：这辈子没见过这么大涨幅",
+                (
+                    "马斯克转发库克采访并表示内存涨价幅度罕见。苹果已上调 Mac、iPad、Vision Pro、"
+                    "HomePod 等 14 款产品价格，MacBook Air 起售价从 8499 元升至 9999 元。"
+                ),
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "美光高管怒怼苹果：芯片涨45美元 你终端加价250美元",
+                (
+                    "美光高管和财经博主围绕苹果成本转嫁发生争议，称苹果曾长期压低内存采购价格，"
+                    "如今芯片涨 45 美元却向消费者加价 250 美元。"
+                ),
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "新机涨价官翻补位！MacBook Neo官翻版上架：679美元 苹果最便宜笔记本",
+                (
+                    "苹果官方翻新版 MacBook Neo 512GB 版本上架，价格为 679 美元，比全新机型便宜 "
+                    "120 美元，并享受苹果标准保修服务。"
+                ),
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "8999元成历史！iPhone 18 Pro涨价不可逆：内存问题解决也不降回原价",
+                (
+                    "TrendForce 数据显示 DRAM 价格在 2026 年第一季度暴涨 98%，第二季度预计继续上涨 "
+                    "58% 至 63%。Mark Gurman 认为 iPhone 18 Pro 涨价后不会降回原价。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [[article.title for article in event.articles] for event in events]
+
+        supplier_events = [
+            event for event in events if any("CXMT" in article.summary or "长鑫" in article.summary for article in event.articles)
+        ]
+        self.assertEqual(len(supplier_events), 1)
+        self.assertEqual({article.source for article in supplier_events[0].articles}, {"9to5Mac", "AppleInsider", "cnBeta"})
+        self.assertGreaterEqual(len(events), 5, titles_by_event)
+        self.assertTrue(any("官翻版" in " ".join(titles) for titles in titles_by_event))
+        self.assertTrue(any("iPhone 18 Pro涨价不可逆" in " ".join(titles) for titles in titles_by_event))
 
     def test_direct_apple_product_price_increase_stays_strong_despite_supplier_background(self):
         module = load_module()

@@ -12,12 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.12.1 - 2026-06-27
+### 1.13.0 - 2026-06-28
 
-- Added stronger final-brief coverage metadata to `final_brief_queue`, `required_final_brief_titles`, `final_brief_coverage`, status JSON, and the adjacent `*.brief.md` scaffold so every eligible JSON event remains a hard brief boundary.
-- Improved omission guidance so automation agents do not drop eligible `events` items merely because they are single-source, speculative, rumor-framed, lower-profile, competitor-adjacent, or less prominent than same-day major news.
-- Updated skill and fallback policy wording to preserve single-source Apple hardware roadmap or product-development rumors when the crawler has already classified them as included events.
-- Added regression coverage for single-source speculative hardware events such as the MacRumors Apple iRing report to ensure they stay visible in required brief checklists.
+- Improved weak filtering for non-Apple primary subjects and ambiguous Apple-like terms such as Safari vehicle names, non-Tim-Cook place names, third-party chip launches, Plex pricing, and third-party browser usage on Mac.
+- Improved price-heavy hardware clustering by splitting restricted-memory-supplier approval, external reactions, supplier cost-pass-through disputes, refurbished availability, future price forecasts, and broad component-shortage background.
+- Improved `key_facts` extraction so short structured list items survive event-level summarization, preserving full device-support lists such as iPadOS unsupported iPad models.
+- Improved MyDrivers/快科技 source cleanup so related-news blocks do not pollute summaries, key facts, or merge anchors.
+- Added regression coverage for incidental Apple context, ambiguous Apple terms, memory-supplier approval, price follow-up splitting, short list facts, and MyDrivers related-news cleanup.
 
 ## What It Does
 

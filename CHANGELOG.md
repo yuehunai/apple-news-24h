@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.13.0 - 2026-06-28
+
+- Improved weak filtering for non-Apple primary subjects and ambiguous Apple-like terms so Safari vehicle names, non-Tim-Cook place names, third-party chip launches, Plex pricing, third-party browser usage on Mac, and similar Apple-adjacent references do not enter final events.
+- Improved price-heavy hardware clustering by splitting restricted-memory-supplier approval, external reactions, supplier cost-pass-through disputes, official refurbished availability, future product price forecasts, and broad component-shortage background into separate event families.
+- Improved `key_facts` extraction and event-level fact retention for short structured list items, preserving full compatibility or device-support lists such as iPadOS unsupported iPad model lists.
+- Improved source cleanup for MyDrivers/快科技 related-news blocks so article-tail recommendation titles do not pollute summaries, key facts, or merge anchors.
+- Updated skill and fallback policy guidance for empty-category checks, granular pricing actions, ambiguous Apple terms, and structured short-list preservation.
+- Added regression coverage for non-Apple incidental context, ambiguous Apple terms, restricted memory supplier approval, price follow-up splitting, short list facts, and MyDrivers related-news cleanup.
+
 ## 1.12.1 - 2026-06-27
 
 - Added stronger final-brief coverage metadata to `final_brief_queue`, `required_final_brief_titles`, `final_brief_coverage`, status JSON, and the adjacent `*.brief.md` scaffold so every eligible JSON event remains a hard brief boundary.
