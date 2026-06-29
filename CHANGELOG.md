@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.14.0 - 2026-06-29
+
+- Added source-level filtering for IT之家 `IT早报` pages so daily link roundups are skipped during candidate discovery while standalone IT之家 Apple articles remain eligible.
+- Improved Apple product price clustering by separating reseller or retailer retroactive order price-difference disputes from official Apple price increases and supplier cost-pass-through stories.
+- Improved weak filtering for non-Apple price-follow-up rumors, including third-party drone or competitor price-change stories that mention Apple only as market context.
+- Refined price-topic facet selection so title-led Apple pricing events keep concrete detail facets without merging unrelated cost, supplier, or retail actions.
+- Updated fallback policy guidance and regression coverage for IT之家 daily-brief filtering, retroactive reseller adjustments, and non-Apple price follow-up handling.
+
 ## 1.13.0 - 2026-06-28
 
 - Improved weak filtering for non-Apple primary subjects and ambiguous Apple-like terms so Safari vehicle names, non-Tim-Cook place names, third-party chip launches, Plex pricing, third-party browser usage on Mac, and similar Apple-adjacent references do not enter final events.

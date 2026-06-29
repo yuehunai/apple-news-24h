@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.13.0 - 2026-06-28
+### 1.14.0 - 2026-06-29
 
-- Improved weak filtering for non-Apple primary subjects and ambiguous Apple-like terms such as Safari vehicle names, non-Tim-Cook place names, third-party chip launches, Plex pricing, and third-party browser usage on Mac.
-- Improved price-heavy hardware clustering by splitting restricted-memory-supplier approval, external reactions, supplier cost-pass-through disputes, refurbished availability, future price forecasts, and broad component-shortage background.
-- Improved `key_facts` extraction so short structured list items survive event-level summarization, preserving full device-support lists such as iPadOS unsupported iPad models.
-- Improved MyDrivers/快科技 source cleanup so related-news blocks do not pollute summaries, key facts, or merge anchors.
-- Added regression coverage for incidental Apple context, ambiguous Apple terms, memory-supplier approval, price follow-up splitting, short list facts, and MyDrivers related-news cleanup.
+- Added source-level filtering for IT之家 `IT早报` pages so daily link roundups are skipped during candidate discovery while standalone IT之家 Apple articles remain eligible.
+- Improved Apple product price clustering by separating reseller or retailer retroactive order price-difference disputes from official Apple price increases and supplier cost-pass-through stories.
+- Improved weak filtering for non-Apple price-follow-up rumors, including third-party drone or competitor price-change stories that mention Apple only as market context.
+- Refined price-topic facet selection so title-led Apple pricing events keep concrete detail facets without merging unrelated cost, supplier, or retail actions.
+- Added fallback policy guidance and regression coverage for IT之家 daily-brief filtering, retroactive reseller adjustments, and non-Apple price follow-up handling.
 
 ## What It Does
 

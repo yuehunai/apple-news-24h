@@ -151,83 +151,42 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotEqual(module.detect_event_kind(title, summary, facts), "marketing_ad")
         self.assertEqual(tier, "strong", reason)
 
-    def test_roundup_article_focuses_on_apple_item_instead_of_whole_brief(self):
+    def test_ithome_daily_brief_candidate_is_filtered_before_detail_fetch(self):
         module = load_module()
         source = source_named(module, "IT之家")
-        page = """
-        <html>
-          <head>
-            <meta name="description" content="IT早报：DeepSeek 完成融资；库克称苹果将因内存芯片短缺涨价；微信支付推 AI 专属卡。" />
-            <span id="pubtime_baidu">2026/6/18 07:01:00</span>
-          </head>
-          <body>
-            <h1>IT早报 0618：DeepSeek 以 4000 亿元估值完成首轮融资；库克称苹果将因内存芯片短缺涨价；微信支付推 AI 专属卡...</h1>
-            <div id="paragraph">
-              <p>“IT早报”时间，大家好，现在是 2026 年 6 月 18 日星期四，今天的重要科技资讯有：</p>
-              <p>1、DeepSeek 以 4000 亿元估值完成首轮外部融资：510 亿元到账，投资方含腾讯、宁德时代、京东、网易等。</p>
-              <p>3、库克：AI 浪潮引发存储芯片价格暴涨，iPhone 等苹果产品涨价已“不可避免”。华尔街日报报道称，苹果 CEO Tim Cook 确认苹果公司为应对 AI 需求导致的存储芯片成本飙升，计划上调产品售价。</p>
-              <p>4、给 Agent 留的指定“办事钱包”：微信支付 AI 专属卡发布，实现从智能推荐到下单支付的自动化消费。</p>
-            </div>
-          </body>
-        </html>
-        """
-        candidate = module.Candidate(
+        daily_brief = module.Candidate(
             source="IT之家",
-            url="https://www.ithome.com/0/965/709.htm",
-            title="IT早报 0618：DeepSeek 以 4000 亿元估值完成首轮融资；库克称苹果将因内存芯片短缺涨价；微信支付推 AI 专属卡...",
+            url="https://www.ithome.com/0/969/735.htm",
+            title="IT早报 0629：央视揭秘欧洲“缺”空调原因；曝苹果寻求从长鑫采购内存芯片",
+            summary="苹果正寻求从长鑫采购内存芯片，Mac Studio 路线图也有新消息。",
+        )
+        spaced_daily_brief = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/969/736.htm",
+            title="IT 早报 0629：曝苹果寻求从长鑫采购内存芯片",
+            summary="苹果正寻求从长鑫采购内存芯片。",
+        )
+        ordinary_article = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/969/739.htm",
+            title="（更新：已恢复）苹果地图搜索、导航等服务出现服务中断",
+            summary="苹果地图搜索、导航服务和查找服务一度异常，随后恢复可用。",
+        )
+        non_ithome_daily_brief = module.Candidate(
+            source="快科技",
+            url="https://news.mydrivers.com/1/1132/1132999.htm",
+            title="IT早报：苹果发布 iOS 27 beta 3",
+            summary="苹果发布 iOS 27 beta 3，新增系统功能并修复多个问题。",
         )
 
-        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
-        combined = " ".join([title, summary, *facts])
-
-        self.assertIn("库克", title)
-        self.assertIn("苹果", combined)
-        self.assertIn("涨价", combined)
-        self.assertNotIn("DeepSeek", combined)
-        self.assertNotIn("微信支付", combined)
-
-    def test_ithome_roundup_heading_blocks_do_not_drag_unrelated_items_into_apple_story(self):
-        module = load_module()
-        source = source_named(module, "IT之家")
-        page = """
-        <html>
-          <head>
-            <meta name="description" content="IT早报：马斯克薪酬、黑鲨社区关闭、折叠屏 iPhone 供应链供货、廉价充电宝安全提醒。" />
-            <span id="pubtime_baidu">2026/6/22 07:00:00</span>
-          </head>
-          <body>
-            <h1>IT早报 0622：马斯克拿下天价薪酬；黑鲨社区关闭访问；供应链称已向苹果首款折叠屏供货</h1>
-            <div id="paragraph">
-              <h2>马斯克拿下人民币 7800 亿元天价薪酬</h2>
-              <p>特斯拉股东批准薪酬方案，马斯克账面收益高达 1160 亿美元。</p>
-              <h2>黑鲨社区关闭访问</h2>
-              <p>黑鲨社区 App 和网页端已经停止访问，用户数据也无法继续查看。</p>
-              <h2>供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布</h2>
-              <p>供应链消息称，相关厂商已向苹果首款折叠屏 iPhone 小批量供货，外界预计新机仍会在 9 月发布。</p>
-              <h2>廉价充电宝安全隐患</h2>
-              <p>多款低价充电宝存在标称容量虚高和安全风险，与苹果产品无直接关系。</p>
-            </div>
-          </body>
-        </html>
-        """
-        candidate = module.Candidate(
-            source="IT之家",
-            url="https://www.ithome.com/0/966/746.htm",
-            title="IT早报 0622：马斯克拿下天价薪酬；黑鲨社区关闭访问；供应链称已向苹果首款折叠屏供货",
-        )
-
-        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
-        combined = " ".join([title, summary, *facts])
-
-        self.assertIn("折叠屏 iPhone", combined)
-        self.assertIn("小批量供货", combined)
-        self.assertNotIn("马斯克", combined)
-        self.assertNotIn("黑鲨", combined)
-        self.assertNotIn("充电宝", combined)
+        self.assertFalse(module.is_relevant_candidate(daily_brief, source))
+        self.assertFalse(module.is_relevant_candidate(spaced_daily_brief, source))
+        self.assertTrue(module.is_relevant_candidate(ordinary_article, source))
+        self.assertTrue(module.is_relevant_candidate(non_ithome_daily_brief, source_named(module, "快科技")))
 
     def test_roundup_apple_items_expand_to_separate_article_variants(self):
         module = load_module()
-        original_title = "IT早报 0622：供应链称已向苹果首款折叠屏供货；苹果美国关闭三家 Apple Store"
+        original_title = "Daily briefing: Apple foldable iPhone suppliers; Apple closes three U.S. stores"
         title = "供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布"
         summary = (
             "4、供应链公司称已向苹果首款折叠屏 iPhone 小批量供货，新机预计 9 月发布。"
@@ -440,6 +399,50 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 2)
 
+    def test_regional_reseller_retroactive_price_action_does_not_merge_with_current_price_increase(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Explains Why It Raised Prices on 14 Products Today",
+                (
+                    "Apple said memory and storage component costs have risen unprecedentedly. "
+                    "The company said it has shielded customers so far but now needs to raise "
+                    "prices across Mac, iPad, Vision Pro, Apple TV, and HomePod products."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果英国经销商被指擅自涨价：买家调价前下单 128G 内存版 MacBook Pro，仍被要求补差价",
+                (
+                    "英国授权经销商 KRCS 在用户 6 月 5 日全额下单 M5 Max 处理器 +128GB 内存 "
+                    "MacBook Pro 后，因苹果官方涨价要求补足差价，否则取消订单并全额退款。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果涨价经销商趁火打劫！已全款下单MacBook：还要补2万元差价",
+                (
+                    "苹果因存储短缺上调 MacBook Pro 售价后，部分经销商开始对涨价前已全款下单的订单追要差价，"
+                    "其中包括英国苹果高级经销商 KRCS。Reddit 用户 sw1000 称，他 6 月 5 日全款下单购买一台 "
+                    "128GB 统一内存的 M5 Max MacBook Pro，KRCS 后来要求补齐涨价后的差价或者全额退款。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" ".join(article.title for article in event.articles) for event in events]
+
+        self.assertEqual(len(events), 2, titles_by_event)
+        reseller_events = [
+            event for event in events if "KRCS" in " ".join(article.summary for article in event.articles)
+        ]
+        self.assertEqual(len(reseller_events), 1, titles_by_event)
+        self.assertEqual({article.source for article in reseller_events[0].articles}, {"IT之家", "快科技"})
+
     def test_future_iphone_price_forecasts_still_merge_with_each_other(self):
         module = load_module()
         articles = [
@@ -529,6 +532,19 @@ class RelevanceRuleTests(unittest.TestCase):
 
         tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
 
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_drone_price_rumor_after_apple_is_weak(self):
+        module = load_module()
+        title = "继苹果后大疆被传全系涨价3%-8% 官方回应：消息不实 纯属谣言"
+        summary = (
+            "传言称 DJI 大疆全系产品将因供应链成本上升调价，新的价格适用于官方商城、京东、"
+            "天猫、抖音及线下授权体验店等渠道。文章后文提到苹果已上调多个市场 Mac、iPad "
+            "等硬件产品售价，作为成本压力背景。"
+        )
+
+        self.assertTrue(module.is_non_apple_price_followup_story(title, summary))
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
         self.assertEqual(tier, "weak", reason)
 
     def test_non_apple_component_market_background_story_is_weak(self):

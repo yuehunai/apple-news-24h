@@ -432,7 +432,6 @@ HARD_EXCLUDE_TERMS = [
     "windows 11",
     "qoder",
     "agenui",
-    "it早报",
     "hbm",
     "magflow",
     "alipay",
@@ -3654,6 +3653,13 @@ def should_hard_exclude_candidate(text: str) -> bool:
     return not has_direct_apple_subject_context(text)
 
 
+def is_ithome_daily_brief_candidate(candidate: Candidate, source: Source | None = None) -> bool:
+    source_name = source.name if source is not None else candidate.source
+    if source_name != "IT之家":
+        return False
+    return re.search(r"(?i)(?<![a-z])it\s*早报", candidate.title) is not None
+
+
 def is_third_party_platform_availability_candidate(text: str) -> bool:
     lower = text.lower()
     if effective_apple_term_score(lower) <= 0:
@@ -3783,6 +3789,8 @@ def score_messages_platform_actions(text: str) -> int:
 
 
 def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
+    if is_ithome_daily_brief_candidate(candidate, source):
+        return False
     url_lower = candidate.url.lower()
     text = f"{candidate.title} {candidate.summary} {candidate.context}"
     lower_text = text.lower()
@@ -4691,7 +4699,6 @@ def is_roundup_article_title(title: str) -> bool:
     return score_terms(
         lower,
         [
-            "it早报",
             "早报",
             "科技早报",
             "科技早参",
@@ -4752,7 +4759,6 @@ def clean_roundup_item_text(value: str) -> str:
     cleaned = clean_fact_text(value)
     cleaned = re.sub(r">>\s*查看详情", "", cleaned)
     cleaned = re.sub(r"^\d{1,2}[、.．]\s*", "", cleaned)
-    cleaned = re.sub(r"^IT早报[:：]\s*", "", cleaned, flags=re.I)
     return clean_fact_text(cleaned)
 
 
@@ -5121,6 +5127,7 @@ APPLE_PRICE_TIMING_FACETS = {
 
 APPLE_PRICE_DETAIL_FACETS = {
     "apple-price-external-reaction",
+    "apple-price-retailer-retroactive-adjustment",
     "apple-price-supplier-cost-dispute",
     "apple-refurbished-store-price-context",
 }
@@ -7307,6 +7314,93 @@ def is_apple_price_supplier_cost_dispute_story(text: str, title: str = "") -> bo
     return supplier_score > 0 and dispute_score > 0
 
 
+def is_apple_price_retailer_retroactive_adjustment_story(text: str, title: str = "") -> bool:
+    lower = f"{title} {text}".lower()
+    retailer_score = score_terms(
+        lower,
+        [
+            "authorized reseller",
+            "authorised reseller",
+            "authorized retailer",
+            "authorised retailer",
+            "reseller",
+            "retailer",
+            "dealer",
+            "store",
+            "seller",
+            "third-party seller",
+            "third party seller",
+            "经销商",
+            "授权经销商",
+            "零售商",
+            "销售商",
+            "卖家",
+            "门店",
+            "第三方商家",
+        ],
+    )
+    existing_order_score = score_terms(
+        lower,
+        [
+            "already ordered",
+            "existing order",
+            "placed an order",
+            "paid in full",
+            "full payment",
+            "preorder",
+            "pre-order",
+            "customer",
+            "buyer",
+            "purchase",
+            "purchased",
+            "delivery",
+            "ship",
+            "下单",
+            "已下单",
+            "订单",
+            "全额",
+            "全款",
+            "已付款",
+            "买家",
+            "客户",
+            "消费者",
+            "交付",
+            "发货",
+        ],
+    )
+    retroactive_price_score = score_terms(
+        lower,
+        [
+            "retroactive",
+            "after the price hike",
+            "after the price increase",
+            "pay the difference",
+            "price difference",
+            "make up the difference",
+            "top up",
+            "cancel the order",
+            "refund",
+            "refused to honor",
+            "补差价",
+            "补足差价",
+            "追溯",
+            "事后",
+            "单方面",
+            "涨价后",
+            "调价后",
+            "涨价前",
+            "调价前",
+            "全额退款",
+            "取消订单",
+            "拒绝按原价",
+            "原价履约",
+            "追加收费",
+        ],
+    )
+    retroactive_price_pattern = re.search(r"(?:补|追要|追缴|追加)[^，。；;:：]{0,16}差价", lower) is not None
+    return retailer_score > 0 and existing_order_score > 0 and (retroactive_price_score > 0 or retroactive_price_pattern)
+
+
 def is_apple_refurbished_store_price_context_story(text: str, title: str = "") -> bool:
     lower = f"{title} {text}".lower()
     refurb_score = score_terms(
@@ -7357,6 +7451,8 @@ def apple_product_price_topic_facets(text: str, title: str = "") -> set[str]:
         facets.add("apple-current-product-price-increase")
     if is_apple_price_external_reaction_story(text, title):
         facets.add("apple-price-external-reaction")
+    if is_apple_price_retailer_retroactive_adjustment_story(text, title):
+        facets.add("apple-price-retailer-retroactive-adjustment")
     if is_apple_price_supplier_cost_dispute_story(text, title):
         facets.add("apple-price-supplier-cost-dispute")
     if is_apple_refurbished_store_price_context_story(text, title):
@@ -7553,6 +7649,9 @@ def is_non_apple_price_followup_story(title: str, text: str) -> bool:
             "meta",
             "quest",
             "tesla",
+            "dji",
+            "drone",
+            "drones",
             "memory",
             "storage",
             "smartphone",
@@ -7566,6 +7665,8 @@ def is_non_apple_price_followup_story(title: str, text: str) -> bool:
             "lg",
             "meta",
             "特斯拉",
+            "大疆",
+            "无人机",
             "手机",
             "国产手机",
             "内存",
@@ -7594,6 +7695,9 @@ def is_non_apple_price_followup_story(title: str, text: str) -> bool:
                 "三星",
                 "google",
                 "谷歌",
+                "dji",
+                "大疆",
+                "无人机",
                 "国产手机",
                 "手机",
                 "内存",
@@ -7602,8 +7706,6 @@ def is_non_apple_price_followup_story(title: str, text: str) -> bool:
         ]
         if pos >= 0
     ]
-    if apple_subject_positions and third_party_positions and min(apple_subject_positions) < min(third_party_positions):
-        return False
     followup_score = score_terms(
         title_lower,
         [
@@ -7620,6 +7722,13 @@ def is_non_apple_price_followup_story(title: str, text: str) -> bool:
             "效仿苹果",
         ],
     )
+    if (
+        apple_subject_positions
+        and third_party_positions
+        and min(apple_subject_positions) < min(third_party_positions)
+        and followup_score <= 0
+    ):
+        return False
     return followup_score > 0 or (
         bool(apple_subject_positions)
         and bool(third_party_positions)
@@ -9008,6 +9117,11 @@ def primary_topic_facets(title: str, summary: str = "") -> set[str]:
         return combined_facets
     if "visionos-m5-ai-features" in combined_facets:
         return combined_facets
+    if "apple-product-price-increase" in title_facets:
+        combined_price_details = price_detail_facets(combined_facets)
+        title_price_details = price_detail_facets(title_facets)
+        if combined_price_details and not title_price_details:
+            return title_facets | combined_price_details
     if title_facets and (title_facets - BROAD_TOPIC_FACETS):
         return title_facets
     return combined_facets or title_facets
@@ -9018,6 +9132,11 @@ def primary_merge_guard_facets(title: str, summary: str = "") -> set[str]:
     combined_facets = merge_guard_facets_from_text(f"{title} {summary}")
     if "apple-restricted-memory-supplier-approval" in combined_facets:
         return combined_facets
+    if "apple-product-price-increase" in title_facets:
+        combined_price_details = price_detail_facets(combined_facets)
+        title_price_details = price_detail_facets(title_facets)
+        if combined_price_details and not title_price_details:
+            return title_facets | combined_price_details
     if title_facets and merge_guard_action_facets(title_facets):
         return title_facets
     return combined_facets or title_facets
@@ -9713,6 +9832,10 @@ def collect_candidates(
     for candidate in candidates:
         normalized_url = normalize_url(candidate.url)
         if not same_domain(candidate.url, source.domains):
+            continue
+        if is_ithome_daily_brief_candidate(candidate, source):
+            excluded_counts = diagnostics.setdefault("source_excluded_daily_brief_counts", {})
+            excluded_counts[source.name] = excluded_counts.get(source.name, 0) + 1
             continue
         if not is_relevant_candidate(candidate, source):
             continue
