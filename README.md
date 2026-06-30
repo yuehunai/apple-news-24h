@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.14.0 - 2026-06-29
+### 1.15.0 - 2026-06-30
 
-- Added source-level filtering for IT之家 `IT早报` pages so daily link roundups are skipped during candidate discovery while standalone IT之家 Apple articles remain eligible.
-- Improved Apple product price clustering by separating reseller or retailer retroactive order price-difference disputes from official Apple price increases and supplier cost-pass-through stories.
-- Improved weak filtering for non-Apple price-follow-up rumors, including third-party drone or competitor price-change stories that mention Apple only as market context.
-- Refined price-topic facet selection so title-led Apple pricing events keep concrete detail facets without merging unrelated cost, supplier, or retail actions.
-- Added fallback policy guidance and regression coverage for IT之家 daily-brief filtering, retroactive reseller adjustments, and non-Apple price follow-up handling.
+- Improved 9to5Mac discovery by preserving WordPress category and tag context from the posts API, restoring coverage for Apple TV+ content stories and OS update reports.
+- Improved OS release clustering so current betas, legacy RCs, public security releases, and support-document explanations stay separate unless they describe the same rollout.
+- Improved hardware roadmap and data-leak clustering so A20 Pro packaging, iPhone 18 Pro feature rumors, iPhone Ultra or iPhone Air roadmap items, supplier leaks, and price or memory-supply stories stay separate when their concrete Apple action differs.
+- Added source-level filtering for 爱范儿 `早报` pages while keeping IT之家 `IT早报` filtering aligned, reducing daily-brief roundup noise without reducing standalone Apple article discovery.
+- Updated skill and fallback policy guidance plus regression coverage for required brief coverage, Apple services/content inclusion, OS release boundaries, strategic transactions, and high-volume roadmap clustering.
 
 ## What It Does
 

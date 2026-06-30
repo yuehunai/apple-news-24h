@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.15.0 - 2026-06-30
+
+- Improved 9to5Mac discovery by preserving WordPress category and tag context from the posts API, restoring coverage for Apple TV+ content stories and OS update reports that were previously under-ranked.
+- Improved OS release clustering with version-train, release-channel, beta-number, RC, final-release, and security-update facets so current betas, legacy RCs, public security releases, and support-document explanations stay separate unless they describe the same rollout.
+- Improved hardware roadmap and data-leak clustering so A20 Pro packaging, iPhone 18 Pro feature rumors, iPhone Ultra or iPhone Air roadmap items, supplier leaks, and price or memory-supply stories remain separate when their concrete Apple action differs.
+- Added source-level filtering for 爱范儿 `早报` pages and kept IT之家 `IT早报` filtering aligned, reducing daily-brief roundup noise without reducing standalone Apple article discovery.
+- Updated skill and fallback policy guidance so automation agents account for every required brief item, keep eligible Apple services/content stories, and merge only duplicate coverage of the same subject and action.
+- Added regression coverage for 9to5Mac API context, OS release boundaries, Apple strategic transactions, service/content inclusion, daily-brief filtering, hardware-data-leak classification, and high-volume roadmap clustering.
+
 ## 1.14.0 - 2026-06-29
 
 - Added source-level filtering for IT之家 `IT早报` pages so daily link roundups are skipped during candidate discovery while standalone IT之家 Apple articles remain eligible.

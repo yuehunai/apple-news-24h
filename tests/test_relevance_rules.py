@@ -184,6 +184,94 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertTrue(module.is_relevant_candidate(ordinary_article, source))
         self.assertTrue(module.is_relevant_candidate(non_ithome_daily_brief, source_named(module, "快科技")))
 
+    def test_ifanr_daily_brief_candidate_is_filtered_before_detail_fetch(self):
+        module = load_module()
+        source = source_named(module, "爱范儿")
+        daily_brief = module.Candidate(
+            source="爱范儿",
+            url="https://www.ifanr.com/1670360",
+            title="早报｜曝 iPhone 18 标准版内存升至 9GB / 自变量机器人 2 个月完成 4 轮融资",
+            summary="曝 iPhone 18 标准版内存升至 9GB，另有多条非 Apple 科技新闻。",
+        )
+        spaced_daily_brief = module.Candidate(
+            source="爱范儿",
+            url="https://www.ifanr.com/1670361",
+            title="早 报｜苹果发布 iOS 26.5.2 安全更新",
+            summary="苹果发布系统更新。",
+        )
+        ordinary_article = module.Candidate(
+            source="爱范儿",
+            url="https://www.ifanr.com/1670300",
+            title="苹果发布 iOS 26.5.2 安全更新，修复多项系统漏洞",
+            summary="苹果向 iPhone 用户推送 iOS 26.5.2，提前发布安全修复。",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(daily_brief, source))
+        self.assertFalse(module.is_relevant_candidate(spaced_daily_brief, source))
+        self.assertTrue(module.is_relevant_candidate(ordinary_article, source))
+
+    def test_duplicate_candidates_merge_context_before_relevance_filtering(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        api_candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/29/silo-season-3-hailed-as-best-season-yet-here-are-the-first-reviews/",
+            title="Silo season 3 hailed as ‘best season yet,’ here are the first reviews",
+            summary=(
+                "Silo returns later this week for season 3, and the first reviews indicate "
+                "the new season could be the show’s best yet thanks in part to a new split-timeline story."
+            ),
+            feed_time_raw="2026-06-29T18:21:00+00:00",
+        )
+        category_context_candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/06/29/silo-season-3-hailed-as-best-season-yet-here-are-the-first-reviews/#more-1058808",
+            title="Expand Expanding Close",
+            context="apple tv",
+        )
+
+        merged = module.merge_duplicate_candidates([api_candidate, category_context_candidate])
+
+        self.assertEqual(len(merged), 1)
+        self.assertIn("Silo season 3", merged[0].title)
+        self.assertIn("split-timeline", merged[0].summary)
+        self.assertIn("apple tv", merged[0].context)
+        self.assertTrue(module.is_relevant_candidate(merged[0], source))
+
+    def test_roundup_variant_does_not_inherit_global_context_for_non_apple_item(self):
+        module = load_module()
+        source = source_named(module, "爱范儿")
+        inherited_context = "apple iphone apple tv apple intelligence"
+        variant_context = module.context_for_article_variant(is_roundup=True, candidate_context=inherited_context)
+        non_apple_item = module.Candidate(
+            source="爱范儿",
+            url="https://www.ifanr.com/1670360",
+            title="Jeep 未来四年连发三款新车，将与东风联合开发大型 SUV",
+            summary="Jeep 将在未来四年推出三款新车，并与东风联合开发大型 SUV。",
+            context=variant_context,
+        )
+
+        self.assertEqual(variant_context, "")
+        self.assertFalse(module.is_relevant_candidate(non_apple_item, source))
+
+    def test_roundup_variants_keep_only_apple_subject_items(self):
+        module = load_module()
+        variants = module.roundup_article_variants(
+            "早报｜曝 iPhone 18 标准版内存升至 9GB / 理想汽车进入澳门市场",
+            "曝 iPhone 18 标准版内存升至 9GB",
+            "苹果 iPhone 18 标准版内存升至 9GB，理想汽车进入澳门市场。",
+            [
+                "曝 iPhone 18 标准版内存升至 9GB，分析师称苹果将提高内存容量。",
+                "理想汽车进入澳门市场，首家零售中心开业，海外版智能系统支持 Apple CarPlay、Spotify 等本地化应用。",
+                "Jeep 未来四年连发三款新车，将与东风联合开发大型 SUV。",
+            ],
+        )
+        titles = " ".join(title for title, _, _ in variants)
+
+        self.assertIn("iPhone 18", titles)
+        self.assertNotIn("理想汽车", titles)
+        self.assertNotIn("Jeep", titles)
+
     def test_roundup_apple_items_expand_to_separate_article_variants(self):
         module = load_module()
         original_title = "Daily briefing: Apple foldable iPhone suppliers; Apple closes three U.S. stores"
@@ -443,6 +531,494 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(len(reseller_events), 1, titles_by_event)
         self.assertEqual({article.source for article in reseller_events[0].articles}, {"IT之家", "快科技"})
 
+    def test_generic_chip_image_leak_does_not_merge_with_supplier_data_breach(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Leaked A20 Pro Image Hints at iPhone 18 Pro Performance Gains",
+                "An alleged image of the iPhone 18 Pro motherboard shows the A20 Pro chip will use WMCM packaging for performance gains.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Tata Leak Reveals iPhone 18 Pro Drop Test Files",
+                "Reuters says Tata files posted on the dark web include confidential Apple iPhone 18 Pro drop test photos, circuit-board chips, battery and camera components.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro dark web breach includes drop-test documents",
+                "The files allegedly stolen from Apple supplier Tata include iPhone 18 Pro drop-test images and internal hardware documents.",
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+
+        self.assertEqual(len(events), 2, titles_by_event)
+        chip_events = [event for event in events if "A20 Pro Image" in " ".join(article.title for article in event.articles)]
+        breach_events = [event for event in events if "Tata" in " ".join(article.title for article in event.articles)]
+        self.assertEqual(len(chip_events), 1, titles_by_event)
+        self.assertEqual(len(breach_events), 1, titles_by_event)
+        self.assertEqual(len(breach_events[0].articles), 2, titles_by_event)
+
+    def test_iphone_hardware_rumor_subtopics_do_not_form_one_large_cluster(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Leaked A20 Pro Image Hints at iPhone 18 Pro Performance Gains",
+                "An alleged image of the iPhone 18 Pro motherboard shows the A20 Pro chip will use WMCM packaging and side-mounted DRAM for better cooling.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro is Just a Few Months Away With These 10 New Features",
+                (
+                    "A broad roundup says the iPhone 18 Pro may debut in September, use an A20 Pro chip, "
+                    "feature a smaller Dynamic Island, and be affected by Tata files leaked on the dark web."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro launch date likely September 8, says Gurman",
+                "Bloomberg says Apple's iPhone 18 Pro models and foldable iPhone are most likely to debut on September 8, 2026.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Tata Leak Reveals iPhone 18 Pro Drop Test Files",
+                "Reuters says Tata files posted on the dark web include confidential Apple iPhone 18 Pro drop test photos, circuit-board chips, battery and camera components.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 iPhone 18 Pro 被曝配备更大均热板",
+                "爆料称 iPhone 18 Pro 的 VC 均热板散热面积非常大，一直延伸到手机顶部。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+
+        self.assertGreaterEqual(len(events), 3, titles_by_event)
+        self.assertTrue(any("A20 Pro Image" in title for title in titles_by_event), titles_by_event)
+        self.assertTrue(any("launch date" in title for title in titles_by_event), titles_by_event)
+        self.assertTrue(any("Tata" in title for title in titles_by_event), titles_by_event)
+        self.assertFalse(
+            any(
+                "10 New Features" in title and "A20 Pro Image" in title and "launch date" in title and "Tata" in title
+                for title in titles_by_event
+            ),
+            titles_by_event,
+        )
+
+    def test_iphone_launch_timing_does_not_absorb_memory_supply_or_chip_process_topics(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro and Ultra Launch Date: Here's When They'll Likely Debut",
+                "Bloomberg's Mark Gurman says Apple's iPhone 18 Pro models and foldable iPhone are most likely to debut on September 8, 2026.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 With 9GB of RAM Still Won't Support Two New iOS 27 Features",
+                "The lower-end iPhone 18 and iPhone 18e will have 9GB of RAM but still miss two Apple Intelligence features that need 12GB.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "郭明錤：苹果寻求采购长鑫存储内存原因，是内存供需缺口持续扩大至明年",
+                "郭明錤称苹果寻求采购长鑫存储内存芯片，是因为 LPDDR 内存供需缺口将持续扩大至 2027 年，A20 芯片拉货量可能低于目标。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "每片晶圆30万元也照买！苹果抢占1.4纳米制程深层布局曝光",
+                "苹果预计 2026 年和 2027 年采用台积电 2 纳米 N2 与 N2P 制程，并在 2028 年为 A22 Pro 芯片换装 1.4 纳米工艺。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "苹果 iPad mini 8 主板首曝，配 A20 Pro 芯片",
+                "消息源分享苹果 iPad mini 8 主板图片，显示该机配备 A20 Pro 芯片。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro Max真机首次泄露：横向大矩阵镜组+全新深空灰配色",
+                "塔塔电子遭遇网络安全事件，暗网泄露 iPhone 18 Pro Max 跌落测试视频和供应商清单。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+        launch_event_titles = [title for title in titles_by_event if "Launch Date" in title or "debute" in title]
+
+        self.assertGreaterEqual(len(events), 5, titles_by_event)
+        self.assertTrue(launch_event_titles, titles_by_event)
+        launch_event_title = launch_event_titles[0]
+        self.assertNotIn("9GB of RAM", launch_event_title)
+        self.assertNotIn("长鑫存储", launch_event_title)
+        self.assertNotIn("1.4纳米", launch_event_title)
+        self.assertNotIn("iPad mini 8", launch_event_title)
+        self.assertNotIn("真机首次泄露", launch_event_title)
+
+    def test_os_beta_release_sources_merge_separately_from_security_release(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Releases Third watchOS 26.6, tvOS 26.6 and visionOS 26.6 Betas",
+                "Apple today provided developers with the third betas of upcoming watchOS 26.6, tvOS 26.6, and visionOS 26.6 updates for testing purposes.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Seeds Third iOS 26.6 and iPadOS 26.6 Betas to Developers",
+                "Apple seeded the third betas of iOS 26.6 and iPadOS 26.6 to developers, two weeks after beta 2.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple releases iOS 26.6 beta 3 for iPhone, here’s what to expect",
+                "Apple released the third iOS 26.6 developer beta, with the update preparing minor iPhone changes before iOS 27.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果 iOS / iPadOS 26.6 开发者预览版 Beta 3 发布",
+                "苹果向 iPhone 和 iPad 用户推送 iOS / iPadOS 26.6 开发者预览版 Beta 3，内部版本号 23G5052d。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "iOS 26.5.2 Patches More Than 25 Security Vulnerabilities",
+                "Apple released iOS 26.5.2 and iPadOS 26.5.2 with fixes for more than 25 security vulnerabilities.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iOS 26.5.2 has fixes for 25 security issues on iPhone, details here",
+                "Apple released iOS 26.5.2 for iPhone with patches for nearly 30 security issues.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Leaker outlines iPhone lineup for next year, with six new models coming",
+                "A leaker says Apple plans six new iPhone models next year after the iOS 27 cycle, including an iPhone 18e and iPhone Ultra.",
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+
+        self.assertEqual(len(events), 3, titles_by_event)
+        beta_events = [event for event in events if "26.6" in " ".join(article.title for article in event.articles)]
+        security_events = [event for event in events if "26.5.2" in " ".join(article.title for article in event.articles)]
+        lineup_events = [event for event in events if "iPhone lineup" in " ".join(article.title for article in event.articles)]
+        self.assertEqual(len(beta_events), 1, titles_by_event)
+        self.assertEqual(len(security_events), 1, titles_by_event)
+        self.assertEqual(len(lineup_events), 1, titles_by_event)
+        self.assertEqual({article.source for article in beta_events[0].articles}, {"MacRumors", "9to5Mac", "IT之家"})
+        self.assertEqual({article.source for article in security_events[0].articles}, {"MacRumors", "9to5Mac"})
+        self.assertEqual({article.source for article in lineup_events[0].articles}, {"9to5Mac"})
+
+    def test_security_update_title_facets_resist_related_beta_noise(self):
+        module = load_module()
+        title = "iOS 26.5.2 has fixes for 25+ security issues on iPhone, details here"
+        noisy_summary = (
+            "Apple released iOS 26.5.2 for iPhone with patches for nearly 30 security issues. "
+            "Related coverage also mentions iOS 26.6 beta 3 rolling out to developers."
+        )
+
+        facets = module.primary_topic_facets(title, noisy_summary)
+
+        self.assertIn("os-release-version-26-5-2", facets)
+        self.assertIn("os-release-security", facets)
+        self.assertNotIn("os-release-version-26-6", facets)
+        self.assertNotIn("os-release-beta", facets)
+
+    def test_multi_version_os_update_context_does_not_bridge_release_events(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple releases iOS 26.6 beta 3 for iPhone, here’s what to expect",
+                "Apple released iOS 26.6 beta 3 to developers with minor iPhone changes.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "iOS 26.5.2 has fixes for 25+ security issues on iPhone, details here",
+                "Apple released iOS 26.5.2 for iPhone with patches for nearly 30 security issues.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple accelerates security updates in response to AI-powered hacking risks",
+                (
+                    "Apple's iOS 26.5.2 security release arrived the same day as iOS 26.6 beta 3, "
+                    "showing a broader push to ship urgent security fixes faster."
+                ),
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+
+        self.assertEqual(len(events), 3, titles_by_event)
+        self.assertFalse(
+            any("26.6 beta" in title and "26.5.2" in title for title in titles_by_event),
+            titles_by_event,
+        )
+
+    def test_apple_acquisition_does_not_merge_with_antitrust_case(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Acquires Award-Winning App 'Play'",
+                "Apple notified the European Commission that it would acquire certain assets and hire employees from Rabbit 3 Times, the company behind the app design tool Play.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Design award winner acquired by Apple for new Swift tools",
+                "Apple has now bought Rabbit 3 Times, which made a visual Swift development tool called Play, after previously giving it an Apple Design Award.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Apple says India built its App Store antitrust case on copy-pasted claims from rivals",
+                "Apple asked India to scrap a CCI App Store antitrust investigation, arguing the report copied rival claims and threatens its integrated business model.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "India's antitrust case is plagiarized and should be scrapped, says Apple",
+                "Apple told regulators that India's App Store antitrust case should be withdrawn because it borrowed from a European ruling.",
+                source="AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+
+        self.assertEqual(len(events), 2, titles_by_event)
+        acquisition_events = [
+            event
+            for event in events
+            if "Play" in " ".join(article.title for article in event.articles)
+            or "Swift tools" in " ".join(article.title for article in event.articles)
+        ]
+        antitrust_events = [event for event in events if "antitrust" in " ".join(article.title for article in event.articles).lower()]
+        self.assertEqual(len(acquisition_events), 1, titles_by_event)
+        self.assertEqual(len(antitrust_events), 1, titles_by_event)
+        self.assertEqual({article.source for article in acquisition_events[0].articles}, {"MacRumors", "AppleInsider"})
+        self.assertEqual(acquisition_events[0].relevance_tier, "strong", titles_by_event)
+        self.assertFalse(any("antitrust" in article.title.lower() for article in acquisition_events[0].articles))
+
+    def test_direct_apple_acquisition_is_strong_even_when_target_is_an_app(self):
+        module = load_module()
+
+        self.assertTrue(module.is_apple_strategic_transaction_story("Apple Acquires Award-Winning App 'Play'"))
+        self.assertIn(
+            "apple-strategic-transaction",
+            module.primary_topic_facets("Apple Acquires Award-Winning App 'Play'"),
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            "Apple Acquires Award-Winning App 'Play'",
+            (
+                "In February, Apple notified the European Commission that it would be acquiring certain assets "
+                "from and have the right to hire certain employees from Rabbit 3 Times, the company behind the "
+                "award-winning app design tool Play."
+            ),
+            [
+                "In 2025, the app won an Apple Design Award for innovation.",
+                "The listing describes Play as offering iOS and macOS tools for designing SwiftUI code in real time.",
+            ],
+            "MacRumors",
+        )
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_acquisition_title_stays_strong_when_summary_contains_app_store_noise(self):
+        module = load_module()
+        noisy_summary = (
+            "Apple Acquires Award-Winning App 'Play'. In February, Apple notified the European Commission that "
+            "it would be acquiring certain assets from and have the right to hire certain employees from Rabbit "
+            "3 Times, the company behind the award-winning app design tool Play. The notification was published "
+            "on the European Commission's website this week, following a four-month waiting period. Play was a "
+            "Mac and iPhone app that allowed designers to prototype iPhone app interfaces using Apple's SwiftUI "
+            "frameworks, and then send them to Xcode. Apple has acquired a variety of apps recently, and the "
+            "latest—Play—won the 2025 Apple Design Award in the Innovation category. IT之家称苹果向欧盟委员会提交申报，"
+            "计划收购 Rabbit 3 Times 公司的部分资产，并有权吸纳该公司部分员工。日前，腾讯旗下一款名为 TenPayGo 的支付应用已上架苹果应用商店 App Store，"
+            "引起了外界对腾讯有无计划推出独立支付应用的讨论。"
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            "Apple Acquires Award-Winning App 'Play'",
+            noisy_summary,
+            [
+                "In 2025, the app won an Apple Design Award for innovation.",
+                "And the latest addition, as spotted by MacRumors, is for Rabbit 3 Times along with its Play app.",
+                "苹果官方表示：Play 是一款功能专业、上手门槛低的工具，用户可依托 SwiftUI 框架制作可交互原型。",
+                "从已公开的信息来看，TenPayGo界面设计较为简洁。用户绑定银行卡后，可生成付款二维码供商户扫码，或主动扫描商户二维码完成支付。",
+                "在应用场景上，该App覆盖购物、餐饮、交通、酒店、景区、医疗健康等多个日常消费领域。",
+                "Perhaps the company will integrate its feature set into Xcode, or re-launch Play as a new standalone app.",
+                "值得注意的是，这并非腾讯首次在跨境支付领域进行布局。",
+            ],
+            "MacRumors",
+        )
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_third_party_app_store_title_is_not_strengthened_by_related_acquisition_noise(self):
+        module = load_module()
+        noisy_summary = (
+            "Tencent's TenPayGo payment app has been listed on Apple's App Store for internal testing. "
+            "Related links mention Apple acquiring the award-winning Play app from Rabbit 3 Times."
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            "腾讯 TenPayGo 支付应用上架苹果 App Store，目前处于内部测试",
+            noisy_summary,
+            [],
+            "cnBeta",
+        )
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_merged_apple_app_acquisition_event_is_not_downgraded_by_app_status_language(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Acquires Award-Winning App 'Play'",
+                (
+                    "In February, Apple notified the European Commission that it would be acquiring certain assets "
+                    "from Rabbit 3 Times, the company behind the award-winning app design tool Play. Play was a Mac "
+                    "and iPhone app that allowed designers to prototype iPhone app interfaces using Apple's SwiftUI "
+                    "frameworks, and then send them to Xcode."
+                ),
+                source="MacRumors",
+                facts=["In 2025, the app won an Apple Design Award for innovation."],
+            ),
+            article_for(
+                module,
+                "Apple just acquired the app that won last year’s Innovation Apple Design Award",
+                (
+                    "Apple has acquired a variety of apps recently, and the latest—Play—won the 2025 Apple Design "
+                    "Award in the Innovation category. Here’s what it does."
+                ),
+                source="9to5Mac",
+                facts=["Perhaps the company will integrate its feature set into Xcode or Apple developer resources."],
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, [event.title for event in events])
+        self.assertEqual(events[0].relevance_tier, "strong", events[0].relevance_reason)
+
+    def test_third_party_payment_app_listing_does_not_merge_with_apple_acquisition(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Acquires Award-Winning App 'Play'",
+                (
+                    "Apple notified the European Commission that it would acquire certain assets and hire employees "
+                    "from Rabbit 3 Times, the company behind the app design tool Play."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "腾讯 TenPayGo 支付应用上架苹果 App Store，目前处于内部测试",
+                (
+                    "腾讯旗下 TenPayGo 支付应用已上架苹果应用商店，用户绑定银行卡后可生成付款二维码，"
+                    "未来还将逐步接入更多本地交通及生活服务功能。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+
+        self.assertEqual(len(events), 2, titles_by_event)
+        self.assertFalse(any("Play" in titles and "TenPayGo" in titles for titles in titles_by_event), titles_by_event)
+
+    def test_mixed_relevance_event_splits_weak_app_noise_from_strong_transaction(self):
+        module = load_module()
+        strong_article = article_for(
+            module,
+            "Apple Acquires Award-Winning App 'Play'",
+            (
+                "Apple notified the European Commission that it would acquire certain assets and hire employees "
+                "from Rabbit 3 Times, the company behind the app design tool Play."
+            ),
+            source="MacRumors",
+        )
+        weak_article = article_for(
+            module,
+            "腾讯 TenPayGo 支付应用上架苹果 App Store，目前处于内部测试",
+            (
+                "腾讯旗下 TenPayGo 支付应用已上架苹果应用商店，用户绑定银行卡后可生成付款二维码，"
+                "未来还将逐步接入更多本地交通及生活服务功能。"
+            ),
+            source="IT之家",
+        )
+        event = module.cluster_articles([strong_article])[0]
+        module.rebuild_event_from_articles(event, [strong_article, weak_article])
+
+        split_events = module.split_mixed_topic_event(event)
+        titles_by_event = [" | ".join(article.title for article in item.articles) for item in split_events]
+
+        self.assertEqual(len(split_events), 2, titles_by_event)
+        self.assertTrue(any("Play" in titles and "TenPayGo" not in titles for titles in titles_by_event), titles_by_event)
+        self.assertTrue(any("TenPayGo" in titles and "Play" not in titles for titles in titles_by_event), titles_by_event)
+
+    def test_same_apple_acquisition_merges_across_secondary_developer_tool_guard(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Acquires Award-Winning App 'Play'",
+                (
+                    "Apple notified the European Commission that it would acquire certain assets and hire employees "
+                    "from Rabbit 3 Times, the company behind the app design tool Play."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果收购获奖应用 Play 开发商部分资产，App Store 已下架该应用",
+                (
+                    "苹果向欧盟委员会提交申报，计划收购 Rabbit 3 Times 公司的部分资产，并有权吸纳该公司部分员工。"
+                    "Play 是一款适用于 Mac 与 iPhone 的应用，设计师可借助苹果 SwiftUI 框架制作原型并导入 Xcode。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        titles_by_event = [" | ".join(article.title for article in event.articles) for event in events]
+
+        self.assertEqual(len(events), 1, titles_by_event)
+
     def test_future_iphone_price_forecasts_still_merge_with_each_other(self):
         module = load_module()
         articles = [
@@ -545,6 +1121,70 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertTrue(module.is_non_apple_price_followup_story(title, summary))
         tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_native_ios_app_launch_stays_weak(self):
+        module = load_module()
+        title = "Open Source AI Agent OpenClaw Gets Native iOS App"
+        summary = (
+            "OpenClaw is expanding to the iPhone and iPad with a new native iOS app "
+            "for chat, voice approvals, sharing, and device-aware automation."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_classic_mac_os_third_party_client_stays_weak(self):
+        module = load_module()
+        title = "开发者为经典MacOS 9打造完整的OpenStreetMap客户端 - Apple macOS - cnBeta.COM"
+        summary = (
+            "开发者发布 OS9Map 地图应用，为已经停产多年的经典 Mac OS 9 操作系统带来现代地图体验，"
+            "需要 PowerPC Macintosh 电脑和 Open Transport 网络栈。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_iphone_accessory_compatibility_stays_weak(self):
+        module = load_module()
+        title = "iPhone也能有背屏了！OPPO Bubble潮玩自拍屏官宣适配：499元"
+        summary = (
+            "OPPO Bubble 潮玩自拍屏正式官宣适配 iPhone，新版本已经开启预约，"
+            "可在 App 查看电量、连接情况，并支持设置个性壁纸。"
+        )
+        facts = [
+            "快科技6月30日消息，OPPO Bubble潮玩自拍屏正式官宣适配iPhone，新版本已经开启预约，将于7月6日开售，依然定价499元。",
+            "从官方海报来看，OPPO应该做了单独的软件适配，可以在App查看电量、连接情况，并且支持设置个性壁纸等等。",
+            "OPPO Bubble机身厚度约7mm，重量约27.5g，内置550mAh电池，正面配备一块圆形AMOLED触屏，支持显示静态图片、实况照片和视频内容。",
+        ]
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "third_party_ecosystem")
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "快科技")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_legacy_apple_hardware_replica_stays_weak(self):
+        module = load_module()
+        title = "SB Mini II 登场：硬件复刻苹果 Apple II Plus 电脑，6502 CPU+48K 内存"
+        summary = (
+            "Simon Boak 发布 SB Mini II 项目，通过现代元件硬件复刻 Apple II Plus。"
+            "Apple II Plus 于 1979 年推出，是苹果早期 8 位个人计算机型号。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_former_apple_staff_third_party_vehicle_story_stays_weak(self):
+        module = load_module()
+        title = "苹果、奥迪前员工联合创业，推出 2.5 万美元月球车风格轻型电动车"
+        summary = (
+            "电动车初创公司 Amble 推出首款产品 Amble One。"
+            "设计总监 Julian Hoenig 曾在奥迪参与 R8、Q3 等车型设计，后加入苹果负责 Apple Watch、Vision Pro 及已取消的 Project Titan 汽车项目。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "爱范儿")
         self.assertEqual(tier, "weak", reason)
 
     def test_non_apple_component_market_background_story_is_weak(self):
@@ -4658,6 +5298,20 @@ class RelevanceRuleTests(unittest.TestCase):
             "link": "https://9to5mac.com/2026/06/22/ios-27-adds-brand-new-widgets-for-your-iphones-home-screen/",
             "title": {"rendered": "iOS 27 adds brand new widgets for your iPhone’s Home Screen"},
             "excerpt": {"rendered": "<p>iOS 27 beta 2 adds new Apple widgets for the iPhone Home Screen.</p>"}
+          },
+          {
+            "date_gmt": "2026-06-29T15:01:27",
+            "link": "https://9to5mac.com/2026/06/29/silo-season-3-hailed-as-best-season-yet-here-are-the-first-reviews/",
+            "title": {"rendered": "Silo season 3 hailed as ‘best season yet,’ here are the first reviews"},
+            "excerpt": {"rendered": "<p>Silo returns later this week for season 3, and the first reviews indicate the new season could be the show’s best yet.</p>"},
+            "_embedded": {
+              "wp:term": [
+                [
+                  {"name": "Apple TV+", "slug": "apple-tv-plus"},
+                  {"name": "TV", "slug": "tv"}
+                ]
+              ]
+            }
           }
         ]
         """
@@ -4667,9 +5321,20 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual([candidate.title for candidate in candidates], [
             "Apple’s productivity apps have a small but useful AI enhancement in macOS 27",
             "iOS 27 adds brand new widgets for your iPhone’s Home Screen",
+            "Silo season 3 hailed as ‘best season yet,’ here are the first reviews",
         ])
         self.assertEqual(candidates[0].feed_time_raw, "2026-06-22T12:05:59+00:00")
         self.assertIn("Pages", candidates[0].summary)
+        self.assertIn("apple tv", candidates[2].context.lower())
+        self.assertTrue(module.is_relevant_candidate(candidates[2], source))
+
+    def test_9to5mac_wordpress_api_preserves_links_needed_for_embedded_terms(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+
+        self.assertTrue(source.wordpress_posts_apis)
+        self.assertIn("_embed=wp:term", source.wordpress_posts_apis[0])
+        self.assertIn("_links.wp:term", source.wordpress_posts_apis[0])
 
     def test_macos_productivity_apps_enhancement_is_direct_os_news(self):
         module = load_module()
@@ -5384,6 +6049,38 @@ class RelevanceRuleTests(unittest.TestCase):
         events = module.split_mixed_topic_events(module.cluster_articles(articles))
 
         self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "hardware_products")
+
+    def test_product_data_leak_with_apple_response_remains_hardware_event(self):
+        module = load_module()
+        title = "Photos of iPhone 18 Pro drop tests and other sensitive info hits the dark web"
+        summary = (
+            "Reuters says Apple is particularly concerned after supplier Tata Electronics suffered "
+            "a data breach. World Leaks posted more than 200,000 files on the dark web, including "
+            "iPhone 18 Pro drop test photos, component supplier lists, logic-board chip details, "
+            "camera parts, and battery information."
+        )
+        chinese_title = "苹果供应商塔塔泄露 iPhone 18 Pro 跌落测试照片和零部件清单"
+        chinese_summary = (
+            "塔塔电子遭黑客攻击后，暗网上出现 iPhone 18 Pro 跌落测试照片、零部件供应商清单、"
+            "主板芯片、电池和摄像头资料，苹果对此表示担忧。"
+        )
+        facts = [
+            "报道指出，这些泄露的敏感信息涵盖 iPhone 18 Pro 零部件供应商名单，"
+            "由于供应商协议受到苹果严密保护，此次事件可能激怒苹果并对塔塔电子与苹果之间的合作伙伴关系造成实质性冲击。",
+            "泄露文件包含主板芯片配置、电池组件、摄像头部件和跌落测试照片。",
+            "The ransomware organization World Leaks posted the files, and a related video appears to show a new back design change with the Apple logo.",
+        ]
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "hardware_market")
+        articles = [
+            article_for(module, title, summary, facts=facts, source="9to5Mac"),
+            article_for(module, chinese_title, chinese_summary, facts=facts, source="IT之家"),
+        ]
+        events = module.split_mixed_topic_events(module.cluster_articles(articles))
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "hardware_market")
         self.assertEqual(events[0].category, "hardware_products")
 
     def test_product_data_leak_summary_events_can_remerge_after_intermediate_split(self):

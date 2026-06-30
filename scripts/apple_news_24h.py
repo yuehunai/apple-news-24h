@@ -1406,7 +1406,7 @@ def build_sources(now_local: datetime) -> list[Source]:
             default_tz="America/Los_Angeles",
             feeds=["https://9to5mac.com/feed/"],
             wordpress_posts_apis=[
-                "https://9to5mac.com/wp-json/wp/v2/posts?per_page=40&_fields=link,date_gmt,date,title,excerpt"
+                "https://9to5mac.com/wp-json/wp/v2/posts?per_page=40&_embed=wp:term&_fields=link,date_gmt,date,title,excerpt,_links.wp:term,_embedded.wp:term"
             ],
             pages=nine_pages,
             domains=("9to5mac.com",),
@@ -1744,6 +1744,21 @@ def parse_wordpress_posts_api(text: str, source: Source, api_url: str) -> list[C
         summary = wordpress_rendered_text(item.get("excerpt"))
         if not title:
             continue
+        context_terms: list[str] = []
+        embedded = item.get("_embedded")
+        if isinstance(embedded, dict):
+            term_groups = embedded.get("wp:term")
+            if isinstance(term_groups, list):
+                for group in term_groups:
+                    if not isinstance(group, list):
+                        continue
+                    for term in group:
+                        if not isinstance(term, dict):
+                            continue
+                        for key in ("name", "slug"):
+                            value = term.get(key)
+                            if isinstance(value, str) and value.strip():
+                                context_terms.append(strip_tags(value).replace("-", " "))
         feed_time_raw = wordpress_utc_timestamp(item.get("date_gmt")) or wordpress_utc_timestamp(
             item.get("date")
         )
@@ -1755,7 +1770,7 @@ def parse_wordpress_posts_api(text: str, source: Source, api_url: str) -> list[C
                 summary=summary,
                 feed_time_raw=feed_time_raw,
                 discovered_from=api_url,
-                context="",
+                context=" ".join(dict.fromkeys(context_terms)),
             )
         )
     return candidates
@@ -2570,10 +2585,128 @@ def is_apple_os_feature_or_summary_story(text: str) -> bool:
     return component_score > 0 and action_score > 0
 
 
+def normalize_os_version_token(value: str) -> str:
+    return value.replace(".", "-")
+
+
+def os_release_facets_from_text(text: str) -> set[str]:
+    lower = text.lower()
+    if score_terms(lower, ["ios", "ipados", "macos", "watchos", "tvos", "visionos"]) <= 0:
+        return set()
+    version_values = {
+        match.group(1)
+        for match in re.finditer(
+            r"(?<!\d)(\d{1,2}\.\d(?:\.\d)?)(?!\d)",
+            lower,
+        )
+    }
+    if not version_values:
+        return set()
+    release_action_score = score_terms(
+        lower,
+        [
+            "beta",
+            "developer beta",
+            "release candidate",
+            "release",
+            "releases",
+            " rc",
+            "seeded",
+            "seeds",
+            "released",
+            "rolling out",
+            "now available",
+            "patch",
+            "patches",
+            "fix",
+            "fixes",
+            "security fixes",
+            "security issues",
+            "security update",
+            "security updates",
+            "security vulnerabilities",
+            "开发者预览版",
+            "测试版",
+            "候选版",
+            "发布",
+            "推送",
+            "正式版",
+            "安全更新",
+            "漏洞",
+            "修复",
+        ],
+    )
+    if release_action_score <= 0:
+        return set()
+    facets = {f"os-release-version-{normalize_os_version_token(value)}" for value in version_values}
+    if score_terms(lower, ["beta", "betas", "developer beta", "developer betas", "开发者预览版", "测试版"]) > 0:
+        facets.add("os-release-beta")
+        beta_numbers = set(re.findall(r"(?:beta|测试版)\s*(\d+)", lower))
+        beta_numbers |= set(re.findall(r"beta\s*/?\s*rc\s*(?:间隔\s*)?(\d+)", lower))
+        ordinal_beta_numbers = {
+            "first": "1",
+            "second": "2",
+            "third": "3",
+            "fourth": "4",
+            "fifth": "5",
+            "sixth": "6",
+        }
+        for ordinal, number in ordinal_beta_numbers.items():
+            if re.search(rf"\b{ordinal}\s+(?:developer\s+)?betas?\b", lower):
+                beta_numbers.add(number)
+        for number in beta_numbers:
+            facets.add(f"os-release-beta-{number}")
+    if score_terms(lower, ["release candidate", " rc", "候选版"]) > 0:
+        facets.add("os-release-rc")
+    if score_terms(lower, ["security", "security fixes", "security vulnerabilities", "patch", "patches", "安全", "漏洞", "修复"]) > 0:
+        facets.add("os-release-security")
+    if score_terms(lower, ["正式版", "now available", "released"]) > 0 and "os-release-beta" not in facets:
+        facets.add("os-release-final")
+    return facets
+
+
+def os_release_version_facets(facets: set[str]) -> set[str]:
+    return {facet for facet in facets if facet.startswith("os-release-version-")}
+
+
+def os_release_channel_facets(facets: set[str]) -> set[str]:
+    return {facet for facet in facets if facet.startswith("os-release-") and not facet.startswith("os-release-version-")}
+
+
+def os_release_facets_compatible(article_facets: set[str], event_facets: set[str]) -> bool:
+    article_versions = os_release_version_facets(article_facets)
+    event_versions = os_release_version_facets(event_facets)
+    if not article_versions or not event_versions:
+        return True
+    if article_versions != event_versions:
+        return False
+    article_channels = os_release_channel_facets(article_facets)
+    event_channels = os_release_channel_facets(event_facets)
+    if article_channels and event_channels and not (article_channels & event_channels):
+        return False
+    return True
+
+
+def same_os_release_event(article: Article, event: Event) -> bool:
+    article_facets = effective_topic_facets(article_primary_facets(article))
+    event_facets = effective_topic_facets(event_primary_facets(event))
+    article_versions = os_release_version_facets(article_facets)
+    event_versions = os_release_version_facets(event_facets)
+    if not article_versions or not event_versions or not (article_versions & event_versions):
+        return False
+    if not os_release_facets_compatible(article_facets, event_facets):
+        return False
+    article_channels = os_release_channel_facets(article_facets)
+    event_channels = os_release_channel_facets(event_facets)
+    return bool(article_channels & event_channels)
+
+
 def allowed_url_excluded_candidate(candidate: Candidate, source: Source, text: str) -> bool:
     url_lower = candidate.url.lower()
     if source.name == "MacRumors" and "/guide/" in url_lower:
         return is_apple_os_feature_or_summary_story(text)
+    if "review" in url_lower and detect_event_kind(candidate.title, candidate.summary, [candidate.context]) == "service_content":
+        return True
     return False
 
 
@@ -3393,7 +3526,22 @@ def is_generic_consumer_electronics_health_safety_story(title: str, text: str) -
 def is_apple_car_asset_story(text: str) -> bool:
     lower = text.lower()
     return (
-        score_terms(lower, ["apple car", "project titan", "苹果汽车", "苹果造车", "自动驾驶项目", "汽车项目"]) > 0
+        score_terms(
+            lower,
+            [
+                "apple car",
+                "apple car project",
+                "project titan",
+                "vehicle testing",
+                "vehicle testing assets",
+                "car testing",
+                "苹果汽车",
+                "苹果造车",
+                "自动驾驶项目",
+                "汽车项目",
+            ],
+        )
+        > 0
         and score_terms(
             lower,
             ["test site", "testing site", "proving ground", "test track", "facility", "site", "测试场", "试验场", "测试设施", "场地"],
@@ -3487,8 +3635,6 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
         or is_apple_hardware_product_launch_story(text, title)
     ):
         return False
-    if is_apple_os_feature_or_summary_story(text):
-        return False
     if score_terms(
         title_lower,
         [
@@ -3536,6 +3682,8 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "monitor",
             "display",
             "touchscreen",
+            "selfie screen",
+            "magnetic",
             "magsafe",
             "case",
             "cases",
@@ -3553,6 +3701,10 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "鼠标",
             "显示器",
             "触控显示器",
+            "自拍屏",
+            "背屏",
+            "磁吸",
+            "潮玩自拍屏",
             "配件",
             "保护壳",
             "手机壳",
@@ -3598,6 +3750,27 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "苹果下架",
         ],
     )
+    third_party_title_score = score_terms(
+        title_lower,
+        [
+            "oppo",
+            "xiaomi",
+            "samsung",
+            "lenovo",
+            "anker",
+            "belkin",
+            "logitech",
+            "viture",
+            "雷鸟",
+            "小米",
+            "三星",
+            "联想",
+            "第三方",
+            "潮玩自拍屏",
+        ],
+    )
+    if is_apple_os_feature_or_summary_story(text) and third_party_title_score <= 0:
+        return False
     return accessory_score > 0 and platform_compatibility_score > 0 and first_party_action_score == 0
 
 
@@ -3653,11 +3826,97 @@ def should_hard_exclude_candidate(text: str) -> bool:
     return not has_direct_apple_subject_context(text)
 
 
-def is_ithome_daily_brief_candidate(candidate: Candidate, source: Source | None = None) -> bool:
+def is_source_daily_brief_candidate(candidate: Candidate, source: Source | None = None) -> bool:
     source_name = source.name if source is not None else candidate.source
-    if source_name != "IT之家":
-        return False
-    return re.search(r"(?i)(?<![a-z])it\s*早报", candidate.title) is not None
+    title = candidate.title
+    if source_name == "IT之家":
+        return re.search(r"(?i)(?<![a-z])it\s*早报", title) is not None
+    if source_name == "爱范儿":
+        return re.search(r"(?i)(?<![a-z])早\s*报", title) is not None
+    return False
+
+
+def is_ithome_daily_brief_candidate(candidate: Candidate, source: Source | None = None) -> bool:
+    return is_source_daily_brief_candidate(candidate, source)
+
+
+GENERIC_LINK_TITLES = {
+    "1 comment",
+    "comments",
+    "expand expanding close",
+    "expand",
+    "read more",
+    "more",
+}
+
+
+def title_quality_score(title: str) -> tuple[int, int, int]:
+    cleaned = clean_sentence(title).lower()
+    generic = cleaned in GENERIC_LINK_TITLES or bool(
+        re.fullmatch(r"\d+\s+comments?", cleaned)
+    )
+    return (
+        0 if generic else 1,
+        1 if effective_apple_term_score(title) > 0 or loose_apple_product_marker(title) else 0,
+        len(cleaned),
+    )
+
+
+def merge_candidate_text(primary: str, secondary: str) -> str:
+    if not primary:
+        return secondary
+    if not secondary:
+        return primary
+    return combine_summaries(primary, secondary)
+
+
+def merge_candidate_context(primary: str, secondary: str) -> str:
+    parts: list[str] = []
+    seen: set[str] = set()
+    for value in [primary, secondary]:
+        for part in re.split(r"\s+", value.strip()):
+            cleaned = part.strip().lower()
+            if not cleaned or cleaned in seen:
+                continue
+            parts.append(cleaned)
+            seen.add(cleaned)
+    return " ".join(parts)
+
+
+def merge_two_candidates(existing: Candidate, incoming: Candidate) -> Candidate:
+    title = existing.title
+    if title_quality_score(incoming.title) > title_quality_score(existing.title):
+        title = incoming.title
+    feed_time_raw = existing.feed_time_raw or incoming.feed_time_raw
+    discovered_from = existing.discovered_from or incoming.discovered_from
+    if incoming.feed_time_raw and not existing.feed_time_raw:
+        discovered_from = incoming.discovered_from or discovered_from
+    return Candidate(
+        source=existing.source,
+        url=existing.url,
+        title=title,
+        summary=merge_candidate_text(existing.summary, incoming.summary),
+        feed_time_raw=feed_time_raw,
+        discovered_from=discovered_from,
+        context=merge_candidate_context(existing.context, incoming.context),
+    )
+
+
+def merge_duplicate_candidates(candidates: list[Candidate]) -> list[Candidate]:
+    merged_by_url: dict[str, Candidate] = {}
+    order: list[str] = []
+    for candidate in candidates:
+        key = normalize_url(candidate.url)
+        if key not in merged_by_url:
+            merged_by_url[key] = candidate
+            order.append(key)
+            continue
+        merged_by_url[key] = merge_two_candidates(merged_by_url[key], candidate)
+    return [merged_by_url[key] for key in order]
+
+
+def context_for_article_variant(is_roundup: bool, candidate_context: str) -> str:
+    return "" if is_roundup else candidate_context
 
 
 def is_third_party_platform_availability_candidate(text: str) -> bool:
@@ -3789,7 +4048,7 @@ def score_messages_platform_actions(text: str) -> int:
 
 
 def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
-    if is_ithome_daily_brief_candidate(candidate, source):
+    if is_source_daily_brief_candidate(candidate, source):
         return False
     url_lower = candidate.url.lower()
     text = f"{candidate.title} {candidate.summary} {candidate.context}"
@@ -3840,6 +4099,8 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     if is_apple_executive_company_story(text):
         return True
     if is_apple_strategic_transaction_story(text):
+        return True
+    if candidate_event_kind == "service_content":
         return True
     if is_apple_research_candidate(text):
         return True
@@ -4779,6 +5040,13 @@ def is_apple_roundup_item(value: str) -> bool:
     lower = value.lower()
     if re.search(r"(?:not|no)\s+(?:direct\s+)?relation(?:ship)?\s+to\s+apple|unrelated\s+to\s+apple|与苹果[^。！？.!?]{0,16}无(?:直接)?关系|和苹果[^。！？.!?]{0,16}无(?:直接)?关系", lower):
         return False
+    if (
+        is_non_apple_primary_subject_with_incidental_apple_context(value, value)
+        or is_former_apple_staff_background_story(value)
+        or is_third_party_app_or_service_status_story(value, value)
+        or is_third_party_accessory_platform_compatibility_story(value, value)
+    ):
+        return False
     apple_score = effective_apple_term_score(value) + score_terms(lower, ["tim cook", "库克"])
     if apple_score <= 0 and not loose_apple_product_marker(value):
         return False
@@ -4795,6 +5063,12 @@ def is_apple_roundup_item(value: str) -> bool:
             "storage shortage",
             "涨价",
             "上调",
+            "升至",
+            "提升",
+            "提高",
+            "配备",
+            "升级到",
+            "升级至",
             "短缺",
             "成本",
             "不可避免",
@@ -4850,8 +5124,10 @@ def roundup_article_variants(
     variants: list[tuple[str, str, list[str]]] = []
     for fact in key_facts:
         cleaned_fact = clean_roundup_item_text(fact)
+        if not is_apple_roundup_item(cleaned_fact):
+            continue
         variants.append((roundup_title_from_item(cleaned_fact), cleaned_fact, [cleaned_fact]))
-    return variants
+    return variants or [(title, summary, key_facts)]
 
 
 def extract_time_candidates(text: str) -> list[tuple[str, str]]:
@@ -5616,9 +5892,13 @@ def is_apple_strategic_transaction_story(text: str) -> bool:
             "merging",
             "acquisition",
             "acquire",
+            "acquires",
             "acquired",
+            "acquiring",
             "buyout",
             "takeover",
+            "purchases",
+            "purchasing",
             "strategic deal",
             "transaction",
             "合并",
@@ -5629,6 +5909,16 @@ def is_apple_strategic_transaction_story(text: str) -> bool:
     )
     if transaction_score <= 0:
         return False
+    direct_acquisition = (
+        re.search(r"\bapple\b[^.!?。！？]{0,64}\b(?:acquires?|acquired|acquiring|buys?|bought|purchase[sd]?|purchasing)\b", lower)
+        is not None
+        or re.search(r"\b(?:acquired|acquiring|bought|purchased|purchasing)\b[^.!?。！？]{0,48}\bby\s+apple\b", lower)
+        is not None
+        or re.search(r"苹果[^。！？.!?]{0,48}(?:收购|买下|购入)", lower) is not None
+        or re.search(r"(?:被|由)苹果[^。！？.!?]{0,24}(?:收购|买下|购入)", lower) is not None
+    )
+    if direct_acquisition:
+        return True
     discussion_score = score_terms(
         lower,
         [
@@ -5693,6 +5983,7 @@ def strategic_transaction_counterparty_facets(text: str) -> set[str]:
         "disney": ["disney", "迪士尼"],
         "twitter": ["twitter", "x corp", "推特"],
         "ai-startup": ["ai startup", "ai company", "人工智能初创", "ai 初创"],
+        "rabbit-play": ["rabbit 3 times", "rabbit 3 ties", "play", "swift development tool", "app design tool"],
     }
     for name, terms in counterparties.items():
         if score_terms(lower, terms) > 0:
@@ -5702,7 +5993,21 @@ def strategic_transaction_counterparty_facets(text: str) -> set[str]:
 
 def is_former_apple_staff_background_story(text: str) -> bool:
     lower = text.lower()
-    if score_terms(lower, ["former apple", "ex-apple", "former vision pro", "前苹果", "前 apple"]) <= 0:
+    former_staff_score = score_terms(
+        lower,
+        [
+            "former apple",
+            "ex-apple",
+            "former vision pro",
+            "前苹果",
+            "前 apple",
+            "苹果前员工",
+            "苹果、奥迪前员工",
+            "前苹果员工",
+            "曾在苹果",
+        ],
+    )
+    if former_staff_score <= 0 and not re.search(r"(?:苹果|apple)[^。！？.!?]{0,16}前员工|前[^。！？.!?]{0,12}(?:苹果|apple)[^。！？.!?]{0,8}员工", lower):
         return False
     if is_apple_company_org_change_story(lower):
         return False
@@ -5710,7 +6015,31 @@ def is_former_apple_staff_background_story(text: str) -> bool:
         return False
     return score_terms(
         lower,
-        ["midjourney", "startup", "company", "medical", "ultrasound", "scanner", "公司", "医疗", "超声波", "扫描仪"],
+        [
+            "midjourney",
+            "startup",
+            "company",
+            "medical",
+            "ultrasound",
+            "scanner",
+            "electric vehicle",
+            "light electric vehicle",
+            "vehicle",
+            "ev",
+            "automaker",
+            "audi",
+            "amble",
+            "公司",
+            "医疗",
+            "超声波",
+            "扫描仪",
+            "电动车",
+            "轻型电动车",
+            "汽车",
+            "车型",
+            "奥迪",
+            "月球车",
+        ],
     ) > 0
 
 
@@ -6344,8 +6673,6 @@ def is_non_apple_primary_subject_with_incidental_apple_context(title: str, text:
         return False
     if is_third_party_app_usage_on_apple_platform_story(title, text):
         return True
-    if has_direct_apple_subject_anchor(title, text):
-        return False
     non_apple_primary_score = score_terms(
         title_lower,
         [
@@ -6359,6 +6686,13 @@ def is_non_apple_primary_subject_with_incidental_apple_context(title: str, text:
             "legion",
             "tata motors",
             "tata car",
+            "li auto",
+            "ideal auto",
+            "jeep",
+            "dongfeng",
+            "electric vehicle",
+            "light electric vehicle",
+            "automaker",
             "plex",
             "supercomputer",
             "nvidia",
@@ -6380,7 +6714,16 @@ def is_non_apple_primary_subject_with_incidental_apple_context(title: str, text:
             "联想",
             "拯救者",
             "塔塔汽车",
+            "理想汽车",
+            "理想 i",
+            "吉普",
+            "东风",
             "电动汽车",
+            "轻型电动车",
+            "电动车",
+            "汽车",
+            "车型",
+            "suv",
             "超算",
             "超级计算机",
             "英伟达",
@@ -6391,6 +6734,36 @@ def is_non_apple_primary_subject_with_incidental_apple_context(title: str, text:
         ],
     )
     if non_apple_primary_score <= 0:
+        return False
+    third_party_vehicle_with_platform_context = (
+        score_terms(
+            title_lower,
+            [
+                "li auto",
+                "ideal auto",
+                "jeep",
+                "dongfeng",
+                "electric vehicle",
+                "vehicle",
+                "automaker",
+                "理想汽车",
+                "吉普",
+                "东风",
+                "电动汽车",
+                "电动车",
+                "汽车",
+                "车型",
+                "suv",
+            ],
+        )
+        > 0
+        and score_terms(lower, ["carplay", "apple carplay", "spotify", "本地化应用"]) > 0
+    )
+    if third_party_vehicle_with_platform_context:
+        return True
+    if effective_apple_term_score(title) <= 0 and not loose_apple_product_marker(title):
+        return True
+    if has_direct_apple_subject_anchor(title, text):
         return False
     direct_apple_action_score = score_terms(
         lower[:900],
@@ -6784,8 +7157,6 @@ def is_apple_product_data_leak_story(text: str, title: str = "") -> bool:
         [
             "stolen",
             "steal",
-            "leak",
-            "leaked",
             "breach",
             "hacked",
             "hackers",
@@ -6835,7 +7206,6 @@ def is_apple_product_data_leak_story(text: str, title: str = "") -> bool:
             "logic board",
             "board designs",
             "modem files",
-            "a20 pro",
             "c2 modem",
             "原理图",
             "逻辑板",
@@ -6855,13 +7225,22 @@ def is_apple_product_data_leak_story(text: str, title: str = "") -> bool:
             "data sheets",
             "files",
             "被黑",
-            "泄露",
             "资料",
             "机密文件",
             "流入暗网",
         ],
     ) > 0
-    return product_score > 0 and leak_score > 0 and (supplier_score > 0 or sensitive_hardware_score > 0 or title_leak_subject)
+    generic_leak_only = (
+        score_terms(lower, ["leak", "leaked", "泄露", "爆料"]) > 0
+        and leak_score <= 0
+        and sensitive_hardware_score <= 0
+        and supplier_score <= 0
+    )
+    if generic_leak_only:
+        return False
+    return product_score > 0 and (leak_score > 0 or title_leak_subject) and (
+        supplier_score > 0 or sensitive_hardware_score > 0 or title_leak_subject
+    )
 
 
 def is_third_party_benchmark_comparison_story(text: str) -> bool:
@@ -7554,6 +7933,79 @@ def is_apple_restricted_memory_supplier_approval_story(text: str) -> bool:
     return approval_score > 0 and authority_score > 0
 
 
+def is_apple_memory_supply_constraint_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "memory",
+            "ram",
+            "dram",
+            "lpddr",
+            "storage chip",
+            "memory chips",
+            "内存",
+            "存储芯片",
+            "存储",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "supply gap",
+            "supply shortage",
+            "supply constraints",
+            "shortage",
+            "tight supply",
+            "procurement",
+            "purchase",
+            "buy",
+            "pull-in",
+            "data center",
+            "capacity",
+            "供需缺口",
+            "供应紧张",
+            "短缺",
+            "采购",
+            "拉货",
+            "数据中心",
+            "产能",
+        ],
+    ) > 0
+
+
+def is_apple_chip_process_roadmap_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if score_terms(lower, ["chip", "chips", "a20", "a22", "tsmc", "process", "node", "wafer", "芯片", "台积电", "制程", "工艺", "晶圆"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "1.4nm",
+            "1.4 nm",
+            "2nm",
+            "2 nm",
+            "n2",
+            "n2p",
+            "advanced process",
+            "process roadmap",
+            "nanometer",
+            "capacity",
+            "1.4纳米",
+            "2纳米",
+            "先进制程",
+            "制程路线",
+            "产能",
+            "抢占",
+        ],
+    ) > 0
+
+
 def price_subtopic_facets(facets: set[str]) -> set[str]:
     return facets & APPLE_PRICE_SUBTOPIC_FACETS
 
@@ -7587,6 +8039,29 @@ def price_facets_compatible(left: set[str], right: set[str]) -> bool:
 def restricted_memory_supplier_approval_facets_compatible(left: set[str], right: set[str]) -> bool:
     restricted_facet = "apple-restricted-memory-supplier-approval"
     return (restricted_facet in left) == (restricted_facet in right)
+
+
+def strategic_transaction_facets_compatible(left: set[str], right: set[str]) -> bool:
+    transaction_facet = "apple-strategic-transaction"
+    left_has = transaction_facet in left
+    right_has = transaction_facet in right
+    if left_has != right_has:
+        return False
+    if not left_has:
+        return True
+    left_counterparties = {facet for facet in left if facet.startswith("transaction-counterparty-")}
+    right_counterparties = {facet for facet in right if facet.startswith("transaction-counterparty-")}
+    if left_counterparties and right_counterparties:
+        return bool(left_counterparties & right_counterparties)
+    return True
+
+
+def shared_specific_strategic_transaction(left: set[str], right: set[str]) -> bool:
+    if "apple-strategic-transaction" not in left or "apple-strategic-transaction" not in right:
+        return False
+    left_counterparties = {facet for facet in left if facet.startswith("transaction-counterparty-")}
+    right_counterparties = {facet for facet in right if facet.startswith("transaction-counterparty-")}
+    return bool(left_counterparties and right_counterparties and left_counterparties & right_counterparties)
 
 
 def is_non_apple_price_followup_story(title: str, text: str) -> bool:
@@ -8141,10 +8616,17 @@ def is_third_party_app_or_service_status_story(title: str, text: str) -> bool:
             "calculator app",
             "utility",
             "workflow",
+            "agent",
+            "open source",
+            "openstreetmap",
+            "map app",
+            "maps app",
             "第三方",
             "应用",
             "客户端",
             "服务",
+            "开源",
+            "地图应用",
         ],
     ) <= 0:
         return False
@@ -8167,6 +8649,11 @@ def is_third_party_app_or_service_status_story(title: str, text: str) -> bool:
             "released",
             "updated",
             "brings",
+            "gets",
+            "expanding to",
+            "native",
+            "builds",
+            "created",
             "停运",
             "关闭",
             "终止",
@@ -8174,6 +8661,9 @@ def is_third_party_app_or_service_status_story(title: str, text: str) -> bool:
             "上线",
             "发布",
             "更新",
+            "获得",
+            "打造",
+            "带来",
         ],
     ) <= 0:
         return False
@@ -8496,6 +8986,7 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
         [
             "ios version",
             "ios app",
+            "native ios app",
             "mac app",
             "watchos app",
             "apple watch app",
@@ -8509,6 +9000,7 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
             "watchos版",
             "客户端",
             "应用",
+            "地图应用",
             "app",
         ],
     ) <= 0:
@@ -8522,6 +9014,9 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
             "available",
             "released",
             "rolls out",
+            "gets",
+            "expands to",
+            "expanding to",
             "supports",
             "support",
             "compatible",
@@ -8531,8 +9026,94 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
             "推出",
             "适配",
             "支持",
+            "获得",
+            "打造",
+            "带来",
         ],
     ) > 0
+
+
+def is_legacy_apple_platform_third_party_app_story(title: str, text: str) -> bool:
+    lower = f"{title} {text}".lower()
+    if has_apple_first_party_release_context(lower):
+        return False
+    legacy_platform_score = score_terms(
+        lower,
+        [
+            "classic mac os",
+            "mac os 9",
+            "macos 9",
+            "powerpc",
+            "macintosh",
+            "open transport",
+            "经典 macos",
+            "经典macos",
+            "经典 mac os",
+            "经典mac os",
+            "停产多年的",
+        ],
+    )
+    third_party_app_score = score_terms(
+        lower,
+        [
+            "developer",
+            "openstreetmap",
+            "client",
+            "app",
+            "application",
+            "map app",
+            "maps app",
+            "开发者",
+            "客户端",
+            "应用",
+            "地图应用",
+        ],
+    )
+    action_score = score_terms(
+        lower,
+        ["released", "created", "builds", "brings", "发布", "打造", "带来"],
+    )
+    return legacy_platform_score > 0 and third_party_app_score > 0 and action_score > 0
+
+
+def is_third_party_legacy_apple_hardware_replica_story(title: str, text: str) -> bool:
+    lower = f"{title} {text}".lower()
+    if has_apple_first_party_release_context(lower):
+        return False
+    specific_legacy_hardware_score = score_terms(
+        lower,
+        [
+            "apple ii",
+            "apple ii plus",
+            "apple 2",
+            "apple ][",
+            "6502",
+            "8-bit",
+            "8 位",
+            "早期 8 位",
+        ],
+    )
+    if specific_legacy_hardware_score <= 0:
+        return False
+    third_party_project_score = score_terms(
+        lower,
+        [
+            "project",
+            "replica",
+            "recreate",
+            "recreated",
+            "clone",
+            "hardware replica",
+            "modern components",
+            "simon boak",
+            "项目",
+            "复刻",
+            "硬件复刻",
+            "现代元件",
+            "开发者",
+        ],
+    )
+    return third_party_project_score > 0
 
 
 def is_apple_support_security_guidance_story(title: str, text: str) -> bool:
@@ -8644,6 +9225,8 @@ def hardware_product_families_from_text(text: str) -> set[str]:
 
 
 def apple_chip_roadmap_facets_from_text(text: str) -> set[str]:
+    if is_apple_chip_process_roadmap_story(text):
+        return {"apple-chip-process-roadmap"}
     if not is_primary_apple_chip_roadmap_title(text):
         return set()
     families = hardware_product_families_from_text(text)
@@ -8652,8 +9235,61 @@ def apple_chip_roadmap_facets_from_text(text: str) -> set[str]:
         facets.add("mac-chip-roadmap")
     if "iphone" in families:
         facets.add("iphone-chip-roadmap")
+    if "ipad" in families:
+        facets.add("ipad-chip-roadmap")
     if not facets:
         facets.add("apple-chip-roadmap")
+    return facets
+
+
+def iphone_hardware_rumor_facets_from_text(text: str) -> set[str]:
+    lower = text.lower()
+    if score_terms(lower, ["iphone", "iphone 18", "iphone 18 pro", "iphone 18e", "iphone air", "苹果 iPhone".lower()]) <= 0:
+        return set()
+    facets: set[str] = set()
+    if (
+        score_terms(lower, ["a20", "a20 pro", "iphone 18 pro", "苹果 a20"]) > 0
+        and score_terms(
+            lower,
+            [
+                "wmcm",
+                "motherboard",
+                "logic board",
+                "package",
+                "packaging",
+                "side-mounted",
+                "side mounted",
+                "dram has been moved",
+                "主板",
+                "封装",
+                "内存旁置",
+                "并排封装",
+                "内存被放置",
+            ],
+        )
+        > 0
+    ):
+        facets.add("iphone-chip-packaging")
+    if score_terms(lower, ["vc", "vapor chamber", "cooling", "heat dissipation", "thermal", "均热板", "散热", "导热"]) > 0:
+        facets.add("iphone-thermal-design")
+    if score_terms(lower, ["launch date", "debut", "unveil", "event", "september", "gurman", "mark gurman", "发布时间", "发布会", "亮相", "古尔曼", "9 月", "九月"]) > 0:
+        facets.add("iphone-launch-timing")
+    if score_terms(lower, ["drop test", "drop-test", "drop tests", "drop-test photos", "跌落测试"]) > 0:
+        facets.add("iphone-drop-test-leak")
+    if score_terms(lower, ["dynamic island", "face id", "ct scan", "cutout", "hole punch", "front camera", "灵动岛", "ct 扫描", "开孔", "前置摄像头"]) > 0:
+        facets.add("iphone-front-cutout")
+    if score_terms(lower, ["iphone air 2", "iphone air successor", "next iphone air", "苹果 iphone air 2", "air 2"]) > 0:
+        facets.add("iphone-air-successor")
+    if (
+        score_terms(lower, ["ram", "memory", "9gb", "9 gb", "lpddr", "内存", "9gb 内存", "9gb内存"]) > 0
+        and score_terms(lower, ["price", "prices", "涨价", "降回", "不会降", "售价"]) > 0
+    ):
+        facets.add("iphone-memory-price-forecast")
+    if (
+        score_terms(lower, ["ram", "memory", "9gb", "9 gb", "12gb", "12 gb", "内存", "9gb 内存", "9gb内存", "12gb 内存", "12gb内存"]) > 0
+        and score_terms(lower, ["support", "supports", "won't support", "will not support", "feature", "features", "apple intelligence", "siri", "支持", "不支持", "功能"]) > 0
+    ):
+        facets.add("iphone-memory-feature-support")
     return facets
 
 
@@ -8669,6 +9305,7 @@ def _topic_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
     facets |= os_feature_component_facets_from_text(lower)
+    facets |= os_release_facets_from_text(lower)
     if is_broad_apple_product_roadmap_story(lower):
         facets.add("apple-product-roadmap-list")
     if is_apple_company_org_change_story(lower):
@@ -8680,7 +9317,12 @@ def _topic_facets_from_text(text: str) -> set[str]:
     facets |= price_facets
     if is_apple_restricted_memory_supplier_approval_story(lower):
         facets.add("apple-restricted-memory-supplier-approval")
-    facets |= apple_chip_roadmap_facets_from_text(lower)
+    if is_apple_memory_supply_constraint_story(lower):
+        facets.add("apple-memory-supply-constraint")
+    data_leak_story = is_apple_product_data_leak_story(lower)
+    if not data_leak_story:
+        facets |= apple_chip_roadmap_facets_from_text(lower)
+    facets |= iphone_hardware_rumor_facets_from_text(lower)
     if is_foldable_iphone_successor_roadmap_story(lower):
         facets.add("foldable-iphone-successor-roadmap")
     if is_foldable_iphone_supply_chain_story(lower):
@@ -8699,7 +9341,7 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("vision-pro-spatial-experience")
     if is_iphone_parts_factory_contamination_story(lower):
         facets.add("iphone-parts-factory-contamination")
-    if is_apple_product_data_leak_story(lower):
+    if data_leak_story:
         facets.add("apple-product-data-leak")
     if is_apple_specific_market_share_report_story(lower):
         facets.add("apple-market-share-report")
@@ -9012,6 +9654,7 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     facets: set[str] = set()
     facets |= os_feature_component_facets_from_text(lower)
+    facets |= os_release_facets_from_text(lower)
     if is_broad_apple_product_roadmap_story(lower):
         facets.add("apple-product-roadmap-list")
     if is_apple_company_org_change_story(lower):
@@ -9019,11 +9662,16 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
     facets |= apple_product_price_topic_facets(lower)
     if is_apple_restricted_memory_supplier_approval_story(lower):
         facets.add("apple-restricted-memory-supplier-approval")
-    if is_apple_product_data_leak_story(lower):
+    if is_apple_memory_supply_constraint_story(lower):
+        facets.add("apple-memory-supply-constraint")
+    data_leak_story = is_apple_product_data_leak_story(lower)
+    if data_leak_story:
         facets.add("apple-product-data-leak")
     if is_apple_specific_market_share_report_story(lower):
         facets.add("apple-market-share-report")
-    facets |= apple_chip_roadmap_facets_from_text(lower)
+    if not data_leak_story:
+        facets |= apple_chip_roadmap_facets_from_text(lower)
+    facets |= iphone_hardware_rumor_facets_from_text(lower)
     if is_foldable_iphone_successor_roadmap_story(lower):
         facets.add("foldable-iphone-successor-roadmap")
     if is_foldable_iphone_supply_chain_story(lower):
@@ -9075,6 +9723,16 @@ def merge_guard_facets_from_text(text: str) -> set[str]:
 
 BROAD_TOPIC_FACETS = {"os-compatibility", "hardware-roadmap"}
 LOW_CONFIDENCE_MERGE_FACETS = {"apple-ai-platform"}
+IPHONE_HARDWARE_RUMOR_TOPIC_FACETS = {
+    "iphone-air-successor",
+    "iphone-chip-packaging",
+    "iphone-drop-test-leak",
+    "iphone-front-cutout",
+    "iphone-launch-timing",
+    "iphone-memory-feature-support",
+    "iphone-memory-price-forecast",
+    "iphone-thermal-design",
+}
 SPLITTABLE_HARDWARE_TOPIC_FACETS = {
     "apple-company-org-change",
     *APPLE_PRICE_SUBTOPIC_FACETS,
@@ -9086,12 +9744,15 @@ SPLITTABLE_HARDWARE_TOPIC_FACETS = {
     "foldable-iphone-render-leak",
     "foldable-iphone-successor-roadmap",
     "foldable-iphone-supply-chain",
-    "iphone-air-successor",
+    *IPHONE_HARDWARE_RUMOR_TOPIC_FACETS,
     "iphone-color-mockup",
     "macbook-memory-ai",
     "macbook-thermal-defect",
     "macbook-touch-roadmap",
     "apple-chip-roadmap",
+    "apple-chip-process-roadmap",
+    "apple-memory-supply-constraint",
+    "ipad-chip-roadmap",
     "iphone-chip-roadmap",
     "mac-chip-roadmap",
     "apple-market-share-report",
@@ -9160,6 +9821,37 @@ def article_splittable_topic_facets(article: Article) -> set[str]:
     return specific or splittable
 
 
+def independent_splittable_topic_facets(facets: set[str]) -> set[str]:
+    iphone_rumor_boundary_facets = IPHONE_HARDWARE_RUMOR_TOPIC_FACETS | {"apple-product-data-leak"}
+    return facets & iphone_rumor_boundary_facets
+
+
+def splittable_topic_facets_compatible(left_facets: set[str], right_facets: set[str]) -> bool:
+    left = independent_splittable_topic_facets(effective_topic_facets(left_facets))
+    right = independent_splittable_topic_facets(effective_topic_facets(right_facets))
+    if not left or not right:
+        return True
+    shared = left & right
+    if not shared:
+        return False
+    if left == right:
+        return True
+    if "apple-product-data-leak" in left or "apple-product-data-leak" in right:
+        leak_detail_facets = {"iphone-chip-packaging", "iphone-drop-test-leak"}
+        allowed_data_leak_facets = {"apple-product-data-leak", *leak_detail_facets}
+        return bool(shared) and left <= allowed_data_leak_facets and right <= allowed_data_leak_facets
+    if len(left) > 1 or len(right) > 1:
+        return False
+    return True
+
+
+def event_splittable_topic_facets(event: Event) -> set[str]:
+    facets: set[str] = set()
+    for article in event.articles:
+        facets |= article_splittable_topic_facets(article)
+    return facets
+
+
 def article_merge_guard_facets(article: Article) -> set[str]:
     return primary_merge_guard_facets(article.title, article.summary)
 
@@ -9189,8 +9881,25 @@ def merge_guard_facets_compatible(article_facets: set[str], event_facets: set[st
         return True
     if not (article_facets & event_facets):
         return False
+    if not os_release_facets_compatible(article_facets, event_facets):
+        return False
+    if not strategic_transaction_facets_compatible(article_facets, event_facets):
+        return False
     if not restricted_memory_supplier_approval_facets_compatible(article_facets, event_facets):
         return False
+    article_release_versions = os_release_version_facets(article_facets)
+    event_release_versions = os_release_version_facets(event_facets)
+    article_release_channels = os_release_channel_facets(article_facets)
+    event_release_channels = os_release_channel_facets(event_facets)
+    if (
+        article_release_versions
+        and event_release_versions
+        and article_release_versions & event_release_versions
+        and article_release_channels
+        and event_release_channels
+        and article_release_channels & event_release_channels
+    ):
+        return True
     article_platforms = merge_guard_platform_facets(article_facets)
     event_platforms = merge_guard_platform_facets(event_facets)
     article_actions = merge_guard_action_facets(article_facets)
@@ -9234,7 +9943,25 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "app_store_trust"
     if is_non_apple_primary_subject_with_incidental_apple_context(title, text):
         return "third_party_ecosystem"
+    if is_former_apple_staff_background_story(text):
+        return "third_party_ecosystem"
+    if is_legacy_apple_platform_third_party_app_story(title, text):
+        return "third_party_ecosystem"
+    if is_third_party_legacy_apple_hardware_replica_story(title, text):
+        return "third_party_ecosystem"
+    if is_third_party_app_or_service_status_story(title, text):
+        return "third_party_ecosystem"
+    if is_routine_third_party_apple_platform_story(title):
+        return "third_party_ecosystem"
+    if is_third_party_platform_availability_candidate(title):
+        return "third_party_ecosystem"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "third_party_ecosystem"
+    if is_third_party_app_platform_launch_story(title, text):
+        return "third_party_ecosystem"
     if is_apple_product_price_increase_story(text, title):
+        return "hardware_market"
+    if is_apple_product_data_leak_story(text, title) and not is_apple_support_security_guidance_story(title, text):
         return "hardware_market"
     if is_apple_company_org_change_story(text):
         return "company_org"
@@ -9252,20 +9979,12 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "third_party_ecosystem"
     if is_multi_vendor_chip_or_phone_roadmap_background_story(title, text):
         return "third_party_ecosystem"
-    if is_third_party_app_or_service_status_story(title, text):
-        return "third_party_ecosystem"
-    if is_routine_third_party_apple_platform_story(title):
-        return "third_party_ecosystem"
-    if is_third_party_platform_availability_candidate(title):
-        return "third_party_ecosystem"
-    if is_third_party_accessory_platform_compatibility_story(title, text):
-        return "third_party_ecosystem"
-    if is_third_party_app_platform_launch_story(title, text):
-        return "third_party_ecosystem"
     if is_apple_product_price_increase_story(text, title):
         return "hardware_market"
     if is_apple_product_data_leak_story(text, title):
         return "hardware_market"
+    if os_release_facets_from_text(text):
+        return "os_app"
     if is_direct_apple_hardware_roadmap_story(text, title):
         return "hardware_market"
     if is_apple_os_feature_or_summary_story(text) and score_terms(lower, OS_SUMMARY_TERMS) > 0:
@@ -9297,6 +10016,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         if score_terms(lower, ["services", "apple tv", "apple tv+", "apple music", "app store", "icloud", "streaming", "服务", "苹果电视", "苹果音乐"]) > 0:
             return "service_content"
         return "general_company"
+    if is_apple_car_asset_story(text):
+        return "hardware_market"
     if is_apple_strategic_transaction_story(text):
         return "general_company"
     if is_messages_platform_candidate(text):
@@ -9324,8 +10045,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if "visionos-m5-ai-features" in topic_facets_from_text(text):
         return "os_app"
     if is_iphone_parts_factory_contamination_story(text):
-        return "hardware_market"
-    if is_apple_car_asset_story(text):
         return "hardware_market"
     if is_broad_apple_product_roadmap_story(text):
         return "hardware_market"
@@ -9506,8 +10225,24 @@ def classify_relevance_tier(
         return "strong", "official Apple source"
     if event_kind == "app_store_trust" and apple_score > 0:
         return "strong", "Apple platform trust, store policy, or review event"
+    if is_apple_strategic_transaction_story(title):
+        return "strong", "Apple strategic transaction or merger discussion"
     if is_apple_opinion_without_new_reporting(title, text):
         return "weak", "opinion or commentary without new Apple reporting"
+    if is_legacy_apple_platform_third_party_app_story(title, text):
+        return "weak", "third-party app or service on a legacy Apple platform without a new Apple action"
+    if is_third_party_legacy_apple_hardware_replica_story(title, text):
+        return "weak", "third-party project recreating legacy Apple hardware without a new Apple action"
+    if is_third_party_app_or_service_status_story(title, text):
+        return "weak", "third-party app or service Apple-platform status story without a direct Apple action"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
+    if is_third_party_app_platform_launch_story(title, text):
+        return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
+    if is_non_apple_primary_subject_with_incidental_apple_context(title, text):
+        return "weak", "non-Apple primary subject with Apple used only as incidental context"
+    if is_former_apple_staff_background_story(text):
+        return "weak", "third-party company story using former Apple staff as background"
     if event_kind == "company_org":
         return "strong", "Apple company leadership, design, or organization change"
     if event_kind == "ecosystem_interop":
@@ -9518,20 +10253,12 @@ def classify_relevance_tier(
         return "weak", "competitor or third-party company story using Apple mainly as benchmark context"
     if is_multi_vendor_chip_or_phone_roadmap_background_story(title, text):
         return "weak", "multi-vendor chip or phone roadmap story using Apple mainly as context"
-    if is_third_party_app_or_service_status_story(title, text):
-        return "weak", "third-party app or service Apple-platform status story without a direct Apple action"
-    if is_third_party_accessory_platform_compatibility_story(title, text):
-        return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
     if is_apple_display_panel_supply_chain_story(text) or is_foldable_iphone_supply_chain_story(text):
         return "strong", "Apple hardware supply-chain or display-panel roadmap event"
     if is_third_party_surveillance_context_story(text):
         return "weak", "third-party surveillance story using Apple devices mainly as context"
     if is_third_party_device_management_service_story(text):
         return "weak", "third-party device-management service for Apple devices"
-    if is_third_party_app_platform_launch_story(title, text):
-        return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
-    if is_non_apple_primary_subject_with_incidental_apple_context(title, text):
-        return "weak", "non-Apple primary subject with Apple used only as incidental context"
     if event_kind == "os_app" and is_title_primary_software_system_story(title, text):
         return "strong", "Apple OS, built-in app, or feature-summary change"
     if is_direct_apple_hardware_roadmap_story(text, title):
@@ -9544,6 +10271,8 @@ def classify_relevance_tier(
         return "strong", "Apple TV hardware event"
     if is_apple_product_data_leak_story(text, title):
         return "strong", "Apple product or supplier data-leak event"
+    if os_release_facets_from_text(text):
+        return "strong", "Apple OS release, beta, RC, or security update"
     if is_apple_hardware_product_launch_story(text, title):
         return "strong", "Apple hardware product launch or roadmap event"
     if (
@@ -9829,11 +10558,11 @@ def collect_candidates(
             len(candidate.context),
         )
 
-    for candidate in candidates:
+    for candidate in merge_duplicate_candidates(candidates):
         normalized_url = normalize_url(candidate.url)
         if not same_domain(candidate.url, source.domains):
             continue
-        if is_ithome_daily_brief_candidate(candidate, source):
+        if is_source_daily_brief_candidate(candidate, source):
             excluded_counts = diagnostics.setdefault("source_excluded_daily_brief_counts", {})
             excluded_counts[source.name] = excluded_counts.get(source.name, 0) + 1
             continue
@@ -10162,6 +10891,10 @@ def topic_facets_compatible(
     event_facets = effective_topic_facets(event_primary_facets(event))
     if not restricted_memory_supplier_approval_facets_compatible(article_facets, event_facets):
         return False
+    if not strategic_transaction_facets_compatible(article_facets, event_facets):
+        return False
+    if not splittable_topic_facets_compatible(article_facets, event_facets):
+        return False
     if not article_facets or not event_facets:
         explicit_specific = specific_merge_facets(article_facets | event_facets)
         if explicit_specific and article.event_kind == event.event_kind == "hardware_market":
@@ -10185,7 +10918,8 @@ def topic_facets_compatible(
     article_guard_facets = article_merge_guard_facets(article)
     event_guard_facets = event_merge_guard_facets(event)
     if not merge_guard_facets_compatible(article_guard_facets, event_guard_facets):
-        return False
+        if not shared_specific_strategic_transaction(article_facets, event_facets):
+            return False
     return True
 
 
@@ -10243,7 +10977,20 @@ def refresh_event_metadata(event: Event) -> None:
         event_source_for_reclassification(event),
     )
     priority = {"weak": 0, "ecosystem": 1, "strong": 2}
-    summary_allows_downgrade = is_routine_recap_comparison_or_buying_advice(event.title, event.summary)
+    summary_context = " ".join([event.summary, *event.key_facts[:5]])
+    summary_allows_downgrade = is_routine_recap_comparison_or_buying_advice(event.title, event.summary) or (
+        summary_tier == "weak"
+        and (
+            effective_apple_term_score(f"{event.title} {summary_context}") <= 0
+            or is_non_apple_primary_subject_with_incidental_apple_context(event.title, summary_context)
+            or is_former_apple_staff_background_story(summary_context)
+            or is_legacy_apple_platform_third_party_app_story(event.title, summary_context)
+            or is_third_party_legacy_apple_hardware_replica_story(event.title, summary_context)
+            or is_third_party_app_or_service_status_story(event.title, summary_context)
+            or is_third_party_accessory_platform_compatibility_story(event.title, summary_context)
+            or is_third_party_app_platform_launch_story(event.title, summary_context)
+        )
+    )
     if priority.get(article_tier, 0) > priority.get(summary_tier, 0) and not summary_allows_downgrade:
         event.event_kind = article_kind
         event.relevance_tier = article_tier
@@ -10441,6 +11188,8 @@ def should_merge(article: Article, event: Event) -> bool:
     if same_system_performance_optimization(article, event, shared):
         return True
     if same_apple_product_price_increase(article, event, shared):
+        return True
+    if same_os_release_event(article, event):
         return True
     strong_shared = strong_shared_merge_tokens(shared)
     if article.event_kind == event.event_kind == "service_content":
@@ -11135,6 +11884,8 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
                 keys.add(("apple-product-price-increase", ()))
     elif "apple-restricted-memory-supplier-approval" in facets:
         keys.add(("apple-restricted-memory-supplier-approval", ()))
+    for facet in sorted(facets & IPHONE_HARDWARE_RUMOR_TOPIC_FACETS):
+        keys.add((facet, ()))
     if "apple-product-data-leak" in facets:
         context = " ".join([event.title, event.summary, *event.key_facts[:8]]).lower()
         product_score = score_terms(
@@ -11334,6 +12085,10 @@ def events_should_merge(left: Event, right: Event) -> bool:
     right_has_retail = any(article.event_kind == "retail_store" for article in right.articles)
     if left_has_retail != right_has_retail:
         return False
+    left_splittable_facets = event_splittable_topic_facets(left)
+    right_splittable_facets = event_splittable_topic_facets(right)
+    if not splittable_topic_facets_compatible(left_splittable_facets, right_splittable_facets):
+        return False
     if "weak" in {left.relevance_tier, right.relevance_tier} and left.relevance_tier != right.relevance_tier:
         return False
     if any(should_merge(article, right) for article in left.articles) or any(
@@ -11420,12 +12175,33 @@ def split_mixed_topic_event(event: Event) -> list[Event]:
             event_from_article_group(event, retail_articles),
             event_from_article_group(event, non_retail_articles),
         ]
+    if "mixed relevance tiers" in event.merge_warnings:
+        non_weak_articles = [article for article in event.articles if article.relevance_tier != "weak"]
+        weak_articles = [article for article in event.articles if article.relevance_tier == "weak"]
+        non_weak_facets: set[str] = set()
+        for article in non_weak_articles:
+            non_weak_facets |= effective_topic_facets(article_primary_facets(article)) - LOW_CONFIDENCE_MERGE_FACETS
+        if non_weak_articles and weak_articles and non_weak_facets:
+            weak_same_topic: list[Article] = []
+            weak_split: list[Article] = []
+            for article in weak_articles:
+                article_facets = effective_topic_facets(article_primary_facets(article)) - LOW_CONFIDENCE_MERGE_FACETS
+                if article_facets and article_facets & non_weak_facets:
+                    weak_same_topic.append(article)
+                else:
+                    weak_split.append(article)
+            if weak_split:
+                return [
+                    event_from_article_group(event, [*non_weak_articles, *weak_same_topic]),
+                    *[event_from_article_group(event, [article]) for article in weak_split],
+                ]
     if "mixed primary topic facets" not in event.merge_warnings:
         return [event]
     splittable_event = (
         event.category == "hardware_products"
         or event.event_kind == "hardware_market"
         or event.event_kind == "service_content"
+        or bool(event_splittable_topic_facets(event))
     )
     if not splittable_event:
         return [event]
@@ -11847,6 +12623,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             summary,
             key_facts,
         ):
+            variant_context = context_for_article_variant(is_roundup, candidate.context)
             if not is_relevant_candidate(
                 Candidate(
                     source=candidate.source,
@@ -11854,15 +12631,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     title=article_title,
                     summary=article_summary,
                     feed_time_raw=candidate.feed_time_raw,
-                    context=candidate.context,
+                    context=variant_context,
                 ),
                 source,
             ):
                 continue
-            event_context_summary = " ".join(part for part in [article_summary, candidate.context] if part)
+            event_context_summary = " ".join(part for part in [article_summary, variant_context] if part)
             category = choose_category(article_title, event_context_summary)
             token_base = article_summary[:700] if is_roundup else candidate.summary or article_summary[:700]
-            token_summary = " ".join([token_base, candidate.context, *article_key_facts[:5]])
+            token_summary = " ".join([token_base, variant_context, *article_key_facts[:5]])
             tokens = article_tokens(article_title, token_summary)
             event_kind = detect_event_kind(article_title, event_context_summary, article_key_facts)
             relevance_tier, relevance_reason = classify_relevance_tier(
@@ -11871,7 +12648,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 article_key_facts,
                 candidate.source,
             )
-            regions = extract_regions(" ".join([article_title, article_summary, candidate.context, *article_key_facts[:5]]))
+            regions = extract_regions(" ".join([article_title, article_summary, variant_context, *article_key_facts[:5]]))
             articles.append(
                 Article(
                     source=candidate.source,
