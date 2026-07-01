@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.16.0 - 2026-07-01
+
+- Improved deferred-event recovery for direct Apple legal and regulatory stories, including Apple/Epic Supreme Court coverage and Siri AI / EU DMA meeting reports.
+- Improved event clustering so Tim Cook / EU Siri AI reports merge across software, policy, and leadership angles while keeping distinct App Store legal matters separate.
+- Improved weak filtering for product commentary and analysis posts, keeping MacBook Ultra opinion-style articles out of required final-brief events while preserving source-backed hardware roadmap rumors.
+- Improved Apple Pay and App Store payment classification so Apple Pay wording, fee percentages, or `interest` in legal articles no longer demote App Store litigation into third-party financial-service candidates.
+- Updated fallback policy guidance for Siri AI / EU DMA regulatory meetings, App Store legal appeals, product commentary exclusions, and high-volume event boundaries.
+- Added regression coverage for Siri AI / EU DMA event merging, Epic Supreme Court relevance, product-analysis weak filtering, competitor display-panel background handling, and related clustering safeguards.
+
 ## 1.15.0 - 2026-06-30
 
 - Improved 9to5Mac discovery by preserving WordPress category and tag context from the posts API, restoring coverage for Apple TV+ content stories and OS update reports that were previously under-ranked.

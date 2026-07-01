@@ -1883,6 +1883,19 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(tier, "strong", reason)
         self.assertEqual(module.choose_category(title, summary), "hardware_products")
 
+    def test_competitor_display_panel_story_using_apple_as_background_stays_weak(self):
+        module = load_module()
+        title = "继苹果之后再失三星订单 传京东方Galaxy S27 OLED合作告吹"
+        summary = (
+            "报道称京东方继失去苹果 iPhone OLED 面板订单后，又被传失去三星 Galaxy S27 OLED 合作；"
+            "文章主体是三星 Galaxy 供应链变化。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
     def test_swift_package_index_joining_apple_merges_across_sources(self):
         module = load_module()
         articles = [
@@ -6130,7 +6143,11 @@ class RelevanceRuleTests(unittest.TestCase):
             ]
         )[0]
 
-        self.assertIn(("apple-product-data-leak", ()), module.event_summary_merge_keys(event))
+        keys = module.event_summary_merge_keys(event)
+
+        self.assertIn(("apple-product-data-leak-specs", ()), keys)
+        self.assertIn(("iphone-chip-packaging", ()), keys)
+        self.assertNotIn(("apple-product-data-leak", ()), keys)
 
     def test_product_data_leak_event_not_split_by_extra_related_hardware_facets(self):
         module = load_module()
@@ -6524,6 +6541,19 @@ class RelevanceRuleTests(unittest.TestCase):
         tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
         self.assertEqual(tier, "strong", reason)
 
+    def test_macbook_ultra_commentary_analysis_stays_weak_without_new_reporting(self):
+        module = load_module()
+        title = "MacBook Ultra could be very good news for MacBook Pro users - 9to5Mac"
+        summary = (
+            "Here’s why the rumored new MacBook Ultra model could be good news for MacBook Pro users "
+            "in light of a previous redesign misstep. The author argues Apple could avoid upsetting "
+            "Pro users by splitting the lineup, while referencing earlier Bloomberg rumors."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "weak", reason)
+
     def test_apple_smart_ring_rumor_is_hardware_roadmap_not_weak_health_context(self):
         module = load_module()
         title = "Apple 'iRing' Rumor Re-Emerges Amid Oura Ring Popularity"
@@ -6677,6 +6707,570 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(len(split_events), 2)
         self.assertTrue(any(event.event_kind == "retail_store" for event in split_events))
         self.assertTrue(any(event.event_kind == "hardware_market" for event in split_events))
+
+    def test_uk_cma_app_store_payment_and_nfc_rules_are_strong_regulation(self):
+        module = load_module()
+        title = "UK Pushes Apple to Loosen App Store Payment and NFC Rules"
+        summary = (
+            "The UK's Competition and Markets Authority proposed letting app developers direct users "
+            "to payment options outside Apple's App Store and requiring Apple to open iOS NFC access "
+            "for contactless payments, digital wallets, digital identity, and car keys."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "regional_regulation")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_siri_ai_eu_dma_meeting_merges_across_policy_and_leadership_angles(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Tim Cook and EU tech chief hold virtual meeting over Siri AI - 9to5Mac",
+                "Tim Cook held constructive talks with EU tech chief Henna Virkkunen over launching Siri AI in Europe while complying with the Digital Markets Act.",
+                "9to5Mac",
+                facts=[
+                    "Apple proposed a Trusted System Agent and an 18-month transition period for virtual assistant interoperability.",
+                ],
+            ),
+            article_for(
+                module,
+                "苹果 CEO 库克与欧盟科技主管就 Siri AI 展开“建设性”会谈",
+                "库克与欧盟科技事务负责人亨娜・维尔库宁举行建设性会谈，讨论苹果如何在欧洲推出新版 Siri，同时避免违反 DMA。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "Tim Cook's government liaison position comes into focus before stepping down as Apple CEO",
+                "Apple CEO Tim Cook had a virtual meeting with Henna Virkkunen about launching revamped AI tools in the EU without violating the Digital Markets Act.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Tim Cook即将卸任苹果CEO 提前上阵担任“政府联络官”",
+                "报道称 Tim Cook 与欧盟委员会执行副主席 Henna Virkkunen 举行建设性虚拟会晤，讨论苹果如何在不违反 DMA 的前提下在欧盟推出 AI 工具。",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual({article.event_kind for article in articles}, {"regional_regulation"})
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "IT之家", "AppleInsider", "cnBeta"})
+
+    def test_epic_supreme_court_appeal_with_payment_facts_stays_strong_legal_event(self):
+        module = load_module()
+        title = "Supreme Court Will Hear Apple's Appeal in Epic Games App Store Fight"
+        summary = (
+            "The United States Supreme Court agreed to hear Apple's appeal against a contempt ruling "
+            "over App Store anti-steering rules, external purchase links, and 12% or 27% commissions."
+        )
+        facts = [
+            "The previous denial involved the original Epic Games vs. Apple commission battle, but the case has since piqued the Supreme Court's interest.",
+            "Apple says the injunction did not prevent it from instituting new fees on external purchases.",
+            "Epic says it will fight against junk fees Apple charges on third-party payments.",
+            "A noisy translated paragraph says developers still needed to pay Apple Pay 12% or 27% commissions.",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "legal_antitrust")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_payment_regulation_epic_appeal_and_amex_rewards_do_not_merge(self):
+        module = load_module()
+        amex = article_for(
+            module,
+            "American Express Announces New Apple Pay Feature",
+            "American Express cardholders can redeem Membership Rewards points when checking out with Apple Pay on iPhone and iPad.",
+            "MacRumors",
+        )
+        uk_cma = article_for(
+            module,
+            "UK Pushes Apple to Loosen App Store Payment and NFC Rules",
+            "The CMA proposed allowing app developers to direct users outside the App Store and requiring Apple to open iOS NFC access.",
+            "MacRumors",
+        )
+        epic = article_for(
+            module,
+            "US Supreme Court agrees to hear Apple's Epic Games appeal",
+            "The Supreme Court will review Apple's appeal over an Epic Games ruling about App Store anti-steering and external-link commissions.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([amex, uk_cma, epic])
+
+        self.assertEqual(len(events), 3)
+
+    def test_airdrop_vulnerability_multisource_cluster_includes_chinese_coverage(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Three AirDrop vulnerabilities discovered, with Apple working on a full fix",
+            "Researchers found three AirDrop vulnerabilities affecting iPhone and Mac; Apple fixed one and is working on full fixes.",
+            "9to5Mac",
+        )
+        chinese = article_for(
+            module,
+            "影响全球超 50 亿台手机：苹果隔空投送 / 谷歌快速分享曝安全漏洞",
+            "CISPA 研究指出苹果隔空投送 AirDrop 和谷歌 Quick Share 存在安全漏洞，攻击者可在 10-30 米范围内让相关服务崩溃。",
+            "IT之家",
+        )
+
+        tier, reason = module.classify_relevance_tier(chinese.title, chinese.summary, [], "IT之家")
+        events = module.cluster_articles([english, chinese])
+
+        self.assertIn(tier, {"strong", "ecosystem"}, reason)
+        self.assertEqual(len(events), 1)
+        self.assertNotEqual(events[0].relevance_tier, "weak")
+
+    def test_apple_watch_redesign_multisource_reports_merge(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Report: Apple Watch Redesign Coming Next Year With New Band System",
+            "A leaker says the Apple Watch will get a major overhaul in 2027 with a new band attachment system and possible compatibility break.",
+            "MacRumors",
+        )
+        nine = article_for(
+            module,
+            "Apple Watch to get 'major overhaul' next year, says leaker",
+            "The Apple Watch Series line could get a 2027 redesign, with Weibo leaker Instant Digital tying it to Apple Watch X band-system rumors.",
+            "9to5Mac",
+        )
+        insider = article_for(
+            module,
+            "Apple Watch redesign will have new band attachment points",
+            "Apple Watch Series 13 may bring a major redesign with new band attachment points, making older watch bands incompatible.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([macrumors, nine, insider])
+
+        self.assertEqual(len(events), 1)
+
+    def test_creator_studio_multisource_reports_merge_and_stay_software(self):
+        module = load_module()
+        newsroom = article_for(
+            module,
+            "Apple Creator Studio gets smarter, faster, and more connected",
+            "Apple introduced updates to Creator Studio, including Final Cut Pro AI captions, Pixelmator Pro image generation, Logic Pro tools, Motion, Compressor, and Final Cut Camera features.",
+            "Apple Newsroom",
+        )
+        macrumors = article_for(
+            module,
+            "Apple Creator Studio Gets New AI Features",
+            "Apple Creator Studio adds AI-powered updates for Final Cut Pro, Pixelmator Pro, Logic Pro, Motion, Compressor, and other Apple creative apps.",
+            "MacRumors",
+        )
+        ithome = article_for(
+            module,
+            "苹果升级 Apple 创作坊：扩展 AI 工具，订阅年费 380 元",
+            "Apple 创作坊更新 Final Cut Pro、Pixelmator Pro、Logic Pro、Motion 和 Compressor，国内订阅年费 380 元。",
+            "IT之家",
+        )
+
+        events = module.cluster_articles([newsroom, macrumors, ithome])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "software_systems")
+        self.assertNotEqual(events[0].event_kind, "hardware_market")
+
+    def test_creator_studio_and_iwork_updates_remain_separate(self):
+        module = load_module()
+        creator = article_for(
+            module,
+            "Apple Creator Studio Gets New AI Features",
+            "Apple Creator Studio adds AI-powered updates for Final Cut Pro, Pixelmator Pro, Logic Pro, Motion, and Compressor.",
+            "MacRumors",
+        )
+        iwork = article_for(
+            module,
+            "Pages, Keynote, and Numbers updates arrive with these new features",
+            "Apple updated Pages, Keynote, and Numbers to version 15.3 with new transitions, custom shapes, image replacement, and sheet tab colors.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([creator, iwork])
+
+        self.assertEqual(len(events), 2)
+
+    def test_huawei_launch_competitor_story_stays_weak(self):
+        module = load_module()
+        title = "9月巅峰对决！华为Mate 90系列迎战iPhone 18 Pro"
+        summary = "华为 Mate 90 系列计划 9 月发布，报道将其与苹果 iPhone 18 Pro 发布窗口和市场竞争作比较。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+
+    def test_chinese_uk_cma_payment_nfc_rules_are_strong_and_merge_with_english(self):
+        module = load_module()
+        chinese = article_for(
+            module,
+            "英国监管机构拟针对苹果谷歌出台新规：开放平台外支付与 iOS NFC 功能",
+            "英国竞争与市场管理局 CMA 计划允许英国应用开发者把用户引导至应用商店之外付款，并研究要求苹果开放 iOS NFC，让第三方钱包、数字身份和汽车钥匙服务接入。",
+            "IT之家",
+        )
+        english = article_for(
+            module,
+            "UK Pushes Apple to Loosen App Store Payment and NFC Rules",
+            "The CMA proposed letting developers direct users outside the App Store and requiring Apple to open iOS NFC access for contactless payments, digital wallets, digital identity, and car keys.",
+            "MacRumors",
+        )
+        amex = article_for(
+            module,
+            "American Express Announces New Apple Pay Feature",
+            "American Express cardholders can redeem Membership Rewards points when checking out with Apple Pay on iPhone and iPad.",
+            "MacRumors",
+        )
+
+        self.assertEqual(chinese.relevance_tier, "strong", chinese.relevance_reason)
+        self.assertEqual(english.relevance_tier, "strong", english.relevance_reason)
+        events = module.cluster_articles([chinese, english, amex])
+
+        self.assertEqual(len(events), 2)
+        cma_events = [event for event in events if "CMA" in event.summary or "NFC" in event.summary or "nfc" in event.summary.lower()]
+        self.assertEqual(len(cma_events), 1)
+        self.assertEqual(len(cma_events[0].articles), 2)
+
+    def test_airdrop_vulnerability_chinese_quick_share_story_stays_strong_and_merges(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Three AirDrop vulnerabilities discovered, with Apple working on a full fix",
+            "Researchers found three AirDrop vulnerabilities affecting iPhone and Mac; Apple fixed one and is working on full fixes.",
+            "9to5Mac",
+        )
+        chinese = article_for(
+            module,
+            "影响全球超 50 亿台手机：苹果隔空投送 / 谷歌快速分享曝安全漏洞",
+            "CISPA 研究指出苹果 AirDrop 隔空投送和谷歌 Quick Share 存在安全漏洞，攻击者可在 10-30 米范围内让 AirDrop、接力和通用剪贴板等连续互通功能崩溃，苹果已修复其中一个漏洞并继续制作补丁。",
+            "IT之家",
+        )
+
+        self.assertNotEqual(chinese.relevance_tier, "weak", chinese.relevance_reason)
+        events = module.cluster_articles([english, chinese])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(len(events[0].articles), 2)
+
+    def test_third_party_financial_service_only_supporting_apple_pay_is_weak(self):
+        module = load_module()
+        title = "马斯克的“银行”：X Money 上线，年化收益 6%、消费返现 3%"
+        summary = (
+            "X Money 面向美国 Premium 用户内测上线，提供活期利息、Visa 金属卡和返现；"
+            "实体卡支持 Apple Pay，但报道主体是 X 的金融服务。"
+        )
+
+        self.assertNotEqual(module.detect_event_kind(title, summary), "wallet_feature")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_iphone_16e_refurbished_reports_merge_across_languages(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Apple Now Sells Refurbished iPhone 16e Starting at $419",
+            "Apple updated its online refurbished store in the United States, adding the iPhone 16e with 128GB, 256GB, and 512GB models in black and white.",
+            "MacRumors",
+        )
+        chinese = article_for(
+            module,
+            "苹果首次上架 iPhone 16e 官翻机：约 2853 元起售",
+            "苹果美国官方翻新商店首次上架 iPhone 16e，提供 128GB、256GB、512GB 三种存储版本，售价分别为 419、509、679 美元。",
+            "快科技",
+        )
+
+        events = module.cluster_articles([english, chinese])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "hardware_products")
+
+    def test_iphone_air_successor_reports_merge_across_languages(self):
+        module = load_module()
+        kuaikeji = article_for(
+            module,
+            "iPhone Air 2外观首秀：告别单摄 补齐影像短板",
+            "曝光图显示 iPhone Air 2 采用横置相机 DECO，升级为双摄，预计配备 4800 万像素主摄和超广角。",
+            "快科技",
+        )
+        ithome = article_for(
+            module,
+            "苹果 iPhone Air 2 渲染图首秀：升级双摄、A20 芯片、6.55 英寸、缩小灵动岛",
+            "消息源分享 iPhone Air 2 渲染图，显示背面升级双摄，并称其配备 A20 芯片、6.55 英寸屏幕和更小灵动岛。",
+            "IT之家",
+        )
+
+        events = module.cluster_articles([kuaikeji, ithome])
+
+        self.assertEqual(len(events), 1)
+
+    def test_apple_arcade_game_catalog_updates_are_strong_service_content(self):
+        module = load_module()
+        nine = article_for(
+            module,
+            "Family Feud Pocket lands on Apple Arcade with 4 more games coming later this week",
+            "Apple Arcade added Family Feud Pocket to iPhone, iPad, Mac, Apple Vision Pro, Apple TV, and iPod touch, with four more App Store games coming July 2.",
+            "9to5Mac",
+        )
+        macrumors = article_for(
+            module,
+            "Apple Arcade Adding 5 Games This Week, Including 'Family Feud Pocket'",
+            "Apple Arcade is adding Family Feud Pocket and four additional games this week across iPhone, iPad, Mac, Apple TV, Apple Vision Pro, and iPod touch.",
+            "MacRumors",
+        )
+
+        self.assertEqual(macrumors.relevance_tier, "strong", macrumors.relevance_reason)
+        self.assertEqual(module.detect_event_kind(macrumors.title, macrumors.summary), "service_content")
+        events = module.cluster_articles([nine, macrumors])
+
+        self.assertEqual(len(events), 1)
+
+    def test_product_data_leak_enforcement_specs_and_price_followups_stay_separate(self):
+        module = load_module()
+        enforcement = article_for(
+            module,
+            "Apple Crackdown Suspected After iPhone 18 Pro Leak Videos Disappear",
+            "Apple appears to be filing DMCA takedowns against social media posts sharing stolen iPhone 18 Pro supplier videos and internal data from a Tata breach.",
+            "MacRumors",
+        )
+        spec_leak = article_for(
+            module,
+            "iPhone 18 Pro leaks: Qualcomm or Apple C2 model, A20 details, camera upgrades",
+            "Leaked iPhone 18 Pro files reveal A20 Pro packaging, C2 modem details, camera upgrades, and 12GB RAM.",
+            "AppleInsider",
+        )
+        price_followup = article_for(
+            module,
+            "iPhone 18 Pro price may rise as memory and storage costs surge",
+            "Analysts expect iPhone 18 Pro pricing to rise after Apple increased Mac and iPad prices due to DRAM and NAND shortages.",
+            "快科技",
+        )
+
+        events = module.cluster_articles([enforcement, spec_leak, price_followup])
+
+        self.assertEqual(len(events), 3)
+
+    def test_apple_pay_rewards_reports_merge_across_amex_title_variants(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "American Express Announces New Apple Pay Feature",
+            "American Express cardholders can redeem Membership Rewards points when checking out with Apple Pay on iPhone and iPad.",
+            "MacRumors",
+        )
+        insider = article_for(
+            module,
+            "Amex cardholders can now use Membership Rewards during Apple Pay checkout",
+            "Amex cardholders can now use Membership Rewards points during Apple Pay checkout with participating merchants.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([macrumors, insider])
+
+        self.assertEqual(len(events), 1)
+
+    def test_online_refurbished_store_copy_detects_official_refurbished_iphone(self):
+        module = load_module()
+        title = "Apple Now Sells Refurbished iPhone 16e Starting at $419"
+        summary = (
+            "Apple today updated its online refurbished store in the United States, adding the iPhone 16e. "
+            "Refurbished iPhone 16e models are available at discounted prices for the first time since launch."
+        )
+
+        self.assertTrue(module.is_official_apple_refurbished_product_story(f"{title} {summary}"))
+        self.assertIn("apple-refurbished-iphone", module.primary_topic_facets(title, summary))
+
+    def test_data_leak_title_action_wins_over_related_detail_background(self):
+        module = load_module()
+        enforcement = article_for(
+            module,
+            "Apple Crackdown Suspected After iPhone 18 Pro Leak Videos Disappear",
+            "Apple appears to be filing DMCA takedowns against social media posts; background paragraphs mention A20 Pro packaging, C2 modem details, and camera upgrades from the same Tata leak.",
+            "MacRumors",
+        )
+        specs = article_for(
+            module,
+            "iPhone 18 Pro leaks: Qualcomm or Apple C2 model, A20 details, camera upgrades",
+            "Leaked files describe C2 modem choices, A20 Pro packaging, camera upgrades, and 12GB RAM; background paragraphs mention Apple is removing some leaked videos.",
+            "AppleInsider",
+        )
+
+        self.assertIn("apple-product-data-leak-enforcement", module.article_primary_facets(enforcement))
+        self.assertNotIn("apple-product-data-leak-specs", module.article_primary_facets(enforcement))
+        self.assertIn("apple-product-data-leak-specs", module.article_primary_facets(specs))
+        events = module.cluster_articles([enforcement, specs])
+
+        self.assertEqual(len(events), 2)
+
+    def test_data_leak_specs_merge_when_title_is_hardware_specs_and_body_names_leaked_files(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "iPhone 18 Pro leaks: Qualcomm or Apple C2 model, A20 details, camera upgrades",
+            "Leaked iPhone 18 Pro files reveal C2 modem choices, A20 Pro packaging, camera upgrades, and 12GB RAM.",
+            "AppleInsider",
+        )
+        chinese = article_for(
+            module,
+            "iPhone 18 Pro曝光：或采用双调制解调器方案A20 Pro芯片与相机迎重大升级",
+            "相关信息来自塔塔集团工厂遭遇网络攻击后泄露的机密文件，其中包括主板设计图、物料清单以及 A20 Pro 芯片与相机配置等技术文档。",
+            "cnBeta",
+        )
+
+        self.assertIn("apple-product-data-leak-specs", module.article_primary_facets(chinese))
+        events = module.cluster_articles([english, chinese])
+
+        self.assertEqual(len(events), 1)
+
+    def test_iphone_color_mockup_rumor_stays_strong_despite_third_party_source_context(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Alleged iPhone 18 Pro Sim Tray Again Shows Dark Cherry Color",
+            "Apple's upcoming iPhone 18 Pro models are expected to introduce a dark cherry color, and a leaked SIM tray image gives another look at the finish.",
+            "MacRumors",
+        )
+        ithome = article_for(
+            module,
+            "2026 苹果最抢手颜色：樱桃红 iPhone 18 Pro 测试照片流出",
+            "消息源在 X 平台发布视频，展示正在测试的樱桃红 iPhone 18 Pro；另有卡托图片显示银灰、浅蓝等配色。",
+            "IT之家",
+        )
+
+        self.assertEqual(ithome.relevance_tier, "strong", ithome.relevance_reason)
+        events = module.cluster_articles([macrumors, ithome])
+
+        self.assertEqual(len(events), 1)
+
+    def test_refurbished_store_availability_is_not_color_mockup_context(self):
+        module = load_module()
+        title = "Apple Now Sells Refurbished iPhone 16e Starting at $419"
+        summary = (
+            "Apple today updated its online refurbished store in the United States, adding the iPhone 16e. "
+            "The iPhone 16e comes in black or white, and Apple has both colors available."
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("apple-refurbished-iphone", facets)
+        self.assertNotIn("iphone-color-mockup", facets)
+
+    def test_iphone_color_mockup_and_refurbished_availability_do_not_merge(self):
+        module = load_module()
+        color = article_for(
+            module,
+            "Alleged iPhone 18 Pro Sim Tray Again Shows Dark Cherry Color",
+            "A leaked SIM tray image allegedly shows Apple's iPhone 18 Pro in a dark cherry finish, with light blue and silver also rumored.",
+            "MacRumors",
+        )
+        refurbished = article_for(
+            module,
+            "Apple Now Sells Refurbished iPhone 16e Starting at $419",
+            "Apple updated its online refurbished store, adding iPhone 16e models at discounted prices. The iPhone 16e comes in black or white, and Apple has both colors available.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([color, refurbished])
+
+        self.assertEqual(len(events), 2)
+
+    def test_iphone_color_mockup_and_data_leak_enforcement_do_not_merge(self):
+        module = load_module()
+        color = article_for(
+            module,
+            "Alleged iPhone 18 Pro Sim Tray Again Shows Dark Cherry Color",
+            "A leaked SIM tray image allegedly shows Apple's iPhone 18 Pro in a dark cherry finish, with light blue and silver also rumored.",
+            "MacRumors",
+        )
+        enforcement = article_for(
+            module,
+            "Apple Crackdown Suspected After iPhone 18 Pro Leak Videos Disappear",
+            "Apple appears to be filing DMCA takedowns against social media posts sharing stolen iPhone 18 Pro supplier videos and internal data from a Tata breach.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([color, enforcement])
+
+        self.assertEqual(len(events), 2)
+
+    def test_color_article_with_dmca_background_keeps_color_primary_topic(self):
+        module = load_module()
+        title = "苹果 iPhone 18 Pro“樱桃红”配色卡托曝光，消息称系列手机还可选“银灰”“浅蓝”配色"
+        summary = (
+            "博主曝光 iPhone 18 Pro 樱桃红配色卡托，并确认该系列还将提供银灰和浅蓝选项。"
+            "背景信息提到近期塔塔电子泄露的测试视频，以及苹果正通过 DMCA 清理相关泄露内容。"
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("iphone-color-mockup", facets)
+        self.assertNotIn("apple-product-data-leak-enforcement", facets)
+
+    def test_red_finish_leak_title_keeps_color_primary_topic(self):
+        module = load_module()
+        title = "爱马仕橙退场！iPhone 18 Pro 红色款偷跑：年度爆款色预定"
+        summary = (
+            "最新泄露的文件还曝光了 iPhone 18 Pro 红色款；背景段落提到塔塔电子文件泄露、"
+            "A20 Pro 数据表和供应商清单。"
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("iphone-color-mockup", facets)
+        self.assertNotIn("apple-product-data-leak-specs", facets)
+
+    def test_drop_test_title_keeps_drop_test_primary_topic(self):
+        module = load_module()
+        title = "iPhone 18 Pro 在泄露的坠落测试中亮相"
+        summary = (
+            "视频显示 iPhone 18 Pro 进行跌落测试；背景信息提到塔塔电子泄露文件包含 A20 Pro 数据表、"
+            "供应商清单和组件文档。"
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("iphone-drop-test-leak", facets)
+        self.assertNotIn("apple-product-data-leak-specs", facets)
+
+    def test_data_leak_enforcement_title_does_not_bridge_visual_leak_events(self):
+        module = load_module()
+        title = "苹果疑似加大打击力度，iPhone 18 Pro 泄露测试视频在社交平台迅速消失"
+        summary = (
+            "文章称苹果通过 DMCA 或平台投诉推动泄露视频下架；正文背景描述这些视频展示了 iPhone 18 Pro "
+            "跌落测试和深色外观。"
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("apple-product-data-leak-enforcement", facets)
+        self.assertNotIn("iphone-drop-test-leak", facets)
+        self.assertNotIn("iphone-color-mockup", facets)
+
+    def test_foldable_iphone_ultra_mockup_does_not_merge_with_iphone_18_pro_specs_leak(self):
+        module = load_module()
+        ultra = article_for(
+            module,
+            "窥见苹果 iPhone Ultra 机密样机，该说些实话还是瞎话",
+            "iPhone Ultra 机模与核心规格爆料趋于一致，苹果或采用宽比例折叠屏、无痕铰链、侧边指纹、A20 Pro 芯片和 5800mAh 电池。",
+            "IT之家",
+        )
+        specs = article_for(
+            module,
+            "iPhone 18 Pro leaks: Qualcomm & C2 modem options, camera upgrades",
+            "Leaked Tata files reveal iPhone 18 Pro C2 modem choices, A20 Pro packaging, camera upgrades, supplier lists, and component documents.",
+            "AppleInsider",
+        )
+
+        self.assertIn("foldable-iphone-render-leak", module.article_primary_facets(ultra))
+        events = module.cluster_articles([ultra, specs])
+
+        self.assertEqual(len(events), 2)
 
 
 if __name__ == "__main__":
