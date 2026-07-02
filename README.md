@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.16.0 - 2026-07-01
+### 1.17.0 - 2026-07-02
 
-- Improved deferred-event recovery for direct Apple legal and regulatory stories, including Apple/Epic Supreme Court coverage and Siri AI / EU DMA meeting reports.
-- Improved event clustering so Tim Cook / EU Siri AI reports merge across software, policy, and leadership angles while keeping distinct App Store legal matters separate.
-- Improved weak filtering for product commentary and analysis posts, keeping MacBook Ultra opinion-style articles out of required final-brief events while preserving source-backed hardware roadmap rumors.
-- Improved Apple Pay and App Store payment classification so Apple Pay wording, fee percentages, or `interest` in legal articles no longer demote App Store litigation into third-party financial-service candidates.
-- Updated fallback policy guidance and regression coverage for regulatory meetings, legal appeals, product commentary exclusions, competitor display-panel background stories, and clustering safeguards.
+- Added stronger direct iPhone hardware rumor handling so battery-capacity, SIM/eSIM, and supplier-leak details stay in `events` instead of `deferred_events`.
+- Improved foldable iPhone panel-market clustering so Counterpoint-style panel share and shipment reports merge across sources while production-target and pricing roadmap stories remain separate.
+- Fixed MacBook price and shipment market reports so they no longer merge with M-series MacBook roadmap events.
+- Updated fallback policy guidance for iPhone hardware specs, foldable panel-market boundaries, and MacBook price/roadmap separation.
+- Added regression coverage for iPhone data-leak details, foldable panel reports, direct iPhone battery rumors, and MacBook price/roadmap boundaries.
 
 ## What It Does
 

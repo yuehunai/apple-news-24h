@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.17.0 - 2026-07-02
+
+- Added stronger direct iPhone hardware rumor handling so battery-capacity, SIM/eSIM, and supplier-leak details stay in `events` instead of `deferred_events`.
+- Improved foldable iPhone panel-market clustering so Counterpoint-style panel share and shipment reports merge across sources while production-target and pricing roadmap stories remain separate.
+- Fixed MacBook price and shipment market reports so they no longer merge with M-series MacBook roadmap events.
+- Updated fallback policy guidance for iPhone hardware specs, foldable panel-market boundaries, and MacBook price/roadmap separation.
+- Added regression coverage for iPhone data-leak details, foldable panel reports, direct iPhone battery rumors, and MacBook price/roadmap boundaries.
+
 ## 1.16.0 - 2026-07-01
 
 - Improved deferred-event recovery for direct Apple legal and regulatory stories, including Apple/Epic Supreme Court coverage and Siri AI / EU DMA meeting reports.

@@ -7272,6 +7272,629 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 2)
 
+    def test_9to5mac_posts_api_has_enough_depth_for_late_day_posts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        api_text = " ".join(source.wordpress_posts_apis)
+
+        self.assertRegex(api_text, r"per_page=(?:[1-9]\d{2,}|[6-9]\d)")
+
+    def test_russia_fas_fine_reports_merge_across_sources(self):
+        module = load_module()
+        nine = article_for(
+            module,
+            "Russia threatens Apple with $52 million fine over alleged app discrimination",
+            "Russia's Federal Antimonopoly Service is accusing Apple of discriminatory practices against Russian search engines and software and threatening a 4 billion roubles fine unless Apple remedies the violations by July 15.",
+            "9to5Mac",
+            facts=["The dispute follows Russia's rule requiring phones and tablets sold in the country to ship with MAX and other local apps preinstalled."],
+        )
+        insider = article_for(
+            module,
+            "Apple in Russia's crosshairs, facing $52M fine for bias against local apps",
+            "Russia's antimonopoly regulator warned Apple it may face a $52 million fine unless it stops discriminating against local apps and search engines on iPhone and iPad.",
+            "AppleInsider",
+        )
+        kuaikeji = article_for(
+            module,
+            "俄罗斯勒令苹果整改iOS应用预装规则：否则将面临最高40亿卢布罚款",
+            "俄罗斯联邦反垄断局要求苹果在 7 月 15 日前整改 iOS 设备本土应用和搜索引擎预装规则，否则最高罚款 40 亿卢布。",
+            "快科技",
+        )
+
+        self.assertEqual(nine.relevance_tier, "strong", nine.relevance_reason)
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/01/russia-threatens-apple-with-52-million-fine-over-alleged-app-discrimination/",
+            title=nine.title,
+            summary=nine.summary,
+            feed_time_raw="2026-07-01T22:30:02",
+        )
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        events = module.cluster_articles([nine, insider, kuaikeji])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "regional_regulation")
+
+    def test_safari_technology_preview_mcp_reports_merge_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Apple Releases Safari Technology Preview 247 With MCP Server for AI Agent Integration",
+            "Apple released Safari Technology Preview 247, adding the Safari Model Context Protocol server for AI agents to inspect webpages, console logs, network requests, screenshots, and page elements.",
+            "MacRumors",
+            facts=["The update also includes fixes for Accessibility, CSS, HTML, JavaScript, WebDriver, WebGL, and more."],
+        )
+        nine = article_for(
+            module,
+            "Safari's new MCP server lets coding agents inspect and debug websites",
+            "Apple says Safari Technology Preview 247 includes the Safari MCP server, letting compatible coding agents connect to Safari and debug websites directly in the browser.",
+            "9to5Mac",
+            facts=["The post lists tools such as browser_console_messages, screenshot, list_network_requests, and page_interactions."],
+        )
+        ithome = article_for(
+            module,
+            "苹果 Safari 技术预览版 247 引入 MCP 服务，AI 智能体加速网页开发和调试",
+            "苹果 WebKit 博客宣布在 Safari Technology Preview 247 中引入 Safari MCP Server，可让编程智能体检查网页、控制台日志、网络请求、截图和页面元素。",
+            "IT之家",
+        )
+
+        self.assertEqual(macrumors.relevance_tier, "strong", macrumors.relevance_reason)
+        self.assertEqual(nine.relevance_tier, "strong", nine.relevance_reason)
+        macrumors_source = source_named(module, "MacRumors")
+        macrumors_candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/01/apple-releases-safari-technology-preview-247/",
+            title=macrumors.title,
+            summary="",
+            feed_time_raw="Wednesday July 1, 2026 3:21 PM PDT",
+        )
+        self.assertTrue(module.is_relevant_candidate(macrumors_candidate, macrumors_source))
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/01/safaris-new-mcp-server-lets-coding-agents-inspect-and-debug-websites/",
+            title=nine.title,
+            summary=nine.summary,
+            feed_time_raw="2026-07-01T21:59:20",
+        )
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        events = module.cluster_articles([macrumors, nine, ithome])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "software_systems")
+
+    def test_macrumors_current_os_feature_guide_candidate_is_relevant(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/guide/ios-27-maps/",
+            title="iOS 27: All the New Apple Maps Features",
+            summary=(
+                "The Maps app has several new iOS 27 features, including Flyover improvements, "
+                "Local Lists, natural language search expansion, Apple Watch Parked Car widget, "
+                "offline map improvements, and expanded Visited Places."
+            ),
+            feed_time_raw="Wednesday July 1, 2026 4:46 PM PDT",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertGreaterEqual(module.candidate_detail_priority(candidate)[0], 70)
+
+        evergreen = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/guide/safari-technology-preview/",
+            title="Safari Technology Preview",
+            summary="Safari Technology Preview articles on MacRumors.com",
+            feed_time_raw="",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(evergreen, source))
+
+    def test_non_apple_platform_apps_and_device_comparisons_stay_weak(self):
+        module = load_module()
+        examples = [
+            (
+                "Google's Gemini Spark for macOS will work on your local Mac files",
+                "Google launched Gemini Spark for its macOS desktop app, letting Google's AI agent automate local files and connect to Google Tasks, Keep, Canva, Dropbox, Instacart, OpenTable, and Zillow.",
+                "AppleInsider",
+            ),
+            (
+                "Elon Musk's SpaceX prototypes an AI device thinner than an iPhone",
+                "SpaceX showed investors an xAI-powered handheld prototype that is thinner than an iPhone and uses a Qualcomm chip, while Musk continues to say he does not want to build a phone.",
+                "AppleInsider",
+            ),
+            (
+                "The iPhone contributed to 'a collapse in US fertility,' claims scientific study",
+                "A scientific study argues iPhone adoption changed social behavior and may correlate with declining US birthrates, but the article does not describe a new Apple product, policy, or research action.",
+                "9to5Mac",
+            ),
+            (
+                "MLB app gives baseball fans a new iPhone and iPad real-time scores widget",
+                "The MLB app added real-time scores widgets for iPhone and iPad users as a third-party sports app update.",
+                "9to5Mac",
+            ),
+            (
+                "New Jamf Beacon gives businesses active Mac threat hunting",
+                "Jamf launched Beacon, a third-party threat hunting tool for enterprise Macs.",
+                "AppleInsider",
+            ),
+        ]
+
+        for title, summary, source in examples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+                event = module.cluster_articles([article_for(module, title, summary, source)])[0]
+                self.assertEqual(event.relevance_tier, "weak", event.relevance_reason)
+
+    def test_third_party_netflix_game_catalog_detail_path_stays_weak(self):
+        module = load_module()
+        title = "You're paying for 80+ iPhone and iPad games through Netflix, here's the full catalog - 9to5Mac"
+        summary = (
+            "Looking for new iPhone and iPad games to play? The App Store has plenty of games without ads and "
+            "in-app purchases. Every Netflix subscription currently includes a huge collection of mobile and TV games."
+        )
+        facts = [
+            "This includes the most affordable “Standard with ads” Netflix subscription for $8.99/month.",
+            "Beyond these titles, Netflix supports a catalog of over 80 iPhone and iPad games. You can download any of these games from the App Store, then sign in with your Netflix email and password to play.",
+        ]
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "9to5Mac")
+        event = module.cluster_articles([article_for(module, title, summary, "9to5Mac", facts=facts)])[0]
+
+        self.assertEqual(tier, "weak", reason)
+        self.assertEqual(event.relevance_tier, "weak", event.relevance_reason)
+
+    def test_apple_first_party_pro_app_update_stays_strong_and_separate_from_device_comparison_noise(self):
+        module = load_module()
+        final_cut = article_for(
+            module,
+            "iPhone 17 Pro just got an exclusive new pro-focused camera feature",
+            (
+                "Apple updated Final Cut Camera with Clean HDMI Out, an Apple first-party camera app feature "
+                "exclusive to iPhone 17 Pro and iPhone 17 Pro Max."
+            ),
+            "9to5Mac",
+            facts=[
+                "Apple Creator Studio also received updates across Final Cut Pro, Pixelmator Pro, and other Apple creative apps."
+            ],
+        )
+        spacex = article_for(
+            module,
+            "Elon Musk's SpaceX prototypes an AI device thinner than an iPhone",
+            "SpaceX showed investors an xAI-powered handheld prototype that is thinner than an iPhone and uses a Qualcomm chip.",
+            "AppleInsider",
+        )
+
+        self.assertEqual(final_cut.relevance_tier, "strong", final_cut.relevance_reason)
+        self.assertEqual(spacex.relevance_tier, "weak", spacex.relevance_reason)
+
+        events = module.cluster_articles([final_cut, spacex])
+
+        self.assertEqual(len(events), 2)
+        self.assertTrue(any(event.relevance_tier == "strong" and final_cut.title in {article.title for article in event.articles} for event in events))
+        self.assertTrue(any(event.relevance_tier == "weak" and spacex.title in {article.title for article in event.articles} for event in events))
+
+    def test_final_cut_camera_update_merges_without_camera_hardware_leakage(self):
+        module = load_module()
+        final_cut_9to5 = article_for(
+            module,
+            "iPhone 17 Pro just got an exclusive new pro-focused camera feature",
+            "Apple updated Final Cut Camera with Clean HDMI Out, a new feature exclusive to iPhone 17 Pro and iPhone 17 Pro Max.",
+            "9to5Mac",
+            facts=["Apple Creator Studio also received updates across Final Cut Pro, Pixelmator Pro, and Motion."],
+        )
+        final_cut_insider = article_for(
+            module,
+            "New Final Cut Camera tries to be more useful for Mac users",
+            "Apple released Final Cut Camera 2.3 for iPhone with easier media transfer to Final Cut Pro on Mac, Clean HDMI Out, and more ProRes options.",
+            "AppleInsider",
+        )
+        final_cut_ithome = article_for(
+            module,
+            "苹果更新 Final Cut Camera 至 2.3 版：iPhone 17 Pro / Max 新增“纯净 HDMI 输出”",
+            "苹果更新 Final Cut Camera 应用，在 2.3 版本中为 iPhone 17 Pro 和 iPhone 17 Pro Max 新增纯净 HDMI 输出，并提供更多 ProRes 选项。",
+            "IT之家",
+        )
+        camera_leak = article_for(
+            module,
+            "苹果史上最大规模影像升级：iPhone 18 Pro 摄像头细节流出",
+            "iPhone 18 Pro 和 iPhone 18 Pro Max 摄像头细节曝光，包含三摄布局、闪光灯、麦克风和激光雷达传感器位置。",
+            "IT之家",
+        )
+        camera_patent = article_for(
+            module,
+            "苹果新 iPhone 相机防抖专利公示：机械校正保持画面水平",
+            "苹果获批相机防抖专利，未来 iPhone 相机模块可能通过物理旋转图像传感器校正画面倾斜。",
+            "IT之家",
+        )
+
+        events = module.cluster_articles([final_cut_9to5, final_cut_insider, final_cut_ithome, camera_leak, camera_patent])
+        final_cut_events = [
+            event
+            for event in events
+            if any("Final Cut Camera" in article.title for article in event.articles)
+        ]
+
+        self.assertEqual(len(final_cut_events), 1)
+        self.assertEqual(len(final_cut_events[0].articles), 3)
+        self.assertEqual(final_cut_events[0].event_kind, "os_app")
+        self.assertFalse(
+            any(camera_leak.title in {article.title for article in event.articles} and final_cut_9to5.title in {article.title for article in event.articles} for event in events),
+            [{article.title for article in event.articles} for event in events],
+        )
+        self.assertFalse(
+            any(camera_patent.title in {article.title for article in event.articles} and final_cut_9to5.title in {article.title for article in event.articles} for event in events),
+            [{article.title for article in event.articles} for event in events],
+        )
+        self.assertFalse(
+            any(camera_patent.title in {article.title for article in event.articles} and camera_leak.title in {article.title for article in event.articles} for event in events),
+            [{article.title for article in event.articles} for event in events],
+        )
+
+    def test_hide_my_email_vulnerability_reports_merge_across_languages(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Hide My Email bug allows 100% of real email addresses to be discovered",
+                "A privacy flaw in Apple's Hide My Email feature means real email addresses can be discovered; EasyOptOuts reported the issue to Apple more than a year ago.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Hide My Email Vulnerability Exposes Real Email Addresses",
+                "A flaw in Apple's Hide My Email service can allow almost anyone to uncover the real email address behind a generated alias, and Apple has failed to address it for more than a year.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果“Hide My Email”被曝安全漏洞：测试中 100% 可溯源真实邮箱",
+                "研究人员称苹果 iCloud+ 的 Hide My Email 功能存在漏洞，测试中 100% 可反查真实邮箱，该问题已向苹果报告超过一年。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "security_privacy")
+
+    def test_memory_supplier_talks_do_not_merge_with_unrelated_iphone_or_foldable_events(self):
+        module = load_module()
+        memory = article_for(
+            module,
+            "Apple in Talks to Buy Memory Chips From Chinese Makers CXMT and YMTC",
+            "Apple is in talks to buy memory from ChangXin Memory Technologies and Yangtze Memory Technologies for devices sold in China, while Tim Cook has spoken with Trump administration officials including Treasury Secretary Scott Bessent.",
+            "MacRumors",
+        )
+        chinese = article_for(
+            module,
+            "苹果被曝正洽谈采购长鑫 + 长江存储芯片，供应中国市场设备",
+            "苹果正寻求从长鑫存储、长江存储采购存储芯片用于中国市场设备，以释放其他供应商产能给美国等市场。",
+            "IT之家",
+        )
+        iphone_cut = article_for(
+            module,
+            "Apple Has Reportedly Cut iPhone 17 Lineup Production",
+            "Apple reportedly cut iPhone 17 lineup production by 15% after a long sales cycle.",
+            "MacRumors",
+        )
+        paste = article_for(
+            module,
+            "iOS 27 Adds New Copy and Paste Feature",
+            "Apple added a new keyboard paste shortcut in iOS 27 for text, photos, links, and other copied content.",
+            "MacRumors",
+        )
+        fold_panel = article_for(
+            module,
+            "iPhone Fold expected to fuel rebound in foldable phone panel shipments",
+            "Counterpoint expects Apple's first foldable iPhone to account for 29% of foldable smartphone panel orders in 2026.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([memory, chinese, iphone_cut, paste, fold_panel])
+        memory_events = [event for event in events if any("CXMT" in article.title or "长鑫" in article.title for article in event.articles)]
+
+        self.assertEqual(len(memory_events), 1)
+        self.assertEqual(len(memory_events[0].articles), 2)
+        self.assertEqual(len(events), 4)
+
+    def test_iphone_roadmap_background_does_not_create_large_mixed_cluster(self):
+        module = load_module()
+        iphone_cut = article_for(
+            module,
+            "Apple Has Reportedly Cut iPhone 17 Lineup Production",
+            (
+                "Apple reportedly lowered iPhone 17 production plans by 15% after a long demand cycle. "
+                "The article adds background that some buyers may be waiting for iPhone 18 Pro models and Apple's first foldable iPhone."
+            ),
+            "MacRumors",
+        )
+        paste = article_for(
+            module,
+            "iOS 27 Adds a Useful New Copy-and-Paste Feature to Your iPhone",
+            "iOS 27 adds a keyboard copy-and-paste shortcut that can paste text, photos, and links from Safari, Reddit, Messages, and Notes.",
+            "MacRumors",
+        )
+        roadmap = article_for(
+            module,
+            "Apple to Release These 16 New Products Later This Year",
+            "Apple is expected to release a broad list of products, including iPhone, Apple Watch, Apple TV, HomePod, and MacBook updates.",
+            "MacRumors",
+        )
+        foldable_en = article_for(
+            module,
+            "Apple reportedly orders 10M foldable iPhone Ultra models, which could sell for around $2500",
+            "Apple has reportedly raised the foldable iPhone production target to 10 million units, up from earlier 7 million to 8 million estimates.",
+            "9to5Mac",
+        )
+        foldable_cn = article_for(
+            module,
+            "近年来最密集发布节奏：消息称苹果今明两年拟推出至少 5 款 iPhone 新机",
+            "日经亚洲称苹果要求供应商为今年生产约 1000 万部折叠屏 iPhone 做好准备，高于此前约 700 万至 800 万部的预期。",
+            "IT之家",
+        )
+        camera = article_for(
+            module,
+            "苹果史上最大规模影像升级：iPhone 18 Pro 摄像头细节流出",
+            "iPhone 18 Pro 和 iPhone 18 Pro Max 摄像头细节曝光，包含三摄布局、闪光灯、麦克风和激光雷达传感器位置。",
+            "IT之家",
+        )
+        ipad = article_for(
+            module,
+            "苹果预计于 2027 年春季推出新款 11 英寸和 13 英寸 iPad Pro",
+            "苹果计划在 2027 年春季发布新款 iPad Pro，升级重点是 M6 或 M7 芯片和散热系统。",
+            "cnBeta",
+        )
+
+        events = module.cluster_articles([iphone_cut, paste, roadmap, foldable_en, foldable_cn, camera, ipad])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertFalse(
+            any(iphone_cut.title in cluster and paste.title in cluster for cluster in clusters),
+            clusters,
+        )
+        self.assertFalse(
+            any(iphone_cut.title in cluster and foldable_en.title in cluster for cluster in clusters),
+            clusters,
+        )
+        foldable_clusters = [cluster for cluster in clusters if foldable_en.title in cluster or foldable_cn.title in cluster]
+        self.assertEqual(len(foldable_clusters), 1, clusters)
+        self.assertEqual(foldable_clusters[0], {foldable_en.title, foldable_cn.title})
+        self.assertGreaterEqual(len(events), 6, clusters)
+
+    def test_ipad_product_roadmap_does_not_merge_with_foldable_iphone_production(self):
+        module = load_module()
+        ipad = article_for(
+            module,
+            "Apple to Launch New iPad Pro in Spring 2027",
+            (
+                "Apple is planning to release new 11-inch and 13-inch iPad Pro models in spring 2027. "
+                "The iPad Pro models could use either M6 chips or M7 chips. "
+                "The article notes in background that iPhone 18e, iPhone 18, and iPhone Air 2 are also slated for spring 2027."
+            ),
+            "MacRumors",
+        )
+        ipad_chips = article_for(
+            module,
+            "古尔曼：苹果 2027 春季更新 iPad Pro 机型，升级 M6/M7 芯片",
+            (
+                "苹果 2027 春季更新 iPad Pro 机型，仍包括 11 英寸和 13 英寸版本，升级重点是 M6 或 M7 芯片和散热系统。"
+                "背景还提到苹果同期准备折叠屏 iPhone 和多款 iPhone 新机。"
+            ),
+            "IT之家",
+        )
+        ipad_cn = article_for(
+            module,
+            "苹果预计于2027年春季推出新款11英寸和13英寸iPad Pro",
+            "苹果计划在 2027 年春季发布新款 iPad Pro，升级重点是 M6 或 M7 芯片和散热系统。",
+            "cnBeta",
+        )
+        macbook = article_for(
+            module,
+            "M6 MacBook Pro Coming in Late 2026, Redesigned M7 Model Launching in 1H 2027",
+            (
+                "Apple plans to release an updated 14-inch MacBook Pro with an M6 chip in late 2026, "
+                "then follow it with a revamped M7 MacBook Pro in the first half of 2027. "
+                "The report also mentions future iPad Pro models in broader product-roadmap context."
+            ),
+            "MacRumors",
+        )
+        foldable = article_for(
+            module,
+            "Apple reportedly orders 10M foldable iPhone Ultra models, which could sell for around $2500",
+            (
+                "Apple plans to manufacture and sell around 10 million foldable iPhone Ultra models. "
+                "Nikkei Asia reports that Apple raised the foldable iPhone production target from 7 million to 8 million units."
+            ),
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([ipad, ipad_chips, ipad_cn, macbook, foldable])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertFalse(any(ipad.title in cluster and foldable.title in cluster for cluster in clusters), clusters)
+        self.assertFalse(any(ipad.title in cluster and macbook.title in cluster for cluster in clusters), clusters)
+        ipad_clusters = [
+            cluster for cluster in clusters if ipad.title in cluster or ipad_chips.title in cluster or ipad_cn.title in cluster
+        ]
+        self.assertEqual(len(ipad_clusters), 1, clusters)
+        self.assertEqual(ipad_clusters[0], {ipad.title, ipad_chips.title, ipad_cn.title})
+        self.assertEqual(len(events), 3, clusters)
+
+    def test_macbook_price_hike_report_does_not_merge_with_macbook_chip_roadmap(self):
+        module = load_module()
+        price = article_for(
+            module,
+            "MacBook price hikes expected to contribute to drop in global laptop shipments",
+            (
+                "TrendForce says Apple's recent MacBook price hikes will contribute to a 13.6% drop "
+                "in global laptop shipments, with AI data centers driving memory and storage component costs higher."
+            ),
+            "9to5Mac",
+            facts=["Apple said AI data centers drove extraordinary memory and storage demand and unusually fast component-cost increases."],
+        )
+        roadmap = article_for(
+            module,
+            "M6 MacBook Pro Coming in Late 2026, Redesigned M7 Model Launching in 1H 2027",
+            (
+                "Bloomberg reports Apple plans an updated 14-inch MacBook Pro with an M6 chip in late 2026, "
+                "then a redesigned M7 model in the first half of 2027."
+            ),
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([price, roadmap])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+
+    def test_macbook_price_shipments_report_does_not_get_product_roadmap_facet(self):
+        module = load_module()
+        price = article_for(
+            module,
+            "苹果MacBook全面涨价！2026年全球笔记本出货恐下跌13.6%",
+            (
+                "根据 TrendForce 最新笔记本产业研究，受零部件成本上升、终端售价上涨以及消费需求转弱影响，"
+                "2026 年全球笔记本市场或将明显承压。苹果 MacBook 涨价后仍有望维持双位数增长。"
+            ),
+            "快科技",
+        )
+
+        self.assertIn("apple-product-price-increase", module.article_primary_facets(price))
+        self.assertNotIn("macbook-product-roadmap", module.article_primary_facets(price))
+
+    def test_non_apple_processor_review_using_macbook_as_benchmark_is_weak(self):
+        module = load_module()
+        title = "英特尔酷睿5 315实测：为硬刚MacBook Neo而生"
+        summary = (
+            "MacBook Neo 的成功让 Windows 阵营看到新的市场突破点。"
+            "文章测试 Wildcat Lake 处理器中的酷睿 5 315，包含 CPU-Z、Cinebench、单核和多核成绩。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], source_name="快科技")
+
+        self.assertEqual(tier, "weak")
+        self.assertIn("benchmark", reason)
+
+    def test_iphone_18_data_leak_detail_is_strong_and_merges_with_main_leak_event(self):
+        module = load_module()
+        main_leak = article_for(
+            module,
+            "苹果史上最大规模泄密！iPhone 18 Pro / Max 被彻底扒干净",
+            (
+                "苹果印度供应商塔塔电子遭黑客入侵，超过 630GB 内部文件泄露，"
+                "涉及 iPhone 18 Pro 和 iPhone 18 Pro Max 的组件设计、规格文件、质量控制和测试资料。"
+            ),
+            "IT之家",
+            facts=["文件显示 iPhone 18 Pro 内部代号 V63，iPhone 18 Pro Max 内部代号 V64。"],
+        )
+        color_and_sim = article_for(
+            module,
+            "iPhone 18 Pro秘密都被泄露完了：只剩价格还没公布",
+            (
+                "苹果印度供应商塔塔电子近期遭黑客组织攻击并泄露超过 630GB 内部文件，"
+                "更多 iPhone 18 Pro 系列工程细节浮出水面，涉及测试配色、深樱桃红、更窄灵动岛、"
+                "中国大陆单实体 SIM + eSIM 配置。"
+            ),
+            "快科技",
+        )
+
+        self.assertEqual(color_and_sim.relevance_tier, "strong", color_and_sim.relevance_reason)
+        events = module.cluster_articles([main_leak, color_and_sim])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "hardware_market")
+
+    def test_foldable_iphone_panel_market_reports_stay_strong_and_merge(self):
+        module = load_module()
+        appleinsider = article_for(
+            module,
+            "iPhone Fold expected to take 29% of 2026 foldable phone screen orders",
+            (
+                "Counterpoint Research says Apple's first iPhone Fold is expected to take 29% of "
+                "2026 foldable smartphone display orders, trailing Samsung at 31% and ahead of Huawei at 24%."
+            ),
+            "AppleInsider",
+        )
+        nine = article_for(
+            module,
+            "iPhone Fold expected to fuel rebound in foldable phone panel shipments",
+            (
+                "Counterpoint Research says Apple's entry into the foldable phone market will help drive "
+                "a 24% increase in foldable smartphone panel shipments and about 48% revenue growth."
+            ),
+            "9to5Mac",
+            facts=["Samsung Display is expected to be the sole supplier of panels for Apple's first foldable iPhone."],
+        )
+        ithome = article_for(
+            module,
+            "CounterPoint 称 iPhone Ultra 改写 2026 全球折叠面板供应格局，苹果首年贡献 29% 采购份额",
+            (
+                "CounterPoint Research 预估苹果首款折叠 iPhone 上市后，在 2026 年全球折叠手机屏幕出货量中"
+                "斩获约 29% 的订单，全年折叠屏面板出货量预计约 2750 万片，同比增长约 24%。"
+            ),
+            "IT之家",
+        )
+
+        self.assertEqual(nine.relevance_tier, "strong", nine.relevance_reason)
+        self.assertEqual(ithome.relevance_tier, "strong", ithome.relevance_reason)
+        events = module.cluster_articles([appleinsider, nine, ithome])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].relevance_tier, "strong")
+        self.assertNotIn("mixed primary topic facets", events[0].merge_warnings)
+
+    def test_foldable_panel_market_report_does_not_merge_with_production_target(self):
+        module = load_module()
+        panel = article_for(
+            module,
+            "iPhone Fold expected to fuel rebound in foldable phone panel shipments",
+            (
+                "Counterpoint Research says Apple's entry into the foldable phone market will help drive "
+                "a 24% increase in foldable smartphone panel shipments and about 48% revenue growth. "
+                "Apple is expected to account for 29% of foldable smartphone panel orders."
+            ),
+            "9to5Mac",
+        )
+        production = article_for(
+            module,
+            "Apple reportedly orders 10M foldable iPhone Ultra models, which could sell for around $2500",
+            (
+                "Nikkei Asia reports Apple has raised the foldable iPhone production target to 10 million units, "
+                "up from earlier 7 million to 8 million estimates, with the first model expected to sell for around $2500."
+            ),
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([panel, production])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+
+    def test_direct_iphone_battery_capacity_rumor_is_not_third_party_platform_status(self):
+        module = load_module()
+        title = "iPhone 18 Pro Max电池容量新鲜出炉：5425mAh刷新苹果纪录"
+        summary = (
+            "快科技7月2日消息，有博主在社交平台上公布了iPhone 18 Pro Max的电池容量信息。"
+            "其中国行版本的电池容量为5235mAh，而eSIM版本则达到了5425mAh，创苹果历史新高，两者容量相差190mAh。"
+            "作为对比，iPhone 17 Pro Max eSIM版的电池容量为5088mAh，与iPhone 18 Pro Max eSIM版相比，容量差距为337mAh；"
+            "而iPhone 17 Pro Max国行版的电池容量为4823mAh，与iPhone 18 Pro Max国行版之间的差距则达到了412mAh。"
+        )
+        facts = [
+            "iPhone 18 Pro Max 国行版预计采用实体 SIM 加 eSIM 并存的组合方式。",
+            "目前国内三大运营商中国联通、中国移动和中国电信均已正式启动面向 eSIM 手机的相关运营服务，用户可前往线下营业厅办理。",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "快科技")
+        event = module.cluster_articles([article_for(module, title, summary, "快科技", facts=facts)])[0]
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(event.relevance_tier, "strong", event.relevance_reason)
+        self.assertEqual(event.category, "hardware_products")
+
 
 if __name__ == "__main__":
     unittest.main()

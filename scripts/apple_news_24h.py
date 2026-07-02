@@ -1183,6 +1183,25 @@ CROSS_LANGUAGE_TOKEN_MAP = {
     "隐藏共享位置": "hide-location",
     "共享时长": "sharing-duration",
     "位置共享": "location-sharing",
+    "隐藏邮件地址": "hide-my-email",
+    "隐藏邮箱": "hide-my-email",
+    "真实邮箱": "email",
+    "可溯源": "discovered",
+    "反查": "discovered",
+    "safari 技术预览版": "technology-preview",
+    "模型上下文协议": "mcp",
+    "智能体": "agent",
+    "调试": "debug",
+    "长鑫": "cxmt",
+    "长鑫存储": "cxmt",
+    "长江存储": "ymtc",
+    "洽谈": "talks",
+    "采购": "buy",
+    "俄罗斯": "russia",
+    "俄联邦": "russia",
+    "反垄断": "antimonopoly",
+    "罚款": "fine",
+    "预装": "preinstall",
     "巴西": "brazil",
     "应用商店": "app-store",
     "第三方应用商店": "alternative-marketplace",
@@ -1391,7 +1410,7 @@ def detect_timezone(requested: str) -> tuple[Any, dict[str, Any]]:
 
 def build_sources(now_local: datetime) -> list[Source]:
     dates = [now_local.date(), (now_local - timedelta(days=1)).date()]
-    macrumors_pages = ["https://www.macrumors.com/"]
+    macrumors_pages = ["https://www.macrumors.com/", "https://www.macrumors.com/guide/"]
     nine_pages = ["https://9to5mac.com/"]
     for date in dates:
         macrumors_pages.append(
@@ -1412,7 +1431,7 @@ def build_sources(now_local: datetime) -> list[Source]:
             default_tz="America/Los_Angeles",
             feeds=["https://9to5mac.com/feed/"],
             wordpress_posts_apis=[
-                "https://9to5mac.com/wp-json/wp/v2/posts?per_page=40&_embed=wp:term&_fields=link,date_gmt,date,title,excerpt,_links.wp:term,_embedded.wp:term"
+                "https://9to5mac.com/wp-json/wp/v2/posts?per_page=100&_embed=wp:term&_fields=link,date_gmt,date,title,excerpt,_links.wp:term,_embedded.wp:term"
             ],
             pages=nine_pages,
             domains=("9to5mac.com",),
@@ -2709,8 +2728,25 @@ def same_os_release_event(article: Article, event: Event) -> bool:
 
 def allowed_url_excluded_candidate(candidate: Candidate, source: Source, text: str) -> bool:
     url_lower = candidate.url.lower()
+    if is_safari_mcp_server_story(text):
+        return True
     if source.name == "MacRumors" and "/guide/" in url_lower:
-        return is_apple_os_feature_or_summary_story(text)
+        kind = detect_event_kind(candidate.title, candidate.summary, [candidate.context])
+        tier, _ = classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [candidate.context],
+            candidate.source,
+        )
+        return is_apple_os_feature_or_summary_story(text) or (
+            kind == "os_app"
+            and tier == "strong"
+            and score_terms(
+                candidate.title.lower(),
+                ["ios", "ipados", "macos", "watchos", "tvos", "visionos"],
+            )
+            > 0
+        )
     if "review" in url_lower and detect_event_kind(candidate.title, candidate.summary, [candidate.context]) == "service_content":
         return True
     return False
@@ -2753,6 +2789,397 @@ def is_apple_developer_tool_story(text: str) -> bool:
         if not has_swift_programming_context(lower):
             return False
     return score_terms(lower, APPLE_DEVELOPER_TOOL_ACTION_TERMS) > 0
+
+
+def is_safari_mcp_server_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple", "苹果", "webkit"]) <= 0:
+        return False
+    if score_terms(lower, ["safari technology preview", "safari 技术预览版", "safari"]) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "mcp",
+            "model context protocol",
+            "mcp server",
+            "mcp 服务",
+            "mcp 服务器",
+            "模型上下文协议",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "coding agent",
+            "coding agents",
+            "ai agent",
+            "ai agents",
+            "debug",
+            "debugging",
+            "inspect",
+            "browser automation",
+            "web development",
+            "console logs",
+            "network requests",
+            "page elements",
+            "智能体",
+            "编程智能体",
+            "调试",
+            "检查网页",
+            "控制台日志",
+            "网络请求",
+            "页面元素",
+        ],
+    ) > 0
+
+
+def is_hide_my_email_vulnerability_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "hide my email",
+            "icloud+",
+            "隐藏邮件地址",
+            "隐藏邮箱",
+            "隐藏我的电子邮件",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "bug",
+            "flaw",
+            "vulnerability",
+            "privacy flaw",
+            "real email",
+            "email addresses",
+            "exposes",
+            "discovered",
+            "uncover",
+            "100%",
+            "漏洞",
+            "安全漏洞",
+            "隐私漏洞",
+            "真实邮箱",
+            "真实邮件地址",
+            "可溯源",
+            "反查",
+            "泄露",
+            "暴露",
+        ],
+    ) > 0
+
+
+def is_russia_fas_app_preinstall_regulation_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "russia",
+            "russian",
+            "federal antimonopoly service",
+            "fas",
+            "россия",
+            "俄罗斯",
+            "俄联邦",
+            "联邦反垄断局",
+            "反垄断局",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "fine",
+            "fines",
+            "penalty",
+            "threatens",
+            "antimonopoly",
+            "antitrust",
+            "discrimination",
+            "discriminatory",
+            "preinstall",
+            "pre-installed",
+            "search engine",
+            "search engines",
+            "local apps",
+            "max",
+            "rustore",
+            "app discrimination",
+            "罚款",
+            "整改",
+            "威胁",
+            "反垄断",
+            "歧视",
+            "预装",
+            "本土应用",
+            "本地应用",
+            "搜索引擎",
+            "40 亿卢布",
+            "4 billion",
+            "$52 million",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(lower, ["iphone", "ipad", "ios", "app store", "apps", "software", "应用", "软件"]) > 0
+
+
+def is_apple_memory_supplier_sourcing_story(text: str) -> bool:
+    lower = text.lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "memory",
+            "ram",
+            "dram",
+            "nand",
+            "storage chip",
+            "storage chips",
+            "memory chips",
+            "存储芯片",
+            "存储",
+            "内存",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "cxmt",
+            "changxin",
+            "changxin memory",
+            "ymtc",
+            "yangtze memory",
+            "长鑫",
+            "长鑫存储",
+            "长江存储",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "talks",
+            "in talks",
+            "buy",
+            "buying",
+            "purchase",
+            "procure",
+            "procurement",
+            "source",
+            "sourcing",
+            "supplier",
+            "suppliers",
+            "use",
+            "using",
+            "devices sold in china",
+            "china market",
+            "chinese market",
+            "谈判",
+            "洽谈",
+            "采购",
+            "购买",
+            "采用",
+            "供应",
+            "供应商",
+            "中国市场",
+        ],
+    ) > 0
+
+
+def is_third_party_ai_agent_for_mac_without_apple_action(title: str, text: str) -> bool:
+    lower = f"{title} {text}".lower()
+    title_lower = title.lower()
+    if has_apple_first_party_release_context(lower):
+        return False
+    if score_terms(title_lower, ["apple", "苹果", "safari", "xcode", "webkit"]) > 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "google",
+            "gemini",
+            "spark",
+            "claude",
+            "copilot",
+            "chatgpt",
+            "openai",
+            "perplexity",
+            "谷歌",
+            "第三方",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(lower, ["macos", "mac", "local mac files", "desktop app", "mac app", "mac 用户"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "ai agent",
+            "agent",
+            "automation",
+            "automate",
+            "local files",
+            "connect to",
+            "desktop app",
+            "智能体",
+            "代理",
+            "自动化",
+            "本地文件",
+        ],
+    ) > 0
+
+
+def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
+    lower = f"{title} {text}".lower()
+    if has_apple_first_party_release_context(lower):
+        return False
+    if is_direct_apple_hardware_roadmap_story(lower, title):
+        return False
+    if is_direct_iphone_hardware_spec_rumor_story(title, lower):
+        return False
+    if is_apple_display_panel_supply_chain_story(lower) or is_foldable_iphone_supply_chain_story(lower):
+        return False
+    if score_terms(lower, ["airdrop", "quick share", "nearby share", "interoperability", "cross-platform", "隔空投送", "互通"]) > 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "spacex",
+            "xai",
+            "elon musk",
+            "musk",
+            "tesla",
+            "qualcomm",
+            "google",
+            "samsung",
+            "高通",
+            "马斯克",
+            "三星",
+            "谷歌",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(lower, ["iphone", "apple", "苹果"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "thinner than",
+            "thinner-than",
+            "prototype",
+            "handheld",
+            "device",
+            "phone",
+            "comparison",
+            "compared",
+            "rival",
+            "比 iphone 更薄",
+            "薄于 iphone",
+            "原型机",
+            "设备",
+            "手机",
+            "对比",
+        ],
+    ) > 0
+
+
+def is_third_party_consumer_app_update_on_apple_platform(title: str, text: str) -> bool:
+    lower = f"{title} {text}".lower()
+    title_lower = title.lower()
+    if has_apple_first_party_release_context(lower):
+        return False
+    if score_terms(lower, ["airdrop", "quick share", "nearby share", "interoperability", "cross-platform", "隔空投送", "互通"]) > 0:
+        return False
+    if score_terms(title_lower, ["apple releases", "apple launches", "apple announces", "苹果发布", "苹果推出", "苹果宣布"]) > 0:
+        return False
+    vendor_score = score_terms(
+        lower,
+        [
+            "mlb",
+            "major league baseball",
+            "netflix",
+            "plex",
+            "spotify",
+            "google",
+            "jamf",
+            "ubisoft",
+            "tencent",
+            "third-party",
+            "third party",
+            "第三方",
+            "育碧",
+            "腾讯",
+        ],
+    )
+    if vendor_score <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "iphone",
+            "ipad",
+            "ios",
+            "ipados",
+            "macos",
+            "app store",
+            "apple tv",
+            "vision pro",
+            "苹果平台",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "widget",
+            "widgets",
+            "app update",
+            "catalog",
+            "games",
+            "game catalog",
+            "scores",
+            "real-time scores",
+            "threat hunting",
+            "小组件",
+            "应用更新",
+            "游戏",
+            "目录",
+            "实时比分",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "adds",
+            "added",
+            "launches",
+            "released",
+            "available",
+            "new app",
+            "new feature",
+            "gives",
+            "paying for",
+            "full catalog",
+            "latest version",
+            "highlights",
+            "推出",
+            "上线",
+            "新增",
+            "更新",
+        ],
+    ) > 0
 
 
 def is_official_apple_accessory_market_story(text: str) -> bool:
@@ -3468,11 +3895,18 @@ def is_third_party_device_management_service_story(text: str) -> bool:
             "jamf",
             "third-party platform",
             "third-party service",
+            "jamf beacon",
+            "beacon by jamf",
             "mdm",
             "device management",
+            "threat hunting",
+            "enterprise mac",
+            "enterprise macs",
             "第三方平台",
             "第三方服务",
             "设备管理",
+            "威胁狩猎",
+            "企业 mac",
         ],
     )
     management_action = score_terms(
@@ -3481,6 +3915,11 @@ def is_third_party_device_management_service_story(text: str) -> bool:
             "launches new service",
             "launches new platform",
             "announces",
+            "add managed threat hunting",
+            "active mac threat hunting",
+            "premium threat hunting",
+            "security teams",
+            "investigate macos threats",
             "manage mac",
             "manage ipad",
             "screen time",
@@ -3490,6 +3929,9 @@ def is_third_party_device_management_service_story(text: str) -> bool:
             "parental control",
             "推出服务",
             "推出平台",
+            "推出",
+            "威胁狩猎",
+            "调查 macos 威胁",
             "家长管理",
             "屏幕时间",
             "学校设备",
@@ -4147,15 +4589,23 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
     if is_routine_retail_discount_story(candidate.title, text):
         return False
     candidate_event_kind = detect_event_kind(candidate.title, candidate.summary, [candidate.context])
-    if candidate_event_kind == "hardware_market":
-        candidate_tier, _ = classify_relevance_tier(
-            candidate.title,
-            candidate.summary,
-            [candidate.context],
-            candidate.source,
-        )
-        if candidate_tier == "strong":
-            return True
+    candidate_tier, _ = classify_relevance_tier(
+        candidate.title,
+        candidate.summary,
+        [candidate.context],
+        candidate.source,
+    )
+    if candidate_tier == "strong" and candidate_event_kind in {
+        "app_store_trust",
+        "developer_tool",
+        "hardware_market",
+        "legal_antitrust",
+        "os_app",
+        "regional_regulation",
+        "security_privacy",
+        "wallet_feature",
+    }:
+        return True
     if is_apple_developer_tool_story(text):
         return True
     if is_official_apple_accessory_market_story(text):
@@ -5497,6 +5947,7 @@ REGION_TERMS = {
     "united-states": ["united states", "u.s.", "us ", "usa", "america", "美国"],
     "latin-america": ["latin america", "拉美", "拉丁美洲"],
     "united-kingdom": ["united kingdom", "uk", "britain", "英国"],
+    "russia": ["russia", "russian", "俄罗斯", "俄联邦"],
 }
 
 REGION_SENSITIVE_EVENT_KINDS = {
@@ -5528,6 +5979,7 @@ SUMMARY_LEVEL_EVENT_MERGE_FACETS = {
     "apple-refurbished-mac",
     "apple-refurbished-product",
     "apple-restricted-memory-supplier-approval",
+    "apple-memory-supplier-sourcing",
     "apple-watch-redesign",
     *APPLE_PRICE_SUBTOPIC_FACETS,
     "apple-product-roadmap-list",
@@ -5536,11 +5988,15 @@ SUMMARY_LEVEL_EVENT_MERGE_FACETS = {
     "brazil-app-store-policy",
     "epic-app-store-appeal",
     "find-my-location-sharing",
+    "final-cut-camera-update",
     "foldable-iphone-supply-chain",
+    "hide-my-email-vulnerability",
     "iwork-apps-update",
     "iphone-air-successor",
     "iphone-color-mockup",
     "iphone-parts-factory-contamination",
+    "russia-fas-app-preinstall-regulation",
+    "safari-mcp-server",
     "system-performance-optimization",
     "uk-cma-app-store-payment-nfc",
 }
@@ -6692,6 +7148,110 @@ def is_direct_apple_hardware_roadmap_story(text: str, title: str = "") -> bool:
     return product_score > 0 and roadmap_score > 0
 
 
+def has_direct_iphone_product_title_subject(title: str) -> bool:
+    title_lower = title.lower()
+    if score_terms(title_lower, ["iphone moment", "iphone 时刻"]) > 0:
+        return False
+    if re.search(r"\biphone\s*(?:\d{1,2}|air|fold|ultra|pro|max|e)\b", title_lower):
+        return True
+    if re.search(r"苹果[^。！？.!?]{0,24}iphone", title_lower):
+        return True
+    if title_lower.startswith("iphone ") and score_terms(title_lower, ["apple", "苹果", "galaxy", "android", "三星", "安卓"]) <= 0:
+        return True
+    return False
+
+
+def is_direct_iphone_hardware_spec_rumor_story(title: str, text: str) -> bool:
+    lower = f"{title} {text}".lower()
+    title_lower = title.lower()
+    if not has_direct_iphone_product_title_subject(title):
+        return False
+    if score_terms(
+        title_lower,
+        [
+            "android",
+            "galaxy",
+            "samsung",
+            "huawei",
+            "xiaomi",
+            "oppo",
+            "vivo",
+            "honor",
+            "pixel",
+            "安卓",
+            "三星",
+            "华为",
+            "小米",
+            "荣耀",
+        ],
+    ) > 0:
+        return False
+    hardware_detail_score = score_terms(
+        lower,
+        [
+            "battery capacity",
+            "battery",
+            "mah",
+            "sim",
+            "esim",
+            "dynamic island",
+            "face id",
+            "camera",
+            "camera control",
+            "color",
+            "colour",
+            "finish",
+            "display",
+            "screen",
+            "chip",
+            "modem",
+            "sensor",
+            "容量",
+            "电池容量",
+            "电池",
+            "实体 sim",
+            "实体sim",
+            "灵动岛",
+            "配色",
+            "颜色",
+            "摄像头",
+            "相机",
+            "芯片",
+            "调制解调器",
+            "传感器",
+        ],
+    )
+    if hardware_detail_score <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "rumor",
+            "rumors",
+            "leak",
+            "leaks",
+            "leaked",
+            "revealed",
+            "published",
+            "posted",
+            "report",
+            "reported",
+            "reportedly",
+            "blogger",
+            "weibo",
+            "公布",
+            "曝光",
+            "泄露",
+            "爆料",
+            "消息称",
+            "新鲜出炉",
+            "显示",
+            "博主",
+            "社交平台",
+        ],
+    ) > 0
+
+
 def is_non_apple_vendor_response_to_apple_product_story(title: str, text: str) -> bool:
     title_lower = title.lower()
     lower = text.lower()
@@ -7220,6 +7780,35 @@ def is_apple_creator_studio_story(text: str) -> bool:
     )
 
 
+def is_final_cut_camera_update_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["final cut camera"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "apple",
+            "updated",
+            "update",
+            "released",
+            "version",
+            "clean hdmi",
+            "hdmi out",
+            "prores",
+            "import",
+            "final cut pro",
+            "app store",
+            "苹果",
+            "更新",
+            "版本",
+            "纯净 hdmi",
+            "hdmi 输出",
+            "导入",
+            "专业拍摄",
+        ],
+    ) > 0
+
+
 def is_iwork_apps_update_story(text: str) -> bool:
     lower = text.lower()
     return (
@@ -7361,7 +7950,33 @@ def os_feature_component_facets_from_text(text: str) -> set[str]:
     ):
         facets.add("weather-app-forecast")
     if (
-        score_terms(lower, ["keyboard", "input method", "typing", "chinese input", "language support", "输入法", "键盘", "中文输入", "拼音", "候选词", "标点", "生僻字"]) > 0
+        score_terms(
+            lower,
+            [
+                "keyboard",
+                "input method",
+                "typing",
+                "chinese input",
+                "language support",
+                "copy-and-paste",
+                "copy and paste",
+                "copy paste",
+                "paste from",
+                "paste",
+                "clipboard",
+                "输入法",
+                "键盘",
+                "中文输入",
+                "拼音",
+                "候选词",
+                "标点",
+                "生僻字",
+                "复制",
+                "粘贴",
+                "剪贴板",
+            ],
+        )
+        > 0
         and score_terms(lower, ["ios", "ipados", "iphone", "ipad", "system", "系统"]) > 0
     ):
         facets.add("keyboard-input-method")
@@ -8719,11 +9334,18 @@ def price_facets_compatible(left: set[str], right: set[str]) -> bool:
 
 def restricted_memory_supplier_approval_facets_compatible(left: set[str], right: set[str]) -> bool:
     restricted_facet = "apple-restricted-memory-supplier-approval"
+    sourcing_facet = "apple-memory-supplier-sourcing"
+    if sourcing_facet in left or sourcing_facet in right:
+        supplier_facets = {restricted_facet, sourcing_facet}
+        return bool((left & supplier_facets) and (right & supplier_facets))
     return (restricted_facet in left) == (restricted_facet in right)
 
 
 def strategic_transaction_facets_compatible(left: set[str], right: set[str]) -> bool:
     transaction_facet = "apple-strategic-transaction"
+    supplier_facets = {"apple-memory-supplier-sourcing", "apple-restricted-memory-supplier-approval"}
+    if (left & supplier_facets) and (right & supplier_facets):
+        return True
     left_has = transaction_facet in left
     right_has = transaction_facet in right
     if left_has != right_has:
@@ -9206,6 +9828,12 @@ def is_competitor_or_company_story_using_apple_as_benchmark(title: str, text: st
             "catch up with apple",
             "apple-like",
             "like apple",
+            "challenge macbook",
+            "compete with macbook",
+            "rival macbook",
+            "beat macbook",
+            "macbook-like",
+            "like macbook",
             "叫板苹果",
             "赶超苹果",
             "对标苹果",
@@ -9213,6 +9841,13 @@ def is_competitor_or_company_story_using_apple_as_benchmark(title: str, text: st
             "媲美苹果",
             "苹果风格",
             "类似苹果",
+            "叫板macbook",
+            "赶超macbook",
+            "对标macbook",
+            "硬刚macbook",
+            "媲美macbook",
+            "macbook 风格",
+            "类似 macbook",
         ],
     )
     if benchmark_score <= 0:
@@ -9230,6 +9865,11 @@ def is_competitor_or_company_story_using_apple_as_benchmark(title: str, text: st
             "tesla",
             "dyson",
             "dreame",
+            "intel",
+            "core ",
+            "wildcat lake",
+            "windows pc",
+            "windows laptop",
             "国产",
             "安卓",
             "华为",
@@ -9239,6 +9879,10 @@ def is_competitor_or_company_story_using_apple_as_benchmark(title: str, text: st
             "特斯拉",
             "戴森",
             "追觅",
+            "英特尔",
+            "酷睿",
+            "处理器",
+            "windows 阵营",
             "厂商",
         ],
     )
@@ -9260,9 +9904,9 @@ def is_competitor_or_company_story_using_apple_as_benchmark(title: str, text: st
             "苹果正在",
             "消息称苹果",
         ],
-    ) > 0 and score_terms(title_lower, ["叫板苹果", "赶超苹果", "对标苹果", "硬刚苹果"]) <= 0:
+    ) > 0 and score_terms(title_lower, ["叫板苹果", "赶超苹果", "对标苹果", "硬刚苹果", "叫板macbook", "赶超macbook", "对标macbook", "硬刚macbook"]) <= 0:
         return False
-    if has_apple_first_party_release_context(lower) and score_terms(title_lower, ["叫板苹果", "赶超苹果", "对标苹果", "硬刚苹果"]) <= 0:
+    if has_apple_first_party_release_context(lower) and score_terms(title_lower, ["叫板苹果", "赶超苹果", "对标苹果", "硬刚苹果", "叫板macbook", "赶超macbook", "对标macbook", "硬刚macbook"]) <= 0:
         return False
     return True
 
@@ -9270,6 +9914,12 @@ def is_competitor_or_company_story_using_apple_as_benchmark(title: str, text: st
 def is_third_party_app_or_service_status_story(title: str, text: str) -> bool:
     title_lower = title.lower()
     lower = text.lower()
+    if is_final_cut_camera_update_story(f"{title} {text}"):
+        return False
+    if is_apple_creator_studio_story(f"{title} {text}"):
+        return False
+    if is_direct_iphone_hardware_spec_rumor_story(title, text):
+        return False
     if is_foldable_iphone_successor_roadmap_story(f"{title} {text}"):
         return False
     if title_lower.startswith("apple ") or title_lower.startswith("苹果"):
@@ -9437,13 +10087,25 @@ def is_foldable_iphone_supply_chain_story(text: str) -> bool:
         lower,
         [
             "production",
+            "production target",
+            "shipment",
+            "shipments",
             "mass production",
             "manufacturing",
             "small batch",
+            "order",
+            "orders",
+            "panel order",
+            "panel orders",
+            "build target",
+            "build targets",
+            "unit",
+            "units",
             "target guidance",
             "launch target",
             "量产",
             "生产",
+            "生产目标",
             "小批量",
             "目标指引",
         ],
@@ -9457,6 +10119,10 @@ def is_foldable_iphone_supply_chain_story(text: str) -> bool:
             "supply",
             "supplies",
             "supplied",
+            "panel",
+            "panels",
+            "display panel",
+            "display panels",
             "供应链",
             "供应商",
             "供货",
@@ -9988,6 +10654,69 @@ def apple_chip_roadmap_facets_from_text(text: str) -> set[str]:
     return facets
 
 
+def title_scoped_hardware_product_roadmap_facets(title: str) -> set[str]:
+    lower = title.lower()
+    if score_terms(
+        lower,
+        [
+            "price",
+            "prices",
+            "price hike",
+            "price hikes",
+            "price increase",
+            "cost",
+            "costs",
+            "shipment",
+            "shipments",
+            "market",
+            "trendforce",
+            "涨价",
+            "调价",
+            "价格",
+            "成本",
+            "出货",
+            "市场",
+        ],
+    ) > 0:
+        return set()
+    if score_terms(
+        lower,
+        [
+            "launch",
+            "launches",
+            "release",
+            "released",
+            "coming",
+            "new",
+            "refresh",
+            "updated",
+            "testing",
+            "reportedly",
+            "spring",
+            "fall",
+            "2026",
+            "2027",
+            "推出",
+            "发布",
+            "新款",
+            "更新",
+            "测试",
+            "春季",
+            "秋季",
+            "明年",
+        ],
+    ) <= 0:
+        return set()
+    families = hardware_product_families_from_text(lower)
+    if "macbook" in families:
+        families.discard("mac")
+    if families == {"macbook"}:
+        return {"macbook-product-roadmap"}
+    if families == {"ipad"}:
+        return {"ipad-product-roadmap"}
+    return set()
+
+
 def iphone_hardware_rumor_facets_from_text(text: str) -> set[str]:
     lower = text.lower()
     if score_terms(lower, ["iphone", "iphone 18", "iphone 18 pro", "iphone 18e", "iphone air", "苹果 iPhone".lower()]) <= 0:
@@ -10018,12 +10747,74 @@ def iphone_hardware_rumor_facets_from_text(text: str) -> set[str]:
         facets.add("iphone-chip-packaging")
     if score_terms(lower, ["vc", "vapor chamber", "cooling", "heat dissipation", "thermal", "均热板", "散热", "导热"]) > 0:
         facets.add("iphone-thermal-design")
+    if (
+        score_terms(
+            lower,
+            [
+                "production",
+                "shipments",
+                "shipment forecast",
+                "shipment forecasts",
+                "output",
+                "build target",
+                "build targets",
+                "demand",
+                "cut production",
+                "cut",
+                "cuts",
+                "reduce",
+                "reduced",
+                "lowered",
+                "lowering",
+                "削减",
+                "下调",
+                "减产",
+                "出货",
+                "产量",
+                "生产目标",
+                "需求",
+            ],
+        )
+        > 0
+    ):
+        facets.add("iphone-production-forecast")
+    if (
+        score_terms(
+            lower,
+            [
+                "camera",
+                "cameras",
+                "camera control",
+                "variable aperture",
+                "lidar",
+                "sensor",
+                "sensors",
+                "photo",
+                "image upgrade",
+                "相机",
+                "摄像头",
+                "影像",
+                "可变光圈",
+                "激光雷达",
+                "传感器",
+            ],
+        )
+        > 0
+    ):
+        if score_terms(lower, ["patent", "patently", "专利", "公示", "获批"]) > 0:
+            facets.add("iphone-camera-patent")
+        else:
+            facets.add("iphone-camera-design-leak")
     if score_terms(lower, ["launch date", "debut", "unveil", "event", "september", "gurman", "mark gurman", "发布时间", "发布会", "亮相", "古尔曼", "9 月", "九月"]) > 0:
         facets.add("iphone-launch-timing")
     if score_terms(lower, ["drop test", "drop-test", "drop tests", "drop testing", "drop-test photos", "跌落测试", "坠落测试"]) > 0:
         facets.add("iphone-drop-test-leak")
     if score_terms(lower, ["dynamic island", "face id", "ct scan", "cutout", "hole punch", "front camera", "灵动岛", "ct 扫描", "开孔", "前置摄像头"]) > 0:
         facets.add("iphone-front-cutout")
+    if score_terms(lower, ["battery capacity", "battery", "mah", "电池容量", "电池", "毫安时"]) > 0:
+        facets.add("iphone-battery-capacity-leak")
+    if score_terms(lower, ["sim", "esim", "physical sim", "实体 sim", "实体sim", "虚拟卡", "国行版", "中国大陆"]) > 0:
+        facets.add("iphone-sim-esim-config")
     if score_terms(lower, ["iphone air 2", "iphone air successor", "next iphone air", "苹果 iphone air 2", "air 2"]) > 0:
         facets.add("iphone-air-successor")
     if (
@@ -10063,8 +10854,14 @@ def _topic_facets_from_text(text: str) -> set[str]:
     facets |= price_facets
     if is_apple_restricted_memory_supplier_approval_story(lower):
         facets.add("apple-restricted-memory-supplier-approval")
+    if is_apple_memory_supplier_sourcing_story(lower):
+        facets.add("apple-memory-supplier-sourcing")
     if is_apple_memory_supply_constraint_story(lower):
         facets.add("apple-memory-supply-constraint")
+    if is_foldable_iphone_supply_chain_story(lower):
+        facets.add("foldable-iphone-supply-chain")
+    if is_apple_display_panel_supply_chain_story(lower):
+        facets.add("apple-display-panel-supply-chain")
     data_leak_enforcement_story = is_apple_product_data_leak_enforcement_story(lower)
     data_leak_specs_story = is_apple_product_data_leak_specs_story(lower)
     data_leak_story = is_apple_product_data_leak_story(lower) or data_leak_enforcement_story or data_leak_specs_story
@@ -10081,6 +10878,8 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("brazil-app-store-policy")
     if is_uk_cma_app_store_payment_nfc_story(lower):
         facets.add("uk-cma-app-store-payment-nfc")
+    if is_russia_fas_app_preinstall_regulation_story(lower):
+        facets.add("russia-fas-app-preinstall-regulation")
     if is_siri_ai_eu_dma_regulatory_meeting_story(lower):
         facets.add("siri-ai-eu-dma-meeting")
     if is_epic_app_store_appeal_story(lower):
@@ -10093,6 +10892,12 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("find-my-location-sharing")
     if is_airdrop_vulnerability_story(lower):
         facets.add("airdrop-vulnerability")
+    if is_hide_my_email_vulnerability_story(lower):
+        facets.add("hide-my-email-vulnerability")
+    if is_safari_mcp_server_story(lower):
+        facets.add("safari-mcp-server")
+    if is_final_cut_camera_update_story(lower):
+        facets.add("final-cut-camera-update")
     if is_apple_creator_studio_story(lower):
         facets.add("apple-creator-studio")
     if is_iwork_apps_update_story(lower):
@@ -10448,6 +11253,8 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
     facets |= apple_product_price_topic_facets(lower)
     if is_apple_restricted_memory_supplier_approval_story(lower):
         facets.add("apple-restricted-memory-supplier-approval")
+    if is_apple_memory_supplier_sourcing_story(lower):
+        facets.add("apple-memory-supplier-sourcing")
     if is_apple_memory_supply_constraint_story(lower):
         facets.add("apple-memory-supply-constraint")
     data_leak_enforcement_story = is_apple_product_data_leak_enforcement_story(lower)
@@ -10465,6 +11272,8 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
         facets.add("brazil-app-store-policy")
     if is_uk_cma_app_store_payment_nfc_story(lower):
         facets.add("uk-cma-app-store-payment-nfc")
+    if is_russia_fas_app_preinstall_regulation_story(lower):
+        facets.add("russia-fas-app-preinstall-regulation")
     if is_siri_ai_eu_dma_regulatory_meeting_story(lower):
         facets.add("siri-ai-eu-dma-meeting")
     if is_epic_app_store_appeal_story(lower):
@@ -10473,6 +11282,12 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
         facets.add("apple-pay-rewards")
     if is_airdrop_vulnerability_story(lower):
         facets.add("airdrop-vulnerability")
+    if is_hide_my_email_vulnerability_story(lower):
+        facets.add("hide-my-email-vulnerability")
+    if is_safari_mcp_server_story(lower):
+        facets.add("safari-mcp-server")
+    if is_final_cut_camera_update_story(lower):
+        facets.add("final-cut-camera-update")
     if is_apple_creator_studio_story(lower):
         facets.add("apple-creator-studio")
     if is_iwork_apps_update_story(lower):
@@ -10495,6 +11310,8 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
         facets.add("foldable-iphone-successor-roadmap")
     if is_foldable_iphone_supply_chain_story(lower):
         facets.add("foldable-iphone-supply-chain")
+    if is_apple_display_panel_supply_chain_story(lower):
+        facets.add("apple-display-panel-supply-chain")
     platform_groups = {
         "platform-ios": ["ios", "iphone"],
         "platform-ipados": ["ipados", "ipad"],
@@ -10544,18 +11361,25 @@ BROAD_TOPIC_FACETS = {"os-compatibility", "hardware-roadmap"}
 LOW_CONFIDENCE_MERGE_FACETS = {"apple-ai-platform"}
 IPHONE_HARDWARE_RUMOR_TOPIC_FACETS = {
     "iphone-air-successor",
+    "iphone-battery-capacity-leak",
+    "iphone-camera-design-leak",
+    "iphone-camera-patent",
     "iphone-chip-packaging",
     "iphone-drop-test-leak",
     "iphone-front-cutout",
     "iphone-launch-timing",
     "iphone-memory-feature-support",
     "iphone-memory-price-forecast",
+    "iphone-production-forecast",
+    "iphone-sim-esim-config",
     "iphone-thermal-design",
 }
 SPLITTABLE_HARDWARE_TOPIC_FACETS = {
+    "apple-product-roadmap-list",
     "apple-company-org-change",
     *APPLE_PRICE_SUBTOPIC_FACETS,
     "apple-display-panel-supply-chain",
+    "apple-memory-supplier-sourcing",
     "apple-product-data-leak",
     "apple-product-data-leak-enforcement",
     "apple-product-data-leak-specs",
@@ -10574,11 +11398,13 @@ SPLITTABLE_HARDWARE_TOPIC_FACETS = {
     "iphone-color-mockup",
     "macbook-memory-ai",
     "macbook-thermal-defect",
+    "macbook-product-roadmap",
     "macbook-touch-roadmap",
     "apple-chip-roadmap",
     "apple-chip-process-roadmap",
     "apple-memory-supply-constraint",
     "ipad-chip-roadmap",
+    "ipad-product-roadmap",
     "iphone-chip-roadmap",
     "mac-chip-roadmap",
     "apple-market-share-report",
@@ -10589,10 +11415,15 @@ SPLITTABLE_SERVICE_TOPIC_FACETS = {
     "apple-creator-studio",
     "apple-music",
     "apple-tv-content",
+    "final-cut-camera-update",
     "iwork-apps-update",
 }
 SPLITTABLE_POLICY_TOPIC_FACETS = APP_STORE_POLICY_SUBTOPIC_FACETS | {
     "airdrop-vulnerability",
+    "hide-my-email-vulnerability",
+    "keyboard-input-method",
+    "russia-fas-app-preinstall-regulation",
+    "safari-mcp-server",
 }
 SPLITTABLE_TOPIC_FACETS = SPLITTABLE_HARDWARE_TOPIC_FACETS | SPLITTABLE_SERVICE_TOPIC_FACETS | SPLITTABLE_POLICY_TOPIC_FACETS
 BRIDGE_SPLIT_TOPIC_FACETS = {"apple-chip-roadmap", "iphone-chip-roadmap", "mac-chip-roadmap", "hardware-roadmap"}
@@ -10618,6 +11449,9 @@ DATA_LEAK_ENFORCEMENT_OBJECT_FACETS = {
 def primary_topic_facets(title: str, summary: str = "") -> set[str]:
     title_facets = topic_facets_from_text(title)
     combined_facets = topic_facets_from_text(f"{title} {summary}")
+    title_product_roadmap_facets = title_scoped_hardware_product_roadmap_facets(title)
+    if title_product_roadmap_facets:
+        return title_product_roadmap_facets | (title_facets - BROAD_TOPIC_FACETS)
     data_leak_detail_facets = {"apple-product-data-leak-enforcement", "apple-product-data-leak-specs"}
     if "apple-product-data-leak-enforcement" in title_facets:
         enforcement_facets = title_facets - DATA_LEAK_ENFORCEMENT_OBJECT_FACETS
@@ -10629,11 +11463,15 @@ def primary_topic_facets(title: str, summary: str = "") -> set[str]:
         return title_facets
     if combined_facets & data_leak_detail_facets:
         return combined_facets
+    if "apple-creator-studio" in title_facets:
+        return title_facets
+    if "final-cut-camera-update" in combined_facets:
+        return {"final-cut-camera-update"}
     if "app-store-policy" in title_facets and "brazil-app-store-policy" in combined_facets:
         return combined_facets
     if combined_facets & APP_STORE_POLICY_SUBTOPIC_FACETS:
         return combined_facets
-    if "apple-restricted-memory-supplier-approval" in combined_facets:
+    if "apple-restricted-memory-supplier-approval" in combined_facets or "apple-memory-supplier-sourcing" in combined_facets:
         return combined_facets
     if "visionos-m5-ai-features" in combined_facets:
         return combined_facets
@@ -10650,7 +11488,14 @@ def primary_topic_facets(title: str, summary: str = "") -> set[str]:
 def primary_merge_guard_facets(title: str, summary: str = "") -> set[str]:
     title_facets = merge_guard_facets_from_text(title)
     combined_facets = merge_guard_facets_from_text(f"{title} {summary}")
-    if "apple-restricted-memory-supplier-approval" in combined_facets:
+    title_product_roadmap_facets = title_scoped_hardware_product_roadmap_facets(title)
+    if title_product_roadmap_facets:
+        return title_product_roadmap_facets | (title_facets - BROAD_TOPIC_FACETS)
+    if "apple-creator-studio" in title_facets:
+        return title_facets
+    if "final-cut-camera-update" in combined_facets:
+        return {"final-cut-camera-update"}
+    if "apple-restricted-memory-supplier-approval" in combined_facets or "apple-memory-supplier-sourcing" in combined_facets:
         return combined_facets
     if "apple-product-price-increase" in title_facets:
         combined_price_details = price_detail_facets(combined_facets)
@@ -10682,16 +11527,26 @@ def article_splittable_topic_facets(article: Article) -> set[str]:
 
 def independent_splittable_topic_facets(facets: set[str]) -> set[str]:
     iphone_rumor_boundary_facets = IPHONE_HARDWARE_RUMOR_TOPIC_FACETS | {
+        "apple-product-roadmap-list",
         "apple-product-data-leak",
         "apple-product-data-leak-enforcement",
         "apple-product-data-leak-specs",
+        "apple-memory-supplier-sourcing",
         "apple-refurbished-iphone",
         "apple-refurbished-ipad",
         "apple-refurbished-mac",
         "apple-refurbished-product",
+        "ipad-product-roadmap",
+        "macbook-product-roadmap",
         "foldable-iphone-render-leak",
         "foldable-iphone-successor-roadmap",
+        "foldable-iphone-supply-chain",
+        "final-cut-camera-update",
         "iphone-color-mockup",
+        "hide-my-email-vulnerability",
+        "keyboard-input-method",
+        "russia-fas-app-preinstall-regulation",
+        "safari-mcp-server",
     }
     return facets & iphone_rumor_boundary_facets
 
@@ -10708,16 +11563,66 @@ def splittable_topic_facets_compatible(left_facets: set[str], right_facets: set[
         return True
     if "iphone-air-successor" in shared:
         return True
+    if "iphone-color-mockup" in shared:
+        allowed_color_facets = {"iphone-color-mockup", "iphone-sim-esim-config", "iphone-front-cutout"}
+        if left <= allowed_color_facets and right <= allowed_color_facets:
+            return True
+    if "foldable-iphone-supply-chain" in shared:
+        allowed_foldable_supply_facets = {
+            "apple-display-panel-supply-chain",
+            "foldable-iphone-supply-chain",
+            "iphone-launch-timing",
+            "iphone-production-forecast",
+        }
+        if left <= allowed_foldable_supply_facets and right <= allowed_foldable_supply_facets:
+            return True
+    allowed_foldable_panel_facets = {
+        "apple-display-panel-supply-chain",
+        "foldable-iphone-supply-chain",
+        "iphone-production-forecast",
+    }
+    if (
+        (left | right) <= allowed_foldable_panel_facets
+        and "apple-display-panel-supply-chain" in (left | right)
+        and "foldable-iphone-supply-chain" in (left | right)
+    ):
+        return True
+    if "ipad-product-roadmap" in shared:
+        allowed_ipad_roadmap_facets = {
+            "ipad-product-roadmap",
+            "ipad-chip-roadmap",
+        }
+        if left <= allowed_ipad_roadmap_facets and right <= allowed_ipad_roadmap_facets:
+            return True
+    if "macbook-product-roadmap" in shared:
+        allowed_macbook_roadmap_facets = {
+            "macbook-product-roadmap",
+            "macbook-touch-roadmap",
+            "mac-chip-roadmap",
+        }
+        if left <= allowed_macbook_roadmap_facets and right <= allowed_macbook_roadmap_facets:
+            return True
     if "apple-product-data-leak" in left or "apple-product-data-leak" in right:
-        leak_detail_facets = {
+        strict_leak_detail_facets = {
             "apple-product-data-leak-enforcement",
-            "apple-product-data-leak-specs",
-            "iphone-chip-packaging",
             "iphone-drop-test-leak",
         }
-        if (left & leak_detail_facets) or (right & leak_detail_facets):
-            return bool((left & leak_detail_facets) and (right & leak_detail_facets) and (left & right & leak_detail_facets))
-        allowed_data_leak_facets = {"apple-product-data-leak", *leak_detail_facets}
+        if (left & strict_leak_detail_facets) or (right & strict_leak_detail_facets):
+            return bool(
+                (left & strict_leak_detail_facets)
+                and (right & strict_leak_detail_facets)
+                and (left & right & strict_leak_detail_facets)
+            )
+        spec_leak_detail_facets = {
+            "apple-product-data-leak-specs",
+            "iphone-battery-capacity-leak",
+            "iphone-camera-design-leak",
+            "iphone-chip-packaging",
+            "iphone-color-mockup",
+            "iphone-front-cutout",
+            "iphone-sim-esim-config",
+        }
+        allowed_data_leak_facets = {"apple-product-data-leak", *spec_leak_detail_facets}
         return bool(shared) and left <= allowed_data_leak_facets and right <= allowed_data_leak_facets
     if len(left) > 1 or len(right) > 1:
         return False
@@ -10750,9 +11655,34 @@ def event_merge_guard_facets(event: Event) -> set[str]:
     return facets
 
 
+def event_title_scoped_hardware_product_roadmap_facets(event: Event) -> set[str]:
+    facets: set[str] = set()
+    for article in event.articles:
+        facets |= title_scoped_hardware_product_roadmap_facets(article.title)
+    return facets
+
+
 def effective_topic_facets(facets: set[str]) -> set[str]:
     specific = facets - BROAD_TOPIC_FACETS
     return specific or facets
+
+
+def foldable_panel_supply_facets_compatible(left_facets: set[str], right_facets: set[str]) -> bool:
+    allowed = {
+        "apple-display-panel-supply-chain",
+        "foldable-iphone-supply-chain",
+        "iphone-production-forecast",
+    }
+    left = effective_topic_facets(left_facets) & allowed
+    right = effective_topic_facets(right_facets) & allowed
+    if not left or not right:
+        return False
+    union = left | right
+    return (
+        union <= allowed
+        and "apple-display-panel-supply-chain" in union
+        and ("foldable-iphone-supply-chain" in union or "iphone-production-forecast" in union)
+    )
 
 
 def merge_guard_platform_facets(facets: set[str]) -> set[str]:
@@ -10795,6 +11725,8 @@ def merge_guard_facets_compatible(article_facets: set[str], event_facets: set[st
     event_actions = merge_guard_action_facets(event_facets)
     if (article_actions & event_actions) & {"apple-product-price-increase"}:
         return price_facets_compatible(article_actions, event_actions)
+    if foldable_panel_supply_facets_compatible(article_actions, event_actions):
+        return True
     if len(article_platforms) > 2 and event_platforms and article_platforms != event_platforms:
         return False
     if len(event_platforms) > 2 and article_platforms and article_platforms != event_platforms:
@@ -10811,6 +11743,34 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     text = f"{title} {summary} {facts}"
     lower = text.lower()
     title_lower = title.lower()
+    if is_safari_mcp_server_story(text):
+        return "developer_tool"
+    if is_final_cut_camera_update_story(text):
+        return "os_app"
+    if is_hide_my_email_vulnerability_story(text):
+        return "security_privacy"
+    if is_airdrop_vulnerability_story(text):
+        return "security_privacy"
+    if is_russia_fas_app_preinstall_regulation_story(text):
+        return "regional_regulation"
+    if is_apple_memory_supplier_sourcing_story(text):
+        return "hardware_market"
+    if is_competitor_display_panel_story_using_apple_as_background(title, text):
+        return "third_party_ecosystem"
+    if (
+        is_direct_iphone_hardware_spec_rumor_story(title, text)
+        or is_apple_display_panel_supply_chain_story(text)
+        or is_foldable_iphone_supply_chain_story(text)
+    ):
+        return "hardware_market"
+    if (
+        is_third_party_ai_agent_for_mac_without_apple_action(title, text)
+        or is_non_apple_device_comparison_story(title, text)
+        or is_third_party_consumer_app_update_on_apple_platform(title, text)
+        or is_non_apple_product_research_context_story(text)
+        or is_third_party_device_management_service_story(text)
+    ):
+        return "third_party_ecosystem"
     if is_competitor_launch_against_apple_story(title, text):
         return "third_party_ecosystem"
     if is_siri_ai_eu_dma_regulatory_meeting_story(text):
@@ -11138,6 +12098,36 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    if is_safari_mcp_server_story(text):
+        return "strong", "Safari Technology Preview or Safari MCP developer tooling event"
+    if is_hide_my_email_vulnerability_story(text):
+        return "strong", "Apple Hide My Email privacy vulnerability"
+    if is_airdrop_vulnerability_story(text):
+        return "strong", "Apple AirDrop security vulnerability or ecosystem impact"
+    if is_russia_fas_app_preinstall_regulation_story(text):
+        return "strong", "Apple-specific Russia app preinstall or antimonopoly regulation"
+    if is_apple_memory_supplier_sourcing_story(text):
+        return "strong", "Apple-specific memory supplier sourcing event"
+    if is_competitor_display_panel_story_using_apple_as_background(title, text):
+        return "weak", "competitor display-panel or supply-chain story using Apple mainly as prior-order context"
+    if is_direct_iphone_hardware_spec_rumor_story(title, text):
+        return "strong", "Apple iPhone hardware specification rumor"
+    if is_apple_display_panel_supply_chain_story(text) or is_foldable_iphone_supply_chain_story(text):
+        return "strong", "Apple hardware supply-chain or display-panel roadmap event"
+    if is_final_cut_camera_update_story(text):
+        return "strong", "Apple first-party Final Cut Camera app update"
+    if is_apple_creator_studio_story(text):
+        return "strong", "Apple first-party pro app or Creator Studio update"
+    if is_third_party_ai_agent_for_mac_without_apple_action(title, text):
+        return "weak", "third-party AI agent for Mac without a direct Apple platform action"
+    if is_non_apple_device_comparison_story(title, text):
+        return "weak", "non-Apple device story using iPhone or Apple mainly as comparison context"
+    if is_third_party_consumer_app_update_on_apple_platform(title, text):
+        return "weak", "third-party app or consumer service update on Apple platforms without a direct Apple action"
+    if is_non_apple_product_research_context_story(text):
+        return "weak", "non-Apple research using an Apple product mainly as study context"
+    if is_third_party_device_management_service_story(text):
+        return "weak", "third-party device-management or security service for Apple devices"
     if is_competitor_launch_against_apple_story(title, text):
         return "weak", "third-party or competitor product launch using Apple mainly as comparison context"
     if is_siri_ai_eu_dma_regulatory_meeting_story(text):
@@ -11553,6 +12543,16 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
         score += 30
     if is_third_party_platform_availability_candidate(text):
         score += 70
+    if is_safari_mcp_server_story(text):
+        score += 70
+    if is_russia_fas_app_preinstall_regulation_story(text):
+        score += 55
+    if is_apple_memory_supplier_sourcing_story(text):
+        score += 55
+    if is_hide_my_email_vulnerability_story(text):
+        score += 45
+    if "/guide/" in candidate.url.lower() and is_apple_os_feature_or_summary_story(text):
+        score += 35
     if is_apple_developer_tool_story(text):
         score += 30
     if (
@@ -11835,6 +12835,12 @@ def topic_facets_compatible(
         return False
     if not app_store_policy_subtopic_facets_compatible(article_facets, event_facets):
         return False
+    title_scoped_roadmap_shared = (
+        title_scoped_hardware_product_roadmap_facets(article.title)
+        & event_title_scoped_hardware_product_roadmap_facets(event)
+    )
+    if title_scoped_roadmap_shared and article.event_kind == event.event_kind == "hardware_market":
+        return True
     if not splittable_topic_facets_compatible(article_facets, event_facets):
         return False
     if not article_facets or not event_facets:
@@ -11850,6 +12856,8 @@ def topic_facets_compatible(
         topic_match = True
     else:
         topic_match = bool(article_facets & event_facets)
+        if not topic_match and foldable_panel_supply_facets_compatible(article_facets, event_facets):
+            topic_match = True
     if not topic_match:
         return False
     if broad_hardware_topic_bridge_only(article_facets, event_facets):
@@ -11920,6 +12928,36 @@ def refresh_event_metadata(event: Event) -> None:
     )
     priority = {"weak": 0, "ecosystem": 1, "strong": 2}
     summary_context = " ".join([event.summary, *event.key_facts[:5]])
+    summary_indicates_weak_context = (
+        is_third_party_ai_agent_for_mac_without_apple_action(event.title, summary_context)
+        or is_non_apple_device_comparison_story(event.title, summary_context)
+        or is_third_party_consumer_app_update_on_apple_platform(event.title, summary_context)
+        or is_non_apple_product_research_context_story(summary_context)
+        or is_third_party_device_management_service_story(summary_context)
+    )
+    article_group_indicates_weak_context = bool(event.articles) and all(
+        (
+            is_third_party_ai_agent_for_mac_without_apple_action(
+                article.title,
+                " ".join([article.summary, *article.key_facts[:5]]),
+            )
+            or is_non_apple_device_comparison_story(
+                article.title,
+                " ".join([article.summary, *article.key_facts[:5]]),
+            )
+            or is_third_party_consumer_app_update_on_apple_platform(
+                article.title,
+                " ".join([article.summary, *article.key_facts[:5]]),
+            )
+            or is_non_apple_product_research_context_story(
+                " ".join([article.summary, *article.key_facts[:5]])
+            )
+            or is_third_party_device_management_service_story(
+                " ".join([article.summary, *article.key_facts[:5]])
+            )
+        )
+        for article in event.articles
+    )
     summary_allows_downgrade = is_routine_recap_comparison_or_buying_advice(event.title, event.summary) or (
         summary_tier == "weak"
         and (
@@ -11933,7 +12971,22 @@ def refresh_event_metadata(event: Event) -> None:
             or is_third_party_app_platform_launch_story(event.title, summary_context)
         )
     )
-    if priority.get(article_tier, 0) > priority.get(summary_tier, 0) and not summary_allows_downgrade:
+    if (
+        priority.get(article_tier, 0) > priority.get(summary_tier, 0)
+        and not summary_allows_downgrade
+        and not (summary_tier == "weak" and summary_indicates_weak_context)
+        and not (summary_tier == "weak" and article_group_indicates_weak_context)
+    ):
+        event.event_kind = article_kind
+        event.relevance_tier = article_tier
+        event.relevance_reason = article_reason
+        event.category = article_category
+        return
+    if (
+        article_tier == "weak"
+        and priority.get(summary_tier, 0) > priority.get(article_tier, 0)
+        and summary_indicates_weak_context
+    ):
         event.event_kind = article_kind
         event.relevance_tier = article_tier
         event.relevance_reason = article_reason
@@ -11967,7 +13020,11 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
     if "weak" in tiers and len(tiers) > 1:
         warnings.append("mixed relevance tiers")
     if len(explicit_facet_sets) > 1:
-        if not common_facets:
+        all_foldable_panel_market_reports = all(
+            is_foldable_iphone_panel_market_report_context(" ".join([item.title, item.summary, *item.key_facts[:4]]))
+            for item in articles
+        )
+        if not common_facets and not all_foldable_panel_market_reports:
             warnings.append("mixed primary topic facets")
     return warnings
 
@@ -12056,6 +13113,134 @@ def same_airdrop_vulnerability_event(article: Article, event: Event, shared: set
     return bool(shared & {"airdrop", "vulnerability", "vulnerabilities", "漏洞", "隔空投送"})
 
 
+def same_hide_my_email_vulnerability_event(article: Article, event: Event, shared: set[str]) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "hide-my-email-vulnerability" not in common_facets:
+        return False
+    return bool(shared & {"hide-my-email", "icloud+", "email", "privacy", "vulnerability", "bug", "flaw", "漏洞", "邮箱", "隐私"})
+
+
+def same_safari_mcp_server_event(article: Article, event: Event, shared: set[str]) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "safari-mcp-server" not in common_facets:
+        return False
+    return bool(shared & {"safari", "mcp", "server", "webkit", "technology-preview", "debug", "agent", "智能体", "调试"})
+
+
+def same_russia_fas_app_preinstall_regulation_event(article: Article, event: Event, shared: set[str]) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    if "russia-fas-app-preinstall-regulation" not in common_facets:
+        return False
+    return bool(shared & {"russia", "russian", "fas", "fine", "antimonopoly", "preinstall", "local", "apps", "俄罗斯", "反垄断", "罚款", "预装"})
+
+
+def is_foldable_iphone_panel_market_report_context(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["iphone fold", "foldable iphone", "folding iphone", "iphone ultra", "折叠屏 iphone", "折叠 iphone", "折叠手机", "折叠屏手机"]) <= 0:
+        return False
+    if score_terms(lower, ["panel", "panels", "display", "screen", "面板", "屏幕", "显示订单"]) <= 0:
+        return False
+    return score_terms(lower, ["counterpoint", "research", "shipment", "shipments", "orders", "market share", "份额", "出货", "采购份额", "订单"]) > 0
+
+
+def is_foldable_iphone_production_target_context(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["iphone fold", "foldable iphone", "folding iphone", "iphone ultra", "折叠屏 iphone", "折叠 iphone", "折叠手机", "折叠屏手机"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "production target",
+            "build target",
+            "manufacture",
+            "manufacturing",
+            "sell around",
+            "models",
+            "units",
+            "million",
+            "nikkei",
+            "price",
+            "生产目标",
+            "生产",
+            "量产",
+            "万台",
+            "万部",
+            "售价",
+            "日经",
+        ],
+    ) > 0
+
+
+def foldable_iphone_panel_and_production_contexts_compatible(article: Article, event: Event) -> bool:
+    article_context = " ".join([article.title, article.summary, *article.key_facts[:4]])
+    event_contexts = [" ".join([item.title, item.summary, *item.key_facts[:4]]) for item in event.articles]
+    article_panel = is_foldable_iphone_panel_market_report_context(article_context)
+    article_production = is_foldable_iphone_production_target_context(article_context)
+    event_panel = any(is_foldable_iphone_panel_market_report_context(context) for context in event_contexts)
+    event_production = any(is_foldable_iphone_production_target_context(context) for context in event_contexts)
+    if article_panel and event_production and not event_panel:
+        return False
+    if article_production and event_panel and not event_production:
+        return False
+    if article_panel != event_panel and (article_panel or event_panel) and (article_production or event_production):
+        return False
+    return True
+
+
+def event_has_foldable_iphone_panel_market_report(event: Event) -> bool:
+    return any(
+        is_foldable_iphone_panel_market_report_context(" ".join([item.title, item.summary, *item.key_facts[:4]]))
+        for item in event.articles
+    )
+
+
+def event_has_foldable_iphone_production_target(event: Event) -> bool:
+    return any(
+        is_foldable_iphone_production_target_context(" ".join([item.title, item.summary, *item.key_facts[:4]]))
+        for item in event.articles
+    )
+
+
+def foldable_iphone_panel_and_production_events_compatible(left: Event, right: Event) -> bool:
+    left_panel = event_has_foldable_iphone_panel_market_report(left)
+    left_production = event_has_foldable_iphone_production_target(left)
+    right_panel = event_has_foldable_iphone_panel_market_report(right)
+    right_production = event_has_foldable_iphone_production_target(right)
+    if left_panel and right_production and not right_panel:
+        return False
+    if left_production and right_panel and not left_panel:
+        return False
+    if (left_panel or right_panel) and (left_production or right_production) and left_panel != right_panel:
+        return False
+    return True
+
+
+def same_foldable_iphone_panel_market_report(article: Article, event: Event, shared: set[str]) -> bool:
+    article_context = " ".join([article.title, article.summary, *article.key_facts[:4]])
+    if not is_foldable_iphone_panel_market_report_context(article_context):
+        return False
+    if not any(
+        is_foldable_iphone_panel_market_report_context(" ".join([item.title, item.summary, *item.key_facts[:4]]))
+        for item in event.articles
+    ):
+        return False
+    if foldable_panel_supply_facets_compatible(article_primary_facets(article), event_primary_facets(event)):
+        return True
+    return bool(shared & {"counterpoint", "research", "29", "24", "shipments", "orders", "份额", "出货", "订单"})
+
+
+def same_apple_memory_supplier_sourcing_event(article: Article, event: Event, shared: set[str]) -> bool:
+    common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
+    supplier_facets = {"apple-memory-supplier-sourcing", "apple-restricted-memory-supplier-approval"}
+    if not (common_facets & supplier_facets):
+        return False
+    article_facets = effective_topic_facets(article_primary_facets(article))
+    event_facets = effective_topic_facets(event_primary_facets(event))
+    if not restricted_memory_supplier_approval_facets_compatible(article_facets, event_facets):
+        return False
+    return bool(shared & {"cxmt", "ymtc", "changxin", "yangtze", "memory", "ram", "storage", "supplier", "suppliers", "长鑫", "长江存储", "存储", "内存"})
+
+
 def service_content_title_tokens_from_text(text: str) -> set[str]:
     return {
         token
@@ -12120,6 +13305,8 @@ def should_merge(article: Article, event: Event) -> bool:
         return False
     if not regions_compatible(article, event):
         return False
+    if not foldable_iphone_panel_and_production_contexts_compatible(article, event):
+        return False
     if not topic_facets_compatible(article, event, shared, similarity):
         return False
     if article.event_kind == event.event_kind == "messages_platform":
@@ -12139,6 +13326,16 @@ def should_merge(article: Article, event: Event) -> bool:
     if same_apple_product_price_increase(article, event, shared):
         return True
     if same_airdrop_vulnerability_event(article, event, shared):
+        return True
+    if same_hide_my_email_vulnerability_event(article, event, shared):
+        return True
+    if same_safari_mcp_server_event(article, event, shared):
+        return True
+    if same_russia_fas_app_preinstall_regulation_event(article, event, shared):
+        return True
+    if same_foldable_iphone_panel_market_report(article, event, shared):
+        return True
+    if same_apple_memory_supplier_sourcing_event(article, event, shared):
         return True
     if same_os_release_event(article, event):
         return True
@@ -12835,8 +14032,15 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
                 keys.add(("apple-product-price-increase", ()))
     elif "apple-restricted-memory-supplier-approval" in facets:
         keys.add(("apple-restricted-memory-supplier-approval", ()))
+    if "final-cut-camera-update" in facets:
+        keys.add(("final-cut-camera-update", ()))
     for facet in sorted(facets & IPHONE_HARDWARE_RUMOR_TOPIC_FACETS):
         keys.add((facet, ()))
+    title_scoped_roadmap_facets = event_title_scoped_hardware_product_roadmap_facets(event)
+    if "ipad-product-roadmap" in facets and "ipad-product-roadmap" in title_scoped_roadmap_facets:
+        anchors = summary_article.tokens & {"ipad", "ipad-pro", "m6", "m7", "spring", "2027", "新款", "春季", "芯片"}
+        if len(anchors) >= 2:
+            keys.add(("ipad-product-roadmap", ()))
     if "apple-product-data-leak" in facets:
         context = " ".join([event.title, event.summary, *event.key_facts[:8]]).lower()
         leak_detail_facets = facets & {
@@ -13074,6 +14278,8 @@ def events_should_merge(left: Event, right: Event) -> bool:
     right_has_retail = any(article.event_kind == "retail_store" for article in right.articles)
     if left_has_retail != right_has_retail:
         return False
+    if not foldable_iphone_panel_and_production_events_compatible(left, right):
+        return False
     left_splittable_facets = event_splittable_topic_facets(left)
     right_splittable_facets = event_splittable_topic_facets(right)
     if not splittable_topic_facets_compatible(left_splittable_facets, right_splittable_facets):
@@ -13199,6 +14405,9 @@ def split_mixed_topic_event(event: Event) -> list[Event]:
     unassigned: list[Article] = []
     for article in event.articles:
         facets = article_splittable_topic_facets(article)
+        title_scoped_roadmap_facets = title_scoped_hardware_product_roadmap_facets(article.title)
+        if title_scoped_roadmap_facets and title_scoped_roadmap_facets <= facets:
+            facets = title_scoped_roadmap_facets
         if not facets:
             unassigned.append(article)
             continue
