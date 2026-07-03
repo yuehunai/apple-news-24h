@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.17.0 - 2026-07-02
+### 1.18.0 - 2026-07-03
 
-- Added stronger direct iPhone hardware rumor handling so battery-capacity, SIM/eSIM, and supplier-leak details stay in `events` instead of `deferred_events`.
-- Improved foldable iPhone panel-market clustering so Counterpoint-style panel share and shipment reports merge across sources while production-target and pricing roadmap stories remain separate.
-- Fixed MacBook price and shipment market reports so they no longer merge with M-series MacBook roadmap events.
-- Updated fallback policy guidance for iPhone hardware specs, foldable panel-market boundaries, and MacBook price/roadmap separation.
-- Added regression coverage for iPhone data-leak details, foldable panel reports, direct iPhone battery rumors, and MacBook price/roadmap boundaries.
+- Improved weak filtering for third-party adapters, MagSafe cases, reference timelines, explainer videos, install-preparation guides, public procurement responses, and third-party browser/security stories that only use Apple devices or platforms as context.
+- Improved event clustering boundaries for iCloud+ perks, Apple price and stock reactions, iPhone production-plan responses, foldable-iPhone production targets, and iPhone modem vs. NAND/storage leak details.
+- Added iPhone Photography Awards handling so cross-source award coverage stays eligible, merges correctly, and remains classified as a hardware/product ecosystem story.
+- Fixed foldable iPhone 10-million-unit production/order reports so sources merge when they share the same production target while remaining separate from panel-share, price, and broader roadmap background.
+- Updated fallback policy guidance and regression coverage for weak third-party noise, tutorial exclusions, iPhone Photography Awards, price/stock/production separation, modem vs. NAND leaks, and foldable iPhone production-order merging.
 
 ## What It Does
 

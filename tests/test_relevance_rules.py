@@ -7895,6 +7895,255 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(event.relevance_tier, "strong", event.relevance_reason)
         self.assertEqual(event.category, "hardware_products")
 
+    def test_third_party_mfi_adapter_and_magsafe_case_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "酷态科推出 CP 苹果转接头 C to L：配硅胶绳套、获 MFi 认证，69 元",
+                "酷态科现已在京东上架一款 CP 苹果转接头 C to L，可以将 USB-C 接口充电线转成苹果 Lightning 接口，定价为 69 元。",
+            ),
+            (
+                "XTREM 为苹果 iPhone 17 系列推出 MagSafe 彩色墨水屏手机壳：利用 NFC 供电、不影响无线充电，399 元",
+                "制造商 XTREM 极稚宣布为苹果 iPhone 17 系列手机推出一款 MagSafe 墨水屏手机壳，产品利用 NFC 供电，支持苹果 MagSafe 磁吸生态。",
+            ),
+        ]
+
+        for title, summary in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+                self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_browser_security_feature_does_not_merge_with_macos_malware_report(self):
+        module = load_module()
+        pamstealer = article_for(
+            module,
+            "PamStealer 恶意软件披露：针对苹果 Mac 用户，加载 Rust 载荷收集隐私数据",
+            (
+                "Jamf Threat Labs 披露名为 PamStealer 的恶意软件，主要针对苹果 macOS 用户，"
+                "通过伪装成 Maccy 剪贴板管理器分发恶意 AppleScript 应用，并窃取浏览器 Cookie、"
+                "剪贴板内容和加密货币钱包数据。"
+            ),
+            "IT之家",
+        )
+        opera = article_for(
+            module,
+            "Opera 推出 Paste Protect：防御剪贴板攻击，支持 Windows、macOS、Linux",
+            (
+                "Opera 宣布推出浏览器原生防御功能 Paste Protect，内置于 Opera 桌面浏览器中，"
+                "可监控剪贴板活动并阻止潜在恶意命令，支持 Windows、macOS 和 Linux。"
+            ),
+            "IT之家",
+        )
+
+        self.assertEqual(pamstealer.relevance_tier, "strong")
+        self.assertEqual(opera.relevance_tier, "weak")
+        events = module.cluster_articles([pamstealer, opera])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+        self.assertTrue(any(pamstealer.title in cluster for cluster in clusters), clusters)
+        self.assertTrue(any(opera.title in cluster for cluster in clusters), clusters)
+
+    def test_iphone_photography_awards_reports_merge_as_hardware_event(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "iPhone Photography Awards Highlight Best Images of 2026",
+            (
+                "The iPhone Photography Awards announced the 2026 winners, with the grand prize image "
+                "shot on an iPhone 15 Pro and winning entries also captured on older iPhone models."
+            ),
+            "MacRumors",
+        )
+        nine = article_for(
+            module,
+            "Check out all the winning shots in the 2026 iPhone Photography Awards",
+            "The 2026 iPhone Photography Awards winners include images shot on iPhone and iPad devices by photographers around the world.",
+            "9to5Mac",
+        )
+        appleinsider = article_for(
+            module,
+            "Gorgeous shots winning 2026 iPhone Photography Awards show old models still cut it",
+            "The winners of the 2026 iPhone Photography Awards have been announced after entries from more than 140 countries were submitted.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([macrumors, nine, appleinsider])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "hardware_market")
+        self.assertEqual(events[0].category, "hardware_products")
+
+    def test_price_stock_reaction_does_not_merge_with_icloud_perks_or_production_cut(self):
+        module = load_module()
+        icloud = article_for(
+            module,
+            "iPhone Users Who Pay for iCloud Storage Get Two New Perks on iOS 27",
+            "iOS 27 adds two iCloud+ perks including higher Apple Intelligence limits and HomeKit Secure Video summaries.",
+            "MacRumors",
+        )
+        stock = article_for(
+            module,
+            "Apple stock recovers after hit from unprecedented price hikes on products",
+            (
+                "Last week, Apple announced dramatic price increases on Macs, iPads, and other products "
+                "due to rising component costs. Apple stock rebounded with a 5% gain today."
+            ),
+            "9to5Mac",
+        )
+        production = article_for(
+            module,
+            "消息称苹果下调 iPhone 生产计划以应对涨价影响",
+            (
+                "产业链称苹果下调整体市场预期，iPhone 生产计划削减 15%，以应对涨价带来的潜在销量波动，"
+                "传闻称 iPhone 17 Pro 系列涨价 800-1000 元。"
+            ),
+            "快科技",
+        )
+
+        events = module.cluster_articles([icloud, stock, production])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 3, clusters)
+
+    def test_modem_and_nand_data_leak_details_stay_separate(self):
+        module = load_module()
+        modem = article_for(
+            module,
+            "iPhone 18 Pro Could Use Qualcomm Modem in the US and C2 Elsewhere",
+            (
+                "Stolen Tata files show iPhone 18 Pro could use Qualcomm modem in the US and Apple C2 modem elsewhere. "
+                "The breach involved 630GB of data, schematics, and supplier documents."
+            ),
+            "MacRumors",
+        )
+        nand = article_for(
+            module,
+            "iPhone 18 Pro high-capacity storage reportedly downgraded to QLC NAND",
+            (
+                "Stolen Tata files and Reptalica details say iPhone 18 Pro 1TB and 2TB models may use QLC NAND flash, "
+                "while 256GB and 512GB versions use TLC NAND storage."
+            ),
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([modem, nand])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+
+    def test_third_party_reference_and_explainer_projects_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "Explore every iPad ever released in this interactive timeline",
+                "The sheets.works project catalogs all 45 iPad models released since 2010 across 131 colorways and turns the dataset into an interactive visualization.",
+            ),
+            (
+                "New iFixit video shows how an iPhone battery is made",
+                "iFixit published a video showing the production steps for an iPhone battery, including BMS connection, adhesive strips, and quality-control checks.",
+            ),
+        ]
+
+        for title, summary in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+                self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_ifixit_battery_explainer_does_not_merge_with_iphone_battery_capacity_leak(self):
+        module = load_module()
+        leak = article_for(
+            module,
+            "iPhone 18 Pro Max’s huge battery size reportedly leaked",
+            "A social media leak says iPhone 18 Pro Max may have 5,425 mAh in eSIM models and 5,235 mAh in physical SIM models.",
+            "9to5Mac",
+        )
+        explainer = article_for(
+            module,
+            "New iFixit video shows how an iPhone battery is made",
+            "iFixit published a video showing how an iPhone battery is made, including BMS connection and adhesive-strip production steps.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([leak, explainer])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+
+    def test_third_party_accessory_with_apple_compatibility_stays_weak_even_with_specs(self):
+        module = load_module()
+        cases = [
+            (
+                "XTREM 为苹果 iPhone 17 系列推出 MagSafe 彩色墨水屏手机壳：利用 NFC 供电、不影响无线充电，399 元",
+                "制造商 XTREM 极稚宣布为苹果 iPhone 17 系列推出一款 MagSafe 墨水屏手机壳，厚度 2.2mm、重量 44g，支持 NFC 供电和无线充电。",
+            ),
+            (
+                "酷态科推出 CP 苹果转接头 C to L：配硅胶绳套、获 MFi 认证，69 元",
+                "酷态科推出第三方 C to L 转接头，支持苹果 Lightning 设备并通过 MFi 认证。",
+            ),
+        ]
+
+        for title, summary in cases:
+            with self.subTest(title=title):
+                self.assertEqual(module.detect_event_kind(title, summary, []), "third_party_ecosystem")
+                tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_tutorial_ad_malware_and_public_response_noise_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "iOS 27 Public Beta Available This Month, Here's How to Get Your iPhone Ready Now",
+                "Apple previously announced the iOS 27 public beta would be released in July. The article outlines how to get ready and how to install the beta.",
+            ),
+            (
+                "Malware found spreading through sponsored ad on X",
+                "Jamf Threat Labs found a sponsored ad posing as a third-party Mac utility and redirecting users to a malicious lookalike domain.",
+            ),
+            (
+                "韩红基金会回应采购万元苹果电脑：诚恳致歉",
+                "韩红基金会回应采购单价上万的苹果电脑争议，称设备采购用于公益影像留存、素材制作和项目归档。",
+            ),
+        ]
+
+        for title, summary in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_foldable_iphone_ten_million_order_reports_merge_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Apple Ramps Foldable iPhone 'Ultra' Production to 10 Million Units",
+            "Nikkei Asia says Apple told suppliers to prepare to make around 10 million foldable iPhones this year, up from 7-8 million units.",
+            "MacRumors",
+        )
+        appleinsider = article_for(
+            module,
+            "Confident Apple increases its iPhone Fold orders to 10 million",
+            (
+                "Apple expects to sell 10 million of the iPhone Fold in 2026 and into early 2027, "
+                "considerably up from previous estimates. A related paragraph mentions Samsung's estimated "
+                "31% foldable display panel share and Huawei's 24% share."
+            ),
+            "AppleInsider",
+        )
+        kuaikeji = article_for(
+            module,
+            "苹果折叠屏信心满满！iPhone Ultra年产目标上调至1000万台",
+            "供应链消息称苹果将首款折叠 iPhone 的生产目标由 700-800 万台上调至 1000 万台。",
+            "快科技",
+        )
+
+        events = module.cluster_articles([macrumors, appleinsider, kuaikeji])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 1, clusters)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider", "快科技"})
+
 
 if __name__ == "__main__":
     unittest.main()

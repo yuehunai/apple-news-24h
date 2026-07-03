@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.18.0 - 2026-07-03
+
+- Improved weak filtering for third-party adapters, MagSafe cases, reference timelines, explainer videos, install-preparation guides, public procurement responses, and third-party browser/security stories that only use Apple devices or platforms as context.
+- Improved event clustering boundaries for iCloud+ perks, Apple price and stock reactions, iPhone production-plan responses, foldable-iPhone production targets, and iPhone modem vs. NAND/storage leak details.
+- Added iPhone Photography Awards handling so cross-source award coverage stays eligible, merges correctly, and remains classified as a hardware/product ecosystem story.
+- Fixed foldable iPhone 10-million-unit production/order reports so sources merge when they share the same production target while remaining separate from panel-share, price, and broader roadmap background.
+- Updated fallback policy guidance for tutorial exclusions, third-party Apple-adjacent noise, and high-volume hardware/price event boundaries.
+- Added regression coverage for weak third-party noise, iPhone Photography Awards, iCloud+ perks, price/stock/production separation, modem vs. NAND leaks, and foldable iPhone production-order merging.
+
 ## 1.17.0 - 2026-07-02
 
 - Added stronger direct iPhone hardware rumor handling so battery-capacity, SIM/eSIM, and supplier-leak details stay in `events` instead of `deferred_events`.
