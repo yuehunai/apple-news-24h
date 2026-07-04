@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.19.0 - 2026-07-04
+
+- Added official Apple privacy-campaign handling so first-party iPhone, App Store, permission, App Privacy Label, and App Tracking Transparency ads stay in `events` instead of `deferred_events`.
+- Improved hardware rumor and leak boundaries for camera-equipped AirPods code clues, AirPods development suspension, iPhone image-sensor suppliers, iPhone battery capacities, Apple Watch band sensors, and Apple chip foundry/process reports.
+- Improved cross-source clustering for Tata supplier data-leak investigations, Apple Watch band-sensor rumors, iOS point-release internal-testing reports, Prosser lawsuit responses, and Apple chip foundry denials.
+- Tightened weak filtering for buying guides, wishlist/opinion posts, third-party custom unreleased iPhone concepts, non-Apple processor reviews, benchmark comparisons, and multi-vendor roadmap stories that use Apple mainly as context.
+- Updated fallback policy guidance for direct Apple privacy campaigns, supplier data leaks, chip-process rumors, OS internal-testing boundaries, wearable sensor rumors, and weak Apple-adjacent comparisons.
+- Added regression coverage for privacy ads, AirPods and iPhone hardware boundaries, Tata data-leak merging, Apple Watch band sensors, iOS 27.4 internal testing, Apple chip process reports, and weak third-party noise.
+
 ## 1.18.0 - 2026-07-03
 
 - Improved weak filtering for third-party adapters, MagSafe cases, reference timelines, explainer videos, install-preparation guides, public procurement responses, and third-party browser/security stories that only use Apple devices or platforms as context.

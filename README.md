@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.18.0 - 2026-07-03
+### 1.19.0 - 2026-07-04
 
-- Improved weak filtering for third-party adapters, MagSafe cases, reference timelines, explainer videos, install-preparation guides, public procurement responses, and third-party browser/security stories that only use Apple devices or platforms as context.
-- Improved event clustering boundaries for iCloud+ perks, Apple price and stock reactions, iPhone production-plan responses, foldable-iPhone production targets, and iPhone modem vs. NAND/storage leak details.
-- Added iPhone Photography Awards handling so cross-source award coverage stays eligible, merges correctly, and remains classified as a hardware/product ecosystem story.
-- Fixed foldable iPhone 10-million-unit production/order reports so sources merge when they share the same production target while remaining separate from panel-share, price, and broader roadmap background.
-- Updated fallback policy guidance and regression coverage for weak third-party noise, tutorial exclusions, iPhone Photography Awards, price/stock/production separation, modem vs. NAND leaks, and foldable iPhone production-order merging.
+- Added official Apple privacy-campaign handling so first-party iPhone, App Store, permission, App Privacy Label, and App Tracking Transparency ads stay in `events`.
+- Improved hardware rumor and leak boundaries for camera-equipped AirPods, iPhone image-sensor suppliers, iPhone battery capacities, Apple Watch band sensors, and Apple chip foundry/process reports.
+- Improved cross-source clustering for Tata supplier data-leak investigations, Apple Watch band-sensor rumors, iOS point-release internal-testing reports, Prosser lawsuit responses, and Apple chip foundry denials.
+- Tightened weak filtering for buying guides, wishlist/opinion posts, third-party custom unreleased iPhone concepts, non-Apple processor reviews, benchmark comparisons, and multi-vendor roadmap stories.
+- Updated fallback policy guidance and regression coverage for privacy ads, supplier data leaks, OS internal-testing boundaries, hardware rumor separation, chip-process reports, and weak Apple-adjacent noise.
 
 ## What It Does
 

@@ -8144,6 +8144,592 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(len(events), 1, clusters)
         self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider", "快科技"})
 
+    def test_official_apple_privacy_ad_is_direct_security_privacy_event(self):
+        module = load_module()
+        title = "岳云鹏出演苹果新广告：App 访问权限 iPhone 管，隐私由你说了算"
+        summary = (
+            "苹果今年持续推出 iPhone 隐私保护宣传活动，聚焦 App 隐私保护，发布由岳云鹏主演的影片。"
+            "影片展示 App 在日常使用中索取超出实际所需权限，并介绍 App 审核准则、App 隐私标签、"
+            "App 权限许可和 App 跟踪透明度等 iPhone 隐私保护功能。"
+        )
+        facts = [
+            "App 审核准则：每款 App 在上架 App Store 之前，都需要经过专家审核流程，以检查是否存在恶意软件，以及可能影响用户安全与隐私的软件问题。",
+            "App 隐私标签：顾客可以直接在 App Store 的 App 产品页面上查看清晰的隐私摘要，了解该 App 会收集哪些数据。",
+            "App 权限许可：当第三方 App 首次请求使用用户数据时，用户会收到提示。",
+            "App 跟踪透明度：App 在出于广告目的跨其他公司拥有的 App 和网站跟踪用户活动之前，必须先征得用户同意。",
+        ]
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "security_privacy")
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "IT之家")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_buying_advice_opinion_and_non_apple_memory_price_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "Which iPad is right for you? Here’s what Apple has to say - 9to5Mac",
+                (
+                    "Over the years, buying an iPad has become an increasingly confusing task. "
+                    "The article summarizes how Apple markets each model and gives buying advice across the iPad lineup. "
+                    "Tech specs include A16, M4, M5, Apple Intelligence support, Apple Pencil compatibility, "
+                    "Magic Keyboard support, cameras, displays, storage choices, and price comparisons."
+                ),
+                "9to5Mac",
+            ),
+            (
+                "We really need a way to hand over ownership of an Apple Home - 9to5Mac",
+                (
+                    "The author argues Apple should add an Owner role to Apple Home so a smart home can be handed over "
+                    "to a new resident, but the piece is a wishlist based on personal moving experience."
+                ),
+                "9to5Mac",
+            ),
+            (
+                "内存价格越来越贵：千元机受伤最严重",
+                (
+                    "卢伟冰指出不少千元机因为存储芯片价格上涨而取消 OLED 屏、满级防水和高强度玻璃等配置，"
+                    "文章讨论安卓预算机和内存行业涨价，苹果只是成本背景。"
+                ),
+                "快科技",
+            ),
+        ]
+
+        for title, summary, source in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_memory_price_background_stays_deferred_after_event_refresh(self):
+        module = load_module()
+        article = article_for(
+            module,
+            "内存价格越来越贵：千元机受伤最严重",
+            (
+                "卢伟冰指出，不少原先的千元机“飘档”，OLED 屏、满级防水、高强度玻璃等曾经的标配在千元机上越来越少见。"
+                "成本失控的根源在于存储芯片价格暴涨，文章称随着苹果等主流品牌先后启动涨价，手机行业被迫适应新的价格体系。"
+            ),
+            "快科技",
+        )
+        events = module.cluster_articles([article])
+
+        self.assertEqual(events[0].relevance_tier, "weak", events[0].relevance_reason)
+
+    def test_third_party_custom_unreleased_iphone_concept_stays_weak(self):
+        module = load_module()
+        title = "奢侈定制品牌Caviar替苹果率先发布iPhone Ultra折叠机：售价10万起"
+        summary = (
+            "苹果官方至今还没有发布传闻中的 iPhone Ultra 折叠机型，主打超高端定制的第三方厂商 Caviar "
+            "结合供应链公开信息和泄露渲染图，提前推出 Flagship 限定系列，每款全球限量 19 台。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_camera_airpods_code_and_suspension_merge_without_iphone_sensor_leak(self):
+        module = load_module()
+        macrumors_code = article_for(
+            module,
+            "iOS 27 Beta Hints at New Apple Product Such as 'AirPods Ultra'",
+            (
+                "The second iOS 27 developer beta hints at a new Apple product codenamed B790 that can relay "
+                "two images from cameras on either side of a user's head. The code may point to camera-equipped "
+                "AirPods or smart glasses, both tied to Visual Intelligence."
+            ),
+            "MacRumors",
+        )
+        appleinsider_code = article_for(
+            module,
+            "AirPods with cameras show up in iOS 27 beta code",
+            (
+                "Code in the latest iOS 27 developer beta describes handling two images from cameras on either side "
+                "of a user's head, pointing to expected AirPods with cameras rather than ordinary smart glasses."
+            ),
+            "AppleInsider",
+        )
+        ithome_code = article_for(
+            module,
+            "苹果 iOS 27 代码曝光 B790 耳机，指向带摄像头的 AirPods",
+            (
+                "IT之家称 iOS 27 开发者测试版出现代号 B790，代码字符串描述来自用户头部两侧摄像头的 2 张图像，"
+                "后续判断更高概率指向带摄像头的 AirPods。"
+            ),
+            "IT之家",
+        )
+        samsung_sensor = article_for(
+            module,
+            "iPhone 18 系列将搭载三星图像传感器，打破索尼独家供应局面",
+            (
+                "产业链消息称 iPhone 18 系列将搭载三星图像传感器，三星将在美国得克萨斯州奥斯汀工厂为苹果生产高端图像传感器，"
+                "打破索尼多年来对 iPhone 图像传感器的独家供应。"
+            ),
+            "快科技",
+        )
+        tata_leak = article_for(
+            module,
+            "iPhone 18 Pro 系列手机遭泄密后，印度政府宣布调查苹果供应商塔塔电子数据泄露事件",
+            (
+                "塔塔电子位于印度的工厂遭遇网络攻击，超过 630GB 机密数据被窃取，"
+                "包括尚未发布的 iPhone 18 Pro 系列主板设计图纸以及多款苹果自研芯片数据手册。"
+            ),
+            "IT之家",
+        )
+
+        self.assertEqual(macrumors_code.relevance_tier, "strong", macrumors_code.relevance_reason)
+        self.assertEqual(samsung_sensor.relevance_tier, "strong", samsung_sensor.relevance_reason)
+        events = module.cluster_articles([macrumors_code, appleinsider_code, ithome_code, samsung_sensor, tata_leak])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 3, clusters)
+        self.assertTrue(
+            any(
+                {macrumors_code.title, appleinsider_code.title, ithome_code.title} <= cluster
+                for cluster in clusters
+            ),
+            clusters,
+        )
+        self.assertTrue(any({samsung_sensor.title} == cluster for cluster in clusters), clusters)
+        self.assertTrue(any({tata_leak.title} == cluster for cluster in clusters), clusters)
+
+    def test_camera_airpods_suspension_does_not_merge_with_iphone_battery_capacity(self):
+        module = load_module()
+        airpods = article_for(
+            module,
+            "Camera-Equipped AirPods Pro Development 'Suspended,' Leaker Claims",
+            (
+                "Development of Apple's rumored camera-equipped AirPods Pro has been halted. "
+                "The built-in cameras would feed visual information about the wearer's surroundings to Siri "
+                "and connect to Apple Intelligence."
+            ),
+            "MacRumors",
+        )
+        battery = article_for(
+            module,
+            "苹果 iPhone 18 Pro Max 电池首曝：5187mAh 容量，欣旺达生产",
+            (
+                "消息源分享了适用于苹果 iPhone 18 Pro Max 的电池电芯细节，型号 A3166 配备 3.903V 5187mAh 电池，"
+                "此前 eSIM 版容量为 5425mAh，实体 SIM 卡版为 5235mAh。"
+            ),
+            "IT之家",
+        )
+
+        events = module.cluster_articles([airpods, battery])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+
+    def test_camera_airpods_suspension_merges_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Camera-Equipped AirPods Pro Development 'Suspended,' Leaker Claims",
+            (
+                "Development of Apple's rumored camera-equipped AirPods Pro has been halted. "
+                "Kosutami says the project was suspended after earlier reports said it was in advanced testing."
+            ),
+            "MacRumors",
+        )
+        ithome = article_for(
+            module,
+            "消息称苹果带摄像头 AirPods Pro 项目“暂停”，距量产仅一步之遥",
+            (
+                "爆料者 Kosutami 透露，苹果内部代号 H90 的带红外摄像头 AirPods Pro 开发项目已被暂停，"
+                "此前彭博社报道称这款带摄像头的 AirPods Pro 已接近量产。"
+            ),
+            "IT之家",
+        )
+        kuaikeji = article_for(
+            module,
+            "胎死腹中！苹果带摄像头AirPods Pro项目被曝暂停",
+            "知情人士透露，苹果内部代号为 H90 的 AirPods Pro 开发项目已遭暂停。",
+            "快科技",
+        )
+
+        events = module.cluster_articles([macrumors, ithome, kuaikeji])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 1, clusters)
+
+    def test_platform_only_overlap_does_not_merge_ios_features_with_foldable_hardware(self):
+        module = load_module()
+        ios_features = article_for(
+            module,
+            "12 New Things Your iPhone Can Do in iOS 27",
+            (
+                "Apple will release iOS 27 in September with context-aware Siri, Safari tab organization, "
+                "natural language shortcuts, Liquid Glass transparency controls, and Image Playground updates."
+            ),
+            "MacRumors",
+        )
+        foldable = article_for(
+            module,
+            "苹果首款折叠屏 iPhone Ultra 或搭载 2nm A20 Pro 芯片",
+            (
+                "供应链消息称苹果首款折叠屏 iPhone Ultra 预计将与 iPhone 18 Pro 系列同步发布，"
+                "搭载台积电 2nm 工艺的 A20 Pro 芯片。"
+            ),
+            "快科技",
+        )
+
+        events = module.cluster_articles([ios_features, foldable])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+        self.assertEqual(ios_features.event_kind, "os_app")
+        self.assertEqual(foldable.event_kind, "hardware_market")
+
+    def test_data_leak_sensor_supplier_chip_rumor_and_competitor_phone_stay_separate(self):
+        module = load_module()
+        tata = article_for(
+            module,
+            "iPhone 18 Pro 系列手机遭泄密后，印度政府宣布调查苹果供应商塔塔电子数据泄露事件",
+            (
+                "塔塔电子工厂遭遇网络攻击，超过 630GB 机密数据被窃取，包含 iPhone 18 Pro 主板设计图纸、"
+                "跌落测试素材、摄像头模组和苹果自研芯片数据手册，印度政府已移交 CERT-In 调查。"
+            ),
+            "IT之家",
+        )
+        samsung_sensor = article_for(
+            module,
+            "iPhone 18 系列将搭载三星图像传感器，打破索尼独家供应局面",
+            (
+                "产业链消息称 iPhone 18 系列将首次采用三星图像传感器，三星将在得克萨斯州奥斯汀工厂"
+                "为苹果生产高端图像传感器。"
+            ),
+            "快科技",
+        )
+        intel_denial = article_for(
+            module,
+            "iPhone 18 标准版采用英特尔 18A 工艺传闻被否认",
+            (
+                "爆料者称已经审阅塔塔工厂泄露的苹果内部文件，但没有找到标准版 iPhone 18 采用英特尔 18A "
+                "制程生产 A20 芯片的证据。"
+            ),
+            "cnBeta",
+        )
+        redmi = article_for(
+            module,
+            "REDMI K100 系列今年将史诗级提档，工程机配色参考 iPhone 18 Pro",
+            (
+                "报道主体介绍 REDMI K100 系列配置，称工程机配色参考 iPhone 18 Pro 系列，"
+                "并将采用骁龙芯片和 2 亿像素主摄。"
+            ),
+            "快科技",
+        )
+
+        self.assertEqual(redmi.relevance_tier, "weak", redmi.relevance_reason)
+        events = module.cluster_articles([tata, samsung_sensor, intel_denial, redmi])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 4, clusters)
+
+    def test_tata_government_investigation_and_dark_web_data_leak_merge_across_chinese_sources(self):
+        module = load_module()
+        ithome = article_for(
+            module,
+            "iPhone 18 Pro 系列手机遭泄密后，印度政府宣布调查苹果供应商塔塔电子数据泄露事件",
+            (
+                "塔塔电子位于印度的工厂上月遭遇大规模网络攻击，超过 630GB 机密数据被窃取，"
+                "其中包括尚未发布的 iPhone 18 Pro 系列主板设计图纸，以及多款苹果自研芯片数据手册。"
+                "印度政府已将事件移交 CERT-In 调查。"
+            ),
+            "IT之家",
+        )
+        kuaikeji = article_for(
+            module,
+            "海量未公开机密数据流入暗网 印度政府调查苹果手机信息泄露事件",
+            (
+                "印度政府正就塔塔电子大规模数据泄露事件展开正式调查。黑客组织 World Leaks "
+                "窃取并上传超过 20 万份、总量约 630GB 的未公开机密数据，涵盖 iPhone 18 Pro "
+                "跌落测试、主板芯片、摄像头模组和供应商清单。"
+            ),
+            "快科技",
+        )
+        cnbeta = article_for(
+            module,
+            "iPhone 18 Pro泄密影响恶劣 印度政府机构调查塔塔",
+            (
+                "印度政府已开始调查塔塔电子数据泄露事件，事件已上报给印度计算机应急响应小组。"
+                "泄露文件包括 iPhone 18 Pro 的组件清单、供应商清单、机型照片和跌落测试视频，"
+                "规模超过 630GB、涉及逾 20 万份文件。"
+            ),
+            "cnBeta",
+        )
+
+        events = module.cluster_articles([ithome, kuaikeji, cnbeta])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "hardware_market")
+        self.assertEqual(events[0].category, "hardware_products")
+        self.assertEqual({article.source for article in events[0].articles}, {"IT之家", "快科技", "cnBeta"})
+
+    def test_mixed_data_leak_cluster_splits_weak_competitor_and_distinct_hardware_followups(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro 系列手机遭泄密后，印度政府宣布调查苹果供应商塔塔电子数据泄露事件",
+                (
+                    "塔塔电子工厂遭遇网络攻击，超过 630GB 机密数据被窃取，包含 iPhone 18 Pro 主板设计图纸、"
+                    "跌落测试素材、摄像头模组和苹果自研芯片数据手册，印度政府已移交 CERT-In 调查。"
+                ),
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "海量未公开机密数据流入暗网 印度政府调查苹果手机信息泄露事件",
+                (
+                    "印度政府正就塔塔电子大规模数据泄露事件展开正式调查。World Leaks 上传超过 630GB "
+                    "苹果未公开机密数据，文件包含 iPhone 18 Pro 跌落测试、主板芯片和供应商清单。"
+                ),
+                "快科技",
+            ),
+            article_for(
+                module,
+                "iPhone 18 系列将搭载三星图像传感器，打破索尼独家供应局面",
+                "产业链消息称 iPhone 18 系列将首次采用三星图像传感器，三星将在得克萨斯州奥斯汀工厂为苹果生产高端图像传感器。",
+                "快科技",
+            ),
+            article_for(
+                module,
+                "iPhone 18 标准版采用英特尔 18A 工艺传闻被否认",
+                (
+                    "爆料者称已经审阅塔塔工厂泄露的苹果内部文件，但没有找到标准版 iPhone 18 采用英特尔 18A "
+                    "制程生产 A20 芯片的证据，认为相关代工传闻不实。"
+                ),
+                "cnBeta",
+            ),
+            article_for(
+                module,
+                "8月见！REDMI K100系列外观全方位对标iPhone 18 Pro：中框背板同色",
+                "REDMI K100 系列外观对标 iPhone 18 Pro，报道主体介绍 REDMI 手机规格和设计。",
+                "快科技",
+            ),
+        ]
+        events = module.cluster_articles(articles)
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 4, clusters)
+        self.assertTrue(any({articles[0].title, articles[1].title} == cluster for cluster in clusters), clusters)
+        self.assertTrue(any({articles[2].title} == cluster for cluster in clusters), clusters)
+        self.assertTrue(any({articles[3].title} == cluster for cluster in clusters), clusters)
+        self.assertTrue(any({articles[4].title} == cluster for cluster in clusters), clusters)
+
+    def test_live_style_competitor_foldable_and_redmi_items_do_not_pollute_apple_events(self):
+        module = load_module()
+        ios_features = article_for(
+            module,
+            "12 New Things Your iPhone Can Do in iOS 27",
+            "Apple will release iOS 27 in September with context-aware Siri, Safari tab organization, and Liquid Glass controls.",
+            "MacRumors",
+        )
+        foldable_market = article_for(
+            module,
+            "华为首创阔折叠形态！苹果安卓集体跟进 大战一触即发",
+            (
+                "据数码闲聊站爆料，TOP6 手机厂商中，华为已率先发布阔折叠产品，vivo 暂时不做大阔折，"
+                "其余几家厂商的大阔折机型预计将在 2026 年下半年至 2027 年上半年全部亮相，"
+                "其中苹果将成为首个搭载 2nm 芯片的大阔折厂商。"
+            ),
+            "快科技",
+        )
+        redmi = article_for(
+            module,
+            "8月见！REDMI K100系列外观全方位对标iPhone 18 Pro：中框背板同色",
+            "REDMI K100 系列外观对标 iPhone 18 Pro，报道主体介绍 REDMI 手机规格和设计。",
+            "快科技",
+        )
+
+        self.assertEqual(foldable_market.relevance_tier, "weak", foldable_market.relevance_reason)
+        self.assertEqual(redmi.relevance_tier, "weak", redmi.relevance_reason)
+        events = module.cluster_articles([ios_features, foldable_market, redmi])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 3, clusters)
+        self.assertTrue(any({ios_features.title} == cluster for cluster in clusters), clusters)
+
+    def test_live_style_os_summary_and_non_apple_phone_stories_keep_correct_priority(self):
+        module = load_module()
+        ios_features = article_for(
+            module,
+            "12 New Things Your iPhone Can Do in iOS 27",
+            (
+                "Apple will release iOS 27 in September with context-aware Siri, Safari tab organization, "
+                "Liquid Glass controls, AI wallpaper generation, and a Camera-related visual lookup workflow."
+            ),
+            "MacRumors",
+        )
+        foldable_market = article_for(
+            module,
+            "华为首创阔折叠形态！苹果安卓集体跟进 大战一触即发",
+            (
+                "据数码闲聊站爆料，TOP6手机厂商中，华为已率先发布阔折叠产品，vivo明确暂时不做大阔折，"
+                "其余几家厂商的大阔折机型预计将在2026年下半年至2027年上半年全部亮相，"
+                "其中苹果将成为首个搭载2nm芯片的大阔折厂商。"
+            ),
+            "快科技",
+        )
+        redmi = article_for(
+            module,
+            "8月见！REDMI K100系列外观全方位对标iPhone 18 Pro：中框背板同色",
+            (
+                "REDMI K100 系列今年将在 8 月发布，工程机配色参考 iPhone 18 Pro 系列，"
+                "文章主体介绍 REDMI 手机的骁龙芯片、主摄和价格策略。"
+            ),
+            "快科技",
+        )
+
+        self.assertEqual(ios_features.event_kind, "os_app")
+        self.assertEqual(ios_features.category, "software_systems")
+        self.assertNotIn("iphone-camera-design-leak", module.article_primary_facets(ios_features))
+        self.assertEqual(foldable_market.relevance_tier, "weak", foldable_market.relevance_reason)
+        self.assertEqual(redmi.relevance_tier, "weak", redmi.relevance_reason)
+        events = module.cluster_articles([ios_features, foldable_market, redmi])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 3, clusters)
+        self.assertTrue(any({ios_features.title} == cluster for cluster in clusters), clusters)
+
+    def test_chip_foundry_denial_keeps_chip_process_topic_despite_tata_leak_background(self):
+        module = load_module()
+        intel_denial = article_for(
+            module,
+            "英特尔代工苹果A20处理器传闻被否定 可信爆料者痛批原始消息源为“吹牛”",
+            (
+                "一则关于英特尔将为苹果基础版 iPhone 18 代工 A20 芯片的传闻仅维持数小时便被推翻。"
+                "爆料者称已审阅近期从印度塔塔工厂泄露的苹果内部文件，但没有找到标准版 iPhone 18 "
+                "采用英特尔 18A 制程工艺的证据。"
+            ),
+            "cnBeta",
+        )
+
+        facets = module.article_primary_facets(intel_denial)
+
+        self.assertEqual(intel_denial.relevance_tier, "strong")
+        self.assertIn("chip process", intel_denial.relevance_reason)
+        self.assertIn("apple-chip-process-roadmap", facets)
+        self.assertNotIn("apple-product-data-leak", facets)
+
+    def test_cnbeta_iphone_18_ai_feature_limit_merges_with_ram_feature_story(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "iPhone 18 With 9GB RAM Still Won't Support Two New iOS 27 Features",
+            (
+                "The lower-end iPhone 18 and iPhone 18e will have 9GB of RAM, but two new Apple Intelligence "
+                "features in iOS 27 will require 12GB of RAM."
+            ),
+            "MacRumors",
+        )
+        cnbeta = article_for(
+            module,
+            "iPhone 18系列或涨价 两项iOS 27新AI功能仍缺席 - Apple iPhone - cnBeta.COM",
+            (
+                "郭明錤预测苹果下一代入门机型 iPhone18 和 iPhone18e 将把运行内存从 8GB 提升至 9GB，"
+                "不过即便升级至 9GB，这两款机型仍将缺席 iOS27 中两项最新的 Siri 和语音相关智能功能。"
+            ),
+            "cnBeta",
+        )
+
+        self.assertIn("iphone-memory-feature-support", module.article_primary_facets(cnbeta))
+        events = module.cluster_articles([macrumors, cnbeta])
+
+        self.assertEqual(len(events), 1)
+
+    def test_prosser_apple_lawsuit_reports_merge_across_sources(self):
+        module = load_module()
+        insider = article_for(
+            module,
+            "Leaker Jon Prosser denies Apple's charges and blames everything on his co-defendant",
+            (
+                "Prosser's lawyers filed a rebuttal to Apple's lawsuit alleging he and Michael Ramacciotti "
+                "conspired to steal trade secrets from an Apple employee's iPhone."
+            ),
+            "AppleInsider",
+        )
+        verge = article_for(
+            module,
+            "Jon Prosser responds to Apple lawsuit by blaming the other guy",
+            (
+                "Prosser admitted participating in a FaceTime call where unreleased iOS features were shown, "
+                "but denied jointly planning to access Apple's alleged trade secrets and requested a jury trial."
+            ),
+            "The Verge",
+        )
+
+        self.assertEqual(verge.event_kind, "legal_antitrust")
+        events = module.cluster_articles([insider, verge])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "legal_antitrust")
+
+    def test_ios_point_release_internal_testing_reports_merge_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Apple Already Testing iOS 27.4",
+            "Apple software engineers are already internally testing iOS 27.4 according to MacRumors visitor logs.",
+            "MacRumors",
+        )
+        ithome = article_for(
+            module,
+            "苹果内部正测试 iOS 27.4，预计明年春季发布",
+            (
+                "MacRumors 网站日志显示，苹果软件工程师正在内部测试 iOS 27.4 版本。"
+                "文章同时提到 iOS 27.0 在 WWDC 发布，将带来全新 Siri、相机智能、AI 壁纸、"
+                "Safari 标签页整理、自然语言提醒事项和液态玻璃设计等功能。"
+            ),
+            "IT之家",
+        )
+
+        events = module.cluster_articles([macrumors, ithome])
+
+        self.assertEqual(len(events), 1)
+
+    def test_internal_testing_point_release_requires_same_platform(self):
+        module = load_module()
+        ios = article_for(
+            module,
+            "Apple Already Testing iOS 27.4",
+            "Apple software engineers began testing iOS 27.4 according to MacRumors visitor logs.",
+            "MacRumors",
+        )
+        macos = article_for(
+            module,
+            "Apple Already Testing macOS 27.4",
+            "Apple software engineers began testing macOS 27.4 according to MacRumors visitor logs.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([ios, macos])
+
+        self.assertEqual(len(events), 2)
+
+    def test_apple_watch_band_sensor_reports_merge_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Sketchy Rumor Claims Apple Watch Series 12 Could Introduce Sensor in Band",
+            "A leaker claims Apple Watch Series 12 will feature a new health sensor injection molded into a fluoroelastomer band.",
+            "MacRumors",
+        )
+        ithome = article_for(
+            module,
+            "消息称苹果 Apple Watch Series 12 新表带内嵌传感器，支持血糖监测等",
+            (
+                "IT之家 7 月 4 日消息，科技媒体 MacRumors 昨日发布博文，报道称在 Apple Watch Series 12 "
+                "智能手表表带上，苹果公司可能会嵌入新的健康传感器。报道称 Apple Watch Series 12 "
+                "这款表带将采用注塑方式，将传感器集成到硅胶表带中。该媒体指出苹果公司早在 2017 年"
+                "获得相关专利，构想表带的每个链节可以容纳不同的功能，包括血压监测器和汗液传感器。"
+                "随后消息源补充表示一款表带可能具备血糖监测功能。"
+            ),
+            "IT之家",
+        )
+
+        events = module.cluster_articles([macrumors, ithome])
+
+        self.assertEqual(len(events), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
