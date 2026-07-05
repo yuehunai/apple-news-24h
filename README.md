@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.19.0 - 2026-07-04
+### 1.20.0 - 2026-07-05
 
-- Added official Apple privacy-campaign handling so first-party iPhone, App Store, permission, App Privacy Label, and App Tracking Transparency ads stay in `events`.
-- Improved hardware rumor and leak boundaries for camera-equipped AirPods, iPhone image-sensor suppliers, iPhone battery capacities, Apple Watch band sensors, and Apple chip foundry/process reports.
-- Improved cross-source clustering for Tata supplier data-leak investigations, Apple Watch band-sensor rumors, iOS point-release internal-testing reports, Prosser lawsuit responses, and Apple chip foundry denials.
-- Tightened weak filtering for buying guides, wishlist/opinion posts, third-party custom unreleased iPhone concepts, non-Apple processor reviews, benchmark comparisons, and multi-vendor roadmap stories.
-- Updated fallback policy guidance and regression coverage for privacy ads, supplier data leaks, OS internal-testing boundaries, hardware rumor separation, chip-process reports, and weak Apple-adjacent noise.
+- Improved recap-page boundaries so broad weekly summaries such as MacRumors Top Stories stay weak while specific hardware reports remain standalone events.
+- Improved source cleanup for Chinese article-end markers, related-story blocks, and 9to5Mac Apple @ Work sponsor/about boilerplate before summary, key-fact, and clustering extraction.
+- Updated weak-relevance handling for how-to and lost-device tips, former-Apple biographical background, sponsored columns without a new Apple action, and broad AI phone / AI PC market commentary.
+- Kept discovery coverage unchanged while moving low-value false positives into `deferred_events` for review instead of letting them pollute final brief queues.
+- Updated fallback policy guidance and regression coverage for recap pages, article-tail cleanup, sponsored boilerplate, lost-device tips, former-Apple context, and broad market commentary.
 
 ## What It Does
 

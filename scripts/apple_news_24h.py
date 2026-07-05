@@ -3825,6 +3825,11 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
     return False
 
 
+def is_non_actionable_recap_title(title: str) -> bool:
+    title_lower = title.lower().strip()
+    return bool(re.match(r"^top stories\b", title_lower))
+
+
 def is_routine_retail_discount_story(title: str, text: str) -> bool:
     lower = text.lower()
     title_lower = title.lower()
@@ -5218,8 +5223,27 @@ def remove_trailing_promo_sections(text: str) -> str:
     return text[:earliest]
 
 
+def remove_article_end_tail_sections(text: str) -> str:
+    """Cut source footer/recommendation text after explicit article-end markers."""
+    earliest: int | None = None
+    for pattern in [
+        r"【\s*本文结束\s*】",
+        r"\b本文结束\b",
+    ]:
+        match = re.search(pattern, text, re.I)
+        if not match:
+            continue
+        leading_text = strip_tags(text[: match.start()])
+        if len(leading_text) < 80:
+            continue
+        earliest = match.start() if earliest is None else min(earliest, match.start())
+    if earliest is None:
+        return text
+    return text[:earliest]
+
+
 def remove_noise_blocks(text: str) -> str:
-    text = remove_trailing_promo_sections(text)
+    text = remove_article_end_tail_sections(remove_trailing_promo_sections(text))
     cleaned = re.sub(
         r"(?is)<!--\s*相关文章\s*-->.*?(?=<!--\s*评论\s*-->|<div\b[^>]+id=['\"]post_comm['\"]|</article>|</main>|$)",
         " ",
@@ -5257,7 +5281,7 @@ def remove_noise_blocks(text: str) -> str:
             break
         previous = cleaned
         cleaned = re.sub(pattern, " ", cleaned)
-    return remove_trailing_promo_sections(cleaned)
+    return remove_article_end_tail_sections(remove_trailing_promo_sections(cleaned))
 
 
 PREFERRED_CONTENT_CLASS_FRAGMENTS = (
@@ -5408,6 +5432,8 @@ def extract_text_units(text: str) -> list[tuple[str, str]]:
 
 def fact_noise(value: str) -> bool:
     lower = value.lower()
+    if re.search(r"apple @ work is exclusively brought to you|about apple @ work|request your extended trial|\bmosyle\b", lower, re.I):
+        return True
     if re.search(r"广告声明|文内含有的对外跳转链接|it之家所有文章均包含本声明", lower, re.I):
         return True
     if re.search(r"当前位置[:：]|当前位置：首页|相关阅读[:：]|相关文章[:：]|延伸阅读[:：]|更多阅读[:：]|豫icp备|icp备|公网安备", lower, re.I):
@@ -6561,8 +6587,16 @@ def is_how_to_guide_without_new_apple_action(title: str, text: str) -> bool:
                 "how you can install",
                 "before installing",
                 "install the beta",
+                "怎么办",
+                "打开这个功能",
+                "一定提前打开",
+                "提前打开",
+                "提前开启",
+                "找回概率",
+                "别急着",
                 "安装前",
                 "如何安装",
+                "如何找回",
                 "准备安装",
             ],
         )
@@ -6593,6 +6627,140 @@ def is_how_to_guide_without_new_apple_action(title: str, text: str) -> bool:
         or is_apple_developer_tool_story(text)
         or app_store_policy_score(text) > 0
     )
+
+
+def is_non_apple_primary_subject_with_former_apple_background(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lower = f"{title} {text}".lower()
+    if effective_apple_term_score(title_lower) > 0:
+        return False
+    former_apple_background = score_terms(
+        lower,
+        [
+            "former apple",
+            "ex-apple",
+            "previously at apple",
+            "worked at apple",
+            "曾在苹果",
+            "前苹果",
+            "苹果前员工",
+            "苹果公司初代处理器",
+            "领导了苹果",
+            "曾领导苹果",
+        ],
+    ) > 0
+    if not former_apple_background:
+        return False
+    current_non_apple_subject = score_terms(
+        lower,
+        [
+            "startup",
+            "company",
+            "ceo",
+            "founder",
+            "tenstorrent",
+            "ai model",
+            "large model",
+            "llm",
+            "openai",
+            "anthropic",
+            "kimi",
+            "glm",
+            "公司",
+            "创始人",
+            "首席执行官",
+            "大模型",
+            "中国大模型",
+            "智谱",
+            "月之暗面",
+        ],
+    ) > 0
+    apple_action = score_terms(
+        lower,
+        [
+            "apple hires",
+            "apple hired",
+            "apple loses",
+            "apple lost",
+            "apple poached",
+            "apple appoints",
+            "apple names",
+            "苹果聘请",
+            "苹果任命",
+            "苹果高管离职",
+            "苹果失去",
+            "苹果挖角",
+        ],
+    ) > 0
+    return current_non_apple_subject and not apple_action
+
+
+def is_broad_ai_device_market_commentary_with_apple_example(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lower = f"{title} {text}".lower()
+    if score_terms(title_lower, ["ai phone", "ai phones", "ai pc", "aipc", "ai手机", "ai 手机"]) <= 0:
+        return False
+    if score_terms(lower, ["apple intelligence", "iphone", "苹果"]) <= 0:
+        return False
+    broad_market_score = score_terms(
+        lower,
+        [
+            "consumer",
+            "consumers",
+            "market",
+            "survey",
+            "ubs",
+            "upgrade intent",
+            "buying decision",
+            "aipc",
+            "ai pc",
+            "消费者",
+            "买单",
+            "市场",
+            "调查",
+            "换机意愿",
+            "购机决策",
+            "提前升级",
+        ],
+    )
+    direct_apple_action = has_apple_first_party_release_context(lower) and score_terms(
+        title_lower,
+        ["apple", "iphone", "ios", "apple intelligence", "苹果"],
+    ) > 0
+    return broad_market_score > 0 and not direct_apple_action
+
+
+def is_apple_work_column_without_new_apple_action(title: str, text: str) -> bool:
+    title_lower = title.lower().strip()
+    lower = f"{title} {text}".lower()
+    if not title_lower.startswith("apple @ work:"):
+        return False
+    if score_terms(
+        lower,
+        [
+            "exclusively brought to you",
+            "about apple @ work",
+            "ways apple could improve",
+            "trend that needs to stop",
+            "it has to squash",
+            "sponsor",
+            "sponsored",
+        ],
+    ) <= 0:
+        return False
+    direct_apple_action = score_terms(
+        title_lower,
+        [
+            "apple launches",
+            "apple announces",
+            "apple releases",
+            "apple released",
+            "adds",
+            "new feature",
+            "new service",
+        ],
+    ) > 0
+    return not direct_apple_action
 
 
 def is_third_party_reference_or_explainer_project_story(title: str, text: str) -> bool:
@@ -12978,6 +13146,9 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         or is_third_party_custom_unreleased_apple_product_story(title, text)
         or is_third_party_accessory_platform_compatibility_story(title, text)
         or is_non_apple_public_response_with_apple_purchase_context(title, text)
+        or is_non_apple_primary_subject_with_former_apple_background(title, text)
+        or is_broad_ai_device_market_commentary_with_apple_example(title, text)
+        or is_apple_work_column_without_new_apple_action(title, text)
         or is_non_apple_product_research_context_story(text)
         or is_third_party_device_management_service_story(text)
         or is_multi_vendor_chip_or_phone_roadmap_background_story(title, text)
@@ -13324,6 +13495,14 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    if is_non_actionable_recap_title(title):
+        return "weak", "routine recap without a new standalone Apple action"
+    if is_non_apple_primary_subject_with_former_apple_background(title, text):
+        return "weak", "non-Apple primary subject with former Apple background"
+    if is_broad_ai_device_market_commentary_with_apple_example(title, text):
+        return "weak", "broad AI device market commentary using Apple mainly as an example"
+    if is_apple_work_column_without_new_apple_action(title, text):
+        return "weak", "Apple @ Work column or sponsored commentary without a new Apple action"
     if is_official_apple_privacy_ad_campaign_story(text):
         return "strong", "official Apple privacy campaign or advertising action"
     if is_camera_airpods_code_clue_story(text):

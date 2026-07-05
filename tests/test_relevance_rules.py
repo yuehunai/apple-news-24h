@@ -1409,6 +1409,31 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotIn("mobile operating system", combined)
         self.assertNotIn("Subscribe to 9to5Mac", combined)
 
+    def test_9to5_apple_work_sponsor_copy_is_removed_and_column_stays_weak(self):
+        module = load_module()
+        html = """
+        <html>
+          <head><meta name="description" content="Apple continues to become an enterprise vendor of choice, but breaking core functions like printing in minor security updates is a trend that needs to stop." /></head>
+          <body>
+            <article class="post-content">
+              <p>Apple @ Work is exclusively brought to you by Mosyle, the only Apple Unified Platform. Request your EXTENDED TRIAL today.</p>
+              <p>About Apple @ Work: Bradley Chambers has been an Apple IT admin since 2009 and shares ways Apple could improve its products for IT departments.</p>
+              <p>A perfect example happened with the March 2026 security updates. Apple released patches for macOS 26.4, macOS 15.7.5, and macOS 14.8.5, after which some enterprise users saw printing problems with PaperCut Mobility Print.</p>
+            </article>
+          </body>
+        </html>
+        """
+        title = "Apple @ Work: As Apple grows in the enterprise, these are the kind of update bugs it has to squash immediately"
+
+        summary = module.extract_summary(html, title)
+        facts = module.extract_key_facts(html, title, "9to5Mac")
+        combined = " ".join([summary, *facts])
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "9to5Mac")
+
+        self.assertNotIn("Mosyle", combined)
+        self.assertNotIn("About Apple @ Work", combined)
+        self.assertEqual(tier, "weak", reason)
+
     def test_9to5_post_content_is_preferred_over_sidebar_article_cards(self):
         module = load_module()
         source = source_named(module, "9to5Mac")
@@ -2700,6 +2725,43 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(tier, "weak", reason)
 
+    def test_top_stories_with_hardware_leak_terms_stays_weak_and_separate(self):
+        module = load_module()
+        top_stories = article_for(
+            module,
+            "Top Stories: 'MacBook Ultra' and iPhone 18 Rumors, iOS 26.5.2 Security Fixes, and More",
+            (
+                "This week's top stories include a MacBook Ultra rumor, iPhone 18 Pro references, "
+                "iOS 26.5.2 security fixes, and supplier leak follow-ups."
+            ),
+            "MacRumors",
+            facts=[
+                "A20 Pro reports mention LPDDR6 memory, a wider memory bus, NAND storage tradeoffs, and iPhone 18 Pro cost pressure.",
+                "Earlier reports said Apple is trying to buy DRAM from ChangXin Memory Technologies and CXMT, and has asked the Trump administration for access to restricted memory suppliers.",
+                "Other linked stories discuss Tata Electronics data leaks and MacBook chip roadmap rumors.",
+            ],
+        )
+        memory_bus = article_for(
+            module,
+            "消息称苹果 A20 Pro 内存总线升级到 96-bit，LPDDR6 与高容量闪存存在取舍",
+            (
+                "爆料称 iPhone 18 Pro 的 A20 Pro 可能采用 96-bit LPDDR6 内存总线，"
+                "但 1TB/2TB 版本或因成本使用 QLC NAND 闪存。"
+            ),
+            "cnBeta",
+            facts=[
+                "A20 Pro 可能采用 96-bit LPDDR6 内存总线，带宽相较 64-bit LPDDR5X 明显提升。",
+                "1TB/2TB 版本可能使用 QLC NAND，256GB/512GB 版本仍使用 TLC NAND。",
+            ],
+        )
+
+        events = module.cluster_articles([top_stories, memory_bus])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(top_stories.relevance_tier, "weak", top_stories.relevance_reason)
+        self.assertEqual(len(events), 2, clusters)
+        self.assertFalse(any({top_stories.title, memory_bus.title} == cluster for cluster in clusters), clusters)
+
     def test_column_commentary_about_apple_management_stays_weak(self):
         module = load_module()
         title = "Sunday Reboot: The right marketing, the wrong changes"
@@ -2737,6 +2799,61 @@ class RelevanceRuleTests(unittest.TestCase):
         module = load_module()
         title = "避开购机亏空 解析苹果几年换最划算"
         summary = "文章分析 iPhone、MacBook 和 Apple Watch 的换机周期、保值率和购买建议，帮助用户避免购机亏空。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_lost_iphone_find_my_how_to_stays_weak_and_out_of_data_leak_cluster(self):
+        module = load_module()
+        how_to = article_for(
+            module,
+            "苹果没告诉你 iPhone 丢了怎么办：这功能一定提前打开",
+            (
+                "如果哪天出门不小心把 iPhone 丢了，用户可以通过查找 App 标记为丢失、暂停 Apple Pay、"
+                "远程抹掉数据并避免个人隐私泄露。文章提醒用户不要提前删除设备，避免解除激活锁。"
+            ),
+            "快科技",
+            facts=[
+                "花 30 秒打开查找我的 iPhone、查找网络和发送最后的位置，可提高找回概率。",
+            ],
+        )
+        leak = article_for(
+            module,
+            "海量未公开机密数据流入暗网 印度政府调查苹果手机信息泄露事件",
+            (
+                "印度政府正调查苹果供应商塔塔电子数据泄露事件，超过 630GB 文件流入暗网，"
+                "涉及 iPhone 18 Pro 主板图纸、A20 Pro 数据表和供应商清单。"
+            ),
+            "快科技",
+        )
+
+        events = module.cluster_articles([leak, how_to])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(how_to.relevance_tier, "weak", how_to.relevance_reason)
+        self.assertEqual(len(events), 2, clusters)
+
+    def test_former_apple_engineer_background_ai_model_story_stays_weak(self):
+        module = load_module()
+        title = "硅仙人 Jim Keller 大赞中国大模型：成本降低 5 倍 美国 AI 没法微调"
+        summary = (
+            "Jim Keller 是硅谷著名芯片设计师，之前被称为 Zen 架构之父，领导了苹果公司初代处理器开发，"
+            "也在 Intel 参与多款处理器开发，现在成为 Tenstorrent 公司的 CEO。"
+            "他表示公司已经把开发任务切换到 Kimi K2 与 GLM-5.2，成本降低 5 倍并实现隐私保护。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_broad_ai_phone_market_commentary_with_apple_example_stays_weak(self):
+        module = load_module()
+        title = "AI手机、AIPC都不太给力：消费者无意买单 苹果也带不动"
+        summary = (
+            "文章讨论 AI 手机和 AIPC 市场接受度偏低，并以 UBS 调查中的 Apple Intelligence 换机意愿为例，"
+            "称会因为该功能提前升级设备的消费者占比为 24%，比半年前少 5 个百分点。"
+        )
 
         tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
 
@@ -3798,6 +3915,30 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertIn("240GB/s", combined)
         self.assertNotIn("全系万元起步", combined)
+
+    def test_mydrivers_end_marker_cuts_plain_related_news_tail(self):
+        module = load_module()
+        title = "捡到 iPhone 别急着刷机：30 秒打开查找功能能提高找回概率"
+        html = """
+        <html><body>
+          <div class="news_info">
+            <p>如果哪天出门不小心把 iPhone 丢了，用户可以通过查找 App 标记为丢失并显示联系电话。</p>
+            <p>苹果提醒用户提前打开查找网络、发送最后的位置和丢失模式，这些设置能帮助找回设备。</p>
+            <p class="zhuanzai">【本文结束】如需转载请务必注明出处：快科技</p>
+            <h3>相关资讯</h3>
+            <p>海量未公开机密数据流入暗网，印度政府调查苹果供应商塔塔电子数据泄露事件，超过 630GB 文件包含 iPhone 18 Pro 主板图纸。</p>
+          </div>
+        </body></html>
+        """
+
+        summary = module.extract_summary(html, title)
+        facts = module.extract_key_facts(html, title, "快科技")
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("查找", summary)
+        self.assertNotIn("塔塔", combined)
+        self.assertNotIn("630GB", combined)
+        self.assertFalse(module.is_apple_product_data_leak_story(combined, title))
 
     def test_memory_supplier_approval_does_not_absorb_distinct_price_followups(self):
         module = load_module()
