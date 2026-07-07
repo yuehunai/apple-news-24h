@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.22.0 - 2026-07-07
+
+- Improved weak filtering for third-party app launches on Apple platforms, non-Apple charity or procurement stories that only mention Apple hardware, and former-Apple commentary without a new Apple action.
+- Improved cross-source hardware clustering for M6 Mac roadmap rumors, iPhone 18 Pro logic-board and mainboard leaks, and iPhone 18 Pro battery-capacity reports.
+- Kept Broadcom supply-agreement coverage as an independent hardware supply-chain event instead of merging it into unrelated M-series or iPhone rumor clusters.
+- Updated fallback policy guidance for direct Apple hardware rumors, non-Apple platform availability, charity/procurement context, and former-Apple background.
+- Added regression coverage for weak third-party noise, Apple-hardware incidental mentions, former-Apple commentary, M6 roadmap merging, iPhone logic-board leaks, iPhone battery reports, and Broadcom event separation.
+
 ## 1.21.0 - 2026-07-07
 
 - Improved live crawl performance on high-volume news days by fetching selected detail pages concurrently and caching repeated term, scoring, and primary-facet computations without reducing source discovery coverage.

@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.21.0 - 2026-07-07
+### 1.22.0 - 2026-07-07
 
-- Improved live crawl performance on high-volume news days with concurrent detail-page fetching and cached term, scoring, and primary-facet computations.
-- Improved OS release boundaries for `26.6` and `27` beta trains, macOS wallpaper updates, watchOS Siri AI, Siri voice customization, and platform-specific beta details.
-- Improved Apple service handling for App Store / iCloud payment-method restoration, billing availability, and Apple TV app / iTunes Store purchased-content 4K upgrades.
-- Improved hardware and market-report clustering for Broadcom supply deals, foldable iPhone production, Apple Watch edge-AI reports, iPhone battery leaks, iPhone Air 2 rumors, and Mac AI-demand reports.
-- Updated weak filtering, fallback policy guidance, and regression coverage while keeping discovery coverage broad and reviewable weak items in `deferred_events`.
+- Improved weak filtering for third-party app launches, non-Apple charity or procurement stories, and former-Apple commentary that only mention Apple hardware or platforms.
+- Improved hardware clustering for M6 Mac roadmap rumors, iPhone 18 Pro logic-board and mainboard leaks, and iPhone 18 Pro battery-capacity reports.
+- Kept Broadcom supply-agreement coverage separate from unrelated M-series or iPhone rumor clusters.
+- Updated fallback policy guidance for direct Apple hardware rumors, non-Apple platform availability, charity/procurement context, and former-Apple background.
+- Added regression coverage for these weak-relevance and hardware-clustering boundaries.
 
 ## What It Does
 

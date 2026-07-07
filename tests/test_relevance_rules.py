@@ -9507,6 +9507,165 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.detect_event_kind(title, summary), "os_app")
         self.assertEqual(module.choose_category(title, summary), "software_systems")
 
+    def test_third_party_app_launch_on_apple_platform_stays_weak(self):
+        module = load_module()
+        title = "腾讯 AI 生成应用 App“吐司”苹果 iOS 版上线，主打探索型 Vibe Coding"
+        summary = (
+            "腾讯 AI 生成应用 App“吐司”苹果 iOS 版上线，主打探索型 Vibe Coding。"
+            "腾讯旗下 AI 应用生成平台“吐司”iOS 版已正式登陆 App Store。这款定位为探索型氛围编程的产品，"
+            "让用户通过自然语言描述想法，AI 即可自动拆解功能、生成原型并打包成 App。"
+            "安卓版本已在上个月推出。IT之家查询 App Store 页面获悉，这款应用大小 20.5MB，"
+            "兼容 iOS 17.6、macOS 14.6 和 visionOS 1.3 或更高版本。"
+        )
+        article = article_for(module, title, summary, "IT之家")
+
+        self.assertEqual(article.relevance_tier, "weak", article.relevance_reason)
+        events = module.cluster_articles([article])
+        self.assertEqual(events[0].relevance_tier, "weak", events[0].relevance_reason)
+
+    def test_non_apple_charity_donation_with_apple_purchase_context_stays_weak(self):
+        module = load_module()
+        title = "曾因买万元苹果电脑惹争议！韩红慈善基金会驰援广西 捐赠200万元救灾资金"
+        summary = (
+            "韩红爱心慈善基金会宣布驰援广西受灾地区，统筹调配 200 万元应急物资并捐赠专项善款。"
+            "此前该基金会曾因购买万元苹果电脑引发争议，但本文主事件是慈善捐赠和救灾响应。"
+        )
+        article = article_for(module, title, summary, "快科技")
+
+        self.assertEqual(article.relevance_tier, "weak", article.relevance_reason)
+        events = module.cluster_articles([article])
+        self.assertEqual(events[0].relevance_tier, "weak", events[0].relevance_reason)
+
+    def test_former_apple_commentary_without_new_apple_action_stays_weak(self):
+        module = load_module()
+        title = "Our choice of AI assistant really matters, says Tony Fadell"
+        summary = (
+            "Father of the iPod Tony Fadell wrote a lengthy column arguing that our choice of AI assistant matters. "
+            "He points to the Mac, iPod, iPhone, and Nest as examples of behavior shifts, but the article does not report "
+            "a new Apple product, service, policy, release, filing, or executive action."
+        )
+        article = article_for(module, title, summary, "9to5Mac")
+
+        self.assertEqual(article.relevance_tier, "weak", article.relevance_reason)
+        events = module.cluster_articles([article])
+        self.assertEqual(events[0].relevance_tier, "weak", events[0].relevance_reason)
+
+    def test_m6_chip_roadmap_merges_across_language_sources(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Apple’s M6 chip could skip many new products, here’s what’s rumored",
+            (
+                "Apple is expected to launch its next-generation M6 chip this fall, but rumors indicate the new chip could skip "
+                "a number of products. Mark Gurman says Apple plans to ship only a base M6 chip, with no M6 Pro or M6 Max, "
+                "as the company accelerates M7 for on-device AI."
+            ),
+            "9to5Mac",
+        )
+        chinese = article_for(
+            module,
+            "最“单薄”Mac 芯片系列：消息称苹果 M6 仅规划基础版，跳过 Mac mini 等多数产品线",
+            (
+                "9to5Mac 报道称苹果 M6 系列可能仅有 M6 标准版一款，后续预估不会推出 M6 Pro 和 M6 Max。"
+                "M6 标准版可能采用 12 核 GPU，内存带宽提高到 200GB/s，Mac mini、iMac、Mac Studio "
+                "和高端 MacBook Pro 大概率跳过 M6 升级到 M7。"
+            ),
+            "IT之家",
+        )
+
+        events = module.cluster_articles([english, chinese])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "IT之家"})
+
+    def test_iphone_logic_board_leak_merges_across_language_sources(self):
+        module = load_module()
+        cnbeta = article_for(
+            module,
+            "iPhone 18 Pro主板高清实物曝光：A20 Pro占用更大裸芯面积 高通5G基带",
+            (
+                "iPhone 18 Pro 与 iPhone 18 Pro Max 的主板实物图再次曝光，显示 A20 Pro 采用 WMCM 封装，"
+                "DRAM 从堆叠式改为与 SoC 并排放置，并可能配合 96-bit LPDDR6 内存。图中 PMX75 标签被认为"
+                "对应高通 Snapdragon X80 5G 基带。"
+            ),
+            "cnBeta",
+        )
+        ithome = article_for(
+            module,
+            "苹果 iPhone 18 Pro 逻辑板曝光：A20 Pro 芯片、LPDDR6 内存等",
+            (
+                "消息源分享 3 张图片，展示苹果 iPhone 18 Pro 系列高分辨率主板图片，进一步呈现 A20 Pro 芯片细节。"
+                "A20 Pro 是苹果首款 2nm SoC，采用晶圆级多芯片模块封装，DRAM 移至芯片侧边，并再次提及 LPDDR6 内存。"
+            ),
+            "IT之家",
+        )
+
+        events = module.cluster_articles([cnbeta, ithome])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"cnBeta", "IT之家"})
+
+    def test_iphone_logic_board_leak_merges_despite_background_region_and_leak_facets(self):
+        module = load_module()
+        cnbeta = article_for(
+            module,
+            "iPhone 18 Pro主板高清实物曝光：A20 Pro占用更大裸芯面积 高通5G基带",
+            (
+                "iPhone 18 Pro 与 iPhone 18 Pro Max 的主板实物图再次曝光，显示 A20 Pro 采用 WMCM 封装，"
+                "DRAM 与 SoC 并排放置，配合 LPDDR6 内存和高通 X80 5G 基带。文章还提到美国市场机型、"
+                "Tata 数据泄露、折叠屏 iPhone 背景和散热调整。"
+            ),
+            "cnBeta",
+        )
+        ithome = article_for(
+            module,
+            "苹果 iPhone 18 Pro 逻辑板曝光：A20 Pro 芯片、LPDDR6 内存等",
+            (
+                "消息源分享 3 张图片，展示苹果 iPhone 18 Pro 系列高分辨率主板图片，A20 Pro 采用晶圆级多芯片模块封装，"
+                "DRAM 移至芯片侧边，并再次提及 LPDDR6 内存。"
+            ),
+            "IT之家",
+        )
+        mydrivers = article_for(
+            module,
+            "iPhone 18 Pro主板图纸流传 华强北卖家称绝无可能复刻真机",
+            (
+                "大量标注机密标识的 iPhone 18 Pro 主板设计图纸、芯片参数与供应链清单流入市场，"
+                "泄密源头指向苹果印度核心代工厂塔塔电子。图纸显示 A20 Pro、LPDDR6 内存和双层板结构，"
+                "华强北卖家称难以复刻真机。"
+            ),
+            "快科技",
+        )
+
+        events = module.cluster_articles([cnbeta, ithome, mydrivers])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"cnBeta", "IT之家", "快科技"})
+        self.assertEqual(events[0].merge_warnings, [])
+
+    def test_iphone_battery_interpretation_merges_with_capacity_leak(self):
+        module = load_module()
+        filing = article_for(
+            module,
+            "iPhone 18 Pro Battery Capacities Revealed by Regulatory Filings",
+            (
+                "Chinese regulatory filings appear to confirm iPhone 18 Pro battery capacities: 4,056mAh in China and "
+                "4,288mAh in the U.S., while iPhone 18 Pro Max is listed at 5,391mAh in China and 5,567mAh in the U.S."
+            ),
+            "MacRumors",
+        )
+        interpretation = article_for(
+            module,
+            "iPhone 18 Pro vs. iPhone 18 Pro Max: Here's What the Latest Leak Says",
+            (
+                "The latest leak says iPhone 18 Pro Max could take a bigger step forward in battery life. "
+                "If the leaked capacities are accurate, the Pro Max battery would be nearly 10% larger than iPhone 17 Pro Max, "
+                "while iPhone 18 Pro would increase by less than 1%."
+            ),
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([filing, interpretation])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.title for article in events[0].articles}, {filing.title, interpretation.title})
+
 
 if __name__ == "__main__":
     unittest.main()
