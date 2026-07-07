@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.20.0 - 2026-07-05
+### 1.21.0 - 2026-07-07
 
-- Improved recap-page boundaries so broad weekly summaries such as MacRumors Top Stories stay weak while specific hardware reports remain standalone events.
-- Improved source cleanup for Chinese article-end markers, related-story blocks, and 9to5Mac Apple @ Work sponsor/about boilerplate before summary, key-fact, and clustering extraction.
-- Updated weak-relevance handling for how-to and lost-device tips, former-Apple biographical background, sponsored columns without a new Apple action, and broad AI phone / AI PC market commentary.
-- Kept discovery coverage unchanged while moving low-value false positives into `deferred_events` for review instead of letting them pollute final brief queues.
-- Updated fallback policy guidance and regression coverage for recap pages, article-tail cleanup, sponsored boilerplate, lost-device tips, former-Apple context, and broad market commentary.
+- Improved live crawl performance on high-volume news days with concurrent detail-page fetching and cached term, scoring, and primary-facet computations.
+- Improved OS release boundaries for `26.6` and `27` beta trains, macOS wallpaper updates, watchOS Siri AI, Siri voice customization, and platform-specific beta details.
+- Improved Apple service handling for App Store / iCloud payment-method restoration, billing availability, and Apple TV app / iTunes Store purchased-content 4K upgrades.
+- Improved hardware and market-report clustering for Broadcom supply deals, foldable iPhone production, Apple Watch edge-AI reports, iPhone battery leaks, iPhone Air 2 rumors, and Mac AI-demand reports.
+- Updated weak filtering, fallback policy guidance, and regression coverage while keeping discovery coverage broad and reviewable weak items in `deferred_events`.
 
 ## What It Does
 

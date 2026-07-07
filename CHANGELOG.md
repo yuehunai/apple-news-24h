@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.21.0 - 2026-07-07
+
+- Improved live crawl performance on high-volume news days by fetching selected detail pages concurrently and caching repeated term, scoring, and primary-facet computations without reducing source discovery coverage.
+- Improved OS release and feature boundaries for `26.6` and `27` beta trains, macOS wallpaper updates, watchOS Siri AI, Siri voice customization, and platform-specific beta details so direct Apple system items stay in `events` instead of `deferred_events`.
+- Improved Apple service handling for App Store / iCloud payment-method restoration, billing availability, and Apple TV app / iTunes Store purchased-content 4K upgrades.
+- Improved hardware and market-report clustering for Apple-Broadcom chip supply, foldable iPhone production, Apple Watch edge-AI shipment reports, iPhone battery capacity leaks, iPhone Air 2 rumors, and Mac AI-demand reports.
+- Tightened weak filtering for personal settings guides, podcasts, third-party Apple-device projects, self-upgrade stories, broad multi-vendor market reports, and non-Apple context while keeping reviewable weak items in `deferred_events`.
+- Updated fallback policy guidance and regression coverage for performance caching, OS beta demotion, service billing, Apple TV entitlements, Broadcom supply deals, market-report boundaries, and high-volume Apple hardware clustering.
+
 ## 1.20.0 - 2026-07-05
 
 - Improved recap-page boundaries so broad weekly summaries such as MacRumors Top Stories stay weak while specific hardware reports remain standalone events.

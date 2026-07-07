@@ -44,7 +44,237 @@ def article_for(module, title, summary, source="9to5Mac", facts=None):
     )
 
 
+def event_for(module, article):
+    return module.Event(
+        event_id="test-event",
+        category=article.category,
+        title=article.title,
+        summary=article.summary,
+        key_facts=list(article.key_facts),
+        published_utc=article.published_utc,
+        published_raw=article.published_raw,
+        published_source=article.published_source,
+        confidence=article.confidence,
+        articles=[article],
+        tokens=set(article.tokens),
+        event_kind=article.event_kind,
+        relevance_tier=article.relevance_tier,
+        relevance_reason=article.relevance_reason,
+        regions=set(article.regions),
+    )
+
+
 class RelevanceRuleTests(unittest.TestCase):
+    def test_cached_score_terms_matches_list_tuple_and_set_inputs(self):
+        module = load_module()
+        text = "Apple released iOS 27 beta 3 for iPhone and iPad."
+
+        self.assertEqual(module.score_terms(text, ["apple", "ios", "macos"]), 2)
+        self.assertEqual(module.score_terms(text, ("apple", "ios", "macos")), 2)
+        self.assertEqual(module.score_terms(text, {"apple", "ios", "macos"}), 2)
+
+    def test_primary_topic_facet_cache_returns_independent_sets(self):
+        module = load_module()
+        title = "Apple and Broadcom Extend Chip Supply Deal to 2031"
+        summary = "Apple and Broadcom extended their chip supply deal for wireless components."
+
+        first = module.primary_topic_facets(title, summary)
+        self.assertIn("apple-broadcom-chip-supply-deal", first)
+        first.add("mutated-test-facet")
+
+        second = module.primary_topic_facets(title, summary)
+        self.assertIn("apple-broadcom-chip-supply-deal", second)
+        self.assertNotIn("mutated-test-facet", second)
+
+    def test_os_beta_release_is_not_downgraded_as_personal_settings_guide(self):
+        module = load_module()
+        title = "Apple Seeds Fourth iOS 26.6 and iPadOS 26.6 Betas to Developers"
+        summary = (
+            "Apple today seeded the fourth betas of upcoming iOS 26.6 and iPadOS 26.6 "
+            "updates to developers for testing purposes. Registered developers can "
+            "download the betas from the Settings app by going to General and selecting "
+            "Software Update. The update primarily focuses on bug fixes and performance improvements."
+        )
+
+        self.assertFalse(
+            module.is_personal_usage_or_settings_guide_without_new_apple_action(title, summary)
+        )
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_os_wallpaper_release_is_not_downgraded_as_personal_settings_guide(self):
+        module = load_module()
+        title = "macOS Golden Gate Gets New Wallpaper"
+        summary = (
+            "With the third beta of macOS 27, Apple added new Golden Gate-themed wallpaper "
+            "options to the Mac. Golden Gate Sunset and Golden Gate Night animate when "
+            "unlocking the Mac and can be set as a screen saver. In the Photos section "
+            "of the Settings app, Apple also added a new Show Rating Controls toggle."
+        )
+
+        self.assertFalse(
+            module.is_personal_usage_or_settings_guide_without_new_apple_action(title, summary)
+        )
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_watchos_siri_ai_release_is_not_downgraded_as_device_mod_project(self):
+        module = load_module()
+        title = "watchOS 27第三个测试版将Siri AI带入Apple Watch"
+        summary = (
+            "苹果在最新发布的 watchOS 27 第三个开发者测试版中，为 Apple Watch 用户正式开放"
+            "全新升级的 Siri AI，并引入独立的 Siri 应用。该应用可在 Dynamic App Grid "
+            "界面中启动，并在同一 Apple ID 下同步对话记录。随着测试版推送，改造后的 Siri AI "
+            "以独立应用的形式登陆 Apple Watch 平台。"
+        )
+
+        self.assertFalse(
+            module.is_third_party_hardware_mod_or_repair_story_without_apple_action(title, summary)
+        )
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_foldable_iphone_mass_production_story_stays_strong_despite_market_context(self):
+        module = load_module()
+        title = "史上最贵iPhone蓄势待发 苹果首款折叠屏手机开始量产"
+        summary = (
+            "据多方爆料，苹果首款折叠屏 iPhone 预计定名为 iPhone Ultra，并有望在今年 9 月发布。"
+            "赣州富士康发布招聘文章，招聘 18 至 50 岁员工，主要从事苹果手机精密组件的生产与加工，"
+            "供应链信息显示苹果首款折叠屏手机已进入量产准备阶段。三星、华为、荣耀、OPPO、vivo、"
+            "小米等厂商均已推出折叠屏产品，苹果入局后有望进一步拉高折叠屏手机市场热度，"
+            "并推动这一品类进入新的竞争阶段。"
+        )
+
+        self.assertTrue(module.is_foldable_iphone_supply_chain_story(summary))
+        self.assertFalse(module.is_broad_multi_vendor_market_report(summary, title))
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_integer_major_os_beta_release_facets_include_platform_and_round(self):
+        module = load_module()
+        text = "Apple Seeds Third iOS 27 and iPadOS 27 Betas to Developers"
+
+        facets = module.os_release_facets_from_text(text)
+
+        self.assertIn("os-release-version-27", facets)
+        self.assertIn("os-release-beta", facets)
+        self.assertIn("os-release-beta-3", facets)
+        self.assertIn("platform-ios", facets)
+        self.assertIn("platform-ipados", facets)
+
+    def test_same_integer_major_os_beta_release_merges_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Apple Seeds Third iOS 27 and iPadOS 27 Betas to Developers",
+            "Apple today seeded the third betas of iOS 27 and iPadOS 27 to developers for testing purposes.",
+            source="MacRumors",
+        )
+        nine_to_five = article_for(
+            module,
+            "iOS 27 beta 3 now available for developers",
+            "Apple has released the third iOS 27 beta for developer testing. iOS 27 beta 3 replaces the second iOS 27 beta.",
+            source="9to5Mac",
+        )
+
+        self.assertTrue(module.should_merge(macrumors, event_for(module, nine_to_five)))
+
+    def test_system_wallpaper_merges_only_when_platform_matches(self):
+        module = load_module()
+        macrumors_wallpaper = article_for(
+            module,
+            "macOS Golden Gate Gets New Wallpaper",
+            "With the third beta of macOS 27, Apple added new Golden Gate-themed wallpaper options to the Mac.",
+            source="MacRumors",
+        )
+        nine_to_five_wallpaper = article_for(
+            module,
+            "macOS 27 Golden Gate adds these new wallpapers and screen savers to your Mac",
+            "Today’s macOS 27 Golden Gate beta 3 release includes two new wallpaper and screen saver options for your Mac.",
+            source="9to5Mac",
+        )
+        ios_feature_roundup = article_for(
+            module,
+            "Here's what's new with iOS 27 beta 3",
+            "Apple released iOS 27 beta 3 today. The third beta adds a new wallpaper animation, Siri voice customization, and Photos improvements.",
+            source="9to5Mac",
+        )
+
+        self.assertTrue(module.should_merge(macrumors_wallpaper, event_for(module, nine_to_five_wallpaper)))
+        self.assertFalse(module.should_merge(ios_feature_roundup, event_for(module, macrumors_wallpaper)))
+
+    def test_beta_feature_title_is_not_release_availability_story(self):
+        module = load_module()
+        feature = article_for(
+            module,
+            "iOS 27 beta 3 makes it easier to adjust AirPods Adaptive mode intensity",
+            "After Apple released iOS 27 beta 3, the update adds a new way to adjust AirPods Adaptive Audio intensity from the mode picker.",
+            source="9to5Mac",
+        )
+        generic_beta = article_for(
+            module,
+            "macOS 27 Golden Gate beta 3 now available for developers",
+            "Apple is rolling out macOS 27 Golden Gate beta 3 for developers ahead of the public beta.",
+            source="9to5Mac",
+        )
+
+        self.assertFalse(module.is_os_release_availability_article(feature))
+        self.assertFalse(module.should_merge(feature, event_for(module, generic_beta)))
+
+    def test_major_beta_does_not_merge_with_point_release_background_mention(self):
+        module = load_module()
+        ios_27_beta = article_for(
+            module,
+            "Apple Seeds Third iOS 27 and iPadOS 27 Betas to Developers",
+            "Apple seeded the third betas of iOS 27 and iPadOS 27 to developers.",
+            source="MacRumors",
+        )
+        ios_26_beta = article_for(
+            module,
+            "Apple releases iOS 26.6 beta 4 for iPhone, here’s what to expect",
+            "Apple released the fourth iOS 26.6 developer beta, with the update preparing minor iPhone changes before iOS 27.",
+            source="9to5Mac",
+        )
+
+        self.assertFalse(module.should_merge(ios_27_beta, event_for(module, ios_26_beta)))
+
+    def test_broad_apple_ai_facet_alone_does_not_merge_distinct_features(self):
+        module = load_module()
+        home_icloud = article_for(
+            module,
+            "Apple Intelligence Home Features Require 2TB iCloud+ Plan in iOS 27",
+            "Apple Intelligence camera features in the Home app will require an iCloud+ plan starting at 2TB.",
+            source="MacRumors",
+        )
+        watch_siri = article_for(
+            module,
+            "Siri AI Comes to Apple Watch in watchOS 27 Beta 3",
+            "With watchOS 27 beta 3, Apple added support for Siri AI and the Siri app, so Apple Watch users can now use the features from their wrist.",
+            source="MacRumors",
+        )
+
+        self.assertFalse(module.should_merge(home_icloud, event_for(module, watch_siri)))
+
+    def test_os_release_title_primary_facet_wins_over_service_terms(self):
+        module = load_module()
+        title = "Apple Seeds tvOS 27 Beta 3 to Developers"
+        summary = "Apple seeded the third tvOS 27 beta to developers for testing on Apple TV."
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("os-release-beta", facets)
+        self.assertIn("os-release-version-27", facets)
+        self.assertNotIn("apple-tv-content", facets)
+
+    def test_siri_voice_customization_has_specific_facet(self):
+        module = load_module()
+        title = "New in iOS 27 beta 3: Siri AI voice customization options"
+        summary = "Apple added Siri AI voice customization controls for speaking pace and expressivity."
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("siri-voice-customization", facets)
+
     def test_apple_watch_health_data_research_is_relevant_and_software_category(self):
         module = load_module()
         source = source_named(module, "9to5Mac")
@@ -8870,6 +9100,412 @@ class RelevanceRuleTests(unittest.TestCase):
         events = module.cluster_articles([macrumors, ithome])
 
         self.assertEqual(len(events), 1)
+
+    def test_india_app_store_icloud_card_payment_restore_merges_across_sources(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Four years on, Apple bends to India's banks over card payments",
+            (
+                "App Store and iCloud users in India should soon be able to subscribe using credit or debit cards again, "
+                "as Apple tests the restored payment options with a limited number of users after complying with RBI card tokenisation rules."
+            ),
+            "AppleInsider",
+        )
+        chinese = article_for(
+            module,
+            "时隔约 5 年，苹果印度 App Store 测试恢复银行卡支付选项",
+            (
+                "印度财经媒体 Moneycontrol 报道称，苹果在印度小规模测试恢复 App Store 和 iCloud 交易的信用卡和借记卡支付选项。"
+                "苹果此前因印度循环付款监管要求停止卡支付，如今完成 card tokenisation 合规后重新启用相关功能。"
+            ),
+            "IT之家",
+        )
+
+        self.assertIn(english.event_kind, {"wallet_feature", "app_store_trust", "os_app"})
+        self.assertIn(chinese.event_kind, {"wallet_feature", "app_store_trust", "os_app"})
+        self.assertEqual(english.relevance_tier, "strong", english.relevance_reason)
+        self.assertEqual(chinese.relevance_tier, "strong", chinese.relevance_reason)
+        events = module.cluster_articles([english, chinese])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "IT之家"})
+
+    def test_apple_watch_edge_ai_market_report_does_not_merge_with_dumb_phone_guide(self):
+        module = load_module()
+        watch_report = article_for(
+            module,
+            "Report: Apple Watch accounted for nearly all Edge AI smartwatch shipments in Q1 2026",
+            (
+                "Counterpoint Research says global shipments of Edge AI-capable smartwatches grew 70% year over year in Q1 2026, "
+                "reaching 25% penetration, and Apple accounted for roughly 90% of those shipments. "
+                "The report defines Edge AI smartwatches as devices with a dedicated neural engine or NPU running at least one health, safety, or interaction feature locally."
+            ),
+            "9to5Mac",
+            facts=[
+                "Blood pressure monitoring rose from 11% to 23% of smartwatch shipments, sleep apnea detection from 5% to 18%, and ECG from 31% to 34%.",
+            ],
+        )
+        dumb_phone_guide = article_for(
+            module,
+            "Here's how to turn any iPhone into a dumb phone",
+            (
+                "The guide explains how parents can use Screen Time, allowed apps, and Safari restrictions to make an iPhone behave like a basic phone for children. "
+                "A related link mentions a Counterpoint Apple Watch report, but the article itself is a how-to guide without a new Apple action."
+            ),
+            "9to5Mac",
+        )
+        ithome_watch = article_for(
+            module,
+            "Counterpoint：2026 年 Q1 全球端侧 AI 智能手表出货量同比增长 70%，苹果占约 90%",
+            (
+                "Counterpoint Research 报告称 2026 年第一季度全球支持端侧 AI 的智能手表出货量同比增长 70%，市场渗透率达到 25%，"
+                "苹果在端侧 AI 智能手表出货量中占约 90%，全年渗透率有望接近 32%。"
+            ),
+            "IT之家",
+        )
+
+        self.assertEqual(watch_report.relevance_tier, "strong", watch_report.relevance_reason)
+        self.assertEqual(ithome_watch.relevance_tier, "strong", ithome_watch.relevance_reason)
+        self.assertEqual(dumb_phone_guide.relevance_tier, "weak", dumb_phone_guide.relevance_reason)
+        events = module.cluster_articles([watch_report, dumb_phone_guide, ithome_watch])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+        self.assertTrue(
+            any({watch_report.title, ithome_watch.title} == cluster for cluster in clusters),
+            clusters,
+        )
+
+    def test_apple_market_share_report_does_not_merge_with_os_beta_or_service_events(self):
+        module = load_module()
+        watch_report = article_for(
+            module,
+            "Report: Apple Watch accounted for nearly all Edge AI smartwatch shipments in Q1 2026",
+            (
+                "Counterpoint Research says global shipments of Edge AI-capable smartwatches grew 70% year over year in Q1 2026, "
+                "reaching 25% penetration, and Apple accounted for roughly 90% of those shipments."
+            ),
+            "9to5Mac",
+        )
+        watchos_siri_beta = article_for(
+            module,
+            "watchOS 27 beta 3 includes upgraded Siri AI experience and dedicated Siri app",
+            (
+                "Apple Watch owners can now use the new Siri AI in watchOS 27 beta 3, "
+                "including a dedicated Siri app and a more capable on-device assistant."
+            ),
+            "9to5Mac",
+        )
+        icloud_home_features = article_for(
+            module,
+            "Apple Home AI features locked behind 2TB iCloud+ plan",
+            (
+                "Apple says Apple Intelligence camera features in the Home app will require an iCloud+ plan starting at 2TB."
+            ),
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([watchos_siri_beta, icloud_home_features, watch_report])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertTrue(any(cluster == {watch_report.title} for cluster in clusters), clusters)
+        self.assertFalse(
+            any(watch_report.title in cluster and len(cluster) > 1 for cluster in clusters),
+            clusters,
+        )
+
+    def test_mixed_beta_service_payment_and_market_events_split_after_clustering(self):
+        module = load_module()
+        visionos_beta = article_for(
+            module,
+            "Apple Seeds Third visionOS 27 Beta to Developers",
+            "Apple provided developers with the third beta of visionOS 27, adding Siri AI and spatial environment updates for Vision Pro.",
+            "MacRumors",
+        )
+        icloud_home = article_for(
+            module,
+            "Apple Intelligence Home Features Require 2TB iCloud+ Plan in iOS 27",
+            "Apple says Apple Intelligence camera features in the Home app require an iCloud+ plan starting at 2TB.",
+            "MacRumors",
+        )
+        payment = article_for(
+            module,
+            "Four years on, Apple bends to India's banks over card payments",
+            "App Store and iCloud users in India can subscribe using credit or debit cards again as Apple tests restored payment options after complying with RBI card tokenisation rules.",
+            "AppleInsider",
+        )
+        watch_report = article_for(
+            module,
+            "Report: Apple Watch accounted for nearly all Edge AI smartwatch shipments in Q1 2026",
+            "Counterpoint says Edge AI-capable smartwatch shipments grew 70% year over year, and Apple accounted for roughly 90% of shipments.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([visionos_beta, icloud_home, payment, watch_report])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertTrue(any(cluster == {payment.title} for cluster in clusters), clusters)
+        self.assertTrue(any(cluster == {watch_report.title} for cluster in clusters), clusters)
+        self.assertFalse(
+            any(
+                payment.title in cluster
+                and (visionos_beta.title in cluster or icloud_home.title in cluster or watch_report.title in cluster)
+                for cluster in clusters
+            ),
+            clusters,
+        )
+        self.assertFalse(
+            any(watch_report.title in cluster and len(cluster) > 1 for cluster in clusters),
+            clusters,
+        )
+
+
+    def test_mac_ai_demand_does_not_merge_with_foldable_iphone_supply_chain(self):
+        module = load_module()
+        macrumors_mac_ai = article_for(
+            module,
+            "Apple Silicon Exec Explains Mac Mini AI Demand and On-Device Future",
+            (
+                "Apple's Mac mini and Mac Studio have become the machines of choice for running AI agents, "
+                "according to Doug Brooks, Apple's senior product manager of Apple silicon. "
+                "Brooks made the claim while discussing Apple's chip strategy and on-device AI future."
+            ),
+            "MacRumors",
+            facts=[
+                "Brooks says that the company has seen \"incredible demand\" for the two desktop Macs.",
+                "Many AI tools are also Mac-first or Mac-only, which Brooks says has helped cement the Mac's standing among developers.",
+                "Apple more recently added neural accelerators to the GPU, extending AI performance from iPhone-class parts up to the Mac's largest silicon.",
+            ],
+        )
+        cnbeta_mac_ai = article_for(
+            module,
+            "苹果高管详解 Mac mini 在本地 AI 时代走红的原因",
+            (
+                "苹果公司负责 Apple 芯片产品的高级产品经理 Doug Brooks 表示，Mac mini 与 Mac Studio "
+                "已经成为众多开发者和团队运行 AI 智能体的首选设备。"
+            ),
+            "cnBeta",
+            facts=[
+                "Brooks 称，公司看到来自这两款桌面 Mac 的“惊人需求”。",
+                "很多用户希望有一台由自己掌控、与主力电脑隔离、并且可以 7×24 小时不间断运行的系统。",
+            ],
+        )
+        iphone_ultra_availability = article_for(
+            module,
+            "Limited availability of the iPhone Ultra may be a feature, not a bug",
+            (
+                "After conflicting reports about when the iPhone Ultra would launch, there is now a clear consensus "
+                "that it will be announced in September alongside the iPhone 18 Pro."
+            ),
+            "9to5Mac",
+            facts=[
+                "Apple analyst Ming-Chi Kuo warned that only one million units may be manufactured within the third quarter.",
+                "Delivery times could stretch four to six weeks or more for the folding iPhone.",
+            ],
+        )
+        foldable_supply = article_for(
+            module,
+            "iPhone Ultra 本月开始大规模量产，供应链急招工人",
+            (
+                "蓝思科技大规模急招操作工、质检员和技术员，业内认为这是为苹果折叠屏 iPhone Ultra "
+                "量产做人力储备。"
+            ),
+            "cnBeta",
+            facts=[
+                "蓝思科技将为苹果折叠屏 iPhone Ultra 供应 UTG 玻璃，良率已突破 90%。",
+                "扩招岗位月薪 5500 至 7500 元，并覆盖操作工人、质检员、包装员、技术员等岗位。",
+            ],
+        )
+        apple_foldable_phone_forecast = article_for(
+            module,
+            "郭明錤爆料最新苹果折叠手机：出货量明显不足",
+            (
+                "知名分析师郭明錤预测，苹果的可折叠手机可能沿用 iPhone X 的发布节奏，"
+                "会先随秋季新品发布，但数月后才开放预购和销售。"
+            ),
+            "快科技",
+            facts=[
+                "2026 年下半年可折叠 iPhone 的组装出货量约为 700 万至 800 万部。",
+                "第三季度出货量约为 50 万至 100 万部，约占苹果总出货量的 10%。",
+            ],
+        )
+
+        events = module.cluster_articles(
+            [
+                macrumors_mac_ai,
+                cnbeta_mac_ai,
+                iphone_ultra_availability,
+                foldable_supply,
+                apple_foldable_phone_forecast,
+            ]
+        )
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertTrue(
+            any({macrumors_mac_ai.title, cnbeta_mac_ai.title} == cluster for cluster in clusters),
+            clusters,
+        )
+        self.assertFalse(
+            any(
+                macrumors_mac_ai.title in cluster
+                and (
+                    iphone_ultra_availability.title in cluster
+                    or foldable_supply.title in cluster
+                    or apple_foldable_phone_forecast.title in cluster
+                )
+                for cluster in clusters
+            ),
+            clusters,
+        )
+
+
+    def test_personal_usage_podcast_and_third_party_projects_stay_weak(self):
+        module = load_module()
+        samples = [
+            (
+                "Apple Watch sleep score became more useful for me with these settings",
+                (
+                    "Apple Watch includes a built-in sleep tracking feature. "
+                    "On iPhone, go to the Watch app, swipe down to the Sleep section, then tap Sleep Score Notifications to toggle alerts."
+                ),
+                "9to5Mac",
+            ),
+            (
+                "9to5Mac Overtime 071: A weird time for Apple",
+                (
+                    "9to5Mac Overtime is a weekly video-first podcast exploring observations in the Apple ecosystem. "
+                    "Subscribe to Overtime via Apple Podcasts and YouTube."
+                ),
+                "9to5Mac",
+            ),
+            (
+                "iPhone 17 Pro Max Sealed in Time Capsule Until 2276",
+                (
+                    "America250 sealed an iPhone 17 Pro Max inside a 250 year time capsule as part of America's Semiquincentennial celebrations. "
+                    "The capsule will be reopened in 2276."
+                ),
+                "MacRumors",
+            ),
+            (
+                "一位工程师自行为 MacBook Pro 升级 8TB 存储，但代价高昂过程坎坷",
+                (
+                    "一位 Reddit 工程师分享了为 MacBook Pro 自行更换 NAND 闪存并升级到 8TB SSD 的全过程。"
+                    "他强调这需要焊接经验和专业工具，并不适合普通用户。"
+                ),
+                "cnBeta",
+            ),
+            (
+                "《连线》编辑善用 iOS 17 辅助访问将 iPhone 13 变儿童手机：仅保留 6 款 App",
+                (
+                    "Wired 编辑利用 iOS 17 辅助访问功能把 iPhone 13 配置成儿童手机，"
+                    "仅保留通话、信息、地图、相机、照片和音乐六款应用。"
+                ),
+                "IT之家",
+            ),
+        ]
+
+        for title, summary, source in samples:
+            with self.subTest(title=title):
+                article = article_for(module, title, summary, source)
+                self.assertEqual(article.relevance_tier, "weak", article.relevance_reason)
+
+    def test_apple_broadcom_chip_supply_deal_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple and Broadcom Extend Chip Supply Deal to 2031",
+                (
+                    "Broadcom has agreed to extend its chip partnership with Apple through 2031, "
+                    "expanding a deal that covers custom radio frequency components, Wi-Fi and Bluetooth connectivity, "
+                    "and other networking semiconductors found throughout Apple's lineup."
+                ),
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple-Broadcom renew partnership through 2031",
+                (
+                    "Apple has extended its long-time supplier agreement with Broadcom, ensuring Apple gets a steady flow "
+                    "of custom chips until 2031. The deal includes custom ASIC products and wireless components."
+                ),
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "博通、苹果续签多年期协议，双方技术合作延长至 2031 年",
+                (
+                    "Broadcom 向 SEC 递交 Form 8-K 报告，表示该企业已与 Apple 达成新的多年期协议，"
+                    "将双方长久以来的技术合作进一步延长至 2031 年，涉及射频前端元件、无线组件和模块。"
+                ),
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "苹果与博通将芯片供应合作延长至2031年",
+                (
+                    "据路透社报道，博通已同意将其与苹果的芯片合作伙伴关系延长至 2031 年，"
+                    "扩展原有涵盖多种定制芯片开发与供应的长期协议。"
+                ),
+                "cnBeta",
+            ),
+            article_for(
+                module,
+                "Apple radio chips switch likely to take five more years, suggests Broadcom deal",
+                (
+                    "Reuters reports that Apple has agreed to retain and expand its partnership with Broadcom through 2031. "
+                    "The deal suggests Apple's move to fully in-house radio chips may take five more years."
+                ),
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "印度代工厂被黑 苹果最怕泄露的不是真机照片",
+                (
+                    "黑客组织声称泄露苹果印度供应商塔塔电子超过 20 万份文件，"
+                    "其中包含 iPhone 18 Pro 主板设计、测试数据和工厂文件。"
+                    "背景段落提到苹果也与博通、高通等供应商合作，但本文主事件不是 Broadcom 续约。"
+                ),
+                "快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        broadcom_events = [
+            event for event in events if any("Broadcom" in article.title or "博通" in article.title for article in event.articles)
+        ]
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual(len(broadcom_events), 1)
+        self.assertEqual(
+            {article.source for article in broadcom_events[0].articles},
+            {"MacRumors", "AppleInsider", "IT之家", "cnBeta", "9to5Mac"},
+        )
+
+    def test_apple_tv_purchase_4k_upgrade_is_service_news(self):
+        module = load_module()
+        title = "Apple starts offering free 4K upgrades for purchased TV shows"
+        summary = (
+            "Apple is extending free 4K upgrades to select purchased TV shows in the Apple TV app "
+            "and iTunes Store, after previously upgrading purchased movies at no additional charge."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "service_content")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+
+    def test_ios_beta_siri_ai_release_is_software_news(self):
+        module = load_module()
+        title = "iOS 27 beta 3 now available as Apple tests major Siri AI upgrade"
+        summary = (
+            "Apple has released the third iOS 27 beta for developer testing. "
+            "The update continues testing Siri AI, Apple Intelligence, and new Apple Foundation Models. "
+            "Other iPhone changes include smoother Camera behavior, continuous sending in Messages, "
+            "custom EQ for AirPods, new recovery options, and easier Apple Pay card switching."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
 
 
 if __name__ == "__main__":
