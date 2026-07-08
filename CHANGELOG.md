@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.23.0 - 2026-07-08
+
+- Improved weak filtering for routine third-party app updates, competitor product launches, non-Apple AI service expansions, broad surveys or market-share reports, and macOS-compatible third-party accessories.
+- Added stronger handling for Apple executive government meetings and regional App Store / Apple ID age-verification regulation so direct Apple company or platform actions stay in `events`.
+- Improved cross-source clustering for AirPods / Beats firmware releases, AirPods Max condensation litigation, official Beats accessory availability, iOS signing-status changes, and public beta rollout timing.
+- Tightened iPhone hardware rumor boundaries so foldable-iPhone launch timing, iPhone 18 Pro physical-dimension rumors, logic-board leaks, and supplier/data-leak stories no longer merge through competitor or background context.
+- Updated Siri / Apple Intelligence classification so first-party Siri access to third-party app data remains a software/system event while routine third-party app updates stay weak.
+- Updated fallback policy guidance and regression coverage for third-party noise, regional regulation, AirPods firmware, OS release/signing events, Siri platform features, iPhone hardware rumor boundaries, and official accessory clustering.
+
 ## 1.22.0 - 2026-07-07
 
 - Improved weak filtering for third-party app launches on Apple platforms, non-Apple charity or procurement stories that only mention Apple hardware, and former-Apple commentary without a new Apple action.

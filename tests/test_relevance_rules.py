@@ -5549,10 +5549,653 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(tier, "weak", reason)
         self.assertIn("third-party", reason)
 
+    def test_third_party_app_update_with_ios_carplay_terms_stays_weak(self):
+        module = load_module()
+        title = "Pocket Casts update brings three new features, including CarPlay chapter artwork"
+        summary = (
+            "Pocket Casts version 8.15 adds CarPlay chapter artwork, a Siri shortcut, and a "
+            "Lock Screen or Control Center control. The third-party podcast app also drops "
+            "support for iOS 16 and watchOS 9. That means Pocket Casts app updates now require "
+            "iOS 17 and watchOS 10 or later. The release also fixes an Apple Watch episode heading."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_travel_app_update_stays_weak_even_with_apple_platform_context(self):
+        module = load_module()
+        title = "Flighty Update Adds Step-by-Step Guide for Connecting Flights"
+        summary = (
+            "Flighty, a third-party travel app for iPhone and Apple Watch, added a Connection "
+            "Assistant feature that helps travelers make connecting flights."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_harmonyos_wechat_update_stays_weak_when_apple_is_not_primary_subject(self):
+        module = load_module()
+        title = "微信鸿蒙版灰度测试聊天实况照片发送功能，补齐私聊场景短板"
+        summary = "微信鸿蒙版正在灰度测试聊天实况照片发送功能，功能面向鸿蒙系统用户，与苹果 iPhone 仅作为实况照片格式背景相关。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_competitor_product_event_before_apple_launch_stays_weak(self):
+        module = load_module()
+        title = "Google's Pixel 11 Event Set for August 12, a Month Before Apple Debuts Foldable iPhone"
+        summary = (
+            "Google will introduce Pixel 11 smartphones and a Pixel 11 Pro Fold at an August 12 event, "
+            "about a month before Apple is expected to introduce new iPhone models. The body also mentions "
+            "related iPhone 18 Pro thickness rumors and foldable iPhone timing as market context."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_competitor_product_event_does_not_merge_into_foldable_iphone_timing(self):
+        module = load_module()
+        competitor = article_for(
+            module,
+            "Google's Pixel 11 Event Set for August 12, a Month Before Apple Debuts Foldable iPhone",
+            (
+                "Google will introduce Pixel 11 smartphones and a Pixel 11 Pro Fold at an August 12 event, "
+                "about a month before Apple is expected to introduce new iPhone models. The body also mentions "
+                "foldable iPhone release timing as market context."
+            ),
+            "MacRumors",
+        )
+        foldable = article_for(
+            module,
+            "Foldable iPhone Ultra May Launch After iPhone 18 Pro Models",
+            "Apple's first foldable iPhone may launch after the iPhone 18 Pro models, with preorders possibly delayed until the fourth quarter.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([competitor, foldable])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertFalse(module.events_should_merge(event_for(module, competitor), event_for(module, foldable)))
+        self.assertEqual(len(events), 2, clusters)
+        self.assertFalse(any(competitor.title in cluster and foldable.title in cluster for cluster in clusters), clusters)
+
+    def test_competitor_foldable_phone_event_does_not_merge_into_apple_foldable_timing(self):
+        module = load_module()
+        competitor = article_for(
+            module,
+            "三星官宣7月22日发布会：Z Fold 8设计大改 对标苹果折叠机",
+            (
+                "三星将推出 Galaxy Z Fold 8，文章把新机设计与苹果计划推出的折叠款 iPhone 作比较，"
+                "但主语和动作都是三星发布会。"
+            ),
+            "cnBeta",
+        )
+        foldable = article_for(
+            module,
+            "Foldable iPhone Ultra May Launch After iPhone 18 Pro Models",
+            "Apple's first foldable iPhone may launch after the iPhone 18 Pro models, with preorders possibly delayed until the fourth quarter.",
+            "MacRumors",
+        )
+
+        self.assertEqual(competitor.relevance_tier, "weak", competitor.relevance_reason)
+        self.assertFalse(module.events_should_merge(event_for(module, competitor), event_for(module, foldable)))
+
+    def test_third_party_ai_service_expanding_to_iphone_stays_weak(self):
+        module = load_module()
+        title = "Claude Cowork Expands to iPhone and the Web"
+        summary = (
+            "Anthropic is bringing Claude Cowork to mobile and the web, letting the third-party AI service "
+            "continue cloud tasks across devices including iPhone."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_broad_android_user_apple_ai_survey_stays_weak(self):
+        module = load_module()
+        title = "安卓用户也不给苹果AI面子：不会因此而转向iPhone手机"
+        summary = (
+            "一项消费者调查称，Android 用户不会因为 Apple Intelligence 大规模上线就转向 iPhone；"
+            "文章讨论消费者换机意愿，没有新的苹果系统、服务或硬件动作。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_broad_windows_desktop_share_report_stays_weak(self):
+        module = load_module()
+        title = "StatCounter 称 6 月全球桌面系统中 Windows 占比首次跌破 60%"
+        summary = (
+            "StatCounter 数据显示 Windows 全球桌面系统份额首次跌破 60%，macOS 和 Linux 作为对比数据出现，"
+            "但文章主体是 Windows 桌面份额变化。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_executive_government_meeting_is_relevant_and_high_priority(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/07/tim-cook-and-john-ternus-hold-virtual-meeting-with-minister-president-of-bavaria/",
+            title="Tim Cook and John Ternus hold virtual meeting with Minister-President of Bavaria",
+            summary=(
+                "Apple CEO Tim Cook and hardware chief John Ternus held a virtual meeting with "
+                "Bavarian Minister-President Markus Söder about Apple's more than 2,000 jobs in "
+                "Munich, investment in Bavaria, data protection, and overregulation."
+            ),
+            feed_time_raw="2026-07-07T20:45:00+00:00",
+            context="apple executive government meeting bavaria munich investment jobs regulation",
+        )
+        pocket = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/07/pocket-casts-update-brings-three-new-features-including-carplay-chapter-artwork/",
+            title="Pocket Casts update brings three new features, including CarPlay chapter artwork",
+            summary="Pocket Casts version 8.15 adds CarPlay chapter artwork, a Siri shortcut, and drops iOS 16 support.",
+            feed_time_raw="2026-07-07T15:42:00+00:00",
+            context="carplay ios podcast app",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary, [candidate.context]), "company_org")
+        tier, reason = module.classify_relevance_tier(candidate.title, candidate.summary, [candidate.context], "9to5Mac")
+        self.assertEqual(tier, "strong", reason)
+        self.assertGreater(module.candidate_detail_priority(candidate), module.candidate_detail_priority(pocket))
+
+    def test_texas_app_store_age_verification_regulation_stays_strong(self):
+        module = load_module()
+        title = "Apple must continue to age-verify users in Texas, says one-sentence ruling"
+        summary = (
+            "A court ruling says Apple must continue age verification for App Store and Apple ID "
+            "users in Texas while litigation over the state law continues."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "regional_regulation")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_pushed_airpods_firmware_is_not_third_party_accessory_story(self):
+        module = load_module()
+        title = "苹果向 AirPods Pro 3 等耳机推送 9A5314b 开发固件，支持 GymKit 健身器材同步心率"
+        summary = (
+            "苹果向 AirPods Pro 3、AirPods 4 和 AirPods Max 推送 9A5314b 开发者测试固件，"
+            "新增 iOS 27 相关功能，并支持 GymKit 健身器材同步心率数据。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertFalse(module.is_third_party_accessory_platform_compatibility_story(title, summary))
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_airpods_beta_firmware_reports_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Releases New AirPods Beta Firmware With iOS 27 Features",
+                "Apple released 9A5314b beta firmware for AirPods Pro 3, AirPods 4, and AirPods Max with iOS 27 features.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple releases new beta firmware for AirPods Pro 3 and more",
+                "Apple's new AirPods beta firmware enables developer testing of upcoming iOS 27 AirPods features.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果向 AirPods Pro 3 等耳机推送 9A5314b 开发固件，支持 GymKit 健身器材同步心率",
+                "苹果向 AirPods Pro 3、AirPods 4 和 AirPods Max 推送 9A5314b 开发者测试固件，并支持 GymKit 健身器材同步心率数据。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "os_app")
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "9to5Mac", "IT之家"})
+
+    def test_airpods_max_condensation_lawsuit_reports_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "AirPods Max Condensation Lawsuit Largely Dismissed by NY Judge",
+                (
+                    "A New York judge largely dismissed an AirPods Max condensation class-action "
+                    "lawsuit, while allowing some warranty-related claims to proceed."
+                ),
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "AirPods Max condensation lawsuit significantly narrowed by judge",
+                (
+                    "A judge significantly narrowed a lawsuit accusing Apple of selling AirPods Max "
+                    "with condensation issues, dismissing most claims but leaving a narrow path forward."
+                ),
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "No sweat: Most claims stricken in AirPods Max condensation lawsuit",
+                (
+                    "Most claims in the AirPods Max condensation lawsuit were struck, with Apple "
+                    "facing only a narrowed set of allegations."
+                ),
+                "AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "legal_antitrust")
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "9to5Mac", "AppleInsider"})
+
+    def test_beats_power_pink_cables_merge_as_official_accessory_event(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Beats Charging Cables Now Available in 'Power Pink'",
+                (
+                    "Apple's Beats charging cables are now available in a new Power Pink color "
+                    "from Apple's online store."
+                ),
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 Beats 充电线新配色 Power Pink 上架：USB-C、USB-C to Lightning 可选",
+                (
+                    "苹果官网上架 Beats 充电线 Power Pink 新配色，提供 USB-C to USB-C、"
+                    "USB-C to Lightning 和 USB-C to Apple Watch 磁力充电线。"
+                ),
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "hardware_market")
+        self.assertEqual(events[0].relevance_tier, "strong")
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+
+    def test_ios_signing_closure_reports_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple stops signing iOS 26.5.1 after critical security fix release",
+                "Apple has stopped signing iOS 26.5.1, preventing iPhone users from downgrading after installing iOS 26.5.2.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果停止签署 iOS26.5/iOS 26.5.1 系统，已升级 26.5.2 的 iPhone 用户无法再降级",
+                "苹果关闭 iOS 26.5 和 iOS 26.5.1 签名验证，已升级到 iOS 26.5.2 的 iPhone 用户无法再降级。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "升了就回不去了！苹果关闭iOS 26.5/26.5.1签名验证",
+                "苹果关闭 iOS 26.5 和 iOS 26.5.1 签名通道，iPhone 用户升级后无法回退到旧系统。",
+                "快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "os_app")
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "IT之家", "快科技"})
+
+    def test_siri_ai_third_party_app_data_feature_stays_strong(self):
+        module = load_module()
+        title = "Siri AI can pull info from third-party apps in the latest developer beta"
+        summary = (
+            "We've been looking out for new features in iOS 27 beta 3, and the latest developer "
+            "beta allows Siri AI to access information from third-party apps. The only examples "
+            "seen so far are pulling in the remaining battery from electric car apps, and it works "
+            "with Tesla via the Tessie app."
+        )
+        facts = [
+            "Siri AI can use third-party apps in iOS 27 beta 3.",
+            "Siri 会先向用户申请应用访问权限，之后调取第三方应用内的数据。",
+            "该功能目前暂不支持特斯拉官方 App。",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "9to5Mac")
+
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "os_app")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_ios_public_beta_timing_reports_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 27 Public Beta is Coming Soon",
+                "Apple is expected to release the first iOS 27 public beta soon, likely after the third or fourth developer beta.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果iOS 27公测版最快下周发布！升级教程收好：iPhone 11及以上都能体验",
+                "苹果 iOS 27 公测版最快下周发布，iPhone 11 及以上机型可通过测试版更新入口体验。",
+                "快科技",
+            ),
+            article_for(
+                module,
+                "iOS 27 公测版即将发布 苹果提醒用户提前做好准备",
+                "苹果提醒用户在 iOS 27 公测版即将发布前做好备份和测试版设置准备。",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "os_app")
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "快科技", "cnBeta"})
+
+    def test_os_public_beta_four_reports_merge_across_platform_scope(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Seeds Fourth Public Betas of iOS 26.6, macOS Tahoe 26.6 and More",
+                "Apple seeded the fourth public betas of iOS 26.6, iPadOS 26.6, macOS Tahoe 26.6, watchOS 26.6, and tvOS 26.6.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果推送 iOS / iPadOS 26.6 第四个公测版，修复 Bug / 改进安全",
+                "苹果推送 iOS 26.6 和 iPadOS 26.6 第四个公测版，主要修复 Bug 并改进安全。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "os_app")
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+
+    def test_public_beta_setup_background_does_not_trigger_age_verification_regulation(self):
+        module = load_module()
+        title = "iOS 27 Public Beta is Coming Soon"
+        summary = (
+            "Apple announced the first iOS 27 public beta will be released in July. "
+            "Users can prepare through beta.apple.com, Apple ID settings, and device setup; "
+            "the support page also mentions family and child safety settings as background, "
+            "and says users can continue after confirming those setup options."
+        )
+
+        self.assertFalse(module.is_direct_apple_regional_platform_regulation_story(title, summary))
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+
+    def test_jp_morgan_apple_stock_target_reports_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Bullish JP Morgan bumps AAPL price target to $345",
+                "J.P. Morgan raised its Apple stock target to $345 while staying bullish despite memory-driven hardware price hikes.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "J.P. Morgan raises Apple stock target despite hardware price hikes",
+                "J.P. Morgan raised AAPL's price target to $345 and said Apple's hardware price hikes should not derail long-term revenue.",
+                "9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "9to5Mac"})
+
+    def test_foldable_iphone_launch_timing_reports_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Foldable iPhone Ultra May Launch After iPhone 18 Pro Models",
+                "Apple's first foldable iPhone may launch after the iPhone 18 Pro models, with preorders possibly delayed until the fourth quarter.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "不会延期发售！果链确认：苹果首款折叠机iPhone Ultra可正常交付",
+                "供应链人士称苹果首款折叠 iPhone Ultra 没有延期，预计 9 月发布后可以正常交付。",
+                "快科技",
+            ),
+            article_for(
+                module,
+                "多位果链企业人士称“没听说”苹果首款折叠屏 iPhone 延期发售，预计 9 月可正常交付",
+                "多位果链企业人士表示没有听说苹果首款折叠屏 iPhone 延期发售，预计 9 月发布并可正常交付。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "快科技", "IT之家"})
+
+    def test_iphone_physical_dimension_rumors_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Weibo leaker says iPhone 18 Pro thickness will be ‘surprising’",
+                (
+                    "Days after materials from Apple supplier Tata surfaced online, Fixed Focus Digital said "
+                    "both the iPhone 18 Pro body and rear camera plateau are thicker by about 2mm, with leaked "
+                    "drop tests and A20 Pro documents."
+                ),
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro Could Be Noticeably Thicker Than iPhone 17 Pro",
+                (
+                    "Fixed Focus Digital says the iPhone 18 Pro aluminum frame and camera housing are set to "
+                    "grow thicker, with overall thickness around 9.9 to 10.9mm and a variable aperture main camera."
+                ),
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro's camera bump could be a little bit thicker",
+                (
+                    "The iPhone 18 Pro will probably be thicker thanks to a more generous camera plateau. "
+                    "The design could be about 2 millimeters thicker than the 2025 release."
+                ),
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro机身或明显增厚 继续采用铝合金中框",
+                "爆料称 iPhone 18 Pro 铝合金中框和后置摄像头平台都将变厚，整体厚度预计增加约 2 毫米，并继续采用铝合金材质。",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "hardware_market")
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "MacRumors", "AppleInsider", "cnBeta"})
+
+    def test_iphone_physical_dimension_events_remerge_after_topic_split(self):
+        module = load_module()
+        leak_article = article_for(
+            module,
+            "Weibo leaker says iPhone 18 Pro thickness will be ‘surprising’",
+            (
+                "Days after materials from Apple supplier Tata surfaced online, Fixed Focus Digital "
+                "doubled down that the iPhone 18 Pro body and rear camera plateau are thicker. "
+                "The stolen Tata files include logic board diagrams, A20 Pro documents, supplier lists, "
+                "and drop-test videos."
+            ),
+            "9to5Mac",
+        )
+        dimension_article = article_for(
+            module,
+            "iPhone 18 Pro Could Be Noticeably Thicker Than iPhone 17 Pro",
+            (
+                "Fixed Focus Digital says the iPhone 18 Pro aluminum frame and camera housing are set "
+                "to grow thicker, with overall thickness around 9.9 to 10.9mm and a variable aperture main camera."
+            ),
+            "MacRumors",
+        )
+
+        self.assertTrue(module.events_should_merge(event_for(module, leak_article), event_for(module, dimension_article)))
+
+    def test_iphone_physical_dimension_title_gets_dedicated_primary_facet(self):
+        module = load_module()
+        facets = module.primary_topic_facets(
+            "Weibo leaker says iPhone 18 Pro thickness will be ‘surprising’",
+            (
+                "Days after Tata supplier files surfaced online, the article says the iPhone 18 Pro "
+                "body and rear camera plateau are thicker by about 2mm."
+            ),
+        )
+
+        self.assertIn("iphone-physical-dimension-rumor", facets)
+        self.assertNotIn("apple-product-data-leak", facets)
+        self.assertNotIn("iphone-logic-board-leak", facets)
+
+    def test_foldable_launch_timing_does_not_merge_with_iphone_thickness_context(self):
+        module = load_module()
+        thickness = article_for(
+            module,
+            "iPhone 18 Pro Could Be Noticeably Thicker Than iPhone 17 Pro",
+            (
+                "The iPhone 18 Pro's aluminum frame and camera housing are both set to grow thicker. "
+                "The article mentions Apple's foldable iPhone launch timing as broader roadmap context."
+            ),
+            "MacRumors",
+        )
+        foldable = article_for(
+            module,
+            "Foldable iPhone Ultra May Launch After iPhone 18 Pro Models",
+            "Apple's first foldable iPhone may launch after the iPhone 18 Pro models, with preorders possibly delayed until the fourth quarter.",
+            "MacRumors",
+        )
+
+        self.assertFalse(module.events_should_merge(event_for(module, thickness), event_for(module, foldable)))
+
+    def test_iphone_logic_board_leak_does_not_merge_with_physical_dimension_rumor(self):
+        module = load_module()
+        logic_board = article_for(
+            module,
+            "iPhone 18 Pro logic board leak reveals A20 Pro and LPDDR6 details",
+            (
+                "Leaked Tata files show the iPhone 18 Pro logic board, A20 Pro package, LPDDR6 memory, "
+                "supplier lists, and component documents. The article mentions separate iPhone 18 Pro "
+                "thickness rumors as background."
+            ),
+            "IT之家",
+        )
+        dimension = article_for(
+            module,
+            "Weibo leaker says iPhone 18 Pro thickness will be ‘surprising’",
+            (
+                "Fixed Focus Digital says the iPhone 18 Pro body and rear camera plateau are thicker by "
+                "about 2mm, with overall thickness around 9.9 to 10.9mm."
+            ),
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([logic_board, dimension])
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+        self.assertFalse(any(logic_board.title in cluster and dimension.title in cluster for cluster in clusters), clusters)
+
+    def test_iphone_data_leak_specs_do_not_bridge_into_physical_dimension_cluster(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro board schematics leak from supplier breach",
+                (
+                    "Leaked Tata files include iPhone 18 Pro logic board diagrams, A20 Pro data sheets, "
+                    "LPDDR6 details, supplier lists, and component documents."
+                ),
+                "快科技",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro logic board leak reveals A20 Pro and LPDDR6 details",
+                "The iPhone 18 Pro logic board leak shows A20 Pro chip packaging, LPDDR6 memory, and component layout.",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "Weibo leaker says iPhone 18 Pro thickness will be ‘surprising’",
+                (
+                    "Fixed Focus Digital says the iPhone 18 Pro body and rear camera plateau are thicker by "
+                    "about 2mm, while mentioning the Tata breach as background."
+                ),
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro Could Be Noticeably Thicker Than iPhone 17 Pro",
+                "The iPhone 18 Pro aluminum frame and camera housing are set to grow thicker, with overall thickness around 9.9 to 10.9mm.",
+                "MacRumors",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2, clusters)
+        self.assertTrue(any(articles[0].title in cluster and articles[1].title in cluster for cluster in clusters), clusters)
+        self.assertTrue(any(articles[2].title in cluster and articles[3].title in cluster for cluster in clusters), clusters)
+
     def test_third_party_charger_with_iphone_compatibility_stays_weak(self):
         module = load_module()
         title = "绿联 25W 磁吸无线充电器发售：适配苹果 iPhone 12-17 系列，139 元"
         summary = "绿联新推出一款 25W 磁吸无线充电器，配 1.5m 编织线，适配 iPhone 12 至 iPhone 17 系列。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_storage_enclosure_with_macos_compatibility_stays_weak(self):
+        module = load_module()
+        title = "华硕推出 ProArt 创梦 40Gbps 移动高速硬盘盒：内嵌智能风扇，569 元"
+        summary = (
+            "华硕推出 ProArt 创梦系列 40Gbps 移动高速硬盘盒，支持 USB4、NVMe/SATA、"
+            "Windows、MacOS 和 Linux，京东售价 569 元。"
+        )
 
         tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
 

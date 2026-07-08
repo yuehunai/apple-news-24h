@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.22.0 - 2026-07-07
+### 1.23.0 - 2026-07-08
 
-- Improved weak filtering for third-party app launches, non-Apple charity or procurement stories, and former-Apple commentary that only mention Apple hardware or platforms.
-- Improved hardware clustering for M6 Mac roadmap rumors, iPhone 18 Pro logic-board and mainboard leaks, and iPhone 18 Pro battery-capacity reports.
-- Kept Broadcom supply-agreement coverage separate from unrelated M-series or iPhone rumor clusters.
-- Updated fallback policy guidance for direct Apple hardware rumors, non-Apple platform availability, charity/procurement context, and former-Apple background.
-- Added regression coverage for these weak-relevance and hardware-clustering boundaries.
+- Improved weak filtering for routine third-party app updates, competitor product launches, broad surveys, market-share reports, and macOS-compatible accessories.
+- Added stronger handling for Apple executive government meetings and regional App Store / Apple ID age-verification regulation.
+- Improved clustering for AirPods / Beats firmware, AirPods Max litigation, official Beats accessories, iOS signing changes, and public beta timing.
+- Tightened iPhone hardware rumor boundaries around foldable launch timing, physical dimensions, logic-board leaks, and supplier/data-leak background.
+- Updated Siri / Apple Intelligence handling and added regression coverage for these relevance and clustering boundaries.
 
 ## What It Does
 
