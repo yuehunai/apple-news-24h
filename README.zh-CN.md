@@ -12,13 +12,13 @@
 
 ## 最新更新
 
-### 1.23.0 - 2026-07-08
+### 1.24.0 - 2026-07-09
 
-- 改进常规第三方应用更新、竞品发布、泛调查 / 市占率报道，以及仅兼容 macOS 的第三方配件等弱相关过滤。
-- 增强 Apple 高管政府会谈、App Store / Apple ID 地区年龄验证监管等直接 Apple 公司或平台动作识别。
-- 改进 AirPods / Beats 固件、AirPods Max 诉讼、官方 Beats 配件、iOS 停签和公测发布时间的跨源聚类。
-- 收紧 iPhone 硬件传闻边界，避免折叠 iPhone 上市时间、iPhone 18 Pro 机身尺寸、逻辑板泄露和供应商 / 数据泄露背景互相误并。
-- 更新 Siri / Apple Intelligence 处理，并增加上述相关性和聚类边界的回归测试。
+- 新增 Apple 高管出席行业 / 商业会议的识别，让 Sun Valley 这类报道保持可收录并能跨来源合并。
+- 改进欧盟 DMA“看门人”上诉、加密 HFS+ 停用、Apple Translate 语言扩展、Apple Wallet 车钥匙支持和 Apple TV 服务更新的跨源聚类。
+- 拆分 Apple TV 艾美奖提名与已购剧集 4K 免费升级，避免两个不同服务动作误并。
+- 收紧第三方游戏多端互通、Apple Watch 教程 / 旧功能、Back to School 或 AirPods 导购、竞品 AI 手机等弱相关过滤。
+- 改进 9to5Mac 文末配件推荐清理、Apple TV 4K 硬件分类、兜底规则说明和回归测试覆盖。
 
 ## 它会做什么
 

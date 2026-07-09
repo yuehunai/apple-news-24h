@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.23.0 - 2026-07-08
+### 1.24.0 - 2026-07-09
 
-- Improved weak filtering for routine third-party app updates, competitor product launches, broad surveys, market-share reports, and macOS-compatible accessories.
-- Added stronger handling for Apple executive government meetings and regional App Store / Apple ID age-verification regulation.
-- Improved clustering for AirPods / Beats firmware, AirPods Max litigation, official Beats accessories, iOS signing changes, and public beta timing.
-- Tightened iPhone hardware rumor boundaries around foldable launch timing, physical dimensions, logic-board leaks, and supplier/data-leak background.
-- Updated Siri / Apple Intelligence handling and added regression coverage for these relevance and clustering boundaries.
+- Added Apple executive event-attendance handling so Sun Valley-style business conference reports stay eligible and merge across sources.
+- Improved clustering for EU DMA gatekeeper appeals, encrypted HFS+ deprecation, Apple Translate language expansion, Apple Wallet car-key support, and Apple TV service updates.
+- Split Apple TV Emmy nomination coverage from purchased TV-show 4K upgrade coverage so separate service actions stay separate.
+- Tightened weak filtering for third-party game cross-platform launches, Apple Watch how-to articles, Back to School or AirPods buying guides, and competitor AI-phone stories.
+- Improved 9to5Mac accessory-recommendation cleanup, Apple TV 4K hardware classification, fallback policy guidance, and regression coverage.
 
 ## What It Does
 

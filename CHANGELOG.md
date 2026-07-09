@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.24.0 - 2026-07-09
+
+- Added Apple executive event-attendance handling so Sun Valley-style business conference reports remain eligible and merge across sources even when attendee lists mention non-Apple companies.
+- Improved cross-source clustering for EU DMA gatekeeper appeals, encrypted HFS+ deprecation, Apple Translate language expansion, Apple Wallet car-key partner support, and Apple TV service-content updates.
+- Split Apple TV Emmy nomination coverage from purchased TV-show 4K upgrade coverage so distinct service actions no longer collapse into one event.
+- Tightened weak filtering for third-party game cross-platform launches, Apple Watch how-to or old-feature articles, Back to School or AirPods buying guides, and competitor AI-phone stories.
+- Improved article-tail cleanup for 9to5Mac-style personal accessory recommendation blocks and classified Apple TV 4K hardware refresh rumors under hardware/product news.
+- Updated fallback policy guidance and regression coverage for executive attendance, Wallet car keys, Apple TV service boundaries, article-tail cleanup, weak third-party noise, and Apple TV hardware classification.
+
 ## 1.23.0 - 2026-07-08
 
 - Improved weak filtering for routine third-party app updates, competitor product launches, non-Apple AI service expansions, broad surveys or market-share reports, and macOS-compatible third-party accessories.

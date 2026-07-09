@@ -6202,6 +6202,323 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
         self.assertEqual(tier, "weak", reason)
 
+    def test_third_party_game_cross_platform_launches_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "腾讯重磅新游！《失控进化》今日上线：PC、iOS、安卓、鸿蒙多端互通",
+                "腾讯开放世界沙盒生存新作《失控进化》全平台公测，支持 PC、iOS、安卓、鸿蒙和平板之间账号数据互通，游戏进度和社交关系可延续。",
+                "快科技",
+            ),
+            (
+                "网易海洋冒险 RPG《遗忘之海》今日公测，PC、安卓、苹果 iOS 数据互通",
+                "网易 Joker 工作室海洋冒险 RPG《遗忘之海》PC 版公测，移动端计划随后上线，相同账号在 PC、iOS、安卓之间数据互通。",
+                "IT之家",
+            ),
+            (
+                "努比亚官宣：全球首款AI智能体手机下周首次亮相",
+                "努比亚将发布 AI 智能体手机，文章提到苹果和 iPhone 只是行业对比，没有 Apple 产品、系统、服务或供应链动作。",
+                "快科技",
+            ),
+        ]
+
+        for title, summary, source in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_apple_buyer_guides_without_new_action_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "Apple Watch has a useful hidden feature for tracking a great healthy habit",
+                "The article explains how to find Time in Daylight data in the Health app, a feature that has existed since iOS 17 and watchOS 10.",
+                "9to5Mac",
+            ),
+            (
+                "When is Apple's 2026 Back to School Offer?",
+                "The article speculates on when Apple's Back to School promotion might return and explains previous offers, without Apple announcing a new promotion.",
+                "MacRumors",
+            ),
+            (
+                "When is Apple releasing new AirPods?",
+                "The article is a buying guide that discusses when customers might see new AirPods hardware and whether they should wait.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_sun_valley_apple_leadership_reports_are_relevant_and_merge(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/08/cook-and-ternus-attend-sun-valley-conference/",
+            title="Cook and Ternus Attend Sun Valley Conference Together",
+            summary=(
+                "Apple CEO Tim Cook and hardware engineering chief John Ternus attended the "
+                "Allen & Co. Sun Valley Conference together, alongside other technology and media executives "
+                "including Amazon's Jeff Bezos, OpenAI CEO Sam Altman, Meta CEO Mark Zuckerberg, and "
+                "Alphabet CEO Sundar Pichai."
+            ),
+            feed_time_raw="2026-07-08T09:00:00-07:00",
+            context="Apple leadership Sun Valley conference Tim Cook John Ternus hardware strategy",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        articles = [
+            article_for(
+                module,
+                candidate.title,
+                candidate.summary,
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "John Ternus takes his place at the Sun Valley billionaire camp",
+                "Apple hardware chief John Ternus appeared at the 2026 Allen & Co. Sun Valley retreat with Tim Cook and other technology executives.",
+                "AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "AppleInsider"})
+
+    def test_foldable_iphone_supply_shortage_is_hardware_not_os_app(self):
+        module = load_module()
+        title = "iPhone X一机难求再度重演！苹果折叠屏供货严重不足"
+        summary = (
+            "苹果首款折叠屏iPhone的上市节奏，可能正在重演2017年iPhone X的历史。"
+            "分析师郭明錤在最新产业调查中指出，由于初期产能极为有限，该机型大概率无法与 iPhone 18 Pro 系列同步开售。"
+            "2026年下半年的组装出货量预计仅约700万至800万部，其中第三季度出货量低至50万至100万部。"
+            "郭明錤将这一状况与2017年的iPhone X类比，当年 iPhone X 因 OLED 全面屏与 Face ID 等新技术导致制造难度极高。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_same_mac_market_share_report_merges_despite_memory_price_context(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple the only bright spot in a declining PC market, savaged by RAM price hikes",
+                (
+                    "Apple gained ground in the PC market even as global shipments fell. "
+                    "An estimated 6.7 million Macs shipped during the quarter, increasing Apple's shipments "
+                    "10.1% year over year and lifting its PC market share from 8.5% to 9.9%."
+                ),
+                "AppleInsider",
+                [
+                    "Apple's response: AI data centers drove extraordinary memory and storage demand and unusually fast component-cost increases."
+                ],
+            ),
+            article_for(
+                module,
+                "内存价格飙升冲击全球PC市场 苹果Mac成为唯一亮点",
+                (
+                    "全球 PC 市场在连续九个季度增长之后首次出现下滑，但苹果 Mac 逆势扩张。"
+                    "2026 年第二季度全球 PC 出货量同比下降 4.9%，总计约 6820 万台；"
+                    "苹果 Mac 出货量同比增长 10.1%，市场份额从 8.5% 升至 9.9%。"
+                ),
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "cnBeta"})
+
+    def test_memory_supplier_sourcing_merges_despite_price_pressure_context(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Begins Testing Controversial Chinese Memory Chips",
+                (
+                    "Apple is testing DRAM memory chips from China's state-backed ChangXin Memory Technologies. "
+                    "The report says Apple previously discussed sourcing memory from CXMT and YMTC, with approval still uncertain."
+                ),
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果传测试长鑫内存 纾困涨价危机却难治本",
+                (
+                    "为应对全球内存价格飙升带来的成本压力，苹果公司开始测试来自长鑫存储（CXMT）的 DRAM 内存芯片。"
+                    "如果测试达标并获得美国政府放行，相关芯片未来可能进入部分 iPhone。"
+                ),
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "cnBeta"})
+
+    def test_direct_apple_wallet_car_key_partner_reports_are_strong_and_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 27 Code Points to Car Key Support for Lucid and Xiaomi",
+                "Code in iOS 27 beta 3 suggests Apple is preparing to add Apple Wallet car key support for Lucid and Xiaomi vehicles.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iOS 27 hints at Apple Wallet car key support for two new automakers",
+                "Apple Wallet car key references in iOS 27 beta 3 point to new Lucid and Xiaomi support for iPhone and Apple Watch.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 现踪迹：iPhone 17 等用户未来可用 Apple 车钥匙解锁小米 SU7/YU7 汽车",
+                "iOS 27 测试版代码出现小米和 Lucid 车企识别代码，意味着 Apple Wallet 数字车钥匙将适配这些车型。",
+                "IT之家",
+            ),
+        ]
+
+        for article in articles:
+            self.assertEqual(article.relevance_tier, "strong", article.relevance_reason)
+            self.assertEqual(article.event_kind, "wallet_feature")
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "9to5Mac", "IT之家"})
+
+    def test_cross_language_platform_feature_reports_merge_for_same_action(self):
+        module = load_module()
+        cases = [
+            [
+                article_for(
+                    module,
+                    "Apple Loses EU Fight Over App Store Gatekeeper Label",
+                    "The EU General Court rejected Apple's appeal and upheld the European Commission decision designating iOS and App Store as gatekeeper core platform services under the DMA.",
+                    "MacRumors",
+                ),
+                article_for(
+                    module,
+                    "欧盟法院驳回苹果上诉，维持 App Store 和 iOS“看门人”认定",
+                    "欧盟普通法院驳回苹果对 DMA 相关认定的上诉，维持将 iOS 和 App Store 认定为看门人核心平台服务。",
+                    "IT之家",
+                ),
+                article_for(
+                    module,
+                    "欧盟驳回苹果上诉 确认其App Store和iOS为“守门人”平台",
+                    "卢森堡普通法院驳回苹果关于 App Store 和 iOS 被认定为守门人的诉讼请求。",
+                    "cnBeta",
+                ),
+            ],
+            [
+                article_for(
+                    module,
+                    "Apple to Drop Support for Encrypted Mac OS Extended Drives Next Year",
+                    "Apple says macOS 28 will no longer support encrypted Mac OS Extended or HFS+ volumes and users should migrate to APFS.",
+                    "MacRumors",
+                ),
+                article_for(
+                    module,
+                    "Encrypted Mac OS Extended drive format support dies in macOS 28",
+                    "Apple confirmed encrypted HFS+ drive support ends in macOS 28, while macOS 26 will warn affected users.",
+                    "AppleInsider",
+                ),
+                article_for(
+                    module,
+                    "苹果宣布 macOS 28 将不再支持“Mac OS 扩展（日志式，加密）”文件系统格式",
+                    "苹果宣布 macOS 28 起不再支持 Mac OS 扩展（日志式，加密）格式，建议用户迁移到 APFS。",
+                    "IT之家",
+                ),
+            ],
+            [
+                article_for(
+                    module,
+                    "iOS 27 adds nine new languages and accents to Apple Translate",
+                    "Apple Translate in iOS 27 adds nine languages and accents, bringing total support to 30 languages.",
+                    "9to5Mac",
+                ),
+                article_for(
+                    module,
+                    "新增支持粤语：苹果 iOS 27 版翻译应用总支持语言数量达 30 种",
+                    "苹果 iOS 27 版翻译应用新增支持 9 种语言和方言，总支持语言数量达到 30 种。",
+                    "IT之家",
+                ),
+            ],
+        ]
+
+        for articles in cases:
+            with self.subTest(title=articles[0].title):
+                events = module.cluster_articles(articles)
+                self.assertEqual(len(events), 1)
+                self.assertEqual({article.source for article in events[0].articles}, {article.source for article in articles})
+
+    def test_apple_tv_emmy_and_purchased_4k_upgrade_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple TV Earns Record 87 Emmy Nominations for 2026",
+                "Apple TV received a record 87 Emmy nominations for the 78th Primetime Emmy Awards, led by Widow's Bay and Pluribus.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple TV just landed a record 87 Emmy nominations",
+                "Apple TV earned a record number of Emmy nominations across its original shows.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "TV show purchases on Apple TV are finally getting free 4K upgrades",
+                "Apple is extending its free 4K upgrade policy to select purchased TV shows in the Apple TV app for the first time.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "苹果 Apple TV 已购剧集开始免费升级 4K",
+                "Apple TV Store 开始把已购内容免费升级到 4K 的政策从电影扩展到部分电视剧和节目。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        clusters = [{article.source for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 2)
+        self.assertIn({"MacRumors", "9to5Mac"}, clusters)
+        self.assertIn({"AppleInsider", "IT之家"}, clusters)
+
+    def test_home_app_ai_icloud_subscription_reports_merge_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Says These iOS 27 Features Require $9.99/Month Subscription",
+                "iOS 27 includes new Apple Intelligence features for compatible cameras in Apple's Home app, but only with an iCloud+ plan with at least 2TB of storage.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "I'm disappointed Apple will charge for AI camera features in the Home app",
+                "Apple revealed that the new AI camera features in the Home app require a 2TB iCloud+ subscription for iOS, iPadOS, and macOS 27 users.",
+                "9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "9to5Mac"})
+
     def test_third_party_mac_touch_monitor_launch_stays_weak(self):
         module = load_module()
         title = "制造商 Alogic 推出一系列苹果 Mac 专用触控显示器产品：协作大屏、双屏便携屏"
@@ -10308,6 +10625,48 @@ class RelevanceRuleTests(unittest.TestCase):
         events = module.cluster_articles([filing, interpretation])
         self.assertEqual(len(events), 1)
         self.assertEqual({article.title for article in events[0].articles}, {filing.title, interpretation.title})
+
+    def test_wallet_car_key_story_is_not_airdrop_vulnerability(self):
+        module = load_module()
+        text = (
+            "iOS 27 code points to Apple Wallet car key support for Lucid and Xiaomi. "
+            "Apple car key lets drivers use iPhone or Apple Watch to lock, unlock, and start a car, "
+            "and keys can be shared with Messages, Mail, and AirDrop. The implementation uses NFC and UWB secure communication."
+        )
+
+        self.assertTrue(module.is_apple_wallet_car_key_partner_support_story("iOS 27 car key support", text))
+        self.assertFalse(module.is_airdrop_vulnerability_story(text))
+        self.assertEqual(module.detect_event_kind("iOS 27 car key support", text), "wallet_feature")
+        tier, reason = module.classify_relevance_tier("iOS 27 car key support", text)
+        self.assertEqual(tier, "strong")
+        self.assertIn("car key", reason.lower())
+
+    def test_carplay_accessory_recommendations_are_cut_after_article_body(self):
+        module = load_module()
+        html = (
+            "<article><p>Apple is preparing Apple Wallet car key support for Lucid and Xiaomi in iOS 27.</p>"
+            "<p>Specific compatible car models and launch timing are not yet confirmed.</p>"
+            "<h2>My favorite CarPlay accessories&nbsp;</h2>"
+            "<ul><li>iOttie Easy One Touch iPhone Car Mount</li>"
+            "<li>Belkin MagSafe-compatible Car Charger for iPhone</li></ul></article>"
+        )
+
+        cleaned = module.strip_tags(module.remove_noise_blocks(html))
+        self.assertIn("Apple Wallet car key support", cleaned)
+        self.assertNotIn("iOttie Easy One Touch", cleaned)
+        self.assertNotIn("Belkin MagSafe-compatible", cleaned)
+
+    def test_apple_tv_4k_hardware_refresh_is_hardware_category(self):
+        module = load_module()
+        title = "Everything Coming in the 2026 Apple TV 4K"
+        summary = (
+            "Apple's next Apple TV 4K set-top box is expected to launch in 2026 with an updated chip, "
+            "a newer wireless chip, and support for Siri AI features after iOS 27."
+        )
+
+        self.assertTrue(module.is_apple_tv_hardware_story(f"{title} {summary}"))
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
 
 
 if __name__ == "__main__":
