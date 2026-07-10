@@ -10510,6 +10510,61 @@ class RelevanceRuleTests(unittest.TestCase):
         events = module.cluster_articles([article])
         self.assertEqual(events[0].relevance_tier, "weak", events[0].relevance_reason)
 
+    def test_current_apple_store_phrase_does_not_trigger_former_apple_commentary(self):
+        module = load_module()
+        title = "苹果定价创新高！iPhone Ultra起步价突破1.5万元：贵过MacBook Pro"
+        summary = (
+            "快科技7月10日消息，有博主发文爆料，苹果首款折叠屏手机将于9月份推出，"
+            "起售价定为2300美元，折合人民币约为15600元。该博主表示，iPhone Ultra的定价已与"
+            "MacBook Pro相当，但它并非市面上最好的折叠屏手机。按照2300美元的起售价计算，"
+            "iPhone Ultra的价格已刷新苹果手机的定价纪录，几乎是iPhone 17 Pro Max（1199美元）的两倍。"
+            "即便与苹果自家笔记本产品线相比，这一价格也超过了多款MacBook Pro；"
+            "目前苹果官网在售的14英寸M5 MacBook Pro定价为1999美元，仍低于iPhone Ultra的起售价。"
+        )
+
+        self.assertFalse(module.is_former_apple_figure_commentary_without_new_apple_action(title, summary))
+        self.assertTrue(module.is_future_apple_product_price_forecast_story(summary, title))
+        article = article_for(module, title, summary, "快科技")
+        self.assertEqual(article.relevance_tier, "strong", article.relevance_reason)
+
+    def test_future_iphone_price_forecast_has_price_boundary_facet(self):
+        module = load_module()
+        title = "苹果定价创新高！iPhone Ultra起步价突破1.5万元：贵过MacBook Pro"
+        summary = (
+            "快科技7月10日消息，有博主发文爆料，苹果首款折叠屏手机将于9月份推出，"
+            "起售价定为2300美元，折合人民币约为15600元。按照2300美元的起售价计算，"
+            "iPhone Ultra的价格已刷新苹果手机的定价纪录，几乎是iPhone 17 Pro Max（1199美元）的两倍。"
+        )
+        flatness = article_for(
+            module,
+            "iPhone Ultra平整度看齐OPPO Find N6：折痕近乎无感",
+            (
+                "博主定焦数码爆料，苹果首款折叠屏iPhone Ultra的屏幕平整度将达到与OPPO Find N6相当的水准。"
+                "iPhone Ultra折叠屏的产业链与OPPO Find N6存在高度重合，目前已正式启动量产，新品将于9月正式发布。"
+            ),
+            "快科技",
+        )
+        price = article_for(module, title, summary, "快科技")
+
+        facets = module.topic_facets_from_text(f"{title} {summary}")
+        self.assertIn("apple-product-price-increase", facets)
+        self.assertIn("apple-future-product-price-forecast", facets)
+        self.assertFalse(module.should_merge(price, event_for(module, flatness)))
+        self.assertFalse(module.should_merge(flatness, event_for(module, price)))
+
+    def test_chinese_former_apple_commentary_without_new_action_stays_weak(self):
+        module = load_module()
+        title = "前苹果员工称 AI 助手选择会影响用户习惯"
+        summary = (
+            "前苹果员工在一篇专栏中表示，用户选择 AI 助手会影响长期使用习惯。文章提到 iPhone、"
+            "Mac 和 Apple Watch 等产品作为历史案例，但没有报道新的 Apple 产品、服务、政策、发布、"
+            "监管文件或高管动作。"
+        )
+
+        self.assertTrue(module.is_former_apple_figure_commentary_without_new_apple_action(title, summary))
+        article = article_for(module, title, summary, "9to5Mac")
+        self.assertEqual(article.relevance_tier, "weak", article.relevance_reason)
+
     def test_m6_chip_roadmap_merges_across_language_sources(self):
         module = load_module()
         english = article_for(
@@ -10667,6 +10722,397 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertTrue(module.is_apple_tv_hardware_story(f"{title} {summary}"))
         self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
         self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_apple_tv_lineup_and_trailer_are_separate_service_events(self):
+        module = load_module()
+        comic_macrumors = article_for(
+            module,
+            "Apple TV Taking Over Comic-Con's Hall H for the First Time With Widow's Bay, Silo and More",
+            (
+                "Apple TV+ announced a major San Diego Comic-Con Hall H lineup with panels for Silo, "
+                "Dark Matter, For All Mankind, Monarch, and the new series Widow's Bay."
+            ),
+            "MacRumors",
+        )
+        comic_9to5 = article_for(
+            module,
+            "Apple TV+ sets major Comic-Con lineup with Silo, Dark Matter, Widow's Bay, more",
+            (
+                "Apple TV+ will bring Silo, Dark Matter, For All Mankind, Monarch, and Widow's Bay "
+                "to San Diego Comic-Con as part of a Hall H panel lineup."
+            ),
+            "9to5Mac",
+        )
+        snoopy = article_for(
+            module,
+            "Apple TV+ shares first trailer for There's No Place Like Home, Snoopy",
+            "Apple TV+ shared the first trailer for the new Peanuts special There's No Place Like Home, Snoopy.",
+            "9to5Mac",
+        )
+
+        self.assertEqual(module.detect_event_kind(comic_9to5.title, comic_9to5.summary), "service_content")
+        self.assertEqual(module.detect_event_kind(snoopy.title, snoopy.summary), "service_content")
+        events = module.cluster_articles([comic_macrumors, comic_9to5, snoopy])
+        self.assertEqual(len(events), 2)
+        comic_events = [event for event in events if any("Comic-Con" in article.title for article in event.articles)]
+        self.assertEqual(len(comic_events), 1)
+        self.assertEqual({article.source for article in comic_events[0].articles}, {"MacRumors", "9to5Mac"})
+        snoopy_events = [event for event in events if any("Snoopy" in article.title for article in event.articles)]
+        self.assertEqual(len(snoopy_events), 1)
+        self.assertEqual({article.source for article in snoopy_events[0].articles}, {"9to5Mac"})
+
+    def test_apple_tv_4k_chip_and_networking_roadmap_is_hardware(self):
+        module = load_module()
+        title = "苹果 2026 款 Apple TV 4K 前瞻：A17 Pro 芯片、支持 Siri AI 和 Wi-Fi 7"
+        summary = (
+            "苹果有望发布 2026 款 Apple TV 4K，升级 A17 Pro 芯片，支持 Apple Intelligence "
+            "和 Siri AI，并可能搭载 N1 网络芯片，引入 Wi-Fi 7、蓝牙 6.0、Thread 和新 Siri Remote。"
+        )
+
+        self.assertTrue(module.is_apple_tv_hardware_story(f"{title} {summary}"))
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_tv_mlb_schedule_merges_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Apple TV and MLB Release August Schedule for Friday Night Baseball",
+            "Apple and Major League Baseball released the August schedule for Friday Night Baseball on Apple TV+.",
+            "MacRumors",
+        )
+        nine = article_for(
+            module,
+            "Apple TV unveils August Friday Night Baseball schedule",
+            "Apple TV+ announced August games for Friday Night Baseball, with MLB matchups streaming on Apple TV+.",
+            "9to5Mac",
+        )
+        newsroom = article_for(
+            module,
+            "Apple and Major League Baseball announce August Friday Night Baseball schedule",
+            "Apple and Major League Baseball announced the August Friday Night Baseball schedule for Apple TV+ subscribers.",
+            "Apple Newsroom",
+        )
+
+        events = module.cluster_articles([macrumors, nine, newsroom])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "9to5Mac", "Apple Newsroom"})
+
+    def test_siri_ai_settlement_merges_across_sources(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "'Siri AI' Lawsuit Update: Apple to Pay Owners of These iPhone Models",
+            (
+                "Apple agreed to pay $250 million to settle a U.S. class action lawsuit over Siri AI's delayed launch. "
+                "Eligible iPhone 15 Pro and iPhone 16 owners can receive $25 per device, or up to $95 if fewer claims are filed."
+            ),
+            "MacRumors",
+        )
+        mydrivers = article_for(
+            module,
+            "Siri AI功能虚假宣传！苹果要支付17亿天价赔偿：iPhone 16/15 Pro每人645元",
+            (
+                "苹果已达成2.5亿美元集体诉讼和解协议，以解决 iPhone 16 系列宣传的 Siri AI 功能延迟上线纠纷。"
+                "本次补偿面向美国境内购入 iPhone 15 Pro、iPhone 15 Pro Max 以及 iPhone 16 全系机型的消费者。"
+            ),
+            "快科技",
+        )
+
+        events = module.cluster_articles([macrumors, mydrivers])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "快科技"})
+
+    def test_india_tariff_exemption_merges_without_absorbing_iphone_costs(self):
+        module = load_module()
+        tariff_articles = [
+            article_for(
+                module,
+                "Apple's Manufacturing in India Gets Boost From New Tariff Exemptions",
+                "India removed import duties of 7.5% and 5% on smartphone and electronics parts, helping Apple lower iPhone manufacturing costs through March 31, 2029.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone manufacturing in India gets a tariff boost",
+                "India removed tariffs on select parts used in smartphones and other devices, including wireless charging modules and lithium-ion battery cells, helping Apple suppliers.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "印度取消部分手机及电子设备零部件进口关税，利好苹果、小米等厂商",
+                "印度已取消部分手机及其他电子设备零部件的进口关税，免除了此前 7.5% 和 5% 的税率，有望帮助苹果进一步降低制造成本。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "印度取消部分电子产品及智能手机零部件进口关税",
+                "印度政府取消部分用于制造手机及其他电子设备的进口关税，预计将使苹果、小米等在印布局的电子厂商获益，有效期至 2029 年 3 月 31 日。",
+                "cnBeta",
+            ),
+        ]
+        cost_article = article_for(
+            module,
+            "iPhone 18 Pro Max component costs could jump by nearly $300",
+            "Counterpoint estimates that NAND, DRAM, a 2nm SoC, and new packaging will push the iPhone 18 Pro Max bill of materials much higher.",
+            "9to5Mac",
+        )
+
+        self.assertEqual(tariff_articles[-1].relevance_tier, "strong", tariff_articles[-1].relevance_reason)
+        events = module.cluster_articles([*tariff_articles, cost_article])
+        tariff_events = [event for event in events if any("tariff" in article.title.lower() or "关税" in article.title for article in event.articles)]
+        self.assertEqual(len(tariff_events), 1)
+        self.assertEqual({article.source for article in tariff_events[0].articles}, {"MacRumors", "9to5Mac", "IT之家", "cnBeta"})
+        cost_events = [event for event in events if any("component costs" in article.title for article in event.articles)]
+        self.assertEqual(len(cost_events), 1)
+        self.assertEqual({article.source for article in cost_events[0].articles}, {"9to5Mac"})
+
+    def test_prismml_on_device_ai_story_is_strong_software_and_merges(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "Apple Exploring Ways to Run Much Larger AI Models Directly on iPhones",
+            "Apple is exploring PrismML compression technology to run much larger Apple Intelligence models directly on iPhones.",
+            "MacRumors",
+        )
+        ithome = article_for(
+            module,
+            "已在 iPhone 17 Pro 上完整运行 Qwen 3.6，消息称 PrismML 模型 AI 压缩技术被苹果看中",
+            (
+                "The Information 报道称苹果公司正接洽 PrismML 初创公司，评估在 iPhone 上直接运行更大规模 AI 模型的可行性。"
+                "PrismML 的 1-bit 模型压缩技术可将模型体积压缩至全精度版本的 1/14，内存占用降低超 90%。"
+            ),
+            "IT之家",
+        )
+
+        self.assertEqual(ithome.relevance_tier, "strong", ithome.relevance_reason)
+        self.assertEqual(ithome.category, "software_systems")
+        events = module.cluster_articles([macrumors, ithome])
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+
+    def test_on_device_ai_model_story_does_not_merge_with_wallet_id_event(self):
+        module = load_module()
+        wallet = article_for(
+            module,
+            "Apple Says iPhone Driver's Licenses Will Expand to These 6 U.S. States",
+            (
+                "In select U.S. states, residents can add a driver's license or state ID "
+                "to the Apple Wallet app on the iPhone and Apple Watch. Apple Wallet IDs "
+                "are accepted at TSA checkpoints in more than 250 airports."
+            ),
+            "MacRumors",
+        )
+        prism_9to5 = article_for(
+            module,
+            "Apple interested in startup that runs giant AI models on iPhone without servers",
+            (
+                "The startup PrismML said it has shrunk down Qwen 3.6, an open-source model "
+                "with 27 billion parameters, so it can run directly on iPhone without servers."
+            ),
+            "9to5Mac",
+        )
+        prism_macrumors = article_for(
+            module,
+            "Apple Exploring Ways to Run Much Larger AI Models Directly on iPhones",
+            "Apple is exploring PrismML compression technology to run much larger Apple Intelligence models directly on iPhones.",
+            "MacRumors",
+        )
+
+        self.assertEqual(prism_9to5.relevance_tier, "strong", prism_9to5.relevance_reason)
+        self.assertIn("apple-on-device-ai-model-compression", module.primary_topic_facets(prism_9to5.title, prism_9to5.summary))
+        self.assertFalse(module.should_merge(prism_9to5, event_for(module, wallet)))
+        events = module.cluster_articles([wallet, prism_9to5, prism_macrumors])
+        wallet_events = [event for event in events if any("Driver's Licenses" in article.title for article in event.articles)]
+        prism_events = [event for event in events if any("PrismML" in article.summary or "giant AI models" in article.title for article in event.articles)]
+        self.assertEqual(len(wallet_events), 1)
+        self.assertEqual({article.source for article in wallet_events[0].articles}, {"MacRumors"})
+        self.assertEqual(len(prism_events), 1)
+        self.assertEqual({article.source for article in prism_events[0].articles}, {"9to5Mac", "MacRumors"})
+
+    def test_iphone_18_pro_max_weight_and_component_costs_merge_separately(self):
+        module = load_module()
+        weight_sources = [
+            article_for(
+                module,
+                "iPhone 18 Pro Max Said to Be Thicker and Heavier Than Predecessor",
+                "Ice Universe claims the iPhone 18 Pro Max will be around 9mm thick and weigh about 240 grams because of a larger battery.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Rumored iPhone 18 Pro Max specs point to Apple's heaviest iPhone in years",
+                "A new leak says the iPhone 18 Pro Max could be heavier and larger, with a 5,500 mAh battery and weight around 240 grams.",
+                "9to5Mac",
+            ),
+        ]
+        cost_sources = [
+            article_for(
+                module,
+                "iPhone 18 Pro Max component costs could jump by nearly $300",
+                "Counterpoint estimates that NAND, DRAM, a 2nm SoC, and new packaging will push the iPhone 18 Pro Max bill of materials much higher.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Price rises certain as iPhone 18 Pro Max component costs soar",
+                "Memory and storage prices are driving up iPhone 18 Pro Max component costs, with NAND above $250 and combined DRAM and NAND about $400.",
+                "AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles([*weight_sources, *cost_sources])
+        weight_events = [event for event in events if any("heavier" in article.title.lower() or "heaviest" in article.title.lower() for article in event.articles)]
+        cost_events = [event for event in events if any("component costs" in article.title.lower() or "costs soar" in article.title.lower() for article in event.articles)]
+        self.assertEqual(len(weight_events), 1)
+        self.assertEqual({article.source for article in weight_events[0].articles}, {"MacRumors", "9to5Mac"})
+        self.assertEqual(len(cost_events), 1)
+        self.assertEqual({article.source for article in cost_events[0].articles}, {"9to5Mac", "AppleInsider"})
+        self.assertEqual(len(events), 2)
+
+    def test_android_memory_market_commentary_stays_weak_after_event_refresh(self):
+        module = load_module()
+        article = article_for(
+            module,
+            "Memory prices are bad news for Android brands but may help Apple",
+            (
+                "Omdia says memory costs have become a serious burden for Android smartphones below $400, "
+                "with that market segment declining more than 22% year over year. The article argues that "
+                "higher Android prices could make entry-level iPhones look more appealing, but it does not "
+                "report a new Apple shipment, production, price, or supplier action."
+            ),
+            "9to5Mac",
+        )
+
+        self.assertEqual(article.relevance_tier, "weak", article.relevance_reason)
+        events = module.cluster_articles([article])
+        self.assertEqual(events[0].relevance_tier, "weak", events[0].relevance_reason)
+
+    def test_third_party_ipad_stylus_is_weak_without_apple_action(self):
+        module = load_module()
+        title = "纸张、iPad 皆可书写：ELECOM 联手 Zebra 推出 STYLUS 2WAY 双功能笔"
+        summary = (
+            "日本硬件制造商 ELECOM 联手文具制造商 Zebra 推出 STYLUS 2WAY 笔。"
+            "这一第三方设备采用独特结构设计，在纸张和苹果 iPad 平板电脑上均可书写，"
+            "并支持磁吸固定和 7 小时续航。"
+        )
+
+        self.assertTrue(module.is_third_party_accessory_platform_compatibility_story(title, summary))
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_pencil_patent_is_not_downgraded_as_third_party_stylus(self):
+        module = load_module()
+        title = "苹果 Apple Pencil 新专利获批：“预见”手写笔姿态，支持旋转交互"
+        summary = (
+            "苹果一项 Apple Pencil 新专利获批，可在触控笔接近屏幕前预判姿态，"
+            "并支持旋转交互和更细粒度的输入控制。"
+        )
+
+        self.assertFalse(module.is_third_party_accessory_platform_compatibility_story(title, summary))
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_conflicting_discovery_summary_does_not_override_detail_topic(self):
+        module = load_module()
+        cost_title = "A20 Pro、存储是主因！iPhone 18 Pro Max硬件成本暴涨2000元：苹果还要混用TLC、QLC"
+        cost_summary = (
+            "Counterpoint 预计 iPhone 18 Pro Max 的 12GB+1TB 顶配版本综合硬件成本"
+            "相比上一代上涨近 300 美元，主要来自 NAND、DRAM 和 A20 Pro 芯片成本。"
+        )
+        signing_discovery_summary = (
+            "Apple has stopped signing several older versions of iOS for legacy iPhone and iPad models, "
+            "cutting off paths to reinstall or downgrade affected software."
+        )
+        wallet_title = "Apple Says iPhone Driver's Licenses Will Expand to These 6 U.S. States"
+        wallet_summary = (
+            "In select U.S. states, residents can add their driver's license or state ID to the Apple Wallet app "
+            "on the iPhone and Apple Watch, then use it to display proof of identity or age."
+        )
+        foldable_discovery_summary = (
+            "苹果首款折叠屏手机 iPhone Ultra 白色版机模亮相，传闻搭载 A20 Pro 芯片、12GB 内存，"
+            "首批产能可能紧张。"
+        )
+
+        self.assertTrue(
+            module.discovery_text_conflicts_with_detail_topic(
+                cost_title,
+                cost_summary,
+                signing_discovery_summary,
+            )
+        )
+        self.assertEqual(
+            module.safe_combine_detail_and_discovery_summary(
+                cost_title,
+                cost_summary,
+                signing_discovery_summary,
+            ),
+            cost_summary,
+        )
+        self.assertTrue(
+            module.discovery_text_conflicts_with_detail_topic(
+                wallet_title,
+                wallet_summary,
+                foldable_discovery_summary,
+            )
+        )
+        self.assertEqual(
+            module.safe_context_for_detail_article(False, wallet_title, wallet_summary, foldable_discovery_summary),
+            "",
+        )
+
+    def test_wallet_drivers_license_has_digital_id_topic_boundary(self):
+        module = load_module()
+        title = "Apple Says iPhone Driver's Licenses Will Expand to These 6 U.S. States"
+        summary = (
+            "In select U.S. states, residents can add their driver's license or state ID to the Apple Wallet app "
+            "on the iPhone and Apple Watch, then use it to display proof of identity or age."
+        )
+
+        facets = module.topic_boundary_facets_for_text(title, summary)
+
+        self.assertIn("apple-wallet-digital-id", facets)
+
+    def test_incompatible_background_facts_are_filtered_from_primary_event(self):
+        module = load_module()
+        title = "关键零部件免税：苹果印度制造 iPhone 成本直线下降"
+        summary = (
+            "印度取消用于制造智能手机及其他电子产品的多种零部件进口关税，"
+            "此前 7.5% 和 5% 的税率将被免除，政策预计持续至 2029 年 3 月 31 日。"
+        )
+        facts = [
+            "报道称这些关税豁免政策有效期将持续至2029年3月31日，预计将使包括苹果在内的多家手机制造商受益。",
+            "泄露内容涵盖iPhone 18 Pro系列的数百种零部件明细及供应商清单、主板设计图纸、A20 Pro芯片数据手册，以及工厂内拍摄的新机跌落测试视频。",
+        ]
+
+        filtered = module.filter_key_facts_for_primary_topic(title, summary, facts)
+
+        self.assertEqual(filtered, [facts[0]])
+
+    def test_hardware_rumor_supporting_facts_are_not_filtered(self):
+        module = load_module()
+        title = "A20 Pro、存储是主因！iPhone 18 Pro Max硬件成本暴涨2000元：苹果还要混用TLC、QLC"
+        summary = (
+            "Counterpoint 预计 iPhone 18 Pro Max 的 12GB+1TB 顶配版本综合硬件成本"
+            "相比上一代上涨近 300 美元。"
+        )
+        facts = [
+            "同规格256GB NAND闪存的采购成本涨幅达到了80%至90%，占这次整机成本增量的最大比例。",
+            "iPhone 18 Pro全系列预计都会搭载台积电独家2nm工艺制程打造的A20 Pro芯片，单片晶圆报价接近3万美元。",
+        ]
+
+        self.assertEqual(module.filter_key_facts_for_primary_topic(title, summary, facts), facts)
+
+    def test_macrumors_political_forum_notice_is_not_key_fact(self):
+        module = load_module()
+        notice = (
+            "Note: Due to the political or social nature of the discussion regarding this topic, "
+            "the discussion thread is located in our Political News forum."
+        )
+
+        self.assertTrue(module.fact_noise(notice))
 
 
 if __name__ == "__main__":

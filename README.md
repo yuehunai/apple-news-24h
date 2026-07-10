@@ -12,13 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.24.0 - 2026-07-09
+### 1.25.0 - 2026-07-10
 
-- Added Apple executive event-attendance handling so Sun Valley-style business conference reports stay eligible and merge across sources.
-- Improved clustering for EU DMA gatekeeper appeals, encrypted HFS+ deprecation, Apple Translate language expansion, Apple Wallet car-key support, and Apple TV service updates.
-- Split Apple TV Emmy nomination coverage from purchased TV-show 4K upgrade coverage so separate service actions stay separate.
-- Tightened weak filtering for third-party game cross-platform launches, Apple Watch how-to articles, Back to School or AirPods buying guides, and competitor AI-phone stories.
-- Improved 9to5Mac accessory-recommendation cleanup, Apple TV 4K hardware classification, fallback policy guidance, and regression coverage.
+- Added stricter service/content boundaries for Apple TV sports schedules, Comic-Con lineups, trailers, Siri AI settlements, India tariff manufacturing stories, and on-device AI model compression so high-volume days keep separate event boundaries.
+- Improved hardware rumor clustering for iPhone battery, weight, component-cost, foldable iPhone, iPhone Ultra pricing, display flatness, mockup, and production stories so same-product rumors split by concrete Apple action instead of broad product family.
+- Fixed Chinese former-Apple background detection so ordinary phrases like `目前苹果官网` no longer demote direct Apple hardware pricing reports while real former-Apple staff commentary remains `weak`.
+- Tightened future Apple product price forecast detection to require clear price or starting-price anchors and avoid contaminating render, data-leak, panel, or supply-chain events.
+- Updated fallback policy documentation and expanded regression coverage for deferred-event recovery, third-party accessory filtering, source-tail cleanup, service/content merges, and hardware rumor boundaries.
+- Kept live crawl coverage stable in validation while preserving the recent performance target, with the repaired crawler moving the iPhone Ultra price rumor from `deferred_events` into `events`.
 
 ## What It Does
 

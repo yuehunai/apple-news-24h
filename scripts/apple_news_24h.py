@@ -794,11 +794,24 @@ GENERIC_SERVICE_CONTENT_MERGE_TOKENS = GENERIC_MERGE_TOKENS | {
 SERVICE_CONTENT_TOPIC_FACETS = {
     "apple-arcade",
     "apple-music",
+    "apple-music-top-artists",
     "apple-tv-content",
+    "apple-tv-content-event-lineup",
+    "apple-tv-content-trailer",
     "apple-tv-emmy-nominations",
+    "apple-tv-sports-schedule",
     "apple-tv-purchase-4k-upgrade",
     "apple-tv-remote",
     "icloud-home-ai-camera-subscription",
+}
+
+SERVICE_CONTENT_DETAIL_TOPIC_FACETS = {
+    "apple-music-top-artists",
+    "apple-tv-content-event-lineup",
+    "apple-tv-content-trailer",
+    "apple-tv-emmy-nominations",
+    "apple-tv-sports-schedule",
+    "apple-tv-purchase-4k-upgrade",
 }
 
 APP_STORE_POLICY_SUBTOPIC_FACETS = {
@@ -3533,6 +3546,13 @@ def is_iphone_physical_dimension_rumor_story(title: str, text: str) -> bool:
     dimension_terms = [
         "thicker",
         "thickness",
+        "heavier",
+        "heaviest",
+        "weight",
+        "weigh",
+        "weighs",
+        "grams",
+        "240 grams",
         "camera bump",
         "camera plateau",
         "camera housing",
@@ -3548,6 +3568,10 @@ def is_iphone_physical_dimension_rumor_story(title: str, text: str) -> bool:
         "增厚",
         "厚度",
         "变厚",
+        "更重",
+        "重量",
+        "240g",
+        "克",
         "机身",
         "后摄平台",
         "摄像头平台",
@@ -3579,6 +3603,8 @@ def is_iphone_physical_dimension_rumor_story(title: str, text: str) -> bool:
             "might",
             "claims",
             "says",
+            "point to",
+            "points to",
             "report",
             "reported",
             "supply chain",
@@ -4790,29 +4816,42 @@ def is_apple_product_commentary_analysis_without_new_reporting(title: str, text:
     ) > 0
 
 
-def is_former_apple_figure_commentary_without_new_apple_action(title: str, text: str) -> bool:
-    lower = f"{title} {text}".lower()
-    if effective_apple_term_score(lower) <= 0:
-        return False
-    former_apple_score = score_terms(
+def has_former_apple_person_reference(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(
         lower,
         [
             "former apple",
             "ex-apple",
             "apple veteran",
+            "previously at apple",
+            "worked at apple",
             "ipod father",
             "father of the ipod",
             "ipod creator",
             "tony fadell",
             "jony ive",
-            "前苹果",
-            "苹果前",
+            "曾在苹果",
             "苹果老将",
             "ipod 之父",
             "ipod之父",
         ],
+    ) > 0:
+        return True
+    person_role_pattern = (
+        r"(?:前\s*(?:apple|苹果)(?:公司)?[^。！？.!?]{0,18}"
+        r"(?:员工|高管|主管|工程师|设计师|负责人|经理|副总裁|总监|团队成员|团队负责人|成员|老将|资深人士))"
+        r"|(?:(?:apple|苹果)(?:公司)?[^。！？.!?]{0,8}前[^。！？.!?]{0,12}"
+        r"(?:员工|高管|主管|工程师|设计师|负责人|经理|副总裁|总监|团队成员|团队负责人|成员))"
     )
-    if former_apple_score <= 0:
+    return re.search(person_role_pattern, lower) is not None
+
+
+def is_former_apple_figure_commentary_without_new_apple_action(title: str, text: str) -> bool:
+    lower = f"{title} {text}".lower()
+    if effective_apple_term_score(lower) <= 0:
+        return False
+    if not has_former_apple_person_reference(lower):
         return False
     if is_apple_company_org_change_story(lower):
         return False
@@ -5202,11 +5241,16 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "magsafe",
             "lightning",
             "mfi",
+            "stylus",
+            "digital pen",
+            "touch pen",
             "专用",
             "面向",
             "适配",
             "兼容",
             "支持",
+            "书写",
+            "可书写",
             "转接头",
             "手机壳",
             "保护壳",
@@ -5228,8 +5272,13 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
                 "magsafe",
                 "lightning",
                 "mfi",
+                "stylus",
+                "digital pen",
+                "touch pen",
                 "适配",
                 "支持",
+                "书写",
+                "可书写",
                 "转接头",
                 "手机壳",
                 "保护壳",
@@ -5258,6 +5307,9 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "external storage",
             "portable ssd",
             "usb4 enclosure",
+            "stylus",
+            "digital pen",
+            "touch pen",
             "selfie screen",
             "magnetic",
             "magsafe",
@@ -5285,6 +5337,10 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "高速硬盘盒",
             "外置硬盘",
             "固态硬盘盒",
+            "手写笔",
+            "触控笔",
+            "数字笔",
+            "圆珠笔",
             "自拍屏",
             "背屏",
             "磁吸",
@@ -5334,10 +5390,17 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "apple launched",
             "apple store removes",
             "apple store removed",
+            "apple patent",
+            "patent",
+            "patented",
+            "granted",
             "苹果发布",
             "苹果推出",
             "苹果宣布",
             "苹果下架",
+            "苹果专利",
+            "专利",
+            "获批",
         ],
     )
     third_party_title_score = score_terms(
@@ -6316,6 +6379,8 @@ def fact_noise(value: str) -> bool:
         return True
     if re.search(r"广告声明|文内含有的对外跳转链接|it之家所有文章均包含本声明", lower, re.I):
         return True
+    if re.search(r"due to the political or social nature of the discussion|political news forum|posting is limited to forum members", lower, re.I):
+        return True
     if re.search(r"当前位置[:：]|当前位置：首页|相关阅读[:：]|相关文章[:：]|延伸阅读[:：]|更多阅读[:：]|豫icp备|icp备|公网安备", lower, re.I):
         return True
     if re.match(r"^apple (?:music|arcade|news\+|tv\+|one(?: bundle)?)\s+[–-]\s*[$￥¥€£]?\d", lower) and "after free trial" in lower:
@@ -6581,6 +6646,118 @@ def combine_summaries(primary: str, secondary: str) -> str:
             if len(parts) >= 8:
                 break
     return " ".join(parts)
+
+
+def _topic_boundary_facets_for_text(title: str, summary: str = "") -> frozenset[str]:
+    """Return concrete event-boundary facets that should not be crossed by background text."""
+    facets = effective_topic_facets(primary_topic_facets(title, summary))
+    boundary_facets = independent_splittable_topic_facets(facets)
+    if not boundary_facets:
+        boundary_facets = facets & (SPLITTABLE_TOPIC_FACETS | SUMMARY_LEVEL_EVENT_MERGE_FACETS)
+    return frozenset(boundary_facets - BROAD_TOPIC_FACETS)
+
+
+@lru_cache(maxsize=16384)
+def cached_topic_boundary_facets_for_text(title: str, summary: str = "") -> frozenset[str]:
+    return _topic_boundary_facets_for_text(title, summary)
+
+
+def topic_boundary_facets_for_text(title: str, summary: str = "") -> set[str]:
+    return set(cached_topic_boundary_facets_for_text(title, summary))
+
+
+def topic_boundary_facets_conflict(primary_facets: set[str], secondary_facets: set[str]) -> bool:
+    if not primary_facets or not secondary_facets:
+        return False
+    return not splittable_topic_facets_compatible(primary_facets, secondary_facets)
+
+
+def discovery_text_conflicts_with_detail_topic(
+    detail_title: str,
+    detail_summary: str,
+    discovery_text: str,
+) -> bool:
+    if not discovery_text:
+        return False
+    detail_facets = topic_boundary_facets_for_text(detail_title, detail_summary)
+    discovery_facets = topic_boundary_facets_for_text("", discovery_text)
+    return topic_boundary_facets_conflict(detail_facets, discovery_facets)
+
+
+def safe_discovery_text_for_detail(detail_title: str, detail_summary: str, discovery_text: str) -> str:
+    if discovery_text_conflicts_with_detail_topic(detail_title, detail_summary, discovery_text):
+        return ""
+    return discovery_text
+
+
+def safe_combine_detail_and_discovery_summary(
+    detail_title: str,
+    detail_summary: str,
+    discovery_summary: str,
+) -> str:
+    return combine_summaries(
+        detail_summary,
+        safe_discovery_text_for_detail(detail_title, detail_summary, discovery_summary),
+    )
+
+
+def safe_context_for_detail_article(
+    is_roundup: bool,
+    detail_title: str,
+    detail_summary: str,
+    candidate_context: str,
+) -> str:
+    if is_roundup:
+        return ""
+    return safe_discovery_text_for_detail(detail_title, detail_summary, candidate_context)
+
+
+def hardware_rumor_supporting_fact_compatible(primary_facets: set[str], fact_facets: set[str]) -> bool:
+    hardware_primary_facets = IPHONE_HARDWARE_RUMOR_TOPIC_FACETS | {
+        "apple-future-product-price-forecast",
+        "apple-product-price-increase",
+        "foldable-iphone-render-leak",
+        "foldable-iphone-successor-roadmap",
+        "foldable-iphone-supply-chain",
+        "iphone-component-cost-forecast",
+    }
+    hardware_supporting_fact_facets = hardware_primary_facets | {
+        "apple-chip-process-roadmap",
+        "apple-chip-roadmap",
+        "iphone-chip-roadmap",
+        "iphone-launch-timing",
+        "iphone-memory-price-forecast",
+    }
+    return bool(primary_facets & hardware_primary_facets) and bool(
+        fact_facets & hardware_supporting_fact_facets
+    ) and not bool(
+        fact_facets
+        & {
+            "apple-product-data-leak",
+            "apple-product-data-leak-enforcement",
+            "apple-product-data-leak-specs",
+            "ios-signing-status",
+        }
+    )
+
+
+def key_fact_topic_compatible_with_primary(primary_facets: set[str], fact_facets: set[str]) -> bool:
+    if not topic_boundary_facets_conflict(primary_facets, fact_facets):
+        return True
+    return hardware_rumor_supporting_fact_compatible(primary_facets, fact_facets)
+
+
+def filter_key_facts_for_primary_topic(title: str, summary: str, key_facts: list[str]) -> list[str]:
+    primary_facets = topic_boundary_facets_for_text(title, summary)
+    if not primary_facets:
+        return key_facts
+    filtered: list[str] = []
+    for fact in key_facts:
+        fact_facets = topic_boundary_facets_for_text("", fact)
+        if fact_facets and not key_fact_topic_compatible_with_primary(primary_facets, fact_facets):
+            continue
+        filtered.append(fact)
+    return filtered or key_facts
 
 
 def is_roundup_article_title(title: str) -> bool:
@@ -6886,6 +7063,7 @@ def extract_article(
     summary = extract_summary(text, candidate.summary)
     key_facts = extract_key_facts(text, title, source.name)
     title, summary, key_facts = focus_roundup_article(title, summary, key_facts, text)
+    key_facts = filter_key_facts_for_primary_topic(title, summary, key_facts)
     default_tz = source.default_tz
 
     if source.name == "Apple Newsroom":
@@ -7709,16 +7887,9 @@ def is_non_apple_primary_subject_with_former_apple_background(title: str, text: 
     lower = f"{title} {text}".lower()
     if effective_apple_term_score(title_lower) > 0:
         return False
-    former_apple_background = score_terms(
+    former_apple_background = has_former_apple_person_reference(lower) or score_terms(
         lower,
         [
-            "former apple",
-            "ex-apple",
-            "previously at apple",
-            "worked at apple",
-            "曾在苹果",
-            "前苹果",
-            "苹果前员工",
             "苹果公司初代处理器",
             "领导了苹果",
             "曾领导苹果",
@@ -8413,21 +8584,8 @@ def strategic_transaction_counterparty_facets(text: str) -> set[str]:
 
 def is_former_apple_staff_background_story(text: str) -> bool:
     lower = text.lower()
-    former_staff_score = score_terms(
-        lower,
-        [
-            "former apple",
-            "ex-apple",
-            "former vision pro",
-            "前苹果",
-            "前 apple",
-            "苹果前员工",
-            "苹果、奥迪前员工",
-            "前苹果员工",
-            "曾在苹果",
-        ],
-    )
-    if former_staff_score <= 0 and not re.search(r"(?:苹果|apple)[^。！？.!?]{0,16}前员工|前[^。！？.!?]{0,12}(?:苹果|apple)[^。！？.!?]{0,8}员工", lower):
+    former_staff_score = score_terms(lower, ["former vision pro"]) > 0 or has_former_apple_person_reference(lower)
+    if not former_staff_score:
         return False
     if is_apple_company_org_change_story(lower):
         return False
@@ -9620,6 +9778,12 @@ def is_service_content_story(text: str) -> bool:
         return True
     if score_terms(lower, ["apple music", "apple arcade", "classical", "苹果音乐"]) > 0:
         return True
+    if (
+        is_apple_tv_mlb_schedule_story(text)
+        or is_apple_tv_content_event_lineup_story(text)
+        or is_apple_tv_content_trailer_story(text)
+    ):
+        return True
     apple_tv_score = score_terms(lower, ["apple tv", "apple tv+", "苹果电视"])
     if apple_tv_score <= 0:
         return False
@@ -9639,18 +9803,139 @@ def is_service_content_story(text: str) -> bool:
                 "thriller",
                 "premiere",
                 "debut",
+                "trailer",
+                "teaser",
+                "lineup",
+                "panel",
+                "comic-con",
                 "grand prix",
                 "formula 1",
                 "f1",
                 "剧集",
                 "电影",
                 "首播",
+                "预告",
+                "阵容",
+                "展会",
+                "动漫展",
                 "大奖赛",
                 "直播",
             ],
         )
         > 0
     )
+
+
+def is_apple_tv_mlb_schedule_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple tv", "apple tv+", "苹果电视"]) <= 0:
+        return False
+    if score_terms(lower, ["mlb", "major league baseball", "friday night baseball", "美国职业棒球", "职棒"]) <= 0:
+        return False
+    return score_terms(lower, ["schedule", "matchups", "games", "august", "赛程", "比赛", "直播"]) > 0
+
+
+def is_apple_tv_content_event_lineup_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple tv", "apple tv+", "苹果电视"]) <= 0:
+        return False
+    event_score = score_terms(lower, ["comic-con", "comic con", "hall h", "san diego", "动漫展", "圣迭戈"])
+    lineup_score = score_terms(lower, ["lineup", "panel", "panels", "take over", "taking over", "阵容", "小组", "展会"])
+    content_score = score_terms(lower, ["silo", "dark matter", "widow", "monarch", "for all mankind", "剧集", "电视剧"])
+    return event_score > 0 and lineup_score > 0 and content_score > 0
+
+
+def is_apple_tv_content_trailer_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple tv", "apple tv+", "苹果电视"]) <= 0:
+        return False
+    trailer_score = score_terms(lower, ["trailer", "teaser", "first look", "预告", "先导"])
+    content_score = score_terms(lower, ["special", "series", "season", "film", "movie", "documentary", "snoopy", "peanuts", "剧集", "电影", "特别节目"])
+    return trailer_score > 0 and content_score > 0
+
+
+def is_siri_ai_lawsuit_settlement_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["siri", "apple intelligence", "苹果智能", "苹果 ai"]) <= 0:
+        return False
+    if score_terms(lower, ["lawsuit", "class action", "settlement", "claim", "payout", "false advertising", "诉讼", "集体诉讼", "和解", "赔偿", "虚假宣传"]) <= 0:
+        return False
+    return score_terms(lower, ["delayed", "delay", "iphone 15 pro", "iphone 16", "$250 million", "250 million", "2.5亿美元", "延迟", "延期"]) > 0
+
+
+def is_india_tariff_iphone_manufacturing_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["india", "indian", "印度"]) <= 0:
+        return False
+    if score_terms(lower, ["tariff", "tariffs", "import duty", "import duties", "duty exemption", "customs", "关税", "进口税", "免税"]) <= 0:
+        return False
+    if score_terms(lower, ["apple", "iphone", "苹果"]) <= 0:
+        return False
+    return score_terms(
+        lower,
+        [
+            "smartphone",
+            "smartphones",
+            "mobile phone",
+            "phone parts",
+            "electronics parts",
+            "component",
+            "components",
+            "wireless charging",
+            "lithium-ion",
+            "battery cell",
+            "manufacturing",
+            "手机",
+            "智能手机",
+            "电子设备",
+            "零部件",
+            "无线充电",
+            "锂离子",
+            "电芯",
+            "制造",
+        ],
+    ) > 0
+
+
+def is_apple_on_device_ai_model_compression_story(text: str) -> bool:
+    lower = text.lower()
+    if score_terms(lower, ["apple", "iphone", "苹果"]) <= 0:
+        return False
+    if score_terms(
+        lower,
+        [
+            "on-device",
+            "on device",
+            "directly on iphone",
+            "directly on iphones",
+            "run directly",
+            "runs giant ai models on iphone",
+            "run giant ai models on iphone",
+            "without servers",
+            "without server",
+            "local ai",
+            "本地 ai",
+            "端侧",
+            "本地运行",
+            "直接运行",
+        ],
+    ) <= 0:
+        return False
+    ai_score = score_terms(lower, ["ai model", "large model", "larger ai", "llm", "qwen", "apple intelligence", "模型", "大模型", "人工智能"])
+    compression_score = score_terms(lower, ["prisml", "compression", "compressed", "shrunk", "shrink", "1-bit", "one-bit", "quantization", "压缩", "量化"])
+    return ai_score > 0 and compression_score > 0
+
+
+def is_iphone_component_cost_forecast_story(text: str) -> bool:
+    lower = text.lower()
+    headline = lower[:260]
+    if score_terms(headline, ["android", "安卓"]) > 0 and score_terms(headline, ["iphone 18 pro max", "iphone18 pro max"]) <= 0:
+        return False
+    if score_terms(lower, ["iphone 18 pro max", "iphone18 pro max", "苹果 iphone 18 pro max"]) <= 0:
+        return False
+    if score_terms(lower, ["component cost", "component costs", "bill of materials", "bom", "materials cost", "物料清单", "物料成本", "组件成本", "成本"]) <= 0:
+        return False
+    return score_terms(lower, ["counterpoint", "nand", "dram", "memory", "storage", "2nm", "packaging", "$300", "300", "内存", "存储", "闪存", "封装"]) > 0
 
 
 def is_apple_tv_purchase_4k_upgrade_story(text: str) -> bool:
@@ -10842,37 +11127,78 @@ def is_future_apple_product_price_forecast_story(text: str, title: str = "") -> 
     )
     if future_product_score <= 0:
         return False
-    price_forecast_score = score_terms(
+    if score_terms(
         headline_scope,
         [
+            "price not announced",
+            "pricing not announced",
+            "price has not been announced",
+            "price hasn't been announced",
+            "price remains unknown",
+            "pricing remains unknown",
+            "只剩价格还没公布",
+            "价格还没公布",
+            "价格尚未公布",
+            "价格未公布",
+            "售价尚未公布",
+            "售价未公布",
+        ],
+    ) > 0:
+        return False
+    price_anchor_score = score_terms(
+        headline_scope,
+        [
+            "starting price",
+            "starting at",
+            "starts at",
             "could start",
             "may start",
-            "expected",
-            "estimated",
-            "forecast",
-            "report",
-            "reportedly",
-            "rumor",
-            "rumored",
-            "prediction",
+            "expected to cost",
+            "expected to start",
+            "estimated price",
+            "estimated pricing",
+            "forecast price",
+            "forecast pricing",
+            "price forecast",
+            "pricing forecast",
+            "priced at",
             "price",
             "pricing",
             "more expensive",
             "涨价",
+            "定价",
             "售价",
             "起售价",
+            "起步价",
             "价格",
             "万元",
+            "美元",
+            "人民币",
+        ],
+    )
+    if price_anchor_score <= 0:
+        return False
+    if re.search(r"(?:[$￥¥]\s*\d|\d[\d,.]*\s*(?:dollars?|usd|美元|元|万元|人民币))", headline_scope):
+        return True
+    return score_terms(
+        headline_scope,
+        [
+            "expected",
+            "estimated",
+            "forecast",
+            "reportedly",
+            "rumor",
+            "rumored",
+            "prediction",
+            "消息称",
+            "爆料",
             "预计",
             "预估",
             "预测",
-            "消息称",
-            "爆料",
             "或",
             "将",
         ],
-    )
-    return price_forecast_score > 0
+    ) > 0
 
 
 def is_apple_price_external_reaction_story(text: str, title: str = "") -> bool:
@@ -11300,12 +11626,15 @@ def is_iphone_color_mockup_or_finish_rumor(text: str, title: str = "") -> bool:
 
 
 def apple_product_price_topic_facets(text: str, title: str = "") -> set[str]:
+    future_price_forecast = is_future_apple_product_price_forecast_story(text, title)
     if not is_apple_product_price_increase_story(text, title):
+        if future_price_forecast:
+            return {"apple-product-price-increase", "apple-future-product-price-forecast"}
         return set()
     facets = {"apple-product-price-increase"}
     if is_apple_retail_promotion_price_context_story(text, title):
         facets.add("apple-retail-promotion-price-context")
-    elif is_future_apple_product_price_forecast_story(text, title):
+    elif future_price_forecast:
         facets.add("apple-future-product-price-forecast")
     else:
         facets.add("apple-current-product-price-increase")
@@ -11785,7 +12114,19 @@ def is_non_apple_price_followup_story(title: str, text: str) -> bool:
 def is_non_apple_component_market_background_story(title: str, text: str) -> bool:
     title_lower = title.lower()
     lower = text.lower()
-    if score_terms(title_lower, ["apple", "iphone", "ipad", "mac", "macbook", "苹果"]) > 0:
+    non_apple_title_subject = score_terms(
+        title_lower,
+        [
+            "android",
+            "android brands",
+            "smartphone market",
+            "安卓",
+            "手机市场",
+            "手机厂商",
+            "安卓厂商",
+        ],
+    ) > 0
+    if score_terms(title_lower, ["apple", "iphone", "ipad", "mac", "macbook", "苹果"]) > 0 and not non_apple_title_subject:
         return False
     if score_terms(lower, ["apple", "iphone", "ipad", "mac", "macbook", "苹果"]) <= 0:
         return False
@@ -13896,6 +14237,12 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("apple-memory-supplier-sourcing")
     if is_apple_memory_supply_constraint_story(lower):
         facets.add("apple-memory-supply-constraint")
+    if is_india_tariff_iphone_manufacturing_story(lower):
+        facets.add("india-tariff-iphone-manufacturing")
+    if is_siri_ai_lawsuit_settlement_story(lower):
+        facets.add("siri-ai-lawsuit-settlement")
+    if is_iphone_component_cost_forecast_story(lower):
+        facets.add("iphone-component-cost-forecast")
     if is_foldable_iphone_supply_chain_story(lower):
         facets.add("foldable-iphone-supply-chain")
     if is_apple_display_panel_supply_chain_story(lower):
@@ -13940,6 +14287,8 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("hide-my-email-vulnerability")
     if is_safari_mcp_server_story(lower):
         facets.add("safari-mcp-server")
+    if is_apple_on_device_ai_model_compression_story(lower):
+        facets.add("apple-on-device-ai-model-compression")
     if is_final_cut_camera_update_story(lower):
         facets.add("final-cut-camera-update")
     if is_apple_creator_studio_story(lower):
@@ -14110,6 +14459,12 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("apple-tv-purchase-4k-upgrade")
     if is_apple_tv_awards_nominations_story(lower):
         facets.add("apple-tv-emmy-nominations")
+    if is_apple_tv_mlb_schedule_story(lower):
+        facets.add("apple-tv-sports-schedule")
+    if is_apple_tv_content_event_lineup_story(lower):
+        facets.add("apple-tv-content-event-lineup")
+    if is_apple_tv_content_trailer_story(lower):
+        facets.add("apple-tv-content-trailer")
     if is_apple_tv_hardware_story(lower):
         facets.add("apple-tv-hardware")
     elif (
@@ -14301,6 +14656,11 @@ def _topic_facets_from_text(text: str) -> set[str]:
             [
                 "digital id",
                 "passport",
+                "driver's license",
+                "driver license",
+                "drivers license",
+                "state id",
+                "state identification",
                 "identity verification",
                 "nationality verification",
                 "数字身份证",
@@ -14309,6 +14669,8 @@ def _topic_facets_from_text(text: str) -> set[str]:
                 "身份核验",
                 "国籍校验",
                 "护照",
+                "驾驶证",
+                "州身份证",
             ],
         ) > 0:
             facets.add("apple-wallet-digital-id")
@@ -14391,6 +14753,8 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
         facets.add("hide-my-email-vulnerability")
     if is_safari_mcp_server_story(lower):
         facets.add("safari-mcp-server")
+    if is_apple_on_device_ai_model_compression_story(lower):
+        facets.add("apple-on-device-ai-model-compression")
     if is_final_cut_camera_update_story(lower):
         facets.add("final-cut-camera-update")
     if is_apple_creator_studio_story(lower):
@@ -14470,6 +14834,12 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
         facets.add("apple-tv-purchase-4k-upgrade")
     if is_apple_tv_awards_nominations_story(lower):
         facets.add("apple-tv-emmy-nominations")
+    if is_apple_tv_mlb_schedule_story(lower):
+        facets.add("apple-tv-sports-schedule")
+    if is_apple_tv_content_event_lineup_story(lower):
+        facets.add("apple-tv-content-event-lineup")
+    if is_apple_tv_content_trailer_story(lower):
+        facets.add("apple-tv-content-trailer")
     if (
         score_terms(lower, ["beats"]) > 0
         and score_terms(lower, ["cable", "cables", "charging cable", "power pink", "充电线"]) > 0
@@ -14554,8 +14924,12 @@ SPLITTABLE_SERVICE_TOPIC_FACETS = {
     "apple-arcade",
     "apple-creator-studio",
     "apple-music",
+    "apple-music-top-artists",
     "apple-tv-content",
+    "apple-tv-content-event-lineup",
+    "apple-tv-content-trailer",
     "apple-tv-emmy-nominations",
+    "apple-tv-sports-schedule",
     "apple-tv-purchase-4k-upgrade",
     "final-cut-camera-update",
     "iwork-apps-update",
@@ -14566,15 +14940,21 @@ SPLITTABLE_POLICY_TOPIC_FACETS = APP_STORE_POLICY_SUBTOPIC_FACETS | {
     "airdrop-vulnerability",
     "apple-legal-proceeding",
     "airpods-max-condensation-lawsuit",
+    "apple-wallet-digital-id",
     "apple-wallet-car-key-partner-support",
     "apple-regional-platform-regulation",
     "app-store-age-verification",
+    "apple-on-device-ai-model-compression",
     "eu-gatekeeper-designation-appeal",
     "hide-my-email-vulnerability",
+    "india-tariff-iphone-manufacturing",
+    "iphone-component-cost-forecast",
     "keyboard-input-method",
     "os-internal-testing",
     "russia-fas-app-preinstall-regulation",
     "safari-mcp-server",
+    "siri-ai-lawsuit-settlement",
+    "uk-cma-app-store-payment-nfc",
 }
 SPLITTABLE_OS_TOPIC_FACETS = {
     "airpods-firmware-update",
@@ -14598,13 +14978,20 @@ SPLITTABLE_TOPIC_FACETS = (
 )
 EXACT_SHARED_EVENT_TOPIC_FACETS = {
     "apple-executive-event-attendance",
+    "apple-on-device-ai-model-compression",
     "apple-translate-language-expansion",
     "apple-tv-emmy-nominations",
     "apple-tv-purchase-4k-upgrade",
+    "apple-tv-sports-schedule",
+    "apple-wallet-digital-id",
     "apple-wallet-car-key-partner-support",
     "encrypted-hfs-support-removal",
     "eu-gatekeeper-designation-appeal",
     "icloud-home-ai-camera-subscription",
+    "india-tariff-iphone-manufacturing",
+    "iphone-component-cost-forecast",
+    "siri-ai-lawsuit-settlement",
+    "uk-cma-app-store-payment-nfc",
 }
 BRIDGE_SPLIT_TOPIC_FACETS = {"apple-chip-roadmap", "iphone-chip-roadmap", "mac-chip-roadmap", "hardware-roadmap"}
 NO_SPLIT_SHARED_CORE_TOPIC_FACETS = {
@@ -14709,6 +15096,11 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
         return frozenset(memory_supplier_facets)
     if "visionos-m5-ai-features" in combined_facets:
         return frozenset(combined_facets)
+    if "iphone-component-cost-forecast" in combined_facets:
+        return frozenset(
+            {"iphone-component-cost-forecast"}
+            | (combined_facets & {"apple-product-price-increase", "apple-future-product-price-forecast"})
+        )
     market_report_primary = (
         "apple-market-share-report" in combined_facets
         and not is_foldable_iphone_panel_market_report_context(combined_text)
@@ -14786,6 +15178,8 @@ def _primary_merge_guard_facets(title: str, summary: str = "") -> frozenset[str]
         return frozenset({"final-cut-camera-update"})
     if "apple-restricted-memory-supplier-approval" in combined_facets or "apple-memory-supplier-sourcing" in combined_facets:
         return frozenset(combined_facets)
+    if "iphone-component-cost-forecast" in combined_facets:
+        return frozenset({"iphone-component-cost-forecast"} | merge_guard_platform_facets(combined_facets))
     if "apple-watch-band-sensor-rumor" in combined_facets:
         return frozenset({"apple-watch-band-sensor-rumor"} | merge_guard_platform_facets(combined_facets))
     if "apple-product-price-increase" in title_facets:
@@ -14841,10 +15235,11 @@ def independent_splittable_topic_facets(facets: set[str]) -> set[str]:
         "apple-product-data-leak",
     "apple-product-data-leak-enforcement",
     "apple-product-data-leak-specs",
-    "apple-legal-proceeding",
-    "airpods-max-condensation-lawsuit",
-    "airpods-firmware-update",
+        "apple-legal-proceeding",
+        "airpods-max-condensation-lawsuit",
+        "airpods-firmware-update",
         "app-store-age-verification",
+        "apple-wallet-digital-id",
         "apple-executive-event-attendance",
         "apple-translate-language-expansion",
         "apple-tv-emmy-nominations",
@@ -14873,9 +15268,16 @@ def independent_splittable_topic_facets(facets: set[str]) -> set[str]:
         "hide-my-email-vulnerability",
         "keyboard-input-method",
         "apple-legal-proceeding",
+        "apple-on-device-ai-model-compression",
         "os-internal-testing",
         "russia-fas-app-preinstall-regulation",
         "safari-mcp-server",
+        "siri-ai-lawsuit-settlement",
+        "india-tariff-iphone-manufacturing",
+        "iphone-component-cost-forecast",
+        "apple-tv-content-event-lineup",
+        "apple-tv-content-trailer",
+        "apple-tv-sports-schedule",
     }
     return facets & iphone_rumor_boundary_facets
 
@@ -15151,6 +15553,12 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "security_privacy"
     if is_airdrop_vulnerability_story(text):
         return "security_privacy"
+    if is_apple_tv_hardware_story(title):
+        return "hardware_market"
+    if is_apple_on_device_ai_model_compression_story(text):
+        return "os_app"
+    if is_india_tariff_iphone_manufacturing_story(text):
+        return "hardware_market"
     if is_russia_fas_app_preinstall_regulation_story(text):
         return "regional_regulation"
     if is_apple_memory_supplier_sourcing_story(text):
@@ -15173,6 +15581,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "os_app"
     if is_iphone_physical_dimension_rumor_story(title, text):
         return "hardware_market"
+    if is_iphone_component_cost_forecast_story(text):
+        return "hardware_market"
     if is_competitor_display_panel_story_using_apple_as_background(title, text):
         return "third_party_ecosystem"
     if (
@@ -15188,6 +15598,7 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         or is_non_apple_primary_subject_with_former_apple_background(title, text)
         or is_broad_ai_device_market_commentary_with_apple_example(title, text)
         or is_apple_work_column_without_new_apple_action(title, text)
+        or is_non_apple_component_market_background_story(title, text)
         or is_non_apple_product_research_context_story(text)
         or is_third_party_device_management_service_story(text)
         or is_multi_vendor_chip_or_phone_roadmap_background_story(title, text)
@@ -15254,6 +15665,12 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if is_apple_tv_awards_nominations_story(text):
         return "service_content"
     if is_apple_tv_purchase_4k_upgrade_story(text):
+        return "service_content"
+    if (
+        is_apple_tv_mlb_schedule_story(text)
+        or is_apple_tv_content_event_lineup_story(text)
+        or is_apple_tv_content_trailer_story(text)
+    ):
         return "service_content"
     if is_uk_cma_app_store_payment_nfc_story(text):
         return "regional_regulation"
@@ -15585,6 +16002,8 @@ def classify_relevance_tier(
         return "strong", "Apple iCloud service entitlement or subscription perk"
     if is_icloud_home_ai_camera_subscription_story(text):
         return "strong", "Apple Home app AI camera iCloud subscription requirement"
+    if is_apple_on_device_ai_model_compression_story(text):
+        return "strong", "Apple on-device AI model compression or larger local model event"
     if is_safari_mcp_server_story(text):
         return "strong", "Safari Technology Preview or Safari MCP developer tooling event"
     if is_hide_my_email_vulnerability_story(text):
@@ -15593,10 +16012,14 @@ def classify_relevance_tier(
         return "strong", "Apple AirDrop security vulnerability or ecosystem impact"
     if is_russia_fas_app_preinstall_regulation_story(text):
         return "strong", "Apple-specific Russia app preinstall or antimonopoly regulation"
+    if is_india_tariff_iphone_manufacturing_story(text):
+        return "strong", "India tariff exemption affecting Apple iPhone manufacturing"
     if is_apple_memory_supplier_sourcing_story(text):
         return "strong", "Apple-specific memory supplier sourcing event"
     if is_apple_broadcom_chip_supply_deal_story(text, title):
         return "strong", "Apple-specific Broadcom chip supply partnership event"
+    if is_non_apple_component_market_background_story(title, text):
+        return "weak", "non-Apple component or industry price story using Apple mainly as background"
     if is_broad_multi_vendor_market_report(text, title):
         return "weak", "broad multi-vendor market report without Apple-specific shipment or share detail"
     if is_apple_specific_market_share_report_story(text, title):
@@ -15613,6 +16036,8 @@ def classify_relevance_tier(
         return "strong", "Apple Siri or Apple Intelligence capability change"
     if is_iphone_physical_dimension_rumor_story(title, text):
         return "strong", "Apple iPhone physical design or dimension rumor"
+    if is_iphone_component_cost_forecast_story(text):
+        return "strong", "Apple iPhone component cost or bill-of-materials forecast"
     if (
         is_apple_chip_process_roadmap_story(text)
         and score_terms(
@@ -16580,6 +17005,7 @@ def refresh_event_metadata(event: Event) -> None:
         or is_non_apple_public_response_with_apple_purchase_context(event.title, summary_context)
         or is_former_apple_figure_commentary_without_new_apple_action(event.title, summary_context)
         or is_usage_podcast_or_third_party_project_without_new_apple_action(event.title, summary_context)
+        or is_non_apple_component_market_background_story(event.title, summary_context)
     )
     article_group_indicates_weak_context = bool(event.articles) and all(
         (
@@ -16634,6 +17060,10 @@ def refresh_event_metadata(event: Event) -> None:
                 " ".join([article.summary, *article.key_facts[:5]]),
             )
             or is_usage_podcast_or_third_party_project_without_new_apple_action(
+                article.title,
+                " ".join([article.summary, *article.key_facts[:5]]),
+            )
+            or is_non_apple_component_market_background_story(
                 article.title,
                 " ".join([article.summary, *article.key_facts[:5]]),
             )
@@ -17458,6 +17888,11 @@ def same_iphone_physical_dimension_rumor_event(article: Article, event: Event, s
     dimension_anchors = {
         "thicker",
         "thickness",
+        "heavier",
+        "heaviest",
+        "weight",
+        "grams",
+        "240",
         "camera",
         "bump",
         "plateau",
@@ -17475,6 +17910,10 @@ def same_iphone_physical_dimension_rumor_event(article: Article, event: Event, s
         "增厚",
         "厚度",
         "变厚",
+        "更重",
+        "重量",
+        "240g",
+        "克",
         "机身",
         "后摄",
         "摄像头",
@@ -17484,9 +17923,9 @@ def same_iphone_physical_dimension_rumor_event(article: Article, event: Event, s
     }
     if shared & dimension_anchors:
         return True
-    return score_terms(article_text, ["2mm", "2 mm", "9.9", "10.9", "增厚", "厚度"]) > 0 and score_terms(
+    return score_terms(article_text, ["2mm", "2 mm", "9.9", "10.9", "240 grams", "240g", "heavier", "weight", "增厚", "厚度", "重量"]) > 0 and score_terms(
         event_text,
-        ["2mm", "2 mm", "9.9", "10.9", "增厚", "厚度"],
+        ["2mm", "2 mm", "9.9", "10.9", "240 grams", "240g", "heavier", "weight", "增厚", "厚度", "重量"],
     ) > 0
 
 
@@ -17522,12 +17961,18 @@ def service_content_title_shared_tokens(article: Article, event: Event, shared: 
     return shared & article_title_tokens & event_title_tokens
 
 
+def service_content_facets_for_merge(facets: set[str]) -> set[str]:
+    service_facets = effective_topic_facets(facets) & SERVICE_CONTENT_TOPIC_FACETS
+    detail_facets = service_facets & SERVICE_CONTENT_DETAIL_TOPIC_FACETS
+    return detail_facets or service_facets
+
+
 def article_service_topic_facets(article: Article) -> set[str]:
-    return effective_topic_facets(article_primary_facets(article)) & SERVICE_CONTENT_TOPIC_FACETS
+    return service_content_facets_for_merge(article_primary_facets(article))
 
 
 def event_service_topic_facets(event: Event) -> set[str]:
-    return effective_topic_facets(event_primary_facets(event)) & SERVICE_CONTENT_TOPIC_FACETS
+    return service_content_facets_for_merge(event_primary_facets(event))
 
 
 def should_merge(article: Article, event: Event) -> bool:
@@ -19237,14 +19682,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             continue
         is_roundup = is_roundup_article_title(candidate.title)
         if not is_roundup:
-            summary = combine_summaries(summary, candidate.summary)
+            summary = safe_combine_detail_and_discovery_summary(title, summary, candidate.summary)
         for article_title, article_summary, article_key_facts in roundup_article_variants(
             candidate.title,
             title,
             summary,
             key_facts,
         ):
-            variant_context = context_for_article_variant(is_roundup, candidate.context)
+            variant_context = safe_context_for_detail_article(
+                is_roundup,
+                article_title,
+                article_summary,
+                candidate.context,
+            )
             if not is_relevant_candidate(
                 Candidate(
                     source=candidate.source,
@@ -19259,7 +19709,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 continue
             event_context_summary = " ".join(part for part in [article_summary, variant_context] if part)
             category = choose_category(article_title, event_context_summary)
-            token_base = article_summary[:700] if is_roundup else candidate.summary or article_summary[:700]
+            token_base = (
+                article_summary[:700]
+                if is_roundup
+                else safe_discovery_text_for_detail(article_title, article_summary, candidate.summary)
+                or article_summary[:700]
+            )
             token_summary = " ".join([token_base, variant_context, *article_key_facts[:5]])
             tokens = article_tokens(article_title, token_summary)
             event_kind = detect_event_kind(article_title, event_context_summary, article_key_facts)

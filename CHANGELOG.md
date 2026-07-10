@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.25.0 - 2026-07-10
+
+- Added stricter service/content boundaries for Apple TV sports schedules, Comic-Con lineups, trailers, Siri AI settlements, India tariff manufacturing stories, and on-device AI model compression so high-volume days keep separate event boundaries.
+- Improved hardware rumor clustering for iPhone battery, weight, component-cost, foldable iPhone, iPhone Ultra pricing, display flatness, mockup, and production stories so same-product rumors split by concrete Apple action instead of broad product family.
+- Fixed Chinese former-Apple background detection so ordinary phrases like `目前苹果官网` no longer demote direct Apple hardware pricing reports while real former-Apple staff commentary remains `weak`.
+- Tightened future Apple product price forecast detection to require clear price or starting-price anchors and avoid contaminating render, data-leak, panel, or supply-chain events.
+- Updated fallback policy documentation and expanded regression coverage for deferred-event recovery, third-party accessory filtering, source-tail cleanup, service/content merges, and hardware rumor boundaries.
+- Kept live crawl coverage stable in validation while preserving the recent performance target, with the repaired crawler moving the iPhone Ultra price rumor from `deferred_events` into `events`.
+
 ## 1.24.0 - 2026-07-09
 
 - Added Apple executive event-attendance handling so Sun Valley-style business conference reports remain eligible and merge across sources even when attendee lists mention non-Apple companies.
