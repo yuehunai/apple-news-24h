@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.25.0 - 2026-07-10
+### 1.26.0 - 2026-07-11
 
-- Added stricter service/content boundaries for Apple TV sports schedules, Comic-Con lineups, trailers, Siri AI settlements, India tariff manufacturing stories, and on-device AI model compression so high-volume days keep separate event boundaries.
-- Improved hardware rumor clustering for iPhone battery, weight, component-cost, foldable iPhone, iPhone Ultra pricing, display flatness, mockup, and production stories so same-product rumors split by concrete Apple action instead of broad product family.
-- Fixed Chinese former-Apple background detection so ordinary phrases like `目前苹果官网` no longer demote direct Apple hardware pricing reports while real former-Apple staff commentary remains `weak`.
-- Tightened future Apple product price forecast detection to require clear price or starting-price anchors and avoid contaminating render, data-leak, panel, or supply-chain events.
-- Updated fallback policy documentation and expanded regression coverage for deferred-event recovery, third-party accessory filtering, source-tail cleanup, service/content merges, and hardware rumor boundaries.
-- Kept live crawl coverage stable in validation while preserving the recent performance target, with the repaired crawler moving the iPhone Ultra price rumor from `deferred_events` into `events`.
+- Improved title-and-lead precedence for direct Apple OS components, current system-app guides, watchOS built-in app changes, and government authorization for Apple to access regulated chips or data-center equipment.
+- Tightened event boundaries for built-in apps across OS platforms, foldable-iPhone battery capacity versus battery regulation, product mockups, OpenAI trade-secret litigation, and iPhone production forecasts.
+- Improved cross-source merging for foldable-iPhone battery and mockup reports, Apple market-share research, legal actions, and production metrics while preserving distinct product actions and numeric facts.
+- Tightened weak filtering for personal feature walkthroughs, list-style rumor recaps, and routine third-party desktop-client updates without a new Apple action.
+- Fixed direct Apple market reports and physical Apple Store relocations so comparison context or plural retail wording no longer causes demotion or software misclassification.
+- Updated fallback policy guidance and expanded regression coverage to 477 tests while keeping live discovery coverage unchanged and crawler runtime within the recent performance target.
 
 ## What It Does
 

@@ -7801,6 +7801,17 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.detect_event_kind(title, summary), "retail_store")
         self.assertEqual(module.choose_category(title, summary), "hardware_products")
 
+    def test_multiple_apple_retail_store_moves_are_hardware_news(self):
+        module = load_module()
+        title = "Two Apple Stores in U.S. Are Moving Soon"
+        summary = (
+            "Apple Queens Center and Apple Renaissance at Colony Park will move to new "
+            "physical retail locations later this month."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "retail_store")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
     def test_single_article_multi_region_context_does_not_create_merge_warning(self):
         module = load_module()
         article = article_for(
@@ -11113,6 +11124,323 @@ class RelevanceRuleTests(unittest.TestCase):
         )
 
         self.assertTrue(module.fact_noise(notice))
+
+    def test_direct_apple_regulated_technology_access_story_is_selected(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url=(
+                "https://9to5mac.com/2026/07/10/us-eases-restrictions-on-apples-access-to-ai-chips-"
+                "and-data-center-equipment-in-the-uae/"
+            ),
+            title="US eases restrictions on Apple's access to AI chips and data center equipment in the UAE",
+            summary=(
+                "Apple is among eight U.S. companies now able to bring advanced-computing chips, servers, "
+                "and controlled technology into the UAE without individual export licenses."
+            ),
+            feed_time_raw="Fri, 10 Jul 2026 18:10:28 +0000",
+            context="aapl",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(
+            module.detect_event_kind(candidate.title, candidate.summary, [candidate.context]),
+            "regional_regulation",
+        )
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [candidate.context],
+            candidate.source,
+        )
+        self.assertEqual(tier, "strong", reason)
+        self.assertGreaterEqual(module.candidate_detail_priority(candidate)[0], 90)
+
+    def test_current_macrumors_os_component_guide_ignores_body_third_party_context(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/guide/ios-27-mail/",
+            title="iOS 27: What's New With the Mail App",
+            summary=(
+                "Apple's Mail app gets relevance-ranked search, Ask Siri, Writing Tools, Call Context, "
+                "and contextual suggestions in iOS 27. Contextual suggestions are also available to "
+                "third-party apps. Related Roundups: iOS 27, iPadOS 27."
+            ),
+            feed_time_raw="Fri, 10 Jul 2026 15:26:16 PDT",
+            context="featured ios 27",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(
+            module.detect_event_kind(candidate.title, candidate.summary, [candidate.context]),
+            "os_app",
+        )
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [candidate.context],
+            candidate.source,
+        )
+        self.assertEqual(tier, "strong", reason)
+        self.assertGreaterEqual(module.candidate_detail_priority(candidate)[0], 70)
+
+    def test_watchos_builtin_app_removal_is_strong_despite_opinion_framing(self):
+        module = load_module()
+        title = "Will you miss the Walkie-Talkie Apple Watch app when watchOS 27 drops push-to-talk?"
+        summary = (
+            "Apple Watch is losing its built-in Walkie-Talkie app in watchOS 27. The system-level "
+            "push-to-talk feature will disappear, and a third-party app might eventually fill the gap. "
+            "Related iOS stories discuss third-party iPhone apps, app updates, and Apple Watch features."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+        self.assertEqual(tier, "strong", reason)
+        self.assertIn("built-in-app-change", module.primary_topic_facets(title, summary))
+
+    def test_builtin_app_changes_on_different_os_platforms_do_not_merge(self):
+        module = load_module()
+        messages = article_for(
+            module,
+            "These are my favorite new Messages features in iOS 27 [Video]",
+            "iOS 27 makes the built-in Messages app faster and adds new Siri and drawing features.",
+            source="9to5Mac",
+        )
+        walkie_talkie = article_for(
+            module,
+            "Will you miss the Walkie-Talkie Apple Watch app when watchOS 27 drops push-to-talk?",
+            "Apple Watch is losing its built-in Walkie-Talkie app in watchOS 27.",
+            source="9to5Mac",
+        )
+
+        messages_event = module.cluster_articles([messages])[0]
+        self.assertFalse(
+            module.topic_facets_compatible(
+                walkie_talkie,
+                messages_event,
+                walkie_talkie.tokens & messages_event.tokens,
+                module.jaccard(walkie_talkie.tokens, messages_event.tokens),
+            )
+        )
+
+        events = module.cluster_articles([messages, walkie_talkie])
+
+        self.assertEqual(len(events), 2)
+
+    def test_foldable_iphone_battery_aliases_merge_but_eu_battery_rule_stays_separate(self):
+        module = load_module()
+        battery_articles = [
+            article_for(
+                module,
+                "苹果 iPhone Ultra 阔折叠？消息称苹果供应商入网备案 4883mAh 电池",
+                "两块电芯额定容量为 1921mAh 和 2962mAh，合计 4883mAh，可能用于苹果首款折叠屏 iPhone。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Foldable iPhone Ultra Battery Capacity Allegedly Registered by Supplier",
+                "Apple's supplier registered 1,921mAh and 2,962mAh cells for a combined 4,883mAh foldable iPhone battery.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone Fold将采用双电池设计 但容量恐怕要让你失望了",
+                "消息透露苹果首款折叠屏手机采用 1921mAh 和 2962mAh 双电池，合计 4883mAh。",
+                source="快科技",
+            ),
+        ]
+        regulation_articles = [
+            article_for(
+                module,
+                "报道称欧版苹果 iPhone 18 Pro 豁免欧盟新规，不会改为可拆卸电池",
+                (
+                    "欧盟 Commission Regulation (EU) 2023/1670 将于 2027 年执行；满足 500 次循环保留 "
+                    "83% 容量、1000 次保留 80% 容量的设备可豁免普通用户可拆卸电池要求。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "No, EU iPhones won't have a removable battery door in 2027",
+                (
+                    "European Union battery legislation takes effect in 2027, but qualifying iPhones are exempt "
+                    "from the user-replaceable battery requirement."
+                ),
+                source="AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles([*battery_articles, *regulation_articles])
+
+        self.assertEqual(len(events), 2)
+        capacity_event = next(event for event in events if len(event.articles) == 3)
+        regulation_event = next(event for event in events if len(event.articles) == 2)
+        self.assertEqual(capacity_event.relevance_tier, "strong")
+        self.assertEqual(regulation_event.event_kind, "hardware_market")
+        self.assertIn("apple-device-battery-regulation", module.event_primary_facets(regulation_event))
+        self.assertNotIn("iphone-battery-capacity-leak", module.event_primary_facets(regulation_event))
+
+        cnbeta_candidate = module.Candidate(
+            source="cnBeta",
+            url="https://www.cnbeta.com.tw/articles/tech/example.htm",
+            title="iPhone 依然不会改变其目前的不可拆卸电池设计",
+            summary=(
+                "欧盟 2027 年电池法规允许满足循环寿命标准的 iPhone 豁免可拆卸电池要求；"
+                "文章末尾以任天堂 Switch 2 作为不符合豁免条件的对照。"
+            ),
+        )
+        self.assertTrue(module.is_relevant_candidate(cnbeta_candidate, source_named(module, "cnBeta")))
+
+    def test_same_foldable_iphone_mockup_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果首款折叠手机：白色版 iPhone Ultra 机模曝光",
+                "TheAppleHub 分享白色 iPhone Ultra 折叠机机模视频，中间有明显折痕。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "9月发布！苹果首款折叠手机 iPhone Ultra 白色版机模亮相：折痕明显",
+                "海外博主展示同一白色折叠 iPhone 机模，零售版据称会改善折痕。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(len(events[0].articles), 2)
+
+    def test_openai_trade_secret_lawsuit_merges_sues_wording_and_data_theft_details(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple sues OpenAI & previous VP of product design over mass IP theft",
+                "Apple filed suit alleging former employees stole trade secrets and supplied them to OpenAI.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "苹果起诉 OpenAI，指控其挖角前员工窃取未发布产品、供应链资料等商业机密",
+                "苹果向法院起诉 OpenAI，称前员工窃取商业秘密、未发布产品和供应链资料。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "legal_antitrust")
+
+    def test_same_iphone_production_forecast_merges_despite_cost_background(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Reportedly Slashes iPhone 17 Demand Forecast Amid Rising Costs",
+                (
+                    "A Chinese leaker says some standard iPhone 17 lines moved from a 15% reduction to "
+                    "suspending roughly one-third of capacity."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "成本上涨太恐怖！苹果部分产线砍掉iPhone 17三分之一产能",
+                (
+                    "消息称标准版iPhone 17部分产线从减产 15% 调整为暂停三分之一产能；"
+                    "DRAM、NAND 与 A19 成本上涨构成背景，苹果在美国的回应解释了成本压力。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(len(events[0].articles), 2)
+        self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
+
+    def test_direct_apple_market_share_report_is_not_downgraded_by_comparisons(self):
+        module = load_module()
+        title = "Apple Watch Accounts for 90% of AI Smartwatch Shipments"
+        summary = (
+            "Counterpoint says Apple accounted for roughly 90% of Edge AI smartwatch shipments in Q1 2026, "
+            "where artificial intelligence runs directly on the wearable, "
+            "while Huawei followed with comparable silicon, Qualcomm is entering the race, and Google is "
+            "preparing a Tensor wearable chip. This remains niche compared to Apple's dedicated-chip strategy."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "strong", reason)
+
+        english = article_for(module, title, summary, source="MacRumors")
+        chinese = article_for(
+            module,
+            "苹果 Apple Watch 在边缘 AI 智能手表市场首季出货量独占九成",
+            (
+                "Counterpoint 报告显示，Apple Watch 占 2026 年第一季度 Edge AI 智能手表出货量约 90%，"
+                "该市场同比增长 70%、渗透率达到 25%；研究报告还介绍了本地心率、健康与安全推理场景。"
+            ),
+            source="cnBeta",
+        )
+
+        events = module.cluster_articles([english, chinese])
+
+        self.assertEqual(len(events), 1)
+
+    def test_third_party_desktop_client_update_does_not_become_apple_hardware_news(self):
+        module = load_module()
+        title = "微信 Win / Mac PC 测试版 4.1.12 发布：通话中可接听新来电，支持 Markdown 排版"
+        summary = (
+            "微信团队面向 PC 版内测用户推送 4.1.12 更新，支持通话中接听新来电，"
+            "并为桌面版笔记新增 Markdown 标题、加粗、列表和待办事项排版。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_rumor_feature_recap_without_new_reporting_is_weak(self):
+        module = load_module()
+        examples = [
+            (
+                "Apple to Launch 'MacBook Ultra' With Up to Six New Features",
+                "This roundup recaps six previously reported rumored features and contains no new reporting.",
+            ),
+            (
+                "iPhone 18 Pro Coming Soon With These 10 New Features",
+                "Below, we have recapped 10 features rumored for the iPhone 18 Pro models as of July.",
+            ),
+            (
+                "苹果秋季发布会锁定9月份：史上最大规模新品潮有何看点",
+                "文章汇总此前传闻，盘点秋季发布会可能出现的 16 款产品，没有新增消息。",
+            ),
+        ]
+
+        for title, summary in examples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_personal_os_feature_walkthrough_is_weak_without_a_new_standalone_action(self):
+        module = load_module()
+        title = "These are my favorite new Messages features in iOS 27 [Video]"
+        summary = (
+            "A hands-on walkthrough highlights four favorite quality-of-life features already included "
+            "in the iOS 27 Messages app."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "weak", reason)
 
 
 if __name__ == "__main__":
