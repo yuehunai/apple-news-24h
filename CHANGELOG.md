@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.27.0 - 2026-07-12
+
+- Added cross-angle clustering for Apple chip tariff exemptions when regulatory and foundry reports share the same supplier, production commitment, and exemption action.
+- Improved same-case legal clustering so responses and background reports merge by the concrete parties and proceeding before unrelated body context can split them.
+- Tightened weak filtering for multi-product previews, first-person Apple fleet or product-usage columns, and viral AI-generated Apple-product image debunks without a new Apple action.
+- Kept Apple Books and App Store AI knockoff, fraud, impersonation, and copyright failures eligible as platform-trust news while moving recycled product-rumor background out of required events.
+- Updated fallback policy guidance and expanded regression coverage to 482 tests, with identical live source coverage and improved crawler runtime in baseline comparison.
+
 ## 1.26.0 - 2026-07-11
 
 - Improved title-and-lead precedence for direct Apple OS components, current system-app guides, watchOS built-in app changes, and government authorization for Apple to access regulated chips or data-center equipment.

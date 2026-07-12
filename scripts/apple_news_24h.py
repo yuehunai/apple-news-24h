@@ -4067,6 +4067,86 @@ def is_direct_apple_regulated_technology_access_story(title: str, text: str) -> 
     ) > 0
 
 
+CHIP_FOUNDRY_ENTITY_TERMS = {
+    "intel": ("intel", "英特尔"),
+    "tsmc": ("tsmc", "台积电"),
+    "samsung": ("samsung", "三星"),
+    "globalfoundries": ("globalfoundries", "格芯"),
+}
+
+
+def chip_foundry_entities(text: str) -> set[str]:
+    lower = text.lower()
+    return {
+        entity
+        for entity, terms in CHIP_FOUNDRY_ENTITY_TERMS.items()
+        if score_terms(lower, terms) > 0
+    }
+
+
+def is_apple_chip_tariff_exemption_story(title: str, text: str) -> bool:
+    """Match a tariff exemption linked to an Apple chip-production commitment."""
+    title_lower = title.lower()
+    lead_lower = f"{title} {text[:1400]}".lower()
+    if score_terms(title_lower, ["apple", "苹果"]) <= 0:
+        return False
+    if not chip_foundry_entities(lead_lower):
+        return False
+    if score_terms(
+        lead_lower,
+        [
+            "chip",
+            "chips",
+            "semiconductor",
+            "semiconductors",
+            "foundry",
+            "fabrication",
+            "晶圆厂",
+            "半导体",
+            "芯片",
+            "代工",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(
+        lead_lower,
+        [
+            "tariff exemption",
+            "tariff exemptions",
+            "exemption from",
+            "exempt from",
+            "avoided semiconductor tariffs",
+            "avoid semiconductor tariffs",
+            "关税豁免",
+            "豁免关税",
+            "免征关税",
+            "避免半导体关税",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        lead_lower,
+        [
+            "deal",
+            "agreement",
+            "contract",
+            "commitment",
+            "committed",
+            "supply",
+            "production",
+            "manufacturing",
+            "代工协议",
+            "代工合作",
+            "供应协议",
+            "承诺",
+            "同意",
+            "生产",
+            "制造",
+            "换取",
+        ],
+    ) > 0
+
+
 def is_apple_device_battery_regulation_story(text: str) -> bool:
     lower = text.lower()
     if score_terms(lower, ["iphone", "iphones", "ipad", "ipads", "apple", "苹果"]) <= 0:
@@ -4831,6 +4911,10 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
             "opinion",
             "commentary",
             "column",
+            "新品前瞻",
+            "发布会前瞻",
+            "产品前瞻",
+            "新品展望",
             "本周回顾",
             "一周",
             "汇总",
@@ -4967,6 +5051,63 @@ def is_rumor_feature_recap_without_new_reporting(title: str, text: str) -> bool:
         ],
     )
     return recap_evidence > 0
+
+
+def is_ai_generated_apple_product_image_debunk_without_new_action(title: str, text: str) -> bool:
+    """Detect viral fake-image debunks whose Apple details are only recycled background."""
+    title_lower = title.lower()
+    lead_lower = f"{title} {text[:900]}".lower()
+    if effective_apple_term_score(title) <= 0 and not loose_apple_product_marker(title):
+        return False
+    if score_terms(
+        title_lower,
+        [
+            "ai-generated",
+            "ai generated",
+            "fake image",
+            "fake photo",
+            "hoax",
+            "ai 生成",
+            "ai生成",
+            "ai 伪造",
+            "ai伪造",
+            "伪造照片",
+            "系 ai 生成",
+            "系ai生成",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(
+        lead_lower,
+        [
+            "photo",
+            "image",
+            "picture",
+            "viral",
+            "debunk",
+            "fake",
+            "照片",
+            "图片",
+            "刷屏",
+            "破绽",
+            "辨伪",
+            "造假",
+        ],
+    ) <= 0:
+        return False
+    return score_terms(
+        title_lower,
+        [
+            "apple announced",
+            "apple unveiled",
+            "apple confirmed",
+            "apple shared",
+            "苹果宣布",
+            "苹果发布",
+            "苹果确认",
+            "苹果展示",
+        ],
+    ) == 0
 
 
 def is_routine_retail_discount_story(title: str, text: str) -> bool:
@@ -6051,6 +6192,7 @@ def is_relevant_candidate(candidate: Candidate, source: Source) -> bool:
             return False
     direct_title_event = (
         is_apple_device_battery_regulation_story(text)
+        or is_apple_chip_tariff_exemption_story(candidate.title, text)
         or is_direct_apple_regulated_technology_access_story(candidate.title, text)
         or is_direct_apple_os_component_change_story(candidate.title, text)
         or is_apple_specific_market_share_report_story(text, candidate.title)
@@ -8322,21 +8464,7 @@ def is_broad_ai_device_market_commentary_with_apple_example(title: str, text: st
 
 def is_apple_work_column_without_new_apple_action(title: str, text: str) -> bool:
     title_lower = title.lower().strip()
-    lower = f"{title} {text}".lower()
     if not title_lower.startswith("apple @ work:"):
-        return False
-    if score_terms(
-        lower,
-        [
-            "exclusively brought to you",
-            "about apple @ work",
-            "ways apple could improve",
-            "trend that needs to stop",
-            "it has to squash",
-            "sponsor",
-            "sponsored",
-        ],
-    ) <= 0:
         return False
     direct_apple_action = score_terms(
         title_lower,
@@ -14580,6 +14708,8 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("apple-legal-proceeding")
         if score_terms(lower, ["airpods max", "condensation", "冷凝", "结露"]) > 0:
             facets.add("airpods-max-condensation-lawsuit")
+    if is_apple_chip_tariff_exemption_story(lower, lower):
+        facets.add("apple-chip-tariff-exemption")
     if is_direct_apple_regulated_technology_access_story(lower, lower):
         facets.add("apple-regulated-technology-access")
     if is_apple_device_battery_regulation_story(lower):
@@ -15063,6 +15193,8 @@ def _merge_guard_facets_from_text(text: str) -> set[str]:
         facets.add("apple-legal-proceeding")
         if score_terms(lower, ["airpods max", "condensation", "冷凝", "结露"]) > 0:
             facets.add("airpods-max-condensation-lawsuit")
+    if is_apple_chip_tariff_exemption_story(lower, lower):
+        facets.add("apple-chip-tariff-exemption")
     if is_direct_apple_regulated_technology_access_story(lower, lower):
         facets.add("apple-regulated-technology-access")
     if is_apple_device_battery_regulation_story(lower):
@@ -15342,6 +15474,7 @@ SPLITTABLE_TOPIC_FACETS = (
     | SPLITTABLE_OS_TOPIC_FACETS
 )
 EXACT_SHARED_EVENT_TOPIC_FACETS = {
+    "apple-chip-tariff-exemption",
     "apple-executive-event-attendance",
     "apple-on-device-ai-model-compression",
     "apple-translate-language-expansion",
@@ -15412,6 +15545,8 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
         ) > 0:
             return frozenset({"camera-airpods-code-clue"})
         return frozenset(camera_airpods_facets)
+    if is_apple_chip_tariff_exemption_story(title, combined_text):
+        return frozenset({"apple-chip-tariff-exemption"})
     if (
         is_direct_apple_regulated_technology_access_story(title, combined_text)
         and not is_apple_restricted_memory_supplier_approval_story(combined_text)
@@ -15549,6 +15684,8 @@ def _primary_merge_guard_facets(title: str, summary: str = "") -> frozenset[str]
         ) > 0:
             return frozenset({"camera-airpods-code-clue"})
         return frozenset(camera_airpods_facets)
+    if is_apple_chip_tariff_exemption_story(title, combined_text):
+        return frozenset({"apple-chip-tariff-exemption"})
     if (
         is_direct_apple_regulated_technology_access_story(title, combined_text)
         and not is_apple_restricted_memory_supplier_approval_story(combined_text)
@@ -15961,6 +16098,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if is_apple_service_card_payment_restore_story(text):
         return "app_store_trust"
+    if is_apple_chip_tariff_exemption_story(title, text):
+        return "regional_regulation"
     if (
         is_direct_apple_regulated_technology_access_story(title, text)
         and not is_apple_restricted_memory_supplier_approval_story(text)
@@ -15969,6 +16108,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "regional_regulation"
     if is_apple_device_battery_regulation_story(text):
         return "hardware_market"
+    if is_ai_generated_apple_product_image_debunk_without_new_action(title, text):
+        return "third_party_ecosystem"
     if is_direct_apple_os_component_change_story(title, text):
         return "os_app"
     if is_third_party_cross_platform_desktop_client_update(title, text):
@@ -16430,6 +16571,10 @@ def classify_relevance_tier(
         return "weak", "rumor feature recap without new standalone reporting"
     if is_third_party_cross_platform_desktop_client_update(title, text):
         return "weak", "third-party cross-platform desktop client update without a direct Apple action"
+    if is_ai_generated_apple_product_image_debunk_without_new_action(title, text):
+        return "weak", "AI-generated Apple product image debunk without a new Apple action"
+    if is_apple_chip_tariff_exemption_story(title, text):
+        return "strong", "Apple chip-production commitment tied to a tariff exemption"
     if (
         is_direct_apple_regulated_technology_access_story(title, text)
         and not is_apple_restricted_memory_supplier_approval_story(text)
@@ -17007,6 +17152,8 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
         score += 70
     if is_apple_executive_government_meeting_story(candidate.title, text):
         score += 65
+    if is_apple_chip_tariff_exemption_story(candidate.title, text):
+        score += 55
     if is_direct_apple_regulated_technology_access_story(candidate.title, text):
         score += 55
     if is_direct_apple_regional_platform_regulation_story(candidate.title, text):
@@ -18217,6 +18364,16 @@ def same_apple_legal_proceeding_event(article: Article, event: Event, shared: se
     return len(shared & legal_anchors) >= 2
 
 
+def same_apple_chip_tariff_exemption_event(article: Article, event: Event) -> bool:
+    article_context = article_merge_context(article)
+    event_context = event_merge_context(event)
+    if not is_apple_chip_tariff_exemption_story(article.title, article_context):
+        return False
+    if not is_apple_chip_tariff_exemption_story(event.title, event_context):
+        return False
+    return bool(chip_foundry_entities(article_context) & chip_foundry_entities(event_context))
+
+
 def same_ios_signing_status_event(article: Article, event: Event, shared: set[str]) -> bool:
     article_facets = effective_topic_facets(article_primary_facets(article))
     event_facets = effective_topic_facets(event_primary_facets(event))
@@ -18629,6 +18786,8 @@ def should_merge(article: Article, event: Event) -> bool:
             return True
     if same_hardware_company_context_event(article, event, shared):
         return True
+    if same_apple_chip_tariff_exemption_event(article, event):
+        return True
     if not event_kind_compatible(article, event):
         return False
     if not relevance_tier_compatible(article, event):
@@ -18675,6 +18834,8 @@ def should_merge(article: Article, event: Event) -> bool:
         return True
     if same_os_release_event(article, event):
         return True
+    if same_apple_legal_proceeding_event(article, event, shared):
+        return True
     if not topic_facets_compatible(article, event, shared, similarity):
         return False
     common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
@@ -18711,8 +18872,6 @@ def should_merge(article: Article, event: Event) -> bool:
     if same_camera_airpods_code_clue_event(article, event, shared):
         return True
     if same_camera_airpods_development_suspension_event(article, event, shared):
-        return True
-    if same_apple_legal_proceeding_event(article, event, shared):
         return True
     if same_apple_watch_band_sensor_event(article, event, shared):
         return True

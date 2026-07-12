@@ -12,14 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.26.0 - 2026-07-11
+### 1.27.0 - 2026-07-12
 
-- Improved title-and-lead precedence for direct Apple OS components, current system-app guides, watchOS built-in app changes, and government authorization for Apple to access regulated chips or data-center equipment.
-- Tightened event boundaries for built-in apps across OS platforms, foldable-iPhone battery capacity versus battery regulation, product mockups, OpenAI trade-secret litigation, and iPhone production forecasts.
-- Improved cross-source merging for foldable-iPhone battery and mockup reports, Apple market-share research, legal actions, and production metrics while preserving distinct product actions and numeric facts.
-- Tightened weak filtering for personal feature walkthroughs, list-style rumor recaps, and routine third-party desktop-client updates without a new Apple action.
-- Fixed direct Apple market reports and physical Apple Store relocations so comparison context or plural retail wording no longer causes demotion or software misclassification.
-- Updated fallback policy guidance and expanded regression coverage to 477 tests while keeping live discovery coverage unchanged and crawler runtime within the recent performance target.
+- Added cross-angle clustering for Apple chip tariff exemptions when regulatory and foundry reports share the same supplier, production commitment, and exemption action.
+- Improved same-case legal clustering so responses and background reports merge by the concrete parties and proceeding before unrelated body context can split them.
+- Tightened weak filtering for multi-product previews, first-person Apple fleet or product-usage columns, and viral AI-generated Apple-product image debunks without a new Apple action.
+- Kept Apple Books and App Store AI knockoff, fraud, impersonation, and copyright failures eligible as platform-trust news while moving recycled product-rumor background out of required events.
+- Updated fallback policy guidance and expanded regression coverage to 482 tests, with identical live source coverage and improved crawler runtime in baseline comparison.
 
 ## What It Does
 

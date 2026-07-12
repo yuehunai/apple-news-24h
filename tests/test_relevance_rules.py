@@ -11442,6 +11442,108 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(tier, "weak", reason)
 
+    def test_chip_tariff_exemption_merges_hardware_and_regulatory_angles(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "WSJ: Apple avoided semiconductor tariffs thanks to Intel chip deal",
+                (
+                    "Apple reportedly committed to use Intel's U.S. foundries for some future chips, "
+                    "helping the company secure an exemption from 100% semiconductor tariffs."
+                ),
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "美国政府施压：苹果同意让英特尔代工部分芯片，换取半导体关税豁免",
+                (
+                    "报道称苹果承诺采用英特尔美国晶圆厂生产部分 iPhone 和 Mac 芯片，"
+                    "并因此获得美国政府的半导体关税豁免。"
+                ),
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Apple's 100% tariff exemption may have been helped by Intel supply deal",
+                (
+                    "Apple's Intel chip-production agreement reportedly helped persuade the U.S. government "
+                    "to exempt the company from 100% semiconductor tariffs."
+                ),
+                source="AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "IT之家", "AppleInsider"})
+
+    def test_lawsuit_response_merges_with_same_case_background_before_topic_guards(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "OpenAI Responds After Being Sued by Apple",
+                (
+                    "OpenAI responded to Apple's lawsuit alleging that former employees stole trade secrets "
+                    "for its AI hardware work. The company denied seeking Apple's confidential information."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果与 OpenAI 反目始末：人才挖角如何演变为法律大战？",
+                (
+                    "报道回顾苹果起诉 OpenAI 的同一商业秘密案件，称前员工利用漏洞访问内部文件，"
+                    "复制 iPhone 资料，并补充 io Products 收购、AI 设备、原型电池、逻辑板和"
+                    "硬件团队的案件背景。"
+                ),
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "legal_antitrust")
+
+    def test_multi_product_preview_and_buying_roundup_is_weak(self):
+        module = load_module()
+        title = "九月苹果新品前瞻！iPhone 万元起步，史上最贵"
+        summary = (
+            "文章汇总 iPhone、折叠 iPhone、Mac、Apple Watch 等此前传闻，并按预算、"
+            "价格和使用场景给出购买建议，没有苹果发布或新的独立信源。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_work_first_person_usage_column_is_weak_without_new_action(self):
+        module = load_module()
+        title = "Apple @ Work: The M1 MacBook Air has the longest usable lifespan of any Apple laptop"
+        summary = (
+            "The author explains why I still keep 30 to 40 five-year-old M1 MacBook Air units as daily "
+            "loaners and recommends that IT teams retain them instead of recycling them."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_ai_generated_apple_product_photo_debunk_is_weak(self):
+        module = load_module()
+        title = "演员手持折叠 iPhone 照片刷屏，多处破绽显示系 AI 生成"
+        summary = (
+            "网友指出照片中的屏幕宽度和机身细节不一致，判断这是一张 AI 生成的伪造照片；"
+            "正文随后复述此前流传的 iPhone Ultra 规格传闻，没有苹果行动或新的独立爆料。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
 
 if __name__ == "__main__":
     unittest.main()
