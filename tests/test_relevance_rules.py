@@ -11544,6 +11544,208 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(tier, "weak", reason)
 
+    def test_chip_roadmap_memory_capacity_research_transfer_and_process_node_stay_separate(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Here's Why Apple is Reportedly Skipping M6 Pro and M6 Max Chips",
+                (
+                    "Apple will release only the base M6 before moving to M7 six months later. "
+                    "M6 Pro, M6 Max, and M6 Ultra are reportedly cancelled so Apple can accelerate "
+                    "the AI-focused M7 generation."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "M6 era will last just six months as Apple pushes for AI-focused M7",
+                (
+                    "Apple's base M6 is expected in late 2026, followed by M7 in early 2027. "
+                    "The report says there will be no M6 Pro, M6 Max, or M6 Ultra."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Apple's M7 Ultra Chip Designed to Match a 2019 Mac Pro Feat",
+                (
+                    "The M7 Ultra chip is designed to support up to 1.5TB of unified memory, "
+                    "although the final configuration depends on memory supply."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "M7 Ultra to potentially feature up to 1.5TB of RAM",
+                "Apple is preparing an M7 Ultra configuration with up to 1.5TB of unified memory.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Power of Apple's M7 & M8 chips was born from Apple Car research",
+                (
+                    "Research from Apple's cancelled car project is reportedly being reused in the "
+                    "AI design of future M7 and M8 chips for Macs and Apple Intelligence servers."
+                ),
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "苹果 M7 与 M8 芯片的性能被指源自此前造车项目研究",
+                "苹果把自动驾驶项目积累的研究成果转化到 M7 和 M8 芯片的 AI 架构设计中。",
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "Apple M8 Chips Expected to Use TSMC's 1.4nm Process",
+                "Apple is developing M8 chips expected to use TSMC's 1.4nm process in 2028.",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        clusters = [{article.title for article in event.articles} for event in events]
+
+        self.assertEqual(len(events), 4, clusters)
+        self.assertTrue(any({articles[0].title, articles[1].title} <= cluster for cluster in clusters), clusters)
+        self.assertTrue(any({articles[2].title, articles[3].title} <= cluster for cluster in clusters), clusters)
+        self.assertTrue(any({articles[4].title, articles[5].title} <= cluster for cluster in clusters), clusters)
+        self.assertFalse(any(articles[0].title in cluster and articles[2].title in cluster for cluster in clusters), clusters)
+
+    def test_direct_m6_lineup_report_is_strong_hardware_news(self):
+        module = load_module()
+        title = "Here's Why Apple is Reportedly Skipping M6 Pro and M6 Max Chips"
+        summary = (
+            "Apple will release a base M6 chip but no M6 Pro, M6 Max, or M6 Ultra, then move "
+            "to the AI-focused M7 generation six months later."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_store_employee_iphone_deployment_is_hardware_and_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Stores to Expand Use of 'Tap to Pay on iPhone'",
+                (
+                    "Apple will give more retail employees iPhone 16 units to replace iPhone 14 "
+                    "and dedicated Bluetooth card readers for in-store Tap to Pay. iOS 27 also "
+                    "adds Tap to Share."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果开始向更多直营店员工配发 iPhone 16，优化 Tap to Pay 体验",
+                "苹果将向更多 Apple Store 员工配发 iPhone 16，并逐步淘汰旧读卡器。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "retail_store")
+        self.assertEqual(events[0].category, "hardware_products")
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+
+    def test_same_new_apple_pencil_report_merges_despite_battery_regulation_background(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Two New Apple Pencils Reportedly Launching Next Year",
+                (
+                    "Apple is developing new USB-C Apple Pencil and Apple Pencil Pro models for "
+                    "the next iPad Pro, with a new battery system linked to EU requirements."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "古尔曼：苹果明年春季推出新款 Apple Pencil，与下一代 iPad Pro 同步发布",
+                (
+                    "两款新 Apple Pencil 代号 B582 和 B632，预计采用新的可维修电池系统；"
+                    "现款此前已在美国上市。"
+                ),
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+        self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
+
+    def test_crime_blotter_is_weak_when_apple_devices_are_only_evidence_or_stolen_goods(self):
+        module = load_module()
+        title = "Crime blotter: Stolen iPad leads to arrest of accused bank robber"
+        summary = (
+            "A weekly crime roundup covers a stolen iPad tracked by police, school iPads taken "
+            "during a burglary, and counterfeit AirPods offered to officers."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_advice_led_back_to_school_article_is_weak_without_independent_offer_terms(self):
+        module = load_module()
+        title = "Assess Apple's imminent Back to School sales, before you pull the trigger on a bad deal"
+        summary = (
+            "Apple is preparing its annual promotion, but readers are advised to assess the terms "
+            "before buying because other vendors may offer better deals. No 2026 terms are announced."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_multi_brand_activation_comparison_is_weak_despite_apple_background_metrics(self):
+        module = load_module()
+        title = "iPhone 17 Pro Max激活量超1438万台：一款顶四款国产Ultra旗舰总和"
+        summary = (
+            "博主把 iPhone 17 Pro Max 的 1438 万台激活量与 iQOO、小米、vivo、OPPO "
+            "四款 Ultra 旗舰合计 83.4 万台进行对比，称前者达到后者总和的 17.2 倍；"
+            "正文另以 Counterpoint 第一季度数据作为背景。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_competitor_chip_process_first_claim_stays_weak_and_separate_from_apple_m8_process(self):
+        module = load_module()
+        competitor = article_for(
+            module,
+            "谷歌抢苹果首发？曝 Tensor G6 芯片将率先用上台积电 2nm 工艺",
+            (
+                "谷歌 Pixel 11 预计搭载 Tensor G6，成为台积电 2nm 首发客户，"
+                "比苹果 A20 芯片早一个月；苹果只是历代先进制程首发惯例的比较背景。"
+            ),
+            source="IT之家",
+        )
+        apple = article_for(
+            module,
+            "苹果 M8 系列已在研发，预计采用台积电 1.4nm 制程",
+            "苹果 M8 芯片预计于 2028 年采用台积电 1.4nm 工艺，并获得首批产能。",
+            source="cnBeta",
+        )
+
+        events = module.cluster_articles([competitor, apple])
+
+        self.assertEqual(competitor.event_kind, "third_party_ecosystem")
+        self.assertEqual(competitor.relevance_tier, "weak", competitor.relevance_reason)
+        self.assertEqual(apple.event_kind, "hardware_market")
+        self.assertEqual(apple.relevance_tier, "strong", apple.relevance_reason)
+        self.assertEqual(len(events), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.28.0 - 2026-07-13
+
+- Added concrete Apple chip action boundaries so M6 lineup transitions, M7 Ultra memory capacity, cancelled-project research transfers, and M8 process-node plans stay separate while same-action reports still merge across sources.
+- Improved cross-source clustering for Apple Pencil roadmaps and Apple Store employee-device deployments, keeping regulatory or OS context from splitting one hardware action or moving it into software news.
+- Tightened weak filtering for crime roundups, second-person buying advice, sensational multi-brand activation comparisons, and competitor chip or process launches that use Apple mainly as a benchmark.
+- Refined company-organization detection so generic technical architecture wording no longer overrides direct Apple chip research, capacity, or roadmap reporting.
+- Updated fallback policy guidance and expanded regression coverage to 490 tests; live baseline comparison kept candidate, detail, article, and URL coverage identical while reducing crawler runtime.
+
 ## 1.27.0 - 2026-07-12
 
 - Added cross-angle clustering for Apple chip tariff exemptions when regulatory and foundry reports share the same supplier, production commitment, and exemption action.

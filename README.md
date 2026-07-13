@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.27.0 - 2026-07-12
+### 1.28.0 - 2026-07-13
 
-- Added cross-angle clustering for Apple chip tariff exemptions when regulatory and foundry reports share the same supplier, production commitment, and exemption action.
-- Improved same-case legal clustering so responses and background reports merge by the concrete parties and proceeding before unrelated body context can split them.
-- Tightened weak filtering for multi-product previews, first-person Apple fleet or product-usage columns, and viral AI-generated Apple-product image debunks without a new Apple action.
-- Kept Apple Books and App Store AI knockoff, fraud, impersonation, and copyright failures eligible as platform-trust news while moving recycled product-rumor background out of required events.
-- Updated fallback policy guidance and expanded regression coverage to 482 tests, with identical live source coverage and improved crawler runtime in baseline comparison.
+- Added concrete Apple chip action boundaries so M6 lineup transitions, M7 Ultra memory capacity, cancelled-project research transfers, and M8 process-node plans stay separate while same-action reports still merge across sources.
+- Improved cross-source clustering for Apple Pencil roadmaps and Apple Store employee-device deployments, keeping regulatory or OS context from splitting one hardware action or moving it into software news.
+- Tightened weak filtering for crime roundups, second-person buying advice, sensational multi-brand activation comparisons, and competitor chip or process launches that use Apple mainly as a benchmark.
+- Refined company-organization detection so generic technical architecture wording no longer overrides direct Apple chip research, capacity, or roadmap reporting.
+- Updated fallback policy guidance and expanded regression coverage to 490 tests; live baseline comparison kept candidate, detail, article, and URL coverage identical while reducing crawler runtime.
 
 ## What It Does
 
