@@ -11746,6 +11746,805 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(apple.relevance_tier, "strong", apple.relevance_reason)
         self.assertEqual(len(events), 2)
 
+    def test_direct_apple_acquisition_survives_competitor_names_in_body_background(self):
+        module = load_module()
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/13/apple-acquires-observability-startup-sigscalr/",
+            title="Apple acquires observability startup SigScalr",
+            summary=(
+                "Apple acquired part of SigScalr's assets and hired members of its team. "
+                "The observability market also includes Microsoft, Amazon, and Alphabet."
+            ),
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source_named(module, "9to5Mac")))
+
+    def test_material_apple_stock_move_survives_market_comparison_background(self):
+        module = load_module()
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/13/apple-stock-record-territory/",
+            title="Apple Stock Returns to Record Territory After 15% Rally",
+            summary=(
+                "AAPL added roughly $600 billion as investors welcomed Apple's AI spending caution "
+                "and product price increases. Amazon and Microsoft were discussed as market peers."
+            ),
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source_named(module, "MacRumors")))
+        tier, reason = module.classify_relevance_tier(
+            candidate.title, candidate.summary, [], candidate.source
+        )
+        self.assertEqual(tier, "strong", reason)
+
+    def test_app_store_purchase_language_does_not_create_acquisition_identity(self):
+        module = load_module()
+        acquisition = article_for(
+            module,
+            "Apple Acquiring SigScalr",
+            "Apple acquired SigScalr assets and hired employees from the observability startup.",
+            source="MacRumors",
+        )
+        acquisition_followup = article_for(
+            module,
+            "SigLens acquired by Apple for debugging massive apps and services",
+            "Apple bought assets from SigScalr and brought members of the SigLens team into Apple.",
+            source="AppleInsider",
+        )
+        epic = article_for(
+            module,
+            "Epic Games fights Apple's request to pause App Store commission proceedings",
+            (
+                "Epic opposed Apple's request in the App Store case. The filing discusses app purchases, "
+                "commissions, alternative payments, and an earlier company acquisition cited as background."
+            ),
+            source="9to5Mac",
+        )
+
+        self.assertNotIn("apple-strategic-transaction", module.primary_topic_facets(epic.title, epic.summary))
+        events = module.cluster_articles([acquisition, epic, acquisition_followup])
+        self.assertEqual(len(events), 2)
+        acquisition_event = next(event for event in events if any("Sig" in item.title for item in event.articles))
+        self.assertEqual({item.source for item in acquisition_event.articles}, {"MacRumors", "AppleInsider"})
+
+    def test_generic_component_capacity_story_is_weak_and_does_not_bridge_apple_chip_roadmap(self):
+        module = load_module()
+        generic_cowos = article_for(
+            module,
+            "台积电 CoWoS 供不应求，订单外溢至封测厂和英特尔",
+            (
+                "AI 芯片带动先进封装需求，英伟达囊括大多数 CoWoS 产能，其他客户还包括苹果、"
+                "博通、AMD、亚马逊和联发科；订单外溢至日月光、英特尔等封测厂。"
+                "报道没有披露苹果与博通之间的新协议，也没有苹果订单、产品或制程动作。"
+            ),
+            source="快科技",
+        )
+        apple_m8 = article_for(
+            module,
+            "苹果 M8 芯片路线图曝光：计划采用台积电 1.4nm 制程",
+            "苹果计划让 M8 系列 Mac 芯片采用台积电 1.4nm 工艺，并争取首批产能。",
+            source="快科技",
+        )
+
+        self.assertEqual(generic_cowos.relevance_tier, "weak", generic_cowos.relevance_reason)
+        self.assertEqual(apple_m8.relevance_tier, "strong", apple_m8.relevance_reason)
+        self.assertEqual(len(module.cluster_articles([generic_cowos, apple_m8])), 2)
+
+    def test_first_public_beta_release_wave_merges_cross_platform_sources_without_feature_bridging(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 27 and iPadOS 27 Now Available to Public Beta Testers",
+                (
+                    "Apple released the first public betas of iOS 27 and iPadOS 27. "
+                    "Subscribe to the MacRumors YouTube channel for more videos."
+                ),
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "iOS 27 public beta is here with Siri AI, iPhone speed upgrades, and more",
+                "Apple released the first iOS 27 public beta with Siri AI and performance changes.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "First macOS Golden Gate Public Beta Now Available",
+                "Apple released the first macOS 27 Golden Gate public beta to testers.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple's public betas for iOS 27 and more are out now",
+                "Apple released the first public betas of iOS 27, iPadOS 27, macOS 27, and watchOS 27.",
+                source="The Verge",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        events = module.cluster_articles(articles)
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "9to5Mac", "The Verge"})
+
+    def test_routine_third_party_apple_tv_app_launch_is_weak(self):
+        module = load_module()
+        title = "WordPress just released a brand-new Apple TV app with thousands of free videos"
+        summary = "WordPress launched its own third-party tvOS app for watching WordPress.tv videos on Apple TV."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_same_apple_cross_device_pairing_api_merges_platform_and_meta_angles(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Plans AirPods-Like Pairing for Meta's Glasses and Quest",
+                "Apple is developing an iOS API that gives approved third-party devices automatic proximity pairing like AirPods.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果披露正为欧盟地区 iOS 开发全新 API，允许第三方产品跨设备自动同步配对",
+                "苹果的新配对 API 将先支持 Meta Quest 头显，并受欧盟互操作要求推动。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Facebook demands AirPods-like pairing for its glasses and headsets",
+                "Meta requested the same Apple iOS automatic pairing API for its glasses and Quest headsets.",
+                source="AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家", "AppleInsider"})
+        self.assertEqual(events[0].category, "software_systems")
+
+    def test_material_apple_stock_move_merges_cross_source_reporting(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "AAPL stock rallies 15% as investors favor AI caution and welcome price increases",
+                "Apple shares gained 15% from their post-WWDC low as investors reassessed AI spending and product prices.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Stock Returns to Record Territory After 15% Rally",
+                "Apple added about $600 billion in value and closed at $315.32, near its $317.40 record.",
+                source="MacRumors",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "MacRumors"})
+        self.assertEqual(events[0].event_kind, "hardware_market")
+        self.assertEqual(events[0].category, "hardware_products")
+
+    def test_revised_developer_builds_stay_separate_from_first_public_beta_wave(self):
+        module = load_module()
+        public_ios = article_for(
+            module,
+            "iOS 27 public beta is here with Siri AI and iPhone speed upgrades",
+            "Apple released the first iOS 27 public beta to public beta testers.",
+            source="9to5Mac",
+        )
+        public_tvos = article_for(
+            module,
+            "tvOS 27 and watchOS 27 now available to public beta testers",
+            "Apple released the first public betas of tvOS 27 and watchOS 27.",
+            source="MacRumors",
+        )
+        revised_9to5 = article_for(
+            module,
+            "Apple rolls out revised beta 3 builds for iPadOS 27 and macOS 27 Golden Gate",
+            "Apple replaced the third developer beta builds of iPadOS 27 and macOS 27 with revised builds.",
+            source="9to5Mac",
+        )
+        revised_ai = article_for(
+            module,
+            "iPadOS 27 and macOS 27 beta 3 get a version 2 update as public betas drop",
+            "Apple issued second builds of the third developer betas for iPadOS 27 and macOS 27.",
+            source="AppleInsider",
+        )
+
+        events = module.cluster_articles([public_ios, public_tvos, revised_9to5, revised_ai])
+
+        self.assertEqual(len(events), 2)
+        revised_event = next(event for event in events if any("revised" in item.title.lower() or "version 2" in item.title.lower() for item in event.articles))
+        self.assertEqual({item.source for item in revised_event.articles}, {"9to5Mac", "AppleInsider"})
+        self.assertTrue(all("public beta" not in item.title.lower() or "version 2" in item.title.lower() for item in revised_event.articles))
+
+    def test_direct_apple_vision_pro_design_guidance_is_strong_software(self):
+        module = load_module()
+        title = "苹果更新 Vision Pro 空间配件设计指南，详解 visionOS 27 第三方手柄支持"
+        summary = "苹果面向开发者更新官方设计指南，列出空间配件与 visionOS 27 控制器的接口和交互要求。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+
+    def test_apple_car_research_reused_for_named_m_series_roadmap_is_strong_hardware(self):
+        module = load_module()
+        title = "消息称苹果转化 100 亿美元造车成果，用于 M7/M8 系列 Mac AI 芯片"
+        summary = "苹果把已终止造车项目积累的芯片与 AI 研究成果转入 M7 和 M8 系列 Mac 芯片研发。"
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertIn("apple-chip-research-transfer", module.primary_topic_facets(title, summary))
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_dated_apple_tv_sports_lineup_is_service_content(self):
+        module = load_module()
+        title = "Apple TV has a packed lineup of sports premieres coming soon"
+        summary = "Apple announced dated July premieres and schedules for Formula 1, MLS, and Friday Night Baseball on Apple TV."
+
+        self.assertEqual(module.detect_event_kind(title, summary, []), "service_content")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+        self.assertEqual(tier, "strong", reason)
+
+    def test_hardware_trade_secret_lawsuit_is_classified_as_hardware(self):
+        module = load_module()
+        article = article_for(
+            module,
+            "Apple's OpenAI lawsuit threatens plans for an iPhone rival",
+            (
+                "Apple alleges former hardware engineers took unreleased device designs and product-roadmap secrets "
+                "to OpenAI, affecting Jony Ive's physical AI hardware timeline."
+            ),
+            source="MacRumors",
+        )
+
+        event = module.cluster_articles([article])[0]
+
+        self.assertEqual(event.event_kind, "legal_antitrust")
+        self.assertEqual(event.category, "hardware_products")
+
+    def test_combined_release_roundup_cannot_bridge_public_beta_and_revised_build_events(self):
+        module = load_module()
+        public = article_for(
+            module,
+            "iOS 27 and iPadOS 27 Now Available to Public Beta Testers",
+            "Apple released the first public betas of iOS 27 and iPadOS 27.",
+            source="MacRumors",
+        )
+        combined = article_for(
+            module,
+            "苹果发布 iOS 27 等首个公测版，同步推送 macOS 27 Beta 3 修订版",
+            "苹果发布首个 iOS 27 公测版，同时向开发者推送 macOS 27 Beta 3 修订编译版本。",
+            source="IT之家",
+        )
+        revised = article_for(
+            module,
+            "Apple rolls out revised beta 3 builds for iPadOS 27 and macOS 27 Golden Gate",
+            "Apple replaced the third developer beta builds of iPadOS 27 and macOS 27.",
+            source="9to5Mac",
+        )
+
+        events = module.cluster_articles([public, combined, revised])
+
+        self.assertEqual(len(events), 2)
+        self.assertFalse(any(public in event.articles and revised in event.articles for event in events))
+
+    def test_epic_app_store_case_cannot_absorb_openai_hardware_trade_secret_case(self):
+        module = load_module()
+        epic = article_for(
+            module,
+            "Epic fights Apple's request to pause App Store commission proceedings",
+            "Epic opposed Apple's request in the App Store commission lawsuit.",
+            source="9to5Mac",
+        )
+        generic_epic = article_for(
+            module,
+            "苹果请求法院暂停 App Store 佣金诉讼，遭 Epic 反对",
+            "法院文件涉及 Apple、Epic、App Store 佣金和替代支付争议。",
+            source="IT之家",
+        )
+        openai = article_for(
+            module,
+            "OpenAI hardware timeline unchanged after Apple trade-secret lawsuit",
+            "Apple alleges former hardware engineers took unreleased device designs for OpenAI's physical AI product.",
+            source="cnBeta",
+        )
+
+        events = module.cluster_articles([epic, generic_epic, openai])
+
+        self.assertEqual(len(events), 2)
+        self.assertFalse(any(epic in event.articles and openai in event.articles for event in events))
+        self.assertEqual(next(event for event in events if openai in event.articles).category, "hardware_products")
+
+    def test_same_q2_iphone_market_share_reports_merge_despite_pricing_context(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple hits record 20% global smartphone shipment share as market plunges",
+                "Counterpoint says Apple reached a record Q2 share of 20% in 2026.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Omdia 报告 2026Q2 全球手机出货量同比降 4%：三星占 22%、苹果占 20%",
+                "Omdia 称苹果 2026 年第二季度全球智能手机份额达到同期纪录 20%。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 2026 年 Q2 全球智能手机份额冲至 20%：创同期新高，全靠 iPhone 17 不涨价",
+                "报告称苹果份额达到 20%，iPhone 17 维持定价被视为增长因素。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual({item.source for item in events[0].articles}, {"9to5Mac", "IT之家", "快科技"})
+
+    def test_same_beta_number_release_wave_merges_across_platforms_and_update_labels(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Seeds Fifth iOS 26.6 and iPadOS 26.6 Betas to Developers [Update: Public Beta Available]",
+                "Apple released beta 5 of iOS 26.6 and iPadOS 26.6.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "macOS 26.6 beta 5 now available, here's what's coming",
+                "Apple released macOS 26.6 beta 5 to developers.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果 watchOS 26.6 开发者预览版 Beta 5 发布",
+                "苹果发布 watchOS 26.6 Beta 5。",
+                source="IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+
+    def test_public_beta_advice_and_feature_list_without_new_action_are_weak(self):
+        module = load_module()
+        titles = [
+            "iOS 27 Public Beta Is Here: 10 New Features Worth Testing",
+            "iOS 27 public beta: Should you install it on your iPhone?",
+            "The macOS 27 public beta is worth it just for the Liquid Glass tweaks",
+        ]
+
+        for title in titles:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, title, [], "9to5Mac")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_current_macrumors_public_beta_feature_guide_remains_reviewable(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/guide/ios-27-public-beta-features/",
+            title="iOS 27 Public Beta Is Here: 10 New Features Worth Testing",
+            summary=(
+                "Apple released the iOS 27 public beta today and lists performance improvements, "
+                "Siri AI, Visual Intelligence, Safari, Home, AirPods EQ, and Shortcuts changes. "
+                "The guide also mentions third-party apps, alternative Siri activation methods, "
+                "installation advice, and forum links."
+            ),
+            feed_time_raw="Mon, 13 Jul 2026 16:07:18 PDT",
+            context="featured ios 27",
+        )
+
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [candidate.context],
+            candidate.source,
+        )
+
+        self.assertEqual(tier, "weak", reason)
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
+    def test_direct_macos_malware_reports_merge_by_family(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "CrashStealer malware poses as an Apple tool to steal passwords and Mac data",
+            "CrashStealer targets macOS users and steals credentials from 14 password managers.",
+            source="AppleInsider",
+        )
+        chinese = article_for(
+            module,
+            "CrashStealer 攻击披露：针对苹果 Mac 用户，瞄准 14 款密码管理器",
+            "该恶意软件伪装成苹果工具，窃取 macOS 密码和浏览器数据。",
+            source="IT之家",
+        )
+
+        events = module.cluster_articles([english, chinese])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "security_privacy")
+        self.assertEqual(events[0].relevance_tier, "strong")
+
+    def test_malicious_imessage_warning_reports_merge_as_direct_os_security_change(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 26.6 Will Warn You About Malicious iMessages",
+                "Apple added an iOS warning for malicious messages and suspicious links.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 26.6 Beta 5 新增检测到恶意信息提醒",
+                "信息 App 会警告用户收到的恶意 iMessage。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "iOS 26.6 将针对恶意 iMessage 发出警告",
+                "苹果新增恶意信息警告功能。",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "security_privacy")
+        self.assertEqual(events[0].relevance_tier, "strong")
+
+    def test_apple_i_auction_is_hardware_news(self):
+        module = load_module()
+        self.assertEqual(
+            module.choose_category(
+                "又一台能开机的苹果 Apple I 电脑被拍卖，估价 30 万-50 万美元",
+                "一台可运行的 Apple I 实体电脑进入拍卖。",
+            ),
+            "hardware_products",
+        )
+
+    def test_openai_product_trade_secret_case_merges_across_headline_styles_as_hardware(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "为了 AI iPhone 苹果正式起诉 OpenAI",
+                "苹果指控前员工窃取未发布产品、设备设计和供应链资料，协助 OpenAI 开发实体 AI 硬件。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "Report: Apple's OpenAI Lawsuit Threatens iPhone Rival Plans",
+                "Apple alleges former hardware engineers took unreleased device designs for OpenAI's physical AI product.",
+                source="MacRumors",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "hardware_products")
+        self.assertEqual(events[0].event_kind, "legal_antitrust")
+
+    def test_plural_beta_release_titles_merge_by_version_and_beta_number(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Releases Fifth watchOS 26.6, tvOS 26.6 and visionOS 26.6 Betas",
+                "Apple released beta 5 across watchOS, tvOS, and visionOS.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Seeds Fifth iOS 26.6 and iPadOS 26.6 Betas to Developers [Update: Public Beta Available]",
+                "Apple released beta 5 of iOS 26.6 and iPadOS 26.6.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "macOS 26.6 beta 5 now available, here's what's coming",
+                "Apple released macOS 26.6 beta 5 to developers.",
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+
+    def test_apple_intel_foundry_commitment_is_hardware_and_merges_with_named_chip_order(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Report: Apple Agreed to Intel Chips Amid White House Tariff Talks",
+                "Apple agreed to have Intel fabricate chips for future Mac and iPhone products.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Intel 18A-P 工艺拿下苹果 M7 处理器订单",
+                "苹果将由 Intel 代工 M7 芯片，采用 18A-P 制程。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "hardware_products")
+        self.assertEqual(events[0].event_kind, "hardware_market")
+
+    def test_competitor_chip_launch_cannot_join_apple_foundry_sourcing_event(self):
+        module = load_module()
+        competitor = article_for(
+            module,
+            "台积电 2nm 已量产，谷歌新机将抢先苹果首发搭载",
+            "报道主体是谷歌手机和台积电 2nm 量产，仅在比较中提到苹果后续产品。",
+            source="快科技",
+        )
+        apple = article_for(
+            module,
+            "Report: Apple Agreed to Intel Chips Amid White House Tariff Talks",
+            "Apple agreed to have Intel fabricate chips for future Mac and iPhone products.",
+            source="MacRumors",
+        )
+
+        events = module.cluster_articles([competitor, apple])
+
+        self.assertEqual(len(events), 2)
+        self.assertEqual(competitor.relevance_tier, "weak")
+        self.assertNotIn("apple-chip-foundry-sourcing", module.article_primary_facets(competitor))
+
+    def test_high_overlap_hardware_leak_followups_merge_on_multiple_specific_facets(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro 散热史诗级提升，A20 Pro 采用台积电 WMCM 封装",
+                "泄露资料显示 A20 Pro 采用 WMCM 多芯片封装、2nm 芯片和新散热结构。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro 散热大翻身，A20 Pro 性能释放更彻底",
+                "同一批泄露资料显示 A20 Pro 使用 WMCM 多芯片封装、2nm 芯片和新散热结构。",
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+
+    def test_third_party_product_name_containing_vision_pro_is_not_apple_news(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://example.com/dynamic-vision-pro-cooler",
+            title="利民推出 Dynamic Vision PRO 360 ARGB BLACK 液冷散热器",
+            summary="产品配备 6400 RPM 水泵、VRM 风扇和可旋转 LCD 冷头屏幕。",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(candidate, source))
+        tier, _ = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+        self.assertEqual(tier, "weak")
+
+    def test_apple_service_how_to_without_new_action_is_weak(self):
+        module = load_module()
+        title = "How to use Playlist Playground to build Apple Music playlists in seconds"
+        summary = (
+            "Apple added Playlist Playground in iOS 26.4. This walkthrough explains how "
+            "to enter prompts and refine an existing playlist."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_market_comparison_cannot_join_direct_apple_share_report(self):
+        module = load_module()
+        apple_report = article_for(
+            module,
+            "Apple hits record 20% global smartphone shipment share as market plunges",
+            "Counterpoint says Apple reached a record Q2 share of 20% in 2026.",
+            source="9to5Mac",
+        )
+        competitor_report = article_for(
+            module,
+            "三星 Galaxy 手机在韩独占逾 80% 份额，亦成为 78% 用户未来购机选择",
+            (
+                "韩国盖洛普调查显示 Galaxy 用户占 81%，苹果手机占 19%；只有 20 至 29 岁人群中，"
+                "苹果手机用户占比 53%，高于 Galaxy 的 47%。"
+            ),
+            source="IT之家",
+        )
+
+        events = module.cluster_articles([apple_report, competitor_report])
+
+        self.assertEqual(len(events), 2)
+        self.assertFalse(any(apple_report in event.articles and competitor_report in event.articles for event in events))
+
+    def test_direct_apple_metrics_in_multi_vendor_market_report_are_strong(self):
+        module = load_module()
+        title = (
+            "IDC 报告 2026 年 Q2 全球智能手机出货量同比下滑 6.7%："
+            "小米跌幅最大但有意为之，三星、苹果、华为逆势上涨"
+        )
+        summary = (
+            "苹果第二季度出货量创历史同期新高，市场份额扩大 3.8 个百分点，"
+            "全年市场份额有望达到 22%，主要受 iPhone 17 需求推动。"
+            "IDC 全球客户端设备副总裁发布了相关分析。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertIn("apple-market-share-report", module.primary_topic_facets(title, summary))
+
+    def test_government_pressure_for_apple_to_use_intel_foundry_is_hardware_sourcing(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Report: Apple Agreed to Intel Chips Amid White House Tariff Talks",
+                "Apple agreed to have Intel fabricate chips for future Mac and iPhone products.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "英特尔翻身有靠山！特朗普施压苹果、英伟达：英特尔这单你们必须接",
+                (
+                    "美国政府将英特尔复兴列为战略优先项，向苹果、英伟达及 SpaceX 等潜在合作伙伴施压，"
+                    "鼓励采用英特尔的芯片与晶圆制造服务；苹果与英特尔的谈判正在推进。"
+                    "背景还提到日本软银此前对英特尔投资。"
+                ),
+                source="快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "hardware_products")
+        self.assertEqual(events[0].event_kind, "hardware_market")
+        self.assertEqual(events[0].merge_warnings, [])
+
+    def test_independent_ios_developer_project_is_weak_without_apple_action(self):
+        module = load_module()
+        title = "代码 100% 由 AI 编写：9 年 iOS 开发者 15 天打造外卖游戏，斩获 2.5 万美元奖金"
+        summary = (
+            "一名独立 iOS 开发者在 Cursor Vibe Jam 中使用 Claude Code 开发第三方游戏并获奖，"
+            "科技媒体发布博文称项目生成了约 2.7 万行代码；报道主体是参赛项目、开发过程和奖金，"
+            "并未涉及平台政策或系统功能变更。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+        facets = module.primary_topic_facets(title, summary)
+        self.assertFalse(any(facet.startswith("os-release-version-") for facet in facets))
+
+    def test_numbered_os_feature_roundup_without_new_action_is_weak(self):
+        module = load_module()
+        title = "Time for change: 50 Apple Watch updates coming in watchOS 27"
+        summary = (
+            "A roundup collects 50 previously announced watchOS 27 interface and app changes. "
+            "It does not report a new release, build, or standalone Apple action."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_led_corporate_ranking_with_apple_as_comparison_is_weak(self):
+        module = load_module()
+        title = "普华永道发布 2026 全球市值 100 强上市公司排行榜，英伟达超越苹果登顶"
+        summary = (
+            "PwC 按 2026 年 3 月 31 日市值列出全球 100 强公司，英伟达位居第一。"
+            "报告讨论全球企业总市值、美国公司占比，以及半导体、硬件和芯片行业增长，"
+            "苹果只是排名比较对象。"
+        )
+
+        kind = module.detect_event_kind(title, summary)
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(kind, "third_party_ecosystem")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_legal_dispute_with_later_apple_comparison_is_rejected(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        title = "OpenAI 反击马斯克窃密官司：xAI 诉讼浪费公司资源，需承担百万法律费"
+        summary = (
+            "OpenAI 向法院申请裁定 xAI 的商业机密窃取诉讼本不该立案，并要求对方承担超百万美元法律费用。"
+            "这标志着两家公司法律纠纷进一步升级。OpenAI 指责 xAI 先起诉后找证据。"
+            "作为后文背景，报道提到苹果公司上周也对 OpenAI 提起了另一宗商业秘密诉讼。"
+        )
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://example.com/openai-xai-lawsuit",
+            title=title,
+            summary=summary,
+            context="苹果起诉 OpenAI 涉嫌窃取未发布硬件机密。",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(candidate, source))
+        tier, reason = module.classify_relevance_tier(
+            title,
+            summary,
+            [candidate.context],
+            candidate.source,
+        )
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_legal_story_with_direct_lead_remains_strong(self):
+        module = load_module()
+        title = "OpenAI hardware timeline unchanged after Apple trade-secret theft lawsuit"
+        summary = (
+            "Apple sued OpenAI over alleged theft of unreleased hardware information. "
+            "OpenAI still plans to unveil its first device this year."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_macos_point_beta_and_legacy_release_candidates_remain_separate(self):
+        module = load_module()
+        current_beta = article_for(
+            module,
+            "Fifth macOS Tahoe 26.6 Beta Now Available for Developers [Update: Public Beta Available]",
+            (
+                "Apple released macOS Tahoe 26.6 beta 5 to developers for testing purposes. "
+                "An update notes that "
+                "public release candidates for macOS Sonoma 14.8.8 and macOS Sequoia 15.7.8 "
+                "also became available."
+            ),
+            source="MacRumors",
+        )
+        legacy_rc = article_for(
+            module,
+            "macOS Sonoma 14.8.8 and macOS Sequoia 15.7.8 get a rare fifth RC",
+            (
+                "Developers testing macOS Sonoma 14.8.8 and macOS Sequoia 15.7.8 can install "
+                "the fifth release candidate builds for macOS Sonoma 14.8.8 "
+                "and macOS Sequoia 15.7.8 alongside macOS 26.6 beta 5."
+            ),
+            source="9to5Mac",
+        )
+
+        events = module.cluster_articles([current_beta, legacy_rc])
+
+        self.assertEqual(len(events), 2)
+        self.assertIn("os-release-version-26-6", module.primary_topic_facets(current_beta.title, current_beta.summary))
+        self.assertIn("os-release-beta-5", module.primary_topic_facets(current_beta.title, current_beta.summary))
+        self.assertIn("os-release-version-14-8-8", module.primary_topic_facets(legacy_rc.title, legacy_rc.summary))
+        self.assertIn("os-release-rc", module.primary_topic_facets(legacy_rc.title, legacy_rc.summary))
+
 
 if __name__ == "__main__":
     unittest.main()

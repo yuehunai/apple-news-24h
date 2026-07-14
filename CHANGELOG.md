@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.30.0 - 2026-07-14
+
+- Added authoritative event identities for OS versions, release channels, beta numbers, legal counterparties, strategic transactions, stock moves, malware families, and hardware actions, preventing unrelated reports from merging through generic shared terms.
+- Improved high-volume cross-source coverage for Apple acquisitions, public and developer beta releases, market-share reports, Apple TV sports lineups, stock moves, foundry sourcing, security reports, and hardware litigation while preserving every reviewed source URL in final briefs.
+- Improved OS release boundaries so first public betas, revised developer builds, numbered beta waves, internal testing, current feature guides, and advice or roundup articles are classified and grouped by their concrete Apple release action.
+- Tightened weak filtering for independent developer projects, routine third-party Apple-platform apps, competitor-led rankings and component reports, product-name collisions, and non-Apple legal disputes that mention Apple only as background.
+- Updated fallback policy and agent-facing source coverage rules, and expanded regression coverage to 528 tests with live validation confirming complete target-source coverage and clean event boundaries.
+
 ## 1.28.0 - 2026-07-13
 
 - Added concrete Apple chip action boundaries so M6 lineup transitions, M7 Ultra memory capacity, cancelled-project research transfers, and M8 process-node plans stay separate while same-action reports still merge across sources.

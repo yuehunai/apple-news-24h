@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.28.0 - 2026-07-13
+### 1.30.0 - 2026-07-14
 
-- Added concrete Apple chip action boundaries so M6 lineup transitions, M7 Ultra memory capacity, cancelled-project research transfers, and M8 process-node plans stay separate while same-action reports still merge across sources.
-- Improved cross-source clustering for Apple Pencil roadmaps and Apple Store employee-device deployments, keeping regulatory or OS context from splitting one hardware action or moving it into software news.
-- Tightened weak filtering for crime roundups, second-person buying advice, sensational multi-brand activation comparisons, and competitor chip or process launches that use Apple mainly as a benchmark.
-- Refined company-organization detection so generic technical architecture wording no longer overrides direct Apple chip research, capacity, or roadmap reporting.
-- Updated fallback policy guidance and expanded regression coverage to 490 tests; live baseline comparison kept candidate, detail, article, and URL coverage identical while reducing crawler runtime.
+- Added authoritative event identities for OS versions, release channels, beta numbers, legal counterparties, strategic transactions, stock moves, malware families, and hardware actions, preventing unrelated reports from merging through generic shared terms.
+- Improved high-volume cross-source coverage for Apple acquisitions, public and developer beta releases, market-share reports, Apple TV sports lineups, stock moves, foundry sourcing, security reports, and hardware litigation while preserving every reviewed source URL in final briefs.
+- Improved OS release boundaries so first public betas, revised developer builds, numbered beta waves, internal testing, current feature guides, and advice or roundup articles are classified and grouped by their concrete Apple release action.
+- Tightened weak filtering for independent developer projects, routine third-party Apple-platform apps, competitor-led rankings and component reports, product-name collisions, and non-Apple legal disputes that mention Apple only as background.
+- Updated fallback policy and agent-facing source coverage rules, and expanded regression coverage to 528 tests with live validation confirming complete target-source coverage and clean event boundaries.
 
 ## What It Does
 
