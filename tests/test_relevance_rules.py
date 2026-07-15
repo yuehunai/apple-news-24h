@@ -7361,6 +7361,17 @@ class RelevanceRuleTests(unittest.TestCase):
                 ),
             ),
         )
+        self.assertNotIn(
+            "apple-display-panel-spec-rumor",
+            module.primary_topic_facets(
+                "iPhone Ultra 2 Gets Green Light for Development, Says Leaker",
+                (
+                    "Apple's second-generation foldable iPhone has officially been given the go-ahead "
+                    "for development. The first foldable iPhone will use a foldable 7.8-inch OLED panel "
+                    "supplied by Samsung, based on reports."
+                ),
+            ),
+        )
 
         events = module.cluster_articles(articles)
 
@@ -12544,6 +12555,598 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertIn("os-release-beta-5", module.primary_topic_facets(current_beta.title, current_beta.summary))
         self.assertIn("os-release-version-14-8-8", module.primary_topic_facets(legacy_rc.title, legacy_rc.summary))
         self.assertIn("os-release-rc", module.primary_topic_facets(legacy_rc.title, legacy_rc.summary))
+
+    def test_distinct_apple_tv_titles_do_not_merge_on_cast_and_trailer_boilerplate(self):
+        module = load_module()
+        mayday = article_for(
+            module,
+            "Apple TV's next action-comedy starring Ryan Reynolds gets first trailer - 9to5Mac",
+            "Apple TV today released the first trailer for Mayday, an action comedy movie starring Ryan Reynolds and Kenneth Branagh. Watch it below.",
+            source="9to5Mac",
+        )
+        lucky = article_for(
+            module,
+            "Limited series Lucky, starring Anya Taylor-Joy, premieres on Apple TV - 9to5Mac",
+            "The first episodes of Lucky, Apple TV's new limited series starring Anya Taylor-Joy, are now streaming. Watch the trailer below.",
+            source="9to5Mac",
+        )
+
+        self.assertEqual(len(module.cluster_articles([mayday, lucky])), 2)
+
+    def test_apple_arcade_title_identity_overrides_device_compatibility_background(self):
+        module = load_module()
+        newsroom = article_for(
+            module,
+            "Madden NFL 27 Arcade Edition brings gridiron action to Apple Arcade on August 6",
+            "Apple announced Madden NFL 27 Arcade Edition for Apple Arcade on iPhone, iPad, Mac, Apple TV, and Apple Vision Pro.",
+            source="Apple Newsroom",
+        )
+        appleinsider = article_for(
+            module,
+            "Madden football returns to Mac for the first time in 19 years",
+            "Madden NFL 27 Arcade Edition arrives through Apple Arcade and also supports Apple TV and Vision Pro as compatible devices.",
+            source="AppleInsider",
+        )
+
+        self.assertEqual(
+            module.primary_topic_facets(appleinsider.title, appleinsider.summary),
+            {"apple-arcade"},
+        )
+        events = module.cluster_articles([newsroom, appleinsider])
+        self.assertEqual(len(events), 1)
+
+    def test_distinct_apple_legal_cases_do_not_merge_through_generic_legal_terms(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple says Epic's arguments against pausing the case are wrong",
+                "Apple responded to Epic Games in the App Store commission and anti-steering case.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果请求暂停 App Store 佣金案程序，称 Epic 的反对理由错误",
+                "苹果在 Epic Games 的 App Store 反引导和佣金诉讼中提交了新的法院文件。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Judge dismisses lawsuit accusing Apple of failing to stop CSAM on iCloud",
+                "A federal judge dismissed the iCloud CSAM class action under Section 230.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果成功驳回 iCloud 儿童性虐待材料集体诉讼",
+                "法院依据 Section 230 驳回指控苹果未阻止 iCloud 传播儿童性虐待材料的案件。",
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "OpenAI says it has seen no evidence supporting Apple's trade-secret theft claims",
+                "OpenAI responded to Apple's lawsuit alleging theft of unreleased hardware trade secrets.",
+                source="9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        self.assertEqual(len(events), 3)
+        source_sets = [{article.source for article in event.articles} for event in events]
+        self.assertIn({"9to5Mac", "IT之家"}, source_sets)
+        self.assertIn({"9to5Mac", "cnBeta"}, source_sets)
+
+    def test_direct_prismml_talks_are_strong_but_model_only_release_stays_weak(self):
+        module = load_module()
+        direct = [
+            article_for(
+                module,
+                "PrismML confirms it is in talks with Apple about AI model-shrinking tech",
+                "PrismML CEO Babak Hassibi confirmed early talks with Apple about evaluating its model-compression technology.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "PrismML确认正与苹果洽谈 AI 模型压缩技术合作",
+                "PrismML 表示苹果正在评估其 1-bit 模型压缩技术，双方处于早期沟通阶段。",
+                source="cnBeta",
+            ),
+        ]
+        model_only = article_for(
+            module,
+            "PrismML releases Bonsai 27B, claiming first major AI model of its size fit for iPhone",
+            "The startup released a compressed third-party AI model that can run on iPhone; Apple did not announce a partnership or platform change.",
+            source="9to5Mac",
+        )
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in direct))
+        self.assertTrue(
+            all(
+                "apple-on-device-ai-model-compression" in module.primary_topic_facets(article.title, article.summary)
+                for article in direct
+            )
+        )
+        self.assertEqual(model_only.relevance_tier, "weak")
+        events = module.cluster_articles([*direct, model_only])
+        self.assertEqual(len(events), 2)
+        self.assertEqual(len(next(event for event in events if direct[0] in event.articles).articles), 2)
+
+    def test_chinese_apple_initiated_ai_compression_talks_are_direct_apple_news(self):
+        module = load_module()
+        title = "苹果研发 AI 模型压缩技术：把 270 亿参数大模型装进 iPhone"
+        summary = (
+            "苹果正与硅谷初创公司 PrismML 进行早期洽谈，后者宣称能将大型 AI 模型压缩至可在 "
+            "iPhone 上本地运行。双方仍在评估技术，尚未公布交易。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(
+            module.primary_topic_facets(title, summary),
+            {"apple-on-device-ai-model-compression"},
+        )
+
+    def test_siri_beta_availability_does_not_inherit_listed_product_topics(self):
+        module = load_module()
+        title = "苹果通过 iOS 27 公测版向更多用户开放 Siri AI"
+        summary = (
+            "苹果向公众开放重构后的 Siri AI。此次公测覆盖 iPhone、iPad、Mac、Apple Watch、"
+            "CarPlay、AirPods、Apple TV 和 Vision Pro；正文还说明模型基于苹果芯片优化。"
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+
+        self.assertIn("apple-ai-platform", facets)
+        self.assertNotIn("apple-tv-content", facets)
+        self.assertNotIn("carplay-platform-feature", facets)
+        self.assertNotIn("ipad-chip-roadmap", facets)
+
+    def test_product_outlook_roundup_is_not_promoted_by_recycled_specs(self):
+        module = load_module()
+        title = "OLED iPad Mini: Release Date, Pricing, and What to Expect"
+        summary = (
+            "A roundup asks what to expect and recaps prior reports about an A19 Pro chip, an 8.4-inch "
+            "OLED panel, water resistance, and a possible late-2026 launch. It contains no newly sourced report."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_industry_story_is_not_promoted_by_later_apple_legal_example(self):
+        module = load_module()
+        title = "SK海力士扩产画饼被戳破！2028年产能仅六分之一：DRAM高价还要3年"
+        summary = (
+            "美国银行发布全球存储周报，估算 SK 海力士到 2028 年实际新增产能仅为原规划的"
+            "六分之一。正文后段才讨论存储厂商在美国遭遇的集体诉讼，并将苹果对 iPad 和 Mac"
+            "的全面提价援引为直接损害案例。"
+        )
+        facts = [
+            "三星、SK 海力士与美光在加州联邦法院遭遇集体诉讼。",
+            "原告方将苹果对 iPad 和 Mac 的提价援引为损害案例。",
+        ]
+
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_carrier_financing_lock_policy_is_direct_hardware_news(self):
+        module = load_module()
+        title = (
+            "分期买 iPhone 17 Pro 不再自动解锁：苹果确认 T-Mobile 和 Verizon "
+            "分期用户不再享受无锁待遇"
+        )
+        summary = (
+            "苹果更新购买 FAQ：通过运营商设备分期计划购买的 iPhone 在还清全款前保持有锁状态，"
+            "用户不能直接换网；新条款涉及 T-Mobile、Verizon 和 AT&T。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(
+            module.primary_topic_facets(title, summary),
+            {"iphone-carrier-lock-policy"},
+        )
+
+    def test_apple_analyst_rating_action_is_separate_from_market_share_background(self):
+        module = load_module()
+        title = "KeyBanc downgrades Apple to Underweight with a $250 price target"
+        summary = (
+            "The investment bank cut its Apple rating and set a $250 target, citing slower iPhone production, "
+            "weaker carrier subsidies, and service growth risk. The report later notes Apple's 20% market share."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(
+            module.primary_topic_facets(title, summary),
+            {"apple-analyst-rating-target"},
+        )
+
+    def test_speculative_witness_analysis_is_not_a_new_legal_action(self):
+        module = load_module()
+        response = article_for(
+            module,
+            "OpenAI says Apple's trade-secret complaint has no merit",
+            "OpenAI formally responded to Apple's lawsuit and denied that the complaint has evidentiary merit.",
+            source="9to5Mac",
+        )
+        analysis = article_for(
+            module,
+            "Jony Ive may be unable to stay out of the Apple and OpenAI dispute",
+            (
+                "A commentary says Ive could possibly be subpoenaed as a witness during discovery, but notes that "
+                "it is too early to know and reports no subpoena, filing, ruling, testimony, or confirmed action."
+            ),
+            source="IT之家",
+        )
+
+        self.assertEqual(analysis.relevance_tier, "weak", analysis.relevance_reason)
+        self.assertEqual(len(module.cluster_articles([response, analysis])), 2)
+
+    def test_airpods_public_beta_firmware_sources_merge_as_firmware_event(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "AirPods public betas arrive one day after iOS 27 public beta",
+                "Apple released AirPods firmware 9.0.314 build 9A5314b to public beta testers for AirPods Pro, AirPods 4, and AirPods Max.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Releases New iOS 27 AirPods Firmware For Public Beta Testers",
+                "Apple released AirPods firmware 9A5314b for public beta testers with iOS 27 features.",
+                source="MacRumors",
+            ),
+        ]
+
+        self.assertTrue(
+            all(
+                "airpods-firmware" in module.primary_topic_facets(article.title, article.summary)
+                for article in articles
+            )
+        )
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_same_ipad_mini_display_spec_rumor_merges_across_source_wording(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Upcoming OLED iPad Mini Allegedly Uses 60Hz 8.4-Inch Display Panel",
+                "A supply-chain report says the next iPad mini uses an 8.4-inch LTPS hybrid OLED panel fixed at 60Hz.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "消息称苹果 iPad mini 8 搭载 8.4 寸 60Hz OLED 面板",
+                "新款 iPad mini 据称采用 8.4 英寸 LTPS Hybrid OLED 屏幕，刷新率仍为 60Hz。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "传闻称新款 OLED iPad mini 将采用 60Hz 显示屏",
+                "供应链消息称苹果下一代 iPad mini 配备 8.4 英寸 OLED 面板并保持 60Hz。",
+                source="cnBeta",
+            ),
+            article_for(
+                module,
+                "OLED iPad mini may still launch before the end of 2026",
+                (
+                    "According to a Naver post by Yeux1122, the iPad mini with an AMOLED display will launch "
+                    "in the second half of 2026. Mass production is underway on Samsung Display's A2 G5.5 "
+                    "line for an 8.4-inch LTPS rear panel with hybrid OLED."
+                ),
+                source="AppleInsider",
+            ),
+        ]
+
+        self.assertTrue(
+            all(
+                "apple-display-panel-spec-rumor" in module.primary_topic_facets(article.title, article.summary)
+                for article in articles
+            )
+        )
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_multi_product_oled_supply_roadmap_stays_separate_from_one_product_spec_rumor(self):
+        module = load_module()
+        roadmap = article_for(
+            module,
+            "Omdia: BOE may supply Apple OLED panels for 2027 iPad Air and 2028 MacBook Pro",
+            (
+                "Omdia says BOE may supply OLED panels for Apple's 2027 iPad Air and 2028 MacBook Pro. "
+                "The wider roadmap also expects a 2026 iPad mini with an 8.4-inch LTPS hybrid OLED panel."
+            ),
+            source="IT之家",
+        )
+        ipad_mini_spec = article_for(
+            module,
+            "OLED iPad mini may still launch before the end of 2026",
+            (
+                "According to a Naver post, mass production is underway for an 8.4-inch LTPS hybrid OLED "
+                "panel and the iPad mini is expected in the second half of 2026."
+            ),
+            source="AppleInsider",
+        )
+
+        self.assertNotIn(
+            "apple-display-panel-spec-rumor",
+            module.primary_topic_facets(roadmap.title, roadmap.summary),
+        )
+        self.assertEqual(len(module.cluster_articles([roadmap, ipad_mini_spec])), 2)
+
+    def test_eu_apple_device_battery_exemption_is_not_regulated_access_story(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Watch among wearables exempted from EU user-replaceable battery rules",
+                "The European Commission exempted Apple Watch and AirPods from user-replaceable battery requirements when opening a sealed device would harm safety or durability.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Watch、Meta 眼镜和 AirPods 获欧盟可更换电池法规豁免",
+                "欧盟委员会修订电池法规，为 Apple Watch 和 AirPods 等紧凑密封设备提供用户可更换电池豁免；欧委会否认此举源于美国施压。",
+                source="cnBeta",
+            ),
+        ]
+
+        self.assertTrue(
+            all(
+                module.primary_topic_facets(article.title, article.summary) == {"apple-device-battery-regulation"}
+                for article in articles
+            )
+        )
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_apple_market_share_action_overrides_competitor_and_price_background(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone grows China market share as price hikes harm Android rivals",
+                "IDC says iPhone shipments in China grew 24.4% and market share rose from 13.9% to 18.1%; Android price pressure is background context.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "iPhone在华市场份额增长，涨价冲击 Android 竞争对手",
+                "IDC 数据显示苹果 iPhone 第二季度在华出货量增长 24.4%，份额从 13.9% 升至 18.1%。",
+                source="cnBeta",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        self.assertTrue(
+            all(module.primary_topic_facets(article.title, article.summary) == {"apple-market-share-report"} for article in articles)
+        )
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_iphone_production_retooling_does_not_absorb_ai_company_talks(self):
+        module = load_module()
+        hardware = [
+            article_for(
+                module,
+                "Factories Now Ready for iPhone 20's Glass Redesign, Leaker Claims",
+                "Apple suppliers completed factory-line renovations for a new glass enclosure and are waiting for iPhone production equipment.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "传苹果 iPhone 20 将迎来全玻璃机身设计，供应链已做好准备",
+                "苹果供应链工厂完成新玻璃工艺产线改造，等待设备进场生产下一代 iPhone。",
+                source="cnBeta",
+            ),
+        ]
+        prism = article_for(
+            module,
+            "PrismML confirms it is in talks with Apple about AI model-shrinking tech",
+            "PrismML confirmed early discussions with Apple about model compression for on-device AI.",
+            source="AppleInsider",
+        )
+
+        events = module.cluster_articles([*hardware, prism])
+        self.assertEqual(len(events), 2)
+        self.assertEqual(len(next(event for event in events if hardware[0] in event.articles).articles), 2)
+        self.assertFalse(any(prism in event.articles and hardware[0] in event.articles for event in events))
+
+    def test_third_party_usage_opinion_tutorial_and_comparison_stories_stay_weak(self):
+        module = load_module()
+        samples = [
+            (
+                "Opera gains ground among iPhone users in the US and UK",
+                "Opera says its iOS monthly active users grew after Apple's browser choice screen; the update also adds Opera account sync and browser AI.",
+                "9to5Mac",
+            ),
+            (
+                "Owning an Apple Home: The broken promise of Matter",
+                "An opinion column argues that third-party Matter accessories still provide an inconsistent Apple Home experience, without a new Apple action.",
+                "AppleInsider",
+            ),
+            (
+                "These are the things you should do first after updating to iOS 27",
+                "A tutorial recommends settings and setup steps after installing iOS 27; Apple announced no new change in the article.",
+                "AppleInsider",
+            ),
+            (
+                "OpenAI's first hardware device will be a HomePod, but don't tell them that",
+                "A commentary compares OpenAI's rumored smart speaker with Apple's HomePod; Apple made no product announcement.",
+                "AppleInsider",
+            ),
+            (
+                "多名用户示警：OpenAI 最新模型 GPT-5.6 Sol 会擅自删除用户文件",
+                "用户报告第三方 OpenAI 模型删除 Windows 和 Mac 文件；苹果没有发布或调整任何产品、平台或安全机制。",
+                "IT之家",
+            ),
+        ]
+
+        for title, summary, source in samples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_hardware_report_does_not_join_apple_legal_response_from_background_case(self):
+        module = load_module()
+        legal = article_for(
+            module,
+            "OpenAI says it has seen no evidence supporting Apple's trade-secret theft claims",
+            "OpenAI directly responded to Apple's lawsuit over unreleased hardware trade secrets.",
+            source="9to5Mac",
+        )
+        hardware = article_for(
+            module,
+            "OpenAI's First AI Device Will Be a Portable Smart Speaker",
+            (
+                "Bloomberg reports that OpenAI is developing a portable smart speaker for 2027. "
+                "The device is also mentioned in Apple's separate lawsuit over unreleased hardware trade secrets."
+            ),
+            source="MacRumors",
+        )
+
+        self.assertEqual(legal.relevance_tier, "strong")
+        self.assertEqual(hardware.relevance_tier, "weak")
+        self.assertEqual(hardware.event_kind, "third_party_ecosystem")
+        self.assertNotIn("apple-legal-proceeding", module.article_primary_facets(hardware))
+        self.assertEqual(len(module.cluster_articles([legal, hardware])), 2)
+
+    def test_third_party_model_release_without_direct_apple_action_stays_weak(self):
+        module = load_module()
+        title = "手机 AI 的 DeepSeek 时刻：Bonsai 27B 模型登场，苹果 iPhone 17 Pro 可运行"
+        summary = (
+            "PrismML 发布 Bonsai 27B 模型，压缩后可在 12GB 内存的 iPhone 上本地运行。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+        self.assertNotIn("apple-on-device-ai-model-compression", module.primary_topic_facets(title, summary))
+
+    def test_single_weak_roundup_event_is_not_promoted_by_aggregated_summary(self):
+        module = load_module()
+        roundup = article_for(
+            module,
+            "OLED iPad Mini: Release Date, Pricing, and What to Expect",
+            "A buying-oriented roundup recaps old OLED, pricing, and release-date rumors without new reporting.",
+            source="MacRumors",
+        )
+
+        roundup.relevance_tier = "weak"
+        roundup.relevance_reason = "routine product outlook roundup"
+        event = module.cluster_articles([roundup])[0]
+        self.assertEqual(event.relevance_tier, "weak", event.relevance_reason)
+
+    def test_direct_display_spec_rumor_stays_strong_with_comparison_background(self):
+        module = load_module()
+        title = "传闻称新款 OLED iPad mini 将采用 60Hz 显示屏"
+        summary = (
+            "供应链称新款 iPad mini 配备 8.4 英寸 LTPS OLED 面板，刷新率为 60Hz。"
+            "正文随后比较 iPad Pro、iPhone 17 和三星显示生产线。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_apple_market_growth_title_uses_market_report_identity_despite_price_background(self):
+        module = load_module()
+        title = "苹果 iPhone 17 定价策略助力其在二季度中国智能手机市场逆势增长"
+        summary = "IDC 数据显示苹果第二季度在华出货量增长 24.9%，市场份额由 13.9% 升至 18.1%。"
+
+        self.assertTrue(module.is_title_primary_apple_market_share_story(title, summary))
+        self.assertEqual(module.primary_topic_facets(title, summary), {"apple-market-share-report"})
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+
+    def test_same_device_battery_regulation_ignores_background_region_markers(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Watch among wearables exempted from EU user-replaceable battery rules",
+                "The European Commission granted an exemption; the report also discusses U.S. pressure claims.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Watch, Meta Glasses, AirPods get reprieve from EU replaceable battery law",
+                "The EU exemption covers sealed wearables and includes technical examples from Germany.",
+                source="AppleInsider",
+            ),
+            article_for(
+                module,
+                "Apple Watch、Meta 眼镜和 AirPods 获欧盟可更换电池法规豁免",
+                "欧盟委员会调整同一法规；正文还提到美国和日本市场的维修安排。",
+                source="cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
+
+    def test_feature_and_hardware_outlook_roundups_stay_weak(self):
+        module = load_module()
+        samples = [
+            (
+                "Top watchOS 27 features that will enhance your Apple Watch",
+                "Here is everything new in watchOS 27 so far, including Siri, widgets, gestures, and health changes.",
+            ),
+            (
+                "Your iPhone might miss out on these iOS 27 features",
+                "Here is everything you need to know about compatibility and previously announced feature availability.",
+            ),
+            (
+                "Apple has a new MacBook Pro coming soon, here's what we know",
+                "This roundup recaps previously reported OLED, touchscreen, design, and launch timing rumors.",
+            ),
+        ]
+
+        for title, summary in samples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+                self.assertEqual(tier, "weak", reason)
+        os_roundups = [article_for(module, title, summary, source="9to5Mac") for title, summary in samples[:2]]
+        self.assertEqual(len(module.cluster_articles(os_roundups)), 2)
+
+    def test_subjective_legal_commentary_without_new_case_action_stays_weak(self):
+        module = load_module()
+        title = "Sam Altman didn't need another lawsuit"
+        summary = (
+            "A commentary discusses Apple's existing trade-secret accusations and the former employees named in them."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "The Verge")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_epic_pause_response_merges_when_legal_action_is_in_first_sentence(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple says Epic's arguments against pausing the case are wrong",
+                "Apple responded to Epic's opposition to pausing lower-court proceedings over App Store commissions.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果回应 Epic 反对暂停 App Store 佣金诉讼：对方论点存在谬误",
+                "苹果正式回应 Epic 反对暂停下级法院 App Store 佣金诉讼的请求。",
+                source="IT之家",
+            ),
+        ]
+
+        self.assertTrue(
+            all("epic-app-store-appeal" in module.article_primary_facets(article) for article in articles)
+        )
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
 
 
 if __name__ == "__main__":

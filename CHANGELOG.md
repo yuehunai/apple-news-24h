@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.31.0 - 2026-07-15
+
+- Added title-and-lead-first event identities and concrete legal-case subjects so body background, cast lists, product enumerations, and source-name suffixes cannot bridge unrelated Apple lawsuits, services, AI stories, or hardware reports.
+- Improved same-action cross-source clustering for OLED iPad mini display specifications, AirPods beta firmware, Apple Arcade releases, EU battery exemptions, and Apple hardware production changes while keeping multi-product panel roadmaps and separate Apple TV titles independent.
+- Improved direct Apple relevance handling for on-device AI technology evaluations, iPhone carrier-lock policies, analyst rating and price-target changes, Siri AI availability, Apple market-share reports, and regional platform regulation.
+- Tightened weak filtering for all-weak aggregate promotion, speculative legal participation, third-party AI model or app releases, competitor comparisons, product outlooks, tutorials, opinions, and feature recaps without a new Apple action.
+- Updated fallback policy guidance and expanded regression coverage from 528 to 555 tests; live baseline comparison preserved source and URL coverage, stayed below the runtime target, and produced a clean 21-event run with no merge warnings.
+
 ## 1.30.0 - 2026-07-14
 
 - Added authoritative event identities for OS versions, release channels, beta numbers, legal counterparties, strategic transactions, stock moves, malware families, and hardware actions, preventing unrelated reports from merging through generic shared terms.
