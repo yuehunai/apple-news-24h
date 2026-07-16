@@ -1,6 +1,6 @@
 [project]
 name = "apple-news-24h"
-version = "1.31.0"
+version = "1.32.0"
 description = "Codex skill and standard-library crawler for recent 24-hour Apple software and hardware news briefs."
 readme = "README.md"
 requires-python = ">=3.9"

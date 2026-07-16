@@ -1,6 +1,7 @@
 import importlib.util
 import sys
 import unittest
+from unittest import mock
 from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -1777,6 +1778,38 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertIn("Safari, Mail, News, Podcasts, and Calendar", combined)
         self.assertNotIn("MacBook Neo", combined)
         self.assertNotIn("Logitech MX Master", combined)
+
+    def test_9to5_unlocked_renewed_iphone_amazon_list_is_removed(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html><head>
+          <meta property="article:published_time" content="2026-07-15T16:00:00+00:00" />
+          <meta property="og:description" content="Apple now locks carrier-financed iPhones until they are paid in full." />
+        </head><body><div class="post-content">
+          <p>Apple updated its purchase FAQ: iPhones financed through AT&amp;T, T-Mobile, or Verizon remain locked until paid in full.</p>
+          <p>The policy closes a workaround that previously combined carrier financing with an unlocked device.</p>
+          <p>One of the easiest ways to buy an unlocked iPhone and save some cash in the process is via Amazon:</p>
+          <ul>
+            <li>iPhone 17 Pro (Unlocked, Renewed): $1,069</li>
+            <li>iPhone 17 Pro Max (Unlocked, Renewed): $1,179</li>
+            <li>iPhone 17 (Unlocked, Renewed): $745</li>
+            <li>iPhone Air (Unlocked, Renewed): $768.10</li>
+          </ul>
+        </div></body></html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/15/unlocked-iphone-carrier-financing/",
+            title="Apple just closed a popular workaround for buying an unlocked iPhone",
+        )
+
+        _, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("locked until paid in full", combined)
+        self.assertNotIn("Renewed", combined)
+        self.assertNotIn("$1,069", combined)
 
     def test_9to5_best_apple_watch_accessories_section_is_removed(self):
         module = load_module()
@@ -13147,6 +13180,639 @@ class RelevanceRuleTests(unittest.TestCase):
             all("epic-app-store-appeal" in module.article_primary_facets(article) for article in articles)
         )
         self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_live_official_education_promotion_is_relevant_and_merges_across_languages(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/15/apple-2026-back-to-school-offer-rolling-out/",
+            title="Apple's 2026 Back to School Offer Just Went Live in Select Countries",
+            summary=(
+                "Apple's annual Back to School promotion is now live in China, India, Malaysia, "
+                "Singapore, and other Asian markets through August 27. Eligible Mac and iPad buyers "
+                "can receive AirTags, AirPods, Apple Pencil Pro, or an Apple gift card."
+            ),
+            feed_time_raw="Wed, 15 Jul 2026 11:48:45 PDT",
+            context="featured back to school promotion",
+        )
+        english = article_for(module, candidate.title, candidate.summary, source="MacRumors")
+        chinese = article_for(
+            module,
+            "苹果 2026 返校季活动开启：中国大陆用户买 Mac / iPad 送 AirTags",
+            "苹果返校季教育优惠在八个亚洲市场正式启动，活动持续至 8 月 27 日。",
+            source="IT之家",
+        )
+        airpods_angle = article_for(
+            module,
+            "苹果 2026 返校季教育优惠开启：免费 AirPods 取消、选耳机需补差价",
+            (
+                "苹果中国同一返校季活动持续至 8 月 27 日，购买指定 Mac 或 iPad 可享 849 元促销优惠；"
+                "选择 AirPods 4、AirPods Pro 3 或 Apple Pencil Pro 时需补不同差价。"
+            ),
+            source="快科技",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        event = module.cluster_articles([english, chinese, airpods_angle])
+        self.assertEqual(len(event), 1)
+        self.assertEqual({article.source for article in event[0].articles}, {"MacRumors", "IT之家", "快科技"})
+
+    def test_applecare_price_change_is_distinct_from_ipad_financing_and_keeps_regional_prices(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        applecare_candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/15/applecare-plus-price-increase/",
+            title="AppleCare+ for Macs and iPads Just Got More Expensive",
+            summary=(
+                "Apple is increasing AppleCare+ subscription prices for new Mac and iPad plans by "
+                "$0.50 per month or $5 per year. Existing subscriptions are unchanged."
+            ),
+            feed_time_raw="Wed, 15 Jul 2026 14:32:09 PDT",
+            context="applecare",
+        )
+        financing = article_for(
+            module,
+            "Apple Adds 36-Month Carrier Financing for Cellular iPads",
+            (
+                "Apple added AT&T and Verizon 36-month financing for cellular iPads. The 11-inch "
+                "iPad Pro now starts at $1,399 after an earlier hardware price increase."
+            ),
+            source="MacRumors",
+        )
+        applecare = article_for(
+            module,
+            "苹果提高 Mac、iPad 等产品 AppleCare+ 价格",
+            "苹果提高 AppleCare+ 服务计划价格，硬件此前也因内存成本上涨而调价。",
+            facts=[
+                "Mac mini：原价 649 元，现价 799 元",
+                "Mac Studio / iMac：原价 1399 元，现价 1549 元",
+                "MacBook Neo：原价 1099 元，现价 1249 元",
+                "MacBook Air 13 英寸：原价 1599 元，现价 1749 元",
+                "MacBook Air 15 英寸：原价 1899 元，现价 2049 元",
+                "MacBook Pro 14 英寸：原价 2299 元，现价 2449 元",
+                "MacBook Pro 16 英寸：原价 3299 元，现价 3449 元",
+                "Mac Pro：原价 3999 元，无变化",
+                "iPad / iPad mini：原价 549 元，现价 649 元",
+                "11 英寸 iPad Air（M4）：原价 649 元，现价 749 元",
+                "13 英寸 iPad Air（M4）：原价 799 元，现价 899 元",
+            ],
+            source="IT之家",
+        )
+        applecare_english = article_for(
+            module,
+            "AppleCare+ for Macs and iPads Just Got More Expensive",
+            "Apple raised new AppleCare+ plans by $0.50 per month or $5 per year; existing subscriptions are unchanged.",
+            source="MacRumors",
+        )
+        applecare_followup = article_for(
+            module,
+            "Apple bumps monthly AppleCare+ for iPad, Mac by 50 cents",
+            "The same AppleCare+ price change raises the monthly plan by 50 cents and annual plan by $5.",
+            source="AppleInsider",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(applecare_candidate, source))
+        events = module.cluster_articles([financing, applecare, applecare_english, applecare_followup])
+        self.assertEqual(len(events), 2)
+        applecare_event = next(event for event in events if "AppleCare" in event.title)
+        self.assertEqual(len(applecare_event.articles), 3)
+        for expected in applecare.key_facts:
+            self.assertIn(expected, applecare_event.key_facts)
+        event_dict = module.event_to_dict(applecare_event, timezone.utc)
+        must_include = " ".join(event_dict.get("must_include_facts", []))
+        for expected in applecare.key_facts:
+            self.assertIn(expected, must_include)
+
+    def test_crashstealer_detail_facts_do_not_downgrade_direct_macos_malware(self):
+        module = load_module()
+        macrumors = article_for(
+            module,
+            "CrashStealer Malware Impersonates Apple Tool to Steal Mac Passwords and Crypto",
+            (
+                "CrashStealer targets macOS, impersonates Apple's crash reporter, and was found in "
+                "an Apple-notarized app before Apple revoked its signing credentials."
+            ),
+            facts=[
+                "It targets more than 80 cryptocurrency wallet extensions and 14 password managers including 1Password, LastPass, and Dashlane.",
+                "It requests full disk access and uses a native macOS password prompt to access the login keychain.",
+            ],
+            source="MacRumors",
+        )
+        nine_to_five = article_for(
+            module,
+            "Beware of fake Mac crash reports out to steal your passwords",
+            "Jamf identified the same malware as CrashStealer after seeing active macOS infections in July.",
+            source="9to5Mac",
+        )
+
+        self.assertEqual(macrumors.relevance_tier, "strong", macrumors.relevance_reason)
+        self.assertEqual(len(module.cluster_articles([macrumors, nine_to_five])), 1)
+
+    def test_china_apple_intelligence_approval_merges_but_suno_imessage_update_stays_weak(self):
+        module = load_module()
+        direct_articles = [
+            article_for(
+                module,
+                "Apple reaches agreement with Chinese government on Apple Intelligence rollout",
+                "Apple Intelligence received regulatory clearance for rollout in China with local partners.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Intelligence Finally Cleared to Launch in China",
+                "Chinese regulators cleared Apple Intelligence for launch in the country.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 Apple 智能在列，网信部门发布手机端侧生成式人工智能服务备案信息",
+                "网信部门公告 Apple 智能完成手机端侧生成式人工智能服务备案。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Apple Intelligence finally on the road to release in China",
+                "Apple's Chinese partner Alibaba says Qwen will be integrated when Apple Intelligence becomes available in China.",
+                source="AppleInsider",
+            ),
+        ]
+        suno = article_for(
+            module,
+            "Suno 接入 iMessage：苹果 iPhone 用户可在聊天内 AI 生成歌曲",
+            "第三方 Suno 应用更新后可从 iMessage 应用抽屉生成歌曲。",
+            source="IT之家",
+        )
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in direct_articles))
+        self.assertTrue(
+            all(
+                "apple-intelligence-china-regulatory-rollout" in module.article_primary_facets(article)
+                for article in direct_articles
+            )
+        )
+        self.assertEqual(suno.relevance_tier, "weak", suno.relevance_reason)
+        events = module.cluster_articles([*direct_articles, suno])
+        strong_events = [event for event in events if event.relevance_tier == "strong"]
+        self.assertEqual(len(strong_events), 1)
+        self.assertEqual(len(strong_events[0].articles), 4)
+
+    def test_ai_chip_acquisition_sources_merge_without_absorbing_china_ai_partner_update(self):
+        module = load_module()
+        acquisition_articles = [
+            article_for(
+                module,
+                "Apple looks into buying AI chip startups to bolster infrastructure",
+                "Apple is contacting semiconductor startups about possible acquisitions for AI server chips.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "消息称苹果正寻求收购人工智能芯片企业",
+                "苹果与银行家和半导体初创企业接触，评估用于 AI 服务器芯片的收购。此前曾收购 Q.ai。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Apple Reportedly Looking to Acquire AI Chip Companies",
+                "Apple may acquire AI chip companies and the report cites its earlier Q.ai and PA Semi deals as background.",
+                source="MacRumors",
+            ),
+        ]
+        partner_update = article_for(
+            module,
+            "阿里回应千问将与苹果 AI 合作：无需切换应用即可调用",
+            "阿里千问将作为 AI 能力集成至中国版 Apple 智能。",
+            source="快科技",
+        )
+
+        events = module.cluster_articles([*acquisition_articles, partner_update])
+        acquisition_event = next(
+            event for event in events if any("acquire" in article.title.lower() or "收购" in article.title for article in event.articles)
+        )
+        self.assertEqual(len(acquisition_event.articles), 3)
+        self.assertNotIn(partner_update, acquisition_event.articles)
+
+    def test_carrier_financing_lock_policy_merges_across_confirmation_headline_styles(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "分期买 iPhone 17 Pro 不再自动解锁：苹果确认新政策",
+                "通过 T-Mobile 或 Verizon 分期购买的 iPhone 在付清前保持锁定。",
+                source="IT之家",
+            ),
+            article_for(
+                module,
+                "Apple Closes Unlocked iPhone Loophole for T-Mobile and Verizon Financing",
+                "Apple's purchase FAQ says carrier-financed iPhones will be locked until paid in full.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple just closed a popular workaround for buying an unlocked iPhone",
+                "AT&T, T-Mobile, and Verizon installment-plan iPhones are now locked until paid off.",
+                source="9to5Mac",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_direct_apple_maps_ad_policy_sources_are_strong_and_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Maps won't allow ads from these categories at launch",
+                "Apple updated Maps advertising rules to prohibit political ads, bail bonds, crypto ATMs, and home services.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Won't Allow These Ad Categories in the Maps App",
+                "The revised Apple Maps ad policy prohibits the same categories.",
+                source="MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果更新地图 Apple Maps 广告投放条款：明确禁投家政服务等内容",
+                "苹果修订 Apple Maps 广告政策，禁止政治广告、保释担保和加密货币 ATM。",
+                source="IT之家",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_direct_apple_battery_regulation_sources_stay_strong_and_merge_despite_competitor_context(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "EU Drops Battery Removal Requirement for Apple Watch and AirPods",
+            (
+                "The EU added a sealed-wearable exemption directly covering Apple Watch and AirPods. "
+                "The report also compares Meta glasses and Nintendo hardware."
+            ),
+            facts=["Apple continues battery service through Apple Stores and authorized providers."],
+            source="MacRumors",
+        )
+        chinese = article_for(
+            module,
+            "欧盟修改新规为苹果让步：iPhone 等旗下产品不用拆卸电池设计",
+            "欧盟修订便携式电池规则；报道将 iPhone 作为苹果设备示例，并说明可穿戴设备新增豁免。",
+            source="快科技",
+        )
+        self.assertEqual(
+            module.detect_event_kind(english.title, english.summary, english.key_facts),
+            "hardware_market",
+        )
+        english.event_kind = "retail_store"
+
+        self.assertEqual(english.relevance_tier, "strong", english.relevance_reason)
+        self.assertEqual(len(module.cluster_articles([english, chinese])), 1)
+
+    def test_brazil_minor_gambling_app_inquiry_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple faces new questions from Brazil over betting apps accessible to minors",
+                "Brazil gave Apple five business days to explain App Store controls for 18+ gambling apps.",
+                source="9to5Mac",
+            ),
+            article_for(
+                module,
+                "巴西施压苹果，限期说明如何拦截未成年人下载 18+ 博彩应用",
+                "巴西监管部门要求苹果说明 App Store 年龄核验、授权检查和下架流程。",
+                source="IT之家",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_ui_screen_order_language_is_not_display_panel_supply_chain_evidence(self):
+        module = load_module()
+        title = "iOS 27 breaks 15 years of muscle memory on iPhone and iPad"
+        summary = (
+            "Apple changed the top-edge swipe gesture for Notification Center. The screen shows alerts "
+            "in chronological order, and Apple says the change will ship this fall."
+        )
+
+        self.assertFalse(module.is_apple_display_panel_supply_chain_story(f"{title} {summary}"))
+        self.assertEqual(module.detect_event_kind(title, summary), "os_app")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+
+    def test_apple_specific_metrics_in_multi_vendor_report_remain_strong(self):
+        module = load_module()
+        title = "Omdia：中国大陆智能手机出货量下降 2%，华为苹果逆势大涨"
+        summary = (
+            "苹果排名第二，出货量 1240 万台、份额 19%，出货量和份额均创历年第二季度新高；"
+            "华为、OPPO 等厂商数据也列在报告中。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "strong", reason)
+
+        market_report = article_for(module, title, summary, source="IT之家")
+        product_forecast = article_for(
+            module,
+            "苹果一芯难求！A18 Pro 产能不足：MacBook Neo 出货量暴降 40%",
+            "分析师因 A18 Pro 供应瓶颈将单一 MacBook Neo 年度出货预期从 1000 万台下调至 600 万到 700 万台。",
+            source="快科技",
+        )
+        self.assertNotIn("apple-market-share-report", module.article_primary_facets(product_forecast))
+        self.assertIn("apple-product-production-forecast", module.article_primary_facets(product_forecast))
+        self.assertFalse(
+            module.article_primary_facets(product_forecast)
+            & {
+                "apple-product-price-increase",
+                "apple-current-product-price-increase",
+                "apple-future-product-price-forecast",
+            }
+        )
+        self.assertEqual(len(module.cluster_articles([market_report, product_forecast])), 2)
+
+    def test_supplier_wealth_profile_and_rumor_feature_roundup_stay_weak(self):
+        module = load_module()
+        samples = [
+            (
+                "靠着 iPhone 等苹果产品，立讯精密创始人成为中国女首富",
+                "文章回顾创始人的创业经历和 855 亿元身家，并以历年苹果供应链合作作为背景。",
+                "快科技",
+            ),
+            (
+                "Apple Watch Series 12: Four rumored new features coming soon",
+                "The roundup recaps four features previously rumored by multiple reports and adds no new reporting.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in samples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_unrelated_weak_third_party_titles_do_not_merge_from_incidental_apple_context(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "华为全新轻薄本入网：整机仅重 700g",
+                "报道以 MacBook Air 重量作为对比，并介绍鸿蒙跨设备能力。",
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "华为 Mate 90 定于 9 月中下旬登场",
+                "报道将发布时间与 iPhone 18 Pro 对比，并讨论鸿蒙与 iOS 阵营。",
+                facts=["华为新机将在 iPhone 18 Pro 发布后登场，并采用新一代麒麟芯片。"],
+                source="快科技",
+            ),
+            article_for(
+                module,
+                "Nomad Kicks Off Anniversary Sale With Up to 30% Off Sitewide",
+                "The third-party sale covers iPhone cases, Apple Watch bands, and charging accessories.",
+                facts=[
+                    "A related-page fragment says the iPhone 18 Pro will launch in September with a new chip.",
+                    "Nomad's iPhone cases are discounted during the anniversary sale.",
+                ],
+                source="MacRumors",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "weak" for article in articles))
+        self.assertEqual(len(module.cluster_articles(articles)), 3)
+
+    def test_non_apple_security_statistics_with_apple_as_comparison_stays_weak(self):
+        module = load_module()
+        title = "Linux 2308 个漏洞成全球第一！内核大佬喊话微软苹果：你们上报太少了"
+        summary = (
+            "报告主体是 Linux 内核 CVE 数量和披露机制，并把微软与苹果的漏洞上报数量作为对比，"
+            "没有新的 Apple 漏洞、补丁、政策或平台动作。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_subjects_do_not_become_strong_from_incidental_apple_context(self):
+        module = load_module()
+        samples = [
+            (
+                "地震预警 App 被质疑会员优先推送消息，研究所发布整改公告",
+                (
+                    "使用苹果手机打开该第三方 App 时会看到广告；公告称核心地震预警推送和灾害提醒对所有用户"
+                    "无差别开放，整改针对会员加速通道文案、预警信息推送和开屏广告。"
+                ),
+            ),
+            (
+                "纽约州试点引入机器人老师：课程内容可控、保护隐私",
+                "机器人由 Realbotix 提供，课程参考苹果联合创始人沃兹尼亚克开发的教学体系。",
+            ),
+            (
+                "Omdia：2030 年全球录制音乐市场规模将突破 560 亿美元",
+                "Spotify、Apple Music 和 YouTube Music 等订阅平台是全球行业增长背景，但没有 Apple Music 专属数据或动作。",
+            ),
+            (
+                "泡泡玛特创始人访问苹果总部，送 LABUBU 给库克和特努斯",
+                "第三方公司高管礼节性探访 Apple Park 并赠送玩偶，没有宣布合作、投资、产品或平台动作。",
+            ),
+        ]
+
+        for title, summary in samples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_app_status_with_apple_phone_usage_context_stays_weak(self):
+        module = load_module()
+        title = "地震预警 App 被质疑会员优先推送消息，研究所发布整改公告"
+        summary = (
+            "消息称使用苹果手机打开由研究所研发的地震预警 App 时会看到开屏广告，"
+            "会员页面还标注预警信息加速通道。"
+        )
+        facts = [
+            "公告称核心地震预警推送和灾害提醒对所有用户免费开放、无差别推送。",
+            "研究所已删除会员加速通道的歧义文案，并全面下线开屏广告。",
+        ]
+
+        self.assertTrue(
+            module.is_third_party_app_or_service_status_story(
+                title,
+                " ".join([summary, *facts]),
+            )
+        )
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "IT之家")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_weak_background_display_facet_does_not_merge_unrelated_product_stories(self):
+        module = load_module()
+        smart_home = article_for(
+            module,
+            "Apple's 2026 Smart Home Lineup: New Apple TV, HomePod, and Home Hub",
+            (
+                "Apple is rumored to be planning several smart-home products, including a home hub with a "
+                "7-inch display, a new Apple TV 4K, and new HomePod models. The article is a broad roundup of "
+                "previously reported specifications and launch expectations."
+            ),
+            source="MacRumors",
+        )
+        huawei_laptop = article_for(
+            module,
+            "代号玛丽莲·梦露 华为全新轻薄本入网：仅重700g 刷新行业纪录",
+            (
+                "华为新笔记本通过 3C 认证，爆料称整机约 700g，并搭载鸿蒙系统。"
+                "目前华为在售的 MateBook Pro 为 14.2 英寸、重 970g；报道只把 1.23kg 的苹果 "
+                "MacBook Air 作为重量对比，还提到屏幕和显示规格。"
+            ),
+            source="快科技",
+        )
+        smart_home.relevance_tier = "weak"
+        smart_home.relevance_reason = "broad product rumor roundup"
+        huawei_laptop.relevance_tier = "weak"
+        huawei_laptop.relevance_reason = "non-Apple comparison story"
+
+        self.assertEqual(len(module.cluster_articles([smart_home, huawei_laptop])), 2)
+
+        huawei_event = event_for(module, huawei_laptop)
+        with mock.patch.object(
+            module,
+            "article_primary_facets",
+            return_value={"apple-display-panel-spec-rumor"},
+        ), mock.patch.object(
+            module,
+            "event_primary_facets",
+            return_value={"apple-display-panel-spec-rumor"},
+        ):
+            self.assertFalse(module.weak_event_has_title_level_identity(smart_home, huawei_event))
+
+    def test_direct_apple_legal_action_is_not_typed_as_third_party_ecosystem(self):
+        module = load_module()
+        title = "Apple wins discovery fight over federal agency documents in DOJ case"
+        summary = "A federal judge granted Apple's request for agency records in the DOJ antitrust lawsuit."
+
+        self.assertEqual(module.detect_event_kind(title, summary), "legal_antitrust")
+
+    def test_legal_case_person_profile_does_not_merge_with_new_email_development(self):
+        module = load_module()
+        email = article_for(
+            module,
+            "An email mistake derailed pre-lawsuit talks between Apple and OpenAI",
+            "Newly disclosed emails show a 13-minute mixup that ended pre-lawsuit talks in Apple's hardware trade-secret case.",
+            source="9to5Mac",
+        )
+        profile = article_for(
+            module,
+            "Tang Tan: The ex-Apple VP at the heart of OpenAI's IP trouble",
+            "A profile retraces Tang Tan's career from iPod and iPhone design to his later departure, without a new filing or ruling.",
+            source="AppleInsider",
+        )
+
+        self.assertEqual(email.relevance_tier, "strong", email.relevance_reason)
+        self.assertEqual(profile.relevance_tier, "weak", profile.relevance_reason)
+        self.assertEqual(len(module.cluster_articles([email, profile])), 2)
+
+    def test_single_product_shipment_forecast_does_not_merge_with_market_share_report(self):
+        module = load_module()
+        market_report = article_for(
+            module,
+            "Omdia：第二季度中国大陆智能手机出货量同比下降 2%，华为苹果逆势大涨",
+            "苹果出货量 1240 万台、市场份额 19%，两项数据均创历年第二季度新高。",
+            source="IT之家",
+        )
+        ithome_forecast = article_for(
+            module,
+            "约 40% 降幅，DigiTimes 下调 2026 苹果 MacBook Neo 笔记本出货量预期至 600~700 万台",
+            (
+                "DigiTimes 因 A18 Pro 芯片供应限制，将单一 MacBook Neo 年度出货量预期"
+                "从 1000 万台下调至 600~700 万台。"
+            ),
+            source="IT之家",
+        )
+        fasttech_forecast = article_for(
+            module,
+            "苹果一芯难求！A18 Pro 产能不足：MacBook Neo 出货量暴降 40%",
+            "A18 Pro 供应瓶颈令 MacBook Neo 年度出货目标从 1000 万台下调至 600~700 万台。",
+            source="快科技",
+        )
+
+        self.assertIn("apple-product-production-forecast", module.article_primary_facets(ithome_forecast))
+        events = module.cluster_articles([market_report, ithome_forecast, fasttech_forecast])
+        self.assertEqual(len(events), 2)
+        forecast_event = next(event for event in events if "MacBook Neo" in event.title)
+        self.assertEqual({article.source for article in forecast_event.articles}, {"IT之家", "快科技"})
+
+    def test_detail_page_identity_rejects_non_apple_discovery_context(self):
+        module = load_module()
+        title = "三星 Galaxy AI 通过大模型服务备案，合作方为百度智能云"
+        summary = "中国三星与百度智能云合作，为 Galaxy AI 提供搜索、笔记和语音助手能力。"
+        discovery_context = (
+            "相关阅读称 Apple Intelligence 已获中国监管批准，将由阿里巴巴和百度提供本地模型。"
+        )
+
+        safe_context = module.safe_context_for_detail_article(False, title, summary, discovery_context)
+
+        self.assertEqual(safe_context, "")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_narrative_colon_paragraphs_are_not_mandatory_structured_rows(self):
+        module = load_module()
+        article = article_for(
+            module,
+            "Apple Intelligence 获得中国监管批准",
+            "中国监管部门完成 Apple Intelligence 手机端侧生成式 AI 服务备案。",
+            facts=[
+                "7 月 15 日下午，监管部门发布公告：新增 Apple 智能等 7 款服务完成备案。",
+                "小米是最直观的例子：去年 9 月送审的服务名称随后发生变化。",
+                "把苹果的备案编号单独拎出来看：登记日期为 2025 年 6 月 16 日。",
+                "过去两年的上线传闻反复变化：版本从 iOS 18.6 一路传到 iOS 26.4。",
+            ],
+            source="IT之家",
+        )
+
+        self.assertEqual(module.structured_enumerated_data_facts(article), [])
+
+    def test_bullish_analyst_commentary_without_new_rating_action_stays_weak(self):
+        module = load_module()
+        title = "大摩坚定看涨苹果：iPhone 涨价料成拉升引擎"
+        summary = (
+            "摩根士丹利分析师认为未来 iPhone 提价可改善盈利，并维持原有增持评级和 360 美元目标价；"
+            "报告没有上调或下调评级、目标价，也没有披露新的 Apple 定价行动。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_apple_silicon_driver_certification_is_software_ecosystem_news(self):
+        module = load_module()
+        title = "苹果 M1/M2 在 Asahi Linux 上拿下 OpenCL 3.1 完整一致性认证"
+        summary = (
+            "Mesa Rusticl 驱动让运行 Asahi Linux 的 Apple Silicon 成为首个通过 OpenCL 3.1 "
+            "完整一致性测试的实现；该成果来自第三方开源社区，并非 Apple 官方发布。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "os_compatibility")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "ecosystem", reason)
+
+    def test_model_generation_rows_remain_in_price_table_facts(self):
+        module = load_module()
+        title = "苹果提高 Mac、iPad 等产品 AppleCare+ 价格"
+        summary = "苹果上调中国大陆 Mac 三年期与 iPad 两年期 AppleCare+ 方案价格。"
+        facts = [
+            "11 英寸 iPad Air（M4）：原价 649 元，现价 749 元",
+            "11 英寸 iPad Pro（M5）：原价 1299 元，现价 1399 元",
+            "13 英寸 iPad Pro（M5）：原价 1449 元，现价 1549 元",
+        ]
+
+        self.assertEqual(module.filter_key_facts_for_primary_topic(title, summary, facts), facts)
+        article = article_for(module, title, summary, facts=facts, source="IT之家")
+        self.assertEqual(module.structured_enumerated_data_facts(article), facts)
 
 
 if __name__ == "__main__":

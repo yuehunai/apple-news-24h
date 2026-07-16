@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.32.0 - 2026-07-16
+
+- Added direct event identities and same-action cross-source clustering for official education promotions, AppleCare+ price changes, carrier-financed device locks, China Apple Intelligence approval, Maps ad policy, AI chip acquisitions, regional platform inquiries, and sales-tax holidays.
+- Improved detail-page title-and-lead precedence so feed summaries, related links, body comparisons, and non-Apple discovery context cannot promote or merge unrelated market, legal, supplier, app, or analyst stories.
+- Refined relevance and event boundaries for direct macOS malware, Apple Silicon OS/driver certification, Apple-specific product forecasts, analyst commentary, and broad multi-vendor reports while keeping weak or background items out of required events.
+- Added structured data-series extraction that preserves complete per-model and per-region price, support, eligibility, and status rows in `must_include_facts` without promoting narrative colon paragraphs.
+- Updated agent and fallback guidance and expanded regression coverage from 555 to 581 tests; concurrent live comparison preserved candidate, article, and URL coverage, produced no merge warnings, and stayed near the 120-second runtime target.
+
 ## 1.31.0 - 2026-07-15
 
 - Added title-and-lead-first event identities and concrete legal-case subjects so body background, cast lists, product enumerations, and source-name suffixes cannot bridge unrelated Apple lawsuits, services, AI stories, or hardware reports.
