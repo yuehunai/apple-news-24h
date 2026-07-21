@@ -1849,6 +1849,38 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotIn("AirPods Pro 3", combined)
         self.assertNotIn("Retro Mac stand", combined)
 
+    def test_9to5_comma_separated_best_accessories_heading_is_removed(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html><head>
+          <meta property="article:published_time" content="2026-07-20T17:13:54+00:00" />
+          <meta property="og:description" content="Apple released beta 4 for iPadOS 27, tvOS 27, watchOS 27, and more." />
+        </head><body><div class="container med post-content">
+          <p>iPadOS 27, tvOS 27, watchOS 27, HomePod 27, and more are rolling out beta 4 releases today.</p>
+          <p>Apple is expected to ship the same releases to public beta testers in the coming days.</p>
+          <h3>Best iPad, Apple Watch, Apple TV accessories</h3>
+          <ul>
+            <li>AirPods Pro 3 (now only $199, down from $249)</li>
+            <li>Portable USB-C charger for Apple Watch</li>
+            <li>100W USB-C fast charging power adapter</li>
+          </ul>
+          <p>FTC: We use income earning auto affiliate links.</p>
+        </div></body></html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/20/apple-releases-beta-4-for-ipados-27-tvos-27-and-more/",
+            title="Apple releases beta 4 for iPadOS 27, tvOS 27, and more",
+        )
+
+        _, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("rolling out beta 4", combined)
+        self.assertNotIn("AirPods Pro 3", combined)
+        self.assertNotIn("Portable USB-C charger", combined)
+
     def test_selected_candidate_with_feed_time_survives_detail_fetch_failure(self):
         module = load_module()
         source = module.Source(
@@ -3286,6 +3318,26 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertTrue(any("12 vulnerabilities" in fact for fact in facts))
         self.assertFalse(any("Counterpoint" in fact for fact in facts))
 
+    def test_feedback_prompts_and_pure_ui_navigation_are_not_key_facts(self):
+        module = load_module()
+        html = """
+        <article class="post-content">
+          <p>Apple says iOS 26.6 optimizes the Spotlight index to prepare the iPhone for iOS 27.</p>
+          <li>Click the ‘i’ icon next to Beta Updates</li>
+          <li>From the dropdown menu in the top-right, select the macOS Developer Tahoe Beta</li>
+          <p>In the Camera section of Settings, users can select ProRes Log 2 for video encoding.</p>
+          <p>Have you found anything new in iOS 26.6 or moved to iOS 27 beta? Let us know in the comments.</p>
+        </article>
+        """
+
+        facts = module.extract_key_facts(html, "Apple releases iOS 26.6 RC", "9to5Mac")
+
+        self.assertTrue(any("Spotlight index" in fact for fact in facts), facts)
+        self.assertTrue(any("ProRes Log 2" in fact for fact in facts), facts)
+        self.assertFalse(any("Click the" in fact for fact in facts), facts)
+        self.assertFalse(any("dropdown menu" in fact for fact in facts), facts)
+        self.assertFalse(any("Let us know" in fact for fact in facts), facts)
+
     def test_ithome_related_posts_and_site_footer_do_not_become_key_facts(self):
         module = load_module()
         html = """
@@ -3494,6 +3546,7 @@ class RelevanceRuleTests(unittest.TestCase):
         data = {
             "events": [
                 {
+                    "id": "wallet-event",
                     "category": "software_systems",
                     "title": "Apple Wallet Digital ID may be used for verification",
                     "summary": "This long source summary should not be copied into the coverage scaffold.",
@@ -3501,6 +3554,7 @@ class RelevanceRuleTests(unittest.TestCase):
                     "sources": [{"name": "9to5Mac", "url": "https://example.com/wallet"}],
                 },
                 {
+                    "id": "store-event",
                     "category": "hardware_products",
                     "title": "苹果美国关闭三家 Apple Store",
                     "summary": "苹果关闭美国三家 Apple Store，员工安排引发争议。",
@@ -3514,6 +3568,12 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertIn("Apple Wallet Digital ID", scaffold)
         self.assertIn("苹果美国关闭三家 Apple Store", scaffold)
+        self.assertIn("<!-- event_id: wallet-event -->", scaffold)
+        self.assertIn("<!-- event_id: store-event -->", scaffold)
+        self.assertIn(
+            "Do not combine separate event IDs merely because they share a source, report, roadmap",
+            scaffold,
+        )
         self.assertNotIn("This long source summary", scaffold)
         self.assertNotIn("A long key fact", scaffold)
 
@@ -7822,6 +7882,40 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertIn("Vision Pro 的起售价从 29999 元上调至 31999 元", combined)
         self.assertIn("Apple TV 的起售价从 129 美元上调至 199 美元", combined)
 
+    def test_contextual_short_price_rows_survive_extraction_and_event_aggregation(self):
+        module = load_module()
+        title = "国区个人 11 元 / 月涨至 12 元 / 月，苹果 Apple Music 订阅全球多地涨价"
+        html = """
+        <article>
+          <h1>国区个人 11 元 / 月涨至 12 元 / 月，苹果 Apple Music 订阅全球多地涨价</h1>
+          <p>苹果公司今天对 Apple Music 订阅服务进行涨价，其中，国区涨价详情如下：</p>
+          <ul>
+            <li>个人：11 元 / 月 → 12 元 / 月，涨 1 元</li>
+            <li>家庭：17 元 / 月 → 20 元 / 月，涨 3 元</li>
+            <li>学生：6 元 / 月 → 7 元 / 月，涨 1 元</li>
+          </ul>
+          <p>苹果表示，本轮调整主要是因为版权费上涨。</p>
+        </article>
+        """
+
+        facts = module.extract_key_facts(html, title, "IT之家")
+        self.assertIn("个人：11 元 / 月 → 12 元 / 月，涨 1 元", facts)
+        self.assertIn("家庭：17 元 / 月 → 20 元 / 月，涨 3 元", facts)
+        self.assertIn("学生：6 元 / 月 → 7 元 / 月，涨 1 元", facts)
+
+        article = article_for(
+            module,
+            title,
+            "苹果对 Apple Music 国区个人、家庭和学生套餐进行涨价。",
+            source="IT之家",
+            facts=facts,
+        )
+        event = module.cluster_articles([article])[0]
+        combined = " ".join(event.key_facts)
+        self.assertIn("个人：11 元 / 月 → 12 元 / 月，涨 1 元", combined)
+        self.assertIn("家庭：17 元 / 月 → 20 元 / 月，涨 3 元", combined)
+        self.assertIn("学生：6 元 / 月 → 7 元 / 月，涨 1 元", combined)
+
     def test_third_party_platform_update_directly_improving_airpods_beats_is_ecosystem_relevant(self):
         module = load_module()
         title = "微软修复Windows 11蓝牙故障：AirPods和Beats连接更稳定"
@@ -8777,6 +8871,28 @@ class RelevanceRuleTests(unittest.TestCase):
         )
 
         self.assertFalse(module.is_relevant_candidate(evergreen, source))
+
+    def test_title_only_current_os_app_guides_remain_discoverable(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        candidates = [
+            module.Candidate(
+                source="MacRumors",
+                url="https://www.macrumors.com/guide/ios-27-calendar-reminders/",
+                title="Everything New in Calendar and Reminders in iOS 27",
+                summary="",
+                feed_time_raw="",
+            ),
+            module.Candidate(
+                source="MacRumors",
+                url="https://www.macrumors.com/guide/ios-27-visual-intelligence/",
+                title="Here's What's New With Visual Intelligence in iOS 27",
+                summary="",
+                feed_time_raw="",
+            ),
+        ]
+
+        self.assertTrue(all(module.is_relevant_candidate(candidate, source) for candidate in candidates))
 
     def test_non_apple_platform_apps_and_device_comparisons_stay_weak(self):
         module = load_module()

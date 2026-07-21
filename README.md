@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.32.0 - 2026-07-16
+### 1.40.0 - 2026-07-21
 
-- Added direct event identities and same-action cross-source clustering for official education promotions, AppleCare+ price changes, carrier-financed device locks, China Apple Intelligence approval, Maps ad policy, AI chip acquisitions, regional platform inquiries, and sales-tax holidays.
-- Improved detail-page title-and-lead precedence so feed summaries, related links, body comparisons, and non-Apple discovery context cannot promote or merge unrelated market, legal, supplier, app, or analyst stories.
-- Refined relevance and event boundaries for direct macOS malware, Apple Silicon OS/driver certification, Apple-specific product forecasts, analyst commentary, and broad multi-vendor reports while keeping weak or background items out of required events.
-- Added structured data-series extraction that preserves complete per-model and per-region price, support, eligibility, and status rows in `must_include_facts` without promoting narrative colon paragraphs.
-- Updated agent and fallback guidance and expanded regression coverage from 555 to 581 tests; concurrent live comparison preserved candidate, article, and URL coverage, produced no merge warnings, and stayed near the 120-second runtime target.
+- Added the `scripts/apple_news_core` package: `event_identity.py` builds title-and-lead-led semantic identities for products, components, actors, actions, regions, legal cases, content forms, and named subjects, while `event_matcher.py` applies pure, conservative same-event compatibility decisions outside the crawler orchestration layer.
+- Improved event boundaries across OS release waves, first-party apps and services, legal and company actions, regional availability, hardware roadmaps, suppliers, pricing, market reports, and content titles so same-action reports retain all source links while unrelated reports no longer merge through broad Apple context.
+- Improved direct Apple relevance and deferred-event handling for company facilities, platform trust, ecosystem interoperability, research and market reports, while keeping tutorials, polls, podcasts, routine deals, competitor comparisons, affiliate content, and incidental Apple mentions out of required events.
+- Improved source-body cleanup and fact extraction to remove related-link, affiliate, feedback-prompt, and pure UI-navigation noise while preserving source-specific figures, complete model or region tables, feature lists, official explanations, and other material `key_facts`.
+- Added dedicated event-identity architecture tests and expanded regression coverage from 581 to 665 tests; cached and live validation preserved candidate, article, and URL coverage and produced no merge warnings.
 
 ## What It Does
 
@@ -30,6 +30,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - Labels event kind and relevance tier so broad discovery can preserve weak Apple-adjacent candidates without polluting the final brief.
 - Extracts key numeric facts, lists, feature names, countries, terms, eligibility details, and rollout limits for richer summaries.
 - Emits Markdown or JSON.
+
+## Architecture
+
+- `scripts/apple_news_24h.py` handles source discovery, page fetching, timestamp verification, article extraction, event orchestration, and Markdown/JSON rendering.
+- `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
+- `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
+- `tests/test_event_identity_architecture.py` provides focused regression coverage for identity extraction and matching boundaries; the existing crawler tests continue to verify discovery, parsing, relevance, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 
@@ -124,7 +131,7 @@ python3 -m unittest discover -s tests
 Run a syntax check:
 
 ```bash
-python3 -m py_compile scripts/apple_news_24h.py
+python3 -m py_compile scripts/apple_news_24h.py scripts/apple_news_core/event_identity.py scripts/apple_news_core/event_matcher.py
 ```
 
 Live smoke tests are intentionally separate from CI because they depend on network access and third-party site availability.
