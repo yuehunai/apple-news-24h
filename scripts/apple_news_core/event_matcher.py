@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from .event_identity import CROSS_PRODUCT_IDENTITY_FACETS, EventIdentity
+from .event_identity import CROSS_PRODUCT_IDENTITY_FACETS, UMBRELLA_FACETS, EventIdentity
 
 
 MergeDecision = Literal["match", "conflict", "unknown"]
@@ -22,23 +22,39 @@ PRICE_CONTEXT_FACETS = {
 }
 
 HIGH_CONFIDENCE_COMPONENTS = {
+    "apple-device-leasing-program",
     "app-catalog-metrics",
     "camera-system",
+    "clipboard-paste-suggestion",
     "car-key",
     "customer-loyalty",
+    "cross-platform-data-migration",
     "dual-battery",
+    "financed-device-restriction",
+    "facility-renovation",
     "hide-my-email",
+    "largest-iphone-display",
+    "ltpo-display",
     "market-cap",
+    "macbook-model:air",
+    "macbook-model:neo",
+    "macbook-model:pro",
+    "macbook-model:ultra",
     "memory-supply",
     "nudify-apps",
     "gambling-apps",
     "office-real-estate",
     "oled-display",
     "privacy-vulnerability",
+    "product-patent-disclosure",
     "price-upgrade-behavior",
+    "product-release-delay",
     "recovery-mode",
+    "recurring-transactions",
     "server-chip",
+    "shopping-assistant",
     "spotlight-index-preparation",
+    "supplier-input-cost",
     "vapor-chamber",
     "writing-tools",
 }
@@ -47,15 +63,26 @@ HIGH_SIGNAL_NAMED_SUBJECT_ACTIONS = {
     "delay-roadmap",
     "feature-change",
     "legal",
+    "official-communication",
     "pilot-testing",
     "project-cancellation",
     "content-release",
     "platform-trust",
+    "price-change",
     "regulation",
     "security",
     "supply-production",
     "transaction",
 }
+
+
+def _high_confidence_components(components: frozenset[str]) -> set[str]:
+    return {
+        component
+        for component in components
+        if component in HIGH_CONFIDENCE_COMPONENTS
+        or component.startswith("display-size:")
+    }
 
 FIRST_PARTY_SERVICE_PRODUCTS = {
     "apple-arcade",
@@ -65,6 +92,7 @@ FIRST_PARTY_SERVICE_PRODUCTS = {
     "apple-sports",
     "apple-tv",
     "icloud",
+    "applecare",
 }
 
 
@@ -122,6 +150,8 @@ def _actions_compatible(left: frozenset[str], right: frozenset[str]) -> bool:
         return True
     related = (
         {"legal", "security"},
+        {"feature-change", "delay-roadmap"},
+        {"feature-change", "retail-availability"},
         {"supply-production", "delay-roadmap"},
         {"retail-availability", "delay-roadmap"},
         {"market-report", "feature-change"},
@@ -134,8 +164,12 @@ def _legal_decision(left: EventIdentity, right: EventIdentity) -> MergeDecision 
     # also establishes an actual proceeding. Treating counterparties alone as
     # legal identity lets unrelated stories that mention OpenAI, DOJ, or Epic
     # collapse into one event.
-    left_is_legal = bool("legal" in left.actions or left.case_topics)
-    right_is_legal = bool("legal" in right.actions or right.case_topics)
+    left_is_legal = "legal" in left.actions
+    right_is_legal = "legal" in right.actions
+    if left_is_legal != right_is_legal and "product-patent-disclosure" in (
+        left.components | right.components
+    ):
+        return "conflict"
     if not (left_is_legal and right_is_legal):
         return None
     if (
@@ -164,6 +198,17 @@ def _price_decision(left: EventIdentity, right: EventIdentity) -> MergeDecision 
     right_forecast = "future-price-forecast" in right.components
     if left_forecast != right_forecast:
         return "conflict"
+    left_supplier_cost = "supplier-input-cost" in left.components
+    right_supplier_cost = "supplier-input-cost" in right.components
+    if left_supplier_cost != right_supplier_cost:
+        return "conflict"
+    if left_supplier_cost and right_supplier_cost:
+        left_title_supplier_cost = "supplier-input-cost" in left.title_components
+        right_title_supplier_cost = "supplier-input-cost" in right.title_components
+        if left_title_supplier_cost != right_title_supplier_cost:
+            return "conflict"
+        if (left.named_subjects & right.named_subjects) or (left.actors & right.actors):
+            return "match"
     if left.products and right.products:
         if left.products & right.products:
             return "match"
@@ -173,11 +218,16 @@ def _price_decision(left: EventIdentity, right: EventIdentity) -> MergeDecision 
 
 def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDecision:
     """Resolve only high-confidence identities; leave nuanced cases to legacy guards."""
+    shared_components = left.components & right.components
+    if (
+        "cross-platform-data-migration" in shared_components
+        and _products_compatible(left.products, right.products)
+    ):
+        return "match"
     if left.scope == "third-party-context" or right.scope == "third-party-context":
         if left.scope != right.scope:
             return "conflict"
 
-    shared_components = left.components & right.components
     if any(
         component.startswith(("os-wave:", "os-wave-platform:"))
         for component in shared_components
@@ -204,15 +254,112 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         if left_context and right_context:
             return "match" if left_context & right_context else "conflict"
 
+    financing_components = {"apple-device-leasing-program", "financed-device-restriction"}
+    left_financing = left.components & financing_components
+    right_financing = right.components & financing_components
+    if left_financing and right_financing and not (left_financing & right_financing):
+        return "conflict"
+
+    left_concrete_components = _high_confidence_components(left.components)
+    right_concrete_components = _high_confidence_components(right.components)
+    if (
+        left_concrete_components
+        and right_concrete_components
+        and not (left_concrete_components & right_concrete_components)
+        and bool(left.products & right.products)
+        and not ((left.facets & right.facets) - UMBRELLA_FACETS)
+    ):
+        return "conflict"
+
     shared_title_components = left.title_components & right.title_components
     shared_facets = left.facets & right.facets
     shared_named_subjects = left.named_subjects & right.named_subjects
     compatible_named_subjects = _compatible_named_subjects(left.named_subjects, right.named_subjects)
+    shared_title_named_subjects = left.title_named_subjects & right.title_named_subjects
+    compatible_title_named_subjects = _compatible_named_subjects(
+        left.title_named_subjects,
+        right.title_named_subjects,
+    )
+    left_product_generations = {
+        component
+        for component in left.title_components
+        if component.startswith("product-generation:")
+    }
+    right_product_generations = {
+        component
+        for component in right.title_components
+        if component.startswith("product-generation:")
+    }
+    if (
+        left_product_generations
+        and right_product_generations
+        and not (left_product_generations & right_product_generations)
+    ):
+        return "conflict"
+    hardware_products = {
+        "airpods",
+        "apple-watch",
+        "foldable-iphone",
+        "homepod",
+        "imac",
+        "ipad",
+        "ipad-air",
+        "ipad-base",
+        "ipad-mini",
+        "ipad-pro",
+        "iphone",
+        "mac",
+        "mac-mini",
+        "mac-pro",
+        "mac-studio",
+        "macbook",
+        "vision-pro",
+    }
+    if (
+        left.title_products & hardware_products
+        and right.title_products & hardware_products
+        and not _products_compatible(
+            frozenset(left.title_products & hardware_products),
+            frozenset(right.title_products & hardware_products),
+        )
+        and not (shared_facets & CROSS_PRODUCT_IDENTITY_FACETS)
+    ):
+        return "conflict"
+    left_macbook_models = {
+        component
+        for component in left.title_components
+        if component.startswith("macbook-model:")
+    }
+    right_macbook_models = {
+        component
+        for component in right.title_components
+        if component.startswith("macbook-model:")
+    }
+    if (
+        left_macbook_models
+        and right_macbook_models
+        and not (left_macbook_models & right_macbook_models)
+    ):
+        return "conflict"
+    if (
+        "roadmap-projection" in (left.title_components | right.title_components)
+        and bool(left.title_products & right.title_products)
+        and "delay-roadmap" in left.actions & right.actions
+    ):
+        return "match"
+    if (
+        left_product_generations & right_product_generations
+        and "production-ramp" in shared_components
+        and "production-ramp" in (left.title_components | right.title_components)
+        and "supply-production" in left.actions & right.actions
+        and _products_compatible(left.title_products, right.title_products)
+    ):
+        return "match"
 
     if "roundup" in {left.content_form, right.content_form} and left.content_form != right.content_form:
         specific = right if left.content_form == "roundup" else left
         if (
-            specific.title_components & HIGH_CONFIDENCE_COMPONENTS
+            _high_confidence_components(specific.title_components)
             or specific.named_subjects
             or specific.facets
         ):
@@ -220,9 +367,30 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
 
     if "price-upgrade-behavior" in shared_title_components:
         return "match"
+    if "apple-device-leasing-program" in shared_title_components:
+        return "match"
+    if (
+        "financed-device-restriction" in shared_title_components
+        and (
+            _products_compatible(left.products, right.products)
+            or (
+                bool(left.products & {"ios", "iphone"})
+                and bool(right.products & {"ios", "iphone"})
+                and left.products <= {"ios", "iphone"}
+                and right.products <= {"ios", "iphone"}
+            )
+        )
+    ):
+        return "match"
     if (
         "dual-battery" in shared_components
         and "dual-battery" in (left.title_components | right.title_components)
+        and _products_compatible(left.products, right.products)
+    ):
+        return "match"
+    if (
+        "product-patent-disclosure" in shared_components
+        and "product-patent-disclosure" in (left.title_components | right.title_components)
         and _products_compatible(left.products, right.products)
     ):
         return "match"
@@ -230,6 +398,17 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
     if shared_named_subjects or compatible_named_subjects:
         shared_actions = left.actions & right.actions & HIGH_SIGNAL_NAMED_SUBJECT_ACTIONS
         if shared_actions and _products_compatible(left.products, right.products):
+            # A chip, executive, analyst, or other named subject found only in
+            # body context is supporting evidence, not event identity. It may
+            # reconcile different facet wording only when both headlines make
+            # that same subject primary.
+            if (
+                left.facets
+                and right.facets
+                and not shared_facets
+                and not (shared_title_named_subjects or compatible_title_named_subjects)
+            ):
+                return "conflict"
             return "match"
     if (
         left.named_subjects
@@ -266,10 +445,10 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         "retail-availability",
     }:
         return "match"
-    concrete_components = shared_components & HIGH_CONFIDENCE_COMPONENTS
+    concrete_components = _high_confidence_components(shared_components)
     if (
         concrete_components
-        and (shared_title_components & concrete_components)
+        and ((left.title_components | right.title_components) & concrete_components)
         and _products_compatible(left.products, right.products)
         and _actions_compatible(left.actions, right.actions)
     ):
@@ -300,8 +479,8 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
     ):
         return "conflict"
 
-    left_concrete = left.title_components & HIGH_CONFIDENCE_COMPONENTS
-    right_concrete = right.title_components & HIGH_CONFIDENCE_COMPONENTS
+    left_concrete = _high_confidence_components(left.title_components)
+    right_concrete = _high_confidence_components(right.title_components)
     if left_concrete and right_concrete and not (left_concrete & right_concrete):
         if left.title_products & right.title_products or left.actions & right.actions:
             return "conflict"

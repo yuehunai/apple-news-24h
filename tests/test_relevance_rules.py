@@ -9585,6 +9585,13 @@ class RelevanceRuleTests(unittest.TestCase):
                 "酷态科推出 CP 苹果转接头 C to L：配硅胶绳套、获 MFi 认证，69 元",
                 "酷态科推出第三方 C to L 转接头，支持苹果 Lightning 设备并通过 MFi 认证。",
             ),
+            (
+                "铁威马推出 4+4 盘位 DAS 硬盘柜 D8 Hybrid 2，不支持 RAID",
+                (
+                    "TerraMaster 推出 USB-C 直连存储硬盘柜，兼容 macOS、Windows 和 Linux，"
+                    "并支持 APFS、NTFS、EXT4 等文件系统。"
+                ),
+            ),
         ]
 
         for title, summary in cases:
@@ -9592,6 +9599,27 @@ class RelevanceRuleTests(unittest.TestCase):
                 self.assertEqual(module.detect_event_kind(title, summary, []), "third_party_ecosystem")
                 tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
                 self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_leasing_plan_using_apple_upgrade_as_comparison_stays_weak(self):
+        module = load_module()
+        third_party = article_for(
+            module,
+            "消息称索尼 / 微软有望效仿苹果，为 PS6/XBOX Helix 推游戏主机月租计划",
+            (
+                "消息源称索尼和微软可能效仿 Apple Upgrade，在下一代游戏主机上推出硬件月租服务。"
+                "Apple 的 iPhone、iPad、Mac 和 Apple Watch 租赁计划只是对照背景。"
+            ),
+            "IT之家",
+        )
+        apple_program = article_for(
+            module,
+            "Apple Upgrade device leasing program reportedly launches July 28",
+            "Apple will reportedly launch its own device-leasing program for iPhone, iPad, Mac, and Apple Watch.",
+            "9to5Mac",
+        )
+
+        self.assertEqual(third_party.relevance_tier, "weak", third_party.relevance_reason)
+        self.assertEqual(len(module.cluster_articles([third_party, apple_program])), 2)
 
     def test_tutorial_ad_malware_and_public_response_noise_stay_weak(self):
         module = load_module()
@@ -11234,6 +11262,24 @@ class RelevanceRuleTests(unittest.TestCase):
             "",
         )
 
+    def test_discovery_summary_only_enriches_genuinely_sparse_detail_pages(self):
+        module = load_module()
+
+        self.assertFalse(
+            module.detail_summary_needs_discovery_enrichment(
+                "Apple announced a complete device-leasing program covering iPhone, iPad, Mac, and Apple Watch, "
+                "with eligibility, upgrade timing, and payment terms described on the article page.",
+                [],
+            )
+        )
+        self.assertTrue(module.detail_summary_needs_discovery_enrichment("Apple announced an update.", []))
+        self.assertFalse(
+            module.detail_summary_needs_discovery_enrichment(
+                "Apple announced an update.",
+                ["The release adds search and filtering for TestFlight beta apps."],
+            )
+        )
+
     def test_wallet_drivers_license_has_digital_id_topic_boundary(self):
         module = load_module()
         title = "Apple Says iPhone Driver's Licenses Will Expand to These 6 U.S. States"
@@ -12635,6 +12681,19 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(kind, "third_party_ecosystem")
         self.assertEqual(tier, "weak", reason)
 
+    def test_broad_corporate_ranking_cannot_become_apple_news_from_supplier_background(self):
+        module = load_module()
+        title = "《财富》中国 500 强：国家电网坐稳第一，腾讯成最赚钱互联网企业"
+        summary = (
+            "榜单按营收排列中国企业，国家电网、中国石油和中国石化位居前三。"
+            "正文仅在完整名次表中称鸿海精密是苹果最大代工厂并列第五，"
+            "没有 Apple 自身排名、市场份额、产品、供应协议或公司动作。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
     def test_non_apple_legal_dispute_with_later_apple_comparison_is_rejected(self):
         module = load_module()
         source = source_named(module, "IT之家")
@@ -13860,6 +13919,49 @@ class RelevanceRuleTests(unittest.TestCase):
         forecast_event = next(event for event in events if "MacBook Neo" in event.title)
         self.assertEqual({article.source for article in forecast_event.articles}, {"IT之家", "快科技"})
 
+    def test_market_reports_require_compatible_scope_segment_and_period(self):
+        module = load_module()
+        foldable = article_for(
+            module,
+            "Counterpoint：预计 2026 年全球折叠屏手机市场同比增长 21%，苹果入局有望拿下 25% 份额",
+            (
+                "2026 年三星预计仍将保持折叠屏手机市场领先地位，但份额将从 40% 下滑至 32%。"
+                "Counterpoint 预测全球折叠屏手机出货量增长 21%，苹果入局首年份额约 25%，华为约 24%。"
+            ),
+            source="IT之家",
+        )
+        india = article_for(
+            module,
+            "Omdia 数据：印度智能手机出货量 2026Q2 同比下降 13% 至 3390 万部",
+            "Omdia 当地时间 21 日统计印度 2026 年第二季度整体智能手机出货量，苹果出货 350 万部。",
+            source="IT之家",
+        )
+        foldable_followup = article_for(
+            module,
+            "机构预测华为、苹果将瓜分全球近半折叠屏市场",
+            "Counterpoint 预计 2026 年全球折叠屏市场增长 21%，苹果份额为 25%。",
+            source="cnBeta",
+        )
+
+        events = module.cluster_articles([foldable, india, foldable_followup])
+
+        self.assertEqual(len(events), 2)
+        foldable_event = next(event for event in events if foldable in event.articles)
+        self.assertEqual({article.source for article in foldable_event.articles}, {"IT之家", "cnBeta"})
+        self.assertNotIn(india, foldable_event.articles)
+        self.assertEqual(foldable_event.merge_warnings, [])
+        with mock.patch.object(
+            module,
+            "article_primary_facets",
+            side_effect=lambda article: (
+                {"non-apple-component-market-background"}
+                if article is foldable
+                else {"apple-market-share-report"}
+            ),
+        ):
+            rebuilt = module.cluster_articles([foldable, foldable_followup])[0]
+        self.assertEqual(rebuilt.merge_warnings, [])
+
     def test_detail_page_identity_rejects_non_apple_discovery_context(self):
         module = load_module()
         title = "三星 Galaxy AI 通过大模型服务备案，合作方为百度智能云"
@@ -13915,6 +14017,19 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.choose_category(title, summary), "software_systems")
         tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
         self.assertEqual(tier, "ecosystem", reason)
+
+    def test_official_shot_on_iphone_campaign_is_not_downgraded_as_third_party_project(self):
+        module = load_module()
+        title = "'Nido de Villanas' is a Mexican microdrama shot on iPhone 17 Pro"
+        summary = (
+            "Apple has shared a first look at Nido de Villanas through Apple's YouTube channel as part of "
+            "the official Shot on iPhone campaign. The 14 Shorts demonstrate Action Mode, 8x optical-quality "
+            "zoom, slow motion, and focus adjustments on iPhone 17 Pro."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "strong", reason)
 
     def test_model_generation_rows_remain_in_price_table_facts(self):
         module = load_module()

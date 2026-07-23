@@ -248,6 +248,493 @@ class EventIdentityArchitectureTests(unittest.TestCase):
                 self.assertEqual(tier, "strong", reason)
                 self.assertEqual(module.detect_event_kind(title, summary), expected_kind)
 
+    def test_subject_first_third_party_titles_stay_weak(self):
+        module = load_module()
+        samples = [
+            (
+                "As Garmin Cirqa launches, should Apple make a fitness band or ring?",
+                "A reader poll compares Garmin's new wearable with possible future Apple products.",
+                "9to5Mac",
+            ),
+            (
+                "漫步者 S1000MKIII 音箱发布：支持苹果 AirPlay 2",
+                "漫步者发布第三方桌面音箱，并把 AirPlay 2 兼容性列为连接功能之一。",
+                "IT之家",
+            ),
+            (
+                "Samsung's new foldable is wider than Apple's anniversary iPhone",
+                "Samsung announced a Galaxy foldable and compares its dimensions with a rumored iPhone.",
+                "The Verge",
+            ),
+        ]
+
+        for title, summary, source in samples:
+            with self.subTest(title=title):
+                identity = module.title_led_identity(title, summary)
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(identity.scope, "third-party-context")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_bridge_article_joins_best_matching_first_party_program_event(self):
+        module = load_module()
+        restricted = article_for(
+            module,
+            "iOS 27 adds restricted mode for financed iPhones with unpaid balances",
+            "Apple limits an overdue financed device to ten system apps and blocks erasure for resale.",
+            "9to5Mac",
+        )
+        upgrades = [
+            article_for(
+                module,
+                "'Apple Upgrade' Program Reportedly Launching Next Week",
+                "Apple will launch Apple Upgrade as a device-leasing program for iPhone, iPad, Mac, and Apple Watch.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple debuting new Apple Upgrade leasing program next week, per report",
+                "The Apple Upgrade program lets customers lease several first-party devices and upgrade later.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Upgrades will let users lease iPhones and Macs with Klarna",
+                "Apple's own Upgrade program uses Klarna financing for monthly device leases.",
+                "AppleInsider",
+            ),
+        ]
+        bridge = article_for(
+            module,
+            "苹果有望下周美国推出月租 iPhone 17 等，iOS 27 显示欠款后可用 10 款白名单 App",
+            (
+                "苹果将推出 Apple Upgrade 设备租赁计划，覆盖 iPhone、iPad、Mac 和 Apple Watch。"
+                "同一报道还披露 iOS 27 的欠款设备受限模式。"
+            ),
+            "IT之家",
+        )
+        localized_restricted = article_for(
+            module,
+            "苹果月租设备欠费后将停用，并防止抹除转卖",
+            "iOS 27 代码显示，Apple 会限制欠费租赁设备，仅保留系统白名单应用。",
+            "快科技",
+        )
+
+        self.assertEqual(upgrades[-1].relevance_tier, "strong", upgrades[-1].relevance_reason)
+        bridge_identity = module.article_title_led_event_identity(bridge)
+        self.assertIn("apple-device-leasing-program", bridge_identity.title_components)
+        self.assertIn("financed-device-restriction", bridge_identity.title_components)
+        events = module.cluster_articles([restricted, *upgrades, bridge, localized_restricted])
+        upgrade_event = next(event for event in events if upgrades[0] in event.articles)
+        restricted_event = next(event for event in events if restricted in event.articles)
+
+        self.assertEqual(
+            {article.title for article in [*upgrades, bridge]},
+            {article.title for article in upgrade_event.articles},
+            event_partitions(events),
+        )
+        self.assertNotIn(restricted, upgrade_event.articles)
+        self.assertEqual(
+            {restricted.title, localized_restricted.title},
+            {article.title for article in restricted_event.articles},
+            event_partitions(events),
+        )
+
+    def test_compound_leasing_and_restriction_article_contributes_to_both_events(self):
+        module = load_module()
+        title = "苹果有望下周美国推出月租 iPhone 17 等，iOS 27 显示欠款后可用 10 款白名单 App"
+        summary = (
+            "Apple Upgrade 计划覆盖 iPhone、iPad、Mac 和 Apple Watch，租期为 24 或 36 个月。"
+            "iOS 27 代码还显示，欠款租赁设备会进入受限模式，只保留 10 款白名单 App 并防止抹除转卖。"
+        )
+        facts = [
+            "Apple Upgrade 由 Klarna 提供融资，支持提前升级或买断。",
+            "欠款设备只保留 10 款系统 App，并启用 Partner Finance Lock。",
+        ]
+
+        variants = module.compound_article_variants(title, summary, facts)
+
+        self.assertEqual(len(variants), 2, variants)
+        identities = [module.title_led_identity(item_title, item_summary) for item_title, item_summary, _ in variants]
+        self.assertEqual(
+            {"apple-device-leasing-program", "financed-device-restriction"},
+            {
+                component
+                for identity in identities
+                for component in identity.title_components
+                if component in {"apple-device-leasing-program", "financed-device-restriction"}
+            },
+        )
+        self.assertTrue(all(item_facts for _, _, item_facts in variants))
+
+        localized_variants = module.compound_article_variants(
+            "苹果将在美国推月租 iPhone 17 等业务：欠费停用，防止拆零件等行为",
+            summary,
+            facts,
+        )
+        self.assertEqual(len(localized_variants), 2, localized_variants)
+        self.assertTrue(
+            all(
+                module.classify_relevance_tier(item_title, item_summary, item_facts, "快科技")[0]
+                == "strong"
+                for item_title, item_summary, item_facts in localized_variants
+            )
+        )
+
+    def test_first_party_app_updates_merge_by_named_product_and_stay_software(self):
+        module = load_module()
+        testflight = [
+            article_for(
+                module,
+                "Apple just improved TestFlight for users with a lot of beta apps",
+                "Apple updated TestFlight with search and filtering for beta apps.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Updates TestFlight With Search and Filtering",
+                "The same TestFlight release adds search and filtering for testers.",
+                "MacRumors",
+            ),
+        ]
+        invites = [
+            article_for(
+                module,
+                "Apple Invites app updated with two new invitation features",
+                "Apple Invites now supports emoji replies and celebration effects.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Invites App Updated With Two New Features",
+                "The Apple Invites update adds the same host and guest features.",
+                "MacRumors",
+            ),
+        ]
+
+        events = module.cluster_articles([*testflight, *invites])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in testflight), event_partitions(events))
+        self.assertIn(frozenset(article.title for article in invites), event_partitions(events))
+        self.assertTrue(all(article.category == "software_systems" for article in [*testflight, *invites]))
+        self.assertTrue(all(event.event_kind == "os_app" for event in events))
+
+    def test_unrelated_weak_third_party_events_cannot_merge_from_body_background(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "三星时隔多年杀入金融科技领域 推出全新信用卡产品 - Samsung 三星 - cnBeta.COM",
+                "The Samsung fintech product supports common wallets and mentions Apple Pay as market background.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "台积电芯片代工基准价格拟上调最高达10% - TSMC 台积电 - cnBeta.COM",
+                "The report lists Apple, Qualcomm, and MediaTek among many customers affected by broad chip costs.",
+                "cnBeta",
+            ),
+            article_for(
+                module,
+                "Intel wins Fortinet as its first public external foundry customer",
+                "The manufacturing report compares Intel capacity with TSMC and mentions Apple chip orders as history.",
+                "快科技",
+            ),
+        ]
+
+        for article in articles:
+            article.relevance_tier = "weak"
+            article.relevance_reason = "non-Apple primary subject with incidental Apple context"
+            self.assertNotIn("com", module.article_title_led_event_identity(article).named_subjects)
+        self.assertEqual(len(module.cluster_articles(articles)), 3)
+
+    def test_supplier_input_cost_event_does_not_merge_with_device_price_forecast(self):
+        module = load_module()
+        supplier_cost = [
+            article_for(
+                module,
+                "Apple Chipmaker TSMC Plans Price Hikes of Up to 10% in 2027",
+                "TSMC plans to increase advanced-node chip prices, directly raising Apple's processor costs.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "More bad news for Apple pricing as TSMC increases chip costs",
+                "TSMC is raising fabrication prices for Apple chips in 2027.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Expect 2027 iPhones to cost more as TSMC increases chip prices",
+                "The supplier price increase affects Apple processors and could pressure future device pricing.",
+                "AppleInsider",
+            ),
+        ]
+        device_price = article_for(
+            module,
+            "iPhone 18 Pro Max price could rise by $200 at launch",
+            "A separate forecast estimates the future retail price of one iPhone model.",
+            "IT之家",
+        )
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in supplier_cost))
+        events = module.cluster_articles([device_price, *supplier_cost])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in supplier_cost), event_partitions(events))
+
+    def test_title_primary_supplier_price_report_beats_downstream_device_price_forecast(self):
+        module = load_module()
+        device_price = article_for(
+            module,
+            "涨价 1000 元：iPhone 18 Pro Max 起售价或达 1.1 万元",
+            (
+                "博主预测下一代 iPhone 的中国零售价将上涨，背景原因包括内存和台积电 2nm 成本。"
+                "文章没有报告供应商已完成新的价格谈判。"
+            ),
+            "快科技",
+        )
+        chinese_supplier = article_for(
+            module,
+            "苹果 iPhone 18 Pro 系列涨价成定局：台积电敲定 2027 年涨价最高达 10%",
+            "台积电已与客户完成晶圆代工价格谈判，2027 年基础报价将上调 5% 至 10%。",
+            "快科技",
+        )
+        english_supplier = article_for(
+            module,
+            "Apple Chipmaker TSMC Plans Price Hikes of Up to 10% in 2027",
+            "TSMC completed talks with clients covering the same foundry base-price increase.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([device_price, chinese_supplier, english_supplier])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(
+            frozenset([chinese_supplier.title, english_supplier.title]),
+            event_partitions(events),
+        )
+
+    def test_shared_chip_name_cannot_bridge_distinct_iphone_price_and_product_roadmaps(self):
+        module = load_module()
+        device_price = article_for(
+            module,
+            "涨价 1000 元：iPhone 18 Pro Max 起售价或达 1.1 万元",
+            "博主暗示并预计 A20 Pro 和内存成本会推高下一代 Pro Max 的零售价。",
+            "快科技",
+        )
+        air_successor = article_for(
+            module,
+            "2027 年发布 iPhone Air 2：双摄、A20 Pro、VC 散热",
+            "第二代 iPhone Air 预计补齐相机、电池和散热短板，并使用 A20 Pro。",
+            "快科技",
+        )
+        air_followup = article_for(
+            module,
+            "iPhone Air 2 有望补齐短板：双摄、A20 Pro、VC 散热",
+            "同一产品路线图还包括 3,500mAh 电池与超广角镜头。",
+            "cnBeta",
+        )
+
+        events = module.cluster_articles([device_price, air_successor, air_followup])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(
+            frozenset([air_successor.title, air_followup.title]),
+            event_partitions(events),
+        )
+
+    def test_distinct_display_changes_do_not_merge_on_shared_iphone_roadmap_words(self):
+        module = load_module()
+        anniversary_display = [
+            article_for(
+                module,
+                "Apple Testing 7-Inch Display for Largest 20th Anniversary iPhone Model",
+                "Apple is testing a 7-inch display for the largest anniversary iPhone.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果测试 7 英寸二十周年 iPhone 显示屏",
+                "供应链称苹果正在测试同一款 7 英寸周年机型屏幕。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "Largest ever iPhone screen arriving next year, suggests leaker",
+                "Supply chain sources say Apple is trialing its largest ever iPhone display for next year's anniversary model.",
+                "9to5Mac",
+            ),
+        ]
+        ltpo = article_for(
+            module,
+            "iPhone 18 Pro display upgrades include LTPO+ and wider ProMotion support",
+            "A separate panel report describes LTPO+ technology and refresh-rate changes.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([*anniversary_display, ltpo])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in anniversary_display), event_partitions(events))
+        self.assertFalse(
+            module.is_apple_display_panel_supply_chain_story(
+                "Supply chain sources say Apple is trialing its largest ever iPhone screen for next year."
+            )
+        )
+        self.assertTrue(
+            module.is_apple_display_panel_supply_chain_story(
+                "Samsung Display will supply Apple with 10 million OLED iPhone panels under a new panel order."
+            )
+        )
+
+    def test_direct_apple_patent_and_official_product_story_stay_strong(self):
+        module = load_module()
+        samples = [
+            (
+                "Future iMac could come with a removable dock and carrying handle",
+                "A newly published Apple patent describes an iMac chassis with a removable dock and handle.",
+                "AppleInsider",
+            ),
+            (
+                "Apple shares video showing Apple Watch helping rescue a swimmer",
+                "Apple published an official video demonstrating the Watch emergency feature in a real rescue.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in samples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "strong", reason)
+
+    def test_product_patent_disclosure_does_not_merge_with_patent_litigation(self):
+        module = load_module()
+        imac_patents = [
+            article_for(
+                module,
+                "Future iMac could come with a removable dock or carrying handle",
+                "A newly granted Apple design patent describes a detachable iMac dock and folding handle.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "行走的 iMac：苹果专利探索可拆卸扩展坞与折叠提手",
+                "苹果获批的设计专利勾勒了同一款便携 iMac 方案。",
+                "IT之家",
+            ),
+        ]
+        litigation = article_for(
+            module,
+            "Apple loses bid to overturn $634 million Masimo patent verdict",
+            "A court rejected Apple's challenge to a patent-infringement verdict involving Apple Watch.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([*imac_patents, litigation])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in imac_patents), event_partitions(events))
+
+    def test_product_patent_identity_can_use_clean_detail_lead_beyond_first_paragraph(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Future iMac could come with a removable dock or handle to make it easier to carry",
+            (
+                "Moving an all-in-one desktop is awkward, and transporting many units also requires bulky packaging. "
+                "Existing carrying cases solve only part of that problem for customers and do not simplify shipping. "
+                "Apple has therefore explored a thinner transport design. A newly-granted patent called Low profile "
+                "computer support describes a removable dock and a folding handle for the iMac."
+            ),
+            "AppleInsider",
+        )
+        chinese = article_for(
+            module,
+            "“行走的 iMac”：苹果专利探索便携方案，可拆卸扩展坞 / 折叠式提手",
+            "苹果最新获批专利描述同一款可拆卸扩展坞与折叠式提手方案。",
+            "IT之家",
+        )
+
+        self.assertIn(
+            "product-patent-disclosure",
+            module.article_title_led_event_identity(english).components,
+        )
+        self.assertIn(
+            "product-patent-disclosure",
+            module.article_title_led_event_identity(chinese).components,
+        )
+        self.assertEqual(
+            module.identity_pair_decision(
+                module.article_title_led_event_identity(english),
+                module.article_title_led_event_identity(chinese),
+            ),
+            "match",
+        )
+        self.assertEqual(english.relevance_tier, chinese.relevance_tier)
+        self.assertTrue(module.regions_compatible(english, module.singleton_merge_event(chinese)))
+        self.assertTrue(module.should_merge(english, module.singleton_merge_event(chinese)))
+        self.assertTrue(module.should_merge(chinese, module.singleton_merge_event(english)))
+        self.assertTrue(module.articles_share_cohesive_title_identity([english, chinese]))
+        refreshed = module.singleton_merge_event(english)
+        module.refresh_event_metadata(refreshed)
+        self.assertTrue(
+            module.should_merge(chinese, refreshed),
+            (refreshed.event_kind, refreshed.relevance_tier, refreshed.category),
+        )
+        clusters = module.cluster_articles([english, chinese])
+        self.assertEqual(
+            len(clusters),
+            1,
+            [
+                {
+                    "titles": [article.title for article in event.articles],
+                    "warnings": event.merge_warnings,
+                    "kind": event.event_kind,
+                }
+                for event in clusters
+            ],
+        )
+
+    def test_official_product_story_merges_across_languages_when_action_words_are_separated(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Apple shares video on how Apple Watch helped rescue an injured cyclist",
+            "Apple published an official video about Fall Detection and Emergency SOS helping Phil after a crash.",
+            "9to5Mac",
+        )
+        chinese = article_for(
+            module,
+            "苹果发布 Apple Watch 真实案例视频，山地骑行事故中帮助挽救男子生命",
+            "苹果官方视频讲述同一名男子 Phil 的山地骑行救援经历。",
+            "IT之家",
+        )
+
+        self.assertEqual(len(module.cluster_articles([english, chinese])), 1)
+
+    def test_rumor_roundups_and_multi_vendor_predictions_stay_deferred(self):
+        module = load_module()
+        samples = [
+            (
+                "苹果 iPhone 18 Pro / Max 爆料汇总：A20 芯片、可变光圈等",
+                "文章汇总此前传闻，没有新增消息。",
+            ),
+            (
+                "iPhone 18 Rumor Reality Check: 20 Claims Ranked by Likelihood",
+                "The article ranks previously reported rumors without new reporting.",
+            ),
+            (
+                "9月份新机预测：iPhone 18、小米18、华为Mate 90谁更有料",
+                "文章比较苹果、小米和华为三家新机的配置与价格预测。",
+            ),
+        ]
+
+        for title, summary in samples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+                self.assertEqual(tier, "weak", reason)
+
     def test_poll_and_body_background_cannot_override_title_event_semantics(self):
         module = load_module()
         poll_title = "What will you do if Apple's higher pricing turns out to be permanent?"
@@ -2030,6 +2517,541 @@ class EventIdentityArchitectureTests(unittest.TestCase):
             {articles[0].title, articles[1].title},
             [{article.title for article in event.articles} for event in events],
         )
+
+    def test_same_product_generation_production_ramp_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "苹果 iPhone 18 Pro 系列已量产：目前处于产能爬坡阶段，富士康迎来招工高峰",
+                (
+                    "苹果 iPhone 18 系列已于本月进入量产阶段，目前正处于产能提升阶段。"
+                    "背景数据显示 iPhone 在中国市场份额增长。"
+                ),
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "苹果iPhone 18系列进入量产爬坡期，富士康迎来招工高峰",
+                (
+                    "产业链人士称 iPhone 18 系列已进入量产阶段，目前正处于产能爬坡期。"
+                    "背景还提到 Pro 系列灵动岛开孔缩小。"
+                ),
+                "快科技",
+            ),
+        ]
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+        self.assertTrue(
+            all("production-ramp" in identity.title_components for identity in identities)
+        )
+        self.assertTrue(
+            all("product-generation:iphone-18" in identity.title_components for identity in identities)
+        )
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_production_ramps_for_different_product_generations_do_not_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 enters mass production ramp at Foxconn",
+                "Apple suppliers started ramping production for the iPhone 18 generation.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "iPhone 19 enters mass production ramp at Foxconn",
+                "Apple suppliers started ramping production for the iPhone 19 generation.",
+                "MacRumors",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 2, event_partitions(module.cluster_articles(articles)))
+
+    def test_applecare_coverage_and_payment_changes_are_service_content(self):
+        module = load_module()
+        title = "AppleCare+ Changes Announced in Japan"
+        summary = (
+            "Apple expanded theft and loss coverage to iPad and Apple Watch, and added monthly "
+            "or annual AppleCare+ payment options for more products in Japan."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "service_content")
+        self.assertEqual(module.choose_category(title, summary), "software_systems")
+
+    def test_apple_store_shopping_assistant_merges_without_competitor_or_financing_bridge(self):
+        module = load_module()
+        assistant_articles = [
+            article_for(
+                module,
+                "Apple Store App Getting AI Shopping Assistant",
+                "Apple updated the Apple Store app privacy policy for a virtual shopping assistant.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Store app may soon get an AI-powered shopping assistant",
+                "The unreleased Apple Store app assistant will answer product and compatibility questions.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果 Apple Store 应用即将迎来 AI 购物助手",
+                "苹果官方应用隐私条款披露虚拟购物助手，可通过聊天帮助用户选购产品。",
+                "cnBeta",
+            ),
+        ]
+        restriction = article_for(
+            module,
+            "苹果 iOS 27 代码曝光：租赁设备逾期未还款或将进入受限模式",
+            "iOS 27 代码显示 Apple Upgrade 租赁设备欠款后会启用 Partner Finance Lock。",
+            "cnBeta",
+        )
+        competitor = article_for(
+            module,
+            "Hands-On With Samsung's Galaxy Z Fold8, the Closest Thing Yet to a Foldable iPhone",
+            "Samsung launched its foldable phone; the article compares it with a future foldable iPhone.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([competitor, *assistant_articles, restriction])
+
+        self.assertEqual(len(events), 3, event_partitions(events))
+        self.assertIn(
+            frozenset(article.title for article in assistant_articles),
+            event_partitions(events),
+        )
+        assistant_event = next(
+            event for event in events if assistant_articles[0].title in {a.title for a in event.articles}
+        )
+        self.assertEqual(assistant_event.relevance_tier, "strong")
+        self.assertEqual(competitor.relevance_tier, "weak")
+
+    def test_product_generation_does_not_hide_production_ramp_from_lead(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Foxconn Ramps Up Hiring as iPhone 18 Pro Enters Mass Production",
+                "Apple's iPhone 18 Pro entered mass production and Foxconn raised hiring for the ramp.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "It has begun: Foxconn amassing army of workers for iPhone 18 Pro assembly",
+                "The report says the iPhone 18 Pro has entered the mass production stage and Foxconn is recruiting workers.",
+                "AppleInsider",
+            ),
+        ]
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+
+        self.assertTrue(all("production-ramp" in identity.components for identity in identities))
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_same_camera_and_facility_actions_merge_across_title_wording(self):
+        module = load_module()
+        camera = [
+            article_for(
+                module,
+                "The iPhone 18 Pro's Rumored Camera Upgrade, Explained",
+                "Apple is expected to introduce a variable-aperture main camera on iPhone 18 Pro.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 iPhone 18 Pro 系列将首次引入可变光圈相机系统",
+                "机械式可变光圈将调整进光量并改善景深控制。",
+                "cnBeta",
+            ),
+        ]
+        facility = [
+            article_for(
+                module,
+                "Apple Park Visitor Center Has 'Update in Progress'",
+                "The Exhibition Space closed temporarily while Apple renovates the visitor center.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Park Visitor Center partially closed for store improvements",
+                "Apple partially closed the Visitor Center for improvements while the store remains open.",
+                "9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles([*camera, *facility])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in camera), event_partitions(events))
+        self.assertIn(frozenset(article.title for article in facility), event_partitions(events))
+
+    def test_broad_mac_roadmap_article_splits_into_product_scoped_variants(self):
+        module = load_module()
+        title = "Apple's huge Mac roadmap revealed in new report"
+        facts = [
+            "The entry 14-inch MacBook Pro J804 is expected to use M6 this fall.",
+            "The 13-inch and 15-inch MacBook Air models J913 and J915 are planned for early 2027.",
+            "Apple is testing a Mac mini with M6 and M5 Pro chips.",
+            "A new Mac Studio is expected to use M5 Max and M5 Ultra.",
+            "The next iMac is ready for this year, while an OLED iMac remains in development.",
+        ]
+
+        variants = module.compound_article_variants(title, " ".join(facts), facts)
+        variant_products = {
+            frozenset(module.title_led_identity(variant_title, variant_summary).products)
+            for variant_title, variant_summary, _ in variants
+        }
+
+        self.assertGreaterEqual(len(variants), 5)
+        self.assertTrue(
+            {
+                frozenset({"macbook"}),
+                frozenset({"mac-mini"}),
+                frozenset({"mac-studio"}),
+                frozenset({"imac"}),
+            }.issubset(variant_products),
+            variant_products,
+        )
+
+    def test_direct_mac_roadmap_sources_are_strong_and_same_product_sources_merge(self):
+        module = load_module()
+        imac = [
+            article_for(
+                module,
+                "iMac Update Expected This Year, Model With OLED Display Also in Works",
+                "Apple completed a new 24-inch iMac for this year and is developing a later OLED iMac.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "新一代 iMac 有望于今年问世，未来还将推出 OLED 屏幕版本",
+                "苹果今年更新 24 英寸 iMac，并继续开发后续 OLED 机型。",
+                "cnBeta",
+            ),
+        ]
+        macbook_ultra = article_for(
+            module,
+            "'MacBook Ultra' Reportedly on Track for Release by Early Next Year",
+            "Apple's high-end MacBook roadmap includes an OLED display, touch support, and M5 Pro or M5 Max.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles([*imac, macbook_ultra])
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in [*imac, macbook_ultra]))
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in imac), event_partitions(events))
+
+    def test_iphone_to_android_migration_is_one_ecosystem_event_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Switching From iPhone to Android Just Got Easier With Android 17",
+                "Android 17 can directly transfer iPhone passwords, Wi-Fi credentials, and eSIM data.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "谷歌上线全新数据迁移功能：从苹果 iPhone 换到安卓更方便，密码也能同步",
+                "Android 17 原生迁移流程可从 iPhone 传输密码、Wi-Fi 凭据和 eSIM。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "Google 升级 Android 数据迁移工具，支持从 iPhone 直接转移密码与 eSIM",
+                "新流程直接影响 iPhone 与 Android 之间的数据互操作。",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertTrue(all(article.relevance_tier == "ecosystem" for article in articles))
+        self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_mac_roadmap_variants_do_not_reintroduce_other_product_names(self):
+        module = load_module()
+        title = "Upgraded Mac Mini, Mac Studio, and OLED iMac are all in the pipeline"
+        facts = [
+            "Apple is preparing a Mac mini with M6 and M5 Pro chips.",
+            "A new Mac Studio is expected to use M5 Max and M5 Ultra.",
+            "The next iMac is ready for this year, while an OLED iMac remains in development.",
+        ]
+
+        variants = module.compound_article_variants(title, " ".join(facts), facts)
+        variant_titles = {variant_title for variant_title, _summary, _facts in variants}
+
+        self.assertEqual(len(variants), 3, variants)
+        for variant_title in variant_titles:
+            subjects = module.mac_roadmap_subjects(variant_title)
+            self.assertEqual(len(subjects), 1, (variant_title, subjects))
+
+        articles = [
+            article_for(module, variant_title, variant_summary, "AppleInsider")
+            for variant_title, variant_summary, _facts in variants
+        ]
+        self.assertEqual(len(module.cluster_articles(articles)), 3, event_partitions(module.cluster_articles(articles)))
+
+    def test_distinct_macbook_models_do_not_merge_through_generic_roadmap_terms(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple MacBook Pro roadmap update",
+                "Apple plans an OLED MacBook Pro with an M7 chip.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple MacBook Air roadmap update",
+                "Apple plans a MacBook Air refresh with an M6 chip.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple MacBook Neo roadmap update",
+                "Apple plans a MacBook Neo refresh with more memory.",
+                "AppleInsider",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 3, event_partitions(module.cluster_articles(articles)))
+
+    def test_numbered_first_party_content_announcements_split_into_events(self):
+        module = load_module()
+        title = "Apple TV announces two high-profile new shows"
+        facts = [
+            "#1: Protective Custody is a new comedy with Benicio Del Toro and Ben Stiller",
+            "Apple unveiled Protective Custody, a comedy about a disgraced financier.",
+            "#2: Peculiar Stars is a new romance adaptation from Rebecca Yarros",
+            "Apple secured the rights to adapt Peculiar Stars into an Apple TV series.",
+        ]
+
+        variants = module.compound_article_variants(title, " ".join(facts), facts)
+
+        self.assertEqual(len(variants), 2, variants)
+        self.assertIn("Protective Custody", variants[0][0])
+        self.assertIn("Peculiar Stars", variants[1][0])
+
+    def test_direct_mac_product_roadmap_is_hardware_even_with_ai_background(self):
+        module = load_module()
+        title = "Apple Working on New MacBook Neo With Two Upgrades"
+        summary = (
+            "Apple is testing a MacBook Neo with an A19 Pro and 12GB of memory. "
+            "The extra memory also supports larger on-device AI models."
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
+    def test_product_scoped_roadmap_projection_merges_with_focused_source(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple iMac roadmap update",
+                "Apple plans a refreshed iMac this fall and is developing a later OLED model.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iMac Update Expected This Year, Model With OLED Display Also in Works",
+                "Apple completed a new 24-inch iMac and is developing a future OLED iMac.",
+                "AppleInsider",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_compound_product_report_projects_facts_by_concrete_action(self):
+        module = load_module()
+        title = "iPhone 18 enters mass production as Apple plans a price increase"
+        facts = [
+            "The iPhone 18 Pro entered mass production and suppliers are ramping capacity.",
+            "Apple delayed the standard iPhone 18 until spring 2027.",
+            "The iPhone 18 Pro adds a variable-aperture main camera.",
+            "Apple may raise the iPhone 18 Pro starting price to $1,199.",
+        ]
+
+        variants = module.compound_article_variants(title, " ".join(facts), facts)
+        identities = [
+            module.title_led_identity(variant_title, variant_summary)
+            for variant_title, variant_summary, _variant_facts in variants
+        ]
+
+        self.assertEqual(len(variants), 4, variants)
+        self.assertTrue(any("production-ramp" in identity.components for identity in identities))
+        self.assertTrue(any("product-release-delay" in identity.components for identity in identities))
+        self.assertTrue(any("camera-system" in identity.components for identity in identities))
+        self.assertTrue(any("price-change" in identity.actions for identity in identities))
+
+    def test_single_action_product_title_does_not_project_body_background(self):
+        module = load_module()
+        title = "iPhone 18 Pro enters mass production"
+        facts = [
+            "The iPhone 18 Pro entered mass production this month.",
+            "Earlier rumors said the model could use a variable-aperture camera.",
+            "Analysts previously expected component costs to increase.",
+        ]
+
+        variants = module.compound_article_variants(title, " ".join(facts), facts)
+
+        self.assertEqual(variants, [(title, " ".join(facts), facts)])
+
+    def test_shared_os_version_does_not_merge_distinct_first_party_components(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 27 adds convenient new iPhone feature",
+                "The keyboard now shows a paste suggestion for copied text and images.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Card adds a new feature in iOS 27",
+                "Wallet now groups recurring transactions and subscription charges.",
+                "MacRumors",
+            ),
+        ]
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+
+        self.assertIn("clipboard-paste-suggestion", identities[0].components)
+        self.assertIn("recurring-transactions", identities[1].components)
+        self.assertEqual(len(module.cluster_articles(articles)), 2, event_partitions(module.cluster_articles(articles)))
+
+    def test_financed_device_restriction_sources_do_not_bridge_into_leasing_program(self):
+        module = load_module()
+        program = article_for(
+            module,
+            "Apple Upgrade leasing program launches next week",
+            "Apple will offer 24-month and 36-month device leases.",
+            "9to5Mac",
+        )
+        restrictions = [
+            article_for(
+                module,
+                "iOS code could let Apple cut off apps when users miss iPhone payments",
+                "The financed iPhone enters a restricted mode after a missed payment.",
+                "The Verge",
+            ),
+            article_for(
+                module,
+                "苹果 iOS 27 代码曝光：租赁设备逾期未还款将进入受限模式",
+                "欠款设备只保留系统白名单应用，并启用 Partner Finance Lock。",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles([program, *restrictions])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in restrictions), event_partitions(events))
+        self.assertTrue(all(article.category == "hardware_products" for article in restrictions))
+
+        compound = module.compound_article_variants(
+            "Don't miss a payment with Apple Upgrade or your iPhone will be locked",
+            (
+                "Apple Upgrade is a new device leasing program. If a payment is missed, "
+                "the financed iPhone enters Restricted Mode."
+            ),
+            [
+                "Apple Upgrade uses monthly device leases.",
+                "A missed payment activates Restricted Mode and Partner Finance Lock.",
+            ],
+        )
+        self.assertEqual(len(compound), 2, compound)
+
+    def test_body_platform_mentions_do_not_promote_unrelated_third_party_app(self):
+        module = load_module()
+        app = article_for(
+            module,
+            "This iPhone app patches a hidden Bluetooth alarm flaw in millions of cars",
+            (
+                "KARR Security updated its dealer-installed car alarm app. The article background "
+                "mentions Android support and CarPlay, but Apple did not change iOS or its platform."
+            ),
+            "AppleInsider",
+        )
+        ios_feature = article_for(
+            module,
+            "iOS 27 adds convenient new iPhone paste feature",
+            "Apple changed the native paste menu in iOS 27 for copied text.",
+            "9to5Mac",
+        )
+
+        self.assertEqual(app.relevance_tier, "weak")
+        self.assertEqual(len(module.cluster_articles([app, ios_feature])), 2)
+
+    def test_ordinal_public_beta_title_matches_numbered_beta_wave(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Second macOS Golden Gate Public Beta Now Available",
+                "Apple released the second public beta of macOS 27 Golden Gate.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "macOS 27 public beta 2 now available",
+                "Apple released macOS 27 public beta 2 to public testers.",
+                "9to5Mac",
+            ),
+        ]
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+
+        self.assertTrue(all("os-wave:27:beta-2" in identity.components for identity in identities))
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_same_standard_iphone_delay_merges_despite_background_topics(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 exits fall launch lineup as Apple prioritizes Pro models",
+                "Apple delayed the standard iPhone 18 until spring while keeping Pro models in fall.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 今年缺席：苹果基础款手机改到明年春季发布",
+                "苹果将标准版 iPhone 18 延期到明年春季，Pro 系列仍在秋季发布。",
+                "快科技",
+            ),
+        ]
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+
+        self.assertTrue(all("product-release-delay" in identity.components for identity in identities))
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_same_apple_park_renovation_merges_across_action_wording(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Park Visitor Center Has 'Update in Progress'",
+                "Apple temporarily closed its Exhibition Space while renovating the visitor center.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Park Visitor Center partially closed for store improvements",
+                "The Visitor Center is partially closed while Apple completes store improvements.",
+                "9to5Mac",
+            ),
+        ]
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+
+        self.assertTrue(all("facility-renovation" in identity.components for identity in identities))
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
 
 
 if __name__ == "__main__":
