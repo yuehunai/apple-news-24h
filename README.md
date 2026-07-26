@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.41.0 - 2026-07-23
+### 1.42.0 - 2026-07-26
 
-- Improved semantic event identities for bridge and multi-action articles, product-specific Mac roadmaps, Apple financing programs and enforcement mechanisms, Apple TV announcements, and granular iPhone or OS changes so related context no longer collapses distinct actions.
-- Improved title-and-lead relevance decisions for third-party app updates, compatibility stories, competitor imitation, analyst previews, accessories, and comparison-led coverage while preserving direct Apple relationships and concrete ecosystem interoperability.
-- Added stricter final-brief boundaries that treat each `event.id` as independent unless titles and leads prove the same canonical subject and action, and require title- or lead-level evidence before promoting a `deferred_events` item over its recorded weak reason.
-- Updated `SKILL.md` and `references/news_policy.md` with mechanical event-ledger, source-link, CarPlay, causal-chain, shared-source, and roadmap guidance for reliable automation output.
-- Expanded regression coverage from 665 to 706 tests; concurrent live comparison preserved all 81 discovered article URLs and per-source coverage, introduced no merge warnings, and showed no runtime regression.
+- Added title-and-lead semantic boundaries for concrete OS components, Apple TV titles and lifecycle actions, Mac roadmap chip generations, production hurdles, display-supplier negotiations, facility incidents, regulatory retaliation, and Apple-platform security reports.
+- Improved cross-source and cross-language clustering for fake App Store wallet litigation, the water-resistant iPad mini roadmap, macOS Mail changes, Siri settlements, display-price negotiations, Apple Maps integrations, and Apple memory-supplier lobbying while retaining every contributing source link.
+- Added compound service-content decomposition and immutable same-source variant boundaries, with normalized release-date and episode-count evidence that keeps distinct works separate while merging translated coverage of the same title.
+- Tightened discovery, extraction, and relevance handling by filtering MacRumors `Top Stories:` roundups before detail fetching, preferring authoritative structured article bodies when page chrome is polluted, and demoting tutorials, rumor recaps, buying advice, third-party compatibility stories, and commentary without a new Apple action.
+- Updated fallback policy guidance and expanded regression coverage from 706 to 741 tests; concurrent live validation preserved every eligible source URL except the intentionally excluded `Top Stories` roundup, produced clean event boundaries, and showed no material runtime regression.
 
 ## What It Does
 

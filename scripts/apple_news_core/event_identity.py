@@ -118,7 +118,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("safari", ("safari", "webkit")),
     ("siri", ("siri",)),
     ("apple-store-app", ("apple store app", "apple store 应用", "apple store应用", "苹果商店应用")),
-    ("app-store", ("app store", "应用商店")),
+    ("app-store", ("app store", "appstore", "应用商店")),
     ("apple-wallet", ("apple wallet", "苹果钱包", "数字车钥匙")),
     ("apple-card", ("apple card", "苹果卡")),
     ("xcode", ("xcode",)),
@@ -129,6 +129,42 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 
 COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "production-hurdle",
+        (
+            "production hurdle",
+            "production hurdles",
+            "manufacturing hurdle",
+            "manufacturing hurdles",
+            "manufacturing obstacle",
+            "manufacturing obstacles",
+            "production hiccup",
+            "production hiccups",
+            "production bottleneck",
+            "production bottlenecks",
+            "mass-production adjustment",
+            "mass-production adjustments",
+            "production adjustment",
+            "production adjustments",
+            "assembly complexity",
+            "low yield",
+            "yield issue",
+            "yield issues",
+            "生产障碍",
+            "量产障碍",
+            "制造难题",
+            "生产难题",
+            "生产调整",
+            "产线调整",
+            "制造流程调整",
+            "组装复杂",
+            "良率较低",
+            "良率偏低",
+            "良率问题",
+            "良率瓶颈",
+            "产能瓶颈",
+        ),
+    ),
     (
         "clipboard-paste-suggestion",
         (
@@ -370,6 +406,18 @@ COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
         "writing-tools",
         ("writing tools", "write with siri", "写作工具", "siri 内容创作", "siri ai 内容创作"),
     ),
+    (
+        "water-resistance",
+        (
+            "water resistance",
+            "water-resistant",
+            "water resistant",
+            "waterproof",
+            "防水",
+            "抗水",
+            "耐水",
+        ),
+    ),
     ("app-catalog-metrics", ("new apps", "app submissions", "app catalog", "新上架应用", "应用提交", "应用数量")),
     ("nudify-apps", ("nudify", "nonconsensual undressing", "undressing apps", "ai 脱衣", "ai脱衣", "脱衣应用", "脱衣 app")),
     ("gambling-apps", ("gambling apps", "gambling app", "博彩应用", "博彩 app", "博彩app", "赌博应用")),
@@ -453,6 +501,7 @@ LEAD_IDENTITY_COMPONENTS = {
     "facility-renovation",
     "office-real-estate",
     "product-release-delay",
+    "production-hurdle",
     "production-ramp",
     "recurring-transactions",
     "shopping-assistant",
@@ -460,7 +509,7 @@ LEAD_IDENTITY_COMPONENTS = {
 
 
 ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
-    ("legal", ("lawsuit", "court", "class action", "legal action", "legal battle", "legal dispute", "legal letter", "antitrust case", "settlement", "trial", "诉讼", "起诉", "法院", "法庭", "对簿公堂", "集体诉讼", "法律纠纷", "律师函", "反垄断", "和解谈判")),
+    ("legal", ("lawsuit", "court", "class action", "legal action", "legal battle", "legal dispute", "legal letter", "antitrust case", "settlement", "trial", "诉讼", "起诉", "被诉", "法院", "法庭", "对簿公堂", "集体诉讼", "法律纠纷", "律师函", "反垄断", "和解谈判")),
     (
         "security",
         (
@@ -571,6 +620,33 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "放弃该项目",
         ),
     ),
+)
+
+
+OS_COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("os-component:lock-screen", ("lock screen", "锁屏")),
+    ("os-component:home-screen", ("home screen", "主屏幕")),
+    ("os-component:control-center", ("control center", "控制中心")),
+    ("os-component:photos", ("apple photos", "photos app", "照片 app", "照片应用")),
+    (
+        "os-component:mail",
+        (
+            "apple mail",
+            "mail app",
+            "mail compose",
+            "mail's compose",
+            "mail’s compose",
+            "mail composer",
+            "邮件 app",
+            "邮件应用",
+            "邮件撰写",
+        ),
+    ),
+    ("os-component:messages", ("apple messages", "messages app", "信息 app", "信息应用")),
+    ("os-component:notes", ("apple notes", "notes app", "备忘录")),
+    ("os-component:weather", ("apple weather", "weather app", "天气 app", "天气应用")),
+    ("os-component:shortcuts", ("apple shortcuts", "shortcuts app", "快捷指令")),
+    ("os-component:settings", ("settings app", "system settings", "设置 app", "系统设置")),
 )
 
 
@@ -703,9 +779,21 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
     )[0]
     scoped = f"{title} {identity_lead}"
     subjects: set[str] = set()
+    background_quoted_subjects: set[str] = set()
 
     for match in re.finditer(r"[\"'“‘]([^\"'“”‘’\n]{2,48})[\"'”’]", scoped):
-        subject = _valid_quoted_subject(match.group(1))
+        trailing_context = scoped[match.end() : match.end() + 36].lstrip(" \t\"'“”‘’")
+        if re.match(
+            r"(?:(?:oscar|emmy|bafta|grammy|golden globe)\s+(?:winner|nominee)|"
+            r"director|winner|star|actor|actress|creator|author|filmmaker)\b",
+            trailing_context,
+            re.I,
+        ):
+            background = _valid_quoted_subject(match.group(1)) or _valid_content_title(match.group(1))
+            if background:
+                background_quoted_subjects.add(background)
+            continue
+        subject = _valid_quoted_subject(match.group(1)) or _valid_content_title(match.group(1))
         if subject:
             subjects.add(subject)
 
@@ -783,7 +871,7 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
             subject = _valid_content_title(match.group(1))
             if subject:
                 subjects.add(subject)
-    return subjects
+    return subjects - background_quoted_subjects
 
 
 def _title_primary_named_subjects(title: str, lead: str) -> set[str]:
@@ -898,6 +986,28 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
     for name, terms in aliases:
         if _contains_any(text, terms):
             topics.add(name)
+    if (
+        _contains_any(text, ("bitcoin wallet", "crypto wallet", "cryptocurrency wallet", "比特币钱包", "加密货币钱包"))
+        and _contains_any(
+            text,
+            (
+                "fake",
+                "fraudulent",
+                "spoof",
+                "impersonat",
+                "stole",
+                "stolen",
+                "scam",
+                "假冒",
+                "仿冒",
+                "伪造",
+                "诈骗",
+                "盗取",
+                "被盗",
+            ),
+        )
+    ):
+        topics.add("crypto-wallet-fraud")
     if "apple-hardware-trade-secret-lawsuit" in facets:
         topics.add("trade-secret")
     return topics
@@ -916,7 +1026,11 @@ def _content_form(title: str, lead: str = "") -> str:
         and not re.search(r"\b(?:launches|releases|updates|adds|announces)\b", lower)
     ):
         return "podcast"
-    if re.search(r"\b(?:here['’]s the fix|troubleshooting guide|fix seems to work)\b|故障排查|解决办法", lower):
+    if re.match(
+        r"^(?:add|enable|disable|turn on|turn off|show|hide|change|set up)\b"
+        r".{0,90}\b(?:on|to|for)\s+(?:your\s+)?(?:iphone|ipad|mac|apple watch)\b",
+        lower,
+    ) or re.search(r"\b(?:here['’]s the fix|troubleshooting guide|fix seems to work)\b|故障排查|解决办法", lower):
         return "tutorial"
     if (
         "poll" in lower
@@ -928,7 +1042,8 @@ def _content_form(title: str, lead: str = "") -> str:
     if re.search(
         r"\b(?:rumors? point to|everything we know|"
         r"what to expect|these \d+ (?:new )?(?:features|changes)|"
-        r"\d+ rumored features|best .+ to try)\b|传闻汇总|功能汇总|值得期待的\s*\d+",
+        r"\d+ rumored features|latest (?:apple )?rumors?|all (?:the )?(?:apple )?rumors?|"
+        r"rumors? so far|best .+ to try)\b|传闻汇总|功能汇总|值得期待的\s*\d+",
         lower,
     ) or re.match(
         r"^(?:everything new|here['’]s what['’]s new|what['’]s new with)\b",
@@ -938,7 +1053,14 @@ def _content_form(title: str, lead: str = "") -> str:
         and re.search(r"\b(?:recaps?|previously reported|rumored so far|no new reporting)\b|汇总此前|此前传闻|无新增", lead_lower)
     ):
         return "roundup"
-    if re.match(r"^(?:is|are) .+ worth it\b", lower) or re.search(r"值不值得|是否值得", lower):
+    if (
+        re.match(r"^(?:is|are) .+ worth it\b", lower)
+        or re.match(r"^why\b.{0,100}\b(?:could|may|might)\b.{0,60}\b(?:risk|problem|concern)\b", lower)
+        or re.search(r"(?:便利与隐患并存|(?:引发|存在|带来).{0,10}(?:隐私|安全).{0,8}(?:争议|风险|隐患))", lower)
+        or re.search(r"值不值得|是否值得", lower)
+    ):
+        return "analysis"
+    if re.match(r"^(?:do|does|did|can|could)\s+we\s+need\s+to\s+worry\b", lower):
         return "analysis"
     if re.search(
         r"\b(?:weekend deals?|daily deals?|best deals?|deal roundup|prime day|shopping guide)\b|"
@@ -955,8 +1077,9 @@ def _content_form(title: str, lead: str = "") -> str:
     if re.search(
         r"\b(?:should(?:n['’]t| not)? (?:buy|wait|upgrade)|should you (?:buy|wait|upgrade)|"
         r"buy now or wait|upgrade now or wait|why you should(?:n['’]t| not)? wait|"
-        r"before you buy|buying advice|buying guide)\b|"
-        r"(?:该不该|要不要|是否应该)(?:买|等|升级)|买还是等|购买建议|换机建议",
+        r"reasons? to buy .+ instead of waiting|before you buy|buying advice|buying guide)\b|"
+        r"(?:该不该|要不要|是否应该)(?:买|等|升级)|买还是等|购买建议|换机建议|"
+        r"(?:升级|换到|换购).{0,18}(?:的|之)?(?:三|四|五|六|七|八|九|十|\d+)大理由",
         lower,
     ):
         return "buying_advice"
@@ -1044,6 +1167,20 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    direct_first_party_content = bool(
+        re.search(r"\bapple\s+tv(?:\+|['’]s)?\b|苹果\s*tv", title_lower)
+        and (
+            any(
+                (_valid_quoted_subject(match.group(1)) or _valid_content_title(match.group(1)))
+                for match in re.finditer(r"[\"'“‘]([^\"'“”‘’\n]{2,48})[\"'”’]", title)
+            )
+            or re.search(
+                r"\b(?:season|series|film|movie|documentary|docuseries|drama|comedy|premiere)\b|"
+                r"(?:剧集|剧集|电影|影片|纪录片|首播|最终季)",
+                title_lower,
+            )
+        )
+    )
     subject_first_comparison = bool(
         re.search(
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b)"
@@ -1067,7 +1204,21 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
-    if first_party_prefix:
+    subject_first_apple_response = bool(
+        re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b|苹果)"
+            r".{1,70}\b(?:responds?|response|reacts?|reaction|answers?)\b.{0,70}"
+            r"\b(?:apple|iphone|ipad|mac|airpods)\b|"
+            r"^(?!苹果|iphone|ipad|mac|airpods).{1,50}(?:回应|答复|评价|表态).{0,40}"
+            r"(?:苹果|iphone|ipad|mac|airpods)",
+            title_lower,
+        )
+        and not re.search(
+            r"\b(?:lawsuit|court|case|legal|filing|charges?)\b|(?:诉讼|法院|法庭|案件|指控|提交文件)",
+            title_lower,
+        )
+    )
+    if first_party_prefix or direct_first_party_content:
         return "apple-direct"
     if direct_target or direct_relationship:
         return "apple-direct"
@@ -1078,6 +1229,7 @@ def _title_scope(title: str, lead: str) -> str:
         or subject_first_service_integration
         or subject_first_comparison
         or subject_first_apple_followup
+        or subject_first_apple_response
     ):
         return "third-party-context"
     if apple_in_title:
@@ -1204,7 +1356,48 @@ def build_event_identity(
     if content_form != "roundup" and not (title_products & direct_service_products):
         products |= _extract_patterns(lead_lower[:260], PRODUCT_PATTERNS) & direct_service_products
     title_components = _extract_patterns(title_lower, COMPONENT_PATTERNS)
+    title_components |= _extract_patterns(title_lower, OS_COMPONENT_PATTERNS)
     components = set(title_components)
+    if "apple-tv" in products:
+        lifecycle_patterns = (
+            (
+                "content-lifecycle:ending",
+                r"\b(?:will\s+end|is\s+ending|to\s+end|concludes?|final\s+season)\b|"
+                r"(?:最终季|完结|收官)",
+            ),
+            (
+                "content-lifecycle:new-project",
+                r"\b(?:announces?|orders?|unveils?)\b.{0,45}\b(?:new\s+)?(?:series|film|movie|documentary|docuseries)\b|"
+                r"\b(?:new|upcoming|first)\b.{0,32}\b(?:series|film|movie|documentary|docuseries)\b|"
+                r"(?:宣布|官宣|预订|推出).{0,30}(?:新剧|剧集|电影|影片|纪录片)|"
+                r"(?:首个|首部).{0,24}(?:剧集|电影|影片|纪录片)",
+            ),
+            (
+                "content-lifecycle:premiere",
+                r"\b(?:premieres?|now\s+(?:available|streaming)|available\s+to\s+stream|sets?\s+(?:a\s+)?premiere\s+date)\b|"
+                r"(?:首播|上线|现已播出|现已上线|公布首播)",
+            ),
+        )
+
+        def lifecycle_component(value: str) -> str | None:
+            for name, pattern in lifecycle_patterns:
+                if re.search(pattern, value):
+                    return name
+            return None
+
+        title_lifecycle = lifecycle_component(title_lower)
+        lead_lifecycle = lifecycle_component(lead_lower[:620])
+        if title_lifecycle:
+            title_components.add(title_lifecycle)
+            components.add(title_lifecycle)
+        elif lead_lifecycle:
+            components.add(lead_lifecycle)
+
+        season_pattern = re.compile(r"\bseason\s*(\d{1,2})\b|第\s*(\d{1,2})\s*季")
+        for match in season_pattern.finditer(f"{title_lower} {lead_lower[:420]}"):
+            components.add(f"content-season:{match.group(1) or match.group(2)}")
+        for match in re.finditer(r"\b(20\d{2})\b", f"{title_lower} {lead_lower[:320]}"):
+            components.add(f"content-year:{match.group(1)}")
     product_generation_components = {
         f"product-generation:{match.group(1)}-{match.group(2)}"
         for match in re.finditer(
@@ -1214,6 +1407,35 @@ def build_event_identity(
     }
     title_components |= product_generation_components
     components |= product_generation_components
+    apple_silicon_generation_components: set[str] = set()
+    for match in re.finditer(r"(?<![a-z0-9])([ma]\d{1,2})(?!\d)", title_lower):
+        prefix = title_lower[max(0, match.start() - 28) : match.start()]
+        if re.search(
+            r"(?:\bnot|rather\s+than|instead\s+of)\b.{0,12}$|(?:而非|并非|不是|非).{0,8}$",
+            prefix,
+        ):
+            continue
+        apple_silicon_generation_components.add(
+            f"apple-silicon-generation:{match.group(1)}"
+        )
+    title_components |= apple_silicon_generation_components
+    components |= apple_silicon_generation_components
+    if products and re.search(
+        r"\b(?:shipments?|market\s+share|sales\s+(?:slump|decline|growth)|unit\s+sales)\b|"
+        r"(?:出货量|市场份额|销量|出货|同比(?:增长|下降))",
+        title_lower,
+    ):
+        title_components.add("hardware-market-performance")
+        components.add("hardware-market-performance")
+    if products and re.search(
+        r"\b(?:next[- ]generation|second[- ]generation|roadmap|in\s+development|"
+        r"plans?\s+for|expected\s+(?:in|for)|coming\s+in|launch(?:es|ing)?\s+in)\b|"
+        r"(?:第二代|下一代|路线图|产品前瞻|笔记本前瞻|计划.{0,20}(?:推出|发布)|"
+        r"预计.{0,20}(?:推出|发布))",
+        title_lower,
+    ):
+        title_components.add("hardware-product-roadmap")
+        components.add("hardware-product-roadmap")
     release_delay_pattern = (
         r"\b(?:delay(?:ed|s|ing)?|postpone(?:d|s|ment)?|move(?:d|s)?)\b.{0,64}"
         r"\b(?:until|to|into)\s+(?:the\s+)?(?:next\s+)?spring\b|"
@@ -1434,6 +1656,51 @@ def build_event_identity(
     actions = set(title_actions)
     if content_form != "roundup":
         actions |= _extract_patterns(lead_lower[:500], ACTION_PATTERNS)
+    integration_pattern = (
+        r"\b(?:integrates?|integrated|integration|connect(?:ed|s|ing)?|embeds?|embedded|"
+        r"power(?:s|ed|ing)?\s+(?:the\s+)?navigation|at\s+the\s+core\s+of)\b|"
+        r"(?:整合|集成|嵌入|接入|驱动导航|作为.{0,12}核心)"
+    )
+    if re.search(integration_pattern, title_lower):
+        title_actions.add("platform-integration")
+        actions.add("platform-integration")
+    elif re.search(integration_pattern, lead_lower[:500]):
+        actions.add("platform-integration")
+    first_party_data_pattern = (
+        r"(?<![a-z0-9])(?:apple\s+health|healthkit|apple\s+wallet|eventkit|homekit)(?![a-z0-9])|"
+        r"(?:苹果\s*health|苹果健康|苹果钱包|健康\s*(?:app|应用))"
+    )
+    if re.search(first_party_data_pattern, title_lower) and re.search(integration_pattern, title_lower):
+        title_components.add("apple-data-integration")
+        components.add("apple-data-integration")
+        data_rollout_pattern = (
+            r"\b(?:roll(?:s|ed|ing)?\s+out|relaunch(?:es|ed)?|launch(?:es|ed)?|"
+            r"now\s+available|expanded\s+access|opens?\s+to\s+all)\b|"
+            r"(?:全面开放|正式上线|开始开放|扩大开放|推出|发布)"
+        )
+        data_commentary_pattern = (
+            r"\b(?:privacy|security|data)[ -]?(?:risk|risks|concern|concerns|tradeoff|tradeoffs|"
+            r"warning|warnings|danger|dangers)\b|"
+            r"\b(?:creates?|raises?|poses?|brings?)\b.{0,40}\b(?:risk|risks|concerns?)\b|"
+            r"(?:隐私|安全|数据).{0,10}(?:风险|争议|隐患|担忧|警告)|"
+            r"(?:风险|争议|隐患|担忧).{0,10}(?:隐私|安全|数据)"
+        )
+        if re.search(data_rollout_pattern, title_lower):
+            title_components.add("apple-data-integration-rollout")
+            components.add("apple-data-integration-rollout")
+        if re.search(data_commentary_pattern, title_lower):
+            title_components.add("apple-data-integration-commentary")
+            components.add("apple-data-integration-commentary")
+    content_lifecycle_pattern = (
+        r"\b(?:will\s+end|to\s+end|concludes?|final\s+season|sets?\s+(?:a\s+)?premiere\s+date|"
+        r"orders?\s+(?:a\s+)?(?:new\s+)?(?:series|film|movie|documentary|docuseries))\b|"
+        r"(?:最终季|完结|收官|确定首播|公布首播|预订.{0,12}(?:剧集|电影|纪录片))"
+    )
+    if re.search(content_lifecycle_pattern, title_lower):
+        title_actions.add("content-release")
+        actions.add("content-release")
+    elif re.search(content_lifecycle_pattern, lead_lower[:500]):
+        actions.add("content-release")
     official_product_communication = bool(
         re.search(
             r"\bapple\b.{0,40}\b(?:shares?|publishes|posts?|releases?)\b.{0,40}\b(?:video|story)\b",

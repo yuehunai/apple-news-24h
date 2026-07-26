@@ -441,6 +441,182 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertFalse(module.is_relevant_candidate(spaced_daily_brief, source))
         self.assertTrue(module.is_relevant_candidate(ordinary_article, source))
 
+    def test_macrumors_top_stories_digest_is_filtered_before_detail_fetch(self):
+        module = load_module()
+        source = source_named(module, "MacRumors")
+        digest = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/25/top-stories-apple-upgrade-program/",
+            title="Top Stories: 'Apple Upgrade' Program, Apple Music Price Hike, and More",
+            summary="A weekly recap of previously published Apple stories.",
+        )
+        ordinary_article = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/25/apple-upgrade-program/",
+            title="Apple Upgrade Program Expands to More Devices",
+            summary="Apple expanded its first-party device upgrade program.",
+        )
+        other_source = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/25/top-stories-app-store-policy/",
+            title="Top Stories app adds a new App Store policy tracker",
+            summary="A third-party app named Top Stories added an App Store policy tracker.",
+        )
+
+        self.assertFalse(module.is_relevant_candidate(digest, source))
+        self.assertTrue(module.is_relevant_candidate(ordinary_article, source))
+        self.assertTrue(module.is_relevant_candidate(other_source, source_named(module, "9to5Mac")))
+
+    def test_fake_wallet_lawsuit_and_water_resistant_ipad_merge_across_languages(self):
+        module = load_module()
+        wallet_articles = [
+            article_for(
+                module,
+                "Apple Sued by Customers Who Lost Combined $1.8 Million Through Fake Bitcoin Wallet in App Store",
+                "Three customers sued Apple after a fake Sparrow Wallet app stole about $1.8 million in Bitcoin.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "假冒比特币钱包应用引发 180 万美元资产窃案，苹果在美被诉",
+                "三名用户起诉苹果，称 App Store 中的假冒 Sparrow Wallet 应用盗走约 180 万美元比特币。",
+                "cnBeta",
+            ),
+        ]
+        ipad_articles = [
+            article_for(
+                module,
+                "Apple's First Water-Resistant iPad to Launch Later This Year",
+                "Apple plans to launch a water-resistant iPad mini later this year.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "消息称新款苹果 iPad mini 将成首款防水 iPad，预计 10 月发布",
+                "新款 iPad mini 将采用防水设计，并计划于今年 10 月推出。",
+                "IT之家",
+            ),
+        ]
+
+        wallet_identities = [
+            module.article_title_led_event_identity(article) for article in wallet_articles
+        ]
+        self.assertEqual(
+            module.identity_pair_decision(*wallet_identities),
+            "match",
+            wallet_identities,
+        )
+        self.assertEqual(len(module.cluster_articles(wallet_articles)), 1)
+        self.assertEqual(len(module.cluster_articles(ipad_articles)), 1)
+
+    def test_chinese_apple_memory_lobbying_story_is_strong_and_merges(self):
+        module = load_module()
+        chinese = article_for(
+            module,
+            "库克游说特朗普使用中国芯片！美光强烈反对：你是要毁掉美国存储产业",
+            (
+                "快科技消息，苹果公司正积极游说特朗普政府，希望允许其在美国以外市场销售的产品中"
+                "使用长鑫存储和长江存储的存储芯片。苹果 CEO 蒂姆·库克已向特朗普等官员推介该计划，"
+                "美光则要求白宫拒绝。"
+            ),
+            "快科技",
+            [
+                "苹果希望获准在海外销售的产品中使用长鑫存储 CXMT 和长江存储的芯片。",
+                "美光警告该计划可能损害美国本土存储产业。",
+            ],
+        )
+        english = article_for(
+            module,
+            "Micron urges White House to reject Apple's blacklist memory plan",
+            (
+                "Apple petitioned the Trump administration to let it buy Mac RAM from blacklisted "
+                "Chinese supplier CXMT, and Micron urged the White House to reject the request."
+            ),
+            "AppleInsider",
+        )
+
+        self.assertEqual(chinese.relevance_tier, "strong", chinese.relevance_reason)
+        events = module.cluster_articles([chinese, english])
+        self.assertEqual(len(events), 1, [[item.title for item in event.articles] for event in events])
+
+    def test_compound_apple_tv_content_article_splits_distinct_title_actions(self):
+        module = load_module()
+        title = (
+            "Apple TV announces streaming date for its epic Neuromancer adaptation, "
+            "new Dark Matter and Matchbox trailers"
+        )
+        summary = (
+            "Neuromancer will premiere on January 22, 2027. Apple TV also released a new trailer "
+            "for Dark Matter season two and a separate trailer for the upcoming movie Matchbox."
+        )
+        facts = [
+            "Neuromancer will premiere on January 22, 2027 with a ten-episode season.",
+            "Apple TV released a new trailer for Dark Matter season two.",
+            "Apple TV released a separate trailer for the upcoming movie Matchbox.",
+        ]
+
+        variants = module.compound_article_variants(title, summary, facts)
+
+        self.assertEqual(len(variants), 3, variants)
+        variant_titles = {item[0].lower() for item in variants}
+        self.assertTrue(any("neuromancer" in item for item in variant_titles))
+        self.assertTrue(any("dark matter" in item for item in variant_titles))
+        self.assertTrue(any("matchbox" in item for item in variant_titles))
+
+    def test_compound_apple_tv_variants_keep_distinct_works_after_clustering(self):
+        module = load_module()
+        original_url = "https://9to5mac.com/2026/07/25/apple-tv-neuromancer-dark-matter-matchbox/"
+        variants = module.compound_article_variants(
+            (
+                "Apple TV announces streaming date for its epic Neuromancer adaptation, "
+                "new Dark Matter and Matchbox trailers"
+            ),
+            (
+                "Neuromancer will premiere on January 22, 2027. Apple TV also released a new "
+                "trailer for Dark Matter season two and a separate trailer for Matchbox."
+            ),
+            [
+                "Neuromancer will premiere on January 22, 2027 with a ten-episode season.",
+                "Apple TV released a new trailer for Dark Matter season two.",
+                "Apple TV released a separate trailer for the upcoming movie Matchbox.",
+            ],
+        )
+        articles = []
+        for variant_title, variant_summary, variant_facts in variants:
+            article = article_for(
+                module,
+                variant_title,
+                variant_summary,
+                "9to5Mac",
+                variant_facts,
+            )
+            article.url = original_url
+            articles.append(article)
+        neuromancer_followup = article_for(
+            module,
+            "苹果发布《神经漫游者》首支预告片",
+            (
+                "苹果发布《神经漫游者》预告片，该剧定于明年 1 月 22 日在 Apple TV "
+                "平台首播，首季共 10 集。"
+            ),
+            "快科技",
+        )
+
+        events = module.cluster_articles([*articles, neuromancer_followup])
+
+        self.assertEqual(
+            len(events),
+            3,
+            [[article.title for article in event.articles] for event in events],
+        )
+        neuromancer_event = next(event for event in events if "neuromancer" in event.title.lower())
+        self.assertEqual(
+            {article.source for article in neuromancer_event.articles},
+            {"9to5Mac", "快科技"},
+        )
+        self.assertTrue(any("dark matter" in event.title.lower() for event in events))
+        self.assertTrue(any("matchbox" in event.title.lower() for event in events))
+
     def test_duplicate_candidates_merge_context_before_relevance_filtering(self):
         module = load_module()
         source = source_named(module, "9to5Mac")
@@ -8021,6 +8197,17 @@ class RelevanceRuleTests(unittest.TestCase):
         tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
         self.assertEqual(tier, "strong", reason)
 
+    def test_touchscreen_macbook_roadmap_stays_hardware_when_body_mentions_macos(self):
+        module = load_module()
+        title = "苹果首款触控屏 MacBook 笔记本前瞻：M5 Pro / Max 芯片，最快年底登场"
+        summary = (
+            "苹果正在开发 14 英寸和 16 英寸 OLED 触控 MacBook Pro，搭载 M5 Pro 和 M5 Max。"
+            "macOS 27 将为触控加入点击、滚动、缩放和自适应菜单。"
+        )
+
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(module.choose_category(title, summary), "hardware_products")
+
     def test_macbook_ultra_commentary_analysis_stays_weak_without_new_reporting(self):
         module = load_module()
         title = "MacBook Ultra could be very good news for MacBook Pro users - 9to5Mac"
@@ -14044,6 +14231,511 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertEqual(module.filter_key_facts_for_primary_topic(title, summary, facts), facts)
         article = article_for(module, title, summary, facts=facts, source="IT之家")
         self.assertEqual(module.structured_enumerated_data_facts(article), facts)
+
+    def test_non_apple_vendor_response_and_buying_advice_stay_weak(self):
+        module = load_module()
+        samples = [
+            (
+                "卢泰文‘间接回应’苹果 iPhone Ultra：三星深耕折叠屏手机领域 7 年，对手短期难追赶",
+                "三星负责人强调自身折叠屏优势，苹果产品只是竞争背景。",
+                "IT之家",
+            ),
+            (
+                "Samsung responds to Apple's iPhone Ultra by touting seven years of foldables",
+                "Samsung's mobile chief said rivals cannot quickly catch its foldable expertise.",
+                "IT之家",
+            ),
+            (
+                "5 Reasons to Buy the iPhone 17 Now Instead of Waiting for iPhone 18",
+                "The article recommends buying the current iPhone rather than waiting.",
+                "MacRumors",
+            ),
+            (
+                "iPhone 17 Pro 用户升级 iPhone 18 Pro 的三大理由",
+                "文章给现有用户提供换机建议，没有新的苹果产品动作。",
+                "快科技",
+            ),
+            (
+                "Do we need to worry about OLED burn-in on future Macs?",
+                "The article analyzes a possible future risk without new Apple reporting.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in samples:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_first_person_product_verdict_without_specific_change_stays_weak(self):
+        module = load_module()
+        opinion_title = "iOS 27's new Siri delivers in every single way I'd hoped for"
+        opinion_summary = (
+            "After using the beta for a month, the author says Siri delivers in all the main "
+            "ways they hoped for and describes a personal wishlist."
+        )
+        feature_title = "iOS 27 gives Apple Photos a useful feature I've wanted for years"
+        feature_summary = (
+            "Apple Photos adds Save Video Frame as Photo, a concrete new command in the app."
+        )
+
+        opinion_tier, opinion_reason = module.classify_relevance_tier(
+            opinion_title, opinion_summary, [], "9to5Mac"
+        )
+        feature_tier, feature_reason = module.classify_relevance_tier(
+            feature_title, feature_summary, [], "9to5Mac"
+        )
+
+        self.assertEqual(opinion_tier, "weak", opinion_reason)
+        self.assertEqual(feature_tier, "strong", feature_reason)
+
+    def test_third_party_headset_with_incidental_ipad_compatibility_stays_weak(self):
+        module = load_module()
+        title = "漫步者推出 HECATE 双擎 PRO 两圈一铁三单元游戏耳机"
+        summary = (
+            "这款耳机采用 L 型 3.5mm 插口设计，同时兼容 PC、iPad、笔记本、手机、"
+            "Switch、PS4 和 PS5 等设备。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_direct_first_party_tv_content_story_is_strong(self):
+        module = load_module()
+        title = "'The Morning Show' will bring Apple TV's first prestige drama to an end in 2027"
+        summary = "Apple TV will end The Morning Show with season six in 2027."
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_direct_apple_health_data_integration_is_ecosystem_but_commentary_is_weak(self):
+        module = load_module()
+        rollout_title = "ChatGPT's Apple Health Integration Now Rolling Out to U.S. Users"
+        rollout_summary = (
+            "OpenAI made ChatGPT Health available to users and lets them connect Apple Health data."
+        )
+        commentary_title = "Why ChatGPT Health's Apple Health access could be a privacy risk"
+        commentary_summary = "A commentary warns about third-party health-data privacy without a new rollout."
+        direct_risk_commentary_title = (
+            "Connecting Apple Health to ChatGPT creates privacy risks Siri AI can avoid"
+        )
+        direct_risk_commentary_summary = (
+            "The article analyzes privacy tradeoffs after the integration became available."
+        )
+        chinese_commentary_title = "便利与隐患并存，苹果健康数据接入 ChatGPT 引发隐私争议"
+        chinese_commentary_summary = "文章讨论隐私隐患，没有宣布新的功能开放动作。"
+
+        rollout_tier, rollout_reason = module.classify_relevance_tier(
+            rollout_title, rollout_summary, [], "cnBeta"
+        )
+        commentary_tier, commentary_reason = module.classify_relevance_tier(
+            commentary_title, commentary_summary, [], "The Verge"
+        )
+        direct_risk_tier, direct_risk_reason = module.classify_relevance_tier(
+            direct_risk_commentary_title,
+            direct_risk_commentary_summary,
+            [],
+            "AppleInsider",
+        )
+        chinese_tier, chinese_reason = module.classify_relevance_tier(
+            chinese_commentary_title, chinese_commentary_summary, [], "cnBeta"
+        )
+
+        self.assertEqual(rollout_tier, "ecosystem", rollout_reason)
+        self.assertEqual(commentary_tier, "weak", commentary_reason)
+        self.assertEqual(direct_risk_tier, "weak", direct_risk_reason)
+        self.assertEqual(chinese_tier, "weak", chinese_reason)
+
+    def test_the_verge_prefers_json_ld_article_body_over_follow_and_popular_ui(self):
+        module = load_module()
+        html = """
+        <html><head><script type="application/ld+json">
+        {"@type":"NewsArticle","articleBody":"Apple TV announced The Last Person on Earth, a dating docuseries that will premiere in 2027. The series follows people seeking partners in remote communities."}
+        </script></head><body><article>
+        <p>Apple TV announced The Last Person on Earth, a dating docuseries that will premiere in 2027.</p>
+        <p>Andrew Webster Senior entertainment editor. Posts from this author will be added to your daily email digest and your homepage feed. Follow Follow.</p>
+        <h2>Most Popular</h2>
+        <p>Samsung's wider Z Fold 8 feels just right after a week of testing the newest foldable phone.</p>
+        <p>Google was hit with a one billion dollar fine for breaking European Union antitrust rules.</p>
+        <p>The 2026 Honda Prelude is a marvel of hybrid technology according to our full road test.</p>
+        </article></body></html>
+        """
+        candidate = module.Candidate(
+            source="The Verge",
+            url="https://www.theverge.com/example",
+            title="Apple TV orders The Last Person on Earth",
+            summary="",
+        )
+        source = source_named(module, "The Verge")
+        diagnostics = {}
+
+        _title, summary, facts, *_rest = module.extract_article(candidate, source, html, diagnostics)
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("dating docuseries", combined)
+        self.assertNotIn("Posts from this author", combined)
+        self.assertNotIn("Most Popular", combined)
+        self.assertNotIn("Samsung Z Fold", combined)
+
+    def test_direct_government_retaliation_against_apple_regulation_is_discoverable(self):
+        module = load_module()
+        cases = [
+            (
+                "9to5Mac",
+                "Trump vows retaliation over EU fines against Apple and other ‘GREAT’ US tech giants",
+                "President Trump pledged retaliation against European Union fines targeting Apple and other U.S. technology companies.",
+            ),
+            (
+                "MacRumors",
+                "Trump Vows to Reverse EU Fines Against Apple and Other Tech Companies, Threatens Tariffs",
+                "The government threatened tariffs in response to European Union penalties imposed on Apple and other U.S. companies.",
+            ),
+            (
+                "AppleInsider",
+                "Trump promises investigation into EU fines on US big tech",
+                "The Section 301 trade investigation and tariff threat directly covers prior European Union penalties against Apple and other U.S. technology companies.",
+            ),
+            (
+                "cnBeta",
+                "特朗普宣布将对欧盟处罚美国科技巨头启动贸易调查",
+                "美国将依据 301 条款调查欧盟对苹果等美国科技企业的处罚，并可能采取关税反制。",
+            ),
+        ]
+
+        for source_name, title, summary in cases:
+            candidate = module.Candidate(
+                source=source_name,
+                url=f"https://example.com/{source_name}/regulatory-retaliation",
+                title=title,
+                summary=summary,
+            )
+            self.assertTrue(
+                module.is_relevant_candidate(candidate, source_named(module, source_name)),
+                (source_name, title),
+            )
+            self.assertIn(
+                module.detect_event_kind(title, summary),
+                {"legal_antitrust", "regional_regulation"},
+            )
+
+        articles = [
+            article_for(module, title, summary, source_name)
+            for source_name, title, summary in cases
+        ]
+        events = module.cluster_articles(articles)
+        self.assertEqual(len(events), 1)
+        self.assertNotIn("multiple region-specific markers", events[0].merge_warnings)
+
+    def test_direct_os_component_change_overrides_incidental_forum_attribution(self):
+        module = load_module()
+        title = "苹果 macOS 27 邮件应用测试新撰写窗口，整合 Siri AI 交互"
+        summary = (
+            "苹果在 macOS 27 Golden Gate Beta 4 中测试邮件应用的新撰写窗口，"
+            "把 Write with Siri 和新的格式栏整合到撰写器中。相关截图由论坛用户 mactracker 分享。"
+        )
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://example.com/ithome/macos-mail-compose",
+            title=title,
+            summary=summary,
+        )
+
+        self.assertTrue(module.is_direct_apple_os_component_change_story(title, summary))
+        self.assertTrue(
+            module.is_relevant_candidate(candidate, source_named(module, "IT之家"))
+        )
+
+    def test_same_siri_settlement_merges_without_requiring_ai_word_in_every_title(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Siri Settlement Approved: Apple to Pay Owners of Some iPhone Models",
+                "A judge approved Apple's $250 million settlement over delayed Siri capabilities for iPhone 15 Pro and iPhone 16 buyers.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple's $250 million Siri settlement just got approved",
+                "The same class action settlement covers delayed Siri features and pays eligible iPhone owners up to $95 per device.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Siri 集体诉讼和解方案获批，苹果将向部分美国 iPhone 用户支付最高 95 美元赔偿金",
+                "苹果因 Siri 功能延期相关集体诉讼达成 2.5 亿美元和解，符合条件的 iPhone 用户每台设备最高获赔 95 美元。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(
+            {article.source for article in events[0].articles},
+            {"MacRumors", "9to5Mac", "IT之家"},
+        )
+
+    def test_same_display_supplier_price_negotiation_merges_across_wording(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Seeking 20% OLED Panel Price Cut for iPhone 18 Pro Max",
+                "Apple asked Samsung Display and LG Display to cut iPhone 18 Pro Max OLED panel prices to about $70 as memory costs rise.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple wants cheaper iPhone displays to offset spiraling memory costs",
+                "Apple proposed paying LG Display and Samsung Display around $70 per iPhone 18 Pro Max display, about 20% less than before.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "消息称苹果为消化内存涨价，提议下调 iPhone 18 Pro / Max 的 OLED 面板采购价",
+                "苹果提议把 iPhone 18 Pro 系列 OLED 面板采购价降到约 70 美元，三星显示和 LG 显示实际供应均价预计为 66.5 美元。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(len(events[0].articles), 3)
+
+    def test_apple_facility_incident_merges_and_is_hardware(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Fire Reported Near Apple Park",
+                "Firefighters responded to an outdoor fire at Apple Forge 1, an Apple-leased building next to Apple Park.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Dispatch records cut claims of major Apple Park fire damage down to size",
+                "County records confirm the same outside fire at Apple Forge 1 near Apple Park, with one engine assigned.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "报告称苹果 Apple Park 园区发生火情，消防人员约 45 分钟完成处置",
+                "火情发生在苹果租用的 Apple Forge 1 建筑外部，消防部门派出一辆消防车处置。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].category, "hardware_products")
+        self.assertEqual({article.category for article in articles}, {"hardware_products"})
+
+    def test_direct_apple_platform_security_reports_are_strong_and_merge_across_tiers(self):
+        module = load_module()
+        strong = article_for(
+            module,
+            "新方法可绕过苹果 macOS 安全机制运行恶意软件",
+            "研究人员发现攻击者可替换受信任 Mac 应用的可执行文件，绕过 macOS 代码签名与安全检查并运行恶意软件。",
+            "IT之家",
+        )
+        english = article_for(
+            module,
+            "Trusted Mac apps could possibly be swapped out for malware",
+            "The same executable-replacement attack can swap a trusted Mac app for malware while bypassing macOS security checks.",
+            "AppleInsider",
+        )
+
+        self.assertEqual(strong.relevance_tier, "strong")
+        self.assertEqual(english.relevance_tier, "strong")
+        events = module.cluster_articles([strong, english])
+        self.assertEqual(len(events), 1)
+
+    def test_old_rumor_roundups_and_setting_walkthroughs_are_not_required_events(self):
+        module = load_module()
+        samples = [
+            (
+                "PSA: Check your banking app for a potentially important setting",
+                "A new Apple Card feature reminded the author to enable a setting in a third-party banking app; Apple announced no new action.",
+                "9to5Mac",
+            ),
+            (
+                "Add a Volume Slider to Your iPhone Lock Screen",
+                "Open Settings, tap Accessibility, then toggle Always Show Volume Control.",
+                "MacRumors",
+            ),
+            (
+                "AirPods Max 3: The Latest Rumors",
+                "The page repeats a May 2025 rumor that may no longer be accurate and reports no new development.",
+                "MacRumors",
+            ),
+            (
+                "iPhone Ultra is coming: Six new features in Apple's top-tier model",
+                "Rumors say the foldable model is coming this fall; here are six features to expect, based on earlier reports.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in samples:
+            tier, _reason = module.classify_relevance_tier(title, summary, [], source)
+            self.assertEqual(tier, "weak", title)
+
+        roundup = article_for(module, *samples[-1][:2], samples[-1][2])
+        concrete_leak = article_for(
+            module,
+            "苹果首款阔折叠 9 月登场！iPhone Ultra 最新外观图出炉",
+            "苹果将在秋季发布首款横向阔折叠 iPhone Ultra，最新爆料展示双屏、双摄、A20 Pro 芯片、C2 调制解调器和量产外观图。",
+            "快科技",
+        )
+        self.assertTrue(
+            module.rumor_feature_recap_boundary_conflict(
+                roundup,
+                event_for(module, concrete_leak),
+            )
+        )
+        self.assertFalse(module.should_merge(roundup, event_for(module, concrete_leak)))
+        events = module.cluster_articles([roundup, concrete_leak])
+        self.assertEqual(
+            len(events),
+            2,
+            [[article.title for article in event.articles] for event in events],
+        )
+
+    def test_title_primary_hardware_and_service_content_choose_correct_categories(self):
+        module = load_module()
+        iphone_ultra_title = (
+            "iPhone Ultra is coming: Six new features in Apple's top-tier model - 9to5Mac"
+        )
+        iphone_ultra_summary = (
+            "Apple's first foldable iPhone is coming this fall with two displays, cameras, "
+            "an A20 Pro chip, a C2 modem, and some iOS 27 features for the new form factor."
+        )
+        self.assertEqual(
+            module.choose_category(
+                iphone_ultra_title,
+                iphone_ultra_summary,
+            ),
+            "hardware_products",
+        )
+        self.assertEqual(
+            module.detect_event_kind(
+                iphone_ultra_title,
+                iphone_ultra_summary,
+                [
+                    "硬件配置上，iPhone Ultra 搭载台积电 2nm 工艺 A20 Pro 旗舰芯片，"
+                    "标配 12GB 运行内存，深度适配 iOS 27 专属折叠分屏系统，"
+                    "多窗口并行、跨应用拖拽流转等生产力功能全面优化。"
+                ],
+            ),
+            "hardware_market",
+        )
+        chinese_hardware_title = "苹果首款阔折叠 9 月登场！iPhone Ultra 最新外观图出炉"
+        chinese_hardware_summary = (
+            "苹果将在秋季发布首款横向阔折叠 iPhone Ultra，爆料展示了双屏、"
+            "双摄、A20 Pro 芯片和 C2 调制解调器等硬件规格。"
+        )
+        self.assertTrue(module.has_direct_iphone_product_title_subject(chinese_hardware_title))
+        self.assertEqual(
+            module.detect_event_kind(
+                chinese_hardware_title,
+                chinese_hardware_summary,
+                ["该机适配 iOS 27 折叠分屏系统和跨应用拖拽功能。"],
+            ),
+            "hardware_market",
+        )
+        self.assertEqual(
+            module.choose_category(
+                "Here's everything new Apple TV has coming in August",
+                "Apple TV subscribers will get new and returning series throughout August.",
+            ),
+            "software_systems",
+        )
+
+    def test_actual_display_price_wording_merges_despite_supplier_background(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Seeking 20% OLED Panel Price Cut for iPhone 18 Pro Max",
+                "Apple proposed paying around $70 while Samsung Display's M16 material set adds manufacturing complexity.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple wants cheaper iPhone displays to offset spiraling memory costs",
+                "Apple asked LG Display and Samsung Display to meet a sub-$67 goal for iPhone 18 Pro Max displays.",
+                "AppleInsider",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_macos_mail_compose_change_merges_across_language(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "macOS 27 Beta Reworks Mail's Compose Window Around Siri AI",
+                "Apple is testing a new formatting bar in Mail's message composer with Write with Siri.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 macOS 27 邮件应用测试新撰写窗口，整合 Siri AI 交互",
+                "苹果重新设计邮件撰写窗口格式栏，并把 Write with Siri 放在突出位置。",
+                "IT之家",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_distinct_apple_legal_cases_do_not_merge_and_security_case_sources_do(self):
+        module = load_module()
+        security = [
+            article_for(
+                module,
+                "New lawsuit alleges unpatchable Apple chip exploit was developed using stolen trade secrets",
+                "Magnet Forensics sued Paradigm Shift over the usbliter8 A12/A13 SecureROM vulnerability, an unpatchable BootROM exploit disclosed using alleged trade secrets.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "iPhone exploit legal fight is really about who owns security research",
+                "The same Magnet Forensics case concerns Paradigm Shift's usbliter8 A12/A13 SecureROM vulnerability and unpatchable BootROM exploit publication.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Lawsuit Filed After Apple's A12 and A13 Chips Hit With New Unpatchable Exploit",
+                "The same usbliter8 A12/A13 SecureROM vulnerability and unpatchable BootROM exploit led Magnet Forensics to sue Paradigm Shift for trade-secret misuse.",
+                "MacRumors",
+            ),
+        ]
+        siri = article_for(
+            module,
+            "Judge approves Apple's $250 million settlement offer over Siri lawsuit",
+            "A separate class action over delayed Siri capabilities was approved for a $250 million settlement.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([security[0], siri, security[1], security[2]])
+
+        self.assertEqual(
+            len(events),
+            2,
+            [[article.title for article in event.articles] for event in events],
+        )
+        security_event = next(event for event in events if security[0] in event.articles)
+        self.assertEqual(
+            {article.title for article in security},
+            {article.title for article in security_event.articles},
+        )
+        self.assertNotIn(siri, security_event.articles)
+        self.assertEqual(security_event.relevance_tier, "strong")
 
 
 if __name__ == "__main__":

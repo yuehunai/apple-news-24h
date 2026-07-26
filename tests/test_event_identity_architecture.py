@@ -2715,6 +2715,74 @@ class EventIdentityArchitectureTests(unittest.TestCase):
             variant_products,
         )
 
+    def test_mac_roadmap_variants_split_same_product_distinct_chip_generations(self):
+        module = load_module()
+        title = "Apple's huge Mac roadmap revealed in new report"
+        facts = [
+            "The redesigned MacBook Pro models K114 and K116 will use M5 Pro and M5 Max with OLED touchscreens in early 2027.",
+            "The touch sensors are integrated into the OLED panel and macOS will enlarge controls for touch input.",
+            "A separate redesigned MacBook Pro K104 with the standard M7 chip is planned for late 2027.",
+        ]
+
+        variants = module.compound_article_variants(title, " ".join(facts), facts)
+        macbook_pro_variants = [
+            (variant_title, variant_summary, variant_facts)
+            for variant_title, variant_summary, variant_facts in variants
+            if "MacBook Pro" in variant_title
+        ]
+
+        self.assertEqual(len(macbook_pro_variants), 2, macbook_pro_variants)
+        m5_variant = next(item for item in macbook_pro_variants if "M5" in item[0])
+        m7_variant = next(item for item in macbook_pro_variants if "M7" in item[0])
+        self.assertNotIn("M6", m5_variant[0])
+        self.assertNotIn("M7", " ".join(m5_variant[2]))
+        self.assertNotIn("M5", " ".join(m7_variant[2]))
+
+        negated_identity = module.title_led_identity(
+            "Apple's touchscreen MacBook Pro will use M5 Pro and M5 Max, not M6",
+            "The OLED model is a direct Apple hardware roadmap report.",
+        )
+        self.assertIn("apple-silicon-generation:m5", negated_identity.title_components)
+        self.assertNotIn("apple-silicon-generation:m6", negated_identity.title_components)
+
+    def test_current_market_performance_does_not_merge_with_future_product_roadmap(self):
+        module = load_module()
+        market = article_for(
+            module,
+            "Apple defied a global PC sales slump in Q2 2026 thanks to MacBook Neo",
+            "Global PC shipments declined 4%, while MacBook Neo shipments grew 13% in the quarter.",
+            "AppleInsider",
+        )
+        roadmap = article_for(
+            module,
+            "苹果 MacBook Neo 2 笔记本前瞻：A19 Pro 芯片 + 12GB 内存",
+            "苹果计划 2027 年发布第二代 MacBook Neo，并测试 A19 Pro 和 12GB 内存。",
+            "IT之家",
+        )
+
+        events = module.cluster_articles([market, roadmap])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+
+    def test_focused_touchscreen_macbook_merges_with_matching_roadmap_variant(self):
+        module = load_module()
+        focused = article_for(
+            module,
+            "苹果首款触控屏 MacBook 笔记本前瞻：M5 Pro / Max 芯片，最快年底登场",
+            "苹果正在开发 14 英寸和 16 英寸 OLED 触控 MacBook Pro，搭载 M5 Pro 和 M5 Max。",
+            "IT之家",
+        )
+        roadmap_variant = article_for(
+            module,
+            "Apple MacBook Pro M5 roadmap update",
+            "Apple is developing redesigned 14-inch and 16-inch OLED touchscreen MacBook Pro models K114 and K116 with M5 Pro and M5 Max.",
+            "快科技",
+        )
+
+        events = module.cluster_articles([focused, roadmap_variant])
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+
     def test_direct_mac_roadmap_sources_are_strong_and_same_product_sources_merge(self):
         module = load_module()
         imac = [
@@ -3052,6 +3120,271 @@ class EventIdentityArchitectureTests(unittest.TestCase):
 
         self.assertTrue(all("facility-renovation" in identity.components for identity in identities))
         self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_distinct_ios_components_do_not_merge_through_shared_os_version(self):
+        module = load_module()
+        lock_screen = article_for(
+            module,
+            "iOS 27 Adds Five New Features to the iPhone Lock Screen",
+            "Apple added clock, wallpaper, notification, and Lock Screen controls in iOS 27.",
+            "MacRumors",
+        )
+        photos = article_for(
+            module,
+            "iOS 27 gives Apple Photos a very useful feature I've wanted for years",
+            "Apple Photos in iOS 27 adds a new sorting control for the photo library.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([lock_screen, photos])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+
+    def test_distinct_apple_tv_programs_stay_separate_but_same_program_merges(self):
+        module = load_module()
+        morning_show = article_for(
+            module,
+            "Apple TV confirms 'The Morning Show' will end with season six",
+            "Apple TV confirmed The Morning Show will conclude with its sixth season in 2027.",
+            "9to5Mac",
+        )
+        morning_show_followup = article_for(
+            module,
+            "'The Morning Show' will bring Apple TV's first prestige drama to an end in 2027",
+            "Apple TV will end The Morning Show with season six in 2027.",
+            "AppleInsider",
+        )
+        dating_series = article_for(
+            module,
+            "Apple TV orders dating docuseries 'The Last Person on Earth'",
+            "The Last Person on Earth is a new Apple TV dating docuseries.",
+            "The Verge",
+        )
+        the_dink = article_for(
+            module,
+            "Apple TV sets premiere date for new comedy 'The Dink'",
+            "The Dink will premiere on Apple TV later this year.",
+            "MacRumors",
+        )
+
+        events = module.cluster_articles(
+            [morning_show, morning_show_followup, dating_series, the_dink]
+        )
+
+        self.assertEqual(len(events), 3, event_partitions(events))
+        morning_event = next(event for event in events if morning_show in event.articles)
+        self.assertEqual(
+            {article.source for article in morning_event.articles},
+            {"9to5Mac", "AppleInsider"},
+        )
+
+    def test_apple_maps_platform_integration_merges_official_and_media_reports(self):
+        module = load_module()
+        official = article_for(
+            module,
+            "Apple Maps to power navigation experience for Ford UEV platform",
+            "Apple announced that Apple Maps will power navigation in Ford's UEV platform.",
+            "Apple Newsroom",
+        )
+        media = article_for(
+            module,
+            "Ford integrates Apple Maps into its new UEV navigation platform",
+            "Ford is using Apple Maps and MapKit in the same UEV navigation experience.",
+            "9to5Mac",
+        )
+
+        self.assertEqual(len(module.cluster_articles([official, media])), 1)
+
+    def test_foldable_iphone_production_hurdle_does_not_merge_generic_iphone_production(self):
+        module = load_module()
+        foldable_reports = [
+            article_for(
+                module,
+                "Apple's foldable iPhone faces production hurdles before launch",
+                "Apple and suppliers are resolving manufacturing obstacles for the foldable iPhone.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果折叠屏 iPhone 量产仍面临制造难题",
+                "供应链正在解决折叠 iPhone 的生产障碍和良率瓶颈。",
+                "IT之家",
+            ),
+        ]
+        generic_iphone = article_for(
+            module,
+            "iPhone 18 Pro enters mass production",
+            "Apple suppliers started mass production of the iPhone 18 Pro.",
+            "快科技",
+        )
+
+        events = module.cluster_articles([*foldable_reports, generic_iphone])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        foldable_event = next(event for event in events if foldable_reports[0] in event.articles)
+        self.assertEqual(
+            {article.title for article in foldable_event.articles},
+            {article.title for article in foldable_reports},
+        )
+
+    def test_apple_tv_lifecycle_actions_split_unquoted_program_titles(self):
+        module = load_module()
+        morning_reports = [
+            article_for(
+                module,
+                "Apple announces The Morning Show is ending after season 5",
+                "Apple TV announced the final season of The Morning Show for 2027.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple TV 质量标杆：苹果官宣《早间新闻》最终季 2027 年播出",
+                "苹果宣布《早间新闻》第五季也是最终季，将于 2027 年完结。",
+                "IT之家",
+            ),
+        ]
+        dating_reports = [
+            article_for(
+                module,
+                "Apple TV announces new dating series: The Last Person on Earth",
+                "Apple TV announced the new eight-part dating documentary series.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple TV is branching out with a self-help eight-part dating docuseries",
+                "Apple TV announced The Last Person on Earth as a new dating docuseries.",
+                "AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles([*morning_reports, *dating_reports])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        morning_event = next(event for event in events if morning_reports[0] in event.articles)
+        self.assertEqual({article.source for article in morning_event.articles}, {"9to5Mac", "IT之家"})
+
+    def test_real_apple_maps_integration_wording_merges_official_and_media(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Maps to power navigation experience for Ford UEV Platform",
+                "Apple and Ford announced Apple Maps will be integrated directly into Ford's UEV Platform.",
+                "Apple Newsroom",
+            ),
+            article_for(
+                module,
+                "Apple Maps to Help Power Autonomous Driving in Ford's 2027 EV",
+                "Ford will embed Apple Maps through the MapKit for Automotive SDK.",
+                "MacRumors",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_real_foldable_production_hurdle_wording_merges_but_generic_iphone_stays_separate(self):
+        module = load_module()
+        foldable = [
+            article_for(
+                module,
+                "Foldable iPhone Still Faces Production Hurdles, Report Says",
+                "Foxconn is making final mass-production adjustments while launch timing remains undecided.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果首款折叠手机 iPhone Ultra 发布日期尚不明朗，消息称富士康正调整产线",
+                "组装复杂和良率较低可能造成延期，富士康正调整制造流程。",
+                "IT之家",
+            ),
+        ]
+        generic = article_for(
+            module,
+            "iPhone 18 Pro 开始量产",
+            "苹果供应商开始量产 iPhone 18 Pro。",
+            "快科技",
+        )
+        foldable[0].regions = {"united-states"}
+        foldable[1].regions = {"china"}
+
+        events = module.cluster_articles([*foldable, generic])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertTrue(
+            any(
+                {article.title for article in foldable}
+                == {article.title for article in event.articles}
+                for event in events
+            )
+        )
+
+    def test_chatgpt_health_rollout_merges_across_integration_wording(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "ChatGPT's Apple Health Integration Now Rolling Out to U.S. Users",
+                "OpenAI is rolling out ChatGPT Health with connected Apple Health data.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "OpenAI relaunches Apple Health-connected ChatGPT feature with expanded access",
+                "OpenAI is rolling out the connected Apple Health feature to more users.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "OpenAI全面开放ChatGPT Health功能：整合Apple Health与电子病历",
+                "OpenAI 全面开放该功能，接入 Apple Health 数据。",
+                "cnBeta",
+            ),
+            article_for(
+                module,
+                "OpenAI 上线 ChatGPT Health：接入苹果 Health 等数据",
+                "该服务向用户开放，并直接接入苹果 Health 数据。",
+                "IT之家",
+            ),
+        ]
+        unrelated = article_for(
+            module,
+            "iPhone Driver's Licenses May Soon Expand to New State",
+            "A related link mentions that ChatGPT Health integrates Apple Health data.",
+            "MacRumors",
+        )
+        privacy_commentary = article_for(
+            module,
+            "Connecting Apple Health to ChatGPT creates privacy risks Siri AI can avoid",
+            "The analysis discusses the privacy tradeoffs after the feature rollout.",
+            "AppleInsider",
+        )
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+        self.assertTrue(all("apple-data-integration" in identity.components for identity in identities))
+        self.assertNotIn(
+            "apple-data-integration",
+            module.article_title_led_event_identity(unrelated).components,
+        )
+        events = module.cluster_articles([*articles, unrelated, privacy_commentary])
+        self.assertEqual(len(events), 3, event_partitions(events))
+        health_event = next(event for event in events if articles[0] in event.articles)
+        self.assertEqual(
+            {article.source for article in health_event.articles},
+            {"MacRumors", "9to5Mac", "cnBeta", "IT之家"},
+        )
+        self.assertNotIn(privacy_commentary, health_event.articles)
+
+    def test_legal_counterparty_extraction_ignores_generic_words_and_chip_models(self):
+        module = load_module()
+
+        facets = module.legal_case_counterparty_facets(
+            "New lawsuit alleges unpatchable Apple A12 and A13 chip exploit used stolen trade secrets"
+        )
+
+        self.assertNotIn("legal-counterparty-new", facets)
+        self.assertNotIn("legal-counterparty-a12", facets)
+        self.assertNotIn("legal-counterparty-a13", facets)
 
 
 if __name__ == "__main__":

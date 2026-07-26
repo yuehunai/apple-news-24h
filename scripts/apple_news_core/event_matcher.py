@@ -22,6 +22,7 @@ PRICE_CONTEXT_FACETS = {
 }
 
 HIGH_CONFIDENCE_COMPONENTS = {
+    "apple-data-integration",
     "apple-device-leasing-program",
     "app-catalog-metrics",
     "camera-system",
@@ -48,6 +49,7 @@ HIGH_CONFIDENCE_COMPONENTS = {
     "privacy-vulnerability",
     "product-patent-disclosure",
     "price-upgrade-behavior",
+    "production-hurdle",
     "product-release-delay",
     "recovery-mode",
     "recurring-transactions",
@@ -56,6 +58,7 @@ HIGH_CONFIDENCE_COMPONENTS = {
     "spotlight-index-preparation",
     "supplier-input-cost",
     "vapor-chamber",
+    "water-resistance",
     "writing-tools",
 }
 
@@ -65,6 +68,7 @@ HIGH_SIGNAL_NAMED_SUBJECT_ACTIONS = {
     "legal",
     "official-communication",
     "pilot-testing",
+    "platform-integration",
     "project-cancellation",
     "content-release",
     "platform-trust",
@@ -82,6 +86,7 @@ def _high_confidence_components(components: frozenset[str]) -> set[str]:
         for component in components
         if component in HIGH_CONFIDENCE_COMPONENTS
         or component.startswith("display-size:")
+        or component.startswith("os-component:")
     }
 
 FIRST_PARTY_SERVICE_PRODUCTS = {
@@ -248,6 +253,13 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         if left_targets and right_targets:
             return "match" if left_targets & right_targets else "conflict"
 
+    if (
+        "water-resistance" in shared_components
+        and _products_compatible(left.products, right.products)
+        and _actions_compatible(left.actions, right.actions)
+    ):
+        return "match"
+
     if "memory-supply" in left.components and "memory-supply" in right.components:
         left_context = left.title_components & MEMORY_SUPPLY_CONTEXT_COMPONENTS
         right_context = right.title_components & MEMORY_SUPPLY_CONTEXT_COMPONENTS
@@ -260,8 +272,70 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
     if left_financing and right_financing and not (left_financing & right_financing):
         return "conflict"
 
+    left_chip_generations = {
+        component
+        for component in left.title_components
+        if component.startswith("apple-silicon-generation:")
+    }
+    right_chip_generations = {
+        component
+        for component in right.title_components
+        if component.startswith("apple-silicon-generation:")
+    }
+    if (
+        left_chip_generations
+        and right_chip_generations
+        and not (left_chip_generations & right_chip_generations)
+    ):
+        return "conflict"
+    shared_chip_generations = left_chip_generations & right_chip_generations
+    shared_chip_variants = {
+        subject
+        for subject in left.title_named_subjects & right.title_named_subjects
+        if any(
+            subject.endswith(suffix)
+            for suffix in ("-pro", "-max", "-ultra")
+        )
+        and subject[:1] in {"m", "a"}
+    }
+    if (
+        shared_chip_generations
+        and shared_chip_variants
+        and _products_compatible(left.products, right.products)
+    ):
+        return "match"
+
+    left_market_performance = "hardware-market-performance" in left.title_components
+    right_market_performance = "hardware-market-performance" in right.title_components
+    left_product_roadmap = "hardware-product-roadmap" in left.title_components
+    right_product_roadmap = "hardware-product-roadmap" in right.title_components
+    if (
+        left_market_performance
+        and right_product_roadmap
+        and not left_product_roadmap
+        and not right_market_performance
+    ) or (
+        right_market_performance
+        and left_product_roadmap
+        and not right_product_roadmap
+        and not left_market_performance
+    ):
+        return "conflict"
+
     left_concrete_components = _high_confidence_components(left.components)
     right_concrete_components = _high_confidence_components(right.components)
+    left_title_data_integration = "apple-data-integration" in left.title_components
+    right_title_data_integration = "apple-data-integration" in right.title_components
+    if left_title_data_integration != right_title_data_integration:
+        return "conflict"
+    data_integration_intents = {
+        "apple-data-integration-rollout",
+        "apple-data-integration-commentary",
+    }
+    left_data_intents = left.title_components & data_integration_intents
+    right_data_intents = right.title_components & data_integration_intents
+    if left_data_intents and right_data_intents and not (left_data_intents & right_data_intents):
+        return "conflict"
     if (
         left_concrete_components
         and right_concrete_components
@@ -294,6 +368,45 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         left_product_generations
         and right_product_generations
         and not (left_product_generations & right_product_generations)
+    ):
+        return "conflict"
+    left_os_components = {
+        component for component in left.title_components if component.startswith("os-component:")
+    }
+    right_os_components = {
+        component for component in right.title_components if component.startswith("os-component:")
+    }
+    if left_os_components and right_os_components:
+        if not (left_os_components & right_os_components):
+            return "conflict"
+        if _products_compatible(left.products, right.products):
+            return "match"
+    left_content_lifecycle = {
+        component for component in left.components if component.startswith("content-lifecycle:")
+    }
+    right_content_lifecycle = {
+        component for component in right.components if component.startswith("content-lifecycle:")
+    }
+    if left_content_lifecycle and right_content_lifecycle:
+        if (
+            not (left_content_lifecycle & right_content_lifecycle)
+            and "content-lifecycle:ending" in (left_content_lifecycle | right_content_lifecycle)
+        ):
+            return "conflict"
+        shared_content_markers = {
+            component
+            for component in shared_components
+            if component.startswith(("content-season:", "content-year:"))
+        }
+        if (
+            shared_content_markers
+            and "apple-tv" in left.products & right.products
+        ):
+            return "match"
+    left_foldable = "foldable-iphone" in left.title_products
+    right_foldable = "foldable-iphone" in right.title_products
+    if left_foldable != right_foldable and (
+        left_product_generations or right_product_generations
     ):
         return "conflict"
     hardware_products = {
@@ -353,6 +466,18 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         and "production-ramp" in (left.title_components | right.title_components)
         and "supply-production" in left.actions & right.actions
         and _products_compatible(left.title_products, right.title_products)
+    ):
+        return "match"
+    if (
+        "production-hurdle" in shared_components
+        and "production-hurdle" in (left.title_components | right.title_components)
+        and _products_compatible(left.products, right.products)
+        and _actions_compatible(left.actions, right.actions)
+    ):
+        return "match"
+    if (
+        "apple-data-integration" in shared_components
+        and "platform-integration" in left.actions & right.actions
     ):
         return "match"
 
@@ -430,6 +555,19 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
     ):
         return "match"
     shared_first_party_services = left.products & right.products & FIRST_PARTY_SERVICE_PRODUCTS
+    if "apple-tv" in shared_first_party_services and "apple-tv-content" in (
+        left.facets | right.facets
+    ):
+        left_titles = left.title_named_subjects
+        right_titles = right.title_named_subjects
+        if left_titles and right_titles:
+            if not (
+                (left_titles & right_titles)
+                or _compatible_named_subjects(left_titles, right_titles)
+            ):
+                return "conflict"
+        elif left_titles or right_titles:
+            return "unknown"
     if (
         shared_first_party_services
         and left.facets
@@ -437,13 +575,22 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         and not (left.facets & right.facets)
     ):
         return "conflict"
-    if shared_first_party_services and left.actions & right.actions & {
+    apple_tv_content_with_title_identity = bool(
+        "apple-tv" in shared_first_party_services
+        and "apple-tv-content" in (left.facets | right.facets)
+        and (left.title_named_subjects or right.title_named_subjects)
+    )
+    if (
+        shared_first_party_services
+        and not apple_tv_content_with_title_identity
+        and left.actions & right.actions & {
         "content-release",
         "market-report",
         "platform-trust",
         "price-change",
         "retail-availability",
-    }:
+        }
+    ):
         return "match"
     concrete_components = _high_confidence_components(shared_components)
     if (

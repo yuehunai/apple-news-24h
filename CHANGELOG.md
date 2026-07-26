@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.42.0 - 2026-07-26
+
+- Added title-and-lead semantic boundaries for concrete OS components, Apple TV titles and lifecycle actions, Mac roadmap chip generations, production hurdles, display-supplier negotiations, facility incidents, regulatory retaliation, and Apple-platform security reports.
+- Improved cross-source and cross-language clustering for fake App Store wallet litigation, the water-resistant iPad mini roadmap, macOS Mail changes, Siri settlements, display-price negotiations, Apple Maps integrations, and Apple memory-supplier lobbying while retaining every contributing source link.
+- Added compound service-content decomposition and immutable same-source variant boundaries, with normalized release-date and episode-count evidence that keeps distinct works separate while merging translated coverage of the same title.
+- Tightened discovery, extraction, and relevance handling by filtering MacRumors `Top Stories:` roundups before detail fetching, preferring authoritative structured article bodies when page chrome is polluted, and demoting tutorials, rumor recaps, buying advice, third-party compatibility stories, and commentary without a new Apple action.
+- Updated fallback policy guidance and expanded regression coverage from 706 to 741 tests; concurrent live validation preserved every eligible source URL except the intentionally excluded `Top Stories` roundup, produced clean event boundaries, and showed no material runtime regression.
+
 ## 1.41.0 - 2026-07-23
 
 - Improved semantic event identities for bridge and multi-action articles, product-specific Mac roadmaps, Apple financing programs and enforcement mechanisms, Apple TV announcements, and granular iPhone or OS changes so related context no longer collapses distinct actions.
