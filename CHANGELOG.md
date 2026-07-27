@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.43.0 - 2026-07-27
+
+- Added title-and-lead product and action boundaries for Apple smart glasses and current attributed Apple Watch roadmap reports while keeping independent AirPods novelty projects, generic compatibility lists, and competitor-led comparisons weak.
+- Added per-title projection for compound Apple TV articles so separately named works and lifecycle actions remain independent events while retaining the shared source URL and compatible facts.
+- Improved anniversary-iPhone generation normalization and concrete cross-language clustering so direct same-product reports merge without letting comparison background or adjacent products redefine the event.
+- Added source-level `title`, `published_at`, and `primary_fact` evidence to JSON output, with historical background trimmed from primary evidence so automation agents retain valid contributing links and current source-specific facts.
+- Added structured title/lead evidence requirements for generic strong-event promotion so body-only homonyms, historical product examples, and incidental Apple references no longer elevate unrelated articles.
+- Improved 9to5Mac affiliate-tail cleanup, updated fallback policy guidance, and expanded regression coverage from 741 to 753 tests; concurrent live validation preserved discovery coverage, produced no merge warnings, and reduced runtime relative to the same-window baseline.
+
 ## 1.42.0 - 2026-07-26
 
 - Added title-and-lead semantic boundaries for concrete OS components, Apple TV titles and lifecycle actions, Mac roadmap chip generations, production hurdles, display-supplier negotiations, facility incidents, regulatory retaliation, and Apple-platform security reports.

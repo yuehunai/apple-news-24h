@@ -66,6 +66,109 @@ def event_for(module, article):
 
 
 class RelevanceRuleTests(unittest.TestCase):
+    def test_incidental_body_apple_mentions_do_not_promote_unknown_subjects(self):
+        module = load_module()
+        cases = [
+            (
+                "比猪肝还补铁！这个夏天硬菜：吃到你就偷着乐吧",
+                "夏季正是吃蛏子的好时节，正文后段称二十个蛏子的热量不如一个苹果。",
+                ["《食品安全质量检测学报》介绍了相关营养研究。"],
+            ),
+            (
+                "谁说机械硬盘都是板砖：有的比SD卡还小",
+                (
+                    "文章回顾微型机械硬盘的发展与生产历史，介绍 5.25 英寸、3.5 英寸、"
+                    "2.5 英寸和 1.8 英寸产品如何适配便携数码设备。后文举例称，"
+                    "1.8 英寸硬盘曾用于苹果初代 iPod 和其他便携播放器。"
+                ),
+                [],
+            ),
+        ]
+
+        for title, summary, facts in cases:
+            with self.subTest(title=title):
+                identity = module.title_led_identity(title, summary)
+                tier, reason = module.classify_relevance_tier(title, summary, facts, "快科技")
+
+                self.assertEqual(identity.scope, "unknown")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_non_apple_product_comparison_and_compatibility_list_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "华为超轻薄本下周发布：仅重 700g，轻盈度远超苹果 MacBook Air",
+                "华为将发布搭载鸿蒙系统的超轻薄本，MacBook Air 只用于重量对比。",
+                "快科技",
+            ),
+            (
+                "微软更新《我的世界》推荐配置：内存要求涨四倍",
+                "微软更新 Java 版系统要求，支持 Windows、macOS 和 Linux，兼容 Apple M1/M2 Pro 等 ARM 平台。",
+                "快科技",
+            ),
+        ]
+
+        for title, summary, source in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_competitor_led_market_result_does_not_become_apple_market_news(self):
+        module = load_module()
+        title = "没任何争议！华为坐稳中国手机第一：对苹果进行绝对反超"
+        summary = "市场统计显示华为激活量排名第一，标题用苹果作为被比较对象。"
+
+        self.assertTrue(module.is_non_apple_device_comparison_story(title, summary))
+        self.assertFalse(module.is_apple_specific_market_share_report_story(summary, title))
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_independent_airpods_novelty_project_stays_weak(self):
+        module = load_module()
+        title = "网友设计创意程序，用苹果 AirPods 挥鞭抽打 AI 加速运行"
+        summary = (
+            "Reddit 用户公布独立程序 whoisbadai，利用 AirPods 的陀螺仪和加速度传感器"
+            "触发跳过或重新计算指令；这不是苹果发布的功能，也不会真正加速 AI。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_quoted_apple_tv_trailer_list_splits_into_content_actions(self):
+        module = load_module()
+        title = "Apple TV teases new trailers for 'Matchbox,' 'Neuromancer,' 'Dark Matter'"
+        facts = [
+            "Matchbox The Movie will air on Apple TV on October 9.",
+            "Neuromancer will premiere with two episodes on January 22, 2027.",
+            "Dark Matter season 2 will premiere on August 28, 2026.",
+        ]
+
+        variants = module.service_content_announcement_variants(title, " ".join(facts), facts)
+
+        self.assertEqual(len(variants), 3, variants)
+        variant_titles = {variant_title for variant_title, _, _ in variants}
+        self.assertTrue(any("Matchbox" in variant_title for variant_title in variant_titles))
+        self.assertTrue(any("Neuromancer" in variant_title for variant_title in variant_titles))
+        self.assertTrue(any("Dark Matter" in variant_title for variant_title in variant_titles))
+
+    def test_smart_glasses_background_does_not_create_camera_airpods_identity(self):
+        module = load_module()
+        title = "Apple's AI glasses to be unveiled at WWDC27"
+        summary = (
+            "Apple plans to reveal its first smart glasses at WWDC 2027 and ship them later that year. "
+            "The privacy-focused device may use cameras only for AI tools. A background comparison says "
+            "this is similar to camera-equipped AirPods and iPhone visual intelligence."
+        )
+
+        facets = module.primary_topic_facets(title, summary)
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertNotIn("camera-airpods-code-clue", facets)
+        self.assertNotIn("camera-airpods-development-suspension", facets)
+        self.assertEqual(module.detect_event_kind(title, summary), "hardware_market")
+        self.assertEqual(tier, "strong", reason)
+
     def test_cached_score_terms_matches_list_tuple_and_set_inputs(self):
         module = load_module()
         text = "Apple released iOS 27 beta 3 for iPhone and iPad."
@@ -1759,6 +1862,51 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertNotIn("must_include_facts", event_dict)
 
+    def test_event_sources_preserve_per_source_title_time_and_primary_fact(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple TV, Apple Music, and App Store services are down",
+                "Apple says several consumer and developer services are currently unavailable.",
+                source="9to5Mac",
+                facts=["Apple says the listed service outages were resolved at 6:15 p.m. PT."],
+            ),
+            article_for(
+                module,
+                "苹果回应多项服务出现故障：App Store、Apple Music 等正进行例行维护",
+                "苹果系统状态页面显示，多项当前服务出现故障 2025 年 10 月苹果激活服务器曾出现另一轮故障。",
+                source="快科技",
+                facts=[
+                    "快科技 7 月 27 日消息，当前受影响服务包括 App Store、Apple Music、Apple TV 和 AppleCare。",
+                    "2025 年 10 月，苹果激活服务器曾出现另一轮故障。",
+                ],
+            ),
+        ]
+        event = module.Event(
+            event_id="service-outage",
+            category="software_systems",
+            title=articles[0].title,
+            summary="Apple services experienced a current outage and were later restored.",
+            key_facts=module.collect_event_key_facts(articles),
+            published_utc=articles[0].published_utc,
+            published_raw=articles[0].published_raw,
+            published_source=articles[0].published_source,
+            confidence=articles[0].confidence,
+            articles=articles,
+            tokens=articles[0].tokens | articles[1].tokens,
+            event_kind="service_content",
+            relevance_tier="strong",
+            relevance_reason="direct Apple service status event",
+        )
+
+        event_dict = module.event_to_dict(event, timezone.utc)
+        sources = {source["name"]: source for source in event_dict["sources"]}
+
+        self.assertEqual(sources["快科技"]["title"], articles[1].title)
+        self.assertEqual(sources["快科技"]["published_at"], articles[1].published_utc.isoformat())
+        self.assertEqual(sources["快科技"]["primary_fact"], "苹果系统状态页面显示，多项当前服务出现故障")
+
     def test_future_price_forecast_event_does_not_emit_current_price_response_must_include(self):
         module = load_module()
         articles = [
@@ -1917,6 +2065,38 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertIn("iPhone 15 Pro", combined)
         self.assertNotIn("AirPods Pro 3", combined)
         self.assertNotIn("45W Fast Charger", combined)
+
+    def test_9to5_favorite_product_links_tail_does_not_enter_article_facts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html><head>
+          <meta property="article:published_time" content="2026-07-26T16:00:00+00:00" />
+          <meta property="og:description" content="Bloomberg reports three Apple Watch models are in late-stage testing." />
+        </head><body>
+          <div class="container med post-content">
+            <p>Bloomberg reports Apple is testing Apple Watch Series 12 and Ultra 4, with no major design overhaul expected this year.</p>
+            <p>The models should receive new processors, while a redesigned watch remains another year or two away.</p>
+            <p><strong>My favorite Apple Watch links:</strong></p>
+            <ul>
+              <li>Apple Watch Series 11</li>
+              <li>Anker 3-in-1 Charging Station for iPhone, AirPods, and Apple Watch</li>
+            </ul>
+            <p>FTC: We use income earning auto affiliate links.</p>
+          </div>
+        </body></html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/26/apple-watch-series-12-and-ultra-4-what-to-expect/",
+            title="Apple Watch Series 12 and Ultra 4: What to expect",
+        )
+
+        _title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("no major design overhaul", combined)
+        self.assertNotIn("Anker 3-in-1", combined)
 
     def test_9to5_worth_checking_out_on_amazon_section_is_removed(self):
         module = load_module()

@@ -50,6 +50,69 @@ def event_partitions(events):
 
 
 class EventIdentityArchitectureTests(unittest.TestCase):
+    def test_current_single_subject_report_is_not_downgraded_by_what_to_expect_title(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Watch redesign is coming, but not for years",
+                "Bloomberg reports Apple is late-stage testing Series 12 and Ultra 4 for September, with no major design change this year.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "What to Expect From Apple Watch Series 12 and Apple Watch Ultra 4",
+                "Bloomberg's Mark Gurman today outlined that three Apple Watch models are in late-stage testing for September and no new SE is planned.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple Watch Series 12 and Ultra 4: What to expect",
+                "According to Gurman, three next-generation Apple Watch models are in late-stage testing for September, while Apple Watch SE will not be updated.",
+                "9to5Mac",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        events = module.cluster_articles(articles)
+        self.assertEqual(len(events), 1, event_partitions(events))
+        self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "MacRumors", "9to5Mac"})
+
+    def test_direct_apple_smart_glasses_reports_share_one_hardware_event(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple's AI glasses to be unveiled at WWDC27",
+                "Bloomberg reports Apple plans to reveal its first smart glasses at WWDC 2027 and ship them by year-end, with privacy-focused hardware and software.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Planning to Unveil Privacy-Focused Smart Glasses at WWDC 2027",
+                "Apple is prototyping privacy features for its smart glasses and plans to reveal them at WWDC 2027 before a late-2027 launch.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple is banking on privacy to set its smart glasses apart",
+                "Mark Gurman reports Apple is planning to reveal its first smart glasses at WWDC next June and launch them by the end of 2027.",
+                "The Verge",
+            ),
+            article_for(
+                module,
+                "Public distrust in smart glasses will be a challenge for Apple Glass",
+                "Apple will introduce its first smart glasses at WWDC in 2027 and is testing camera-free prototypes and privacy protections.",
+                "AppleInsider",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        self.assertTrue(all(article.event_kind == "hardware_market" for article in articles))
+        events = module.cluster_articles(articles)
+        self.assertEqual(len(events), 1, event_partitions(events))
+        self.assertEqual({article.source for article in events[0].articles}, {"9to5Mac", "MacRumors", "The Verge", "AppleInsider"})
+
     def test_legal_counterparty_and_case_action_define_separate_events(self):
         module = load_module()
         doj_articles = [
@@ -2549,6 +2612,90 @@ class EventIdentityArchitectureTests(unittest.TestCase):
             all("product-generation:iphone-18" in identity.title_components for identity in identities)
         )
         self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_anniversary_iphone_generation_report_merges_across_languages(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Here's What the 'iPhone 20' is Expected to Look Like",
+                (
+                    "Apple's 20th anniversary iPhone is expected to arrive in the fall of 2027 "
+                    "with the most significant design overhaul since the iPhone X. The device "
+                    "may use optical refraction, light-guiding structures, and a visual illusion "
+                    "to make the frame recede from view, unlike curved screens on Android phones. "
+                    "An unverified mock-up depicted a 1.1mm "
+                    "bezel compared with approximately 1.44mm on the iPhone 17 Pro. Apple wants "
+                    "to move Face ID and the selfie camera beneath the display. "
+                    + " ".join(f"background-detail-{index}" for index in range(120))
+                    + " DSCC's Ross Young says the technology is unlikely to be fully ready for 2027. "
+                    "Apple is reportedly planning two anniversary models at roughly 6.3 and 6.9 inches."
+                ),
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 20 周年纪念版 iPhone 前瞻：微曲面显示屏、无实体按键，真全面屏仍存悬念",
+                (
+                    "据科技媒体 MacRumors 报道，苹果预计将在 2027 年秋季推出 20 周年纪念版 "
+                    "iPhone，并带来 iPhone X 同等规模的创新。苹果希望这款手机完全没有屏幕 "
+                    "开孔，将面容 ID 和前置摄像头隐藏在屏幕下方，但 DSCC 研究员 Ross Young "
+                    "认为这种技术很难在 2027 年成熟。产品预计有 6.3 英寸和 6.9 英寸两种版本。"
+                    "这两个尺寸类似 iPhone 18 Pro 和 iPhone 18 Pro Max。"
+                ),
+                "IT之家",
+                ["产品预计有 6.3 英寸和 6.9 英寸两种版本，类似 iPhone 18 Pro 和 iPhone 18 Pro Max。"],
+            ),
+        ]
+
+        identities = [module.article_title_led_event_identity(article) for article in articles]
+        self.assertTrue(
+            all("product-generation:iphone-20" in identity.title_components for identity in identities)
+        )
+        events = module.cluster_articles(articles)
+        self.assertEqual(len(events), 1, event_partitions(events))
+        self.assertEqual(events[0].relevance_tier, "strong")
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+
+    def test_cohesive_product_generation_event_is_not_downgraded_by_comparison_background(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "Here's What the 'iPhone 20' is Expected to Look Like",
+            "Apple's anniversary iPhone uses a display unlike curved screens on Android phones.",
+            "MacRumors",
+        )
+        chinese = article_for(
+            module,
+            "苹果 20 周年纪念版 iPhone 前瞻",
+            "苹果预计推出 6.3 英寸和 6.9 英寸两种版本，尺寸类似 iPhone 18 Pro 系列。",
+            "IT之家",
+        )
+        self.assertEqual([english.relevance_tier, chinese.relevance_tier], ["strong", "strong"])
+        event = module.Event(
+            event_id="anniversary-iphone",
+            category="hardware_products",
+            title=english.title,
+            summary=(
+                "Apple's 20th anniversary iPhone is expected in fall 2027. It is unlike curved "
+                "screens seen on Android phones. 产品预计有 6.3 英寸、6.9 英寸两种版本可选，"
+                "类似 iPhone 18 Pro / iPhone 18 Pro Max。"
+            ),
+            key_facts=[],
+            published_utc=english.published_utc,
+            published_raw=english.published_raw,
+            published_source=english.published_source,
+            confidence=english.confidence,
+            articles=[english, chinese],
+            tokens=english.tokens | chinese.tokens,
+            event_kind="hardware_market",
+            relevance_tier="strong",
+            relevance_reason="direct Apple hardware report",
+        )
+
+        module.refresh_event_metadata(event)
+
+        self.assertEqual(event.relevance_tier, "strong")
 
     def test_production_ramps_for_different_product_generations_do_not_merge(self):
         module = load_module()

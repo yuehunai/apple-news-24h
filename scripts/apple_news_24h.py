@@ -3936,6 +3936,50 @@ def is_third_party_ai_agent_for_mac_without_apple_action(title: str, text: str) 
     ) > 0
 
 
+def is_competitor_led_apple_comparison_title(title: str) -> bool:
+    """Require a competitor-led title plus an explicit directional comparison."""
+    lower = title.lower()
+    competitor_terms = [
+        "spacex",
+        "xai",
+        "tesla",
+        "qualcomm",
+        "google",
+        "samsung",
+        "huawei",
+        "honor",
+        "xiaomi",
+        "vivo",
+        "oppo",
+        "高通",
+        "三星",
+        "谷歌",
+        "华为",
+        "荣耀",
+        "小米",
+    ]
+    competitor_positions = [lower.find(term) for term in competitor_terms if lower.find(term) >= 0]
+    apple_positions = [lower.find(term) for term in ["iphone", "apple", "苹果"] if lower.find(term) >= 0]
+    if not competitor_positions or not apple_positions or min(competitor_positions) >= min(apple_positions):
+        return False
+    return score_terms(
+        lower,
+        [
+            "反超",
+            "领先",
+            "力压",
+            "击败",
+            "超过苹果",
+            "超越苹果",
+            "远超苹果",
+            "beats apple",
+            "overtakes apple",
+            "ahead of apple",
+            "outperforms apple",
+        ],
+    ) > 0
+
+
 def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
     lower = f"{title} {text}".lower()
     title_lower = title.lower()
@@ -3944,9 +3988,7 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
         direct_legal_scope
     ):
         return False
-    non_apple_title_subject = score_terms(
-        title_lower,
-        [
+    non_apple_subject_terms = [
             "spacex",
             "xai",
             "elon musk",
@@ -3967,8 +4009,16 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "努比亚",
             "中兴",
             "一加",
-        ],
-    ) > 0
+            "huawei",
+            "honor",
+            "xiaomi",
+            "vivo",
+            "oppo",
+            "华为",
+            "荣耀",
+            "小米",
+        ]
+    non_apple_title_subject = score_terms(title_lower, non_apple_subject_terms) > 0
     apple_comparison_target = score_terms(
         title_lower,
         ["iphone", "homepod", "apple tv", "apple watch", "airpods", "macbook", "苹果"],
@@ -3989,8 +4039,21 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "薄于 iphone",
             "对比",
             "对标",
+            "超过苹果",
+            "超越苹果",
+            "远超苹果",
+            "反超苹果",
+            "领先苹果",
+            "力压苹果",
+            "击败苹果",
+            "beats apple",
+            "overtakes apple",
+            "ahead of apple",
+            "轻于苹果",
+            "薄于苹果",
+            "比苹果更",
         ],
-    ) > 0
+    ) > 0 or is_competitor_led_apple_comparison_title(title)
     if (
         non_apple_title_subject
         and apple_comparison_target
@@ -5864,6 +5927,95 @@ def is_rumor_feature_recap_without_new_reporting(title: str, text: str) -> bool:
         ],
     )
     return recap_evidence > 0
+
+
+def is_current_attributed_single_subject_report(title: str, text: str) -> bool:
+    """Distinguish a current sourced report from an evergreen rumor recap title."""
+    identity = title_led_identity(title, text)
+    if identity.scope != "apple-direct" or score_terms(
+        title.lower(),
+        ["what to expect", "everything we know", "here's what we know", "heres what we know", "产品前瞻", "新品前瞻"],
+    ) <= 0:
+        return False
+    product_families = hardware_product_families_from_text(title)
+    if len(product_families) != 1:
+        return False
+    lead = title_and_lead_scope(title, text, limit=1200).lower()
+    if score_terms(
+        lead,
+        [
+            "no new reporting",
+            "previously reported",
+            "recapped rumors",
+            "rumors so far",
+            "汇总此前",
+            "此前传闻",
+            "无新增消息",
+            "没有新增消息",
+        ],
+    ) > 0:
+        return False
+    current_attribution = score_terms(
+        lead,
+        [
+            "today outlined",
+            "today reported",
+            "today's report",
+            "today’s report",
+            "latest edition",
+            "new report",
+            "reports that",
+            "reports apple",
+            "bloomberg reports",
+            "gurman reports",
+            "according to bloomberg",
+            "according to mark gurman",
+            "according to gurman",
+            "据彭博社",
+            "古尔曼称",
+            "彭博社今日",
+            "古尔曼今日",
+            "最新一期",
+            "最新报道",
+            "今日报告",
+            "今日透露",
+        ],
+    ) > 0
+    concrete_action = score_terms(
+        lead,
+        [
+            "late-stage testing",
+            "in late-stage testing",
+            "will announce",
+            "will launch",
+            "will not be released",
+            "is not planned",
+            "does not expect",
+            "do not expect",
+            "not expected",
+            "no major design changes",
+            "unlikely to arrive",
+            "will not",
+            "codenamed",
+            "codenames",
+            "production",
+            "supplier",
+            "shipment",
+            "进入后期测试",
+            "后期测试",
+            "将发布",
+            "不会发布",
+            "预计不会",
+            "没有重大设计变化",
+            "没有重大改款",
+            "没有计划",
+            "代号",
+            "量产",
+            "供应商",
+            "出货",
+        ],
+    ) > 0
+    return current_attribution and concrete_action
 
 
 def is_ai_generated_apple_product_image_debunk_without_new_action(title: str, text: str) -> bool:
@@ -8434,6 +8586,7 @@ def extract_title(text: str, fallback: str) -> str:
 TRAILING_PROMO_SECTION_PATTERNS = (
     r"my\s+favorite\s+apple\s+accessory\s+recommendations",
     r"my\s+favorite\s+(?:carplay|iphone|ipad|mac|apple\s+watch|apple\s+tv|vision\s+pro|airpods|apple)\s+accessories",
+    r"my\s+favorite\s+(?:iphone|ipad|mac|apple\s+watch|apple\s+tv|vision\s+pro|airpods|apple)\s+links",
     r"worth\s+checking\s+out\s+on\s+amazon",
     r"one\s+of\s+the\s+(?:easiest|best)\s+ways\s+to\s+buy\b[^<\n]{0,180}\b(?:via|on)\s+amazon",
     r"chance(?:'|’|&#8217;|&rsquo;)s\s+favorites",
@@ -9403,6 +9556,9 @@ def service_content_announcement_variants(
             names = re.split(r"\s+(?:and|&)\s+|\s*,\s*", match.group("names"), flags=re.I)
             for name in names:
                 add_announcement(name, "trailer")
+    if score_terms(title.lower(), ["trailer", "trailers", "teaser", "teasers", "预告", "先导片"]) > 0:
+        for quoted_name in re.findall(r"['\"“‘]([^'\"”’]{2,70})['\"”’]", title):
+            add_announcement(quoted_name, "trailer")
 
     if len({name.lower() for name, _ in announcements}) < 2:
         return original
@@ -10780,6 +10936,9 @@ def is_third_party_developer_project_without_new_apple_action(title: str, text: 
             "游戏",
             "应用",
             "项目",
+            "程序",
+            "设计",
+            "制作",
             "获奖",
             "奖金",
             "斩获",
@@ -10806,7 +10965,40 @@ def is_third_party_developer_project_without_new_apple_action(title: str, text: 
             "第三方应用",
         ],
     )
-    if developer_score <= 0 or platform_background <= 0 or project_action <= 0 or independent_context <= 0:
+    apple_device_background = score_terms(
+        title_lower,
+        ["iphone", "ipad", "mac", "apple watch", "airpods", "vision pro", "苹果设备", "苹果耳机"],
+    )
+    device_as_tool = score_terms(
+        lead,
+        [
+            "using airpods",
+            "uses airpods",
+            "airpods sensor",
+            "airpods sensors",
+            "gyroscope",
+            "accelerometer",
+            "利用 airpods",
+            "使用 airpods",
+            "airpods 传感器",
+            "陀螺仪",
+            "加速度传感器",
+            "体感控制",
+        ],
+    )
+    established_developer_path = (
+        developer_score > 0
+        and platform_background > 0
+        and project_action > 0
+        and independent_context > 0
+    )
+    independent_device_project_path = (
+        independent_context > 0
+        and project_action > 0
+        and apple_device_background > 0
+        and device_as_tool > 0
+    )
+    if not (established_developer_path or independent_device_project_path):
         return False
     if (
         has_apple_first_party_release_context(title)
@@ -11905,6 +12097,8 @@ def is_direct_apple_hardware_roadmap_story(text: str, title: str = "") -> bool:
     actor_context = f"{title_lower} {lower[:700]}"
     if is_foldable_iphone_successor_roadmap_story(text):
         return True
+    if is_direct_apple_smart_glasses_roadmap_story(title or text[:180], text):
+        return True
     if effective_apple_term_score(lower) <= 0:
         return False
     if is_apple_os_support_compatibility_story(text):
@@ -11953,10 +12147,15 @@ def is_direct_apple_hardware_roadmap_story(text: str, title: str = "") -> bool:
             "iring",
             "smart ring",
             "ring wearable",
+            "apple glasses",
+            "smart glasses",
+            "ai glasses",
             "苹果手表",
             "苹果电视",
             "智能戒指",
             "戒指",
+            "苹果智能眼镜",
+            "苹果眼镜",
         ],
     )
     roadmap_score = score_terms(
@@ -11988,6 +12187,108 @@ def is_direct_apple_hardware_roadmap_story(text: str, title: str = "") -> bool:
         ],
     )
     return product_score > 0 and roadmap_score > 0
+
+
+def is_direct_apple_smart_glasses_roadmap_story(title: str, text: str) -> bool:
+    """Match Apple-led smart-glasses development, reveal, and launch reporting."""
+    title_lower = title.lower()
+    lead = title_and_lead_scope(title, text, limit=1000).lower()
+    product_anchor = score_terms(
+        lead,
+        [
+            "apple smart glasses",
+            "apple's smart glasses",
+            "apple’s smart glasses",
+            "apple ai glasses",
+            "apple's ai glasses",
+            "apple’s ai glasses",
+            "apple glass",
+            "苹果智能眼镜",
+            "苹果 ai 眼镜",
+            "苹果ai眼镜",
+            "苹果眼镜",
+        ],
+    ) > 0 or (
+        score_terms(title_lower, ["apple", "苹果"]) > 0
+        and score_terms(title_lower, ["smart glasses", "ai glasses", "智能眼镜", "眼镜"]) > 0
+    )
+    if not product_anchor:
+        return False
+    apple_actor = score_terms(
+        lead,
+        [
+            "apple plans",
+            "apple is planning",
+            "apple will",
+            "apple aims",
+            "apple is developing",
+            "apple is prototyping",
+            "apple has prototyped",
+            "苹果计划",
+            "苹果将",
+            "苹果拟",
+            "苹果正在研发",
+            "苹果正在开发",
+            "苹果测试",
+            "苹果已制作原型",
+        ],
+    ) > 0
+    title_led_action = (
+        score_terms(title_lower, ["apple", "苹果"]) > 0
+        and score_terms(title_lower, ["smart glasses", "ai glasses", "智能眼镜", "苹果眼镜"]) > 0
+        and score_terms(
+            title_lower,
+            [
+                "reveal",
+                "unveil",
+                "introduce",
+                "launch",
+                "ship",
+                "release",
+                "prototype",
+                "develop",
+                "plan",
+                "roadmap",
+                "wwdc",
+                "亮相",
+                "揭幕",
+                "发布",
+                "发售",
+                "上市",
+                "原型",
+                "研发",
+                "开发",
+                "计划",
+                "路线图",
+            ],
+        )
+        > 0
+    )
+    roadmap_action = score_terms(
+        lead,
+        [
+            "reveal",
+            "unveil",
+            "introduce",
+            "launch",
+            "ship",
+            "release",
+            "prototype",
+            "develop",
+            "roadmap",
+            "wwdc",
+            "亮相",
+            "揭幕",
+            "发布",
+            "发售",
+            "上市",
+            "原型",
+            "研发",
+            "开发",
+            "路线图",
+        ],
+    ) > 0
+    return (apple_actor or title_led_action) and roadmap_action
 
 
 def has_direct_iphone_product_title_subject(title: str) -> bool:
@@ -12124,6 +12425,8 @@ def is_direct_iphone_hardware_spec_rumor_story(title: str, text: str) -> bool:
 
 def is_camera_airpods_code_clue_story(text: str) -> bool:
     lower = text.lower()
+    if score_terms(lower[:140], ["airpods", "airpods pro", "耳机"]) <= 0:
+        return False
     if score_terms(lower, ["airpods", "airpods pro", "耳机"]) <= 0:
         return False
     if score_terms(lower, ["camera", "cameras", "camera-equipped", "摄像头", "相机"]) <= 0:
@@ -12157,6 +12460,8 @@ def is_camera_airpods_code_clue_story(text: str) -> bool:
 
 def is_camera_airpods_development_suspension_story(text: str) -> bool:
     lower = text.lower()
+    if score_terms(lower[:140], ["airpods", "airpods pro", "耳机"]) <= 0:
+        return False
     if score_terms(lower, ["airpods", "airpods pro", "耳机"]) <= 0:
         return False
     if score_terms(lower, ["camera", "camera-equipped", "infrared", "摄像头", "红外"]) <= 0:
@@ -17008,7 +17313,11 @@ def is_apple_specific_market_share_report_story(text: str, title: str = "") -> b
     headline_scope = (title or text[:220]).lower()
     if score_terms(headline_scope, ["apple", "iphone", "ipad", "mac", "macbook", "apple watch", "苹果"]) <= 0:
         return False
-    if is_broad_multi_vendor_market_report(text, title) or is_multi_brand_comparison_led_market_story(title, text):
+    if (
+        is_broad_multi_vendor_market_report(text, title)
+        or is_multi_brand_comparison_led_market_story(title, text)
+        or is_competitor_led_apple_comparison_title(title)
+    ):
         return False
     product_forecast_signal = score_terms(
         headline_scope,
@@ -19947,6 +20256,7 @@ SPLITTABLE_HARDWARE_TOPIC_FACETS = {
     "apple-analyst-rating-target",
     "apple-education-promotion",
     "apple-sales-tax-holiday",
+    "apple-smart-glasses-roadmap",
     "applecare-plan-price-change",
     "apple-device-battery-regulation",
     "apple-chip-memory-capacity",
@@ -20090,6 +20400,7 @@ EXACT_SHARED_EVENT_TOPIC_FACETS = {
     "apple-analyst-rating-target",
     "apple-education-promotion",
     "apple-sales-tax-holiday",
+    "apple-smart-glasses-roadmap",
     "applecare-plan-price-change",
     "apple-device-battery-regulation",
     "apple-chip-memory-capacity",
@@ -20182,6 +20493,13 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
         combined_facets.discard("apple-intelligence-china-regulatory-rollout")
     if is_apple_silicon_third_party_os_driver_compatibility_story(title, combined_text):
         return frozenset({"apple-silicon-os-driver-compatibility"})
+    if is_direct_apple_smart_glasses_roadmap_story(title, combined_text):
+        return frozenset({"apple-smart-glasses-roadmap"})
+    if (
+        score_terms(title.lower(), ["apple watch", "苹果手表"]) > 0
+        and is_apple_watch_redesign_story(combined_text)
+    ):
+        return frozenset({"apple-watch-redesign"})
     if is_direct_apple_regulatory_trade_action_story(title, combined_text):
         return frozenset({"apple-regulatory-trade-action"})
     if is_apple_display_supplier_price_negotiation_story(title, combined_text):
@@ -21075,6 +21393,10 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if is_direct_apple_product_patent_story(title, text):
         return "hardware_market"
+    if is_current_attributed_single_subject_report(
+        title, text
+    ) or is_direct_apple_smart_glasses_roadmap_story(title, text):
+        return "hardware_market"
     if (
         semantic_identity.scope == "apple-direct"
         and "macbook-product-roadmap" in semantic_identity.facets
@@ -21849,6 +22171,29 @@ def classify_relevance_tier(
     semantic_identity = title_led_identity(title, summary)
     apple_score = effective_apple_term_score(text)
     title_apple_score = effective_apple_term_score(title)
+    cleaned_title = clean_sentence(title)
+    lead_only = clean_sentence(summary)
+    if lead_only.lower().startswith(cleaned_title.lower()):
+        lead_only = lead_only[len(cleaned_title) :].lstrip(" .:-")
+    explicit_first_party_title = title_apple_score > 0 or bool(
+        re.search(r"\b(?:aapl|genius\s+bar)\b|苹果天才吧", title.lower())
+    )
+    direct_apple_lead = bool(
+        re.match(
+            r"^(?:apple(?:-owned|\s+chipmaker)?\b|苹果(?:公司)?(?:正|将|已|计划|正在|据称|被曝|宣布|回应))",
+            lead_only[:360].lower(),
+        )
+    )
+    structured_title_or_lead_action = bool(
+        semantic_identity.products
+        or semantic_identity.actors
+        or semantic_identity.actions
+        or semantic_identity.named_subjects
+    )
+    title_led_direct_apple = semantic_identity.scope == "apple-direct" or (
+        structured_title_or_lead_action
+        and (explicit_first_party_title or direct_apple_lead)
+    )
     third_party_score = score_terms(
         lower,
         [
@@ -21909,6 +22254,10 @@ def classify_relevance_tier(
         title, text
     ):
         return "weak", "how-to, settings walkthrough, or consumer PSA without a new Apple action"
+    if is_current_attributed_single_subject_report(title, text):
+        return "strong", "current attributed report with a concrete Apple product action"
+    if is_direct_apple_smart_glasses_roadmap_story(title, text):
+        return "strong", "Apple-led smart-glasses development or launch roadmap"
     if is_rumor_feature_recap_without_new_reporting(title, text):
         return "weak", "rumor feature roundup without new standalone reporting"
     if semantic_identity.content_form in {"tutorial", "podcast"}:
@@ -21933,6 +22282,17 @@ def classify_relevance_tier(
         return "weak", "privacy or risk commentary about an existing Apple data integration"
     if is_direct_third_party_apple_data_integration_story(title, text):
         return "ecosystem", "third-party rollout with direct first-party Apple data integration"
+    if (
+        is_non_apple_device_comparison_story(title, text)
+        or is_non_apple_primary_subject_with_incidental_apple_context(title, text)
+    ) and not (
+        is_third_party_platform_update_improving_apple_device_interop(title, text)
+        or is_third_party_app_platform_launch_story(title, text)
+        or is_third_party_app_or_service_status_story(title, text)
+        or is_apple_specific_market_share_report_story(text, title)
+        or is_multi_vendor_market_report_with_material_apple_metrics(text, title)
+    ):
+        return "weak", "non-Apple primary subject using Apple only as comparison or compatibility context"
     if is_apple_silicon_third_party_os_driver_compatibility_story(title, text):
         return "ecosystem", "third-party OS or driver compatibility advancement for Apple Silicon"
     if (
@@ -22505,11 +22865,15 @@ def classify_relevance_tier(
         "retail_store",
         "hardware_market",
         "os_app",
-    } and apple_score > 0:
+    } and apple_score > 0 and title_led_direct_apple:
         return "strong", f"Apple-specific {event_kind.replace('_', ' ')} event"
     if third_party_score > 0 and apple_score > 0:
         return "weak", "third-party or competitor story with Apple used mainly as context"
-    return "strong" if apple_score > 0 else "weak", "Apple term match" if apple_score > 0 else "no strong Apple action"
+    if apple_score > 0 and title_led_direct_apple:
+        return "strong", "title-led direct Apple term match"
+    if apple_score > 0:
+        return "weak", "Apple term appears only outside a title-led direct Apple event"
+    return "weak", "no strong Apple action"
 
 
 def choose_category(title: str, summary: str) -> str:
@@ -23346,6 +23710,22 @@ def event_source_for_reclassification(event: Event) -> str:
     return event.articles[0].source if event.articles else ""
 
 
+def articles_share_title_product_generation(articles: list[Article]) -> bool:
+    if len(articles) < 2:
+        return False
+    generation_sets = [
+        {
+            component
+            for component in article_title_led_event_identity(article).title_components
+            if component.startswith("product-generation:")
+        }
+        for article in articles
+    ]
+    return bool(generation_sets) and all(generation_sets) and bool(
+        set.intersection(*generation_sets)
+    )
+
+
 def refresh_event_metadata(event: Event) -> None:
     article_kind = event.event_kind
     article_category = event.category
@@ -23511,6 +23891,16 @@ def refresh_event_metadata(event: Event) -> None:
         )
         for article in event.articles
     )
+    protected_cohesive_product_generation = (
+        event.event_kind == "hardware_market"
+        and articles_share_title_product_generation(event.articles)
+        and all(
+            article.relevance_tier == "strong"
+            and article_title_led_event_identity(article).scope == "apple-direct"
+            for article in event.articles
+        )
+    )
+    protected_direct_action = protected_direct_action or protected_cohesive_product_generation
     summary_allows_downgrade = not protected_direct_action and (
         is_routine_recap_comparison_or_buying_advice(event.title, event.summary) or (
         summary_tier == "weak"
@@ -23536,8 +23926,13 @@ def refresh_event_metadata(event: Event) -> None:
     if (
         priority.get(article_tier, 0) > priority.get(summary_tier, 0)
         and not summary_allows_downgrade
-        and not (summary_tier == "weak" and summary_indicates_weak_context)
-        and not (summary_tier == "weak" and article_group_indicates_weak_context)
+        and (
+            protected_direct_action
+            or (
+                not (summary_tier == "weak" and summary_indicates_weak_context)
+                and not (summary_tier == "weak" and article_group_indicates_weak_context)
+            )
+        )
     ):
         event.event_kind = article_kind
         event.relevance_tier = article_tier
@@ -25370,6 +25765,59 @@ def same_source_variant_boundary_conflict(article: Article, event: Event) -> boo
     )
 
 
+def same_product_generation_report_with_concrete_evidence(
+    article: Article,
+    event: Event,
+    shared: set[str],
+) -> bool:
+    """Reconcile cross-language reports when long body context dilutes similarity."""
+    if article.event_kind != event.event_kind or article.event_kind != "hardware_market":
+        return False
+    if not title_hardware_product_families_compatible(article, event):
+        return False
+
+    article_identity = article_title_led_event_identity(article)
+    event_identities = [article_title_led_event_identity(existing) for existing in event.articles]
+    article_generations = {
+        component
+        for component in article_identity.title_components
+        if component.startswith("product-generation:")
+    }
+    shared_generations = set(article_generations)
+    for existing_identity in event_identities:
+        existing_generations = {
+            component
+            for component in existing_identity.title_components
+            if component.startswith("product-generation:")
+        }
+        shared_generations &= existing_generations
+        if identity_pair_decision(article_identity, existing_identity) == "conflict":
+            return False
+    if not shared_generations:
+        return False
+
+    generation_numbers = {
+        component.rsplit("-", 1)[-1]
+        for component in shared_generations
+    }
+    numeric_evidence = {
+        token
+        for token in shared
+        if token not in generation_numbers
+        and re.fullmatch(r"\d+(?:\.\d+)?(?:mm|inch|inches)?", token)
+    }
+    strong_evidence = strong_shared_merge_tokens(shared)
+    distinctive_measurement = any(
+        "." in token or token.endswith(("mm", "inch", "inches"))
+        for token in numeric_evidence
+    )
+    return (
+        len(numeric_evidence) >= 2
+        and len(strong_evidence) >= 4
+        and distinctive_measurement
+    )
+
+
 def should_merge(article: Article, event: Event) -> bool:
     if same_source_variant_boundary_conflict(article, event):
         return False
@@ -25442,6 +25890,8 @@ def should_merge(article: Article, event: Event) -> bool:
             return False
     shared = article.tokens & event.tokens
     similarity = jaccard(article.tokens, event.tokens)
+    if same_product_generation_report_with_concrete_evidence(article, event, shared):
+        return True
     if same_apple_product_data_leak_event(article, event, shared):
         return True
     if not event_accepts_article_identity(article, event):
@@ -27125,6 +27575,25 @@ def source_link(source: str, url: str, markdown: bool = True) -> str:
     return source
 
 
+def article_source_primary_fact(article: Article) -> str:
+    primary_fact = clean_sentence(
+        re.split(r"(?<=[.!?。！？])\s+", article.summary, maxsplit=1)[0]
+    )
+    for match in re.finditer(r"(?<!\d)(20\d{2})\s*年?", primary_fact):
+        if int(match.group(1)) >= article.published_utc.year:
+            continue
+        current_lead = primary_fact[: match.start()].rstrip(" ,，;；:-")
+        if len(current_lead) >= 20:
+            primary_fact = current_lead
+            break
+    if primary_fact:
+        return primary_fact
+    return next(
+        (clean_sentence(fact) for fact in article.key_facts if clean_sentence(fact)),
+        "",
+    )
+
+
 def event_to_dict(event: Event, local_tz: Any) -> dict[str, Any]:
     sorted_articles = sorted(
         event.articles,
@@ -27137,7 +27606,16 @@ def event_to_dict(event: Event, local_tz: Any) -> dict[str, Any]:
         if key in seen_sources:
             continue
         seen_sources.add(key)
-        sources.append({"name": article.source, "url": article.url})
+        source_entry = {
+            "name": article.source,
+            "url": article.url,
+            "title": article.title,
+            "published_at": article.published_utc.isoformat(),
+        }
+        primary_fact = article_source_primary_fact(article)
+        if primary_fact:
+            source_entry["primary_fact"] = primary_fact
+        sources.append(source_entry)
     event_dict = {
         "id": event.event_id,
         "category": event.category,

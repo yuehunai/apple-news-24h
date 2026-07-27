@@ -106,6 +106,22 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("mac", ("macos", " mac ", "mac 电脑", "苹果电脑")),
     ("apple-watch", ("apple watch", "watchos", "苹果手表")),
     ("airpods", ("airpods",)),
+    (
+        "apple-glasses",
+        (
+            "apple smart glasses",
+            "apple's smart glasses",
+            "apple’s smart glasses",
+            "apple ai glasses",
+            "apple's ai glasses",
+            "apple’s ai glasses",
+            "apple glass",
+            "苹果智能眼镜",
+            "苹果 ai 眼镜",
+            "苹果ai眼镜",
+            "苹果眼镜",
+        ),
+    ),
     ("vision-pro", ("vision pro", "visionos")),
     ("apple-tv", ("apple tv", "tvos", "苹果 tv", "苹果电视")),
     ("apple-sports", ("apple sports", "apple's sports app", "apple’s sports app", "苹果 sports")),
@@ -670,6 +686,7 @@ DIRECT_IDENTITY_FACETS = {
     "app-store-card-payments",
     "apple-memory-supplier-sourcing",
     "apple-restricted-memory-supplier-approval",
+    "apple-smart-glasses-roadmap",
     "apple-wallet-car-key-partner-support",
 }
 
@@ -1039,16 +1056,39 @@ def _content_form(title: str, lead: str = "") -> str:
         or re.search(r"(?:vote|投票|你会怎么|你会如何|你是否).*[?？]?$", lower)
     ):
         return "poll"
-    if re.search(
+    current_attributed_report = bool(
+        re.search(
+            r"\b(?:today (?:outlined|reported)|today['’]s report|latest edition|new report|"
+            r"bloomberg reports|gurman reports|according to (?:bloomberg|mark gurman|gurman))\b|"
+            r"(?:彭博社今日|古尔曼今日|据彭博社|古尔曼称|最新一期|最新报道|今日报告|今日透露)",
+            lead_lower,
+        )
+        and re.search(
+            r"\b(?:late-stage testing|will announce|will launch|will not be released|is not planned|"
+            r"does not expect|do not expect|not expected|no major design changes|"
+            r"unlikely to arrive|will not|codenamed|codenames|production|supplier|shipment)\b|"
+            r"(?:后期测试|将发布|不会发布|预计不会|没有重大设计变化|没有重大改款|"
+            r"没有计划|代号|量产|供应商|出货)",
+            lead_lower,
+        )
+        and not re.search(
+            r"\b(?:no new reporting|previously reported|recapped rumors|rumors so far)\b|"
+            r"(?:汇总此前|此前传闻|无新增消息|没有新增消息)",
+            lead_lower,
+        )
+    )
+    if (not current_attributed_report) and re.search(
         r"\b(?:rumors? point to|everything we know|"
         r"what to expect|these \d+ (?:new )?(?:features|changes)|"
         r"\d+ rumored features|latest (?:apple )?rumors?|all (?:the )?(?:apple )?rumors?|"
         r"rumors? so far|best .+ to try)\b|传闻汇总|功能汇总|值得期待的\s*\d+",
         lower,
-    ) or re.match(
+    ) or (not current_attributed_report) and re.match(
         r"^(?:everything new|here['’]s what['’]s new|what['’]s new with)\b",
         lower,
-    ) or "更新汇总" in lower or (
+    ) or (not current_attributed_report and "更新汇总" in lower) or (
+        not current_attributed_report
+        and
         re.search(r"\bcoming\b.{0,42}\bwith (?:these|\d+) (?:rumored )?new features\b", lower)
         and re.search(r"\b(?:recaps?|previously reported|rumored so far|no new reporting)\b|汇总此前|此前传闻|无新增", lead_lower)
     ):
@@ -1336,6 +1376,11 @@ def build_event_identity(
     lead_lower = _normalized(lead)[:900]
     content_form = _content_form(title, lead)
     title_products = _collapse_product_hierarchy(_extract_patterns(title_lower, PRODUCT_PATTERNS))
+    if (
+        re.search(r"^(?:apple\b|苹果)", title_lower)
+        and re.search(r"\b(?:smart|ai)\s+glasses\b|智能眼镜|苹果眼镜", title_lower)
+    ):
+        title_products.add("apple-glasses")
     if re.search(r"\bipad\s*\d+\b|\b(?:base|entry-level) ipad\b|(?:入门版|基础款)\s*ipad", title_lower):
         title_products.discard("ipad")
         title_products.add("ipad-base")
@@ -1404,6 +1449,20 @@ def build_event_identity(
             r"(?<![a-z0-9])(iphone|ipad)\s*(\d{1,2})(?!\d)",
             title_lower,
         )
+    }
+    anniversary_iphone_generations = {
+        next(group for group in match.groups() if group)
+        for match in re.finditer(
+            r"(?:\b(\d{1,2})(?:st|nd|rd|th)?\s+anniversary\s+iphone\b|"
+            r"\biphone(?:'s)?\s+(\d{1,2})(?:st|nd|rd|th)?\s+anniversary\b|"
+            r"(?<!\d)(\d{1,2})\s*周年(?:纪念版)?\s*iphone\b|"
+            r"\biphone\s*(\d{1,2})\s*周年(?:纪念版)?)",
+            title_lower,
+        )
+    }
+    product_generation_components |= {
+        f"product-generation:iphone-{generation}"
+        for generation in anniversary_iphone_generations
     }
     title_components |= product_generation_components
     components |= product_generation_components
