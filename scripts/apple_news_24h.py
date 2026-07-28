@@ -3201,8 +3201,13 @@ def os_release_facets_from_text(text: str) -> set[str]:
             "seeded",
             "seeds",
             "released",
+            "rolls out",
+            "rolled out",
             "rolling out",
             "now available",
+            "available now",
+            "is out",
+            "are out",
             "patch",
             "patches",
             "fix",
@@ -3310,9 +3315,65 @@ def os_release_facets_from_text(text: str) -> set[str]:
         facets.add("os-release-rc")
     if score_terms(lower, ["security", "security fixes", "security vulnerabilities", "patch", "patches", "安全", "漏洞", "修复"]) > 0:
         facets.add("os-release-security")
-    if score_terms(lower, ["正式版", "now available", "released"]) > 0 and "os-release-beta" not in facets:
+    if score_terms(lower, ["正式版", "now available", "available now", "is out", "are out", "released"]) > 0 and "os-release-beta" not in facets:
         facets.add("os-release-final")
     return facets
+
+
+def os_release_lead_identity_facets(title: str, summary: str) -> set[str]:
+    """Use an explicit lead release sentence to complete a versioned headline."""
+    title_versions = {
+        f"os-release-version-{normalize_os_version_token(value)}"
+        for value in apple_os_version_values_from_text(title)
+    }
+    if not title_versions:
+        return set()
+    if score_terms(
+        title.lower(),
+        [
+            " adds ",
+            " introduces ",
+            " removes ",
+            "new feature",
+            "new control",
+            "新增",
+            "加入",
+            "移除",
+            "新功能",
+        ],
+    ) > 0:
+        return set()
+    lead = clean_sentence(summary)[:700]
+    if not re.search(
+        r"(?:^|[.!?。！？]\s*)(?:apple\s+(?:has\s+)?(?:released|rolled out|made available)|"
+        r"苹果(?:公司)?(?:已|现已|今日|今天|正式)?(?:发布|推送|上线))\b",
+        lead.lower(),
+    ):
+        return set()
+    lead_facets = os_release_facets_from_text(lead)
+    lead_versions = os_release_version_facets(lead_facets)
+    if not lead_versions or not (title_versions & lead_versions):
+        return set()
+    title_platforms = merge_guard_platform_facets(topic_facets_from_text(title))
+    lead_platforms = merge_guard_platform_facets(lead_facets)
+    if title_platforms and lead_platforms and not platform_facets_compatible(title_platforms, lead_platforms):
+        return set()
+    return {
+        facet
+        for facet in lead_facets
+        if facet in title_versions
+        or facet.startswith("platform-")
+        or facet in {
+            "os-release-beta",
+            "os-release-public-beta",
+            "os-release-developer-beta",
+            "os-release-revised-build",
+            "os-release-rc",
+            "os-release-final",
+            "os-release-security",
+        }
+        or re.fullmatch(r"os-release-beta-\d+", facet)
+    }
 
 
 def os_release_version_facets(facets: set[str]) -> set[str]:
@@ -3441,11 +3502,13 @@ def platform_facets_compatible(left_facets: set[str], right_facets: set[str]) ->
 
 
 def os_release_facets_compatible(article_facets: set[str], event_facets: set[str]) -> bool:
+    if not platform_facets_compatible(article_facets, event_facets):
+        return False
     article_versions = os_release_version_facets(article_facets)
     event_versions = os_release_version_facets(event_facets)
     if not article_versions or not event_versions:
         return True
-    if article_versions != event_versions:
+    if not (article_versions & event_versions):
         return False
     article_actions = os_release_action_facets(article_facets)
     event_actions = os_release_action_facets(event_facets)
@@ -3470,28 +3533,80 @@ def os_release_facets_compatible(article_facets: set[str], event_facets: set[str
     return True
 
 
+def is_os_security_disclosure_title(title: str) -> bool:
+    """Distinguish a security bulletin from an OS release availability story."""
+    title_lower = title.lower()
+    facets = topic_facets_from_text(title)
+    if "os-release-security" not in facets:
+        return False
+    if score_terms(
+        title_lower,
+        [
+            "apple releases",
+            "apple released",
+            "now available",
+            "rolls out",
+            "rolling out",
+            "苹果发布",
+            "正式版发布",
+            "推送",
+            "上线",
+        ],
+    ) > 0:
+        return False
+    return score_terms(
+        title_lower,
+        [
+            "security fixes",
+            "security flaws",
+            "security issues",
+            "security vulnerabilities",
+            "patches",
+            "cve",
+            "安全修复",
+            "安全漏洞",
+            "漏洞",
+        ],
+    ) > 0
+
+
+def is_os_security_disclosure_article(article: Article) -> bool:
+    if is_os_security_disclosure_title(article.title):
+        return True
+    title_lower = article.title.lower()
+    if score_terms(
+        title_lower,
+        ["security fixes", "security flaws", "security issues", "security vulnerabilities", "安全修复", "安全漏洞"],
+    ) <= 0:
+        return False
+    if score_terms(title_lower, ["iphone", "ipad", "mac", "apple devices", "苹果设备"]) <= 0:
+        return False
+    facets = article_primary_facets(article)
+    return "os-release-security" in facets and bool(os_release_version_facets(facets))
+
+
 def same_os_release_event(article: Article, event: Event) -> bool:
     article_revised = "os-release-revised-build" in article_primary_facets(article)
-    if not is_os_release_availability_article(article) and not article_revised:
+    article_security_disclosure = is_os_security_disclosure_article(article)
+    if (
+        not is_os_release_availability_article(article)
+        and not article_security_disclosure
+        and not article_revised
+    ):
         return False
     release_event_articles = [
         item
         for item in event.articles
         if is_os_release_availability_article(item)
+        or is_os_security_disclosure_article(item)
         or "os-release-revised-build" in article_primary_facets(item)
     ]
     if not release_event_articles:
         return False
-    if (
-        not is_current_public_beta_release_title(article.title)
-        and not article_revised
-        and os_release_title_specific_facets(article)
-    ):
+    if len(release_event_articles) != len(event.articles):
         return False
     if any(
-        not is_current_public_beta_release_title(item.title)
-        and "os-release-revised-build" not in article_primary_facets(item)
-        and os_release_title_specific_facets(item)
+        is_os_security_disclosure_article(item) != article_security_disclosure
         for item in release_event_articles
     ):
         return False
@@ -3518,6 +3633,44 @@ def same_os_release_event(article: Article, event: Event) -> bool:
     return bool(article_channels & event_channels)
 
 
+def is_legacy_macos_pair_update_article(article: Article) -> bool:
+    lead = title_and_lead_scope(article.title, article.summary, limit=1100).lower()
+    return (
+        score_terms(lead, ["macos sonoma", "sonoma"]) > 0
+        and score_terms(lead, ["macos sequoia", "sequoia"]) > 0
+        and score_terms(
+            lead,
+            [
+                "update",
+                "updates",
+                "security fix",
+                "security fixes",
+                "maintenance",
+                "released",
+                "available",
+                "更新",
+                "安全修复",
+                "安全漏洞",
+                "发布",
+            ],
+        )
+        > 0
+    )
+
+
+def same_legacy_macos_pair_update_event(article: Article, event: Event) -> bool:
+    if not is_legacy_macos_pair_update_article(article):
+        return False
+    article_versions = apple_os_version_values_from_text(article.title)
+    for existing in event.articles:
+        if not is_legacy_macos_pair_update_article(existing):
+            return False
+        existing_versions = apple_os_version_values_from_text(existing.title)
+        if article_versions and existing_versions and not (article_versions & existing_versions):
+            return False
+    return True
+
+
 def os_release_title_specific_facets(article: Article) -> set[str]:
     return os_release_title_specific_facets_from_title(article.title)
 
@@ -3529,6 +3682,10 @@ def os_release_title_specific_facets_from_title(title: str) -> set[str]:
     specific = facets - release_facets - platform_facets
     if "platform-tvos" in facets:
         specific.discard("apple-tv-content")
+    # Security is a property of most point-release announcements, not a
+    # standalone feature identity. Concrete exploit or malware facets remain
+    # available through the article body and dedicated security headlines.
+    specific.discard("privacy-vulnerability")
     return specific
 
 
@@ -3597,7 +3754,11 @@ def is_os_release_availability_title(title: str) -> bool:
 
 
 def is_os_release_availability_article(article: Article) -> bool:
-    return is_os_release_availability_title(article.title) or is_current_public_beta_release_title(article.title)
+    return (
+        is_os_release_availability_title(article.title)
+        or is_current_public_beta_release_title(article.title)
+        or bool(os_release_lead_identity_facets(article.title, article.summary))
+    )
 
 
 def allowed_url_excluded_candidate(candidate: Candidate, source: Source, text: str) -> bool:
@@ -6734,7 +6895,13 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "保护壳",
             "数据线",
         ],
-    ) > 0
+    ) > 0 or bool(
+        re.search(
+            r"\b(?:airpods(?:\s+pro(?:\s+\d+)?)?|iphone|ipad|apple\s+watch)\s+"
+            r"(?:protective\s+)?case\b",
+            title_lower,
+        )
+    )
     direct_apple_title_action = score_terms(
         title_lower,
         [
@@ -6763,6 +6930,8 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "airpods",
             "vision pro",
             "homepod",
+            "macbook",
+            "mac",
             "beats",
             "苹果",
         ],
@@ -7104,10 +7273,30 @@ def is_direct_apple_first_party_developer_guidance_story(title: str, text: str) 
 def is_material_apple_stock_move_story(title: str, text: str) -> bool:
     title_lower = title.lower()
     lead = title_and_lead_scope(title, text).lower()
-    if score_terms(
+    direct_stock_title = score_terms(
         title_lower,
-        ["aapl", "apple stock", "apple shares", "苹果股价", "苹果股票", "苹果市值"],
-    ) <= 0:
+        [
+            "aapl",
+            "apple stock",
+            "apple shares",
+            "market cap",
+            "market capitalization",
+            "most valuable company",
+            "$5 trillion company",
+            "$5t",
+            "苹果股价",
+            "苹果股票",
+            "苹果市值",
+            "市值冠军",
+            "市值第一",
+            "超越英伟达",
+            "重回全球",
+        ],
+    ) > 0
+    if not direct_stock_title or (
+        effective_apple_term_score(title) <= 0
+        and score_terms(title_lower, ["aapl"]) <= 0
+    ):
         return False
     if score_terms(title_lower, ["price target", "target price", "rating", "目标价", "评级"]) > 0:
         return False
@@ -7126,6 +7315,14 @@ def is_material_apple_stock_move_story(title: str, text: str) -> bool:
             "record",
             "all-time high",
             "territory",
+            "overtake",
+            "overtakes",
+            "surpass",
+            "surpasses",
+            "reclaim",
+            "reclaims",
+            "most valuable",
+            "on verge",
             "falls",
             "fell",
             "drops",
@@ -7137,6 +7334,12 @@ def is_material_apple_stock_move_story(title: str, text: str) -> bool:
             "重挫",
             "新高",
             "纪录",
+            "超越",
+            "重回",
+            "重返",
+            "夺回",
+            "冠军",
+            "第一",
         ],
     )
     material_value = bool(re.search(r"\d+(?:\.\d+)?\s*%", lead)) or score_terms(
@@ -7554,6 +7757,19 @@ def legal_case_subject_facets(text: str) -> set[str]:
         facets.add("apple-hardware-trade-secret-lawsuit")
     if is_bootrom_secure_rom_exploit_story(text):
         facets.add("bootrom-secure-rom-exploit")
+    for match in re.finditer(
+        r"\b(?:fake|fraudulent|malicious)\s+([a-z0-9.-]{3,30})\s+wallet\b",
+        lower,
+    ):
+        wallet_name = re.sub(r"[^a-z0-9]+", "-", match.group(1)).strip("-")
+        if wallet_name and wallet_name not in {"bitcoin", "crypto", "digital"}:
+            facets.add(f"fake-wallet-lawsuit-{wallet_name}")
+    if score_terms(lower, ["wallet", "钱包"]) > 0 and score_terms(
+        lower, ["app store", "应用商店"]
+    ) > 0:
+        for match in re.finditer(r"\$\s*(\d+(?:\.\d+)?)\s*(million|m)\b", lower):
+            amount = int(round(float(match.group(1)) * 1_000_000))
+            facets.add(f"wallet-fraud-lawsuit-loss-{amount}")
     return facets
 
 
@@ -10572,9 +10788,12 @@ def is_third_party_financial_service_with_apple_pay_support(title: str, text: st
     title_lower = title.lower()
     if is_epic_app_store_appeal_story(lower) or is_uk_cma_app_store_payment_nfc_story(lower):
         return False
-    if score_terms(title_lower, ["apple wallet", "apple pay", "apple cash", "wallet app", "钱包 app", "钱包应用"]) > 0:
+    if title_lower.startswith(("apple ", "苹果")) and score_terms(
+        title_lower,
+        ["apple wallet", "apple pay", "apple cash", "wallet app", "钱包 app", "钱包应用"],
+    ) > 0:
         return False
-    if score_terms(lower, ["apple pay"]) <= 0:
+    if score_terms(lower, ["apple pay", "apple wallet", "苹果钱包"]) <= 0:
         return False
     if score_terms(
         lower,
@@ -10624,6 +10843,126 @@ def is_third_party_financial_service_with_apple_pay_support(title: str, text: st
             "马斯克",
         ],
     ) > 0 or score_terms(lower, ["third-party", "第三方", "premium", "visa"]) > 0
+
+
+def is_existing_apple_feature_user_anecdote_without_new_action(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lead = title_and_lead_scope(title, text, limit=900).lower()
+    if effective_apple_term_score(title) <= 0:
+        return False
+    anecdote = score_terms(
+        title_lower,
+        [
+            "saves their life",
+            "saved their life",
+            "saves his life",
+            "saved his life",
+            "saves her life",
+            "saved her life",
+            "credits apple watch",
+            "救了他一命",
+            "救了她一命",
+            "救命",
+        ],
+    ) > 0 or bool(
+        re.search(r"\bsav(?:e|es|ed|ing)\b.{0,40}\blife\b", title_lower)
+    ) or score_terms(
+        lead,
+        ["called 911", "called emergency services", "个人经历", "获救", "报警求助"],
+    ) > 0
+    if not anecdote:
+        return False
+    return score_terms(
+        lead,
+        [
+            "apple announced",
+            "apple released",
+            "apple expanded",
+            "apple added",
+            "苹果宣布",
+            "苹果发布",
+            "苹果扩展",
+            "苹果新增",
+        ],
+    ) == 0
+
+
+def is_third_party_network_outage_affecting_apple_devices(title: str, text: str) -> bool:
+    title_lower = title.lower()
+    lead = title_and_lead_scope(title, text, limit=900).lower()
+    if title_lower.startswith(("apple ", "苹果")):
+        return False
+    if effective_apple_term_score(f"{title} {lead}") <= 0:
+        return False
+    outage = score_terms(
+        title_lower,
+        ["outage", "down", "service disruption", "network issue", "宕机", "中断", "断网", "故障"],
+    ) > 0
+    carrier_or_provider = score_terms(
+        lead,
+        [
+            "carrier",
+            "network",
+            "customers",
+            "subscribers",
+            "t-mobile",
+            "verizon",
+            "at&t",
+            "运营商",
+            "蜂窝网络",
+            "用户",
+        ],
+    ) > 0
+    apple_action = score_terms(
+        lead,
+        ["apple confirmed", "apple fixed", "apple released", "苹果确认", "苹果修复", "苹果发布"],
+    ) > 0
+    return outage and carrier_or_provider and not apple_action
+
+
+def is_crime_case_with_apple_device_as_goods(title: str, text: str) -> bool:
+    lead = title_and_lead_scope(title, text, limit=1200).lower()
+    if effective_apple_term_score(f"{title} {lead}") <= 0:
+        return False
+    crime_context = score_terms(
+        lead,
+        [
+            "scam",
+            "fraud",
+            "police",
+            "victim",
+            "stolen",
+            "theft",
+            "骗局",
+            "诈骗",
+            "骗子",
+            "民警",
+            "警方",
+            "受骗",
+            "盗窃",
+            "止损",
+        ],
+    ) > 0
+    device_as_goods = score_terms(
+        lead,
+        [
+            "buy iphone",
+            "bought iphone",
+            "purchase iphone",
+            "purchased iphone",
+            "apple phones",
+            "苹果手机",
+            "购买手机",
+            "购入手机",
+            "邮寄",
+            "伴手礼",
+        ],
+    ) > 0
+    direct_apple_action = score_terms(
+        lead,
+        ["apple sued", "apple filed", "apple responded", "苹果起诉", "苹果报案", "苹果回应"],
+    ) > 0
+    return crime_context and device_as_goods and not direct_apple_action
 
 
 def is_bootrom_secure_rom_exploit_story(text: str) -> bool:
@@ -13613,6 +13952,76 @@ def is_direct_apple_platform_security_impact_story(title: str, text: str) -> boo
         ],
     )
     return platform_score > 0 and security_score > 0 and impact_score > 0
+
+
+def is_third_party_app_vulnerability_without_apple_platform_flaw(title: str, text: str) -> bool:
+    """Keep a third-party app's own sandbox failure separate from macOS flaws."""
+    lead = title_and_lead_scope(title, text, limit=1600).lower()
+    if score_terms(lead, ["mac", "macos", "mac files", "mac 文件", "mac 用户"]) <= 0:
+        return False
+    if score_terms(
+        lead,
+        [
+            "vulnerability",
+            "flaw",
+            "exploit",
+            "sandbox escape",
+            "escaped sandbox",
+            "full access to all files",
+            "漏洞",
+            "沙箱逃逸",
+            "突破沙箱",
+            "任意 mac 文件",
+            "读写任意",
+        ],
+    ) <= 0:
+        return False
+    third_party_subject = score_terms(
+        lead,
+        [
+            "third-party app",
+            "third-party agent",
+            "agent app",
+            "anthropic",
+            "claude cowork",
+            "linux vm",
+            "linux virtual machine",
+            "its own sandbox",
+            "app's sandbox",
+            "应用自身",
+            "第三方应用",
+            "第三方智能体",
+            "智能体应用",
+            "linux 虚拟机",
+            "自身沙箱",
+        ],
+    ) > 0
+    if not third_party_subject:
+        return False
+    direct_platform_flaw = score_terms(
+        lead,
+        [
+            "macos vulnerability",
+            "macos flaw",
+            "macos sandbox vulnerability",
+            "apple sandbox vulnerability",
+            "gatekeeper",
+            "tcc",
+            "code signing",
+            "bootrom",
+            "secure-rom",
+            "apple security bulletin",
+            "apple patched",
+            "apple fixed",
+            "苹果安全公告",
+            "macos 系统漏洞",
+            "macos 沙箱漏洞",
+            "代码签名",
+            "苹果修复",
+            "苹果发布补丁",
+        ],
+    ) > 0
+    return not direct_platform_flaw
 
 
 def is_apple_platform_executable_replacement_attack_story(title: str, text: str) -> bool:
@@ -21004,6 +21413,32 @@ def cached_article_primary_facets(
     key_facts: tuple[str, ...],
 ) -> frozenset[str]:
     facets = primary_topic_facets(title, summary)
+    # Event identity is title-led. Long summaries can introduce unrelated
+    # feature facets, but they must not erase the release train stated in the
+    # headline.
+    facets |= os_release_facets_from_text(title)
+    facets |= os_release_lead_identity_facets(title, summary)
+    legal_scope = " ".join((title, summary, *key_facts[:8]))
+    if is_title_primary_apple_legal_proceeding_story(
+        title,
+        f"{title} {summary[:1200]}",
+    ):
+        facets |= legal_case_subject_facets(legal_scope)
+    if (
+        is_os_release_availability_title(title)
+        and not os_release_title_specific_facets_from_title(title)
+        and not (
+            facets
+            & {
+                "os-release-beta",
+                "os-release-public-beta",
+                "os-release-developer-beta",
+                "os-release-revised-build",
+                "os-release-rc",
+            }
+        )
+    ):
+        facets.add("os-release-final")
     detail_scope = " ".join((summary[:320], *key_facts[:2])).lower()
     detail_declares_current_rc = bool(
         re.search(
@@ -21382,6 +21817,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if is_direct_apple_regulatory_trade_action_story(title, text):
         return "regional_regulation"
+    if is_third_party_app_vulnerability_without_apple_platform_flaw(title, text):
+        return "third_party_ecosystem"
     if is_direct_apple_platform_security_impact_story(title, text):
         return "security_privacy"
     if (
@@ -21416,6 +21853,40 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if semantic_identity.content_form == "podcast":
         return "third_party_ecosystem"
     if "apple-sports" in semantic_identity.products:
+        return "service_content"
+    if (
+        re.search(
+            r"(?:^|[，,:：]\s*)苹果(?:公司)?.{0,12}(?:预热|宣布|推出|开拍|拍摄|定档|续订|发布|上线|回归)",
+            title,
+        )
+        and re.search(r"《[^》]{2,80}》", title)
+        and score_terms(
+            title_and_lead_scope(title, summary, limit=1000).lower(),
+            [
+                "season",
+                "series",
+                "film",
+                "movie",
+                "filming",
+                "production",
+                "电视剧",
+                "剧集",
+                "电影",
+                "第",
+                "季",
+                "预热",
+                "开拍",
+                "拍摄",
+                "定档",
+                "续订",
+                "预告",
+                "首播",
+                "上线",
+                "回归",
+            ],
+        )
+        > 0
+    ):
         return "service_content"
     if (
         "applecare" in semantic_identity.products
@@ -22250,10 +22721,34 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    if is_third_party_app_vulnerability_without_apple_platform_flaw(title, text):
+        return "weak", "third-party app vulnerability without an Apple platform flaw or patch"
     if is_how_to_guide_without_new_apple_action(title, text) or is_personal_usage_or_settings_guide_without_new_apple_action(
         title, text
     ):
         return "weak", "how-to, settings walkthrough, or consumer PSA without a new Apple action"
+    if semantic_identity.content_form in {"deal", "buying_advice", "third_party_spotlight"}:
+        return "weak", "deal, buying advice, or third-party product spotlight without a new Apple action"
+    if semantic_identity.content_form == "analysis" and not semantic_identity.title_actions & {
+        "legal",
+        "regulation",
+        "transaction",
+        "market-report",
+        "market-ranking",
+    }:
+        return "weak", "analysis or opinion without a new standalone Apple action"
+    if is_existing_apple_feature_user_anecdote_without_new_action(title, text):
+        return "weak", "personal anecdote about an existing Apple feature without a new Apple action"
+    if is_third_party_network_outage_affecting_apple_devices(title, text):
+        return "weak", "third-party carrier or network outage affecting Apple devices"
+    if is_crime_case_with_apple_device_as_goods(title, text):
+        return "weak", "crime or fraud case where Apple devices are incidental goods"
+    if is_third_party_financial_service_with_apple_pay_support(title, text):
+        return "weak", "third-party financial service with Apple Wallet or Apple Pay support"
+    if is_direct_apple_first_party_program_story(title, summary):
+        return "strong", "Apple-owned program, plan, or device-leasing action"
+    if is_third_party_accessory_platform_compatibility_story(title, text):
+        return "weak", "third-party accessory story using an Apple product as the target platform"
     if is_current_attributed_single_subject_report(title, text):
         return "strong", "current attributed report with a concrete Apple product action"
     if is_direct_apple_smart_glasses_roadmap_story(title, text):
@@ -23983,7 +24478,21 @@ def articles_form_cohesive_os_release_wave(articles: list[Article]) -> bool:
         for wave in waves
         if wave.startswith("os-wave:")
     }
-    return len(versioned_waves) <= 1
+    if len(versioned_waves) > 1:
+        return False
+    if versioned_waves and all(not wave.endswith(":final") for wave in versioned_waves):
+        return True
+    platform_sets = [
+        merge_guard_platform_facets(article_primary_facets(article))
+        for article in articles
+    ]
+    if any(not platforms for platforms in platform_sets):
+        return False
+    return all(
+        platform_facets_compatible(left, right)
+        for index, left in enumerate(platform_sets)
+        for right in platform_sets[index + 1 :]
+    )
 
 
 def articles_form_cohesive_named_os_component_action(articles: list[Article]) -> bool:
@@ -24055,6 +24564,11 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
     cohesive_os_wave = articles_form_cohesive_os_release_wave(articles)
     cohesive_named_os_component = articles_form_cohesive_named_os_component_action(articles)
     cohesive_market_report = articles_form_cohesive_market_report(articles)
+    cohesive_legacy_macos_update = len(articles) > 1 and all(
+        same_legacy_macos_pair_update_event(left, singleton_merge_event(right))
+        for index, left in enumerate(articles)
+        for right in articles[index + 1 :]
+    )
     if (
         len(kinds) > 1
         and not common_facets
@@ -24062,6 +24576,7 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
         and not cohesive_os_wave
         and not cohesive_named_os_component
         and not cohesive_market_report
+        and not cohesive_legacy_macos_update
     ):
         warnings.append("mixed event kinds")
     if (
@@ -24088,6 +24603,7 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
             and not cohesive_os_wave
             and not cohesive_named_os_component
             and not cohesive_market_report
+            and not cohesive_legacy_macos_update
         ):
             warnings.append("mixed primary topic facets")
     return warnings
@@ -24770,6 +25286,16 @@ def same_apple_legal_proceeding_event(article: Article, event: Event, shared: se
     }
     article_identities = article_facets & legal_identity_facets
     event_identities = event_facets & legal_identity_facets
+    article_identities |= {
+        facet
+        for facet in article_facets
+        if facet.startswith(("fake-wallet-lawsuit-", "wallet-fraud-lawsuit-loss-"))
+    }
+    event_identities |= {
+        facet
+        for facet in event_facets
+        if facet.startswith(("fake-wallet-lawsuit-", "wallet-fraud-lawsuit-loss-"))
+    }
     if article_identities or event_identities:
         return bool(article_identities and event_identities and article_identities & event_identities)
     party_anchors = {
@@ -25217,6 +25743,26 @@ def apple_stock_move_metric_signatures(text: str) -> set[str]:
         f"price:{match.group(1)}"
         for match in re.finditer(r"\$(\d+(?:\.\d+)?)", lower)
     }
+    if score_terms(lower, ["nvidia", "英伟达"]) > 0 and score_terms(
+        lower,
+        [
+            "overtake",
+            "overtakes",
+            "surpassed",
+            "reclaim",
+            "reclaimed",
+            "most valuable company",
+            "world's most valuable",
+            "world’s most valuable",
+            "超越英伟达",
+            "重回全球",
+            "重返全球",
+            "夺回全球",
+            "市值冠军",
+            "市值第一",
+        ],
+    ) > 0:
+        signatures.add("ranking:apple-over-nvidia")
     return signatures
 
 
@@ -25421,6 +25967,111 @@ def same_service_content_release_event(article: Article, event: Event) -> bool:
             article_counts
             & service_content_episode_count_signatures(existing)
         ):
+            return False
+    return True
+
+
+def service_content_season_signatures(article: Article) -> set[int]:
+    text = " ".join([article.title, article.summary, *article.key_facts]).lower()
+    signatures = {
+        int(match.group(1))
+        for match in re.finditer(r"\bseason\s+(\d{1,2})\b", text)
+    }
+    signatures |= {
+        int(match.group(1))
+        for match in re.finditer(r"第\s*(\d{1,2})\s*季", text)
+    }
+    chinese_numbers = {
+        "一": 1,
+        "二": 2,
+        "三": 3,
+        "四": 4,
+        "五": 5,
+        "六": 6,
+        "七": 7,
+        "八": 8,
+        "九": 9,
+        "十": 10,
+    }
+    for value, number in chinese_numbers.items():
+        if re.search(rf"第\s*{value}\s*季", text):
+            signatures.add(number)
+    return signatures
+
+
+def service_content_action_signatures(article: Article) -> set[str]:
+    text = " ".join([article.title, article.summary, *article.key_facts]).lower()
+    signatures: set[str] = set()
+    action_groups = {
+        "production": ["starts filming", "started filming", "filming", "in production", "开拍", "拍摄", "预热"],
+        "trailer": ["trailer", "teaser", "预告片", "先导片"],
+        "premiere": ["premiere", "streaming date", "release date", "首播", "定档", "上线"],
+        "renewal": ["renewed", "renewal", "续订"],
+        "casting": ["cast", "casting", "stars", "主演", "加盟"],
+    }
+    for signature, terms in action_groups.items():
+        if score_terms(text, terms) > 0:
+            signatures.add(signature)
+    return signatures
+
+
+def service_content_named_subject_tokens(article: Article) -> set[str]:
+    tokens = strong_shared_merge_tokens(
+        article_tokens(" ".join([article.title, article.summary, *article.key_facts]), "")
+    )
+    generic = GENERIC_SERVICE_CONTENT_MERGE_TOKENS | {
+        "apple",
+        "apple-tv",
+        "confirm",
+        "confirmed",
+        "confirming",
+        "film",
+        "filming",
+        "movie",
+        "new",
+        "production",
+        "season",
+        "series",
+        "start",
+        "started",
+        "starts",
+        "tease",
+        "teaser",
+        "teases",
+        "third",
+        "update",
+        "电视剧",
+        "剧集",
+        "电影",
+        "季",
+        "预热",
+        "开拍",
+        "拍摄",
+        "苹果",
+    }
+    return {
+        token
+        for token in tokens
+        if token not in generic and not re.fullmatch(r"\d{1,4}", token)
+    }
+
+
+def same_named_service_content_action_event(article: Article, event: Event) -> bool:
+    """Merge coverage of one named title, season, and concrete content action."""
+    if article.event_kind != "service_content" or event.event_kind != "service_content":
+        return False
+    article_seasons = service_content_season_signatures(article)
+    article_actions = service_content_action_signatures(article)
+    article_subjects = service_content_named_subject_tokens(article)
+    if "production" not in article_actions or not article_subjects:
+        return False
+    for existing in event.articles:
+        existing_actions = service_content_action_signatures(existing)
+        existing_subjects = service_content_named_subject_tokens(existing)
+        if "production" not in existing_actions or not (article_subjects & existing_subjects):
+            return False
+        existing_seasons = service_content_season_signatures(existing)
+        if article_seasons and existing_seasons and not (article_seasons & existing_seasons):
             return False
     return True
 
@@ -25707,7 +26358,19 @@ def os_wave_roles_compatible(article: Article, event: Event) -> bool:
     if not article_waves and not event_waves:
         return True
     if not article_waves or not event_waves:
-        return False
+        if not is_os_release_availability_article(article) or any(
+            not is_os_release_availability_article(existing)
+            for existing in event.articles
+        ):
+            return False
+        article_facets = article_primary_facets(article)
+        return all(
+            os_release_facets_compatible(
+                article_facets,
+                article_primary_facets(existing),
+            )
+            for existing in event.articles
+        )
     if any(not waves for waves in event_article_waves):
         return False
     article_versioned_waves = {
@@ -25720,6 +26383,20 @@ def os_wave_roles_compatible(article: Article, event: Event) -> bool:
         article_versioned_waves
         and event_versioned_waves
         and not (article_versioned_waves & event_versioned_waves)
+    ):
+        return False
+    shared_versioned_waves = article_versioned_waves & event_versioned_waves
+    if shared_versioned_waves and all(
+        not wave.endswith(":final") for wave in shared_versioned_waves
+    ):
+        return bool(article_waves & event_waves)
+    article_platforms = article_merge_guard_facets(article)
+    if any(
+        not platform_facets_compatible(
+            article_platforms,
+            article_merge_guard_facets(existing),
+        )
+        for existing in event.articles
     ):
         return False
     return bool(article_waves & event_waves)
@@ -25822,7 +26499,32 @@ def should_merge(article: Article, event: Event) -> bool:
     if same_source_variant_boundary_conflict(article, event):
         return False
     if (
+        same_named_service_content_action_event(article, event)
+        and relevance_tier_compatible(article, event)
+        and regions_compatible(article, event)
+    ):
+        return True
+    if (
         same_service_content_release_event(article, event)
+        and relevance_tier_compatible(article, event)
+        and regions_compatible(article, event)
+    ):
+        return True
+    if (
+        (
+            event_kind_compatible(article, event)
+            or (
+                is_os_security_disclosure_article(article)
+                and all(is_os_security_disclosure_article(existing) for existing in event.articles)
+            )
+        )
+        and relevance_tier_compatible(article, event)
+        and regions_compatible(article, event)
+        and same_os_release_event(article, event)
+    ):
+        return True
+    if (
+        same_legacy_macos_pair_update_event(article, event)
         and relevance_tier_compatible(article, event)
         and regions_compatible(article, event)
     ):
@@ -27396,6 +28098,27 @@ def best_topic_group_for_article(article: Article, groups: dict[tuple[str, ...],
 
 
 def split_mixed_topic_event(event: Event) -> list[Event]:
+    if len(event.articles) > 1 and all(
+        same_material_apple_stock_move_event(left, singleton_merge_event(right))
+        for index, left in enumerate(event.articles)
+        for right in event.articles[index + 1 :]
+    ):
+        return [event]
+    if len(event.articles) > 1 and all(
+        same_legacy_macos_pair_update_event(left, singleton_merge_event(right))
+        for index, left in enumerate(event.articles)
+        for right in event.articles[index + 1 :]
+    ):
+        return [event]
+    if len(event.articles) > 1 and all(
+        same_named_service_content_action_event(
+            left,
+            singleton_merge_event(right),
+        )
+        for index, left in enumerate(event.articles)
+        for right in event.articles[index + 1 :]
+    ):
+        return [event]
     if articles_share_cohesive_title_identity(event.articles):
         return [event]
     if len(event.articles) > 1 and all(

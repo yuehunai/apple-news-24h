@@ -14917,6 +14917,338 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotIn(siri, security_event.articles)
         self.assertEqual(security_event.relevance_tier, "strong")
 
+    def test_final_os_release_wave_requires_a_shared_platform(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iOS 26.6 now available for iPhone with these changes",
+                "Apple released iOS 26.6 final with security fixes and Spotlight indexing preparation.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple releases iPadOS 26.6, here's what's new",
+                "Apple released iPadOS 26.6 final with Spotlight indexing preparation.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Releases iOS 26.6 and iPadOS 26.6 With iOS 27 Optimizations",
+                "Apple released iOS 26.6 and iPadOS 26.6 final for compatible devices.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 iOS / iPadOS 26.6 正式版发布：优化聚焦索引，修复 87 个漏洞",
+                "苹果发布 iOS 与 iPadOS 26.6 正式版，版本号均为 23G71。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "macOS 26.6 now available, here's what's new",
+                "Apple released macOS Tahoe 26.6 final with stability and security fixes.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Releases macOS Tahoe 26.6",
+                "Apple released macOS Tahoe 26.6 final with security and reliability improvements.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "苹果 macOS 26.6 正式版发布：修复 155 个漏洞并优化 Spotlight 索引",
+                "苹果发布 macOS Tahoe 26.6 正式版，版本号为 25G72。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "苹果 visionOS 26.6 正式版发布：修复多项安全漏洞",
+                "苹果向 Vision Pro 发布 visionOS 26.6 正式版。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "Apple Releases watchOS 26.6 With Security Updates",
+                "Apple released watchOS 26.6 final for Apple Watch.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple rolls out watchOS 26.6 update for Apple Watch",
+                "Apple rolled out the final watchOS 26.6 update with security and reliability fixes.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "苹果 watchOS 26.6 正式版发布，修复多项安全漏洞",
+                "苹果发布 watchOS 26.6 正式版，版本号为 23U67。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        grouped_titles = [" | ".join(item.title for item in event.articles) for event in events]
+
+        self.assertEqual(len(events), 4, grouped_titles)
+        ios_event = next(event for event in events if articles[0] in event.articles)
+        macos_event = next(event for event in events if articles[4] in event.articles)
+        self.assertEqual(len(ios_event.articles), 4, grouped_titles)
+        self.assertEqual(len(macos_event.articles), 3, grouped_titles)
+        self.assertTrue(any(titles.count("watchOS 26.6") == 3 for titles in grouped_titles))
+        self.assertTrue(any("visionOS 26.6" in titles for titles in grouped_titles))
+        self.assertTrue(all(not event.merge_warnings for event in events))
+
+    def test_security_bulletin_does_not_bridge_unrelated_third_party_or_legacy_updates(self):
+        module = load_module()
+        current_bulletins = [
+            article_for(
+                module,
+                "Update Now: iOS 26.6 and macOS Tahoe 26.6 Patch Hundreds of Security Flaws",
+                "Apple's current security bulletins list 87 iOS CVEs and 155 macOS CVEs.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Don't wait to update: iOS 26.6 has more than 75 security fixes",
+                "Apple's iOS 26.6 security bulletin fixes more than 75 vulnerabilities.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Apple fixes over 75 security issues with your iPhone and 150+ for Mac, update now",
+                "Following iOS 26.6 and macOS Tahoe 26.6, Apple detailed the same security bulletins.",
+                "9to5Mac",
+            ),
+        ]
+        legacy = article_for(
+            module,
+            "苹果发布 macOS Sonoma 14.8.8/Sequoia 15.7.8 更新，修复 138 个安全漏洞",
+            "Apple released separate security updates for macOS Sonoma 14.8.8 and Sequoia 15.7.8.",
+            "IT之家",
+        )
+        third_party = article_for(
+            module,
+            "Claude Cowork escaped sandbox on Mac, had full access to all files",
+            "A vulnerability in Anthropic's third-party Claude Cowork app could read and write Mac files.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles(
+            [current_bulletins[0], legacy, third_party, *current_bulletins[1:]]
+        )
+
+        self.assertEqual(len(events), 3, [[item.title for item in event.articles] for event in events])
+        bulletin_event = next(event for event in events if current_bulletins[0] in event.articles)
+        self.assertEqual(
+            {item.title for item in bulletin_event.articles},
+            {item.title for item in current_bulletins},
+        )
+        self.assertNotIn(legacy, bulletin_event.articles)
+        self.assertNotIn(third_party, bulletin_event.articles)
+
+    def test_non_news_apple_context_stays_out_of_required_events(self):
+        module = load_module()
+        cases = [
+            (
+                "Apple Glasses just won't be useful without video recording",
+                "A Bloomberg rumor is followed by the author's opinion that Apple Glasses would not be useful without video recording.",
+                "9to5Mac",
+            ),
+            (
+                "Daughters overjoyed as Apple Watch gift saves their father's life",
+                "A personal case says the existing Apple Watch fall detection feature called 911; no new feature or company action is reported.",
+                "AppleInsider",
+            ),
+            (
+                "Apple Upgrade will be great for Apple, might not be good for the buyer",
+                "An opinion analyzes whether the already announced Apple Upgrade leasing program is good for buyers.",
+                "AppleInsider",
+            ),
+            (
+                "ESR FlickLock: The best AirPods Pro 3 case on the market",
+                "A sponsored accessory review recommends buying an ESR case on Amazon.",
+                "9to5Mac",
+            ),
+            (
+                "T-Mobile actively working to fix ongoing outage, iPhone SOS mode",
+                "A T-Mobile network outage put customer iPhones into SOS mode; Apple made no product or platform change.",
+                "9to5Mac",
+            ),
+            (
+                "X Money officially launches in the US with Apple Wallet support",
+                "X launched its own payment service and its virtual debit card can be added to Apple Wallet; Apple made no platform change.",
+                "9to5Mac",
+            ),
+        ]
+
+        for title, summary, source in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_first_party_applecare_expansion_is_not_downgraded_by_accessory_context(self):
+        module = load_module()
+        title = "AppleCare One expands to four more countries"
+        summary = (
+            "Apple is expanding AppleCare One to Australia, France, Germany, and the UK. "
+            "The plan covers Apple devices, while the article footer also mentions cases and accessories."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_third_party_mac_app_vulnerability_stays_weak_without_platform_flaw(self):
+        module = load_module()
+        cases = [
+            (
+                "Claude Cowork escaped sandbox on Mac, had full access to all files",
+                "A flaw in Anthropic's third-party agent app escaped its own Linux VM sandbox and accessed Mac files; Apple shipped no patch.",
+                "9to5Mac",
+            ),
+            (
+                "影响约 50 万 macOS 用户，第三方智能体应用爆漏洞可读写任意 Mac 文件",
+                "第三方智能体应用自身的 Linux 虚拟机沙箱存在漏洞，苹果没有发布 macOS 修复。",
+                "IT之家",
+            ),
+        ]
+
+        for title, summary, source in cases:
+            with self.subTest(source=source):
+                self.assertEqual(module.detect_event_kind(title, summary), "third_party_ecosystem")
+                tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(tier, "weak", reason)
+
+    def test_fake_wallet_lawsuit_sources_merge_across_editorial_angles(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Responds to Lawsuit Over Fake Bitcoin Wallet Scam in App Store",
+                "Three customers sued Apple after losing a combined $1.8 million to a fake Sparrow Wallet app.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Weak App Store protections at core of $1.8M crypto app fraud lawsuit",
+                "The same three customers sued Apple over the fake Sparrow Wallet app.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Three customers sue Apple after fake wallet app wipes out their Bitcoin",
+                "The three customers filed the same lawsuit after losing $1.8 million to a fake Sparrow Wallet app.",
+                "9to5Mac",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, [[item.title for item in event.articles] for event in events])
+        self.assertEqual(events[0].merge_warnings, [])
+        self.assertEqual({item.source for item in events[0].articles}, {"MacRumors", "AppleInsider", "9to5Mac"})
+
+    def test_bilingual_content_production_update_merges_by_named_work_season_and_action(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple teases Severance season 3 in new update",
+                "Apple TV reposted a production update confirming Severance season 3 has started filming.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果预热《人生切割术》电视剧第三季",
+                "苹果开始预热《人生切割术》（Severance）第三季，并确认该剧已经开拍。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, [[item.title for item in event.articles] for event in events])
+        self.assertEqual(events[0].event_kind, "service_content")
+
+    def test_same_market_cap_move_survives_unrelated_price_background(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple overtakes Nvidia as world's most valuable company as it barrels toward $5T",
+                "Apple closed at a $4.95 trillion market cap and reclaimed first place.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果超越英伟达，时隔一年多重回全球市值第一宝座",
+                "苹果收盘市值约 4.95 万亿美元；后文另提到此前 Mac 和 iPad 涨价。",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, [[item.title for item in event.articles] for event in events])
+
+    def test_release_lead_can_complete_title_led_os_identity_without_absorbing_feature_story(self):
+        module = load_module()
+        release = article_for(
+            module,
+            "Apple Releases visionOS 26.6",
+            "Apple released visionOS 26.6 final for Vision Pro.",
+            "MacRumors",
+        )
+        release_analysis = article_for(
+            module,
+            "Prep for Siri AI on Apple Vision Pro with visionOS 26.6",
+            "Apple has released visionOS 26.6 today with minor changes and background Siri indexing preparation.",
+            "AppleInsider",
+        )
+        distinct_feature = article_for(
+            module,
+            "visionOS 26.6 adds a new immersive video playback control",
+            "A newly discovered control changes immersive video playback behavior.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([release, release_analysis, distinct_feature])
+
+        self.assertEqual(len(events), 2, [[item.title for item in event.articles] for event in events])
+        release_event = next(event for event in events if release in event.articles)
+        self.assertIn(release_analysis, release_event.articles)
+        self.assertNotIn(distinct_feature, release_event.articles)
+
+    def test_legacy_macos_security_updates_merge_when_one_title_omits_versions(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "macOS Sonoma 14.8.8 and macOS Sequoia 15.7.8 now available",
+                "Apple released macOS Sonoma 14.8.8 and Sequoia 15.7.8 security updates.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Older Macs get fresh security fixes with new macOS Sequoia & Sonoma update",
+                "Apple released the same new macOS Sequoia and Sonoma maintenance updates for older Macs.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "苹果发布 macOS Sonoma 14.8.8 / Sequoia 15.7.8 更新，修复 138 个安全漏洞",
+                "苹果同步发布两款旧版 macOS 安全更新。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, [[item.title for item in event.articles] for event in events])
+        self.assertEqual(events[0].merge_warnings, [])
+
 
 if __name__ == "__main__":
     unittest.main()

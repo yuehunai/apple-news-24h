@@ -1128,7 +1128,11 @@ def _content_form(title: str, lead: str = "") -> str:
     if re.search(
         r"^(?:analyst|analysis|opinion|commentary)\b|"
         r"^(?:分析师|机构观点|评论)[：:]|(?:分析师|评论人士).{0,24}(?:认为|称|表示)|"
-        r"\b(?:now\s+)?(?:even\s+)?more valuable\b|\bbetter value\b|(?:更有价值|更划算)",
+        r"\b(?:now\s+)?(?:even\s+)?more valuable\b|\bbetter value\b|"
+        r"\b(?:won['’]t|will not|wouldn['’]t|would not)\s+be\s+useful\s+without\b|"
+        r"\b(?:great|good)\s+for\s+apple\b.{0,55}\b(?:not\s+good|bad)\s+for\b|"
+        r"\bmight\s+not\s+be\s+good\s+for\s+(?:the\s+)?(?:buyer|customer|user)\b|"
+        r"(?:更有价值|更划算)",
         lower,
     ):
         return "analysis"
@@ -1935,7 +1939,7 @@ def build_event_identity(
                     numbered_beta_stages = [f"beta-{number}"]
     title_is_release_wave = bool(
         re.search(
-            r"\b(?:releases?|released|seeds?|seeded|rolls? out|now available|is here|are out now|arrives?|revised|surfaces?|is coming soon|are coming soon|coming next week)\b|"
+            r"\b(?:releases?|released|seeds?|seeded|rolls? out|now available|available now|is here|are out now|arrives?|revised|surfaces?|is coming soon|are coming soon|coming next week)\b|"
             r"\bstarts?\s+round\b|\bversion\s*2\s+update\b|"
             r"(?:即将发布|最快.{0,8}发布|发布|推送|释出|修订版)|(?:正式版|候选版).{0,12}上线",
             main_title,
@@ -1945,7 +1949,11 @@ def build_event_identity(
         release_stages = ["rc"]
     elif "os-release-final" in facets:
         release_stages = ["final"]
-    elif (title_is_public_beta and not title_has_explicit_beta_number and not numbered_beta_stages) or (
+    elif (
+        title_is_public_beta
+        and not title_has_explicit_beta_number
+        and (not numbered_beta_stages or numbered_beta_stages == ["beta-1"])
+    ) or (
         "os-release-public-beta" in facets and not numbered_beta_stages
     ):
         release_stages = ["public-beta"]
@@ -1960,6 +1968,19 @@ def build_event_identity(
                 r"\b(ios|ipados|macos|watchos|tvos|visionos)\b",
                 main_title,
             )
+        }
+        platform_names |= {
+            facet.removeprefix("platform-")
+            for facet in facets
+            if facet
+            in {
+                "platform-ios",
+                "platform-ipados",
+                "platform-macos",
+                "platform-watchos",
+                "platform-tvos",
+                "platform-visionos",
+            }
         }
         for platform in platform_names:
             components.add(f"os-wave-platform:{platform}:{release_stages[0]}")

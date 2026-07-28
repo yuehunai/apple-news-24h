@@ -12,14 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.43.0 - 2026-07-27
+### 1.44.0 - 2026-07-28
 
-- Added title-and-lead product and action boundaries for Apple smart glasses and current attributed Apple Watch roadmap reports while keeping independent AirPods novelty projects, generic compatibility lists, and competitor-led comparisons weak.
-- Added per-title projection for compound Apple TV articles so separately named works and lifecycle actions remain independent events while retaining the shared source URL and compatible facts.
-- Improved anniversary-iPhone generation normalization and concrete cross-language clustering so direct same-product reports merge without letting comparison background or adjacent products redefine the event.
-- Added source-level `title`, `published_at`, and `primary_fact` evidence to JSON output, with historical background trimmed from primary evidence so automation agents retain valid contributing links and current source-specific facts.
-- Added structured title/lead evidence requirements for generic strong-event promotion so body-only homonyms, historical product examples, and incidental Apple references no longer elevate unrelated articles.
-- Improved 9to5Mac affiliate-tail cleanup, updated fallback policy guidance, and expanded regression coverage from 741 to 753 tests; concurrent live validation preserved discovery coverage, produced no merge warnings, and reduced runtime relative to the same-window baseline.
+- Added platform-specific final-release identities so iOS/iPadOS companion coverage can merge while macOS, watchOS, tvOS, visionOS, cross-platform security bulletins, and legacy macOS updates remain independent events.
+- Tightened security-event matching around concrete versions, bulletins, exploits, components, and attack paths so generic vulnerability language no longer bridges Apple releases, older patches, and third-party app flaws.
+- Improved cross-source and cross-language clustering for App Store wallet litigation, Apple TV production updates, Apple market-cap rankings, visionOS releases, and paired legacy macOS security updates while preserving every contributing source.
+- Improved title-and-lead ownership checks so opinion pieces, personal anecdotes, affiliate accessories, carrier outages, crime stories, and third-party Wallet services remain weak without a new Apple action, while first-party AppleCare changes remain eligible.
+- Updated fallback policy guidance and expanded regression coverage from 753 to 763 tests; concurrent live validation preserved all 80 discovered source URLs, produced no merge warnings, and showed no runtime regression.
 
 ## What It Does
 

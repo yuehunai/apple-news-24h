@@ -46,7 +46,6 @@ HIGH_CONFIDENCE_COMPONENTS = {
     "gambling-apps",
     "office-real-estate",
     "oled-display",
-    "privacy-vulnerability",
     "product-patent-disclosure",
     "price-upgrade-behavior",
     "production-hurdle",
@@ -233,11 +232,45 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         if left.scope != right.scope:
             return "conflict"
 
-    if any(
-        component.startswith(("os-wave:", "os-wave-platform:"))
-        for component in shared_components
-    ):
-        return "match"
+    left_version_waves = {
+        component for component in left.components if component.startswith("os-wave:")
+    }
+    right_version_waves = {
+        component for component in right.components if component.startswith("os-wave:")
+    }
+    left_platform_waves = {
+        component
+        for component in left.components
+        if component.startswith("os-wave-platform:")
+    }
+    right_platform_waves = {
+        component
+        for component in right.components
+        if component.startswith("os-wave-platform:")
+    }
+    if left_version_waves and right_version_waves:
+        shared_version_waves = left_version_waves & right_version_waves
+        if not shared_version_waves:
+            return "conflict"
+        # A numbered beta/public-beta batch is one coordinated Apple release
+        # action across platforms. Final releases need a concrete platform
+        # anchor because each OS ships as an independently reportable event.
+        if any(not component.endswith(":final") for component in shared_version_waves):
+            return "match"
+        if left_platform_waves and right_platform_waves:
+            left_platforms = {
+                component.split(":", 2)[1] for component in left_platform_waves
+            }
+            right_platforms = {
+                component.split(":", 2)[1] for component in right_platform_waves
+            }
+            mobile_platforms = {"ios", "ipados"}
+            if not (
+                left_platforms & right_platforms
+                or (left_platforms <= mobile_platforms and right_platforms <= mobile_platforms)
+            ):
+                return "conflict"
+            return "match"
 
     legal_decision = _legal_decision(left, right)
     if legal_decision is not None:

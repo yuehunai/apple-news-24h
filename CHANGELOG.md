@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.44.0 - 2026-07-28
+
+- Added platform-specific final-release identities so iOS/iPadOS companion coverage can merge while macOS, watchOS, tvOS, visionOS, cross-platform security bulletins, and legacy macOS updates remain independent events.
+- Tightened security-event matching around concrete versions, bulletins, exploits, components, and attack paths so generic vulnerability language no longer bridges Apple releases, older patches, and third-party app flaws.
+- Improved cross-source and cross-language clustering for App Store wallet litigation, Apple TV production updates, Apple market-cap rankings, visionOS releases, and paired legacy macOS security updates while preserving every contributing source.
+- Improved title-and-lead ownership checks so opinion pieces, personal anecdotes, affiliate accessories, carrier outages, crime stories, and third-party Wallet services remain weak without a new Apple action, while first-party AppleCare changes remain eligible.
+- Updated fallback policy guidance and expanded regression coverage from 753 to 763 tests; concurrent live validation preserved all 80 discovered source URLs, produced no merge warnings, and showed no runtime regression.
+
 ## 1.43.0 - 2026-07-27
 
 - Added title-and-lead product and action boundaries for Apple smart glasses and current attributed Apple Watch roadmap reports while keeping independent AirPods novelty projects, generic compatibility lists, and competitor-led comparisons weak.
