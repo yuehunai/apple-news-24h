@@ -31,6 +31,7 @@ HIGH_CONFIDENCE_COMPONENTS = {
     "customer-loyalty",
     "cross-platform-data-migration",
     "dual-battery",
+    "exclusive-display-supplier",
     "financed-device-restriction",
     "facility-renovation",
     "hide-my-email",
@@ -78,6 +79,11 @@ HIGH_SIGNAL_NAMED_SUBJECT_ACTIONS = {
     "transaction",
 }
 
+LOW_SIGNAL_NAMED_SUBJECTS = {
+    "apple-ceo",
+    "ceo",
+}
+
 
 def _high_confidence_components(components: frozenset[str]) -> set[str]:
     return {
@@ -85,6 +91,7 @@ def _high_confidence_components(components: frozenset[str]) -> set[str]:
         for component in components
         if component in HIGH_CONFIDENCE_COMPONENTS
         or component.startswith("display-size:")
+        or component.startswith("analyst-institution:")
         or component.startswith("os-component:")
     }
 
@@ -96,6 +103,7 @@ FIRST_PARTY_SERVICE_PRODUCTS = {
     "apple-sports",
     "apple-tv",
     "icloud",
+    "shazam",
     "applecare",
 }
 
@@ -223,6 +231,133 @@ def _price_decision(left: EventIdentity, right: EventIdentity) -> MergeDecision 
 def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDecision:
     """Resolve only high-confidence identities; leave nuanced cases to legacy guards."""
     shared_components = left.components & right.components
+    left_primary_intents = {
+        component for component in left.title_components if component.startswith("primary-intent:")
+    }
+    right_primary_intents = {
+        component for component in right.title_components if component.startswith("primary-intent:")
+    }
+    if left_primary_intents and right_primary_intents and not (
+        left_primary_intents & right_primary_intents
+    ):
+        return "conflict"
+    left_analyst_target = "analyst-target-action" in left.title_components
+    right_analyst_target = "analyst-target-action" in right.title_components
+    if left_analyst_target != right_analyst_target:
+        return "conflict"
+    left_analyst_institutions = {
+        component
+        for component in left.title_components
+        if component.startswith("analyst-institution:")
+    }
+    right_analyst_institutions = {
+        component
+        for component in right.title_components
+        if component.startswith("analyst-institution:")
+    }
+    if left_analyst_institutions and right_analyst_institutions:
+        if not (left_analyst_institutions & right_analyst_institutions):
+            return "conflict"
+        if "apple-analyst-rating-target" in left.facets & right.facets:
+            return "match"
+    left_iphone_models = {
+        component
+        for component in left.title_components
+        if component.startswith(("iphone-model:", "iphone-family:", "iphone-line:"))
+    }
+    right_iphone_models = {
+        component
+        for component in right.title_components
+        if component.startswith(("iphone-model:", "iphone-family:", "iphone-line:"))
+    }
+    if left_iphone_models and right_iphone_models:
+        compatible_models = bool(left_iphone_models & right_iphone_models)
+        if not compatible_models:
+            left_air = any(
+                component == "iphone-line:air" or component.startswith("iphone-model:air-")
+                for component in left_iphone_models
+            )
+            right_air = any(
+                component == "iphone-line:air" or component.startswith("iphone-model:air-")
+                for component in right_iphone_models
+            )
+            compatible_models = left_air and right_air
+        if not compatible_models:
+            return "conflict"
+    shared_specific_iphone_models = {
+        component
+        for component in left_iphone_models & right_iphone_models
+        if component.startswith("iphone-model:")
+    }
+    shared_report_attributions = {
+        component
+        for component in left.components & right.components
+        if component.startswith("report-attribution:")
+    }
+    shared_report_actions = left.actions & right.actions & {
+        "delay-roadmap",
+        "feature-change",
+        "market-report",
+        "price-change",
+        "retail-availability",
+        "supply-production",
+    }
+    if (
+        shared_specific_iphone_models
+        and shared_report_attributions
+        and shared_report_actions
+        and _products_compatible(left.products, right.products)
+    ):
+        return "match"
+    left_title_services = left.title_products & FIRST_PARTY_SERVICE_PRODUCTS
+    right_title_services = right.title_products & FIRST_PARTY_SERVICE_PRODUCTS
+    if (
+        ("applecare" in left_title_services) != ("applecare" in right_title_services)
+        and left_title_services
+        and right_title_services
+    ):
+        return "conflict"
+    direct_first_party_products = FIRST_PARTY_SERVICE_PRODUCTS | {
+        "airpods",
+        "beats",
+        "apple-glasses",
+        "apple-home-hub",
+        "apple-watch",
+        "homepod",
+        "ipad",
+        "ipad-air",
+        "ipad-base",
+        "ipad-mini",
+        "ipad-pro",
+        "iphone",
+        "mac",
+        "mac-mini",
+        "mac-pro",
+        "mac-studio",
+        "macbook",
+        "vision-pro",
+    }
+    left_direct_products = left.title_products & direct_first_party_products
+    right_direct_products = right.title_products & direct_first_party_products
+    shared_named_subjects = (left.named_subjects & right.named_subjects) - LOW_SIGNAL_NAMED_SUBJECTS
+    shared_content_release = "content-release" in left.actions & right.actions
+    named_service_content_match = bool(
+        shared_named_subjects
+        and shared_content_release
+        and ((left_title_services | right_title_services) & FIRST_PARTY_SERVICE_PRODUCTS)
+    )
+    if (
+        left_direct_products
+        and right_direct_products
+        and not _products_compatible(left_direct_products, right_direct_products)
+        and not (
+            left_direct_products <= FIRST_PARTY_SERVICE_PRODUCTS
+            and right_direct_products <= FIRST_PARTY_SERVICE_PRODUCTS
+        )
+        and not named_service_content_match
+        and not (left.facets & right.facets & CROSS_PRODUCT_IDENTITY_FACETS)
+    ):
+        return "conflict"
     if (
         "cross-platform-data-migration" in shared_components
         and _products_compatible(left.products, right.products)
@@ -293,6 +428,12 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
     ):
         return "match"
 
+    if (
+        "exclusive-display-supplier" in shared_components
+        and _products_compatible(left.products, right.products)
+    ):
+        return "match"
+
     if "memory-supply" in left.components and "memory-supply" in right.components:
         left_context = left.title_components & MEMORY_SUPPLY_CONTEXT_COMPONENTS
         right_context = right.title_components & MEMORY_SUPPLY_CONTEXT_COMPONENTS
@@ -357,6 +498,17 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
 
     left_concrete_components = _high_confidence_components(left.components)
     right_concrete_components = _high_confidence_components(right.components)
+    shared_home_hub_roadmap = bool(
+        "apple-home-hub" in left.title_products & right.title_products
+        and "hardware-product-roadmap" in (left.components | right.components)
+        and left.scope == "apple-direct"
+        and right.scope == "apple-direct"
+        and _actions_compatible(left.actions, right.actions)
+        and bool(
+            (left.actions | right.actions)
+            & {"delay-roadmap", "retail-availability"}
+        )
+    )
     left_title_data_integration = "apple-data-integration" in left.title_components
     right_title_data_integration = "apple-data-integration" in right.title_components
     if left_title_data_integration != right_title_data_integration:
@@ -375,13 +527,26 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         and not (left_concrete_components & right_concrete_components)
         and bool(left.products & right.products)
         and not ((left.facets & right.facets) - UMBRELLA_FACETS)
+        and not shared_home_hub_roadmap
     ):
         return "conflict"
+    if (
+        "apple-home-hub" in left.title_products & right.title_products
+        and left.scope == "apple-direct"
+        and right.scope == "apple-direct"
+        and _actions_compatible(left.actions, right.actions)
+        and bool((left.actions | right.actions) & {"delay-roadmap", "retail-availability"})
+    ):
+        return "match"
 
     shared_title_components = left.title_components & right.title_components
     shared_facets = left.facets & right.facets
-    shared_named_subjects = left.named_subjects & right.named_subjects
-    compatible_named_subjects = _compatible_named_subjects(left.named_subjects, right.named_subjects)
+    shared_named_subjects = (left.named_subjects & right.named_subjects) - LOW_SIGNAL_NAMED_SUBJECTS
+    compatible_named_subjects = {
+        pair
+        for pair in _compatible_named_subjects(left.named_subjects, right.named_subjects)
+        if not ({pair[0], pair[1]} & LOW_SIGNAL_NAMED_SUBJECTS)
+    }
     shared_title_named_subjects = left.title_named_subjects & right.title_named_subjects
     compatible_title_named_subjects = _compatible_named_subjects(
         left.title_named_subjects,
@@ -445,6 +610,7 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
     hardware_products = {
         "airpods",
         "apple-watch",
+        "apple-home-hub",
         "foldable-iphone",
         "homepod",
         "imac",

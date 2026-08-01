@@ -3533,6 +3533,1370 @@ class EventIdentityArchitectureTests(unittest.TestCase):
         self.assertNotIn("legal-counterparty-a12", facets)
         self.assertNotIn("legal-counterparty-a13", facets)
 
+    def test_exact_first_party_program_identity_overrides_event_kind_variation(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Upgrade launches in the United States",
+                "Apple launched its Upgrade device-leasing program for iPhone, iPad, Mac, and Apple Watch.",
+                "Apple Newsroom",
+            ),
+            article_for(
+                module,
+                "Apple Upgrade leasing program launches for iPhone, Mac, iPad, and Apple Watch",
+                "Apple's new Klarna-backed leasing plan is now live in the United States.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果推出硬件租赁服务 Apple Upgrade，覆盖 Mac、iPad 等全线产品",
+                "Apple Upgrade 已在美国上线，用户可按月租用苹果设备。",
+                "cnBeta",
+            ),
+        ]
+        articles[0].event_kind = "hardware_market"
+        articles[1].event_kind = "retail_store"
+        articles[2].event_kind = "hardware_market"
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_named_service_trailer_merges_without_absorbing_executive_interview(self):
+        module = load_module()
+        trailer_sources = [
+            article_for(
+                module,
+                "Apple unveils Ted Lasso season 4 trailer, series returns next week",
+                "Apple TV released the Ted Lasso season 4 trailer ahead of its August premiere, which Tim Cook and John Ternus attended.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple Shares Ted Lasso Season 4 Trailer",
+                "Apple shared the first trailer for Ted Lasso season 4.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Back to Richmond in season 4, Ted Lasso changes the playbook",
+                "Apple TV released a new Ted Lasso season 4 trailer.",
+                "AppleInsider",
+            ),
+        ]
+        interview = article_for(
+            module,
+            "Tim Cook, John Ternus talk Apple CEO transition and more in new interview",
+            "The Apple executives discussed leadership succession and the future of Apple TV at the Ted Lasso season 4 premiere.",
+            "9to5Mac",
+        )
+
+        events = module.cluster_articles([*trailer_sources, interview])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in trailer_sources), event_partitions(events))
+        self.assertIn(frozenset({interview.title}), event_partitions(events))
+
+    def test_smart_home_roadmap_article_projects_distinct_product_actions(self):
+        module = load_module()
+        title = "Apple has three new smart home products nearly ready to launch"
+        facts = [
+            "Apple TV and HomePod mini refreshes are nearly ready for launch this fall.",
+            "A separate seven-inch Apple home hub with Siri AI is planned for late 2026 or early 2027.",
+            "Apple is also developing a later smart-home security camera.",
+        ]
+
+        variants = module.compound_article_variants(title, " ".join(facts), facts)
+
+        self.assertEqual(len(variants), 2, variants)
+        identities = [module.title_led_identity(item_title, item_summary) for item_title, item_summary, _ in variants]
+        self.assertTrue(any(identity.title_products & {"apple-tv", "homepod"} for identity in identities))
+        self.assertTrue(any("apple-home-hub" in identity.title_products for identity in identities))
+
+    def test_projected_and_localized_home_hub_reports_stay_strong_and_merge(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple home hub and smart-home accessories roadmap",
+                "Apple's home hub is nearly ready to launch between October and early next year, followed by a robotic version and an in-home security camera.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "消息称苹果智能家居中枢将搭载全新 Siri AI，将于今秋至明年初发布",
+                "苹果计划推出 7 英寸家庭中枢，运行基于 tvOS 的系统，并支持 FaceTime、HomeKit 和安防监控。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "全新 Siri AI 加持！苹果首款 7 英寸家庭中枢曝光，支持人脸识别",
+                "苹果家庭中枢最快 10 月推出，提供桌面和磁吸壁挂形态，并运行基于 tvOS 定制的系统。",
+                "快科技",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        self.assertTrue(all(article.event_kind == "hardware_market" for article in articles))
+        self.assertTrue(all(article.category == "hardware_products" for article in articles))
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_cohesive_first_party_program_and_global_valuation_do_not_warn_as_mixed(self):
+        module = load_module()
+        program_articles = [
+            article_for(
+                module,
+                "Apple Upgrade launches in the United States",
+                "Apple launched its first-party leasing program for iPhone, iPad, Mac, and Apple Watch with Klarna.",
+                "Apple Newsroom",
+            ),
+            article_for(
+                module,
+                "Apple Upgrade pricing starts at $18 per month for iPhone",
+                "The same Apple leasing program lists monthly terms and replaces the iPhone Upgrade Program.",
+                "MacRumors",
+            ),
+        ]
+        program_articles[1].event_kind = "hardware_market"
+        valuation_articles = [
+            article_for(
+                module,
+                "Apple just hit $5 trillion market cap for first time",
+                "Apple became the second company to cross the global valuation milestone.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果市值首次触及 5 万亿美元",
+                "苹果股价上涨并达到这一全球估值里程碑。",
+                "IT之家",
+            ),
+        ]
+        valuation_articles[0].regions = {"united-states"}
+        valuation_articles[1].regions = {"china"}
+
+        self.assertNotIn("mixed event kinds", module.event_merge_warnings(program_articles))
+        self.assertNotIn("mixed primary topic facets", module.event_merge_warnings(program_articles))
+        self.assertNotIn("multiple region-specific markers", module.event_merge_warnings(valuation_articles))
+
+    def test_current_direct_apple_actions_are_not_demoted_by_background_terms(self):
+        module = load_module()
+        cases = [
+            (
+                "AppleCare+ Changes Introduced in Canada",
+                "Monthly and annual AppleCare+ subscriptions are now available for iPhone, iPad, Mac, Apple Watch, Apple TV, AirPods, HomePod, Studio Display, and Vision Pro in Canada; coverage starts at $0.99 per month for some accessories.",
+                "MacRumors",
+                "strong",
+                "service_content",
+                "software_systems",
+            ),
+            (
+                "苹果操作系统更新首次致谢 AI 安全研究",
+                "Apple 在 iOS、iPadOS 和 macOS 安全公告中首次致谢 Anthropic、OpenAI、NVIDIA 与 Z.ai 使用 AI 发现漏洞的研究团队，并发布了对应修复。",
+                "cnBeta",
+                "strong",
+                "security_privacy",
+                "software_systems",
+            ),
+            (
+                "苹果 AI 眼镜明年 WWDC 见，但这次隐私不好做",
+                "彭博社称 Apple 计划在 WWDC 2027 发布智能眼镜，年底上市，并正处理硬件隐私设计问题。",
+                "爱范儿",
+                "strong",
+                "hardware_market",
+                "hardware_products",
+            ),
+            (
+                "Apple says iOS 27 Restricted Mode isn't for new Upgrade program leases",
+                "Apple clarified that the native iOS 27 Restricted Mode is not used for missed Apple Upgrade lease payments.",
+                "9to5Mac",
+                "strong",
+                "os_app",
+                "software_systems",
+            ),
+        ]
+        for title, summary, source, tier, kind, category in cases:
+            with self.subTest(title=title):
+                actual_tier, reason = module.classify_relevance_tier(title, summary, [], source)
+                self.assertEqual(actual_tier, tier, reason)
+                self.assertEqual(module.detect_event_kind(title, summary), kind)
+                self.assertEqual(module.choose_category(title, summary), category)
+
+    def test_third_party_app_and_editorial_upgrade_framing_stay_weak(self):
+        module = load_module()
+        cases = [
+            (
+                "Apple Watch just gained a brand-new app for AI meeting notes",
+                "Granola, the AI-powered meeting notepad best known for its Mac app, is expanding to Apple Watch today. The launch comes as watchOS 27 introduces Siri AI, but Granola for Apple Watch is the newly available app.",
+            ),
+            (
+                "iOS 27's Siri gets one thing very right that other AI assistants get wrong",
+                "The author shares a personal assessment of an already released Siri behavior and reports no new Apple action.",
+            ),
+            (
+                "iPhone 18 Pro could be a no-brainer upgrade for lots of users",
+                "The article recaps previously reported iPhone 18 Pro rumors as purchase advice and contains no new reporting.",
+            ),
+        ]
+        for title, summary in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+                self.assertEqual(tier, "weak", reason)
+
+    def test_direct_executive_strategy_statements_merge_across_headline_angles(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Ternus says he plans to build on the success of Apple TV",
+                "Incoming Apple CEO John Ternus directly said he plans to continue growing Apple's entertainment business.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Apple TV may be losing $1B a year but its future is safe under Ternus",
+                "In a Reuters interview, incoming Apple CEO John Ternus said Apple will build on Apple TV's success.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果候任 CEO 特努斯：上任后将继续推动娱乐业务增长",
+                "特努斯在采访中直接表示，接任苹果 CEO 后会继续发展 Apple TV 与娱乐业务。",
+                "IT之家",
+            ),
+        ]
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_market_cap_wording_variants_merge_as_one_company_value_event(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Just Became a $5 Trillion Company",
+                "Apple's market capitalization crossed $5 trillion for the first time.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Strong iPhone demand turns Apple's rebound into a $5 trillion run",
+                "Apple shares reached a record and the company passed a $5 trillion market valuation.",
+                "AppleInsider",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+        self.assertTrue(all(article.event_kind == "hardware_market" for article in articles))
+
+    def test_first_party_service_and_home_hardware_titles_resist_body_product_bridges(self):
+        module = load_module()
+        applecare = article_for(
+            module,
+            "AppleCare+ Changes Introduced in Canada",
+            "Monthly and annual AppleCare+ plans now cover Apple TV, HomePod, AirPods, Mac, and other devices.",
+            "MacRumors",
+        )
+        apple_tv = article_for(
+            module,
+            "New Apple TV and HomePod mini are nearly ready to launch",
+            "Apple plans faster Apple TV and HomePod mini hardware this fall.",
+            "9to5Mac",
+        )
+        home_hub = article_for(
+            module,
+            "消息称苹果智能家居中枢将搭载全新 Siri AI，将于今秋至明年初发布",
+            "苹果家庭中枢配备 7 英寸屏幕并支持人脸识别。",
+            "IT之家",
+        )
+        macbook = article_for(
+            module,
+            "Apple's redesigned MacBook Pro gains a 14-inch OLED touch display",
+            "Samsung will supply the MacBook Pro OLED panel.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([applecare, apple_tv, home_hub, macbook])
+
+        self.assertEqual(len(events), 4, event_partitions(events))
+
+    def test_negated_restricted_mode_clarification_keeps_all_direct_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple says iOS 27 Restricted Mode isn't for new Upgrade program leases",
+                "Apple clarified that Restricted Mode will not be used after missed lease payments.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple won't turn on any Restricted Mode for missed lease payments",
+                "Apple says its device-leasing plan will not activate the iOS restriction feature.",
+                "The Verge",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        self.assertTrue(all(article.category == "software_systems" for article in articles))
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_market_cap_reach_wording_merges_with_company_milestone(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple just hit $5 trillion market cap for first time",
+                "Apple became the second company to cross the valuation milestone.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "苹果市值首次触及 5 万亿美元",
+                "苹果股价上涨并达到这一历史估值里程碑。",
+                "cnBeta",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_same_macbook_oled_supplier_report_merges_without_absorbing_spec_roundup(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "MacBook Ultra OLED Touch Panel to Be Exclusively Supplied by Samsung",
+                "Samsung Display will be the sole supplier of OLED touch panels for Apple's redesigned MacBook Pro.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "6 Display Upgrades Coming With Apple's Redesigned MacBook Pro",
+                "The same Samsung OLED touch-panel report lists tandem OLED, oxide TFT, integrated touch, and 1Hz to 120Hz refresh.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "OLED MacBook Pro will get displays exclusively from Samsung",
+                "Samsung Display will exclusively supply about 2.5 million OLED touch panels for the redesigned MacBook Pro.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "放弃 Mini-LED，苹果 MacBook 拥抱 OLED：三星拿到独家供货资格",
+                "三星显示将独家供应苹果新款 MacBook Pro OLED 触控面板。",
+                "快科技",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        supplier_titles = {
+            articles[0].title,
+            articles[2].title,
+            articles[3].title,
+        }
+        self.assertIn(frozenset(supplier_titles), event_partitions(events))
+        self.assertIn(frozenset({articles[1].title}), event_partitions(events))
+
+    def test_negated_restricted_mode_clarification_merges_with_localized_projection(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple says iOS 27 Restricted Mode isn't for new Upgrade program leases",
+                "Apple clarified that missed Apple Upgrade lease payments will not activate Restricted Mode.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple financed-device restricted mode",
+                "苹果证实 Apple Upgrade 逾期不会启用 iOS 27 受限模式。",
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+        variants = module.compound_article_variants(
+            "苹果确认 Apple Upgrade 逾期不会启用 iOS 27 受限模式",
+            "苹果表示，Apple Upgrade 用户即使逾期也不会触发 Restricted Mode。",
+            ["苹果未说明 iOS 27 中这套受限模式的最终用途。"],
+        )
+        self.assertEqual(len(variants), 1, variants)
+
+    def test_new_analyst_target_action_is_not_treated_as_unchanged_opinion(self):
+        module = load_module()
+        title = "Goldman Sachs raises AAPL target to $370 ahead of Q3 results"
+        summary = "Goldman Sachs increased its Apple price target from $340 to $370 in a new investor note."
+
+        article = article_for(module, title, summary, "AppleInsider")
+
+        self.assertEqual(article.relevance_tier, "strong", article.relevance_reason)
+        self.assertEqual(module.primary_topic_facets(title, summary), {"apple-analyst-rating-target"})
+
+
+    def test_multi_feature_os_summary_does_not_absorb_specific_app_story(self):
+        module = load_module()
+        summary = article_for(
+            module,
+            "iOS 27 adds three new iPhone features you'll use all the time",
+            "The report covers Siri AI, automatic proofreading, and search changes in Spotlight, Photos, and Mail.",
+            "9to5Mac",
+        )
+        maps = article_for(
+            module,
+            "Apple Maps in iOS 27 expands Suggested Places",
+            "Apple Maps now lets users scroll through more Suggested Places recommendations.",
+            "MacRumors",
+        )
+
+        self.assertEqual(module.title_led_identity(summary.title, summary.summary).content_form, "roundup")
+        self.assertEqual(len(module.cluster_articles([summary, maps])), 2)
+
+    def test_os_performance_does_not_merge_with_modem_revenue_story(self):
+        module = load_module()
+        performance = article_for(
+            module,
+            "iOS 27 Speeds Up the iPhone You Already Own: Here's How",
+            "Apple says iOS 27 makes app launches up to 30 percent faster and AirDrop transfers up to 80 percent quicker.",
+            "MacRumors",
+        )
+        modem = article_for(
+            module,
+            "Qualcomm Expects Apple Modem Revenue to Drop Faster Than Expected",
+            "Qualcomm expects Apple revenue to decline as its next-iPhone component share falls below 20 percent.",
+            "MacRumors",
+        )
+
+        self.assertEqual(len(module.cluster_articles([performance, modem])), 2)
+
+    def test_generic_executive_word_does_not_bridge_distinct_supplier_actions(self):
+        module = load_module()
+        modem = article_for(
+            module,
+            "Qualcomm says supply constraints are shrinking its Apple business",
+            "Qualcomm CEO said supply constraints will cause its Apple revenue to decline faster and reduce its share below 20 percent.",
+            "9to5Mac",
+        )
+        memory = article_for(
+            module,
+            "Apple faces pushback over plans to buy Chinese memory chips",
+            "Apple CEO Tim Cook is navigating a memory shortage while senators demand that Apple avoid supply from CXMT and YMTC.",
+            "9to5Mac",
+        )
+
+        self.assertEqual(len(module.cluster_articles([modem, memory])), 2)
+
+    def test_exact_same_action_facets_merge_across_headline_specificity(self):
+        module = load_module()
+        cases = [
+            [
+                article_for(
+                    module,
+                    "Apple Says UK App Store Steering Rules Would Be Highly Intrusive",
+                    "Apple objected to the UK CMA proposal on external App Store payment links and commissions.",
+                    "MacRumors",
+                ),
+                article_for(
+                    module,
+                    "英国 CMA 要求苹果 App Store 开放外链支付，苹果强烈反对",
+                    "英国竞争与市场管理局拟限制佣金并开放第三方支付链接。",
+                    "IT之家",
+                ),
+                article_for(
+                    module,
+                    "Apple pushes back against UK proposal to loosen App Store rules",
+                    "Apple formally opposed the same CMA proposal on App Store fees and payment links.",
+                    "9to5Mac",
+                ),
+            ],
+            [
+                article_for(
+                    module,
+                    "Apple One Premier gains two new iOS 27 perks",
+                    "Paid iCloud+ plans gain higher Apple Intelligence limits and HomeKit Secure Video benefits.",
+                    "9to5Mac",
+                ),
+                article_for(
+                    module,
+                    "iPhone Users Who Pay for iCloud Storage Get Two New iOS 27 Perks",
+                    "Apple says paid iCloud+ plans gain higher AI limits and new HomeKit Secure Video benefits.",
+                    "MacRumors",
+                ),
+            ],
+            [
+                article_for(
+                    module,
+                    "Apple Begins Selling Refurbished Studio Display XDR",
+                    "Apple added Studio Display XDR to its Certified Refurbished store.",
+                    "MacRumors",
+                ),
+                article_for(
+                    module,
+                    "苹果首次上架翻新 Studio Display XDR，八五折起",
+                    "苹果认证翻新商店现已销售 Studio Display XDR。",
+                    "IT之家",
+                ),
+                article_for(
+                    module,
+                    "Studio Display XDR hits Apple's refurb store, saving you up to $540",
+                    "Apple started selling the display through its Certified Refurbished store.",
+                    "9to5Mac",
+                ),
+            ],
+        ]
+
+        for articles in cases:
+            with self.subTest(titles=[article.title for article in articles]):
+                self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+                events = module.cluster_articles(articles)
+                self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_apple_upgrade_headline_variants_share_program_identity(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Upgrade is a really great deal for one reason",
+                "Apple's new device leasing program covers iPhone, iPad, Mac, and Apple Watch.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Apple's New Upgrade Program: Is It Worth It?",
+                "Apple launched the same Upgrade leasing program with Klarna in the United States.",
+                "MacRumors",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+        self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_same_named_supplier_commercial_outlook_merges_across_sources(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Qualcomm says supply constraints are shrinking its Apple business",
+                "Qualcomm CEO said Apple revenue will decline faster as its next-iPhone component share falls below 20 percent.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Qualcomm Expects Apple Modem Revenue to Drop Faster Than Expected",
+                "Qualcomm expects the Apple revenue decline to start in the fourth quarter because of supply constraints.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple's reliance on Qualcomm could decline faster than expected",
+                "Qualcomm says its component share in the next iPhone will fall below the earlier 20 percent estimate.",
+                "AppleInsider",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_supplier_commercial_outlook_does_not_absorb_market_share_or_procurement(self):
+        module = load_module()
+        outlook = [
+            article_for(
+                module,
+                "Qualcomm expects Apple modem revenue to drop faster than expected",
+                "Its component share in the next iPhone will fall well below the earlier 20 percent estimate.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "高通预估苹果调制解调器业务收入下滑速度超出预期",
+                "高通称供应约束将令其下一代 iPhone 组件份额低于此前预计的 20%。",
+                "cnBeta",
+            ),
+            article_for(
+                module,
+                "高通财报预警：苹果业务加速流失",
+                "高通表示苹果相关收入将在第四季度更快下降。",
+                "IT之家",
+            ),
+        ]
+        market_share = article_for(
+            module,
+            "iPhone sales keep rising in China even as market declines",
+            "CAICT says Apple's June iPhone shipments rose in China while the total market fell.",
+            "AppleInsider",
+        )
+        procurement = article_for(
+            module,
+            "Apple faces pushback over plans to buy Chinese memory chips",
+            "Senators urged Apple not to source memory from CXMT or YMTC.",
+            "9to5Mac",
+        )
+
+        self.assertTrue(
+            all(
+                module.primary_topic_facets(article.title, article.summary)
+                == {"apple-supplier-commercial-outlook"}
+                for article in outlook
+            )
+        )
+        events = module.cluster_articles([*outlook, market_share, procurement])
+        self.assertEqual(len(events), 3, event_partitions(events))
+        self.assertIn(frozenset(article.title for article in outlook), event_partitions(events))
+
+    def test_region_scoped_exact_action_ignores_incidental_background_regions(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple Says UK App Store Steering Rules Would Be Highly Intrusive",
+                "Apple opposed the UK CMA proposal and compared it with EU and US rules.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "Apple pushes back against UK proposal to loosen App Store rules",
+                "Apple filed its response to the same UK CMA consultation.",
+                "9to5Mac",
+            ),
+        ]
+        articles[0].regions = {"united-kingdom", "europe", "united-states", "multi-region"}
+        articles[1].regions = {"united-kingdom", "multi-region"}
+
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_restricted_memory_supplier_pushback_is_one_cross_region_action(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple faces pushback over plans to buy Chinese memory chips",
+                "US senators urged Apple to commit by August 21 not to use CXMT or YMTC memory chips from China.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "多名美国参议员联名施压苹果，要求放弃采用中国制造存储芯片计划",
+                "美国参议员反对苹果采购中国长鑫存储和长江存储芯片，并要求苹果在 8 月 21 日前承诺。",
+                "cnBeta",
+            ),
+        ]
+        articles[0].regions = {"china", "united-states", "multi-region"}
+        articles[1].regions = {"china", "united-states", "multi-region"}
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+        self.assertEqual(events[0].merge_warnings, [])
+
+    def test_memory_chip_procurement_is_not_an_ai_company_acquisition(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple faces pushback over plans to buy Chinese memory chips",
+                "US senators urged Apple not to use memory chips from CXMT or YMTC during the AI-driven shortage.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "US senators urge Apple to abandon plans for Chinese-made chips",
+                "During the global memory shortage, Apple requested to buy chips from CXMT and previously purchased YMTC chips for possible use in China products. The senators asked Apple to reconsider chips from either company.",
+                "AppleInsider",
+            ),
+        ]
+
+        self.assertTrue(
+            all("apple-memory-supplier-sourcing" in module.article_primary_facets(article) for article in articles)
+        )
+        self.assertTrue(
+            all("apple-ai-chip-acquisition" not in module.article_primary_facets(article) for article in articles)
+        )
+        self.assertEqual(len(module.cluster_articles(articles)), 1, event_partitions(module.cluster_articles(articles)))
+
+    def test_analyst_target_actions_require_the_same_named_institution(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "JP Morgan lowers Apple price target to $340 on supply constraints",
+                "The investment bank kept its Overweight rating after Apple's earnings call.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "担忧供应链短缺，摩根大通将苹果目标价下调至 340 美元",
+                "摩根大通维持增持评级，并将目标价从 345 美元降至 340 美元。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "Services slowdown pushes Morgan Stanley's Apple target down to $360",
+                "Morgan Stanley kept its Overweight rating while lowering the target from $364.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Rosenblatt hikes AAPL target to $300 after earnings",
+                "Rosenblatt retained its Neutral rating and raised the target by $24.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "Goldman Sachs lowers AAPL target to $360 after earnings call",
+                "Goldman Sachs cut its target from $370 while remaining positive on Apple.",
+                "MacRumors",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 4, event_partitions(events))
+        self.assertIn(
+            frozenset({articles[0].title, articles[1].title}),
+            event_partitions(events),
+        )
+
+    def test_iphone_roadmap_models_do_not_bridge_through_shared_generation(self):
+        module = load_module()
+        air_en = article_for(
+            module,
+            "iPhone Air 2 Expected to Launch Early Next Year With Five New Features",
+            "Jeff Pu expects a second 48MP camera, A20 Pro, N2, C2 and 12GB RAM in early 2027.",
+            "MacRumors",
+        )
+        air_zh = article_for(
+            module,
+            "蒲得宇预估苹果 2027Q1 发布 iPhone Air 2：新增 4800 万超广角、A20 Pro 芯片",
+            "研报称 iPhone Air 2 将升级双摄、A20 Pro、N2 和 C2 芯片。",
+            "IT之家",
+        )
+        budget = article_for(
+            module,
+            "iPhone 18e Rumored to Feature Increased RAM",
+            "The lower-end iPhone 18e is expected to use 9GB of RAM in March 2027.",
+            "MacRumors",
+        )
+        base = article_for(
+            module,
+            "iPhone 18 rumors: Smaller Dynamic Island, 12GB or 9GB RAM",
+            "Apple's base iPhone 18 may use 12GB or 9GB RAM and launch in spring 2027.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([air_en, budget, base, air_zh])
+
+        self.assertEqual(len(events), 3, event_partitions(events))
+        self.assertIn(frozenset({air_en.title, air_zh.title}), event_partitions(events))
+
+    def test_specific_iphone_variants_do_not_merge_through_generation_or_price(self):
+        module = load_module()
+        pro = article_for(
+            module,
+            "iPhone 18 Pro Models Could Be Up to $300 More Expensive, Says Analyst",
+            "The iPhone 18 Pro and Pro Max may start at $1,399 after memory prices rise.",
+            "MacRumors",
+        )
+        budget = article_for(
+            module,
+            "iPhone 18e Rumored to Feature Increased RAM",
+            "The lower-end iPhone 18e is expected to use 9GB of RAM.",
+            "MacRumors",
+        )
+        pro_zh = article_for(
+            module,
+            "苹果 iPhone 18 Pro系列售价或上调 300 美元",
+            "同一份研报预计 iPhone 18 Pro 和 Pro Max 将因内存成本涨价。",
+            "IT之家",
+        )
+
+        events = module.cluster_articles([pro, budget, pro_zh])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(frozenset({pro.title, pro_zh.title}), event_partitions(events))
+
+    def test_same_future_iphone_price_report_consolidates_partial_source_clusters(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro Models Could Be Up to $300 More Expensive, Says Analyst",
+                "Jeff Pu expects iPhone 18 Pro pricing to rise by $250 to $300.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro may launch at $1,399 starting price",
+                "The same Jeff Pu report attributes the increase to memory and chip costs.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "蒲得宇：苹果 iPhone 18 Pro / Max 恐涨价 250~300 美元",
+                "蒲得宇预计芯片和内存成本将推高 Pro 系列售价。",
+                "IT之家",
+            ),
+            article_for(
+                module,
+                "消息称 iPhone 18 Pro系列售价最高或上涨 300 美元",
+                "同一份研报预计起售价可能达到 1399 美元。",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_analyst_target_action_does_not_merge_with_earnings_or_stock_recap(self):
+        module = load_module()
+        target = article_for(
+            module,
+            "担忧供应链短缺问题，摩根大通将苹果目标股价下调至 340 美元",
+            "摩根大通维持增持评级，并将苹果目标股价从 345 美元下调至 340 美元。",
+            "IT之家",
+        )
+        earnings = article_for(
+            module,
+            "库克最后一次苹果财报会太意外！业绩全线飘红，盘后股价大跌 8%",
+            "苹果公布季度营收并讨论供应限制，盘后股价下跌。",
+            "快科技",
+        )
+
+        self.assertEqual(len(module.cluster_articles([target, earnings])), 2)
+
+    def test_analyst_target_without_literal_target_word_stays_out_of_product_rumor(self):
+        module = load_module()
+        rating = article_for(
+            module,
+            "Rosenblatt hikes AAPL to $300 on expected iPhone 18 demand, still underwater",
+            "Rosenblatt raised its Apple price target but retained a Neutral rating.",
+            "AppleInsider",
+        )
+        roadmap = article_for(
+            module,
+            "iPhone 18 rumors: Smaller Dynamic Island, 12GB or 9GB RAM",
+            "Apple's base iPhone 18 may change the Dynamic Island and memory configuration.",
+            "MacRumors",
+        )
+
+        self.assertEqual(len(module.cluster_articles([rating, roadmap])), 2)
+
+    def test_title_primary_intent_separates_market_retrospective_and_capital_strategy(self):
+        module = load_module()
+        market_move = article_for(
+            module,
+            "苹果市值一夜蒸发超 3000 亿美元，盘后股价大跌 8%",
+            "苹果发布季度业绩后股价下跌。",
+            "快科技",
+        )
+        retrospective = article_for(
+            module,
+            "库克 15 年 CEO 任期收官：苹果市值增长超 10 倍",
+            "报道回顾库克任内苹果产品和市值变化。",
+            "快科技",
+        )
+        capital_strategy = article_for(
+            module,
+            "大型科技企业加码 AI，苹果坚持较低资本开支策略",
+            "苹果没有跟随同行大幅增加 AI 基础设施投资。",
+            "cnBeta",
+        )
+
+        self.assertEqual(
+            len(module.cluster_articles([market_move, retrospective, capital_strategy])),
+            3,
+        )
+
+    def test_same_executive_tenure_retrospective_merges_across_languages(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "How Apple Changed Under Tim Cook: 15 Years in Numbers",
+                (
+                    "Tim Cook joined his final Apple earnings call before John Ternus takes over on "
+                    "September 1. The report compares Apple's 2011 and 2026 revenue, devices, services, "
+                    "subscriptions, and shareholder returns across Cook's 15-year tenure."
+                ),
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "用数字回顾蒂姆・库克掌舵苹果的十五年历程",
+                (
+                    "库克参加任内最后一次苹果财报电话会议，约翰・特努斯将在 9 月 1 日接任。"
+                    "报道对比库克掌舵十五年来苹果的营收、设备、服务、订阅及股东回报。"
+                ),
+                "IT之家",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+        self.assertEqual({article.source for article in events[0].articles}, {"MacRumors", "IT之家"})
+        self.assertTrue(all(article.event_kind == "company_org" for article in articles))
+        self.assertEqual(events[0].event_kind, "company_org")
+        self.assertEqual(events[0].category, "software_systems")
+        self.assertEqual(events[0].merge_warnings, [])
+
+    def test_executive_retrospectives_with_different_subject_or_tenure_stay_separate(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "How Apple Changed Under Tim Cook: 15 Years in Numbers",
+                "A data retrospective covers Tim Cook's 15-year tenure as Apple CEO.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "John Ternus: Five Years Leading Apple's Hardware Organization",
+                "A separate retrospective covers John Ternus and five years of hardware leadership.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Tim Cook at Apple: A 10-Year Retrospective",
+                "An older retrospective covers the first 10 years of Tim Cook's tenure.",
+                "9to5Mac",
+            ),
+        ]
+
+        self.assertEqual(len(module.cluster_articles(articles)), 3)
+
+    def test_title_primary_intent_separates_policy_price_and_constraint_domains(self):
+        module = load_module()
+        memory_policy = article_for(
+            module,
+            "美国议员要求苹果承诺不采用中国存储芯片",
+            "议员要求苹果只从获准供应商采购 iPhone 存储芯片。",
+            "IT之家",
+        )
+        price = article_for(
+            module,
+            "iPhone 18 Pro 或因芯片和内存成本上涨 300 美元",
+            "研报预测下一代 Pro 机型售价上调。",
+            "MacRumors",
+        )
+        product_supply = article_for(
+            module,
+            "苹果预计本季度将遭遇严重产品供货紧张",
+            "苹果称多条硬件产品线将受供应约束。",
+            "cnBeta",
+        )
+        compute_risk = article_for(
+            module,
+            "苹果警告 AI 算力资源短缺或导致服务延迟",
+            "公司在风险披露中提到数据中心算力容量不足。",
+            "cnBeta",
+        )
+
+        self.assertEqual(
+            len(module.cluster_articles([memory_policy, price, product_supply, compute_risk])),
+            4,
+        )
+
+    def test_market_share_product_sales_and_supply_constraint_are_distinct_actions(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple hit a record 49% share of global smartphone revenue for Q2",
+                "Counterpoint measured Apple's record revenue share and 21% shipment share.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "MacBook Neo becomes Apple's best-selling notebook",
+                "Apple said the affordable MacBook Neo became its best-selling notebook this quarter.",
+                "快科技",
+            ),
+            article_for(
+                module,
+                "Apple expects severe product supply constraints this quarter",
+                "Apple warned that advanced chip shortages will constrain Mac, iPhone and iPad output.",
+                "cnBeta",
+            ),
+        ]
+
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 3, event_partitions(events))
+
+    def test_title_supply_constraint_resists_market_share_background_bridge(self):
+        module = load_module()
+        market = article_for(
+            module,
+            "Apple hit a record 49% share of global smartphone revenue for Q2",
+            "Counterpoint measured Apple's record revenue share and 23% shipment share.",
+            "9to5Mac",
+        )
+        supply = article_for(
+            module,
+            "苹果预计本季度将遭遇严重供货紧张",
+            "苹果警告先进芯片短缺将限制 Mac、iPhone 和 iPad 供货。财报背景还提到 iPhone 营收增长与全球手机份额。",
+            "cnBeta",
+            facts=[
+                "Counterpoint 的另一份市场报告称苹果占全球智能手机营收近一半。",
+            ],
+        )
+
+        self.assertIn("primary-intent:product-supply-constraint", module.article_title_led_event_identity(supply).title_components)
+        self.assertNotIn("apple-market-share-report", module.article_primary_facets(supply))
+        self.assertEqual(len(module.cluster_articles([market, supply])), 2)
+
+    def test_named_product_sales_performance_resists_broad_market_background(self):
+        module = load_module()
+        market = article_for(
+            module,
+            "Apple hit a record 49% share of global smartphone revenue for Q2",
+            "Counterpoint measured Apple's global smartphone revenue and shipment share.",
+            "9to5Mac",
+        )
+        product_sales = article_for(
+            module,
+            "苹果新任 CEO 操刀打造，MacBook Neo 成为苹果最畅销笔记本",
+            "MacBook Neo 本季度成为苹果销量最高的笔记本。同期行业报告还讨论了苹果的全球手机份额。",
+            "快科技",
+            facts=["Counterpoint 另称苹果占全球智能手机营收近一半。"],
+        )
+
+        identity = module.article_title_led_event_identity(product_sales)
+        self.assertIn("hardware-market-performance", identity.title_components)
+        self.assertIn("apple-product-sales-performance", module.article_primary_facets(product_sales))
+        self.assertNotIn("apple-market-share-report", module.article_primary_facets(product_sales))
+        self.assertEqual(len(module.cluster_articles([market, product_sales])), 2)
+
+    def test_apple_financial_results_resist_market_share_background_bridge(self):
+        module = load_module()
+        market = article_for(
+            module,
+            "Apple hit a record 49% share of global smartphone revenue for Q2",
+            "Counterpoint measured Apple's global smartphone revenue and shipment share.",
+            "9to5Mac",
+        )
+        earnings = article_for(
+            module,
+            "库克最后一舞：苹果连续四个季度营收突破 1000 亿美元",
+            "苹果公布季度业绩和经营指引。背景还引用 Counterpoint 的全球手机营收份额数据。",
+            "快科技",
+            facts=["苹果本财季总营收、净利润和毛利率均同比增长。"],
+        )
+        stock_reaction = article_for(
+            module,
+            "苹果股价因下一财季业绩指引不及预期而重挫 9%",
+            "苹果公布季度业绩后，投资者担忧下一季度指引，盘后市值大幅下跌。",
+            "cnBeta",
+        )
+
+        self.assertIn("apple-financial-results", module.article_primary_facets(earnings))
+        self.assertNotIn("apple-market-share-report", module.article_primary_facets(earnings))
+        self.assertNotIn("apple-financial-results", module.article_primary_facets(stock_reaction))
+        self.assertEqual(earnings.event_kind, "general_company")
+        self.assertEqual(len(module.cluster_articles([market, earnings, stock_reaction])), 3)
+
+    def test_non_apple_comparison_cannot_join_direct_product_roadmap(self):
+        module = load_module()
+        apple = article_for(
+            module,
+            "iPhone Air 2 to feature smaller Dynamic Island and dual cameras",
+            "Apple is expected to release iPhone Air 2 with a smaller Dynamic Island in 2027.",
+            "9to5Mac",
+        )
+        competitor = article_for(
+            module,
+            "REDMI K100 Pro Max debuts with 6.9-inch display and red finish",
+            "The Android phone uses a red color that resembles a rumored iPhone 18 Pro finish.",
+            "快科技",
+        )
+
+        events = module.cluster_articles([apple, competitor])
+
+        self.assertEqual(competitor.relevance_tier, "weak")
+        self.assertEqual(len(events), 2, event_partitions(events))
+
+    def test_current_service_perk_does_not_merge_with_service_history(self):
+        module = load_module()
+        perk = article_for(
+            module,
+            "2TB iCloud+ Plan to Feature Another Key Benefit With iOS 27",
+            "Apple will give the 2TB iCloud+ tier higher Siri AI usage limits in iOS 27.",
+            "MacRumors",
+        )
+        history = article_for(
+            module,
+            "How iTools became iCloud",
+            "Before iCloud became the backbone of the Apple ecosystem, it spent more than a decade evolving through iTools, .Mac, and MobileMe.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([perk, history])
+
+        self.assertEqual(history.relevance_tier, "weak", history.relevance_reason)
+        self.assertEqual(len(events), 2, event_partitions(events))
+
+    def test_first_party_platform_and_owned_brand_actions_override_body_comparisons(self):
+        module = load_module()
+        cases = [
+            (
+                "Shazam launches its first ever sticker pack for a new album",
+                "The Apple-owned Shazam app announced an Artist Sticker Pack in its latest app update.",
+                "9to5Mac",
+            ),
+            (
+                "iOS 27 Features CarPlay Video Mode",
+                "Apple is allowing developers to create CarPlay video apps for parked vehicles; automakers must support the platform.",
+                "MacRumors",
+            ),
+            (
+                "Inside Beats lab: Outside Apple because AirPods can't do everything well",
+                "Apple has spent 12 years strengthening Beats as a separate brand. Executives say it combines its culture with Apple's engineering resources and was developed to complement AirPods as a dual-ecosystem product line.",
+                "AppleInsider",
+            ),
+            (
+                "Another major car brand is preparing to support Apple Car Keys",
+                "Apple Wallet code shows Haval preparing support for Car Key on iPhone and Apple Watch.",
+                "9to5Mac",
+            ),
+        ]
+
+        articles = [article_for(module, *case) for case in cases]
+
+        self.assertTrue(
+            all(article.relevance_tier in {"strong", "ecosystem"} for article in articles),
+            [(article.title, article.relevance_tier, article.relevance_reason) for article in articles],
+        )
+        self.assertEqual(articles[1].event_kind, "os_app")
+        self.assertEqual(articles[2].category, "hardware_products")
+
+    def test_same_attributed_specific_iphone_report_merges_across_language_and_detail_focus(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone Air 2 Expected to Launch Early Next Year With Five New Features",
+                "In a new investor note, analyst Jeff Pu says iPhone Air 2 will launch in early 2027 with a 48-megapixel Ultra Wide camera, A20 Pro, N2, and C2 chips.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone Air 2 to feature smaller Dynamic Island, more: report",
+                "In the same investor note seen today, analyst Jeff Pu gives the iPhone Air 2 feature rundown and says it will keep a 6.55-inch display.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "蒲得宇预估苹果 2027Q1 发布 iPhone Air 2：新增 4800 万超广角、A20 Pro 芯片",
+                "广发证券分析师蒲得宇（Jeff Pu）在最新研报中列出 iPhone Air 2 的五项变化，包括 N2 和 C2 芯片。",
+                "IT之家",
+            ),
+        ]
+
+        self.assertTrue(all(article.event_kind == "hardware_market" for article in articles))
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_compact_chinese_iphone_pro_price_report_merges_with_same_analyst_report(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro Models Could Be Up to $300 More Expensive, Says Analyst",
+                "Analyst Jeff Pu expects the iPhone 18 Pro and Pro Max to cost $250 to $300 more because of chip and memory costs.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "消息称iPhone 18 Pro系列售价最高或上涨300美元",
+                "分析师 Jeff Pu 的同一份研报预计 iPhone 18 Pro 和 Pro Max 将涨价 250 至 300 美元。",
+                "cnBeta",
+            ),
+            article_for(
+                module,
+                "蒲得宇：苹果 iPhone 18 Pro / Max 恐涨价 250~300 美元",
+                "广发证券分析师蒲得宇（Jeff Pu）的研报把涨价归因于 2nm 芯片、DRAM 和 NAND 成本。",
+                "IT之家",
+            ),
+        ]
+
+        self.assertTrue(all(article.event_kind == "hardware_market" for article in articles))
+        events = module.cluster_articles(articles)
+
+        self.assertEqual(len(events), 1, event_partitions(events))
+
+    def test_unsourced_editorial_hardware_inference_and_user_durability_anecdote_are_weak(self):
+        module = load_module()
+        inferred = article_for(
+            module,
+            "iPad Air Could Finally Be Redesigned Next Year",
+            "There is a reasonable case for a redesign, but there are no specific rumors about its design and it is only the obvious candidate if iPad mini changes first.",
+            "MacRumors",
+        )
+        anecdote = article_for(
+            module,
+            "iPhone 17 Pro found pristine after surviving fall from airplane",
+            "One owner accidentally dropped her phone from a plane and later found it undamaged in a field; Apple announced no product or durability change.",
+            "9to5Mac",
+        )
+        derivative = article_for(
+            module,
+            "消息称苹果明年更新 iPad Air 模具，换装 OLED 屏幕",
+            "据 MacRumors 报道，iPad Air 外观可能在 2027 年变化；文章没有提供独立消息源，只复述原文的编辑推演。",
+            "IT之家",
+        )
+
+        self.assertEqual(inferred.relevance_tier, "weak", inferred.relevance_reason)
+        self.assertEqual(anecdote.relevance_tier, "weak", anecdote.relevance_reason)
+        inferred_event = module.cluster_articles([inferred, derivative])
+        self.assertEqual(len(inferred_event), 1, event_partitions(inferred_event))
+        self.assertEqual(inferred_event[0].relevance_tier, "weak", inferred_event[0].relevance_reason)
+
+    def test_owned_brand_strategy_stays_strong_after_event_metadata_refresh(self):
+        module = load_module()
+        beats = article_for(
+            module,
+            "Inside Beats lab: Outside Apple because AirPods can't do everything well",
+            "Apple has spent 12 years strengthening Beats as a separate brand. Apple's vice president of hardware engineering says Beats complements AirPods and uses Apple's engineering resources and reliability testing.",
+            "AppleInsider",
+        )
+
+        events = module.cluster_articles([beats])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].relevance_tier, "strong", events[0].relevance_reason)
+        self.assertEqual(events[0].event_kind, "hardware_market")
+
+    def test_report_attribution_in_key_facts_merges_same_model_and_action(self):
+        module = load_module()
+        source = article_for(
+            module,
+            "iPhone 18 Pro Models Could Be Up to $300 More Expensive, Says Analyst",
+            "The next iPhone 18 Pro models could cost $250 to $300 more because component costs increased.",
+            "MacRumors",
+            facts=["According to an earnings note by analyst Jeff Pu, both Pro models could rise by $250 to $300."],
+        )
+        followup = article_for(
+            module,
+            "iPhone 18 Pro may launch at $1,399 starting price, per report",
+            "The iPhone 18 Pro might cost much more than its predecessor, starting around $1,399.",
+            "9to5Mac",
+            facts=["Analyst Jeff Pu corroborates a roughly $300 price increase for iPhone 18 Pro."],
+        )
+        contextual_followup = article_for(
+            module,
+            "Huge $300 iPhone 18 Pro price hike rumored as chip shortage bites",
+            "The same iPhone 18 Pro price forecast says silicon and memory costs could add $300.",
+            "AppleInsider",
+        )
+
+        identities = [module.article_title_led_event_identity(article) for article in (source, followup)]
+        self.assertTrue(
+            all("report-attribution:jeff-pu" in identity.components for identity in identities)
+        )
+        self.assertEqual(
+            len(module.cluster_articles([source, contextual_followup, followup])),
+            1,
+        )
+
+    def test_specific_attributed_price_report_stays_cohesive_without_supply_bridge(self):
+        module = load_module()
+        report_articles = [
+            article_for(
+                module,
+                "iPhone 18 Pro Models Could Be Up to $300 More Expensive, Says Analyst",
+                "Analyst Jeff Pu expects both Pro models to rise by $250 to $300.",
+                "MacRumors",
+            ),
+            article_for(
+                module,
+                "iPhone 18 Pro may launch at $1,399 starting price, per report",
+                "The price may start near $1,399.",
+                "9to5Mac",
+                facts=["Analyst Jeff Pu corroborates a roughly $300 price increase for iPhone 18 Pro."],
+            ),
+            article_for(
+                module,
+                "蒲得宇：芯片和内存成本飙升，苹果 iPhone 18 Pro / Max 恐涨价 250~300 美元",
+                "分析师蒲得宇（Jeff Pu）的研报称芯片和存储成本将推高售价。",
+                "IT之家",
+            ),
+        ]
+        industry_context = article_for(
+            module,
+            "苹果18涨价2000元只是开始！三星：明年内存短缺加剧 至少持续到2028年",
+            "报告称即将发布的 iPhone 18 Pro 可能涨价；三星另行预测全行业内存短缺将持续到 2028 年。",
+            "快科技",
+        )
+
+        events = module.cluster_articles([*report_articles, industry_context])
+
+        self.assertEqual(len(events), 2, event_partitions(events))
+        self.assertIn(
+            frozenset(article.title for article in report_articles),
+            event_partitions(events),
+        )
+        mixed = module.event_from_article_group(events[0], [*report_articles, industry_context])
+        split = module.split_mixed_topic_event(mixed)
+        self.assertIn(
+            frozenset(article.title for article in report_articles),
+            event_partitions(split),
+        )
+
+    def test_compact_chinese_iphone_air_model_preserves_generation(self):
+        module = load_module()
+        article = article_for(
+            module,
+            "苹果iPhone Air 2配置确认：2nm A20 Pro、后置双摄等5大升级",
+            "分析师 Jeff Pu 在研报中称苹果计划于 2027 年第一季度发布第二代机型。",
+            "快科技",
+        )
+
+        identity = module.article_title_led_event_identity(article)
+
+        self.assertIn("iphone-model:air-2", identity.title_components)
+        self.assertNotIn("iphone-line:air", identity.title_components)
+
+    def test_colloquial_chinese_future_iphone_price_is_not_current_price_action(self):
+        module = load_module()
+        title = "苹果18涨价2000元只是开始！三星：明年内存短缺加剧"
+        summary = "报告称即将发布的 iPhone 18 Pro 售价可能上调至少 2000 元。"
+
+        facets = module.apple_product_price_topic_facets(f"{title} {summary}")
+
+        self.assertIn("apple-future-product-price-forecast", facets)
+        self.assertNotIn("apple-current-product-price-increase", facets)
+
+    def test_chinese_beats_lab_followup_stays_first_party_and_merges(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Inside Beats lab: Outside Apple because AirPods can't do everything well",
+                "Apple's vice president of hardware engineering says Beats complements AirPods and uses Apple's reliability and wireless testing resources.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Beats 成立 20 周年 / 加入苹果 12 周年之际，其美国实验室首次向媒体开放",
+                "苹果硬件工程副总裁表示 Beats 与 AirPods 互补；工程楼设有人耳实验室、五间消声室以及可靠性、无线和质量测试设备。",
+                "IT之家",
+            ),
+        ]
+
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
+        self.assertTrue(all(article.event_kind == "hardware_market" for article in articles))
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

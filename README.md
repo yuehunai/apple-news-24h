@@ -12,13 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.44.0 - 2026-07-28
+### 1.45.0 - 2026-08-01
 
-- Added platform-specific final-release identities so iOS/iPadOS companion coverage can merge while macOS, watchOS, tvOS, visionOS, cross-platform security bulletins, and legacy macOS updates remain independent events.
-- Tightened security-event matching around concrete versions, bulletins, exploits, components, and attack paths so generic vulnerability language no longer bridges Apple releases, older patches, and third-party app flaws.
-- Improved cross-source and cross-language clustering for App Store wallet litigation, Apple TV production updates, Apple market-cap rankings, visionOS releases, and paired legacy macOS security updates while preserving every contributing source.
-- Improved title-and-lead ownership checks so opinion pieces, personal anecdotes, affiliate accessories, carrier outages, crime stories, and third-party Wallet services remain weak without a new Apple action, while first-party AppleCare changes remain eligible.
-- Updated fallback policy guidance and expanded regression coverage from 753 to 763 tests; concurrent live validation preserved all 80 discovered source URLs, produced no merge warnings, and showed no runtime regression.
+- Added compound first-party roadmap and program decomposition for Apple Upgrade, smart-home hardware, Apple service content, and executive strategy or transition coverage so broad source articles no longer bridge independent product actions.
+- Improved same-action matching for institution-specific analyst ratings and targets, Apple financial and market-cap reports, product sales and market share, supply constraints, supplier commercial outlook or procurement, and distinct iPhone Air, iPhone 18, and iPhone 18e roadmap or price reports.
+- Improved direct Apple relevance for Shazam, CarPlay, Beats engineering, AppleCare plan changes, official refurbished products, security acknowledgements, and attributed executive statements while keeping third-party apps, polls, podcasts, anecdotes, old rumor digests, unsourced outlooks, and competitor-led industry forecasts weak.
+- Added cross-language identities for specifically attributed reports and executive-tenure retrospectives, merging the same named executive, anniversary, and action while keeping different executives, tenure lengths, current strategy statements, and unrelated company milestones separate.
+- Improved source cleanup and title/lead ownership with path-boundary URL filtering that preserves Safari Technology Preview pages and a new 9to5Mac `My top deals` tail cutoff that removes affiliate prices without thinning article facts.
+- Updated skill and fallback guidance and expanded regression coverage from 763 to 829 tests; concurrent live validation preserved all 59 discovered source URLs, produced no merge warnings, and matched the baseline runtime.
 
 ## What It Does
 

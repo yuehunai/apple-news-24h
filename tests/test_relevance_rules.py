@@ -829,6 +829,7 @@ class RelevanceRuleTests(unittest.TestCase):
 
         events = module.cluster_articles(articles)
 
+        self.assertTrue(all(article.relevance_tier == "strong" for article in articles))
         self.assertEqual(len(events), 1)
         self.assertIn("foldable-iphone-supply-chain", module.event_primary_facets(events[0]))
 
@@ -2065,6 +2066,39 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertIn("iPhone 15 Pro", combined)
         self.assertNotIn("AirPods Pro 3", combined)
         self.assertNotIn("45W Fast Charger", combined)
+
+    def test_9to5_my_top_deals_tail_does_not_enter_article_facts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html><head>
+          <meta property="article:published_time" content="2026-07-31T11:37:47+00:00" />
+          <meta property="og:description" content="macOS 27 adds three upgrades to iPhone Mirroring." />
+        </head><body><div class="container med post-content">
+          <p>macOS 27 lets users resize the iPhone Mirroring window for compatible apps.</p>
+          <p>Control Center is available through Command-4, and the app also has a new icon.</p>
+          <h2 id="h-my-top-deals">My top deals:</h2>
+          <ul>
+            <li>43-inch LG QNED AI Mini LED 4K Smart TV $330 (Reg. $350)</li>
+            <li>AirPods Pro 3 $199 (Reg. $249)</li>
+            <li>14-inch M5 Pro MacBook Pro 24GB/2TB $2,499 (Reg. $2,999)</li>
+          </ul>
+          <p>FTC: We use income earning auto affiliate links.</p>
+        </div></body></html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/07/31/macos-27-brings-three-key-upgrades-to-iphone-mirroring/",
+            title="macOS 27 brings three key upgrades to iPhone Mirroring",
+        )
+
+        _, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("Command-4", combined)
+        self.assertNotIn("43-inch LG", combined)
+        self.assertNotIn("AirPods Pro 3", combined)
+        self.assertNotIn("$2,499", combined)
 
     def test_9to5_favorite_product_links_tail_does_not_enter_article_facts(self):
         module = load_module()
@@ -10009,6 +10043,8 @@ class RelevanceRuleTests(unittest.TestCase):
             with self.subTest(title=title):
                 tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
                 self.assertEqual(tier, "weak", reason)
+                if title.startswith(("HBO Max", "Pastebot")):
+                    self.assertEqual(module.title_led_identity(title, summary).scope, "third-party-context")
 
     def test_foldable_iphone_ten_million_order_reports_merge_across_sources(self):
         module = load_module()
@@ -13289,6 +13325,67 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(tier, "weak", reason)
 
+    def test_old_single_product_rumor_digest_without_current_reporting_is_weak(self):
+        module = load_module()
+        title = "iPhone 18 rumors: Smaller Dynamic Island, 12GB or 9GB RAM"
+        summary = (
+            "Apple's base iPhone 18 may not arrive until spring 2027, but the rumor mill already has "
+            "a lot to say. Here's what you need to know. The article recaps a May 2025 anonymous "
+            "supply-chain rumor that was reiterated in December 2025 and adds no current report."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "AppleInsider")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_unsourced_multi_product_release_outlook_is_weak(self):
+        module = load_module()
+        title = "Apple to Release 16 New Products Later This Year"
+        summary = (
+            "A forward-looking list recaps expected iPhone, Apple Watch, iMac, Apple TV, HomePod, "
+            "home hub, and MacBook updates from previously published rumors without a new report."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_current_attributed_multi_product_roadmap_report_remains_strong(self):
+        module = load_module()
+        title = "Bloomberg: Apple Plans Three New Mac Models for 2027"
+        summary = (
+            "Mark Gurman reported today that Apple has started late-stage testing of three named "
+            "Mac models and supplied their codenames and launch windows."
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+
+        self.assertEqual(tier, "strong", reason)
+
+    def test_non_apple_industry_forecast_with_unattributed_apple_price_hook_is_weak(self):
+        module = load_module()
+        title = "苹果18涨价2000元只是开始！三星：明年内存短缺加剧，至少持续到2028年"
+        summary = (
+            "文章先无署名地复述 iPhone 18 Pro 可能涨价的预测，随后报道三星对全行业内存短缺、"
+            "AI 实验室预订产能和 2028 年供需情况的判断。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_named_apple_price_report_is_not_weakened_by_supplier_context(self):
+        module = load_module()
+        title = "分析师蒲得宇：苹果 iPhone 18 Pro 或涨价 250 至 300 美元"
+        summary = (
+            "蒲得宇在今日研报中预计 iPhone 18 Pro 与 Pro Max 将因芯片和内存成本上涨而提价，"
+            "并给出 1399 美元起售价预测。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "IT之家")
+
+        self.assertEqual(tier, "strong", reason)
+
     def test_non_apple_industry_story_is_not_promoted_by_later_apple_legal_example(self):
         module = load_module()
         title = "SK海力士扩产画饼被戳破！2028年产能仅六分之一：DRAM高价还要3年"
@@ -15248,6 +15345,195 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 1, [[item.title for item in event.articles] for event in events])
         self.assertEqual(events[0].merge_warnings, [])
+
+
+    def test_url_review_filter_uses_path_word_boundaries(self):
+        module = load_module()
+
+        self.assertFalse(
+            module.url_has_excluded_fragment(
+                "https://www.macrumors.com/2026/07/29/apple-releases-safari-technology-preview-249/"
+            )
+        )
+        self.assertTrue(module.url_has_excluded_fragment("https://example.com/review/iphone-case/"))
+        self.assertTrue(module.url_has_excluded_fragment("https://example.com/iphone-case-review/"))
+
+    def test_safari_technology_preview_release_remains_discoverable(self):
+        module = load_module()
+        source = next(
+            item
+            for item in module.build_sources(module.datetime.now().astimezone())
+            if item.name == "MacRumors"
+        )
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/29/apple-releases-safari-technology-preview-249/",
+            title="Apple Releases Safari Technology Preview 249 With Bug Fixes and Performance Improvements",
+            summary=(
+                "Apple released Safari Technology Preview 249 with fixes for Accessibility, CSS, "
+                "JavaScript, WebKit, WebAssembly, WebDriver, and WebRTC."
+            ),
+            feed_time_raw="Wed, 29 Jul 2026 15:03:29 PDT",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(
+            module.classify_relevance_tier(candidate.title, candidate.summary, [], candidate.source)[0],
+            "strong",
+        )
+
+    def test_title_primary_subject_overrides_incidental_apple_platform_context(self):
+        module = load_module()
+        cases = [
+            (
+                "HBO Max Shorts being tested on iPhone users in latest vertical video offensive",
+                "Warner Bros is testing a vertical Shorts feed in the HBO Max iPhone app.",
+            ),
+            (
+                "Pastebot 3 for Mac Adds Rule-Based Organization, Powerful Paste Filters",
+                "Tapbots launched a third-party clipboard manager that syncs across Macs with iCloud.",
+            ),
+            (
+                "REDMI Turbo 6 Max render looks like iPhone Air",
+                "Redmi is launching its own phone with an iPhone-inspired camera layout.",
+            ),
+            (
+                "Support for school cellphone bans reaches new high, where do you stand?",
+                "A Pew survey measures support for school phone bans; an introductory paragraph mentions Apple's Back to School offer.",
+            ),
+        ]
+
+        for title, summary in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+                self.assertEqual(tier, "weak", reason)
+
+        tier, reason = module.classify_relevance_tier(
+            "Support for school cellphone bans reaches new high, where do you stand?",
+            "A Pew survey measures support for phone bans while the introduction mentions Apple's Back to School offer.",
+            [
+                "Apple offers up to $150 with eligible Mac and iPad purchases.",
+                "The Pew survey says 77% support classroom phone bans, up from 68% in 2024.",
+                "48% support bell-to-bell restrictions.",
+            ],
+            "9to5Mac",
+        )
+        self.assertEqual(tier, "weak", reason)
+
+        pastebot_facts = [
+            "Pastebot syncs across Macs with iCloud and works with Universal Clipboard on iPhone.",
+            "It supports Apple Shortcuts and is sold through the Mac App Store by subscription.",
+        ]
+        tier, reason = module.classify_relevance_tier(
+            "Pastebot 3 for Mac Adds Rule-Based Organization, Powerful Paste Filters",
+            "Tapbots launched Pastebot 3, a third-party clipboard manager for macOS.",
+            pastebot_facts,
+            "MacRumors",
+        )
+        self.assertEqual(tier, "weak", reason)
+
+    def test_direct_apple_retail_program_candidate_is_not_dropped(self):
+        module = load_module()
+        source = next(
+            item
+            for item in module.build_sources(module.datetime.now().astimezone())
+            if item.name == "MacRumors"
+        )
+        candidate = module.Candidate(
+            source="MacRumors",
+            url="https://www.macrumors.com/2026/07/29/is-apple-upgrade-program-worth-it/",
+            title="Apple's New Upgrade Program: Is It Worth It?",
+            summary=(
+                "With the new Apple Upgrade program in the U.S., you can now lease an iPhone, "
+                "but the value is more complicated than a simple yes or no."
+            ),
+            feed_time_raw="Wed, 29 Jul 2026 10:00:00 PDT",
+        )
+
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "retail_store")
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+
+    def test_direct_icloud_entitlement_and_refurbished_store_actions_are_strong(self):
+        module = load_module()
+        cases = [
+            (
+                "iPhone Users Who Pay for iCloud Storage Get Two New iOS 27 Perks",
+                "Apple says paid iCloud+ plans gain higher Apple Intelligence limits and new HomeKit Secure Video benefits.",
+                "service_content",
+            ),
+            (
+                "Studio Display XDR hits Apple's refurb store, saving you up to $540",
+                "Apple has started selling Studio Display XDR through its Certified Refurbished store with official warranty coverage.",
+                "retail_store",
+            ),
+        ]
+
+        for title, summary, kind in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+                self.assertEqual(tier, "strong", reason)
+                self.assertEqual(module.detect_event_kind(title, summary), kind)
+
+    def test_system_performance_facet_requires_an_os_performance_action(self):
+        module = load_module()
+        ios_story = (
+            "iOS 27 Speeds Up the iPhone You Already Own: Here's How",
+            "Apple says iOS 27 makes app launches up to 30 percent faster and AirDrop transfers up to 80 percent quicker.",
+        )
+        modem_story = (
+            "Qualcomm Expects Apple Modem Revenue to Drop Faster Than Expected",
+            "Qualcomm expects its share of components in the next iPhone to fall below 20 percent while Apple's C2 modem targets faster speeds.",
+        )
+
+        self.assertIn("system-performance-optimization", module.primary_topic_facets(*ios_story))
+        self.assertNotIn("system-performance-optimization", module.primary_topic_facets(*modem_story))
+
+    def test_editorial_siri_home_hub_story_remains_hardware_roadmap(self):
+        module = load_module()
+        title = "苹果这块 AI 屏幕，想让 Siri 接管你家的一切"
+        summary = (
+            "苹果计划在今年 10 月至明年初推出配备 7 英寸屏幕的家庭中枢，"
+            "内部代号 J490，并同步更新 Apple TV 和 HomePod mini。"
+        )
+        facts = ["这款家庭硬件此前多次推迟，目标价格约为 350 美元。"]
+
+        self.assertTrue(module.is_direct_apple_hardware_roadmap_story(f"{title} {summary} {' '.join(facts)}", title))
+        self.assertTrue(module.is_title_led_direct_apple_hardware_roadmap_story(title, f"{summary} {' '.join(facts)}"))
+        self.assertEqual(module.detect_event_kind(title, summary, facts), "hardware_market")
+        tier, reason = module.classify_relevance_tier(title, summary, facts, "爱范儿")
+        self.assertEqual(tier, "strong", reason)
+
+        article = article_for(module, title, summary, "爱范儿")
+        article.key_facts = facts
+        events = module.cluster_articles([article])
+
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0].event_kind, "hardware_market")
+        self.assertEqual(events[0].category, "hardware_products")
+
+    def test_non_apple_market_report_is_not_promoted_by_body_roadmap_background(self):
+        module = load_module()
+        title = "中国智能手机市场整体下滑 非国产品牌逆势走高"
+        summary = (
+            "CAICT 数据显示，2026 年 6 月外国品牌智能手机出货量环比增长 66% 至 328 万部，"
+            "但未按厂商拆分。后文提到苹果将公布财报，并推测 Apple Intelligence 未来可能在中国落地。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "cnBeta")
+
+        self.assertEqual(tier, "weak", reason)
+
+    def test_third_party_brand_tribute_is_not_an_apple_hardware_roadmap(self):
+        module = load_module()
+        title = "雷军致敬库克：only Skynomad can do"
+        summary = (
+            "小米创始人雷军发布动态预热汽车技术发布会，并借用了库克常说的 Only Apple can do。"
+            "后文回顾苹果过去推出软硬件方案和 iPhone 散热设计时使用这句品牌话术。"
+        )
+
+        tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+
+        self.assertEqual(tier, "weak", reason)
 
 
 if __name__ == "__main__":
