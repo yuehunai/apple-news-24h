@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.46.0 - 2026-08-03
+
+- Added title-and-lead identities for measured institutional Apple hardware adoption, Apple-product supply constraints, iPhone component-cost forecasts, and Apple smart-glasses health platforms so direct product actions survive competitor and industry background.
+- Improved same-action clustering for cross-language MacBook shortages, MacBook thermal defects, and smart-glasses health reporting while keeping terminal price forecasts, bill-of-materials analysis, product defects, and retailer promotions as separate events.
+- Tightened weak relevance handling for competitor follow-ups, broad SoC or component-market reports, static Apple comparison metrics, and retailer-priced deal articles even when their titles omit explicit deal wording.
+- Improved title-led hardware boundaries so current Apple shortages and quantified cost reports remain strong without letting body-only product, region, memory, price, or supply references bridge unrelated events.
+- Kept publisher-built launch-date projections based only on historical calendars in `deferred_events`, while preserving current attributed launch-timing reports as eligible news.
+- Updated fallback policy guidance and expanded regression coverage from 829 to 841 tests; concurrent live validation preserved identical candidate, detail-selection, and article coverage, produced no merge warnings, and reduced runtime from 170.01 to 152.45 seconds against the same-window baseline.
+
 ## 1.45.0 - 2026-08-01
 
 - Added compound first-party roadmap and program decomposition for Apple Upgrade, smart-home hardware, Apple service content, and executive strategy or transition coverage so broad source articles no longer bridge independent product actions.

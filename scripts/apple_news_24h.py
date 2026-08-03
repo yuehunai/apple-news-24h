@@ -4179,6 +4179,8 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "nubia",
             "zte",
             "oneplus",
+            "microsoft",
+            "surface",
             "高通",
             "马斯克",
             "三星",
@@ -4186,6 +4188,7 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "努比亚",
             "中兴",
             "一加",
+            "微软",
             "huawei",
             "honor",
             "xiaomi",
@@ -4216,6 +4219,7 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "薄于 iphone",
             "对比",
             "对标",
+            "碾压",
             "超过苹果",
             "超越苹果",
             "远超苹果",
@@ -4264,6 +4268,8 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "nubia",
             "zte",
             "oneplus",
+            "microsoft",
+            "surface",
             "高通",
             "马斯克",
             "三星",
@@ -4271,6 +4277,7 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "努比亚",
             "中兴",
             "一加",
+            "微软",
         ],
     ) <= 0:
         return False
@@ -4302,6 +4309,7 @@ def is_non_apple_device_comparison_story(title: str, text: str) -> bool:
             "ai 手机",
             "智能体手机",
             "对比",
+            "碾压",
         ],
     ) > 0
 
@@ -6075,6 +6083,80 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
     return False
 
 
+def is_non_apple_title_action_using_apple_as_reference_story(title: str, text: str) -> bool:
+    """Detect a competitor action whose title uses an Apple product as the benchmark."""
+    title_lower = title.lower()
+    if score_terms(
+        title_lower,
+        ["iphone", "ipad", "macbook", "apple watch", "airpods", "vision pro", "苹果"],
+    ) <= 0:
+        return False
+    competitor_subject = score_terms(
+        title_lower,
+        [
+            "android",
+            "samsung",
+            "google",
+            "huawei",
+            "honor",
+            "xiaomi",
+            "oppo",
+            "vivo",
+            "pixel",
+            "surface",
+            "安卓",
+            "三星",
+            "谷歌",
+            "华为",
+            "荣耀",
+            "小米",
+            "国产",
+            "厂商",
+            "top5",
+            "top 5",
+        ],
+    ) > 0
+    if not competitor_subject:
+        return False
+    reference_or_followup = score_terms(
+        title_lower,
+        [
+            "compared with",
+            "compared to",
+            "rival",
+            "matches",
+            "following apple",
+            "follows apple",
+            "follow suit",
+            "adopt",
+            "copy",
+            "对比",
+            "对标",
+            "比肩",
+            "媲美",
+            "跟进",
+            "效仿",
+            "照搬",
+            "采用类似",
+        ],
+    ) > 0
+    if not reference_or_followup:
+        return False
+    return score_terms(
+        title_lower,
+        [
+            "apple announces",
+            "apple launches",
+            "apple releases",
+            "apple confirms",
+            "苹果宣布",
+            "苹果推出",
+            "苹果发布",
+            "苹果确认",
+        ],
+    ) == 0
+
+
 def is_non_actionable_recap_title(title: str) -> bool:
     title_lower = title.lower().strip()
     return bool(re.match(r"^top stories\b", title_lower))
@@ -6466,7 +6548,7 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
         return False
     retail_title_lower = title_lower.replace("京东方", "")
     retail_lower = lower.replace("京东方", "")
-    if score_terms(
+    title_discount_score = score_terms(
         retail_title_lower,
         [
             "deal",
@@ -6495,7 +6577,55 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
             "拼多多",
             "百亿补贴",
         ],
-    ) <= 0:
+    )
+    retailer_in_title = score_terms(
+        retail_title_lower,
+        [
+            "amazon",
+            "best buy",
+            "walmart",
+            "target",
+            "retailer",
+            "京东",
+            "天猫",
+            "淘宝",
+            "拼多多",
+            "苏宁",
+        ],
+    ) > 0
+    title_has_price = bool(
+        re.search(
+            r"(?i)(?:\b(?:from|for|at|under|only)\s*)?[$€£¥]\s*\d|"
+            r"\d[\d,.]*\s*(?:元|美元|英镑|欧元)",
+            title,
+        )
+    )
+    lead_has_promotion = score_terms(
+        lead_lower,
+        [
+            "deal",
+            "deals",
+            "discount",
+            "sale",
+            "low price",
+            "lowest price",
+            "record low",
+            "save",
+            "off",
+            "affiliate",
+            "deals roundup",
+            "deals newsletter",
+            "优惠",
+            "促销",
+            "折扣",
+            "降价",
+            "立减",
+            "到手价",
+        ],
+    ) > 0
+    if title_discount_score <= 0 and not (
+        retailer_in_title and title_has_price and lead_has_promotion
+    ):
         return False
     if score_terms(
         lead_lower,
@@ -6514,6 +6644,25 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
         ],
     ) > 0:
         return False
+    explicit_title_deal = score_terms(
+        retail_title_lower,
+        [
+            "deal",
+            "discount",
+            "record low",
+            "lowest price",
+            "save",
+            "off",
+            "sale",
+            "优惠",
+            "促销",
+            "折扣",
+            "立减",
+            "到手价",
+        ],
+    ) > 0
+    if explicit_title_deal and title_has_price and lead_has_promotion:
+        return True
     if title_led_identity(title, text[:520]).content_form == "deal":
         if re.match(r"^(?:apple(?:'s)?|苹果)(?:\s|[：:])", title_lower) and score_terms(
             lead_lower,
@@ -8570,6 +8719,7 @@ def is_relevant_candidate(
             return False
     direct_title_event = (
         is_apple_device_battery_regulation_story(text)
+        or is_direct_apple_product_adoption_story(candidate.title, text)
         or is_apple_chip_tariff_exemption_story(candidate.title, text)
         or is_direct_apple_regulated_technology_access_story(candidate.title, text)
         or is_direct_apple_os_component_change_story(candidate.title, text)
@@ -10802,6 +10952,7 @@ REGION_SENSITIVE_EVENT_KINDS = {
 }
 
 REGION_WARNING_EXEMPT_FACETS = {
+    "apple-product-supply-constraint",
     "apple-device-battery-regulation",
     "apple-regulatory-trade-action",
     "apple-education-promotion",
@@ -12987,6 +13138,72 @@ def is_direct_apple_smart_glasses_roadmap_story(title: str, text: str) -> bool:
     return (apple_actor or title_led_action) and roadmap_action
 
 
+def is_apple_smart_glasses_health_platform_story(title: str, text: str) -> bool:
+    """Match Apple-glasses health functions using title and lead evidence."""
+    title_lower = title.lower()
+    lead = title_and_lead_scope(title, text, limit=1100).lower()
+    product_anchor = score_terms(
+        lead,
+        [
+            "apple smart glasses",
+            "apple's smart glasses",
+            "apple’s smart glasses",
+            "apple glasses",
+            "apple glass",
+            "苹果智能眼镜",
+            "苹果眼镜",
+        ],
+    ) > 0 or (
+        score_terms(title_lower, ["apple", "苹果"]) > 0
+        and score_terms(title_lower, ["smart glasses", "apple glasses", "智能眼镜", "眼镜"]) > 0
+    )
+    if not product_anchor:
+        return False
+    health_anchor = score_terms(
+        lead,
+        [
+            "health companion",
+            "health platform",
+            "fitness platform",
+            "health and fitness",
+            "fitness+",
+            "fitness tracking",
+            "workout",
+            "heart-rate",
+            "heart rate",
+            "健康伴侣",
+            "健康平台",
+            "健康健身平台",
+            "健身平台",
+            "健身追踪",
+            "运动追踪",
+            "心率",
+        ],
+    ) > 0
+    action_evidence = score_terms(
+        lead,
+        [
+            "will become",
+            "could come to",
+            "could be implemented",
+            "working toward",
+            "working towards",
+            "plans to turn",
+            "job listing",
+            "job listings",
+            "suggest",
+            "future version",
+            "计划将",
+            "打造为",
+            "将成为",
+            "招聘信息",
+            "职位招聘",
+            "未来版本",
+        ],
+    ) > 0
+    return health_anchor and action_evidence
+
+
 def has_direct_iphone_product_title_subject(title: str) -> bool:
     title_lower = title.lower()
     if score_terms(title_lower, ["iphone moment", "iphone 时刻"]) > 0:
@@ -13916,6 +14133,55 @@ def is_unsourced_editorial_hardware_inference_without_new_report(title: str, tex
             "今日透露",
         ],
     ) > 0
+    schedule_title = score_terms(
+        title.lower(),
+        [
+            "pre-orders",
+            "preorders",
+            "release date",
+            "launch date",
+            "发布日期",
+            "发售日期",
+            "预购日期",
+        ],
+    ) > 0
+    official_schedule_missing = score_terms(
+        scope,
+        [
+            "has yet to reveal",
+            "has not revealed",
+            "has yet to announce",
+            "has not announced",
+            "尚未公布",
+            "尚未宣布",
+            "尚未确认",
+        ],
+    ) > 0
+    calendar_inference = score_terms(
+        scope,
+        [
+            "familiar pattern",
+            "historical pattern",
+            "usual pattern",
+            "most likely date",
+            "until proven otherwise",
+            "another possibility",
+            "it is possible that",
+            "would likely",
+            "历年节奏",
+            "历史规律",
+            "最可能日期",
+            "另一种可能",
+            "推演",
+        ],
+    )
+    if (
+        schedule_title
+        and official_schedule_missing
+        and calendar_inference >= 2
+        and not attributed_report
+    ):
+        return True
     historical_design_premise = bool(
         re.search(
             r"(?:looked|looks|remained|stayed)\s+(?:largely\s+)?(?:the\s+)?same\s+since|"
@@ -15761,6 +16027,35 @@ def is_iphone_component_cost_forecast_story(text: str) -> bool:
     if score_terms(lower, ["component cost", "component costs", "bill of materials", "bom", "materials cost", "物料清单", "物料成本", "组件成本", "成本"]) <= 0:
         return False
     return score_terms(lower, ["counterpoint", "nand", "dram", "memory", "storage", "2nm", "packaging", "$300", "300", "内存", "存储", "闪存", "封装"]) > 0
+
+
+def is_title_led_iphone_component_cost_forecast_story(title: str, text: str) -> bool:
+    """Match component-cost analysis only when cost is the title's Apple action."""
+    title_lower = title.lower()
+    if score_terms(
+        title_lower,
+        ["iphone 18", "iphone18", "iphone air", "iphone ultra", "苹果 iphone"],
+    ) <= 0:
+        return False
+    if score_terms(
+        title_lower,
+        [
+            "component cost",
+            "bill of materials",
+            "bom cost",
+            "cost share",
+            "成本占",
+            "吞噬利润",
+            "物料成本",
+            "组件成本",
+        ],
+    ) <= 0:
+        return False
+    scope = title_and_lead_scope(title, text, limit=1000).lower()
+    return score_terms(
+        scope,
+        ["memory", "storage", "dram", "nand", "flash", "内存", "存储", "闪存", "封装"],
+    ) > 0
 
 
 def is_apple_tv_purchase_4k_upgrade_story(text: str) -> bool:
@@ -17786,6 +18081,64 @@ def is_apple_memory_supply_constraint_story(text: str) -> bool:
     ) > 0
 
 
+def is_title_led_apple_product_supply_constraint_story(title: str, text: str) -> bool:
+    """Recognize concrete Apple-product availability constraints from title/lead."""
+    title_products = hardware_product_families_from_text(title)
+    if not title_products or (
+        effective_apple_term_score(title) <= 0 and not loose_apple_product_marker(title)
+    ):
+        return False
+    scope = title_and_lead_scope(title, text, limit=1000).lower()
+    supply_constraint = score_terms(
+        scope,
+        [
+            "shortage",
+            "supply shortage",
+            "supply constraints",
+            "supply crisis",
+            "tight supply",
+            "out of stock",
+            "backordered",
+            "inventory pressure",
+            "limited availability",
+            "shipping delay",
+            "shipping delays",
+            "供应危机",
+            "供应紧张",
+            "供应受限",
+            "供应短缺",
+            "严重缺货",
+            "缺货",
+            "库存紧张",
+            "库存压力",
+            "发货延迟",
+            "延迟发货",
+        ],
+    ) > 0
+    concrete_availability = score_terms(
+        scope,
+        [
+            "apple store",
+            "apple's online store",
+            "apple online store",
+            "apple's website",
+            "apple website",
+            "retail inventory",
+            "shipping estimate",
+            "delivery estimate",
+            "ship by",
+            "wait until",
+            "苹果官网",
+            "零售库存",
+            "发货时间",
+            "预计发货",
+            "等待至",
+            "等到",
+        ],
+    ) > 0
+    return supply_constraint and concrete_availability
+
+
 def is_apple_chip_process_roadmap_story(text: str) -> bool:
     lower = text.lower()
     if effective_apple_term_score(lower) <= 0:
@@ -18109,6 +18462,12 @@ def is_non_apple_price_followup_story(title: str, text: str) -> bool:
 def is_non_apple_component_market_background_story(title: str, text: str) -> bool:
     title_lower = title.lower()
     lower = text.lower()
+    if is_direct_apple_supplier_cost_change_story(title, text):
+        return False
+    if is_apple_specific_market_share_report_story(title, ""):
+        return False
+    if is_multi_vendor_market_report_with_material_apple_metrics(text, title):
+        return False
     if (
         is_apple_memory_supplier_sourcing_story(lower)
         or is_apple_restricted_memory_supplier_approval_story(lower)
@@ -18120,8 +18479,17 @@ def is_non_apple_component_market_background_story(title: str, text: str) -> boo
             "android",
             "android brands",
             "smartphone market",
+            "smartphone sales",
+            "smartphone soc",
+            "qualcomm",
+            "mediatek",
             "安卓",
             "手机市场",
+            "手机销量",
+            "手机 soc",
+            "手机芯片",
+            "高通",
+            "联发科",
             "手机厂商",
             "安卓厂商",
         ],
@@ -18191,8 +18559,15 @@ def is_non_apple_component_market_background_story(title: str, text: str) -> boo
             "bank",
             "price",
             "prices",
+            "shipments",
+            "shipment decline",
+            "sales decline",
             "涨价",
             "价格",
+            "出货",
+            "销量",
+            "下滑",
+            "暴跌",
             "行业",
             "市场",
             "利润",
@@ -18711,9 +19086,6 @@ def is_primary_apple_chip_roadmap_title(title: str) -> bool:
             "roadmap",
             "timeline",
             "ai-focused",
-            "pro",
-            "max",
-            "ultra",
             "跳过",
             "推出",
             "路线",
@@ -19009,6 +19381,15 @@ def is_multi_vendor_market_report_with_material_apple_metrics(text: str, title: 
         if not re.search(metric_pattern, sentence) or not re.search(market_pattern, sentence):
             continue
         if not re.search(r"\d+(?:\.\d+)?\s*(?:%|万|million|billion)", sentence):
+            continue
+        directional_pattern = (
+            r"(?:grew|growth|gained|increased|declined|fell|rose|from\s+\d|to\s+\d|"
+            r"同比|环比|增长|下降|提升|上升|下滑|由\s*\d|升至|降至)"
+        )
+        if not re.search(
+            rf"{apple_pattern}[^。.!?\n]{{0,100}}{directional_pattern}",
+            sentence,
+        ):
             continue
         if re.search(
             rf"{apple_pattern}[^。.!?，,；;\n]{{0,100}}\d+(?:\.\d+)?\s*(?:%|万|million|billion)",
@@ -20485,6 +20866,122 @@ def is_apple_retail_device_deployment_story(title: str, text: str) -> bool:
     return retail_score > 0 and equipment_score > 0 and device_score > 0
 
 
+def is_direct_apple_product_adoption_story(title: str, text: str) -> bool:
+    """Identify concrete institutional adoption of a first-party Apple device."""
+    identity = title_led_identity(title, text)
+    if (
+        identity.scope != "apple-direct"
+        or identity.content_form != "news"
+        or not identity.title_products
+        & {
+            "iphone",
+            "ipad",
+            "ipad-air",
+            "ipad-base",
+            "ipad-mini",
+            "ipad-pro",
+            "mac",
+            "macbook",
+            "apple-watch",
+            "vision-pro",
+        }
+    ):
+        return False
+    scope = title_and_lead_scope(title, text, limit=1500).lower()
+    if score_terms(
+        title.lower(),
+        [
+            "launches new service",
+            "launches a service",
+            "service to manage",
+            "management service",
+            "device management",
+            "推出新服务",
+            "管理服务",
+            "设备管理",
+        ],
+    ) > 0:
+        return False
+    institution = score_terms(
+        scope,
+        [
+            "school",
+            "schools",
+            "school district",
+            "k-12",
+            "education market",
+            "university",
+            "universities",
+            "enterprise",
+            "enterprises",
+            "organization",
+            "organizations",
+            "学校",
+            "学区",
+            "教育市场",
+            "高校",
+            "大学",
+            "企业",
+            "机构",
+        ],
+    ) > 0
+    adoption = score_terms(
+        scope,
+        [
+            "adopt",
+            "adoption",
+            "deploy",
+            "deployment",
+            "migrate to",
+            "migrating to",
+            "move to",
+            "moving to",
+            "replace",
+            "replacing",
+            "purchased",
+            "bought",
+            "roll out",
+            "rolling out",
+            "采用",
+            "部署",
+            "迁移至",
+            "迁移到",
+            "转向",
+            "替换",
+            "取代",
+            "采购",
+            "购买",
+            "配发",
+        ],
+    ) > 0
+    attributed = score_terms(
+        scope,
+        [
+            "apple said",
+            "apple says",
+            "apple disclosed",
+            "apple reported",
+            "earnings call",
+            "earnings conference call",
+            "quarterly results",
+            "苹果称",
+            "苹果表示",
+            "苹果披露",
+            "苹果报告",
+            "财报电话会议",
+            "季度业绩",
+        ],
+    ) > 0
+    measured = bool(
+        re.search(
+            r"(?i)\d[\d,.\s万千~～至到-]{0,16}"
+            r"(?:units?|devices?|students?|employees?|schools?|台|名学生|名员工|所(?:学校|高中))",
+            scope,
+        )
+    )
+    return institution and adoption and (attributed or measured)
+
+
 def is_apple_pencil_product_roadmap_story(title: str, text: str) -> bool:
     title_lower = title.lower()
     lower = text.lower()
@@ -21501,9 +21998,18 @@ def _topic_facets_from_text(text: str) -> set[str]:
                 "discoloration",
                 "color distortion",
                 "hardware fault",
+                "keyboard deformation",
+                "key deformation",
+                "stuck key",
+                "keycap",
                 "高负载",
+                "高温",
                 "过热",
                 "发热",
+                "键帽变形",
+                "按键变形",
+                "键帽卡死",
+                "按键卡死",
                 "屏幕变色",
                 "颜色失真",
                 "色偏",
@@ -21793,6 +22299,7 @@ SPLITTABLE_HARDWARE_TOPIC_FACETS = {
     "apple-education-promotion",
     "apple-sales-tax-holiday",
     "apple-smart-glasses-roadmap",
+    "apple-smart-glasses-health-platform",
     "applecare-plan-price-change",
     "apple-device-battery-regulation",
     "apple-chip-memory-capacity",
@@ -21842,6 +22349,7 @@ SPLITTABLE_HARDWARE_TOPIC_FACETS = {
     "apple-chip-roadmap",
     "apple-chip-process-roadmap",
     "apple-memory-supply-constraint",
+    "apple-product-supply-constraint",
     "ipad-chip-roadmap",
     "ipad-product-roadmap",
     "iphone-chip-roadmap",
@@ -21941,6 +22449,8 @@ EXACT_SHARED_EVENT_TOPIC_FACETS = {
     "apple-education-promotion",
     "apple-sales-tax-holiday",
     "apple-smart-glasses-roadmap",
+    "apple-smart-glasses-health-platform",
+    "apple-product-supply-constraint",
     "applecare-plan-price-change",
     "apple-device-battery-regulation",
     "apple-chip-memory-capacity",
@@ -22039,6 +22549,18 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
         combined_facets.discard("apple-intelligence-china-regulatory-rollout")
     if not is_apple_sales_tax_holiday_story(title, combined_text):
         combined_facets.discard("apple-sales-tax-holiday")
+    if is_apple_smart_glasses_health_platform_story(title, combined_text):
+        return frozenset({"apple-smart-glasses-health-platform"})
+    if is_title_led_apple_product_supply_constraint_story(title, combined_text):
+        if is_apple_memory_supply_constraint_story(combined_text):
+            return frozenset(
+                {"apple-product-supply-constraint", "apple-memory-supply-constraint"}
+            )
+        return frozenset({"apple-product-supply-constraint"})
+    if is_title_led_iphone_component_cost_forecast_story(title, combined_text):
+        return frozenset({"iphone-component-cost-forecast"})
+    if "macbook-thermal-defect" in (title_facets | combined_facets):
+        return frozenset({"macbook-thermal-defect"})
     if is_apple_silicon_third_party_os_driver_compatibility_story(title, combined_text):
         return frozenset({"apple-silicon-os-driver-compatibility"})
     if is_direct_apple_smart_glasses_roadmap_story(title, combined_text):
@@ -22236,6 +22758,18 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
         return frozenset(title_foldable_production_facets | (title_facets - BROAD_TOPIC_FACETS))
     if "iphone-memory-feature-support" in combined_facets:
         return frozenset({"iphone-memory-feature-support"})
+    memory_supplier_facets = combined_facets & {
+        "apple-restricted-memory-supplier-approval",
+        "apple-memory-supplier-sourcing",
+    }
+    if memory_supplier_facets:
+        return frozenset(memory_supplier_facets)
+    if "apple-product-price-increase" in title_facets:
+        combined_price_details = price_detail_facets(combined_facets)
+        title_price_details = price_detail_facets(title_facets)
+        if combined_price_details and not title_price_details:
+            return frozenset(title_facets | combined_price_details)
+        return frozenset(title_facets)
     exact_shared_facets = combined_facets & EXACT_SHARED_EVENT_TOPIC_FACETS
     if exact_shared_facets:
         return frozenset(exact_shared_facets | merge_guard_platform_facets(combined_facets))
@@ -22278,9 +22812,6 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
         return frozenset(combined_facets)
     if combined_facets & APP_STORE_POLICY_SUBTOPIC_FACETS:
         return frozenset(combined_facets)
-    memory_supplier_facets = combined_facets & {"apple-restricted-memory-supplier-approval", "apple-memory-supplier-sourcing"}
-    if memory_supplier_facets:
-        return frozenset(memory_supplier_facets)
     if "visionos-m5-ai-features" in combined_facets:
         return frozenset(combined_facets)
     if "iphone-component-cost-forecast" in combined_facets:
@@ -22299,11 +22830,6 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
     )
     if market_report_primary:
         return frozenset({"apple-market-share-report"} | merge_guard_platform_facets(combined_facets))
-    if "apple-product-price-increase" in title_facets:
-        combined_price_details = price_detail_facets(combined_facets)
-        title_price_details = price_detail_facets(title_facets)
-        if combined_price_details and not title_price_details:
-            return frozenset(title_facets | combined_price_details)
     if title_facets and (title_facets - BROAD_TOPIC_FACETS):
         return frozenset(title_facets)
     return frozenset(combined_facets or title_facets)
@@ -22327,6 +22853,18 @@ def _primary_merge_guard_facets(title: str, summary: str = "") -> frozenset[str]
         combined_facets.discard("apple-intelligence-china-regulatory-rollout")
     if not is_apple_sales_tax_holiday_story(title, combined_text):
         combined_facets.discard("apple-sales-tax-holiday")
+    if is_apple_smart_glasses_health_platform_story(title, combined_text):
+        return frozenset({"apple-smart-glasses-health-platform"})
+    if is_title_led_apple_product_supply_constraint_story(title, combined_text):
+        if is_apple_memory_supply_constraint_story(combined_text):
+            return frozenset(
+                {"apple-product-supply-constraint", "apple-memory-supply-constraint"}
+            )
+        return frozenset({"apple-product-supply-constraint"})
+    if is_title_led_iphone_component_cost_forecast_story(title, combined_text):
+        return frozenset({"iphone-component-cost-forecast"})
+    if "macbook-thermal-defect" in (title_facets | combined_facets):
+        return frozenset({"macbook-thermal-defect"})
     if title_has_china_ai_action:
         return frozenset({"apple-intelligence-china-regulatory-rollout"})
     if is_title_primary_siri_ai_availability_story(title):
@@ -22501,6 +23039,14 @@ def _primary_merge_guard_facets(title: str, summary: str = "") -> frozenset[str]
         return frozenset(title_foldable_production_facets | (title_facets - BROAD_TOPIC_FACETS))
     if "iphone-memory-feature-support" in combined_facets:
         return frozenset({"iphone-memory-feature-support"} | merge_guard_platform_facets(combined_facets))
+    if "apple-restricted-memory-supplier-approval" in combined_facets or "apple-memory-supplier-sourcing" in combined_facets:
+        return frozenset(combined_facets)
+    if "apple-product-price-increase" in title_facets:
+        combined_price_details = price_detail_facets(combined_facets)
+        title_price_details = price_detail_facets(title_facets)
+        if combined_price_details and not title_price_details:
+            return frozenset(title_facets | combined_price_details)
+        return frozenset(title_facets)
     exact_shared_facets = combined_facets & EXACT_SHARED_EVENT_TOPIC_FACETS
     if exact_shared_facets:
         return frozenset(exact_shared_facets | merge_guard_platform_facets(combined_facets))
@@ -22519,17 +23065,10 @@ def _primary_merge_guard_facets(title: str, summary: str = "") -> frozenset[str]
         return frozenset({"apple-arcade"})
     if "final-cut-camera-update" in combined_facets:
         return frozenset({"final-cut-camera-update"})
-    if "apple-restricted-memory-supplier-approval" in combined_facets or "apple-memory-supplier-sourcing" in combined_facets:
-        return frozenset(combined_facets)
     if "iphone-component-cost-forecast" in combined_facets:
         return frozenset({"iphone-component-cost-forecast"} | merge_guard_platform_facets(combined_facets))
     if "apple-watch-band-sensor-rumor" in combined_facets:
         return frozenset({"apple-watch-band-sensor-rumor"} | merge_guard_platform_facets(combined_facets))
-    if "apple-product-price-increase" in title_facets:
-        combined_price_details = price_detail_facets(combined_facets)
-        title_price_details = price_detail_facets(title_facets)
-        if combined_price_details and not title_price_details:
-            return frozenset(title_facets | combined_price_details)
     if (
         is_apple_chip_process_roadmap_story(combined_text)
         and score_terms(
@@ -22608,9 +23147,14 @@ def cached_article_primary_facets(
             and not re.fullmatch(r"os-release-beta-\d+", facet)
         }
         facets.add("os-release-rc")
-    if not is_foldable_iphone_panel_market_report_context(" ".join((title, summary, *key_facts))) and is_multi_vendor_market_report_with_material_apple_metrics(
-        " ".join((summary, *key_facts)),
-        title,
+    article_context = " ".join((title, summary, *key_facts))
+    if (
+        not is_foldable_iphone_panel_market_report_context(article_context)
+        and not is_non_apple_component_market_background_story(title, article_context)
+        and is_multi_vendor_market_report_with_material_apple_metrics(
+            " ".join((summary, *key_facts)),
+            title,
+        )
     ):
         facets.add("apple-market-share-report")
     title_identity = build_event_identity(title, summary[:260])
@@ -22990,6 +23534,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if is_direct_apple_financial_results_story(title, text):
         return "general_company"
     if is_apple_owned_brand_engineering_strategy_story(title, text):
+        return "hardware_market"
+    if is_direct_apple_product_adoption_story(title, text):
         return "hardware_market"
     if (
         semantic_identity.scope == "apple-direct"
@@ -23875,8 +24421,24 @@ def is_direct_apple_supplier_cost_change_story(title: str, text: str) -> bool:
     """Keep supplier price changes that explicitly alter Apple product input costs."""
     title_lower = title.lower()
     lead = title_and_lead_scope(title, text, limit=1000).lower()
-    identity = title_led_identity(title, lead)
-    if identity.scope != "apple-direct" or "price-change" not in identity.actions:
+    price_change = score_terms(
+        title_lower,
+        [
+            "price hike",
+            "price hikes",
+            "raises prices",
+            "increases prices",
+            "increases chip costs",
+            "cost more",
+            "costs more",
+            "涨价",
+            "提价",
+            "上调价格",
+            "提高价格",
+            "芯片成本",
+        ],
+    ) > 0
+    if not price_change:
         return False
     supplier_title = score_terms(
         title_lower,
@@ -23918,7 +24480,7 @@ def is_direct_apple_supplier_cost_change_story(title: str, text: str) -> bool:
     ) > 0
     return supplier_title and (
         apple_cost_link
-        or bool(identity.title_products)
+        or bool(hardware_product_families_from_text(title))
         or effective_apple_term_score(title) > 0
     )
 
@@ -24037,6 +24599,18 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    if is_routine_retail_discount_story(title, text):
+        return "weak", "routine third-party retail discount or affiliate deal"
+    if is_non_apple_title_action_using_apple_as_reference_story(title, text):
+        return "weak", "non-Apple title action using an Apple product only as reference or precedent"
+    if is_non_apple_component_market_background_story(title, text):
+        return "weak", "non-Apple component or industry report with Apple used as a market data point"
+    if is_apple_smart_glasses_health_platform_story(title, text):
+        return "strong", "Apple smart-glasses health or fitness platform roadmap"
+    if is_title_led_apple_product_supply_constraint_story(title, text):
+        return "strong", "title-led Apple product availability or supply constraint"
+    if is_title_led_iphone_component_cost_forecast_story(title, text):
+        return "strong", "Apple iPhone component cost or bill-of-materials forecast"
     if is_rumor_feature_recap_without_new_reporting(title, text):
         return "weak", "rumor feature roundup without new standalone reporting"
     if is_unsourced_multi_product_outlook_without_new_reporting(title, text):
@@ -24059,6 +24633,8 @@ def classify_relevance_tier(
         return "strong", "Apple Wallet car key partner support or code-reference event"
     if is_apple_owned_brand_engineering_strategy_story(title, text):
         return "strong", "Apple-owned hardware brand engineering or product-strategy report"
+    if is_direct_apple_product_adoption_story(title, text):
+        return "strong", "measured institutional adoption of a first-party Apple product"
     if (
         semantic_identity.scope == "apple-direct"
         and semantic_identity.title_products & {"shazam", "beats"}
@@ -24402,7 +24978,10 @@ def classify_relevance_tier(
     direct_legal_scope = title_and_lead_scope(title, summary, limit=1400)
     if is_title_primary_apple_legal_proceeding_story(title, direct_legal_scope):
         return "strong", "Apple-specific lawsuit or legal proceeding"
-    if is_apple_specific_market_share_report_story(text, title):
+    if (
+        is_apple_specific_market_share_report_story(text, title)
+        and not is_non_apple_component_market_background_story(title, text)
+    ):
         return "strong", "Apple-specific hardware shipment or market-share report"
     if (
         is_third_party_app_or_service_status_story(title, text)
@@ -27750,6 +28329,11 @@ def priority_title_identity_boundary_conflict(left: Article, right: Article) -> 
     """Reject only title boundaries that must outrank broad shared facets."""
     left_identity = article_title_led_event_identity(left)
     right_identity = article_title_led_event_identity(right)
+    shared_supply_constraint = bool(
+        article_primary_facets(left)
+        & article_primary_facets(right)
+        & {"apple-memory-supply-constraint", "apple-product-supply-constraint"}
+    )
     left_target = "analyst-target-action" in left_identity.title_components
     right_target = "analyst-target-action" in right_identity.title_components
     if left_target != right_target:
@@ -27768,7 +28352,12 @@ def priority_title_identity_boundary_conflict(left: Article, right: Article) -> 
     right_intents = {
         item for item in right_identity.title_components if item.startswith("primary-intent:")
     }
-    if left_intents and right_intents and not (left_intents & right_intents):
+    if (
+        left_intents
+        and right_intents
+        and not (left_intents & right_intents)
+        and not shared_supply_constraint
+    ):
         return True
     left_display_components = {
         item
@@ -28272,12 +28861,16 @@ def should_merge(article: Article, event: Event) -> bool:
         & effective_topic_facets(event_primary_facets(event))
         & EXACT_SHARED_EVENT_TOPIC_FACETS
     )
+    same_product_supply_constraint = bool(
+        common_exact_facets & {"apple-product-supply-constraint"}
+        and title_hardware_product_families_compatible(article, event)
+    )
     article_guards = article_merge_guard_facets(article)
     event_guards = event_merge_guard_facets(event)
     if (
         common_exact_facets
         and relevance_tier_compatible(article, event)
-        and regions_compatible(article, event)
+        and (regions_compatible(article, event) or same_product_supply_constraint)
         and os_release_facets_compatible(article_guards, event_guards)
         and strategic_transaction_facets_compatible(article_guards, event_guards)
         and app_store_policy_subtopic_facets_compatible(article_guards, event_guards)

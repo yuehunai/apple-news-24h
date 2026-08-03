@@ -4186,6 +4186,44 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(tier, "weak", reason)
 
+    def test_retailer_price_title_with_deal_lead_stays_weak(self):
+        module = load_module()
+        title = "Apple Watch GPS Models Available From $299 on a Major Retailer"
+        summary = (
+            "The retailer has weekend sale prices with $100 discounts across several models. "
+            "The article directs readers to its deals roundup and deals newsletter."
+        )
+
+        self.assertTrue(module.is_routine_retail_discount_story(title, f"{title} {summary}"))
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_direct_apple_product_adoption_report_survives_competitor_replacement_context(self):
+        module = load_module()
+        source = source_named(module, "IT之家")
+        candidate = module.Candidate(
+            source="IT之家",
+            url="https://www.ithome.com/0/999/001.htm",
+            title="苹果称 MacBook 正助力学校替换 Windows 和 Chromebook",
+            summary=(
+                "苹果在季度财报电话会议中披露，多所学区正迁移到 MacBook。"
+                "其中 18 所高中覆盖 2.5 万名学生，另一学区采购超过 6000 台；"
+                "上一季度学校购买的 MacBook 中有一半用于替代 Windows 或 Chromebook。"
+            ),
+            feed_time_raw="Sun, 02 Aug 2026 01:06:59 GMT",
+        )
+
+        self.assertTrue(module.is_relevant_candidate(candidate, source))
+        self.assertEqual(module.detect_event_kind(candidate.title, candidate.summary), "hardware_market")
+        tier, reason = module.classify_relevance_tier(
+            candidate.title,
+            candidate.summary,
+            [],
+            candidate.source,
+        )
+        self.assertEqual(tier, "strong", reason)
+        self.assertEqual(module.choose_category(candidate.title, candidate.summary), "hardware_products")
+
     def test_official_apple_service_promo_is_not_treated_as_routine_retail_discount(self):
         module = load_module()
         title = "Apple Card Promo to Offer Free AirPods Pro 3"
@@ -8434,6 +8472,36 @@ class RelevanceRuleTests(unittest.TestCase):
         tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
 
         self.assertEqual(tier, "weak", reason)
+
+    def test_calendar_derived_apple_launch_dates_stay_weak_without_new_reporting(self):
+        module = load_module()
+        title = "iPhone 18 Pro and iPhone Ultra: Pre-Orders and Release Date"
+        summary = (
+            "Apple has yet to reveal when the devices will be announced and released, but the dates "
+            "usually follow a familiar pattern. Accordingly, the most likely event date is September 9 "
+            "until proven otherwise. Another possibility is September 15, with pre-orders and release "
+            "dates inferred from Apple's historical schedule."
+        )
+
+        self.assertTrue(
+            module.is_unsourced_editorial_hardware_inference_without_new_report(title, summary)
+        )
+        tier, reason = module.classify_relevance_tier(title, summary, [], "MacRumors")
+        self.assertEqual(tier, "weak", reason)
+
+    def test_current_attributed_apple_launch_timing_report_stays_strong(self):
+        module = load_module()
+        title = "Apple Reportedly Plans iPhone 18 Event for September 9"
+        summary = (
+            "According to Bloomberg, people familiar with the plans say Apple is targeting September 9 "
+            "for the iPhone 18 event, with pre-orders expected later that week."
+        )
+
+        self.assertFalse(
+            module.is_unsourced_editorial_hardware_inference_without_new_report(title, summary)
+        )
+        tier, reason = module.classify_relevance_tier(title, summary, [], "9to5Mac")
+        self.assertEqual(tier, "strong", reason)
 
     def test_apple_smart_ring_rumor_is_hardware_roadmap_not_weak_health_context(self):
         module = load_module()
@@ -15534,6 +15602,196 @@ class RelevanceRuleTests(unittest.TestCase):
         tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
 
         self.assertEqual(tier, "weak", reason)
+
+    def test_explicit_retail_deal_does_not_merge_with_product_defect(self):
+        module = load_module()
+        deal = article_for(
+            module,
+            "Apple's latest 16-inch MacBook Pro is $1,200 off with exclusive deal",
+            "B&H offers the M5 Max configuration for $3,199, the lowest price on record.",
+            "AppleInsider",
+        )
+        defect = article_for(
+            module,
+            "M5 Max MacBook Pro 高负载过热导致按键变形卡入机身",
+            "多位用户称高温导致 Delete 键帽变形，苹果零售店给出的过保维修报价接近 900 美元。",
+            "IT之家",
+        )
+
+        self.assertEqual(deal.relevance_tier, "weak")
+        self.assertFalse(module.should_merge(deal, event_for(module, defect)))
+        self.assertFalse(module.should_merge(defect, event_for(module, deal)))
+
+    def test_same_macbook_thermal_defect_merges_across_sources(self):
+        module = load_module()
+        left = article_for(
+            module,
+            "网友反馈苹果 M5 Max MacBook Pro 高负载运行过热导致按键变形",
+            "Delete 键靠近散热出风口，过热后卡入机身，过保维修约 895 美元。",
+            "IT之家",
+        )
+        right = article_for(
+            module,
+            "M5 Max MacBook Pro 被曝因高温致键帽卡死",
+            "高负荷工作时温度突破 100 摄氏度，退格键受热变形，维修费接近 900 美元。",
+            "cnBeta",
+        )
+
+        self.assertIn("macbook-thermal-defect", module.article_primary_facets(left))
+        self.assertIn("macbook-thermal-defect", module.article_primary_facets(right))
+        self.assertNotIn("mac-chip-roadmap", module.article_merge_guard_facets(left))
+        self.assertNotIn("mac-chip-roadmap", module.article_merge_guard_facets(right))
+        self.assertTrue(module.should_merge(left, event_for(module, right)))
+
+    def test_industry_soc_report_stays_weak_and_separate_from_iphone_cost_analysis(self):
+        module = load_module()
+        industry = article_for(
+            module,
+            "存储暴涨重挫手机销量：高通、联发科芯片出货量均下滑",
+            "Counterpoint 称全球智能手机 SoC 出货量下降，联发科占 32%、高通占 22%、苹果占 19%。",
+            "快科技",
+        )
+        iphone_cost = article_for(
+            module,
+            "iPhone 18 内存、闪存成本占比升至 43%",
+            "Counterpoint 预计内存占 BOM 成本 25%、闪存占 18%，合计达到 43%。",
+            "快科技",
+        )
+
+        self.assertEqual(industry.relevance_tier, "weak")
+        self.assertEqual(iphone_cost.relevance_tier, "strong")
+        self.assertIn("iphone-component-cost-forecast", module.article_primary_facets(iphone_cost))
+        self.assertNotIn("apple-market-share-report", module.article_primary_facets(iphone_cost))
+        self.assertFalse(module.should_merge(industry, event_for(module, iphone_cost)))
+
+    def test_title_led_iphone_price_forecast_stays_separate_from_component_cost_analysis(self):
+        module = load_module()
+        component_cost = article_for(
+            module,
+            "iPhone 18 内存、闪存吞噬手机利润：成本占到 43%",
+            "Counterpoint 预计内存占 BOM 成本 25%、闪存占 18%，合计达到 43%。",
+            "快科技",
+        )
+        price_forecast = article_for(
+            module,
+            "iPhone 会涨价多少？古尔曼：100 美元至 200 美元",
+            (
+                "苹果可能因内存、处理器和相机系统成本上升而调整终端售价，"
+                "折叠 iPhone 起售价预计至少 2000 美元。Counterpoint 此前称，"
+                "1TB iPhone 18 Pro Max 的内存与闪存物料成本可能增加近 300 美元。"
+            ),
+            "cnBeta",
+        )
+
+        self.assertIn("iphone-component-cost-forecast", module.article_primary_facets(component_cost))
+        self.assertIn("apple-product-price-increase", module.article_primary_facets(price_forecast))
+        self.assertNotIn("iphone-component-cost-forecast", module.article_primary_facets(price_forecast))
+        self.assertFalse(module.should_merge(price_forecast, event_for(module, component_cost)))
+        self.assertFalse(module.should_merge(component_cost, event_for(module, price_forecast)))
+
+    def test_macbook_air_supply_shortage_merges_but_surface_comparison_does_not(self):
+        module = load_module()
+        shortage_cn = article_for(
+            module,
+            "芯片短缺引发供应危机，苹果 MacBook Air 严重缺货",
+            "内存芯片短缺导致消费者在苹果官网购机需等待到 8 月下旬，部分配置延至 9 月，零售库存也更紧张。",
+            "cnBeta",
+        )
+        shortage_it = article_for(
+            module,
+            "AI 扩张引发内存芯片短缺，苹果 MacBook Air 出现供应紧张",
+            "苹果官网部分 MacBook Air 机型发货需等待一至两个月。",
+            "IT之家",
+        )
+        comparison = article_for(
+            module,
+            "Surface Laptop 8 性能被苹果 MacBook Air 全方位碾压",
+            "PhoneBuff 对比两款电脑，Surface 在 Word 和视频渲染测试中落后。",
+            "cnBeta",
+        )
+
+        self.assertEqual(shortage_cn.relevance_tier, "strong")
+        self.assertEqual(shortage_it.relevance_tier, "strong")
+        self.assertEqual(comparison.relevance_tier, "weak")
+        self.assertIn("apple-memory-supply-constraint", module.article_primary_facets(shortage_cn))
+        self.assertTrue(module.should_merge(shortage_cn, event_for(module, shortage_it)))
+        self.assertFalse(module.should_merge(comparison, event_for(module, shortage_cn)))
+
+    def test_macbook_air_supply_shortage_merges_across_language_and_source_wording(self):
+        module = load_module()
+        english = article_for(
+            module,
+            "MacBook Air Experiencing 'Major' Shortage Despite $200 Price Increase",
+            (
+                "Apple's online store shows delivery estimates of two to six weeks, with higher-RAM "
+                "configurations delayed the longest despite the recent price increase."
+            ),
+            "MacRumors",
+        )
+        chinese = article_for(
+            module,
+            "AI 产业扩张引发内存芯片短缺，苹果 MacBook Air 出现供应紧张局面",
+            (
+                "苹果官网部分机型预计要到 8 月下旬发货，特殊配置甚至延至 9 月；"
+                "报道还称苹果正转向中国供应商采购内存芯片。"
+            ),
+            "IT之家",
+        )
+
+        self.assertIn("apple-memory-supply-constraint", module.article_primary_facets(english))
+        self.assertIn("apple-memory-supply-constraint", module.article_primary_facets(chinese))
+        self.assertTrue(module.should_merge(english, event_for(module, chinese)))
+        self.assertTrue(module.should_merge(chinese, event_for(module, english)))
+        self.assertNotIn(
+            "multiple region-specific markers",
+            module.event_merge_warnings([english, chinese]),
+        )
+
+    def test_smart_glasses_health_platform_reports_share_specific_action(self):
+        module = load_module()
+        articles = [
+            article_for(
+                module,
+                "Apple job listings suggest Fitness+ could come to Apple Glasses",
+                "The roles point to health and fitness tracking for a future version of Apple's smart glasses.",
+                "AppleInsider",
+            ),
+            article_for(
+                module,
+                "Report: Apple's smart glasses will become a major health companion",
+                "Mark Gurman says Apple is working toward turning its non-AR glasses into a health platform.",
+                "9to5Mac",
+            ),
+            article_for(
+                module,
+                "古尔曼：苹果计划将智能眼镜打造为健康健身平台",
+                "苹果计划把非 AR 智能眼镜变成健康硬件平台，但相关功能不会随第一代产品首发。",
+                "IT之家",
+            ),
+        ]
+
+        for article in articles:
+            self.assertEqual(article.relevance_tier, "strong")
+            self.assertIn("apple-smart-glasses-health-platform", module.article_primary_facets(article))
+        self.assertEqual(len(module.cluster_articles(articles)), 1)
+
+    def test_competitor_followup_or_comparison_does_not_become_apple_hardware_news(self):
+        module = load_module()
+        cases = [
+            (
+                "iPhone 17 首发方形前摄，国产 TOP5 明年全部跟进",
+                "国产手机厂商将采用类似传感器，苹果的 Center Stage 设计只是行业背景。",
+            ),
+            (
+                "第二代华为 Pura X2 首曝：显示面积比肩 iPhone Pro Max",
+                "华为新机采用 6.3 英寸折叠屏，文章用 iPhone Pro Max 作为尺寸参照。",
+            ),
+        ]
+
+        for title, summary in cases:
+            with self.subTest(title=title):
+                tier, reason = module.classify_relevance_tier(title, summary, [], "快科技")
+                self.assertEqual(tier, "weak", reason)
 
 
 if __name__ == "__main__":
