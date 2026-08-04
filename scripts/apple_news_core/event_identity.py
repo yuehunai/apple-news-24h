@@ -1266,6 +1266,8 @@ def _content_form(title: str, lead: str = "") -> str:
     if (not current_attributed_report) and re.search(
         r"\b(?:rumors? point to|everything we know|"
         r"what to expect|these \d+ (?:new )?(?:features|changes)|"
+        r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+\d+\s+"
+        r"(?:new\s+)?(?:products?|devices?)|"
         r"\d+ rumored features|latest (?:apple )?rumors?|all (?:the )?(?:apple )?rumors?|"
         r"rumors? so far|best .+ to try)\b|传闻汇总|功能汇总|值得期待的\s*\d+",
         lower,
@@ -1288,6 +1290,13 @@ def _content_form(title: str, lead: str = "") -> str:
         return "roundup"
     if (
         re.match(r"^(?:is|are) .+ worth it\b", lower)
+        or re.search(
+            r"\b(?:doesn['’]t|does not|didn['’]t|did not)\s+seem\s+credible\b|"
+            r"\b(?:hard|difficult)\s+to\s+believe\b|\bseems?\s+unlikely\b|"
+            r"(?:显得|看起来|似乎).{0,10}(?:平淡|乏味|难以置信|不可信)|"
+            r"(?:补齐|修复).{0,12}(?:短板|缺陷).{0,18}(?:但|不过|然而)",
+            lower,
+        )
         or re.match(r"^why\b.{0,100}\b(?:could|may|might)\b.{0,60}\b(?:risk|problem|concern)\b", lower)
         or re.search(r"(?:便利与隐患并存|(?:引发|存在|带来).{0,10}(?:隐私|安全).{0,8}(?:争议|风险|隐患))", lower)
         or re.search(r"值不值得|是否值得", lower)
@@ -2100,9 +2109,13 @@ def build_event_identity(
     primary_intent: str | None = None
     if _is_analyst_target_action_title(title_lower):
         primary_intent = "analyst-target"
-    elif re.search(
+    elif not re.search(
+        r"\b(?:recruits?|hires?|rehire[sd]?|brings?\s+back|adds?)\b|"
+        r"(?:返聘|召回|重新聘用|重新启用|组建)",
+        title_lower,
+    ) and re.search(
         r"(?:ceo|chief executive|tim cook|john ternus|steve jobs|库克|特努斯|乔布斯|首席执行官)"
-        r".{0,40}(?:tenure|years?|in numbers|retrospective|任期|掌舵|历程|回顾|年|收官)",
+        r".{0,40}(?:tenure|\d{1,2}\s*years?|in numbers|retrospective|任期|掌舵|历程|回顾|收官)",
         title_lower,
     ):
         primary_intent = "executive-retrospective"

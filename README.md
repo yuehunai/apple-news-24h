@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.46.0 - 2026-08-03
+### 1.47.0 - 2026-08-04
 
-- Added title-and-lead identities for measured institutional Apple hardware adoption, Apple-product supply constraints, iPhone component-cost forecasts, and Apple smart-glasses health platforms so direct product actions survive competitor and industry background.
-- Improved same-action clustering for cross-language MacBook shortages, MacBook thermal defects, and smart-glasses health reporting while keeping terminal price forecasts, bill-of-materials analysis, product defects, and retailer promotions as separate events.
-- Tightened weak relevance handling for competitor follow-ups, broad SoC or component-market reports, static Apple comparison metrics, and retailer-priced deal articles even when their titles omit explicit deal wording.
-- Improved title-led hardware boundaries so current Apple shortages and quantified cost reports remain strong without letting body-only product, region, memory, price, or supply references bridge unrelated events.
-- Kept publisher-built launch-date projections based only on historical calendars in `deferred_events`, while preserving current attributed launch-timing reports as eligible news.
-- Updated fallback policy guidance and expanded regression coverage from 829 to 841 tests; concurrent live validation preserved identical candidate, detail-selection, and article coverage, produced no merge warnings, and reduced runtime from 170.01 to 152.45 seconds against the same-window baseline.
+- Added title-and-lead identities for Apple AI compute-cost policy, manufacturing tax incentives, hardware leadership changes, iCloud access and backdoor disputes, security-report quotas, Apple Health interoperability, official accessories, cross-device clipboard support, and App Store enforcement actions.
+- Improved same-action clustering for compound iPhone roadmap reports, financial results and future pricing, Russian app-preinstallation enforcement, Apple Health integrations, official accessory changes, clipboard interoperability, and multilingual App Store removals while keeping distinct subjects and actions separate.
+- Tightened relevance and deferred-event handling for third-party apps, competitor comparisons, commentary, roundups, uncertain multi-product calendars, and background-only Apple references without demoting direct Apple platform, policy, legal, supply-chain, or hardware events.
+- Improved source completeness and classification so India manufacturing incentives retain all contributing outlets, Apple AI usage-cost reporting keeps source-specific facts, and hardware-engineering succession actions remain under hardware and products.
+- Optimized post-processing with bounded normalization caches, early non-Apple rejection, selective key-fact boundary analysis, and concurrent source discovery, reducing the same-window live runtime from 227.25 to 104.77 seconds while preserving all 97 discovered article URLs.
+- Updated fallback policy guidance and expanded regression coverage from 841 to 871 tests; clean skill validation produced no merge warnings and preserved candidate, detail-selection, article, and source-link coverage.
 
 ## What It Does
 

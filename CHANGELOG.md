@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.47.0 - 2026-08-04
+
+- Added title-and-lead identities for Apple AI compute-cost policy, manufacturing tax incentives, hardware leadership changes, iCloud access and backdoor disputes, security-report quotas, Apple Health interoperability, official accessories, cross-device clipboard support, and App Store enforcement actions.
+- Improved same-action clustering for compound iPhone roadmap reports, financial results and future pricing, Russian app-preinstallation enforcement, Apple Health integrations, official accessory changes, clipboard interoperability, and multilingual App Store removals while keeping distinct subjects and actions separate.
+- Tightened relevance and deferred-event handling for third-party apps, competitor comparisons, commentary, roundups, uncertain multi-product calendars, and background-only Apple references without demoting direct Apple platform, policy, legal, supply-chain, or hardware events.
+- Improved source completeness and classification so India manufacturing incentives retain all contributing outlets, Apple AI usage-cost reporting keeps source-specific facts, and hardware-engineering succession actions remain under hardware and products.
+- Optimized post-processing with bounded normalization caches, early non-Apple rejection, selective key-fact boundary analysis, and concurrent source discovery, reducing the same-window live runtime from 227.25 to 104.77 seconds while preserving all 97 discovered article URLs.
+- Updated fallback policy guidance and expanded regression coverage from 841 to 871 tests; clean skill validation produced no merge warnings and preserved candidate, detail-selection, article, and source-link coverage.
+
 ## 1.46.0 - 2026-08-03
 
 - Added title-and-lead identities for measured institutional Apple hardware adoption, Apple-product supply constraints, iPhone component-cost forecasts, and Apple smart-glasses health platforms so direct product actions survive competitor and industry background.
