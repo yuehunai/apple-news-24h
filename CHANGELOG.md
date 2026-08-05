@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.48.0 - 2026-08-05
+
+- Added `scripts/apple_news_core/event_reconciler.py`, a deterministic article-level reconciliation layer that preserves proven crawler groups, splits explicit action conflicts, and reunites cross-source reports only through exact canonical event keys.
+- Improved event boundaries with title-and-lead-first identities for legal and App Store action stages, OS release waves, regional availability, official promotions, refurbished products, security programs, event preparation, and multi-product price forecasts.
+- Tightened weak-event handling for third-party platform updates, accessories, unsupported utilities, compatibility launches, competitor benchmarks, event countdowns, product previews, and background-only Apple references without narrowing source discovery.
+- Improved source completeness and classification by using title-region, named-subject, product-generation, legal-case, and action-stage evidence before body context, preventing background countries, comparison products, and related cases from splitting or bridging coverage.
+- Simplified crawler orchestration by retaining the mature clusterer as a seed and rebuilding only groups changed by reconciliation or relevance decisions, avoiding redundant event reconstruction while preserving same-window live performance and all discovered URLs.
+- Updated fallback policy and architecture documentation, and expanded regression coverage from 871 to 891 tests; concurrent live validation preserved identical candidate, detail-selection, article, and URL coverage with no runtime regression.
+
 ## 1.47.0 - 2026-08-04
 
 - Added title-and-lead identities for Apple AI compute-cost policy, manufacturing tax incentives, hardware leadership changes, iCloud access and backdoor disputes, security-report quotas, Apple Health interoperability, official accessories, cross-device clipboard support, and App Store enforcement actions.

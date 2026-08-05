@@ -47,6 +47,11 @@ from apple_news_core.event_identity import (  # noqa: E402
     is_non_apple_title_context,
 )
 from apple_news_core.event_matcher import identity_pair_decision  # noqa: E402
+from apple_news_core.event_reconciler import (  # noqa: E402
+    ReconciliationProfile,
+    build_reconciliation_profile,
+    reconcile_articles,
+)
 
 try:
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -29154,6 +29159,45 @@ def article_title_led_event_identity(article: Article):
     )
 
 
+def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
+    identity = article_title_led_event_identity(article)
+    exact_facets = effective_topic_facets(article_primary_facets(article)) & (
+        EXACT_SHARED_EVENT_TOPIC_FACETS | COHESIVE_DIRECT_ACTION_FACETS
+    )
+    title_regions = extract_regions(article.title)
+    return build_reconciliation_profile(
+        title=article.title,
+        lead=article.summary,
+        identity=identity,
+        exact_facets=exact_facets,
+        regions=title_regions or extract_regions(" ".join([article.title, article.summary[:400]])),
+        relevance_tier=article.relevance_tier,
+        trusted_direct_action=(
+            high_confidence_direct_apple_action(identity)
+            or is_apple_owned_brand_engineering_strategy_story(
+                article.title,
+                " ".join([article.summary, *article.key_facts[:5]]),
+            )
+        ),
+    )
+
+
+def reconcile_article_relevance(
+    article: Article,
+    profile: ReconciliationProfile,
+) -> bool:
+    changed = False
+    if profile.category_hint:
+        changed = article.category != profile.category_hint
+        article.category = profile.category_hint
+    if not profile.defer_reason or article.relevance_tier in {"weak", "ecosystem"}:
+        return changed
+    changed = True
+    article.relevance_tier = "weak"
+    article.relevance_reason = profile.defer_reason
+    return changed
+
+
 def specific_attributed_report_keys(article: Article) -> set[tuple[str, str, str]]:
     identity = article_title_led_event_identity(article)
     models = {
@@ -31704,7 +31748,7 @@ def split_mixed_topic_events(events: list[Event]) -> list[Event]:
     return split_events
 
 
-def cluster_articles(articles: list[Article]) -> list[Event]:
+def _cluster_seed_events(articles: list[Article]) -> list[Event]:
     events: list[Event] = []
     for article in sorted(articles, key=lambda item: item.published_utc):
         candidates = [event for event in events if should_merge(article, event)]
@@ -31760,6 +31804,68 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
     split_events = split_mixed_topic_events(consolidated)
     reconsolidated = consolidate_events(split_events)
     return sorted(reconsolidated, key=lambda event: event.published_utc)
+
+
+def cluster_articles(articles: list[Article]) -> list[Event]:
+    seed_events = _cluster_seed_events(articles)
+    seed_events_by_articles = {
+        frozenset(id(article) for article in event.articles): event
+        for event in seed_events
+    }
+    profiles = {
+        id(article): article_reconciliation_profile(article)
+        for article in articles
+    }
+    changed_article_ids = {
+        id(article)
+        for article in articles
+        if reconcile_article_relevance(article, profiles[id(article)])
+    }
+
+    reconciled_groups = reconcile_articles(
+        articles,
+        profile_for=lambda article: profiles[id(article)],
+        initial_groups=[event.articles for event in seed_events],
+    )
+    events = []
+    for group in reconciled_groups:
+        group_ids = frozenset(id(article) for article in group)
+        event = seed_events_by_articles.get(group_ids)
+        if event is None or changed_article_ids & group_ids:
+            event = event_from_article_group(singleton_merge_event(group[0]), list(group))
+        shared_event_keys = set.intersection(
+            *(set(profiles[id(article)].event_keys) for article in group)
+        ) if group else set()
+        if shared_event_keys:
+            event.merge_warnings = [
+                warning
+                for warning in event.merge_warnings
+                if warning not in {
+                    "mixed event kinds",
+                    "mixed primary topic facets",
+                    "mixed relevance tiers",
+                }
+            ]
+        category_hints = {
+            profiles[id(article)].category_hint
+            for article in group
+            if profiles[id(article)].category_hint
+        }
+        if len(category_hints) == 1:
+            event.category = next(iter(category_hints))
+        defer_reasons = {
+            profiles[id(article)].defer_reason
+            for article in group
+            if profiles[id(article)].defer_reason
+        }
+        if defer_reasons and all(
+            profiles[id(article)].defer_reason
+            for article in group
+        ) and event.relevance_tier != "ecosystem":
+            event.relevance_tier = "weak"
+            event.relevance_reason = sorted(defer_reasons)[0]
+        events.append(event)
+    return sorted(events, key=lambda event: (event.published_utc, event.event_id))
 
 
 def source_link(source: str, url: str, markdown: bool = True) -> str:

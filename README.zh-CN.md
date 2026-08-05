@@ -12,14 +12,14 @@
 
 ## 最新更新
 
-### 1.47.0 - 2026-08-04
+### 1.48.0 - 2026-08-05
 
-- 新增 Apple AI 算力成本政策、制造业税收激励、硬件领导层变动、iCloud 离职访问与后门争议、安全报告配额、Apple Health 互操作、官方配件、跨设备剪贴板和 App Store 执法动作的标题/导语事件身份。
-- 改进复合 iPhone 路线图、财务业绩与未来定价、俄罗斯应用预装执法、Apple Health 集成、官方配件调整、剪贴板互操作及多语言 App Store 下架报道的同动作归并，同时保持不同主体和动作相互独立。
-- 收紧第三方应用、竞品对比、评论、汇总、可信度不足的多产品日历及仅以 Apple 为背景的内容在相关性和延后队列中的判断，同时保留直接 Apple 平台、政策、法律、供应链和硬件事件。
-- 改进来源完整性与分类，使印度制造激励保留全部贡献来源、Apple AI 使用成本报道保留各来源事实，并将硬件工程接班相关人事动作归入硬件与产品。
-- 通过有界规范化缓存、非 Apple 候选提前退出、选择性关键事实边界分析和并发来源发现优化后处理性能；同窗口联网运行时间由 227.25 秒降至 104.77 秒，同时完整保留 97 个已发现文章 URL。
-- 更新手动兜底规则，并将回归测试从 841 项增加到 871 项；纯净 skill 验证没有聚类警告，并保持候选、详情选择、文章和来源链接覆盖完整。
+- 新增 `scripts/apple_news_core/event_reconciler.py` 确定性文章级重整层，保留已验证的爬虫聚类，拆分存在明确动作冲突的文章，并仅通过精确规范事件键重新归并跨来源报道。
+- 改进法律与 App Store 动作阶段、系统发布批次、地区可用性、官方促销、官翻产品、安全项目、活动筹备及多产品价格预测的标题/导语优先事件边界。
+- 收紧第三方平台更新、配件、不受支持的工具、兼容性发布、竞品跑分、活动倒计时、产品前瞻及仅以 Apple 为背景的内容在延后队列中的判断，同时不缩减来源发现范围。
+- 改进来源完整性与分类，在正文背景之前优先使用标题地区、命名主体、产品代际、法律案件和动作阶段证据，避免背景国家、对比产品及关联案件拆散同题报道或桥接无关事件。
+- 精简爬虫编排：保留成熟聚类器作为种子，只重建被重整或相关性决策改变的事件组，消除冗余事件重建，同时保持同窗口联网性能和全部已发现 URL。
+- 更新手动兜底规则与架构文档，并将回归测试从 871 项增加到 891 项；并发联网验证保持候选、详情选择、文章和 URL 覆盖完全一致，运行时间没有回退。
 
 ## 它会做什么
 
@@ -37,7 +37,8 @@
 - `scripts/apple_news_24h.py` 负责来源发现、页面抓取、时间核验、文章提取、事件编排及 Markdown/JSON 渲染。
 - `scripts/apple_news_core/event_identity.py` 将文章标题和导语转换为结构化事件身份，覆盖产品、组件、参与方、动作、地区、法律案件、内容形态和命名主体。正文只作为受约束的辅助证据，避免相关文章和背景段落重新定义事件。
 - `scripts/apple_news_core/event_matcher.py` 使用保守的产品、组件、动作、地区、法律案件和主体兼容性规则比较事件身份。将该决策层保持为纯函数，使同事件聚类可以独立测试，也更便于维护。
-- `tests/test_event_identity_architecture.py` 为事件身份提取和匹配边界提供聚焦的回归测试；现有爬虫测试则继续端到端验证发现、解析、相关性、聚类、渲染和来源清理。
+- `scripts/apple_news_core/event_reconciler.py` 保留已接受的种子聚类，应用明确动作边界，并通过精确跨来源事件签名归并报道，避免泛相似度或传递桥接重新打开已经确定的事件组。
+- `tests/test_event_identity_architecture.py` 和 `tests/test_20260805_event_reconciliation.py` 为身份提取、匹配、重整和相关性边界提供聚焦的回归测试；现有爬虫测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
 
 ## 它不会做什么
 
@@ -132,7 +133,7 @@ python3 -m unittest discover -s tests
 运行语法检查：
 
 ```bash
-python3 -m py_compile scripts/apple_news_24h.py scripts/apple_news_core/event_identity.py scripts/apple_news_core/event_matcher.py
+python3 -m py_compile scripts/apple_news_24h.py scripts/apple_news_core/event_identity.py scripts/apple_news_core/event_matcher.py scripts/apple_news_core/event_reconciler.py
 ```
 
 实时 smoke test 依赖网络和第三方站点可用性，因此不放入默认 CI。

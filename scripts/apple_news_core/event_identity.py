@@ -1423,6 +1423,16 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    subject_first_owned_platform_update = bool(
+        re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
+            r"tvos\b|visionos\b|airpods\b|icloud\b|safari\b|siri\b|carplay\b|xcode\b|"
+            r"app store\b|苹果).{2,55}['’]s\s+(?:latest\s+)?"
+            r"(?:ios|ipados|macos|watchos|carplay|iphone|ipad|mac)\s+"
+            r"(?:app\s+)?(?:update|release|version|feature)\b",
+            title_lower,
+        )
+    )
     subject_first_compatibility = bool(
         re.search(
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b|苹果)"
@@ -1506,6 +1516,7 @@ def _title_scope(title: str, lead: str) -> str:
     if (
         comparison
         or subject_first_platform_recipient
+        or subject_first_owned_platform_update
         or subject_first_compatibility
         or subject_first_apple_hypothetical
         or subject_first_service_integration
