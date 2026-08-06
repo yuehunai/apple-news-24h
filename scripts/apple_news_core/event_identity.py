@@ -1335,6 +1335,21 @@ def _content_form(title: str, lead: str = "") -> str:
     if re.search(r"\b(?:indie app spotlight|app spotlight|app pick)\b|(?:应用|app)推荐", lower):
         return "third_party_spotlight"
     if re.search(
+        r"\bmy\s+favorite\b.{0,45}\b(?:accessories|bands|chargers|cases|stands)\b|"
+        r"\bfavorite\b.{0,36}\b(?:apple\s+watch|iphone|ipad|mac|airpods|vision\s+pro)\b"
+        r".{0,36}\b(?:accessories|bands|chargers|cases|stands)\b|"
+        r"(?:我最喜欢|最喜欢的|精选).{0,24}(?:苹果|iphone|ipad|mac|airpods|vision\s*pro).{0,20}(?:配件|表带|充电器|保护壳|支架)",
+        lower,
+    ):
+        return "buying_advice"
+    if re.search(
+        r"\b(?:event|keynote)\s+date\b.{0,45}\b(?:years?|history|pattern|announcements?)\b|"
+        r"\b(?:years?|history)\s+of\s+apple\s+announcements?\b|"
+        r"(?:发布会|活动)(?:日期|时间).{0,28}(?:历年|历史|规律|回顾|推算)",
+        lower,
+    ):
+        return "analysis"
+    if re.search(
         r"^(?:analyst|analysis|opinion|commentary)\b|"
         r"^(?:分析师|机构观点|评论)[：:]|(?:分析师|评论人士).{0,24}(?:认为|称|表示)|"
         r"\b(?:now\s+)?(?:even\s+)?more valuable\b|\bbetter value\b|"
@@ -1363,7 +1378,8 @@ def _title_scope(title: str, lead: str) -> str:
     )
     first_party_prefix = bool(
         re.match(
-            r"^(?:(?:these|those|some|older|new)\s+)?(?:apple(?:'s)?|iphones?|ipads?|ios|ipados|macs?(?:book|os)?|watchos|tvos|visionos|airpods|icloud|safari|siri|shazam|beats\s+(?:lab|headphones|earbuds|pill|studio)|carplay|xcode|app store|苹果|传苹果|消息称苹果|报道称苹果)",
+            r"^(?:(?:these|those|some|older|new)\s+)?(?:apple(?:'s)?|iphones?|ipads?|ios|ipados|macs?(?:book|os)?|watchos|tvos|visionos|airpods|icloud|safari|siri|shazam|beats\s+(?:lab|headphones|earbuds|pill|studio)|carplay|xcode|app store)\b|"
+            r"^(?:苹果|传苹果|消息称苹果|报道称苹果)",
             title_lower,
         )
     ) or beats_first_party_technical
@@ -1405,7 +1421,7 @@ def _title_scope(title: str, lead: str) -> str:
     )
     subject_first_platform_recipient = bool(
         re.search(
-            r"^(?!apple\b|iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
+            r"^(?!apple\b|iphone\b|foldable\s+iphone\b|folding\s+iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
             r"tvos\b|visionos\b|airpods\b|icloud\b|safari\b|siri\b|carplay\b|xcode\b|"
             r"app store\b|苹果).{2,80}\b(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)|"
             r"updat(?:es|ed|ing)|adds?|added|brings?|brought|tests?|tested|testing|"
@@ -1509,9 +1525,29 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
-    if first_party_prefix or direct_first_party_content:
-        return "apple-direct"
     if direct_target or direct_relationship:
+        return "apple-direct"
+    contextual_non_apple_action = bool(
+        re.search(
+            r"^as\s+(?:apple|iphones?|ipads?|macs?|apple\s+watch|airpods).{0,65},\s*"
+            r"(?!apple\b|iphone\b|ipad\b|mac(?:book|os)?\b|苹果)"
+            r".{2,55}\b(?:launch(?:es|ed)?|offer(?:s|ed)?|introduc(?:es|ed)?|"
+            r"announce(?:s|d)?|start(?:s|ed)?|expand(?:s|ed)?)\b",
+            title_lower,
+        )
+        or re.search(
+            r"^(?!apple\b|iphone\b|foldable\s+iphone\b|folding\s+iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
+            r"tvos\b|visionos\b|airpods\b|icloud\b|safari\b|siri\b|carplay\b|xcode\b|"
+            r"app store\b|苹果)[a-z0-9][a-z0-9.+-]*(?:\s+[a-z0-9][a-z0-9.+-]*){0,3}\s+"
+            r"(?:is\s+|are\s+)?(?:building|launch(?:es|ed|ing)?|offer(?:s|ed|ing)?|"
+            r"introduc(?:es|ed|ing)?|announce(?:s|d|ing)?|develop(?:s|ed|ing)?)\b"
+            r".{0,100}\b(?:iphone|ipad|mac\s+apps?|apple\s+watch|airpods|vision\s+pro)\b",
+            title_lower,
+        )
+    )
+    if contextual_non_apple_action:
+        return "third-party-context"
+    if first_party_prefix or direct_first_party_content:
         return "apple-direct"
     if (
         comparison

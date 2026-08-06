@@ -12,7 +12,7 @@ import re
 import unicodedata
 from typing import Callable, Iterable, Sequence, TypeVar
 
-from .event_identity import EventIdentity
+from .event_identity import EventIdentity, LEAD_IDENTITY_COMPONENTS
 
 
 ArticleT = TypeVar("ArticleT")
@@ -117,6 +117,251 @@ def _event_preparation(text: str) -> bool:
     )
 
 
+def _event_format_plan(text: str) -> bool:
+    return (
+        _contains(text, "event", "keynote", "iphone launch", "发布会", "新品活动")
+        and _contains(
+            text,
+            "pre-recorded",
+            "prerecorded",
+            "pre recorded",
+            "live presentation",
+            "live on stage",
+            "live segment",
+            "live elements",
+            "hybrid format",
+            "录播",
+            "预录",
+            "现场直播",
+            "现场环节",
+            "混合方案",
+            "混合形式",
+        )
+        and _contains(
+            text,
+            "report",
+            "reported",
+            "likely",
+            "unlikely",
+            "expected",
+            "could be",
+            "will likely",
+            "消息称",
+            "报道称",
+            "预计",
+            "大概率",
+            "可能",
+        )
+    )
+
+
+def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
+    title = text.split(". ", 1)[0]
+    title_os = identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
+    return bool(
+        len(title_os) == 1
+        and identity.scope == "apple-direct"
+        and (
+            "feature-change" in identity.title_actions
+            or _contains(title, "feature", "features", "功能", "变化", "更新")
+        )
+        and re.search(r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s+\d+(?:\.\d+)?\b", title)
+    )
+
+
+def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
+    if not _versioned_os_feature_report(text, identity):
+        return ""
+    title = text.split(". ", 1)[0]
+    os_family = sorted(
+        identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
+    )[0]
+    components = sorted(
+        component
+        for component in identity.title_components
+        if component.startswith("os-component:")
+    )
+    if not components:
+        component_patterns = (
+            ("messages", ("messages", "信息 app", "信息应用")),
+            ("mail", ("mail", "邮件 app", "邮件应用")),
+            ("notes", ("notes", "备忘录")),
+            ("weather", ("weather", "天气 app", "天气应用")),
+            ("shortcuts", ("shortcuts", "快捷指令")),
+            ("wallet", ("wallet", "钱包 app", "钱包应用")),
+            ("maps", ("maps", "地图 app", "地图应用")),
+            ("safari", ("safari",)),
+            ("photos", ("photos", "照片 app", "照片应用")),
+            ("settings", ("settings", "设置 app", "系统设置")),
+            ("control-center", ("control center", "控制中心")),
+            ("lock-screen", ("lock screen", "锁屏")),
+            ("home-screen", ("home screen", "主屏幕")),
+        )
+        components = [
+            f"os-component:{name}"
+            for name, terms in component_patterns
+            if _contains(title, *terms)
+        ]
+    if not components:
+        components = sorted(identity.components & LEAD_IDENTITY_COMPONENTS)
+    title_subject_products = sorted(
+        identity.title_products
+        - {"ios", "ipados", "macos", "watchos", "tvos", "visionos", "iphone", "ipad", "mac"}
+    )
+    if len(title_subject_products) == 1:
+        subject = f"product:{title_subject_products[0]}"
+    elif len(components) == 1:
+        subject = f"component:{components[0]}"
+    else:
+        subject = "multi-feature"
+    return f"apple-os-feature-scope:{os_family}:{subject}"
+
+
+def _broad_component_supply_outlook(text: str) -> bool:
+    title = text.split(". ", 1)[0]
+    return bool(
+        not _contains(title, "apple", "iphone", "ipad", "mac", "苹果")
+        and _contains(title, "ram", "memory", "dram", "nand", "内存", "存储")
+        and _contains(
+            title,
+            "worldwide",
+            "global",
+            "industry",
+            "sold out",
+            "capacity",
+            "shortage",
+            "全球",
+            "行业",
+            "售罄",
+            "产能",
+            "短缺",
+        )
+    )
+
+
+def _supplier_market_without_apple_action(text: str, identity: EventIdentity) -> bool:
+    title = text.split(". ", 1)[0]
+    return bool(
+        not _contains(title, "apple", "iphone", "ipad", "mac", "苹果")
+        and identity.scope != "apple-direct"
+        and _contains(
+            title,
+            "supplier",
+            "supply",
+            "capacity",
+            "production",
+            "order",
+            "供应",
+            "产能",
+            "供货",
+            "订单",
+            "长鑫",
+            "长江存储",
+            "cxmt",
+            "ymtc",
+        )
+        and _contains(
+            title,
+            "price",
+            "capacity",
+            "production",
+            "order",
+            "supply",
+            "价格",
+            "产能",
+            "量产",
+            "订单",
+            "供货",
+            "锁产能",
+        )
+    )
+
+
+def _measured_applied_research_key(text: str, identity: EventIdentity) -> str:
+    products = sorted(identity.title_products & {"vision-pro", "apple-watch", "airpods", "iphone", "ipad", "mac", "macbook"})
+    if not products or not _contains(
+        text,
+        "peer-reviewed",
+        "peer reviewed",
+        "study",
+        "clinical trial",
+        "同行评审",
+        "研究显示",
+        "临床试验",
+    ):
+        return ""
+    if not _contains(
+        text,
+        "using vision pro",
+        "used vision pro",
+        "wore vision pro",
+        "primary display",
+        "using apple watch",
+        "using airpods",
+        "using iphone",
+        "使用 vision pro",
+        "佩戴 vision pro",
+        "作为主要显示设备",
+        "使用 apple watch",
+        "使用 airpods",
+        "使用 iphone",
+    ):
+        return ""
+    minute_values = sorted(
+        {
+            value.rstrip("0").rstrip(".")
+            for value in re.findall(r"(?<!\d)(\d+(?:\.\d+)?)\s*(?:minutes?|分钟)", text)
+        },
+        key=lambda value: float(value),
+    )
+    percentages = sorted(
+        {
+            value.rstrip("0").rstrip(".")
+            for value in re.findall(r"(?<!\d)(\d+(?:\.\d+)?)\s*%", text)
+        },
+        key=lambda value: float(value),
+    )
+    metric = "-".join(minute_values[:2]) if len(minute_values) >= 2 else (percentages[0] if percentages else "")
+    if not metric:
+        return ""
+    domain = "clinical-workflow" if _contains(text, "surgery", "operation", "procedure", "手术", "临床") else "measured-use"
+    return f"apple-product-research:{products[0]}:{domain}:{metric}"
+
+
+def _product_driven_market_forecast_key(text: str, identity: EventIdentity) -> str:
+    products = sorted(identity.title_products & {"foldable-iphone", "iphone", "ipad", "macbook", "apple-watch", "airpods", "vision-pro"})
+    if not products:
+        return ""
+    if not _contains(text, "market", "shipments", "sales", "市场", "出货量", "销量"):
+        return ""
+    if not _contains(
+        text,
+        "forecast",
+        "expected to grow",
+        "expected to rise",
+        "driving the increase",
+        "main driver",
+        "due to",
+        "预测",
+        "预计增长",
+        "重要驱动力",
+        "主要驱动力",
+        "推动增长",
+    ):
+        return ""
+    percentages = sorted(
+        {
+            value.rstrip("0").rstrip(".")
+            for value in re.findall(r"(?<!\d)(\d+(?:\.\d+)?)\s*%", text)
+        },
+        key=lambda value: float(value),
+    )
+    if not percentages:
+        return ""
+    market = "foldable" if _contains(text, "foldable", "折叠屏", "折叠 iphone") else "product-segment"
+    return f"apple-market:{market}:{products[0]}:{percentages[0]}"
+
+
 def _annual_sales_metric(text: str) -> bool:
     return bool(
         re.search(r"\bannual\b.{0,32}\b(?:sales|revenue)\b", text)
@@ -173,6 +418,22 @@ def _bug_bounty_submission_limit(text: str) -> bool:
             "泛滥",
         )
         and _contains(text, "submission", "report", "提交", "报告")
+    )
+
+
+def _icloud_private_relay_leak(text: str) -> bool:
+    return (
+        _contains(text, "private relay", "icloud 专用代理", "icloud+隐私", "icloud+ 隐私")
+        and _contains(text, "leak", "expose", "vulnerability", "漏洞", "泄露", "暴露", "风险")
+        and _contains(
+            text,
+            "real ip",
+            "ip address",
+            "dns",
+            "真实ip",
+            "真实 ip",
+            "网络信息",
+        )
     )
 
 
@@ -364,6 +625,12 @@ def _unsupported_third_party_reason(
 ) -> str:
     if relevance_tier == "ecosystem" or trusted_direct_action:
         return ""
+    if _versioned_os_feature_report(text, identity):
+        return ""
+    if _broad_component_supply_outlook(text):
+        return "broad component supply outlook without a direct Apple action"
+    if _supplier_market_without_apple_action(text, identity):
+        return "supplier market story without a direct Apple procurement or product action"
     if (
         re.match(
             r"^(?!apple(?:'s)?\b|beats\b)[a-z][a-z0-9.+-]{1,36}['’]s\b.{0,65}"
@@ -430,6 +697,10 @@ def _unsupported_third_party_reason(
 def _hard_third_party_boundary(text: str, defer_reason: str) -> str:
     if not defer_reason:
         return ""
+    if defer_reason.startswith("broad component supply"):
+        return "broad-component-supply-outlook"
+    if defer_reason.startswith("supplier market story"):
+        return "independent-supplier-market-story"
     if re.match(
         r"^(?!apple\b|iphone\b|ipad\b|ios\b|mac(?:book|os)?\b|苹果).{2,55}'s\s+"
         r"(?:latest\s+)?(?:ios|ipados|macos|watchos|carplay|iphone|ipad|mac)\s+"
@@ -499,16 +770,36 @@ def build_reconciliation_profile(
         event_keys.add("apple-security:bug-bounty-submission-limit")
         boundary_keys.add("apple-security:bug-bounty-submission-limit")
 
-    if _webkit_proxy_leak(text):
-        event_keys.add("apple-security:webkit-proxy-leak")
-        boundary_keys.add("apple-security:webkit-proxy-leak")
+    if _icloud_private_relay_leak(text) or _webkit_proxy_leak(text):
+        event_keys.add("apple-security:webkit-private-relay-network-leak")
+        boundary_keys.add("apple-security:webkit-private-relay-network-leak")
 
-    if _event_staff_support(text):
-        event_keys = {"apple-event:staff-support-lottery"}
-        boundary_keys = {"apple-event:staff-support-lottery"}
-    if _event_preparation(text):
-        event_keys.add("apple-event:september-preparation")
-        boundary_keys.add("apple-event:september-preparation")
+    applied_research_key = _measured_applied_research_key(text, identity)
+    if applied_research_key:
+        event_keys.add(applied_research_key)
+        boundary_keys.add(":".join(applied_research_key.split(":")[:3]))
+        category_hint = "hardware_products"
+
+    market_forecast_key = _product_driven_market_forecast_key(text, identity)
+    if market_forecast_key:
+        event_keys.add(market_forecast_key)
+        boundary_keys.add(":".join(market_forecast_key.split(":")[:3]))
+        category_hint = "hardware_products"
+
+    os_feature_scope = _versioned_os_feature_scope(text, identity)
+    if os_feature_scope:
+        event_keys.add(os_feature_scope)
+        boundary_keys.add(os_feature_scope)
+
+    event_staff_support = _event_staff_support(text)
+    event_preparation = _event_preparation(text)
+    event_format_plan = _event_format_plan(text)
+    if event_staff_support:
+        event_keys.add("apple-event:staff-support-lottery")
+        boundary_keys.add("apple-event:staff-support-lottery")
+    if event_staff_support or event_preparation or event_format_plan:
+        event_keys.add("apple-event:september-operations")
+        boundary_keys.add("apple-event:september-operations")
 
     if "airpods" in text and _contains(text, "firmware", "固件") and _contains(
         text,
@@ -568,7 +859,7 @@ def build_reconciliation_profile(
             for party in legal_parties
         }
 
-    if content_form == "event_preview":
+    if content_form == "event_preview" and not event_format_plan:
         # Background facts in an editorial preview must not impersonate the
         # concrete actions they recap.
         event_keys.clear()
@@ -603,6 +894,25 @@ def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile
 def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
     """Return only conflicts strong enough to split an accepted seed event."""
     if bool(left.hard_boundary) != bool(right.hard_boundary) and not (left.event_keys & right.event_keys):
+        return True
+    if (
+        left.hard_boundary
+        and right.hard_boundary
+        and left.hard_boundary != right.hard_boundary
+        and not (left.event_keys & right.event_keys)
+    ):
+        return True
+    left_os_scopes = {
+        boundary
+        for boundary in left.boundary_keys
+        if boundary.startswith("apple-os-feature-scope:")
+    }
+    right_os_scopes = {
+        boundary
+        for boundary in right.boundary_keys
+        if boundary.startswith("apple-os-feature-scope:")
+    }
+    if left_os_scopes and right_os_scopes and left_os_scopes.isdisjoint(right_os_scopes):
         return True
     shared_boundaries = left.boundary_keys & right.boundary_keys
     staged_boundaries = {

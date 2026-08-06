@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.49.0 - 2026-08-06
+
+- Added title-and-lead identities for measured Apple-product applied research, Apple-product-driven market forecasts, concrete Apple event operations, and urgent first-party component procurement so direct hardware and company actions remain eligible.
+- Improved deterministic reconciliation for versioned OS feature reports, iCloud Private Relay disclosures, September-event staff and presentation-format reporting, and cross-language foldable-market forecasts while preserving every matching source.
+- Improved supply-chain boundaries so direct Apple/CXMT negotiations and emergency DRAM purchases remain strong, broad memory-market coverage stays separate, and non-Apple supplier earnings driven by other businesses remain weak even when future iPhone production appears as background.
+- Improved source-primary-fact extraction and Chinese sentence segmentation so related-link text cannot promote or merge unrelated articles, while source-specific figures and direct actions remain available to final summaries.
+- Tightened weak-event handling for carrier offers, third-party Mac tools, accessory lists, historical event-date projections, editorial product commentary, and broad industry context without reducing candidate discovery or detail-page coverage.
+- Updated fallback and architecture documentation and expanded regression coverage from 891 to 903 tests; concurrent live validation preserved identical candidate, detail-selection, article, and 62-URL coverage, with runtime remaining within the 120-second target.
+
 ## 1.48.0 - 2026-08-05
 
 - Added `scripts/apple_news_core/event_reconciler.py`, a deterministic article-level reconciliation layer that preserves proven crawler groups, splits explicit action conflicts, and reunites cross-source reports only through exact canonical event keys.
