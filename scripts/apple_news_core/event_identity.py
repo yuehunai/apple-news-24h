@@ -276,6 +276,21 @@ COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "iphone数据迁移",
         ),
     ),
+    (
+        "trade-in-valuation",
+        (
+            "trade-in value",
+            "trade-in values",
+            "trade-in offer",
+            "trade-in offers",
+            "trade in value",
+            "trade in values",
+            "以旧换新",
+            "折抵价",
+            "折抵价值",
+            "折抵估值",
+        ),
+    ),
     ("macbook-model:air", ("macbook air",)),
     ("macbook-model:pro", ("macbook pro",)),
     ("macbook-model:neo", ("macbook neo",)),
@@ -613,7 +628,7 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "苹果发布故事",
         ),
     ),
-    ("price-change", ("price increase", "price increases", "price hike", "raises price", "raises prices", "increases subscription prices", "costs $", "涨价", "提价", "上调价格", "上调售价", "降价")),
+    ("price-change", ("price increase", "price increases", "price hike", "raises price", "raises prices", "raises trade-in values", "increases trade-in offers", "updates trade-in values", "increases subscription prices", "costs $", "涨价", "提价", "上调价格", "上调售价", "上调以旧换新", "调整以旧换新", "上调折抵价", "调整折抵价", "降价")),
     ("market-report", ("market report", "survey", "cirp report", "cirp", "调查报告", "报告显示")),
     ("market-ranking", ("most valuable company", "market capitalization", "market cap", "市值最高", "市值")),
     ("pilot-testing", ("is testing", "are testing", "testing", "pilot", "piloting", "trialing", "试点", "测试")),
@@ -1238,6 +1253,11 @@ def _content_form(title: str, lead: str = "") -> str:
     if (
         "poll" in lower
         or re.match(r"^(?:what|which|would|will|should)\b.*\?", lower)
+        or re.search(
+            r"(?:^|:\s*)(?:what|which)\b[^?？]{0,90}"
+            r"\b(?:will|would|do)\s+you\s+(?:buy|choose|pick|prefer)\b[^?？]*[?？]",
+            lower,
+        )
         or re.search(r"\bshould\s+apple\b[^?？]*[?？]", lower)
         or re.search(r"(?:vote|投票|你会怎么|你会如何|你是否).*[?？]?$", lower)
     ):
@@ -2146,7 +2166,8 @@ def build_event_identity(
         r"\b(?:price|prices|pricing|cost|costs)\b.{0,24}\b(?:rise|rises|increase[sd]?|hike[sd]?)\b|"
         r"\b(?:could|may|might|will)\s+be\b.{0,24}\b(?:more\s+)?expensive\b|"
         r"\b(?:more\s+)?expensive\b.{0,24}\b(?:than|price|prices|pricing|cost|costs)\b|"
-        r"(?:上调|提高|调高|调整).{0,24}(?:价格|售价|订阅价)|(?:价格|售价).{0,18}(?:上调|上涨|提高)"
+        r"\b(?:raise[sd]?|increase[sd]?|update[sd]?|bump(?:s|ed)?)\b.{0,36}\b(?:trade[ -]in\s+(?:value|values|offer|offers|estimate|estimates))\b|"
+        r"(?:上调|提高|调高|调整).{0,24}(?:价格|售价|订阅价|以旧换新|折抵价|折抵估值)|(?:价格|售价|折抵价|折抵估值).{0,18}(?:上调|上涨|提高|调整)"
     )
     if re.search(price_change_pattern, title_lower):
         title_actions.add("price-change")
@@ -2183,7 +2204,7 @@ def build_event_identity(
         and not re.search(r"\b(?:no|not|won['’]t|will\s+not)\b.{0,18}\b(?:price|prices|pricing)\b|(?:不|不会|未).{0,8}(?:涨价|提价|上调价格)", title_lower)
     ):
         primary_intent = "product-price-change"
-    elif re.search(r"(?:ai|artificial intelligence|人工智能|算力)", title_lower) and re.search(
+    elif re.search(r"(?:\bai\b|artificial intelligence|人工智能|算力)", title_lower) and re.search(
         r"(?:shortage|constraint|risk|delay|insufficient|limited|短缺|不足|风险|延迟|受限)",
         title_lower,
     ):
@@ -2192,7 +2213,7 @@ def build_event_identity(
         r"(?:shortage|constraint|tight|limited|紧张|短缺|受限|不足)", title_lower
     ):
         primary_intent = "product-supply-constraint"
-    elif re.search(r"(?:ai|artificial intelligence|人工智能)", title_lower) and re.search(
+    elif re.search(r"(?:\bai\b|artificial intelligence|人工智能)", title_lower) and re.search(
         r"(?:capex|capital expenditure|spending|investment|invest|资本开支|投入|投资|砸钱)", title_lower
     ):
         primary_intent = "capital-strategy"

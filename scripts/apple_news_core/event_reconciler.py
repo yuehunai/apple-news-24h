@@ -12,7 +12,7 @@ import re
 import unicodedata
 from typing import Callable, Iterable, Sequence, TypeVar
 
-from .event_identity import EventIdentity, LEAD_IDENTITY_COMPONENTS
+from .event_identity import EventIdentity, LEAD_IDENTITY_COMPONENTS, PRODUCT_PATTERNS
 
 
 ArticleT = TypeVar("ArticleT")
@@ -22,6 +22,7 @@ ArticleT = TypeVar("ArticleT")
 class ReconciliationProfile:
     event_keys: frozenset[str]
     boundary_keys: frozenset[str]
+    separation_keys: frozenset[str] = frozenset()
     defer_reason: str = ""
     category_hint: str = ""
     hard_boundary: str = ""
@@ -153,6 +154,40 @@ def _event_format_plan(text: str) -> bool:
             "可能",
         )
     )
+
+
+def _apple_first_party_home_camera_roadmap(title: str, text: str) -> bool:
+    """Identify one first-party Apple Home camera roadmap action."""
+    title_has_apple_platform = _contains(
+        title,
+        "apple",
+        "ios",
+        "苹果",
+    )
+    apple_camera = bool(
+        re.search(
+            r"(?:apple|苹果).{0,45}(?:home security camera|security camera|家用安防摄像头|安防摄像头)",
+            text,
+        )
+        or re.search(
+            r"(?:home security camera|security camera|家用安防摄像头|安防摄像头).{0,45}(?:apple|苹果)",
+            text,
+        )
+    )
+    roadmap_action = _contains(
+        text,
+        "launch",
+        "debut",
+        "coming soon",
+        "rumored",
+        "roadmap",
+        "推出",
+        "登场",
+        "有望",
+        "传闻",
+        "路线图",
+    )
+    return title_has_apple_platform and apple_camera and roadmap_action
 
 
 def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
@@ -494,12 +529,19 @@ def _app_store_subjects(title: str, identity: EventIdentity) -> set[str]:
         "removed",
         "removal",
         "store",
+        "why",
     }
     object_match = re.search(
-        r"(?:remove(?:s|d)?|pull(?:s|ed)?|yank(?:s|ed)?)\s+"
+        r"(?:remove(?:s|d)?|pull(?:s|ed)?|yank(?:s|ed)?|ban(?:s|ned|ning)?)\s+"
         r"([a-z][a-z0-9.+-]{2,30})\s+(?:from|off)\b",
         title,
     )
+    if not object_match:
+        object_match = re.search(
+            r"(?:remove(?:s|d)?|pull(?:s|ed)?|yank(?:s|ed)?|ban(?:s|ned|ning)?)\s+"
+            r"([a-z][a-z0-9.+-]{2,30})(?:\b|[?？])",
+            title,
+        )
     if object_match and object_match.group(1) not in ignored:
         return {object_match.group(1)}
     candidates = [
@@ -537,6 +579,33 @@ def _reconciliation_content_form(title: str, identity: EventIdentity) -> str:
 def _legal_action_stage_text(text: str) -> str:
     if _contains(
         text,
+        "motion to dismiss",
+        "moves to dismiss",
+        "asks the judge to dismiss",
+        "asks judge to dismiss",
+        "to be dismissed",
+        "wants apple's lawsuit dismissed",
+        "wants the lawsuit dismissed",
+        "motion filed yesterday to dismiss",
+        "asked a federal judge to toss out",
+        "seeks dismissal",
+        "request to dismiss",
+        "申请驳回",
+        "请求驳回",
+        "要求驳回",
+    ) or re.search(r"(?:请求|要求|申请).{0,12}法官.{0,12}驳回", text):
+        return "dismissal-request"
+    if (
+        _contains(text, "discovery", "response deadline", "filing deadline", "答辩期限", "取证")
+        and _contains(text, "delay", "delays", "delayed", "extend", "extended", "延期", "延长")
+    ):
+        return "case-schedule"
+    if _contains(text, "extension", "extended", "延期", "延长") and _contains(
+        text, "lawsuit", "legal battle", "case", "诉讼", "法律纠纷", "案件"
+    ):
+        return "case-schedule"
+    if _contains(
+        text,
         "preliminary injunction",
         "temporary injunction",
         "seeks an injunction",
@@ -548,6 +617,20 @@ def _legal_action_stage_text(text: str) -> str:
         "请求禁令",
     ):
         return "injunction-request"
+    if (
+        _contains(text, "court ruled", "judge ruled", "法官驳回", "法院裁定", "缩小诉讼")
+        or re.search(r"\b(?:court|judge)\b.{0,28}\b(?:dismissed|narrowed|stricken)\b", text)
+    ):
+        return "court-ruling"
+    if _contains(
+        text,
+        "settlement talks",
+        "settlement negotiation",
+        "settle the lawsuit",
+        "和解谈判",
+        "讨论和解",
+    ):
+        return "settlement-talks"
     if _contains(
         text,
         "public rebuttal",
@@ -570,32 +653,106 @@ def _legal_action_stage_text(text: str) -> str:
         return "public-response"
     if re.search(r"回应.{0,24}(?:诉讼|纠纷|案件|指控|苹果)", text):
         return "public-response"
-    if _contains(
-        text,
-        "dismissed",
-        "narrowed",
-        "stricken",
-        "court ruled",
-        "judge ruled",
-        "法官驳回",
-        "法院裁定",
-        "缩小诉讼",
-    ):
-        return "court-ruling"
-    if _contains(
-        text,
-        "settlement talks",
-        "settlement negotiation",
-        "settle the lawsuit",
-        "和解谈判",
-        "讨论和解",
-    ):
-        return "settlement-talks"
     return ""
 
 
 def _legal_action_stage(title: str, lead: str) -> str:
-    return _legal_action_stage_text(title) or _legal_action_stage_text(lead)
+    return _legal_action_stage_text(f"{title}. {lead}")
+
+
+def _legal_title_parties(title: str) -> set[str]:
+    parties = set()
+    for match in re.finditer(
+        r"\b(?:against|with|in)\s+([a-z][a-z0-9.+-]+(?:\s+[a-z][a-z0-9.+-]+){0,2})['’]s\s+"
+        r"(?:case|lawsuit|response)\b",
+        title,
+    ):
+        party = re.sub(r"\s+", "-", match.group(1)).strip("-")
+        if party not in {"apple", "the", "its"}:
+            parties.add(party)
+    leading = re.match(r"^([a-z][a-z0-9.+-]+(?:\s+[a-z][a-z0-9.+-]+){0,2})['’]s\b", title)
+    if leading:
+        party = re.sub(r"\s+", "-", leading.group(1))
+        if party not in {"apple", "the", "its"}:
+            parties.add(party)
+    return parties
+
+
+def _component_values(identity: EventIdentity, prefix: str) -> set[str]:
+    return {
+        component.split(":", 1)[1]
+        for component in identity.title_components
+        if component.startswith(prefix)
+    }
+
+
+def _content_screening_subject(title: str, lead: str) -> str:
+    raw = f"{title}. {lead}"
+    action_named = re.search(
+        r"\b([A-Z][A-Za-z0-9]+(?:['’][A-Za-z]+)?(?:\s+[A-Z][A-Za-z0-9]+(?:['’][A-Za-z]+)?){0,5})\s+"
+        r"(?:is\s+going\s+to\s+(?:the\s+)?movies|will\s+be\s+shown|is\s+coming\s+to\s+(?:the\s+)?cinema)\b",
+        raw,
+    )
+    if action_named:
+        value = _normalized(action_named.group(1)).replace("'", "")
+        return re.sub(r"[^a-z0-9]+", "-", value).strip("-")
+    quoted = re.search(r"[\"“]([^\"”]{3,70})[\"”]", raw)
+    if not quoted:
+        quoted = re.search(
+            r"['‘]([A-Z][A-Za-z0-9]+(?:['’][A-Za-z]+)?(?:\s+[A-Z][A-Za-z0-9]+(?:['’][A-Za-z]+)?){0,8})['’]",
+            raw,
+        )
+    if quoted:
+        value = _normalized(quoted.group(1)).replace("'", "")
+        return re.sub(r"[^a-z0-9]+", "-", value).strip("-")
+    named = re.search(
+        r"\b(?:show|screen|screening(?:s)?(?:\s+for)?|series)\s+"
+        r"([A-Z][A-Za-z0-9'’ -]{2,60}?)(?=\s+(?:at|in|on|for)\b|[.,;])",
+        raw,
+    )
+    if named:
+        value = _normalized(named.group(1)).replace("'", "")
+        return re.sub(r"[^a-z0-9]+", "-", value).strip("-")
+    return ""
+
+
+def _product_separation_keys(identity: EventIdentity) -> set[str]:
+    products = set(identity.title_products)
+    hardware_specific = bool(
+        any(
+            component.startswith((
+                "iphone-model:",
+                "iphone-family:",
+                "macbook-model:",
+                "display-size:",
+            ))
+            for component in identity.title_components
+        )
+        or identity.title_components
+        & {"largest-iphone-display", "oled-display", "camera-system"}
+    )
+    if not hardware_specific:
+        return set()
+    families = set()
+    if products & {"iphone", "foldable-iphone"}:
+        families.add("iphone")
+    if products & {"mac", "macbook", "imac", "mac-mini", "mac-studio", "mac-pro"}:
+        families.add("mac")
+    for product in products & {"ipad", "ipad-air", "ipad-mini", "ipad-pro", "apple-watch", "airpods", "apple-tv", "vision-pro"}:
+        families.add(product)
+    return {f"product-family:{family}" for family in families}
+
+
+def _weak_topic_separation_key(title: str) -> str:
+    if _contains(title, "dram", "ram", "memory", "nand", "内存", "存储", "闪存"):
+        return "weak-topic:memory-market"
+    if _contains(title, "2nm", "3nm", "chip", "soc", "semiconductor", "芯片", "制程", "半导体"):
+        return "weak-topic:semiconductor-roadmap"
+    if _contains(title, "app", "application", "应用", "微信"):
+        return "weak-topic:third-party-app"
+    if _contains(title, "ai model", "llm", "大模型", "ai 模型"):
+        return "weak-topic:third-party-ai-model"
+    return ""
 
 
 def _legal_case_key(identity: EventIdentity) -> str:
@@ -714,11 +871,69 @@ def _hard_third_party_boundary(text: str, defer_reason: str) -> str:
         "third-party accessory",
         "unsupported third-party",
         "third-party CarPlay",
+        "third-party employer asset disposal",
         "opinion or commentary",
+        "reader poll",
         "competitor experience",
     )):
         return "independent-third-party-action"
     return ""
+
+
+def _official_refurbished_store_action(text: str) -> bool:
+    return bool(
+        _contains(
+            text,
+            "certified refurbished store",
+            "apple refurbished store",
+            "online refurbished store",
+            "official refurbished",
+            "苹果官方翻新",
+            "苹果认证翻新",
+            "苹果翻新商店",
+            "官翻",
+        )
+        and _contains(
+            text,
+            "adds",
+            "added",
+            "adding",
+            "expands",
+            "updates",
+            "updated",
+            "available",
+            "began selling",
+            "started selling",
+            "上架",
+            "新增",
+            "开售",
+            "扩充",
+        )
+    )
+
+
+def _product_anniversary_milestone(title: str) -> tuple[str, str] | None:
+    milestone = re.search(
+        r"\bturns?\s+(\d{1,3})\b|"
+        r"\bmarks?\s+(?:its\s+)?(\d{1,3})(?:st|nd|rd|th)?\s+anniversary\b|"
+        r"\bcelebrates?\s+(?:its\s+)?(\d{1,3})(?:st|nd|rd|th)?\s+anniversary\b|"
+        r"(?:问世|发布|诞生|迎来|庆祝).{0,10}?(\d{1,3})\s*周年|"
+        r"(\d{1,3})\s*周年(?:纪念)?.{0,10}?(?:问世|发布|诞生|迎来|庆祝)",
+        title,
+    )
+    if not milestone:
+        return None
+    years = next((value for value in milestone.groups() if value), "")
+    candidates: list[tuple[int, str]] = []
+    for product, aliases in PRODUCT_PATTERNS:
+        for alias in aliases:
+            position = title.rfind(alias, 0, milestone.end())
+            if position >= 0 and milestone.start() - position <= 80:
+                candidates.append((position, product))
+    if not candidates:
+        return None
+    _position, product = max(candidates)
+    return product, years
 
 
 def build_reconciliation_profile(
@@ -729,6 +944,7 @@ def build_reconciliation_profile(
     exact_facets: Iterable[str],
     regions: Iterable[str],
     relevance_tier: str = "strong",
+    relevance_reason: str = "",
     trusted_direct_action: bool = False,
 ) -> ReconciliationProfile:
     title_text = _normalized(title)
@@ -739,6 +955,7 @@ def build_reconciliation_profile(
     # than one action in a busy news cycle.
     event_keys: set[str] = set()
     boundary_keys: set[str] = set()
+    separation_keys = _product_separation_keys(identity)
     category_hint = ""
     content_form = _reconciliation_content_form(title_text, identity)
 
@@ -766,6 +983,225 @@ def build_reconciliation_profile(
         boundary_keys.add("apple-market:multi-product-price-forecast")
         category_hint = "hardware_products"
 
+    trade_in_change = bool(
+        (
+            "trade-in-valuation" in identity.components
+            or re.search(r"\btrade[ -]in\s+(?:value|values|offer|offers|estimate|estimates|deal|deals)\b", text)
+            or _contains(text, "以旧换新", "折抵价", "折抵估值")
+        )
+        and (
+            "price-change" in identity.actions
+            or _contains(text, "raises", "increases", "updates", "adjusts", "sweetens", "bumps", "上调", "提高", "调整", "下调", "升值")
+        )
+        and _contains(title_text, "apple", "iphone", "ipad", "mac", "苹果")
+    )
+    if trade_in_change:
+        event_keys.add("apple-retail:trade-in-valuation-change")
+        boundary_keys.add("apple-retail:trade-in-valuation-change")
+        separation_keys.add("action:trade-in-valuation-change")
+        category_hint = "hardware_products"
+
+    if (
+        _contains(
+            title_text,
+            "premium smartphone market",
+            "high-end smartphone market",
+            "高端智能手机市场",
+            "高端手机市场",
+            "全球高端手机市场",
+        )
+        and (
+            _contains(text, "market share", "share", "份额", "accounted for", "占据")
+            or re.search(r"\bholds?\s+\d+(?:\.\d+)?\s*%", text)
+        )
+        and _contains(title_text, "apple", "iphone", "苹果")
+    ):
+        event_keys.add("apple-market:premium-smartphone-share")
+        boundary_keys.add("apple-market:premium-smartphone-share")
+        separation_keys.add("action:measured-market-share")
+        category_hint = "hardware_products"
+
+    generations = _component_values(identity, "iphone-generation:") | {
+        value.removeprefix("iphone-")
+        for value in _component_values(identity, "product-generation:")
+        if value.startswith("iphone-")
+    }
+    title_supply_constraint = _contains(
+        title_text,
+        "dram",
+        "ram supply",
+        "memory shortage",
+        "limited availability",
+        "scrambling to secure memory",
+        "sell out fast",
+        "量产遇挑战",
+        "紧急抢购内存",
+        "内存短缺",
+        "供货受限",
+    )
+    supply_constraint = bool(
+        generations
+        and title_supply_constraint
+        and _contains(text, "dram", "ram", "memory", "内存")
+        and _contains(
+            text,
+            "shortage",
+            "limited availability",
+            "supply constraint",
+            "holding up",
+            "sell out fast",
+            "scrambling to secure",
+            "production challenge",
+            "短缺",
+            "供货受限",
+            "供应受限",
+            "量产遇挑战",
+            "紧急抢购",
+        )
+    )
+    if supply_constraint:
+        for generation in generations:
+            event_keys.add(f"apple-supply:iphone-{generation}:memory-constraint")
+        if _contains(text, "a20"):
+            event_keys.add("apple-supply:a20:memory-constraint")
+        boundary_keys.add("apple-supply:iphone-memory-constraint")
+        separation_keys.add("action:product-supply-constraint")
+        category_hint = "hardware_products"
+
+    a20_memory_constraint = bool(
+        _contains(text, "a20")
+        and _contains(text, "dram", "ram", "memory", "内存")
+        and _contains(
+            text,
+            "cannot be packaged",
+            "unable to package",
+            "packaging backlog",
+            "without memory chips",
+            "holding up",
+            "无法封装",
+            "无内存芯片搭配",
+            "积压",
+        )
+    )
+    if a20_memory_constraint:
+        event_keys.add("apple-supply:a20:memory-constraint")
+        boundary_keys.add("apple-supply:iphone-memory-constraint")
+        separation_keys.add("action:product-supply-constraint")
+        category_hint = "hardware_products"
+
+    memory_suppliers = {
+        supplier
+        for supplier, aliases in {
+            "cxmt": ("cxmt", "changxin", "长鑫"),
+            "ymtc": ("ymtc", "yangtze memory", "长江存储"),
+        }.items()
+        if _contains(text, *aliases)
+    }
+    title_memory_negotiation = bool(
+        _contains(title_text, "apple", "iphone", "苹果")
+        and _contains(title_text, "bid", "leverage", "denies", "talks", "negot", "筹码", "谈判", "议价", "压价", "定价权")
+    )
+    title_has_apple_subject = _contains(title_text, "apple", "iphone", "苹果", "库克")
+    if memory_suppliers and (
+        title_memory_negotiation
+        or (
+            title_has_apple_subject
+            and
+            any(alias in title_text for aliases in {
+                "cxmt": ("cxmt", "changxin", "长鑫"),
+                "ymtc": ("ymtc", "yangtze memory", "长江存储"),
+            }.values() for alias in aliases)
+            and _contains(text, "talks", "negot", "procure", "source", "buy", "洽谈", "谈判", "采购", "议价")
+        )
+    ):
+        event_keys.add("apple-sourcing:memory:china-suppliers:negotiation")
+        boundary_keys.add("apple-sourcing:memory-negotiation")
+        separation_keys.add("action:memory-supplier-negotiation")
+        category_hint = "hardware_products"
+
+    memory_policy_action = bool(
+        memory_suppliers
+        and _contains(text, "white house", "trump", "特朗普", "白宫")
+        and _contains(text, "apple", "iphone", "苹果", "cook", "库克")
+        and _contains(text, "petition", "lobby", "allow", "approval", "reject", "游说", "允许", "批准", "拒绝")
+    )
+    if memory_policy_action:
+        event_keys.add("apple-policy:restricted-memory-supplier-approval")
+        boundary_keys.add("apple-policy:restricted-memory-supplier-approval")
+        separation_keys.add("action:memory-supplier-policy")
+        category_hint = "hardware_products"
+
+    macbook_models = _component_values(identity, "macbook-model:")
+    refurbished_store_action = _official_refurbished_store_action(text)
+    macbook_roadmap_action = bool(
+        not refurbished_store_action
+        and (relevance_tier != "weak" or trusted_direct_action)
+        and content_form == "news"
+        and (
+            identity.actions & {"delay-roadmap", "pilot-testing"}
+            or (
+                _contains(
+                    title_text,
+                    "upgrade options",
+                    "coming",
+                    "coming soon",
+                    "upcoming",
+                    "路线图",
+                    "即将",
+                    "将推出",
+                    "来袭",
+                    "首发",
+                )
+                and _contains(
+                    text,
+                    "report",
+                    "plans",
+                    "expected",
+                    "rumored",
+                    "this fall",
+                    "消息称",
+                    "据称",
+                    "计划",
+                    "预计",
+                    "传闻",
+                    "今秋",
+                )
+            )
+        )
+    )
+    if macbook_models and refurbished_store_action:
+        for model in macbook_models:
+            event_keys.add(f"apple-retail:refurbished:macbook-{model}")
+            separation_keys.add(f"product-model:macbook-{model}")
+        boundary_keys.add("apple-retail:refurbished-macbook")
+        separation_keys.add("action:official-refurbished-availability")
+        category_hint = "hardware_products"
+    elif macbook_models and macbook_roadmap_action:
+        for model in macbook_models:
+            event_keys.add(f"apple-roadmap:macbook-{model}")
+            separation_keys.add(f"product-model:macbook-{model}")
+        boundary_keys.add("apple-roadmap:macbook")
+        separation_keys.add("action:product-roadmap")
+        category_hint = "hardware_products"
+
+    anniversary_milestone = _product_anniversary_milestone(title_text)
+    if anniversary_milestone:
+        product, years = anniversary_milestone
+        event_keys.add(f"apple-product-anniversary:{product}:{years}")
+        boundary_keys.add(f"apple-product-anniversary:{product}")
+        separation_keys.add("action:product-anniversary")
+        category_hint = "hardware_products"
+
+    screening_subject = _content_screening_subject(title, lead)
+    if (
+        screening_subject
+        and "apple-tv" in identity.products
+        and _contains(text, "theater", "theatre", "cinema", "screening", "screenings", "影院", "放映")
+    ):
+        event_keys.add(f"apple-tv-content:{screening_subject}:screening")
+        boundary_keys.add("apple-tv-content:screening")
+        separation_keys.add(f"content-title:{screening_subject}")
+
     if _bug_bounty_submission_limit(text):
         event_keys.add("apple-security:bug-bounty-submission-limit")
         boundary_keys.add("apple-security:bug-bounty-submission-limit")
@@ -790,6 +1226,12 @@ def build_reconciliation_profile(
     if os_feature_scope:
         event_keys.add(os_feature_scope)
         boundary_keys.add(os_feature_scope)
+
+    if _apple_first_party_home_camera_roadmap(title_text, text):
+        event_keys.add("apple-home:first-party-security-camera-roadmap")
+        boundary_keys.add("apple-home:first-party-security-camera-roadmap")
+        separation_keys.add("action:first-party-home-camera-roadmap")
+        category_hint = "software_systems"
 
     event_staff_support = _event_staff_support(text)
     event_preparation = _event_preparation(text)
@@ -831,11 +1273,18 @@ def build_reconciliation_profile(
             for metric in display_metrics
         }
         boundary_keys.add("iphone-display-rumor")
+        separation_keys.add("product-family:iphone")
         if anniversary_display:
             event_keys.add("iphone-display-rumor:anniversary-size-change")
 
     legal_case = _legal_case_key(identity)
     legal_stage = _legal_action_stage(title_text, text[len(title_text) :])
+    legal_parties = sorted(
+        (identity.counterparties - {"secrets", "lawsuit"})
+        | _legal_title_parties(title_text)
+    )
+    if not legal_case and legal_parties:
+        legal_case = ":".join(legal_parties)
     direct_legal_action = bool(
         legal_stage
         and legal_case
@@ -847,7 +1296,6 @@ def build_reconciliation_profile(
         and legal_stage
         and (relevance_tier != "weak" or trusted_direct_action or direct_legal_action)
     ):
-        legal_parties = sorted(identity.counterparties - {"secrets", "lawsuit"})
         event_keys.add(f"apple-legal:{legal_case}:{legal_stage}")
         event_keys |= {
             f"apple-legal-party:{party}:{legal_stage}"
@@ -858,6 +1306,25 @@ def build_reconciliation_profile(
             f"apple-legal-party:{party}"
             for party in legal_parties
         }
+        separation_keys |= {
+            f"legal-party:{party}"
+            for party in legal_parties
+        }
+        separation_keys.add(f"legal-stage:{legal_stage}")
+
+    primary_intents = {
+        component
+        for component in identity.title_components
+        if component.startswith("primary-intent:")
+    }
+    separation_keys |= {
+        f"action:{intent.split(':', 1)[1]}"
+        for intent in primary_intents
+        if intent.split(":", 1)[1]
+        in {"product-price-change", "product-supply-constraint", "memory-supplier-policy", "compute-capacity-risk"}
+    }
+    if "feature-change" in identity.title_actions and identity.title_products:
+        separation_keys.add("action:feature-change")
 
     if content_form == "event_preview" and not event_format_plan:
         # Background facts in an editorial preview must not impersonate the
@@ -873,9 +1340,32 @@ def build_reconciliation_profile(
         trusted_direct_action,
     )
     hard_boundary = _hard_third_party_boundary(text, defer_reason)
+    if (
+        not hard_boundary
+        and relevance_tier == "weak"
+        and "legal" not in identity.actions
+        and relevance_reason.startswith(
+            (
+                "third-party AI model",
+                "third-party app update",
+                "third-party employer asset disposal",
+                "analysis repackaging",
+                "non-Apple component or industry",
+                "non-Apple primary subject",
+                "non-Apple title action",
+                "third-party or non-Apple subject",
+            )
+        )
+    ):
+        hard_boundary = "independent-non-apple-or-editorial-action"
+    if relevance_tier == "weak":
+        weak_topic = _weak_topic_separation_key(title_text)
+        if weak_topic:
+            separation_keys.add(weak_topic)
     return ReconciliationProfile(
         event_keys=frozenset(event_keys),
         boundary_keys=frozenset(boundary_keys),
+        separation_keys=frozenset(separation_keys),
         defer_reason=defer_reason,
         category_hint=category_hint,
         hard_boundary=hard_boundary,
@@ -893,6 +1383,8 @@ def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile
 
 def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
     """Return only conflicts strong enough to split an accepted seed event."""
+    if left.event_keys & right.event_keys:
+        return False
     if bool(left.hard_boundary) != bool(right.hard_boundary) and not (left.event_keys & right.event_keys):
         return True
     if (
@@ -914,6 +1406,15 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
     }
     if left_os_scopes and right_os_scopes and left_os_scopes.isdisjoint(right_os_scopes):
         return True
+    for namespace in ("product-family:", "product-model:", "legal-party:", "action:", "weak-topic:"):
+        left_values = {
+            key for key in left.separation_keys if key.startswith(namespace)
+        }
+        right_values = {
+            key for key in right.separation_keys if key.startswith(namespace)
+        }
+        if left_values and right_values and left_values.isdisjoint(right_values):
+            return True
     shared_boundaries = left.boundary_keys & right.boundary_keys
     staged_boundaries = {
         boundary

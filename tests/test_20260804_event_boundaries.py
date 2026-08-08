@@ -622,7 +622,7 @@ class AugustFourthBoundaryTests(unittest.TestCase):
             frozenset({"russia-fas-app-preinstall-regulation"}),
         )
 
-    def test_app_store_delisting_and_restoration_reports_form_one_ecosystem_event(self):
+    def test_app_store_delisting_and_restoration_reports_form_one_strong_event(self):
         module = load_module()
         articles = [
             article_for(
@@ -641,7 +641,7 @@ class AugustFourthBoundaryTests(unittest.TestCase):
 
         events = module.cluster_articles(articles)
         self.assertEqual(len(events), 1, partitions(events))
-        self.assertEqual(events[0].relevance_tier, "ecosystem")
+        self.assertEqual(events[0].relevance_tier, "strong")
 
     def test_direct_apple_hardware_rumors_outweigh_comparison_background(self):
         module = load_module()

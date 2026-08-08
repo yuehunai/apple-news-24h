@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.49.0 - 2026-08-06
+### 1.50.0 - 2026-08-08
 
-- Added title-and-lead identities for measured Apple-product applied research, Apple-product-driven market forecasts, concrete Apple event operations, and urgent first-party component procurement so direct hardware and company actions remain eligible.
-- Improved deterministic reconciliation for versioned OS feature reports, iCloud Private Relay disclosures, September-event staff and presentation-format reporting, and cross-language foldable-market forecasts while preserving every matching source.
-- Improved supply-chain boundaries so direct Apple/CXMT negotiations and emergency DRAM purchases remain strong, broad memory-market coverage stays separate, and non-Apple supplier earnings driven by other businesses remain weak even when future iPhone production appears as background.
-- Improved source-primary-fact extraction and Chinese sentence segmentation so related-link text cannot promote or merge unrelated articles, while source-specific figures and direct actions remain available to final summaries.
-- Tightened weak-event handling for carrier offers, third-party Mac tools, accessory lists, historical event-date projections, editorial product commentary, and broad industry context without reducing candidate discovery or detail-page coverage.
-- Updated fallback and architecture documentation and expanded regression coverage from 891 to 903 tests; concurrent live validation preserved identical candidate, detail-selection, article, and 62-URL coverage, with runtime remaining within the 120-second target.
+- Added stricter title-and-lead event identities for product anniversaries, polls, official refurbished-store changes, Apple-operated activity challenges, material App Store removals or restorations, and multi-product Mac roadmaps.
+- Improved deterministic reconciliation so generic Apple, product, roadmap, price, promotion, and third-party context cannot bridge unrelated actions, while multilingual reports about the same Mac Pro milestone or refurbished-store update retain every matching source.
+- Added product-specific projection for compound roadmap articles, keeping MacBook Ultra, M6 MacBook Pro, AirPods Ultra, and foldable iPhone actions independent instead of collapsing them into broad hardware clusters.
+- Improved topic-scoped summaries and key facts by using the title plus the first non-duplicate lead, supporting compact Chinese sentence boundaries, and rejecting facts from incompatible OS platforms, versions, products, or background events.
+- Improved relevance handling so direct Apple Wallet features, App Store enforcement outcomes, official Apple Watch challenges, and material Certified Refurbished Store availability remain strong, while polls, routine deals, employer asset disposal, and unsupported third-party updates remain deferred or excluded.
+- Updated fallback policy guidance and expanded regression coverage from 903 to 928 tests; concurrent live validation preserved identical candidate, article, and 57-URL coverage with zero merge warnings, while reducing runtime from 115.15 to 110.59 seconds.
 
 ## What It Does
 
