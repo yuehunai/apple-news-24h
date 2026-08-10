@@ -12,14 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.50.0 - 2026-08-08
+### 1.51.0 - 2026-08-10
 
-- Added stricter title-and-lead event identities for product anniversaries, polls, official refurbished-store changes, Apple-operated activity challenges, material App Store removals or restorations, and multi-product Mac roadmaps.
-- Improved deterministic reconciliation so generic Apple, product, roadmap, price, promotion, and third-party context cannot bridge unrelated actions, while multilingual reports about the same Mac Pro milestone or refurbished-store update retain every matching source.
-- Added product-specific projection for compound roadmap articles, keeping MacBook Ultra, M6 MacBook Pro, AirPods Ultra, and foldable iPhone actions independent instead of collapsing them into broad hardware clusters.
-- Improved topic-scoped summaries and key facts by using the title plus the first non-duplicate lead, supporting compact Chinese sentence boundaries, and rejecting facts from incompatible OS platforms, versions, products, or background events.
-- Improved relevance handling so direct Apple Wallet features, App Store enforcement outcomes, official Apple Watch challenges, and material Certified Refurbished Store availability remain strong, while polls, routine deals, employer asset disposal, and unsupported third-party updates remain deferred or excluded.
-- Updated fallback policy guidance and expanded regression coverage from 903 to 928 tests; concurrent live validation preserved identical candidate, article, and 57-URL coverage with zero merge warnings, while reducing runtime from 115.15 to 110.59 seconds.
+- Added deterministic title-led fact signatures for exact finish sets, case materials, form-factor redesigns, Apple Upgrade operations, future product generations, and first-party document lifecycles, improving multilingual same-event reconciliation without reopening fuzzy clustering.
+- Improved first-party support-page and manual lifecycle handling so an initial publication and its direct removal, correction, restoration, or replacement remain one chronological event while later launches, approvals, and policy actions stay separate.
+- Improved product and action boundaries for foldable iPhone colors and roadmaps, Apple Watch redesign and ceramic-case reports, and attributed Apple hardware plans while preventing background alternatives from redefining the primary event.
+- Tightened relevance handling for crime roundups, rumor-derived editorial projections, and non-Apple projects that use Apple only as a benchmark, and prevented generic Apple removal wording from being misclassified as an App Store delisting.
+- Updated skill and fallback policy guidance and expanded regression coverage from 928 to 936 tests; concurrent live validation preserved the same 42-source URL union with zero merge warnings and reduced runtime from 101.30 to 97.88 seconds.
 
 ## What It Does
 

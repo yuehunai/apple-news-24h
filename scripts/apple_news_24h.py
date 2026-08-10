@@ -50,6 +50,7 @@ from apple_news_core.event_matcher import identity_pair_decision  # noqa: E402
 from apple_news_core.event_reconciler import (  # noqa: E402
     ReconciliationProfile,
     build_reconciliation_profile,
+    first_party_document_lifecycle_key,
     reconcile_articles,
 )
 
@@ -6664,12 +6665,29 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
 
 def is_non_apple_title_action_using_apple_as_reference_story(title: str, text: str) -> bool:
     """Detect a competitor action whose title uses an Apple product as the benchmark."""
-    title_lower = title.lower()
+    title_lower = clean_sentence(title).lower()
     if score_terms(
         title_lower,
-        ["iphone", "ipad", "macbook", "apple watch", "airpods", "vision pro", "苹果"],
+        ["apple", "iphone", "ipad", "macbook", "apple watch", "airpods", "vision pro", "苹果"],
     ) <= 0:
         return False
+    first_party_subject = bool(
+        re.match(
+            r"^(?:apple(?:'s)?|iphone|ipad|macbook|apple watch|airpods|vision pro|苹果)",
+            title_lower,
+        )
+    )
+    generic_reference_benchmark = bool(
+        not first_party_subject
+        and re.search(
+            r"(?:larger|bigger|smaller|thinner|faster|slower|exceeds?|surpasses?|"
+            r"overtakes?|compared (?:with|to)|versus|\bvs\.?\b)"
+            r".{0,70}(?:apple\s+park|apple|iphone|ipad|macbook|airpods|苹果(?:园区|总部|产品)?)|"
+            r"(?:面积|规模|性能|速度|厚度).{0,20}(?:超|超过|超越|大于|小于|快于|慢于)"
+            r".{0,70}(?:apple|iphone|ipad|macbook|airpods|苹果)",
+            title_lower,
+        )
+    )
     competitor_subject = score_terms(
         title_lower,
         [
@@ -6695,7 +6713,7 @@ def is_non_apple_title_action_using_apple_as_reference_story(title: str, text: s
             "top 5",
         ],
     ) > 0
-    if not competitor_subject:
+    if not competitor_subject and not generic_reference_benchmark:
         return False
     reference_or_followup = score_terms(
         title_lower,
@@ -6719,7 +6737,7 @@ def is_non_apple_title_action_using_apple_as_reference_story(title: str, text: s
             "采用类似",
         ],
     ) > 0
-    if not reference_or_followup:
+    if not reference_or_followup and not generic_reference_benchmark:
         return False
     return score_terms(
         title_lower,
@@ -7346,7 +7364,21 @@ def is_apple_product_commentary_analysis_without_new_reporting(title: str, text:
     title_lower = title.lower()
     if effective_apple_term_score(lower) <= 0:
         return False
+    rumor_projection = bool(
+        re.search(
+            r"\b(?:based on|assuming) (?:the )?(?:current|existing|previously reported) rumors?\b|"
+            r"\bno new reporting\b|(?:基于|依据)(?:现有|当前|此前)(?:传闻|爆料)|无新增(?:消息|报道)",
+            lower[:1400],
+        )
+        and re.search(
+            r"\b(?:set|projected|expected|on track) to (?:break|set|hold|become)\b.{0,80}\b(?:record|longest|first)\b|"
+            r"(?:有望|预计|或将).{0,30}(?:打破|创下|保持|成为).{0,30}(?:纪录|最长|首个)",
+            title_lower,
+        )
+    )
     if not (
+        rumor_projection
+        or
         score_terms(
             title_lower,
             [
@@ -7382,6 +7414,8 @@ def is_apple_product_commentary_analysis_without_new_reporting(title: str, text:
         )
         > 0
     ):
+        return False
+    if not rumor_projection and is_current_attributed_apple_hardware_roadmap_reporting(title, text):
         return False
     if score_terms(
         lower,
@@ -7421,6 +7455,79 @@ def is_apple_product_commentary_analysis_without_new_reporting(title: str, text:
             "智能家居中枢",
         ],
     ) > 0
+
+
+def is_current_attributed_apple_hardware_roadmap_reporting(title: str, text: str) -> bool:
+    """Keep concrete sourced roadmaps even when a publisher uses commentary framing."""
+    identity = title_led_identity(title, text)
+    if identity.scope != "apple-direct":
+        return False
+    lead = title_and_lead_scope(title, text, limit=1500).lower()
+    if score_terms(
+        lead,
+        [
+            "no new reporting",
+            "without new reporting",
+            "previously reported",
+            "recapped rumors",
+            "rumors so far",
+            "无新增报道",
+            "没有新增报道",
+            "汇总此前",
+            "此前传闻",
+        ],
+    ) > 0:
+        return False
+    attributed = score_terms(
+        lead,
+        [
+            "according to reports from",
+            "according to bloomberg",
+            "according to mark gurman",
+            "according to gurman",
+            "bloomberg reports",
+            "gurman reports",
+            "per mark gurman",
+            "i'm told",
+            "i’m told",
+            "new report",
+            "latest report",
+            "据彭博社",
+            "据古尔曼",
+            "古尔曼称",
+            "最新报道",
+            "今日报告",
+            "消息人士称",
+        ],
+    ) > 0
+    concrete_roadmap_action = score_terms(
+        lead,
+        [
+            "will skip",
+            "is skipping",
+            "will not release",
+            "will not be released",
+            "only chip to be released",
+            "accelerate development",
+            "accelerate the launch",
+            "move the launch forward",
+            "debut as soon as",
+            "launch as soon as",
+            "redesigned macbook",
+            "enter production",
+            "begin production",
+            "预计跳过",
+            "将跳过",
+            "不会发布",
+            "仅发布",
+            "提前发布",
+            "加速开发",
+            "加速推出",
+            "进入量产",
+            "开始量产",
+        ],
+    ) > 0
+    return attributed and concrete_roadmap_action and is_direct_apple_hardware_roadmap_story(lead, title)
 
 
 def has_former_apple_person_reference(text: str) -> bool:
@@ -22620,8 +22727,11 @@ def is_apple_hardware_production_retooling_story(title: str, text: str) -> bool:
 
 
 def is_routine_crime_roundup_without_apple_action(title: str, text: str) -> bool:
-    title_lower = title.lower()
-    if score_terms(title_lower, ["crime blotter", "crime roundup", "犯罪简报", "犯罪汇总"]) <= 0:
+    title_lower = clean_sentence(title).lower()
+    if not (
+        score_terms(title_lower, ["crime blotter", "crime roundup", "犯罪简报", "犯罪汇总"]) > 0
+        or re.search(r"\bcrime[ -]?blotter\b|\bcrime[ -]?roundup\b", title_lower)
+    ):
         return False
     return not (
         is_apple_product_legal_proceeding_story(title, text)
@@ -25153,6 +25263,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     lower = text.lower()
     title_lower = title.lower()
     semantic_identity = title_led_identity(title, summary)
+    if first_party_document_lifecycle_key(title, text, semantic_identity):
+        return "os_app"
     if is_apple_operated_activity_challenge_story(title, text):
         return "service_content"
     if is_apple_operated_compatibility_list_update_story(title, text):
@@ -26435,6 +26547,8 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    if first_party_document_lifecycle_key(title, text, semantic_identity):
+        return "strong", "first-party Apple document lifecycle update"
     if is_apple_operated_activity_challenge_story(title, text):
         return "strong", "Apple-operated fitness or activity challenge"
     if (
@@ -26527,7 +26641,7 @@ def classify_relevance_tier(
     if is_routine_retail_discount_story(title, text):
         return "weak", "routine third-party retail discount or affiliate deal"
     if is_non_apple_title_action_using_apple_as_reference_story(title, text):
-        return "weak", "non-Apple title action using an Apple product only as reference or precedent"
+        return "weak", "third-party or non-Apple title action using an Apple product only as reference or precedent"
     if is_non_apple_component_market_background_story(title, text):
         return "weak", "non-Apple component or industry report with Apple used as a market data point"
     if is_apple_smart_glasses_health_platform_story(title, text):

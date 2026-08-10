@@ -88,6 +88,242 @@ def _display_metrics(text: str) -> set[str]:
     return metrics
 
 
+def _document_subject_token(value: str) -> str:
+    """Return a stable integration target from a first-party document title."""
+    value = _normalized(value).strip(" .,:;!?()[]{}\"'“”‘’《》")
+    value = re.sub(r"(?:大模型|模型|扩展|服务)$", "", value).strip()
+    # Chinese reports may write a partner plus its model as one token while
+    # the first-party page itself names only the model. Normalize common
+    # organization prefixes, but keep the model name data-driven.
+    for prefix in (
+        "阿里巴巴",
+        "字节跳动",
+        "openai",
+        "google",
+        "microsoft",
+        "阿里",
+        "百度",
+        "腾讯",
+        "字节",
+        "谷歌",
+        "微软",
+    ):
+        if value.startswith(prefix) and len(value.removeprefix(prefix)) >= 2:
+            value = value.removeprefix(prefix).strip()
+            break
+    value = re.sub(r"^(?:旗下的?|的)", "", value).strip()
+    value = re.sub(r"^(?:接入|使用|调用|集成|整合|配合|联动)", "", value).strip()
+    if not value or value in {
+        "apple",
+        "apple intelligence",
+        "apple 智能",
+        "siri",
+        "mac",
+        "功能",
+        "页面",
+        "手册",
+        "文档",
+    }:
+        return ""
+    return re.sub(r"[^a-z0-9\u4e00-\u9fff+.-]+", "-", value).strip("-")
+
+
+def _document_integration_subject(text: str) -> str:
+    candidates: list[str] = []
+    for pattern in (
+        r"(?:使用|接入|调用|集成|整合|配合|联动)\s*"
+        r"(?P<name>[\u4e00-\u9fff]{2,14}?|[a-z][a-z0-9+.-]{1,30})"
+        r"(?=\s*(?:大模型|模型|扩展|服务|使用手册|手册|页面|工作|[\"'“”‘’《》]|$))",
+        r"(?:删除|移除|撤下|下线|恢复|替换|更正)\s*"
+        r"(?P<name>[\u4e00-\u9fff]{2,14}?|[a-z][a-z0-9+.-]{1,30})"
+        r"(?=\s*(?:使用手册|用户手册|操作手册|支持文档|支持页面|文档|手册|页面))",
+        r"\b(?:use|using|integrates? with|works? with|powered by)\s+"
+        r"(?P<name>[a-z][a-z0-9+.-]{1,30})(?=\s|[\"'.,:;!?)]|$)",
+    ):
+        candidates.extend(match.group("name") for match in re.finditer(pattern, text, re.I))
+    for candidate in reversed(candidates):
+        token = _document_subject_token(candidate)
+        if token:
+            return token
+    return ""
+
+
+def first_party_document_lifecycle_key(
+    title: str,
+    text: str,
+    identity: EventIdentity,
+) -> str:
+    """Identify reports about one first-party page appearing and later changing."""
+    title = _normalized(title)
+    text = _normalized(text)
+    if not _contains(
+        text,
+        "support document",
+        "support page",
+        "user guide",
+        "user manual",
+        "documentation",
+        "apple support",
+        "apple website",
+        "apple's website",
+        "apple.com",
+        "支持文档",
+        "使用手册",
+        "用户手册",
+        "操作手册",
+        "苹果官网",
+        "苹果中国官网",
+    ):
+        return ""
+    if not _contains(
+        text,
+        "appears",
+        "appeared",
+        "surfaced",
+        "published",
+        "added",
+        "updated",
+        "documented",
+        "removed",
+        "deleted",
+        "withdrawn",
+        "pulled",
+        "restored to",
+        "replaced",
+        "corrected",
+        "现身",
+        "出现",
+        "上线",
+        "新增",
+        "更新",
+        "删除",
+        "删了",
+        "撤下",
+        "下线",
+        "恢复为",
+        "替换",
+        "更正",
+    ):
+        return ""
+    if not _contains(title, "apple", "苹果") and identity.scope != "apple-direct":
+        return ""
+    subject = _document_integration_subject(text)
+    if not subject:
+        return ""
+    preferred_products = (
+        "apple-intelligence",
+        "icloud-private-relay",
+        "icloud",
+        "siri",
+        "app-store",
+        "apple-wallet",
+        "apple-music",
+        "apple-tv",
+        "macos",
+        "ios",
+        "ipados",
+        "watchos",
+        "visionos",
+    )
+    product = next((value for value in preferred_products if value in identity.products), "")
+    if not product:
+        return ""
+    return f"apple-document-lifecycle:{product}:{subject}"
+
+
+def _title_fact_signatures(title: str, lead: str) -> set[str]:
+    """Return exact, title-led subject/action signatures for reconciliation.
+
+    These signatures are deliberately narrower than topic facets.  A product
+    name alone is never a signature: the title or short lead must also expose
+    the concrete changed object, material, finish set, generation, or program
+    operation.  This lets exact cross-source matches override seed boundaries
+    without reopening fuzzy all-pairs clustering.
+    """
+    title = _normalized(title)
+    lead = _normalized(lead)[:900]
+    text = f"{title}. {lead}"
+    signatures: set[str] = set()
+
+    foldable_iphone = bool(
+        re.search(
+            r"\b(?:foldable|folding)\s+(?:apple\s+)?iphone\b|"
+            r"\biphone\s+(?:fold|ultra)\b|(?:折叠屏?|折叠式)\s*(?:iphone|苹果手机)|"
+            r"(?:iphone|苹果首款手机).{0,12}(?:折叠屏?|折叠式)",
+            text,
+        )
+        or (
+            re.search(r"折叠屏?|折叠式", text)
+            and re.search(r"\biphone\s+(?:fold|ultra)\b|iphone", text)
+        )
+    )
+    if foldable_iphone:
+        finish_aliases = {
+            "black": (r"\bblack\b", "黑色"),
+            "dark-blue": (r"\bdark[ -]blue\b", "深蓝色", "深蓝"),
+            "gold": (r"\bgold(?:en)?\b", "金色"),
+            "silver": (r"\bsilver\b", "银色"),
+            "white": (r"\bwhite\b", "白色"),
+        }
+        clauses = [part.strip() for part in re.split(r"(?<=[.!?。！？;；])\s*", text) if part.strip()]
+        for clause in clauses:
+            finishes = {
+                finish
+                for finish, aliases in finish_aliases.items()
+                if any(
+                    re.search(alias, clause) if alias.startswith(r"\b") else alias in clause
+                    for alias in aliases
+                )
+            }
+            finish_context = bool(
+                re.search(r"\b(?:colors?|colou?rs?|finishes?|choice of)\b|配色|颜色|色款", clause)
+            )
+            if finish_context and len(finishes) >= 2:
+                signatures.add(f"finish-set:foldable-iphone:{','.join(sorted(finishes))}")
+                break
+
+        generation_match = re.search(
+            r"\b(?:third|3rd)[ -]generation\b|\bthird[ -]gen\b|"
+            r"\b(?:iphone\s+(?:fold|ultra)\s*3)\b|(?:第三代|第\s*3\s*代)",
+            text,
+        )
+        roadmap_context = bool(
+            re.search(
+                r"\b(?:roadmap|planning|plans?|planned|generation|2028)\b|"
+                r"路线图|规划|计划|第三代|第\s*3\s*代",
+                text,
+            )
+        )
+        if generation_match and roadmap_context:
+            signatures.add("future-generation-roadmap:foldable-iphone:g3")
+
+    apple_watch = bool(re.search(r"(?<![a-z0-9])apple\s*watch\b|苹果\s*watch", text))
+    if apple_watch and re.search(r"\bceramic\b|陶瓷", text):
+        signatures.add("case-material:apple-watch:ceramic")
+    if apple_watch:
+        redesign = bool(re.search(r"\b(?:redesign|rethink|form[ -]factor|revamp)\b|重新设计|重新思考|产品形态|形态重构|大改版", text))
+        form_factor = bool(re.search(r"\bround(?:ed)?\s+(?:screen|display|model)\b|\bscreenless\b|圆(?:形|屏)|无屏", text))
+        if redesign:
+            signatures.add("form-factor-redesign:apple-watch")
+        if redesign and form_factor:
+            signatures.add("form-factor-redesign:apple-watch:round-or-screenless")
+
+    apple_upgrade = bool(re.search(r"\bapple\s+upgrade\b|苹果\s*upgrade", text))
+    device_data_preload = bool(
+        re.search(
+            r"\b(?:preload|pre-load|preloaded|pre-loaded)\b.{0,80}\b(?:icloud|backup|data)\b|"
+            r"\b(?:icloud|backup|data)\b.{0,80}\b(?:preload|pre-load|preloaded|pre-loaded)\b|"
+            r"(?:预载|预装|装好).{0,40}(?:icloud|备份|用户数据|数据)|"
+            r"(?:icloud|备份|用户数据).{0,40}(?:预载|预装|装好)",
+            text,
+        )
+    )
+    if apple_upgrade and device_data_preload:
+        signatures.add("program-operation:apple-upgrade:device-data-preload")
+
+    return signatures
+
+
 def _event_staff_support(text: str) -> bool:
     return (
         _contains(text, "lottery", "抽签")
@@ -490,9 +726,18 @@ def _webkit_proxy_leak(text: str) -> bool:
 
 
 def _app_store_removal_stage(text: str) -> str:
+    explicit_store_surface = _contains(text, "app store", "应用商店", "苹果应用商店")
+    explicit_apple_app_removal = bool(
+        re.search(
+            r"\bapple\b.{0,24}\b(?:remov(?:es|ed|al)?|pull(?:s|ed)?|yank(?:s|ed)?|delist(?:s|ed)?)\b"
+            r".{0,30}\b(?:app|application)\b|"
+            r"(?:苹果).{0,16}(?:下架|移除|撤下).{0,16}(?:应用|app)",
+            text,
+        )
+    )
     if not (
-        _contains(text, "app store", "应用商店", "apple", "苹果")
-        and _contains(text, "remov", "pull", "yank", "delist", "下架")
+        (explicit_store_surface or explicit_apple_app_removal)
+        and _contains(text, "remov", "pull", "yank", "delist", "下架", "移除", "撤下")
     ):
         return ""
     if _contains(
@@ -959,6 +1204,20 @@ def build_reconciliation_profile(
     category_hint = ""
     content_form = _reconciliation_content_form(title_text, identity)
 
+    document_lifecycle_key = first_party_document_lifecycle_key(title_text, text, identity)
+    if document_lifecycle_key:
+        event_keys.add(document_lifecycle_key)
+        boundary_keys.add(document_lifecycle_key)
+        separation_keys.add(f"title-fact:{document_lifecycle_key}")
+        separation_keys.add("action:first-party-document-lifecycle")
+        category_hint = "software_systems"
+
+    for signature in _title_fact_signatures(title_text, lead):
+        key = f"title-fact:{signature}"
+        event_keys.add(key)
+        boundary_keys.add(key)
+        separation_keys.add(key)
+
     removal_stage = _app_store_removal_stage(text)
     if removal_stage:
         removal_subjects = _app_store_subjects(title_text, identity) or {"unknown-app"}
@@ -1406,7 +1665,14 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
     }
     if left_os_scopes and right_os_scopes and left_os_scopes.isdisjoint(right_os_scopes):
         return True
-    for namespace in ("product-family:", "product-model:", "legal-party:", "action:", "weak-topic:"):
+    for namespace in (
+        "title-fact:",
+        "product-family:",
+        "product-model:",
+        "legal-party:",
+        "action:",
+        "weak-topic:",
+    ):
         left_values = {
             key for key in left.separation_keys if key.startswith(namespace)
         }
