@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.51.0 - 2026-08-10
+### 1.52.0 - 2026-08-11
 
-- Added deterministic title-led fact signatures for exact finish sets, case materials, form-factor redesigns, Apple Upgrade operations, future product generations, and first-party document lifecycles, improving multilingual same-event reconciliation without reopening fuzzy clustering.
-- Improved first-party support-page and manual lifecycle handling so an initial publication and its direct removal, correction, restoration, or replacement remain one chronological event while later launches, approvals, and policy actions stay separate.
-- Improved product and action boundaries for foldable iPhone colors and roadmaps, Apple Watch redesign and ceramic-case reports, and attributed Apple hardware plans while preventing background alternatives from redefining the primary event.
-- Tightened relevance handling for crime roundups, rumor-derived editorial projections, and non-Apple projects that use Apple only as a benchmark, and prevented generic Apple removal wording from being misclassified as an App Store delisting.
-- Updated skill and fallback policy guidance and expanded regression coverage from 928 to 936 tests; concurrent live validation preserved the same 42-source URL union with zero merge warnings and reduced runtime from 101.30 to 97.88 seconds.
+- Added typed title-and-lead event identities for subjects, predicates, products and platforms, components, evidence, claim lifecycles, legal stages, OS release waves, and market facts, enabling deterministic splits and reunions without fuzzy bridges.
+- Improved supply-chain reconciliation by separating Apple supplier sourcing, testing, and qualification from shipment-plan changes and shared shortage context, while keeping supplier-led direct Apple hardware reports strong and source-complete.
+- Improved exact event boundaries so later body context, related-story cards, generic shared causes, and weak third-party, competitor, or editorial items cannot redefine or enter main events; added cleanup for 9to5Mac certified-refurbished affiliate tails.
+- Improved runtime by replacing regex-heavy lexical scans with boundary-equivalent cached matching and precompiled identity patterns; high-volume live processing fell from 160.79 seconds to about 90 seconds while preserving source counts and URL coverage.
+- Updated fallback policy and architecture documentation and expanded regression coverage from 936 to 982 tests; concurrent live validation preserved all 116 URLs with no merge warnings or duplicate placements, and clean-agent validation produced 30 one-to-one brief boundaries with exact source-URL coverage.
 
 ## What It Does
 
@@ -37,7 +37,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
 - `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
 - `scripts/apple_news_core/event_reconciler.py` preserves accepted seed clusters, applies explicit action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py`, `tests/test_20260805_event_reconciliation.py`, and `tests/test_20260806_relevance_boundaries.py` provide focused regression coverage for identity extraction, matching, reconciliation, and relevance boundaries; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `tests/test_event_identity_architecture.py`, `tests/test_20260805_event_reconciliation.py`, `tests/test_20260806_relevance_boundaries.py`, and `tests/test_20260811_structured_reconciliation.py` provide focused regression coverage for identity extraction, matching, structured reconciliation, supplier sourcing, and relevance boundaries; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 

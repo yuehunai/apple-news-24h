@@ -2067,6 +2067,37 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotIn("AirPods Pro 3", combined)
         self.assertNotIn("45W Fast Charger", combined)
 
+    def test_9to5_certified_refurbished_footer_does_not_enter_article_facts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-08-11T11:01:05+00:00" />
+            <meta property="og:description" content="Apple considered sourcing memory from additional suppliers." />
+          </head>
+          <body>
+            <div class="container med post-content">
+              <p>Apple considered buying RAM from additional suppliers, but capacity and qualification remain obstacles.</p>
+              <p>The sourcing plan would apply to Apple hardware sold in selected markets.</p>
+              <p>Certified refurbished products 15% off at apple.com</p>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/08/11/memory-supplier-report/",
+            title="Apple considers additional memory suppliers",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("capacity and qualification", combined)
+        self.assertNotIn("Certified refurbished", combined)
+        self.assertNotIn("15% off", combined)
+
     def test_9to5_my_top_deals_tail_does_not_enter_article_facts(self):
         module = load_module()
         source = source_named(module, "9to5Mac")

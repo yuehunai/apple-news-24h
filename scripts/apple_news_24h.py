@@ -52,6 +52,7 @@ from apple_news_core.event_reconciler import (  # noqa: E402
     build_reconciliation_profile,
     first_party_document_lifecycle_key,
     reconcile_articles,
+    supported_reconciliation_event_keys,
 )
 
 try:
@@ -2025,22 +2026,48 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
     return candidates
 
 
-@lru_cache(maxsize=8192)
-def term_pattern(term: str) -> re.Pattern[str]:
-    if term.lower() == "wwdc":
-        return re.compile(r"(?<![a-z0-9])wwdc(?:\d{0,4})?(?![a-z0-9])")
-    escaped = re.escape(term.lower())
-    return re.compile(rf"(?<![a-z0-9]){escaped}(?![a-z0-9])")
+def ascii_lexical_term_present(text: str, term: str) -> bool:
+    offset = 0
+    while True:
+        index = text.find(term, offset)
+        if index < 0:
+            return False
+        end = index + len(term)
+        if (
+            (index == 0 or not (text[index - 1].isascii() and text[index - 1].isalnum()))
+            and (end == len(text) or not (text[end].isascii() and text[end].isalnum()))
+        ):
+            return True
+        offset = index + 1
 
 
 @lru_cache(maxsize=16384)
 def term_present(text: str, term: str) -> bool:
     normalized = term.lower()
     if normalized == "wwdc":
-        return term_pattern(normalized).search(text.lower()) is not None
+        search_text = text.lower()
+        offset = 0
+        while True:
+            index = search_text.find("wwdc", offset)
+            if index < 0:
+                return False
+            end = index + 4
+            while end < len(search_text) and end - index < 8 and search_text[end].isdigit():
+                end += 1
+            if (
+                (index == 0 or not (search_text[index - 1].isascii() and search_text[index - 1].isalnum()))
+                and (end == len(search_text) or not (search_text[end].isascii() and search_text[end].isalnum()))
+            ):
+                return True
+            offset = index + 1
     if any(ord(ch) > 127 for ch in term):
         return term in text
-    return term_pattern(normalized).search(text) is not None
+    return ascii_lexical_term_present(text, normalized)
+
+
+@lru_cache(maxsize=4096)
+def normalized_term_tuple(terms: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(term.lower() for term in terms)
 
 
 @lru_cache(maxsize=32768)
@@ -2050,7 +2077,7 @@ def cached_score_terms(lower: str, terms: tuple[str, ...]) -> int:
 
 def score_terms(text: str, terms: Iterable[str]) -> int:
     lower = text.lower()
-    normalized_terms = tuple(term.lower() for term in terms)
+    normalized_terms = normalized_term_tuple(tuple(terms))
     return cached_score_terms(lower, normalized_terms)
 
 
@@ -2227,6 +2254,14 @@ def loose_apple_product_marker(text: str) -> bool:
 def is_third_party_platform_update_improving_apple_device_interop(title: str, text: str) -> bool:
     lower = f"{title} {text}".lower()
     title_lower = title.lower()
+    if re.search(
+        r"\b(?:independent|open[ -]source|github-hosted)\s+(?:app|client|project|tool|utility)\b|"
+        r"\b(?:app|client|project|tool|utility)\s+(?:hosted\s+)?on\s+github\b|"
+        r"(?:独立|第三方)?开源(?:应用|客户端|项目|工具)|"
+        r"(?:应用|客户端|项目|工具).{0,18}(?:托管|发布|上线)在?\s*github",
+        lower,
+    ):
+        return False
     if score_terms(
         lower,
         [
@@ -4772,6 +4807,8 @@ def is_third_party_consumer_app_update_on_apple_platform(title: str, text: str) 
     title_lower = title.lower()
     lead = title_and_lead_scope(title, text, limit=700).lower()
     identity = title_led_identity(title, lead)
+    if is_third_party_app_platform_launch_story(title, text):
+        return True
     platform_products = {"ios", "ipados", "mac", "macos", "watchos", "tvos", "visionos"}
     named_product_update_on_platform = bool(
         not title_lower.startswith(("apple ", "苹果"))
@@ -10027,6 +10064,7 @@ TRAILING_PROMO_SECTION_PATTERNS = (
     r"(?:prime\s+day\s+)?savings\s+on\s+apple\s+gear",
     r"apple\s+gear\s+savings",
     r"shop\s+at\s+apple\s+with\s+\d{1,2}%\s+discount\s+on\s+certified\s+refurbished",
+    r"certified\s+refurbished\s+products?\s+\d{1,2}%\s+off\s+at\s+apple\.com",
     r"best\s+[a-z0-9+,&'’\-\s]{2,90}\s+accessories\b",
     r"best\s+(?:iphone|ipad|mac|airpods|apple\s+tv\s+4k|apple\s+watch(?:\s+and\s+iphone)?|iphone\s+and\s+apple\s+watch|vision\s+pro|apple)\s+"
     r"(?:accessories|deals\s+and\s+accessories)",
@@ -14673,7 +14711,7 @@ def is_iphone_photography_awards_story(text: str) -> bool:
 
 def is_icloud_service_perk_story(text: str) -> bool:
     lower = text.lower()
-    if score_terms(lower, ["icloud+", "icloud plus", "icloud storage", "icloud", "homekit secure video"]) <= 0:
+    if score_terms(lower, ["icloud+", "icloud plus", "icloud storage", "icloud"]) <= 0:
         return False
     return score_terms(
         lower,
@@ -14687,13 +14725,11 @@ def is_icloud_service_perk_story(text: str) -> bool:
             "subscriber",
             "subscribers",
             "usage limits",
-            "secure video",
             "权益",
             "订阅",
             "付费用户",
             "存储方案",
             "使用额度",
-            "安全视频",
         ],
     ) > 0
 
@@ -16018,6 +16054,35 @@ def is_apple_display_supplier_price_negotiation_story(title: str, text: str) -> 
         ],
     )
     return procurement_score > 0 and negotiation_score > 0
+
+
+def is_title_led_named_apple_product_supplier_action_story(title: str, text: str) -> bool:
+    """Recognize a concrete supplier-to-Apple product/component relationship."""
+    identity = title_led_identity(title, text)
+    return bool(
+        identity.content_form == "news"
+        and effective_apple_term_score(title) > 0
+        and identity.title_products
+        & {
+            "airpods",
+            "apple-watch",
+            "foldable-iphone",
+            "homepod",
+            "ipad",
+            "ipad-air",
+            "ipad-mini",
+            "ipad-pro",
+            "iphone",
+            "mac",
+            "mac-mini",
+            "mac-pro",
+            "mac-studio",
+            "macbook",
+            "vision-pro",
+        }
+        and "supply-production" in identity.title_actions
+        and identity.title_components
+    )
 
 
 def is_direct_apple_facility_incident_story(title: str, text: str) -> bool:
@@ -22052,9 +22117,11 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
             "watchos",
             "tvos",
             "visionos",
+            "carplay",
             "app store",
             "apple watch",
             "apple tv",
+            "carplay",
             "iphone",
             "ipad",
             "mac",
@@ -22074,6 +22141,7 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
             "apple watch app",
             "tvos app",
             "apple tv app",
+            "carplay app",
             "ios 版",
             "ios版",
             "ipados 版",
@@ -22093,7 +22161,7 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
     ) <= 0:
         return False
     return score_terms(
-        lower,
+        title_lower,
         [
             "launch",
             "launches",
@@ -22101,6 +22169,7 @@ def is_third_party_app_platform_launch_story(title: str, text: str) -> bool:
             "available",
             "released",
             "rolls out",
+            "brings",
             "gets",
             "expands to",
             "expanding to",
@@ -24175,6 +24244,7 @@ EXACT_SHARED_EVENT_TOPIC_FACETS = {
     "icloud-child-safety-lawsuit",
     "india-tariff-iphone-manufacturing",
     "iphone-component-cost-forecast",
+    "ios-signing-status",
     "iphone-color-mockup",
     "iphone-photography-awards",
     "iphone-memory-feature-support",
@@ -24286,6 +24356,7 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
     if (
         score_terms(title.lower(), ["apple watch", "苹果手表"]) > 0
         and is_apple_watch_redesign_story(combined_text)
+        and not is_apple_watch_band_sensor_story(title)
     ):
         return frozenset({"apple-watch-redesign"})
     if is_direct_apple_regulatory_trade_action_story(title, combined_text):
@@ -26547,6 +26618,21 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    if semantic_identity.content_form == "third_party_spotlight":
+        return "weak", "deal, buying advice, or third-party product spotlight without a new Apple action"
+    if (
+        semantic_identity.content_form == "deal"
+        and is_routine_retail_discount_story(title, text)
+    ):
+        return "weak", "routine third-party retail discount without a new Apple action"
+    if semantic_identity.content_form == "analysis" and not semantic_identity.title_actions & {
+        "legal",
+        "regulation",
+        "transaction",
+        "market-report",
+        "market-ranking",
+    }:
+        return "weak", "analysis or opinion without a new standalone Apple action"
     if first_party_document_lifecycle_key(title, text, semantic_identity):
         return "strong", "first-party Apple document lifecycle update"
     if is_apple_operated_activity_challenge_story(title, text):
@@ -26696,6 +26782,8 @@ def classify_relevance_tier(
         return "strong", "attributed Apple executive strategy or leadership statement"
     if is_official_apple_refurbished_product_story(text):
         return "strong", "Apple official refurbished product availability or pricing change"
+    if is_official_apple_education_promotion_story(title, text):
+        return "strong", "live Apple education promotion with regional eligibility and benefits"
     if is_apple_supplier_commercial_outlook_story(title, text):
         return "strong", "Apple-specific supplier revenue or component-share outlook"
     if (
@@ -26756,6 +26844,8 @@ def classify_relevance_tier(
         return "strong", "government trade or regulatory action directly targeting Apple"
     if is_apple_display_supplier_price_negotiation_story(title, text):
         return "strong", "Apple display supplier price negotiation"
+    if is_title_led_named_apple_product_supplier_action_story(title, text):
+        return "strong", "named supplier qualification or component-supply action for an Apple product"
     if is_direct_apple_facility_incident_story(title, text):
         return "strong", "physical incident at an Apple facility"
     if is_direct_apple_platform_security_impact_story(title, text):
@@ -27233,7 +27323,11 @@ def classify_relevance_tier(
         return "weak", "multi-vendor chip or phone roadmap story using Apple mainly as context"
     if is_non_apple_product_design_reference_story(title, text):
         return "weak", "non-Apple product story using iPhone design or color only as reference context"
-    if event_kind == "os_app" and is_title_primary_software_system_story(title, text):
+    if (
+        event_kind == "os_app"
+        and semantic_identity.scope != "third-party-context"
+        and is_title_primary_software_system_story(title, text)
+    ):
         return "strong", "Apple OS, built-in app, or feature-summary change"
     if semantic_identity.scope == "apple-direct" and is_direct_apple_hardware_roadmap_story(text, title):
         return "strong", "Apple hardware roadmap or product-development event"
@@ -27267,7 +27361,10 @@ def classify_relevance_tier(
         ) == 0
     ):
         return "weak", "third-party or competitor story with Apple used mainly as context"
-    if is_apple_os_feature_or_summary_story(text):
+    if (
+        semantic_identity.scope != "third-party-context"
+        and is_apple_os_feature_or_summary_story(text)
+    ):
         return "strong", "Apple OS, built-in app, or feature-summary change"
     if event_kind == "messages_platform":
         return "strong", "Apple Messages or iMessage platform capability change"
@@ -28329,6 +28426,18 @@ def refresh_event_metadata(event: Event) -> None:
         event.relevance_reason = "Apple-owned hardware brand engineering or product-strategy report"
         event.category = "hardware_products"
         return
+    if event.articles and all(
+        is_title_led_named_apple_product_supplier_action_story(
+            article.title,
+            " ".join([article.summary, *article.key_facts[:5]]),
+        )
+        for article in event.articles
+    ):
+        event.event_kind = "hardware_market"
+        event.relevance_tier = "strong"
+        event.relevance_reason = "named supplier qualification or component-supply action for an Apple product"
+        event.category = "hardware_products"
+        return
     if title_identities and all(identity.scope == "third-party-context" for identity in title_identities):
         explicit_interop = any(
             is_third_party_platform_update_improving_apple_device_interop(
@@ -28471,6 +28580,9 @@ def refresh_event_metadata(event: Event) -> None:
             )
             or is_official_apple_product_communication_story(article.title, article.summary)
             or is_direct_apple_first_party_program_story(article.title, article.summary)
+            or high_confidence_direct_apple_action(
+                article_title_led_event_identity(article)
+            )
         )
         for article in event.articles
     )
@@ -30413,8 +30525,12 @@ def article_title_led_event_identity(article: Article):
 
 def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
     identity = article_title_led_event_identity(article)
-    exact_facets = effective_topic_facets(article_primary_facets(article)) & (
-        EXACT_SHARED_EVENT_TOPIC_FACETS | COHESIVE_DIRECT_ACTION_FACETS
+    exact_facets = effective_topic_facets(
+        primary_topic_facets(article.title, article_source_primary_fact(article))
+    ) & (
+        EXACT_SHARED_EVENT_TOPIC_FACETS
+        | COHESIVE_DIRECT_ACTION_FACETS
+        | CROSS_PRODUCT_IDENTITY_FACETS
     )
     title_regions = extract_regions(article.title)
     return build_reconciliation_profile(
@@ -30454,7 +30570,12 @@ def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
                 article.title,
                 " ".join([article.summary, *article.key_facts[:5]]),
             )
+            or is_title_led_named_apple_product_supplier_action_story(
+                article.title,
+                " ".join([article.summary, *article.key_facts[:5]]),
+            )
         ),
+        event_kind=article.event_kind,
     )
 
 
@@ -30466,6 +30587,17 @@ def reconcile_article_relevance(
     if profile.category_hint:
         changed = article.category != profile.category_hint
         article.category = profile.category_hint
+    if (
+        article.relevance_tier == "weak"
+        and profile.trusted_direct_action
+        and not profile.hard_boundary
+    ):
+        article.relevance_tier = "strong"
+        article.relevance_reason = (
+            profile.promotion_reason
+            or "title-led direct Apple action confirmed by structured identity"
+        )
+        return True
     if not profile.defer_reason or article.relevance_tier in {"weak", "ecosystem"}:
         return changed
     changed = True
@@ -33167,9 +33299,9 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
         event = seed_events_by_articles.get(group_ids)
         if event is None or changed_article_ids & group_ids:
             event = event_from_article_group(singleton_merge_event(group[0]), list(group))
-        shared_event_keys = set.intersection(
-            *(set(profiles[id(article)].event_keys) for article in group)
-        ) if group else set()
+        shared_event_keys = supported_reconciliation_event_keys(
+            [profiles[id(article)] for article in group]
+        )
         if shared_event_keys:
             event.merge_warnings = [
                 warning
@@ -33194,6 +33326,9 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
         }
         if defer_reasons and all(
             profiles[id(article)].defer_reason
+            for article in group
+        ) and not any(
+            profiles[id(article)].trusted_direct_action
             for article in group
         ) and event.relevance_tier != "ecosystem":
             event.relevance_tier = "weak"

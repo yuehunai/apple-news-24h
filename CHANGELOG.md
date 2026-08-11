@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.52.0 - 2026-08-11
+
+- Added typed title-and-lead event identities for subjects, predicates, products and platforms, components, evidence, claim lifecycles, legal stages, OS release waves, and market facts, enabling deterministic splits and reunions without fuzzy bridges.
+- Improved supply-chain reconciliation by separating Apple supplier sourcing, testing, and qualification from shipment-plan changes and shared shortage context, while keeping supplier-led direct Apple hardware reports strong and source-complete.
+- Improved exact event boundaries so later body context, related-story cards, generic shared causes, and weak third-party, competitor, or editorial items cannot redefine or enter main events; added cleanup for 9to5Mac certified-refurbished affiliate tails.
+- Improved runtime by replacing regex-heavy lexical scans with boundary-equivalent cached matching and precompiled identity patterns; high-volume live processing fell from 160.79 seconds to about 90 seconds while preserving source counts and URL coverage.
+- Updated fallback policy and architecture documentation and expanded regression coverage from 936 to 982 tests; concurrent live validation preserved all 116 URLs with no merge warnings or duplicate placements, and clean-agent validation produced 30 one-to-one brief boundaries with exact source-URL coverage.
+
 ## 1.51.0 - 2026-08-10
 
 - Added deterministic title-led fact signatures for exact finish sets, case materials, form-factor redesigns, Apple Upgrade operations, future product generations, and first-party document lifecycles, improving multilingual same-event reconciliation without reopening fuzzy clustering.

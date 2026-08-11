@@ -1,31 +1,56 @@
 """Deterministic article-level event reconciliation.
 
-The crawler retains its mature source-specific matcher as a seed generator.
-This module adds only explicit action boundaries and exact-key reconciliation,
-so generic similarity cannot reopen an accepted group or create A-B-C bridges.
+The crawler's source-specific matcher remains a fast seed generator. This
+module then treats every seed as provisional: structured article identities
+split incompatible actions and reconcile compatible cross-source coverage
+without relying on publication-specific title keywords.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+from itertools import combinations
 import re
 import unicodedata
 from typing import Callable, Iterable, Sequence, TypeVar
 
-from .event_identity import EventIdentity, LEAD_IDENTITY_COMPONENTS, PRODUCT_PATTERNS
+from .event_identity import (
+    EVIDENCE_BACKED_COMPONENTS,
+    EventIdentity,
+    LEAD_IDENTITY_COMPONENTS,
+    PRODUCT_PATTERNS,
+    primary_assertion_components,
+)
+from .event_matcher import identity_pair_decision
 
 
 ArticleT = TypeVar("ArticleT")
+
+
+STRUCTURED_EVIDENCE_KEY_PREFIXES = (
+    "structured-attributed-measure:",
+    "structured-component-measure:",
+    "structured-component-period:",
+    "structured-entity-component:",
+    "structured-legal-settlement:",
+    "structured-claim-status:",
+    "structured-market-result:",
+)
 
 
 @dataclass(frozen=True)
 class ReconciliationProfile:
     event_keys: frozenset[str]
     boundary_keys: frozenset[str]
+    exact_facets: frozenset[str] = frozenset()
     separation_keys: frozenset[str] = frozenset()
     defer_reason: str = ""
     category_hint: str = ""
     hard_boundary: str = ""
+    identity: EventIdentity | None = None
+    relevance_tier: str = "strong"
+    trusted_direct_action: bool = False
+    promotion_reason: str = ""
 
 
 _GENERIC_SUBJECT_WORDS = {
@@ -86,6 +111,132 @@ def _display_metrics(text: str) -> set[str]:
         normalized = value.rstrip("0").rstrip(".") if "." in value else value
         metrics.add(normalized)
     return metrics
+
+
+def _evidence_measurements(title: str, lead: str) -> set[str]:
+    """Normalize typed quantities from the headline and primary assertion.
+
+    Measurements are evidence, not topics.  They only reconcile articles when
+    paired with an independently extracted subject/component projection, so a
+    shared date or model number cannot become an event boundary by itself.
+    """
+    lead_sentences = re.split(
+        r"(?:[。！？]|(?<=[.!?])\s+)",
+        _normalized(lead),
+        maxsplit=2,
+    )
+    evidence_lead = " ".join(lead_sentences[:2])
+    scope = f"{_normalized(title)}. {evidence_lead}"
+    values: set[str] = set()
+    for value in re.findall(r"(?<![\d.])(\d+(?:\.\d+)?)\s*%", scope):
+        normalized = value.rstrip("0").rstrip(".") if "." in value else value
+        values.add(f"percent:{normalized}")
+    for value in re.findall(r"(?<!\d)(20\d{2})(?!\d)", scope):
+        values.add(f"year:{value}")
+    quarter_patterns = (
+        r"(?<!\d)(20\d{2})\s*年?\s*[- ]?q([1-4])(?!\d)",
+        r"\bq([1-4])\s*(20\d{2})\b",
+        r"(?<!\d)(20\d{2})\s*年?\s*第?([一二三四1234])季度",
+    )
+    chinese_quarters = {"一": "1", "二": "2", "三": "3", "四": "4"}
+    for index, pattern in enumerate(quarter_patterns):
+        for match in re.finditer(pattern, scope):
+            first, second = match.groups()
+            if index == 1:
+                quarter, year = first, second
+            else:
+                year, quarter = first, second
+            quarter = chinese_quarters.get(quarter, quarter)
+            values.add(f"period:{year}-q{quarter}")
+    years = {
+        match.group(1)
+        for match in re.finditer(r"(?<!\d)(20\d{2})(?!\d)", scope)
+    }
+    quarters = {
+        chinese_quarters.get(
+            match.group(1) or match.group(2),
+            match.group(1) or match.group(2),
+        )
+        for match in re.finditer(r"\bq([1-4])\b|第?([一二三四1234])季度", scope)
+        if (match.group(1) or match.group(2))
+    }
+    if len(years) == 1 and len(quarters) == 1:
+        values.add(f"period:{next(iter(years))}-q{next(iter(quarters))}")
+    for value in re.findall(
+        r"(?<!\d)(\d{1,3})(?:st|nd|rd|th)?[\s-]+(?:year|anniversary)|"
+        r"(?<!\d)(\d{1,3})\s*周年",
+        scope,
+    ):
+        values.add(f"anniversary:{next(part for part in value if part)}")
+    number_words = {
+        "one": "1",
+        "two": "2",
+        "three": "3",
+        "four": "4",
+        "five": "5",
+        "six": "6",
+        "seven": "7",
+        "eight": "8",
+        "nine": "9",
+        "ten": "10",
+    }
+    for match in re.finditer(
+        r"(?<!\d)(\d{1,2})\s*(?:-?layer|层)|"
+        r"\b(one|two|three|four|five|six|seven|eight|nine|ten)(?:-layer|\s+layers?)\b|"
+        r"([一二三四五六七八九十])\s*层",
+        scope,
+    ):
+        chinese_numbers = {
+            "一": "1",
+            "二": "2",
+            "三": "3",
+            "四": "4",
+            "五": "5",
+            "六": "6",
+            "七": "7",
+            "八": "8",
+            "九": "9",
+            "十": "10",
+        }
+        raw = match.group(1) or number_words.get(match.group(2), "") or chinese_numbers[match.group(3)]
+        values.add(f"layers:{raw}")
+    currency_patterns = (
+        ("usd", r"(?:us\s*)?\$\s*(\d[\d,]*(?:\.\d+)?)\s*(billion|million|bn|b|m)?\b"),
+        ("usd", r"(\d+(?:\.\d+)?)\s*万\s*美元"),
+        ("usd", r"(\d+(?:\.\d+)?)\s*亿\s*美元"),
+        ("eur", r"€\s*(\d[\d,]*(?:\.\d+)?)"),
+        ("gbp", r"£\s*(\d[\d,]*(?:\.\d+)?)"),
+    )
+    for currency, pattern in currency_patterns:
+        for match in re.finditer(pattern, scope):
+            raw = match.group(1).replace(",", "")
+            amount = float(raw)
+            if "万" in match.group(0):
+                amount *= 10000
+            elif "亿" in match.group(0):
+                amount *= 100000000
+            elif len(match.groups()) > 1 and match.group(2):
+                scale = match.group(2)
+                amount *= 1000000000 if scale in {"billion", "bn", "b"} else 1000000
+            normalized = str(int(amount)) if amount.is_integer() else str(amount)
+            values.add(f"money:{currency}:{normalized}")
+    if "十亿美元" in scope:
+        values.add("money:usd:1000000000")
+    return values
+
+
+def _claim_components(identity: EventIdentity) -> set[str]:
+    """Return typed predicates while excluding product/version metadata."""
+    return {
+        component
+        for component in identity.components
+        if ":" not in component
+        and component
+        not in {
+            "hardware-product-roadmap",
+            "roadmap-projection",
+        }
+    }
 
 
 def _document_subject_token(value: str) -> str:
@@ -428,15 +579,113 @@ def _apple_first_party_home_camera_roadmap(title: str, text: str) -> bool:
 
 def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     title = text.split(". ", 1)[0]
+    security_bulletin = _contains(
+        title,
+        "security fix",
+        "security fixes",
+        "security flaw",
+        "security flaws",
+        "cve",
+        "vulnerabilities",
+        "安全修复",
+        "安全漏洞",
+        "漏洞",
+    )
+    release_announcement = _contains(
+        title,
+        "release",
+        "released",
+        "now available",
+        "rolls out",
+        "land",
+        "lands",
+        "发布",
+        "推送",
+        "正式版",
+    )
+    if security_bulletin and not release_announcement:
+        return False
     title_os = identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
-    return bool(
-        len(title_os) == 1
-        and identity.scope == "apple-direct"
-        and (
-            "feature-change" in identity.title_actions
-            or _contains(title, "feature", "features", "功能", "变化", "更新")
+    versioned_title = bool(
+        re.search(
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
+            r"(?:\s+[a-z][a-z-]+){0,2}\s+\d+(?:\.\d+)?\b",
+            title,
+            flags=re.IGNORECASE,
         )
-        and re.search(r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s+\d+(?:\.\d+)?\b", title)
+        or any(component.startswith("os-wave:") for component in identity.components)
+        or any(component.startswith("os-wave-platform:") for component in identity.components)
+        or (
+            release_announcement
+            and re.search(
+                r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
+                r"(?:\s+[a-z][a-z-]+){0,2}\s+\d+(?:\.\d+)?\b",
+                text,
+                flags=re.IGNORECASE,
+            )
+        )
+    )
+    numbered_incremental = bool(
+        re.search(
+            r"\bbeta\s*\d+\b|"
+            r"(?:开发者预览版|开发者测试版|测试版)\s*beta?\s*\d+|"
+            r"第\s*\d+\s*(?:个|版)?\s*(?:开发者)?测试版",
+            title,
+        )
+    )
+    explicit_feature_change = "feature-change" in identity.title_actions
+    current_change = bool(
+        explicit_feature_change
+        or (
+            identity.content_form == "news"
+            and _contains(
+                title,
+                "feature",
+                "features",
+                "change",
+                "changes",
+                "功能",
+                "变化",
+            )
+        )
+        or (
+            numbered_incremental
+            and _contains(
+                title,
+                "what's new",
+                "everything new",
+                "new in",
+                "feature",
+                "features",
+                "changes",
+                "功能",
+                "变化",
+                "更新",
+                "发布",
+                "测试版",
+            )
+        )
+        or (
+            identity.content_form == "news"
+            and _contains(
+                title,
+                "release",
+                "released",
+                "seeds",
+                "now available",
+                "rolls out",
+                "land",
+                "lands",
+                "发布",
+                "推送",
+            )
+        )
+    )
+    return bool(
+        title_os
+        and identity.scope == "apple-direct"
+        and versioned_title
+        and current_change
     )
 
 
@@ -444,9 +693,110 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
     if not _versioned_os_feature_report(text, identity):
         return ""
     title = text.split(". ", 1)[0]
+    release_title = _contains(
+        title,
+        "release",
+        "released",
+        "now available",
+        "rolls out",
+        "land",
+        "lands",
+        "发布",
+        "推送",
+        "正式版",
+    )
+    release_waves = sorted(
+        component
+        for component in identity.components
+        if component.startswith("os-wave:")
+    )
+    concrete_title_components = {
+        component
+        for component in identity.title_components
+        if component.startswith("os-component:")
+        or component in LEAD_IDENTITY_COMPONENTS
+    }
+    title_describes_feature = _contains(
+        title,
+        "what's new",
+        "everything new",
+        "new feature",
+        "new features",
+        "changes",
+        "功能",
+        "变化",
+        "更新汇总",
+        "new icon",
+        "new icons",
+        "redesigned icon",
+        "redesigned icons",
+        "新图标",
+        "图标重设计",
+    )
+    platform_release_waves = sorted(
+        component
+        for component in identity.components
+        if component.startswith("os-wave-platform:")
+    )
+    if not release_waves:
+        version_match = re.search(
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
+            r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+)?)\b",
+            text,
+            flags=re.IGNORECASE,
+        )
+        beta_match = re.search(r"\bbeta\s*(\d+)\b", title)
+        if version_match and release_title:
+            stage = f"beta-{beta_match.group(1)}" if beta_match else "final"
+            release_waves = [f"os-wave:{version_match.group(1)}:{stage}"]
+    if not release_waves and platform_release_waves and release_title and not title_describes_feature:
+        platform_wave = platform_release_waves[0].removeprefix("os-wave-platform:")
+        return f"apple-os-platform-release-wave:{platform_wave}"
+    if release_waves and (
+        (release_waves[0].endswith(":final") and release_title)
+        or (not concrete_title_components and not title_describes_feature)
+    ):
+        wave = release_waves[0].removeprefix("os-wave:")
+        if wave.endswith(":final"):
+            os_family = sorted(
+                identity.title_products
+                & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
+            )[0]
+            platform_family = "mobile" if os_family in {"ios", "ipados"} else os_family
+            return f"apple-os-release-wave:{wave}:{platform_family}"
+        return f"apple-os-release-wave:{wave}"
     os_family = sorted(
         identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
     )[0]
+    feature_wave = ""
+    if release_waves:
+        feature_wave = release_waves[0].removeprefix("os-wave:")
+    elif platform_release_waves:
+        feature_wave = platform_release_waves[0].removeprefix("os-wave-platform:")
+    else:
+        version_match = re.search(
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
+            r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+)?)\b",
+            title,
+            flags=re.IGNORECASE,
+        )
+        beta_match = re.search(r"\bbeta\s*(\d+)\b", title)
+        if version_match:
+            stage = f"beta-{beta_match.group(1)}" if beta_match else "current"
+            feature_wave = f"{version_match.group(1)}:{stage}"
+    if identity.content_form == "roundup" and feature_wave:
+        return f"apple-os-feature-roundup:{os_family}:{feature_wave}"
+    icon_change = bool(
+        re.search(
+            r"\b(?:new|redesigned|updated|changed)\s+(?:[a-z]+\s+){0,3}icons?\b|"
+            r"\bicons?\b.{0,36}\b(?:redesign(?:ed)?|update(?:d)?|change(?:d)?)\b|"
+            r"(?:新增|启用|带来|采用|更换|重设计|重新设计|调整|更新).{0,24}图标|"
+            r"图标.{0,24}(?:新增|启用|重设计|重新设计|调整|更新)",
+            title,
+        )
+    )
+    if icon_change and feature_wave:
+        return f"apple-os-feature-scope:{os_family}:{feature_wave}:component:app-icons"
     components = sorted(
         component
         for component in identity.title_components
@@ -475,14 +825,64 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
         ]
     if not components:
         components = sorted(identity.components & LEAD_IDENTITY_COMPONENTS)
+    if not components:
+        components = sorted(
+            component
+            for component in identity.title_components
+            if not component.startswith(
+                (
+                    "apple-silicon-generation:",
+                    "iphone-family:",
+                    "iphone-line:",
+                    "iphone-model:",
+                    "macbook-model:",
+                    "primary-intent:",
+                    "product-generation:",
+                    "report-attribution:",
+                )
+            )
+        )
     title_subject_products = sorted(
         identity.title_products
         - {"ios", "ipados", "macos", "watchos", "tvos", "visionos", "iphone", "ipad", "mac"}
     )
-    if len(title_subject_products) == 1:
-        subject = f"product:{title_subject_products[0]}"
-    elif len(components) == 1:
+    branded_named_subjects = {
+        subject
+        for subject in identity.named_subjects
+        if subject.startswith("apple-")
+    }
+    named_subject_candidates = {
+        subject.removeprefix("apple-")
+        for subject in (branded_named_subjects or identity.named_subjects)
+        if subject
+        not in {
+            "airpods",
+            "apple-tv",
+            "apple-watch",
+            "homekit",
+            "iphone",
+            "ipad",
+            "mac",
+            "macbook",
+            "safari",
+            "siri",
+            "vision-pro",
+        }
+    }
+    named_subjects = sorted(
+        subject
+        for subject in named_subject_candidates
+        if not any(
+            other != subject and other.startswith(f"{subject}-")
+            for other in named_subject_candidates
+        )
+    )
+    if len(components) == 1:
         subject = f"component:{components[0]}"
+    elif len(named_subjects) == 1:
+        subject = f"named:{named_subjects[0]}"
+    elif len(title_subject_products) == 1:
+        subject = f"product:{title_subject_products[0]}"
     else:
         subject = "multi-feature"
     return f"apple-os-feature-scope:{os_family}:{subject}"
@@ -988,6 +1388,105 @@ def _product_separation_keys(identity: EventIdentity) -> set[str]:
     return {f"product-family:{family}" for family in families}
 
 
+def _predicate_separation_keys(identity: EventIdentity) -> set[str]:
+    """Return coarse title-led predicate classes for rejecting mixed seed groups.
+
+    These classes describe what the article asserts about its subject. They do
+    not merge articles on their own; they only keep an accepted legacy seed
+    from treating two explicit, incompatible assertions as one event.
+    """
+    products = set(identity.title_products)
+    components = set(identity.title_components)
+    assertion_components = set(identity.components)
+    actions = set(identity.title_actions)
+    keys: set[str] = set()
+    software_products = {
+        "app-store",
+        "apple-books",
+        "apple-intelligence",
+        "apple-music",
+        "apple-sports",
+        "apple-tv",
+        "apple-wallet",
+        "carplay",
+        "icloud",
+        "ios",
+        "ipados",
+        "macos",
+        "safari",
+        "siri",
+        "tvos",
+        "visionos",
+        "watchos",
+        "xcode",
+    }
+    hardware_products = {
+        "airpods",
+        "apple-tv-hardware",
+        "apple-watch",
+        "foldable-iphone",
+        "imac",
+        "ipad",
+        "ipad-air",
+        "ipad-mini",
+        "ipad-pro",
+        "iphone",
+        "mac",
+        "mac-mini",
+        "mac-pro",
+        "mac-studio",
+        "macbook",
+        "vision-pro",
+    }
+    if products & software_products and "feature-change" in actions:
+        keys.add("predicate:platform-feature-change")
+    if components & {"display-panel", "oled-display"}:
+        keys.add("predicate:hardware-component-development")
+    if (
+        products & hardware_products
+        and (
+            components
+            & {
+                "hardware-product-roadmap",
+                "product-release-delay",
+                "roadmap-projection",
+            }
+            or actions & {"delay-roadmap", "project-cancellation"}
+        )
+    ):
+        keys.add("predicate:hardware-product-roadmap")
+    if "component-cost-analysis" in assertion_components:
+        keys.add("predicate:hardware-component-cost")
+    if "price-change" in actions:
+        keys.add("predicate:retail-price-change")
+    if actions & {"claim-denial", "project-cancellation"}:
+        keys.add("predicate:claim-status")
+    if any(
+        component.startswith("component-supplier-sourcing:")
+        for component in assertion_components
+    ) or "component-supplier-sourcing" in assertion_components:
+        keys.add("predicate:component-supplier-sourcing")
+    if "hardware-shipment-plan-change" in assertion_components:
+        keys.add("predicate:hardware-shipment-plan-change")
+    elif "hardware-market-performance" in components:
+        keys.add("predicate:hardware-market-performance")
+    return keys
+
+
+def _title_proves_first_party_subject(title: str, identity: EventIdentity) -> bool:
+    """Require explicit title ownership before promoting an initially weak item."""
+    if identity.title_named_subjects:
+        return True
+    if identity.title_products - {"app-store"}:
+        return True
+    return bool(
+        re.match(
+            r"^(?:apple(?:'s)?|app store|苹果)",
+            _normalized(title),
+        )
+    )
+
+
 def _weak_topic_separation_key(title: str) -> str:
     if _contains(title, "dram", "ram", "memory", "nand", "内存", "存储", "闪存"):
         return "weak-topic:memory-market"
@@ -1191,6 +1690,7 @@ def build_reconciliation_profile(
     relevance_tier: str = "strong",
     relevance_reason: str = "",
     trusted_direct_action: bool = False,
+    event_kind: str = "",
 ) -> ReconciliationProfile:
     title_text = _normalized(title)
     text = f"{title_text}. {_normalized(lead)[:900]}"
@@ -1201,6 +1701,7 @@ def build_reconciliation_profile(
     event_keys: set[str] = set()
     boundary_keys: set[str] = set()
     separation_keys = _product_separation_keys(identity)
+    separation_keys |= _predicate_separation_keys(identity)
     category_hint = ""
     content_form = _reconciliation_content_form(title_text, identity)
 
@@ -1218,7 +1719,149 @@ def build_reconciliation_profile(
         boundary_keys.add(key)
         separation_keys.add(key)
 
-    removal_stage = _app_store_removal_stage(text)
+    primary_lead = re.split(
+        r"(?:[。！？]|(?<=[.!?])\s+)",
+        _normalized(lead),
+        maxsplit=1,
+    )[0]
+    measurements = _evidence_measurements(title_text, lead)
+    claim_components = _claim_components(identity) | {
+        component
+        for component in primary_assertion_components(primary_lead)
+        if ":" not in component
+    }
+    claim_products = {
+        product.removeprefix("apple-")
+        for product in (identity.title_products or identity.products)
+        if product
+    }
+    product_aliases = claim_products | {
+        "apple",
+        "iphone",
+        "ipad",
+        "mac",
+        "macbook",
+    }
+    attributed_entities = {
+        component.removeprefix("report-attribution:")
+        for component in identity.components
+        if component.startswith("report-attribution:")
+    } | {
+        subject.removeprefix("apple-")
+        for subject in identity.named_subjects
+        if subject.removeprefix("apple-") not in product_aliases
+        and subject not in _GENERIC_SUBJECT_WORDS
+    }
+    non_calendar_measurements = {
+        measurement
+        for measurement in measurements
+        if not measurement.startswith("year:")
+    }
+    claim_status_actions = identity.title_actions & {
+        "claim-denial",
+        "project-cancellation",
+    }
+    if claim_status_actions:
+        status_subjects = sorted(
+            identity.title_products
+            or identity.title_actors
+            or identity.title_named_subjects
+        )
+        status_measurements = sorted(
+            measurement
+            for measurement in non_calendar_measurements
+            if measurement.startswith(("anniversary:", "money:"))
+        )
+        for subject in status_subjects:
+            for measurement in status_measurements:
+                event_keys.add(
+                    f"structured-claim-status:{subject}:{measurement}"
+                )
+    if "hardware-market-performance" in claim_components:
+        periods = sorted(
+            measurement.removeprefix("period:")
+            for measurement in measurements
+            if measurement.startswith("period:")
+        )
+        percentages = sorted(
+            measurement.removeprefix("percent:")
+            for measurement in measurements
+            if measurement.startswith("percent:")
+        )
+        for period in periods:
+            for percentage in percentages:
+                event_keys.add(
+                    f"structured-market-result:{period}:percent:{percentage}"
+                )
+    for entity in attributed_entities:
+        for product in claim_products:
+            for measurement in non_calendar_measurements:
+                event_keys.add(
+                    f"structured-attributed-measure:{entity}:{product}:{measurement}"
+                )
+    for component in claim_components:
+        for product in claim_products:
+            if (
+                not exact
+                and component in LEAD_IDENTITY_COMPONENTS
+                and component in primary_assertion_components(primary_lead)
+            ):
+                event_keys.add(f"structured-component:{component}:{product}")
+            for entity in attributed_entities:
+                event_keys.add(
+                    f"structured-entity-component:{entity}:{product}:{component}"
+                )
+            for measurement in non_calendar_measurements:
+                event_keys.add(
+                    f"structured-component-measure:{component}:{product}:{measurement}"
+                )
+    supplier_component_classes = {
+        component.removeprefix("component-supplier-sourcing:")
+        for component in identity.components
+        if component.startswith("component-supplier-sourcing:")
+    }
+    supplier_entity_stopwords = {
+        "cpu",
+        "dram",
+        "gpu",
+        "lcd",
+        "nand",
+        "oled",
+        "ram",
+        "soc",
+    }
+    supplier_entities = {
+        subject
+        for subject in identity.named_subjects
+        if subject not in supplier_entity_stopwords
+        and not subject.startswith(("a20", "m6", "m7", "m8"))
+    }
+    for component_class in supplier_component_classes:
+        for supplier_entity in supplier_entities:
+            event_keys.add(
+                f"structured-supplier-action:{component_class}:{supplier_entity}"
+            )
+    calendar_measurements = {
+        measurement
+        for measurement in measurements
+        if measurement.startswith("year:")
+    }
+    for left_component, right_component in combinations(sorted(claim_components), 2):
+        for measurement in calendar_measurements:
+            event_keys.add(
+                "structured-component-period:"
+                f"{left_component}+{right_component}:{measurement}"
+            )
+    if (
+        event_kind == "legal_antitrust"
+        or "legal" in identity.actions
+        or identity.case_topics
+        or identity.counterparties
+    ):
+        for measurement in measurements:
+            if measurement.startswith("money:"):
+                event_keys.add(f"structured-legal-settlement:{measurement}")
+    removal_stage = _app_store_removal_stage(f"{title_text}. {primary_lead}")
     if removal_stage:
         removal_subjects = _app_store_subjects(title_text, identity) or {"unknown-app"}
         event_keys = {
@@ -1481,10 +2124,161 @@ def build_reconciliation_profile(
         boundary_keys.add(":".join(market_forecast_key.split(":")[:3]))
         category_hint = "hardware_products"
 
-    os_feature_scope = _versioned_os_feature_scope(text, identity)
+    # Existing exact action facets are stronger than a generic OS/version
+    # scope. Let the exact facet reconcile translations and headline variants
+    # instead of creating competing feature identities for the same action.
+    os_feature_scope = "" if exact else _versioned_os_feature_scope(text, identity)
     if os_feature_scope:
         event_keys.add(os_feature_scope)
         boundary_keys.add(os_feature_scope)
+        if os_feature_scope.startswith("apple-os-release-wave:"):
+            for platform_wave in sorted(
+                component.removeprefix("os-wave-platform:")
+                for component in identity.components
+                if component.startswith("os-wave-platform:")
+            ):
+                event_keys.add(
+                    f"apple-os-platform-release-wave:{platform_wave}"
+                )
+
+    report_attributions = sorted(
+        component.removeprefix("report-attribution:")
+        for component in identity.components
+        if component.startswith("report-attribution:")
+    )
+    report_subjects = sorted(
+        component
+        for component in identity.components
+        if component.startswith(
+            (
+                "iphone-model:",
+                "iphone-family:",
+                "macbook-model:",
+                "product-generation:",
+            )
+        )
+    )
+    report_components = sorted(
+        component
+        for component in identity.components & LEAD_IDENTITY_COMPONENTS
+        if not component.startswith("primary-intent:")
+    )
+    if report_attributions and report_subjects and report_components:
+        for attribution in report_attributions:
+            for subject in report_subjects:
+                for component in report_components:
+                    event_keys.add(
+                        f"structured-report:{attribution}:{subject}:{component}"
+                    )
+
+    structured_components = sorted(
+        identity.components & (LEAD_IDENTITY_COMPONENTS | EVIDENCE_BACKED_COMPONENTS)
+    )
+    structured_subjects = sorted(
+        subject
+        for subject in identity.named_subjects
+        if subject
+        not in {
+            "apple",
+            "apple-vision",
+            "iphone",
+            "ipad",
+            "mac",
+            "macbook",
+        }
+    )
+    canonical_subjects = {
+        subject.removeprefix("apple-")
+        for subject in structured_subjects
+        if subject.startswith("apple-")
+    }
+    canonical_subjects = {
+        subject
+        for subject in canonical_subjects
+        if not any(
+            other != subject and other.startswith(f"{subject}-")
+            for other in canonical_subjects
+        )
+    }
+    product_subjects = {
+        subject.removeprefix("apple-")
+        for subject in structured_subjects
+        if subject.startswith("apple-")
+    }
+    product_subjects = {
+        subject
+        for subject in product_subjects
+        if not any(
+            other != subject and subject.startswith(f"{other}-")
+            for other in product_subjects
+        )
+    }
+    explicit_first_party_subjects = {
+        subject.removeprefix("apple-")
+        for subject in identity.title_named_subjects
+        if subject.startswith("apple-")
+    } | {
+        component.removeprefix("evidence-named-subject:apple-")
+        for component in identity.components
+        if component.startswith("evidence-named-subject:apple-")
+    }
+    product_aliases = {
+        product.removeprefix("apple-")
+        for product in identity.products | identity.title_products
+    }
+    if (
+        identity.scope == "apple-direct"
+        and identity.content_form == "news"
+        and not identity.counterparties
+        and not identity.case_topics
+    ):
+        for subject in sorted(product_subjects & explicit_first_party_subjects):
+            if "-" in subject and subject not in product_aliases:
+                event_keys.add(f"structured-first-party-subject:{subject}")
+    if (
+        identity.scope == "apple-direct"
+        and identity.content_form == "news"
+        and not identity.counterparties
+        and not identity.case_topics
+        and canonical_subjects
+        and identity.title_actions
+    ):
+        for subject in sorted(canonical_subjects):
+            for action in sorted(identity.title_actions):
+                event_keys.add(f"structured-subject-action:{subject}:{action}")
+    if (
+        identity.scope == "apple-direct"
+        and identity.content_form == "news"
+        and not identity.counterparties
+        and not identity.case_topics
+        and not any(
+            component.startswith(("os-wave:", "os-wave-platform:"))
+            for component in identity.components
+        )
+        and product_subjects
+        and identity.title_products
+    ):
+        for subject in sorted(product_subjects):
+            for product in sorted(identity.title_products):
+                normalized_product = product.removeprefix("apple-")
+                if (
+                    subject == product
+                    or subject == normalized_product
+                    or subject.endswith(f"-{product}")
+                ):
+                    continue
+                event_keys.add(f"structured-subject-product:{subject}:{product}")
+    if structured_components and identity.title_products:
+        for component in structured_components:
+            for product in sorted(identity.title_products):
+                if not report_attributions:
+                    event_keys.add(
+                        f"structured-component:{component}:{product}"
+                    )
+                for subject in structured_subjects:
+                    event_keys.add(
+                        f"structured-component:{component}:{product}:{subject}"
+                    )
 
     if _apple_first_party_home_camera_roadmap(title_text, text):
         event_keys.add("apple-home:first-party-security-camera-roadmap")
@@ -1591,16 +2385,28 @@ def build_reconciliation_profile(
         event_keys.clear()
         boundary_keys.clear()
 
+    versioned_os_action = _versioned_os_feature_report(text, identity)
+    trusted_direct_action = bool(
+        trusted_direct_action
+        and _title_proves_first_party_subject(title_text, identity)
+    )
+    structural_direct_action = trusted_direct_action or versioned_os_action
+    promotion_reason = ""
+    if versioned_os_action:
+        promotion_reason = "current versioned Apple OS release or feature report"
+    elif trusted_direct_action:
+        promotion_reason = "title-led direct Apple action confirmed by structured identity"
     defer_reason = _unsupported_third_party_reason(
         text,
         identity,
         exact,
         relevance_tier,
-        trusted_direct_action,
+        structural_direct_action,
     )
     hard_boundary = _hard_third_party_boundary(text, defer_reason)
     if (
         not hard_boundary
+        and not structural_direct_action
         and relevance_tier == "weak"
         and "legal" not in identity.actions
         and relevance_reason.startswith(
@@ -1624,14 +2430,43 @@ def build_reconciliation_profile(
     return ReconciliationProfile(
         event_keys=frozenset(event_keys),
         boundary_keys=frozenset(boundary_keys),
+        exact_facets=exact,
         separation_keys=frozenset(separation_keys),
         defer_reason=defer_reason,
         category_hint=category_hint,
         hard_boundary=hard_boundary,
+        identity=identity,
+        relevance_tier=relevance_tier,
+        trusted_direct_action=structural_direct_action,
+        promotion_reason=promotion_reason,
     )
 
 
 def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
+    if _weak_editorial_profile(left) != _weak_editorial_profile(right):
+        return True
+    left_release = {
+        key for key in left.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    right_release = {
+        key for key in right.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    left_features = {
+        key for key in left.event_keys if key.startswith("apple-os-feature-scope:")
+    }
+    right_features = {
+        key for key in right.event_keys if key.startswith("apple-os-feature-scope:")
+    }
+    shared_non_os_keys = {
+        key
+        for key in left.event_keys & right.event_keys
+        if not key.startswith(("apple-os-release-wave:", "apple-os-feature-scope:"))
+    }
+    if (
+        not shared_non_os_keys
+        and ((left_release and right_features) or (right_release and left_features))
+    ):
+        return True
     shared_boundaries = left.boundary_keys & right.boundary_keys
     if shared_boundaries and left.event_keys and right.event_keys and not (left.event_keys & right.event_keys):
         return True
@@ -1640,10 +2475,91 @@ def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile
     return False
 
 
+def _weak_editorial_profile(profile: ReconciliationProfile) -> bool:
+    identity = profile.identity
+    return bool(
+        profile.relevance_tier == "weak"
+        and not profile.trusted_direct_action
+        and identity is not None
+        and identity.content_form
+        in {
+            "analysis",
+            "buying_advice",
+            "deal",
+            "podcast",
+            "roundup",
+            "third_party_spotlight",
+            "tutorial",
+        }
+    )
+
+
+def _explicit_separation_conflict(
+    left: ReconciliationProfile,
+    right: ReconciliationProfile,
+) -> bool:
+    """Keep explicit product/action boundaries authoritative during reunion."""
+    for namespace in (
+        "product-family:",
+        "product-model:",
+        "legal-party:",
+    ):
+        left_values = {
+            key for key in left.separation_keys if key.startswith(namespace)
+        }
+        right_values = {
+            key for key in right.separation_keys if key.startswith(namespace)
+        }
+        if left_values and right_values and left_values.isdisjoint(right_values):
+            return True
+    return False
+
+
 def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
     """Return only conflicts strong enough to split an accepted seed event."""
+    if _weak_editorial_profile(left) != _weak_editorial_profile(right):
+        return True
+    left_legal_stages = {
+        key for key in left.separation_keys if key.startswith("legal-stage:")
+    }
+    right_legal_stages = {
+        key for key in right.separation_keys if key.startswith("legal-stage:")
+    }
+    if (
+        left_legal_stages
+        and right_legal_stages
+        and left_legal_stages.isdisjoint(right_legal_stages)
+    ):
+        return True
+    if left.exact_facets & right.exact_facets:
+        return False
     if left.event_keys & right.event_keys:
         return False
+    left_release = {
+        key for key in left.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    right_release = {
+        key for key in right.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    left_features = {
+        key for key in left.event_keys if key.startswith("apple-os-feature-scope:")
+    }
+    right_features = {
+        key for key in right.event_keys if key.startswith("apple-os-feature-scope:")
+    }
+    left_roundups = {
+        key for key in left.event_keys if key.startswith("apple-os-feature-roundup:")
+    }
+    right_roundups = {
+        key for key in right.event_keys if key.startswith("apple-os-feature-roundup:")
+    }
+    if (left_release and right_features) or (right_release and left_features):
+        return True
+    if (
+        (left_roundups and (right_release or right_features))
+        or (right_roundups and (left_release or left_features))
+    ):
+        return True
     if bool(left.hard_boundary) != bool(right.hard_boundary) and not (left.event_keys & right.event_keys):
         return True
     if (
@@ -1670,7 +2586,9 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
         "product-family:",
         "product-model:",
         "legal-party:",
+        "legal-stage:",
         "action:",
+        "predicate:",
         "weak-topic:",
     ):
         left_values = {
@@ -1703,25 +2621,162 @@ def _stable_article_key(article: object) -> tuple[str, str, str]:
     )
 
 
+def _event_key_namespace(key: str) -> str:
+    for prefix in (
+        "structured-first-party-subject:",
+        "structured-attributed-measure:",
+        "structured-component-measure:",
+        "structured-component-period:",
+        "structured-entity-component:",
+        "structured-legal-settlement:",
+        "structured-claim-status:",
+        "structured-market-result:",
+        "structured-subject-product:",
+        "structured-subject-action:",
+        "structured-component:",
+        "structured-report:",
+        "apple-os-release-wave:",
+        "apple-os-platform-release-wave:",
+        "apple-os-feature-roundup:",
+        "apple-os-feature-scope:",
+    ):
+        if key.startswith(prefix):
+            return prefix
+    return key.split(":", 1)[0] + ":"
+
+
+def supported_reconciliation_event_keys(
+    profiles: Sequence[ReconciliationProfile],
+) -> set[str]:
+    """Return exact keys supported by a coherent, possibly sparse source group."""
+    union = {key for profile in profiles for key in profile.event_keys}
+    supported: set[str] = set()
+    for key in union:
+        if key.startswith("structured-"):
+            if key.startswith(STRUCTURED_EVIDENCE_KEY_PREFIXES):
+                supported.add(key)
+                continue
+            namespace = _event_key_namespace(key)
+            if all(
+                not {
+                    candidate
+                    for candidate in profile.event_keys
+                    if _event_key_namespace(candidate) == namespace
+                }
+                or key in profile.event_keys
+                for profile in profiles
+            ):
+                supported.add(key)
+            continue
+        if all(not profile.event_keys or key in profile.event_keys for profile in profiles):
+            supported.add(key)
+    return supported
+
+
 def reconcile_articles(
     articles: Sequence[ArticleT],
     *,
     profile_for: Callable[[ArticleT], ReconciliationProfile],
     initial_groups: Sequence[Sequence[ArticleT]],
 ) -> tuple[tuple[ArticleT, ...], ...]:
-    """Reconcile accepted seed groups without reopening broad clustering."""
+    """Split explicit conflicts, then reconcile groups by exact event identity."""
     ordered = sorted(articles, key=_stable_article_key)
     profiles = {id(article): profile_for(article) for article in ordered}
 
+    def explicit_identity_conflict(
+        left_profile: ReconciliationProfile,
+        right_profile: ReconciliationProfile,
+    ) -> bool:
+        left = left_profile.identity
+        right = right_profile.identity
+        if left is None or right is None:
+            return False
+        left_generations = {
+            component
+            for component in left.title_components
+            if component.startswith("product-generation:")
+        }
+        right_generations = {
+            component
+            for component in right.title_components
+            if component.startswith("product-generation:")
+        }
+        if (
+            left_generations
+            and right_generations
+            and left_generations.isdisjoint(right_generations)
+        ):
+            return True
+        left_is_analyst_action = "analyst-target-action" in left.title_components
+        right_is_analyst_action = "analyst-target-action" in right.title_components
+        if left_is_analyst_action != right_is_analyst_action:
+            return True
+        shared_event_keys = left_profile.event_keys & right_profile.event_keys
+        def predicate_classes(identity: EventIdentity) -> set[str]:
+            title_components = identity.title_components
+            if "component-cost-analysis" in title_components:
+                return {"component-cost-analysis"}
+            if "immersive-live-video" in identity.components:
+                return {"immersive-live-content"}
+            if "apple-tv-sports-schedule" in (
+                left_profile.exact_facets if identity is left else right_profile.exact_facets
+            ):
+                return {"content-schedule"}
+            if title_components & {"display-panel", "oled-display"}:
+                return {"component-development"}
+            if title_components & {"hardware-market-performance", "memory-supply"}:
+                return {"supply-or-shipment-outlook"}
+            product_specific = any(
+                component.startswith(
+                    (
+                        "apple-silicon-generation:",
+                        "iphone-family:",
+                        "iphone-model:",
+                        "macbook-model:",
+                        "product-generation:",
+                    )
+                )
+                for component in title_components
+            )
+            if (
+                product_specific
+                and identity.title_actions & {"delay-roadmap", "feature-change", "pilot-testing"}
+            ):
+                return {"product-roadmap"}
+            return set()
+
+        left_components = predicate_classes(left)
+        right_components = predicate_classes(right)
+        predicate_conflict = bool(
+            left_components
+            and right_components
+            and left_components.isdisjoint(right_components)
+        )
+        if predicate_conflict:
+            authoritative_shared_keys = {
+                key
+                for key in shared_event_keys
+                if not (
+                    ":multi-" in key
+                    or ":product-segment:" in key
+                    or key.endswith(":market-summary")
+                )
+            }
+            return not authoritative_shared_keys
+        if shared_event_keys:
+            return False
+        if left_profile.exact_facets & right_profile.exact_facets:
+            return False
+        return False
+
     def split_seed_group(seed: Sequence[ArticleT]) -> list[list[ArticleT]]:
-        # The seed groups have already passed the crawler's mature domain
-        # rules.  Reconciliation may split them only on a new, explicit
-        # boundary (for example an initial removal versus a later allegation,
-        # or a third-party app update attached to an Apple platform feature).
-        # Treating every lower-level identity disagreement as a split here
-        # regresses intentional release-wave and cross-platform grouping.
         def seed_conflicts(left: ArticleT, right: ArticleT) -> bool:
-            return _seed_profiles_conflict(profiles[id(left)], profiles[id(right)])
+            left_profile = profiles[id(left)]
+            right_profile = profiles[id(right)]
+            return _seed_profiles_conflict(
+                left_profile,
+                right_profile,
+            ) or explicit_identity_conflict(left_profile, right_profile)
 
         split_groups: list[list[ArticleT]] = []
         for article in sorted(seed, key=_stable_article_key):
@@ -1765,19 +2820,27 @@ def reconcile_articles(
         groups.extend(split_seed)
     groups.extend([[article] for article in ordered if id(article) not in seen])
 
-    def common_event_keys(group: Sequence[ArticleT]) -> set[str]:
-        keyed = [set(profiles[id(article)].event_keys) for article in group]
-        if not keyed or any(not keys for keys in keyed):
-            return set()
-        return set.intersection(*keyed)
+    def supported_event_keys(group: Sequence[ArticleT]) -> set[str]:
+        return supported_reconciliation_event_keys(
+            [profiles[id(article)] for article in group]
+        )
 
-    # Cross-event reconciliation is intentionally key-indexed.  Scanning every
-    # event pair after each merge is cubic and invites similarity bridges; only
-    # an exact action key may override a seed split.
+    known_report_entities = {
+        component.removeprefix("report-attribution:")
+        for profile in profiles.values()
+        if profile.identity is not None
+        for component in profile.identity.components
+        if component.startswith("report-attribution:")
+    }
     key_buckets: dict[str, list[int]] = {}
     for index, group in enumerate(groups):
-        for key in common_event_keys(group):
+        for key in supported_event_keys(group):
+            if key.startswith("structured-entity-component:"):
+                entity = key.split(":", 2)[1]
+                if entity not in known_report_entities:
+                    continue
             key_buckets.setdefault(key, []).append(index)
+
     parent = list(range(len(groups)))
 
     def root(index: int) -> int:
@@ -1786,19 +2849,93 @@ def reconcile_articles(
             index = parent[index]
         return index
 
-    def union(left_index: int, right_index: int) -> None:
+    def union(
+        left_index: int,
+        right_index: int,
+        *,
+        require_shared_keys: bool = True,
+    ) -> None:
         left_root = root(left_index)
         right_root = root(right_index)
         if left_root == right_root:
             return
         left_group = groups[left_root]
         right_group = groups[right_root]
-        if any(
-            _profiles_conflict(profiles[id(left)], profiles[id(right)])
-            for left in left_group
-            for right in right_group
-        ):
+        join_keys = supported_event_keys(left_group) & supported_event_keys(right_group)
+        if require_shared_keys and not join_keys:
             return
+        join_namespaces = {_event_key_namespace(key) for key in join_keys}
+        cross_product_release_join = any(
+            key.startswith("apple-os-release-wave:") for key in join_keys
+        )
+        evidence_join = any(
+            key.startswith(STRUCTURED_EVIDENCE_KEY_PREFIXES)
+            for key in join_keys
+        )
+        for left in left_group:
+            for right in right_group:
+                left_profile = profiles[id(left)]
+                right_profile = profiles[id(right)]
+                if _profiles_conflict(
+                    left_profile,
+                    right_profile,
+                ) or _explicit_separation_conflict(left_profile, right_profile):
+                    return
+                pair_identity_conflict = (
+                    left_profile.identity is not None
+                    and right_profile.identity is not None
+                    and identity_pair_decision(
+                        left_profile.identity,
+                        right_profile.identity,
+                    )
+                    == "conflict"
+                )
+                if (
+                    pair_identity_conflict
+                    and not cross_product_release_join
+                    and not evidence_join
+                    and len(join_namespaces) < 2
+                ):
+                    return
+                explicit_conflict = explicit_identity_conflict(
+                    left_profile,
+                    right_profile,
+                )
+                if not explicit_conflict:
+                    continue
+                left_identity = left_profile.identity
+                right_identity = right_profile.identity
+                analyst_action_conflict = bool(
+                    left_identity
+                    and right_identity
+                    and (
+                        "analyst-target-action" in left_identity.title_components
+                    )
+                    != (
+                        "analyst-target-action" in right_identity.title_components
+                    )
+                )
+                if evidence_join and not analyst_action_conflict:
+                    continue
+                if cross_product_release_join:
+                    continue
+                if not require_shared_keys:
+                    return
+                left_namespaces = {
+                    _event_key_namespace(key) for key in left_profile.event_keys
+                }
+                right_namespaces = {
+                    _event_key_namespace(key) for key in right_profile.event_keys
+                }
+                # Exact reconciliation keys join coherent groups through their
+                # matching identity projection. A sparse source that describes
+                # the same event through another projection must not veto that
+                # join; competing identities in the joining namespace still do.
+                if (
+                    left_namespaces & join_namespaces
+                    and right_namespaces & join_namespaces
+                ):
+                    return
         if right_root < left_root:
             left_root, right_root = right_root, left_root
             left_group, right_group = right_group, left_group
@@ -1810,10 +2947,103 @@ def reconcile_articles(
         members = key_buckets[key]
         if not members:
             continue
-        anchor = members[0]
-        for member in members[1:]:
-            union(anchor, member)
-            anchor = root(anchor)
+        # A conflicting first member must not block two later compatible
+        # members from reconciling.  Treat each exact key bucket as a graph and
+        # let the existing conflict gates decide every possible edge.
+        for left_index, right_index in combinations(members, 2):
+            union(left_index, right_index)
+
+    def group_release_stages(group: Sequence[ArticleT]) -> set[str]:
+        return {
+            component.rsplit(":", 1)[-1]
+            for article in group
+            for component in (profiles[id(article)].identity.components if profiles[id(article)].identity else ())
+            if component.startswith("os-wave-platform:")
+        }
+
+    def article_platform_release_stages(article: ArticleT) -> set[tuple[str, str]]:
+        identity = profiles[id(article)].identity
+        if identity is None:
+            return set()
+        signatures: set[tuple[str, str]] = set()
+        for component in identity.components:
+            match = re.fullmatch(r"os-wave-platform:([^:]+):(.+)", component)
+            if match:
+                signatures.add((match.group(1), match.group(2)))
+        return signatures
+
+    def group_release_waves(group: Sequence[ArticleT]) -> set[tuple[str, str]]:
+        waves: set[tuple[str, str]] = set()
+        for article in group:
+            for key in profiles[id(article)].event_keys:
+                match = re.fullmatch(r"apple-os-release-wave:([^:]+):([^:]+)", key)
+                if match:
+                    waves.add((match.group(1), match.group(2)))
+        return waves
+
+    # A release headline can identify an OS by codename while omitting the
+    # numeric generation. Attach it to a numbered release train only when the
+    # current candidate set has exactly one compatible version for that beta
+    # stage. Ambiguous simultaneous legacy/current trains remain separate.
+    active_roots = [index for index, group in enumerate(groups) if group and root(index) == index]
+    for unknown_index in active_roots:
+        unknown_root = root(unknown_index)
+        unknown_group = groups[unknown_root]
+        if not unknown_group or group_release_waves(unknown_group):
+            continue
+        stages = group_release_stages(unknown_group)
+        if len(stages) != 1:
+            continue
+        stage = next(iter(stages))
+        unknown_signatures = set().union(
+            *(article_platform_release_stages(article) for article in unknown_group)
+        )
+        if not unknown_signatures:
+            continue
+        candidates: list[tuple[int, str]] = []
+        for candidate_index in active_roots:
+            candidate_root = root(candidate_index)
+            if candidate_root == unknown_root or not groups[candidate_root]:
+                continue
+            if not any(
+                article_platform_release_stages(article) & unknown_signatures
+                for article in groups[candidate_root]
+            ):
+                continue
+            matching_versions = {
+                version
+                for version, candidate_stage in group_release_waves(groups[candidate_root])
+                if candidate_stage == stage
+            }
+            candidates.extend((candidate_root, version) for version in matching_versions)
+        versions = {version for _, version in candidates}
+        candidate_roots = {candidate for candidate, _ in candidates}
+        if len(versions) != 1 or not candidate_roots:
+            continue
+        largest_size = max(len(groups[candidate]) for candidate in candidate_roots)
+        largest_candidates = {
+            candidate
+            for candidate in candidate_roots
+            if len(groups[candidate]) == largest_size
+        }
+        if len(largest_candidates) != 1:
+            continue
+        candidate_root = next(iter(largest_candidates))
+        candidate_anchors = [
+            article
+            for article in groups[candidate_root]
+            if article_platform_release_stages(article) & unknown_signatures
+        ]
+        if not candidate_anchors:
+            continue
+        if any(
+            _profiles_conflict(profiles[id(left)], profiles[id(right)])
+            or explicit_identity_conflict(profiles[id(left)], profiles[id(right)])
+            for left in unknown_group
+            for right in candidate_anchors
+        ):
+            continue
+        union(unknown_root, candidate_root, require_shared_keys=False)
     groups = [group for index, group in enumerate(groups) if group and root(index) == index]
 
     groups.sort(key=lambda group: tuple(_stable_article_key(article) for article in group))

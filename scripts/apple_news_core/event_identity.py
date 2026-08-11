@@ -9,6 +9,7 @@ and only falls back to a short lead when the title is sparse.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
 import re
 import unicodedata
 from typing import Iterable
@@ -87,6 +88,7 @@ APPLE_TITLE_TERMS = (
     "applecare",
     "app store",
     "apple wallet",
+    "apple pay",
     "苹果",
 )
 
@@ -170,6 +172,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("apple-store-app", ("apple store app", "apple store 应用", "apple store应用", "苹果商店应用")),
     ("app-store", ("app store", "appstore", "应用商店")),
     ("apple-wallet", ("apple wallet", "苹果钱包", "数字车钥匙")),
+    ("apple-pay", ("apple pay", "苹果支付")),
     ("apple-card", ("apple card", "苹果卡")),
     ("xcode", ("xcode",)),
     ("carplay", ("carplay",)),
@@ -179,6 +182,43 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 
 COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "component-cost-analysis",
+        (
+            "bill of materials",
+            "bill-of-materials",
+            "bom cost",
+            "build cost",
+            "component cost",
+            "parts cost",
+            "cost to build",
+            "cost to manufacture",
+            "cost more in parts",
+            "more expensive to manufacture",
+            "more to manufacture",
+            "manufacturing cost",
+            "零部件成本",
+            "部件成本",
+            "物料成本",
+            "整机成本",
+            "制造成本",
+            "生产成本",
+            "成本占比",
+        ),
+    ),
+    (
+        "immersive-live-video",
+        (
+            "immersive video",
+            "immersive live video",
+            "spatial video stream",
+            "stereoscopic live",
+            "沉浸式视频",
+            "沉浸式直播",
+            "空间视频直播",
+            "立体直播",
+        ),
+    ),
     (
         "production-hurdle",
         (
@@ -325,12 +365,32 @@ COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "missing from fall launch",
             "absent from fall launch",
             "skips fall launch",
+            "moved to next year",
+            "moves to next year",
+            "pushed to next year",
+            "shifted to next year",
             "延期到明年春季",
             "推迟到明年春季",
             "改到明年春季",
+            "放到明年",
+            "移到明年",
+            "移至明年",
             "退出秋季发布",
             "缺席秋季发布",
             "今年缺席",
+        ),
+    ),
+    (
+        "watch-band-sensor",
+        (
+            "sensor in band",
+            "sensor in the band",
+            "band sensor",
+            "sensor embedded in band",
+            "sensor embedded in the band",
+            "表带内嵌传感器",
+            "表带嵌入传感器",
+            "表带集成传感器",
         ),
     ),
     (
@@ -574,8 +634,10 @@ LEAD_IDENTITY_COMPONENTS = {
     # title identity without allowing body background to redefine the event.
     "camera-system",
     "clipboard-paste-suggestion",
+    "component-cost-analysis",
     "cross-platform-data-migration",
     "financed-device-restriction",
+    "immersive-live-video",
     "facility-renovation",
     "office-real-estate",
     "product-release-delay",
@@ -583,6 +645,7 @@ LEAD_IDENTITY_COMPONENTS = {
     "production-ramp",
     "recurring-transactions",
     "shopping-assistant",
+    "watch-band-sensor",
 }
 
 
@@ -610,11 +673,88 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ),
     ("regulation", ("regulator", "regulatory", "approved", "approval", "filing", "registered", "fine", "ordered to remove", "demand to pull", "investigation", "备案", "获批", "监管", "罚款", "合规", "检方要求", "要求下架", "下架")),
     ("transaction", ("acquire", "acquisition", "merger", "partner", "partnership", "evaluate", "evaluation", "talks", "lease", "leases", "leased", "leasing", "收购", "合作", "接洽", "评估", "洽谈", "租赁", "租下", "承租")),
-    ("supply-production", ("order", "orders", "supplier", "supply", "production", "mass production", "manufacture", "量产", "订单", "供应商", "供货", "生产")),
+    ("supply-production", ("order", "orders", "supplier", "supply", "production", "mass production", "manufacture", "量产", "订单", "供应", "供应商", "供货", "生产")),
     ("investment-capacity", ("investment", "invest", "plant", "plants", "fab", "factory", "capacity", "扩产", "投资", "工厂", "晶圆厂", "产能")),
-    ("retail-availability", ("selling", "available", "store", "refurbished", "launch", "release", "推出", "上架", "开售", "发售", "上市", "官翻", "翻新")),
-    ("delay-roadmap", ("delay", "delayed", "roadmap", "reportedly", "rumor", "expected", "target", "推迟", "延期", "路线图", "传闻", "预计", "计划")),
-    ("feature-change", ("adds", "added", "changes", "changed", "improves", "improved", "removes", "removed", "upgrade", "update", "new feature", "makes", "新增", "加入", "改进", "升级", "移除", "更新", "调整")),
+    (
+        "retail-availability",
+        (
+            "selling",
+            "available",
+            "store",
+            "refurbished",
+            "launch",
+            "release",
+            "enters the market",
+            "market entry",
+            "推出",
+            "上架",
+            "开售",
+            "发售",
+            "上市",
+            "进入市场",
+            "登陆市场",
+            "官翻",
+            "翻新",
+        ),
+    ),
+    ("delay-roadmap", ("delay", "delayed", "roadmap", "reportedly", "rumor", "expected", "target", "plan", "plans", "planned", "planning", "推迟", "延期", "路线图", "传闻", "预计", "计划")),
+    (
+        "claim-denial",
+        (
+            "denies rumor",
+            "denied rumor",
+            "disputes report",
+            "counters report",
+            "counters rumor",
+            "refutes report",
+            "refutes rumor",
+            "remains on track",
+            "still on track",
+            "still planned",
+            "否认传闻",
+            "否认报道",
+            "反驳传闻",
+            "反驳报道",
+            "并未取消",
+            "没有取消",
+            "仍按计划",
+            "仍在推进",
+        ),
+    ),
+    (
+        "feature-change",
+        (
+            "adds",
+            "added",
+            "changes",
+            "changed",
+            "brings",
+            "brought",
+            "develops",
+            "developing",
+            "working on",
+            "introduces",
+            "introducing",
+            "improves",
+            "improved",
+            "removes",
+            "removed",
+            "upgrade",
+            "update",
+            "new feature",
+            "makes",
+            "新增",
+            "加入",
+            "引入",
+            "开发",
+            "研发",
+            "改进",
+            "升级",
+            "移除",
+            "更新",
+            "调整",
+        ),
+    ),
     (
         "official-communication",
         (
@@ -753,8 +893,201 @@ DIRECT_IDENTITY_FACETS = {
 }
 
 
+@lru_cache(maxsize=None)
+def _english_alias_forms(alias: str) -> tuple[str, ...]:
+    """Return stable, conservative inflections for the final word of a phrase."""
+    forms = {alias}
+    match = re.search(r"([a-z]+)$", alias)
+    if not match:
+        return (alias,)
+    word = match.group(1)
+    if word.endswith(("s", "ed", "ing")):
+        return (alias,)
+    prefix = alias[: match.start(1)]
+    if word.endswith(("s", "x", "z", "ch", "sh")):
+        plural = f"{word}es"
+    elif word.endswith("y") and len(word) > 1 and word[-2] not in "aeiou":
+        plural = f"{word[:-1]}ies"
+    else:
+        plural = f"{word}s"
+    if word.endswith("e"):
+        past = f"{word}d"
+        progressive = f"{word[:-1]}ing"
+    else:
+        past = f"{word}ed"
+        progressive = f"{word}ing"
+    forms.update(
+        {
+            f"{prefix}{plural}",
+            f"{prefix}{past}",
+            f"{prefix}{progressive}",
+        }
+    )
+    return tuple(sorted(forms, key=lambda value: (-len(value), value)))
+
+
+@lru_cache(maxsize=None)
+def _compiled_pattern_groups(
+    patterns: tuple[tuple[str, tuple[str, ...]], ...],
+) -> tuple[tuple[str, tuple[str, ...], tuple[re.Pattern[str], ...]], ...]:
+    """Compile immutable pattern tables once instead of rebuilding forms per article."""
+    groups: list[tuple[str, tuple[str, ...], tuple[re.Pattern[str], ...]]] = []
+    for name, aliases in patterns:
+        cjk_aliases: list[str] = []
+        boundary_forms: dict[tuple[bool, bool], set[str]] = {}
+        for alias in aliases:
+            if re.search(r"[\u3400-\u9fff]", alias):
+                cjk_aliases.append(alias)
+                continue
+            for form in _english_alias_forms(alias):
+                boundary_forms.setdefault(
+                    (form[0].isalnum(), form[-1].isalnum()),
+                    set(),
+                ).add(form)
+
+        matchers: list[re.Pattern[str]] = []
+        for (left_boundary, right_boundary), forms in boundary_forms.items():
+            alternatives = "|".join(
+                re.escape(form)
+                for form in sorted(forms, key=lambda value: (-len(value), value))
+            )
+            expression = f"(?:{alternatives})"
+            if left_boundary:
+                expression = rf"(?<![a-z0-9]){expression}"
+            if right_boundary:
+                expression = rf"{expression}(?![a-z0-9])"
+            matchers.append(re.compile(expression))
+        groups.append((name, tuple(cjk_aliases), tuple(matchers)))
+    return tuple(groups)
+
+
+@lru_cache(maxsize=32768)
+def _cached_extract_patterns(
+    text: str,
+    patterns: tuple[tuple[str, tuple[str, ...]], ...],
+) -> frozenset[str]:
+    return frozenset(
+        name
+        for name, cjk_aliases, matchers in _compiled_pattern_groups(patterns)
+        if any(alias in text for alias in cjk_aliases)
+        or any(matcher.search(text) for matcher in matchers)
+    )
+
+
 def _extract_patterns(text: str, patterns: tuple[tuple[str, tuple[str, ...]], ...]) -> set[str]:
-    return {name for name, aliases in patterns if _contains_any(text, aliases)}
+    return set(_cached_extract_patterns(text, patterns))
+
+
+def primary_assertion_components(value: str) -> frozenset[str]:
+    """Expose typed components from the first assertion without mutating identity."""
+    primary = re.split(
+        r"(?:[。！？]|(?<=[.!?])\s+)",
+        _normalized(value),
+        maxsplit=1,
+    )[0]
+    return frozenset(_extract_patterns(primary, COMPONENT_PATTERNS))
+
+
+_SUPPLIER_COMPONENT_CLASSES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "memory",
+        (
+            "dram",
+            "ram",
+            "nand",
+            "memory chip",
+            "memory chips",
+            "storage chip",
+            "storage chips",
+            "内存",
+            "存储芯片",
+            "闪存",
+        ),
+    ),
+    (
+        "display",
+        (
+            "display panel",
+            "display panels",
+            "oled panel",
+            "oled panels",
+            "screen panel",
+            "显示面板",
+            "oled 面板",
+            "oled面板",
+        ),
+    ),
+    (
+        "image-sensor",
+        (
+            "image sensor",
+            "image sensors",
+            "camera sensor",
+            "camera sensors",
+            "图像传感器",
+            "相机传感器",
+        ),
+    ),
+    (
+        "battery",
+        (
+            "battery cell",
+            "battery cells",
+            "battery supplier",
+            "电池供应",
+            "电芯",
+        ),
+    ),
+    (
+        "semiconductor",
+        (
+            "processor",
+            "processors",
+            "semiconductor",
+            "semiconductors",
+            "modem chip",
+            "modem chips",
+            "芯片供应",
+            "处理器供应",
+            "调制解调器芯片",
+        ),
+    ),
+)
+
+
+def _component_supplier_sourcing_classes(title: str, lead: str) -> set[str]:
+    """Return component classes in a direct Apple buyer/supplier relation.
+
+    A component shortage is context, not an event predicate.  This relation
+    therefore requires Apple (or one of its product families) to be the buyer,
+    tester, qualifier, or sourcing target in the headline or opening claim.
+    """
+    title_text = _normalized(title)
+    lead_text = _normalized(lead)[:700]
+    text = f"{title_text}. {lead_text}"
+    apple_subject = (
+        r"(?:apple(?:'s|’s)?|iphone|ipad|mac(?:book)?|imac|apple\s+watch|airpods|vision\s+pro|苹果)"
+    )
+    sourcing_action = (
+        r"(?:buy(?:ing)?|source|sourcing|sourced|procure|procurement|purchase|purchasing|"
+        r"test|testing|tested|qualify|qualifying|qualification|approve|approval|"
+        r"negotiate|negotiating|negotiation|talks?\s+with|consider(?:s|ed|ing)?\s+(?:buying|sourcing|using)|"
+        r"采购|购买|寻求|寻找|测试|认证|送样|洽谈|谈判|议价|考虑采用|考虑使用|导入供应链)"
+    )
+    direct_buyer_relation = bool(
+        re.search(rf"{apple_subject}[^。！？\n]{{0,110}}{sourcing_action}", text)
+        or re.search(
+            rf"{sourcing_action}[^。！？\n]{{0,110}}(?:for|to|by|供给|供应|面向)?\s*{apple_subject}",
+            text,
+        )
+    )
+    if not direct_buyer_relation:
+        return set()
+    return {
+        component_class
+        for component_class, aliases in _SUPPLIER_COMPONENT_CLASSES
+        if _contains_any(text, aliases)
+    }
 
 
 GENERIC_NAMED_SUBJECTS = {
@@ -849,6 +1182,21 @@ def _valid_content_title(value: str) -> str | None:
     return _canonical_named_subject(value)
 
 
+def _explicit_evidence_first_party_subjects(evidence: Iterable[str]) -> set[str]:
+    subjects: set[str] = set()
+    for evidence_item in tuple(evidence)[:6]:
+        for match in re.finditer(
+            r"(?i)(?:something\s+called|called|named|known\s+as|名为|称为)\s*"
+            r"[\"'“‘]?\s*(Apple\s+[A-Z][A-Za-z0-9+-]{2,30}"
+            r"(?:\s+[A-Z][A-Za-z0-9+-]{2,30}){0,2})\b",
+            evidence_item,
+        ):
+            subject = _canonical_named_subject(match.group(1))
+            if subject:
+                subjects.add(subject)
+    return subjects
+
+
 def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[str]:
     """Extract rare title/lead anchors without treating reporter names as event identity."""
     identity_lead = re.split(
@@ -896,6 +1244,11 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
         if subject:
             subjects.add(subject)
 
+    # Key facts may contain the explicit first-party name that a concise
+    # headline omits. Accept only names introduced by naming language; this
+    # keeps background product mentions from becoming event identity.
+    subjects |= _explicit_evidence_first_party_subjects(evidence)
+
     for match in re.finditer(
         r"(?<![A-Za-z0-9])(?:A\d{1,2}\s*Pro|M\d{1,2}(?:\s*(?:Pro|Max|Ultra|Extreme))?)(?![A-Za-z0-9])",
         scoped,
@@ -933,6 +1286,7 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
     # not create a false subject called "Apple Updates".
     apple_named_stopwords = {
         "adds",
+        "already",
         "announces",
         "approves",
         "chipmaker",
@@ -943,18 +1297,24 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
         "improves",
         "launches",
         "plans",
+        "product",
         "publishes",
         "raises",
         "releases",
         "reportedly",
+        "seeds",
         "shares",
         "testing",
         "updates",
         "will",
     }
-    for match in re.finditer(r"\bApple\s+([A-Z][A-Za-z0-9+.-]{2,30})\b", scoped):
+    for match in re.finditer(
+        r"\bApple\s+([A-Z][A-Za-z0-9+-]{2,30}"
+        r"(?:\s+(?!Apple\b)[A-Z][A-Za-z0-9+-]{2,30}){0,2})\b",
+        scoped,
+    ):
         branded_noun = match.group(1)
-        if branded_noun.lower() in apple_named_stopwords:
+        if branded_noun.split()[0].lower() in apple_named_stopwords:
             continue
         subject = _canonical_named_subject(f"Apple {branded_noun}")
         if subject:
@@ -1131,16 +1491,58 @@ def _analyst_institution_components(title: str, lead: str = "") -> set[str]:
     return {f"analyst-institution:{name}" for name in institutions}
 
 
+def _attribution_slug(value: str) -> str:
+    value = _normalized(value)
+    value = re.sub(
+        r"^(?:a\s+|the\s+|market\s+research\s+firm\s+|research\s+firm\s+|"
+        r"市场研究机构|研究机构|分析机构|分析师|研究员)",
+        "",
+        value,
+    )
+    value = re.sub(
+        r"(?:最新|手机|产业|市场|行业|研究)*(?:报告|研究|数据|预测|咨询)$",
+        "",
+        value,
+    )
+    value = re.sub(r"[^a-z0-9\u4e00-\u9fff+.-]+", "-", value).strip("-")
+    if not value or value in {
+        "apple",
+        "苹果",
+        "报告",
+        "研究",
+        "分析师",
+        "研究员",
+        "the-report",
+        "the-company",
+        "earlier",
+        "latest",
+        "other",
+    }:
+        return ""
+    if re.fullmatch(
+        r"(?:apple|iphone|ipad|mac|macbook|airpods|vision-pro|"
+        r"[am]\d+(?:-(?:pro|max|ultra|extreme))?|j\d+(?:-mac-pro)?)",
+        value,
+    ):
+        return ""
+    return value
+
+
 def _report_attribution_components(title: str, lead: str = "") -> set[str]:
-    """Extract a named report source without making the source an event by itself."""
+    """Extract a report's named source independently of language and publisher."""
     scope = f"{title}. {lead[:900]}"
     values: set[str] = set()
     patterns = (
         r"\b(?:[Aa]nalyst|[Rr]esearcher)\s+([A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){0,2})\b",
-        r"\b[Aa]ccording\s+to\s+([A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){0,2})\b",
-        r"\b(?:[Nn]ote|[Rr]eport)\s+(?:from|by)\s+([A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){0,2})\b",
+        r"\b[Aa]ccording\s+to\s+([A-Z][A-Za-z0-9&+.'-]+(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,3})\b",
+        r"\b(?:[Nn]ote|[Rr]eport)\s+(?:from|by)\s+([A-Z][A-Za-z0-9&+.'-]+(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,3})\b",
+        r"\b([A-Z][A-Za-z0-9&+.'-]{2,30}(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,2})\s+"
+        r"(?:reports?|says|estimates?|forecasts?|projects?|data\s+shows)\b",
+        r"(?:根据|据)\s*([A-Za-z][A-Za-z0-9&+.'-]{2,30})(?:\s|的|，|,)",
         r"(?:分析师|研究员)[^。；,，\n]{0,24}?[（(]\s*([A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){0,2})\s*[）)]",
         r"(?:分析师|研究员)[^。；,，\n]{0,24}?([A-Z][A-Za-z'.-]+(?:\s*[A-Z][A-Za-z'.-]+)?)",
+        r"([\u4e00-\u9fffA-Za-z][\u4e00-\u9fffA-Za-z0-9&+.'-]{1,23})"
+        r"(?:报告称|数据显示|研究显示|预测)",
     )
     rejected = {
         "apple",
@@ -1165,7 +1567,7 @@ def _report_attribution_components(title: str, lead: str = "") -> set[str]:
     for pattern in patterns:
         for match in re.finditer(pattern, scope):
             raw_value = re.sub(r"([a-z])([A-Z])", r"\1-\2", match.group(1))
-            value = re.sub(r"[^a-z0-9]+", "-", raw_value.lower()).strip("-")
+            value = _attribution_slug(raw_value)
             if value and value not in rejected:
                 values.add(value)
     return {f"report-attribution:{value}" for value in values}
@@ -1262,6 +1664,31 @@ def _content_form(title: str, lead: str = "") -> str:
         or re.search(r"(?:vote|投票|你会怎么|你会如何|你是否).*[?？]?$", lower)
     ):
         return "poll"
+    if re.match(r"^apple\s*,?\s+please\b", lower) or re.search(
+        r"(?:还|是否)?值得(?:购买|买|升级)吗[?？]?$",
+        lower,
+    ):
+        return "analysis"
+    custom_vendor = re.search(
+        r"(?<![a-z0-9])(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b)"
+        r"([a-z][a-z0-9.+-]{2,30})(?![a-z0-9]).{0,36}"
+        r"(?:lists?|listed|launch(?:es|ed)?|unveils?|上架|推出|发布)",
+        lead_lower,
+    )
+    if (
+        custom_vendor
+        and re.search(
+            r"\b(?:custom|customized|bespoke|luxury|modified)\b|"
+            r"(?:定制版|定制款|高奢定制|奢华定制|改装版)",
+            lower,
+        )
+        and not re.search(
+            r"\bapple\s+(?:announces?|launches?|releases?|unveils?)\b|"
+            r"苹果(?:宣布|推出|发布)",
+            lead_lower,
+        )
+    ):
+        return "third_party_spotlight"
     current_attributed_report = bool(
         re.search(
             r"\b(?:today (?:outlined|reported)|today['’]s report|latest edition|new report|"
@@ -1283,6 +1710,20 @@ def _content_form(title: str, lead: str = "") -> str:
             lead_lower,
         )
     )
+    if (not current_attributed_report) and re.search(
+        r"(?:发布会|活动).{0,28}(?:将|预计|有望|可能|大概率).{0,18}"
+        r"(?:推|推出|发布|带来|亮相).{0,10}"
+        r"(?:[一二三四五六七八九十百\d]+)\s*(?:款|项|个)?(?:新品|产品|设备|硬件)",
+        lower,
+    ):
+        return "roundup"
+    if (not current_attributed_report) and re.search(
+        r"(?:等|共|多达)\s*[一二三四五六七八九十百\d]+\s*款"
+        r"(?:苹果)?(?:新品|产品|设备).{0,28}"
+        r"(?:彻底泄密|全部曝光|集中曝光|一次看完|汇总|再无悬念)",
+        lower,
+    ):
+        return "roundup"
     if (not current_attributed_report) and re.search(
         r"\b(?:rumors? point to|everything we know|"
         r"what to expect|these \d+ (?:new )?(?:features|changes)|"
@@ -1320,6 +1761,11 @@ def _content_form(title: str, lead: str = "") -> str:
         or re.match(r"^why\b.{0,100}\b(?:could|may|might)\b.{0,60}\b(?:risk|problem|concern)\b", lower)
         or re.search(r"(?:便利与隐患并存|(?:引发|存在|带来).{0,10}(?:隐私|安全).{0,8}(?:争议|风险|隐患))", lower)
         or re.search(r"值不值得|是否值得", lower)
+    ):
+        return "analysis"
+    if re.match(
+        r"^[^:：]{2,24}(?:吐槽|抱怨|炮轰|批评)[：:]",
+        lower,
     ):
         return "analysis"
     if re.search(
@@ -1561,7 +2007,14 @@ def _title_scope(title: str, lead: str) -> str:
             r"app store\b|苹果)[a-z0-9][a-z0-9.+-]*(?:\s+[a-z0-9][a-z0-9.+-]*){0,3}\s+"
             r"(?:is\s+|are\s+)?(?:building|launch(?:es|ed|ing)?|offer(?:s|ed|ing)?|"
             r"introduc(?:es|ed|ing)?|announce(?:s|d|ing)?|develop(?:s|ed|ing)?)\b"
-            r".{0,100}\b(?:iphone|ipad|mac\s+apps?|apple\s+watch|airpods|vision\s+pro)\b",
+            r".{0,100}\b(?:ios|ipados|macos|watchos|tvos|visionos|iphone|ipad|mac\s+apps?|apple\s+watch|airpods|vision\s+pro)\b",
+            title_lower,
+        )
+        or re.search(
+            r"^(?!苹果|iphone|ipad|ios|ipados|mac(?:book|os)?|watchos|tvos|visionos|airpods)"
+            r"[a-z][a-z0-9.+-]*(?:\s+[a-z][a-z0-9.+-]*){0,3}.{0,36}"
+            r"(?:发布|推出|更新|新增|扩充|强化|上线|上架|适配).{0,70}"
+            r"(?:ios|ipados|macos|watchos|tvos|visionos|iphone|ipad|mac|苹果平台|苹果应用商店)",
             title_lower,
         )
     )
@@ -1648,6 +2101,11 @@ def high_confidence_direct_apple_action(identity: EventIdentity) -> bool:
         return True
     if identity.facets & DIRECT_IDENTITY_FACETS:
         return True
+    if "apple-pay" in identity.title_products and identity.title_actions & {
+        "retail-availability",
+        "transaction",
+    }:
+        return True
     if "car-key" in identity.components:
         return True
     if "memory-supply" in identity.components and "supply-production" in identity.actions:
@@ -1684,6 +2142,7 @@ def build_event_identity(
     title_lower = _normalized(title)
     lead_lower = _normalized(lead)[:900]
     content_form = _content_form(title, lead)
+    title_scope = _title_scope(title, lead)
     title_products = _collapse_product_hierarchy(_extract_patterns(title_lower, PRODUCT_PATTERNS))
     if (
         re.match(r"^beats\b", title_lower)
@@ -1721,6 +2180,15 @@ def build_event_identity(
     if content_form != "roundup" and not (title_products & direct_service_products):
         products |= _extract_patterns(lead_lower[:260], PRODUCT_PATTERNS) & direct_service_products
     title_components = _extract_patterns(title_lower, COMPONENT_PATTERNS)
+    if re.search(
+        r"\b(?:cost|costs|costing)\b.{0,28}\b(?:build|built|make|manufacture|produce)\b|"
+        r"\b(?:cost|costs|costing)\b.{0,36}\b(?:more|less)\b.{0,18}"
+        r"\b(?:parts?|components?|materials?)\b|"
+        r"(?:制造|生产|整机|零部件|物料).{0,12}成本|成本.{0,12}(?:制造|生产|整机|零部件|物料)|"
+        r"成本(?:大增|上升|增加|上涨|提高)[^，。！？:：]{0,16}(?:\d+(?:\.\d+)?\s*%|近|约|达到|达)",
+        title_lower,
+    ):
+        title_components.add("component-cost-analysis")
     title_components |= _extract_patterns(title_lower, OS_COMPONENT_PATTERNS)
     components = set(title_components)
     if "apple-tv" in products:
@@ -1838,7 +2306,7 @@ def build_event_identity(
         )
     title_components |= apple_silicon_generation_components
     components |= apple_silicon_generation_components
-    if products and re.search(
+    if (products or title_scope == "apple-direct") and re.search(
         r"\b(?:shipments?|market\s+share|sales\s+(?:slump|decline|growth)|unit\s+sales|"
         r"best[- ]selling|top[- ]selling)\b|"
         r"(?:出货量|市场份额|销量|出货|同比(?:增长|下降)|最畅销|销量最高|销售冠军)",
@@ -1846,6 +2314,34 @@ def build_event_identity(
     ):
         title_components.add("hardware-market-performance")
         components.add("hardware-market-performance")
+    supplier_sourcing_classes = _component_supplier_sourcing_classes(title, lead)
+    if supplier_sourcing_classes:
+        components.add("component-supplier-sourcing")
+        components |= {
+            f"component-supplier-sourcing:{component_class}"
+            for component_class in supplier_sourcing_classes
+        }
+        title_supplier_sourcing_classes = _component_supplier_sourcing_classes(title, "")
+        if title_supplier_sourcing_classes:
+            title_components.add("component-supplier-sourcing")
+            title_components |= {
+                f"component-supplier-sourcing:{component_class}"
+                for component_class in title_supplier_sourcing_classes
+            }
+    shipment_plan_change_pattern = (
+        r"\b(?:cut(?:s|ting)?|reduc(?:e|es|ed|ing)|lower(?:s|ed|ing)?|trim(?:s|med|ming)?|"
+        r"slash(?:es|ed|ing)?|scale[sd]?\s+back)\b[^。！？\n]{0,70}"
+        r"\b(?:shipments?|shipment\s+plans?|production\s+plans?|output\s+plans?)\b|"
+        r"\b(?:shipments?|shipment\s+plans?|production\s+plans?|output\s+plans?)\b"
+        r"[^。！？\n]{0,70}\b(?:cut|reduc(?:e|ed)|lower(?:ed)?|trim(?:med)?|slash(?:ed)?|scaled?\s+back)\b|"
+        r"(?:削减|缩减|下调|调低|减少|砍掉)[^。！？\n]{0,36}(?:出货|产量|生产计划|出货规划)|"
+        r"(?:出货|产量|生产计划|出货规划)[^。！？\n]{0,36}(?:削减|缩减|下调|调低|减少)"
+    )
+    if re.search(shipment_plan_change_pattern, title_lower):
+        title_components.add("hardware-shipment-plan-change")
+        components.add("hardware-shipment-plan-change")
+    elif re.search(shipment_plan_change_pattern, lead_lower[:620]):
+        components.add("hardware-shipment-plan-change")
     if products and re.search(
         r"\b(?:next[- ]generation|second[- ]generation|roadmap|in\s+development|"
         r"plans?\s+for|expected\s+(?:in|for)|coming\s+in|launch(?:es|ing)?\s+in)\b|"
@@ -1856,9 +2352,9 @@ def build_event_identity(
         title_components.add("hardware-product-roadmap")
         components.add("hardware-product-roadmap")
     release_delay_pattern = (
-        r"\b(?:delay(?:ed|s|ing)?|postpone(?:d|s|ment)?|move(?:d|s)?)\b.{0,64}"
-        r"\b(?:until|to|into)\s+(?:the\s+)?(?:next\s+)?spring\b|"
-        r"(?:延期|推迟|改到|延后).{0,32}(?:明年|次年|春季)"
+        r"\b(?:delay(?:ed|s|ing)?|postpone(?:d|s|ment)?|move(?:d|s)?|push(?:ed|es)?|shift(?:ed|s)?)\b.{0,64}"
+        r"\b(?:until|to|into)\s+(?:the\s+)?(?:early\s+)?(?:next\s+year|next\s+spring|spring)\b|"
+        r"(?:延期|推迟|改到|延后|放到|移到|移至).{0,32}(?:明年|次年|春季)"
     )
     if re.search(release_delay_pattern, title_lower):
         title_components.add("product-release-delay")
@@ -1879,10 +2375,20 @@ def build_event_identity(
         components.add("clipboard-paste-suggestion")
     if not components and content_form != "roundup" and identity_evidence:
         for evidence_item in identity_evidence[:6]:
-            components |= (
-                _extract_patterns(_normalized(evidence_item)[:420], COMPONENT_PATTERNS)
-                & EVIDENCE_BACKED_COMPONENTS
+            normalized_evidence = _normalized(evidence_item)[:420]
+            evidence_components = _extract_patterns(
+                normalized_evidence,
+                COMPONENT_PATTERNS,
+            ) & (EVIDENCE_BACKED_COMPONENTS | LEAD_IDENTITY_COMPONENTS)
+            evidence_products = _collapse_product_hierarchy(
+                _extract_patterns(normalized_evidence, PRODUCT_PATTERNS)
             )
+            components |= {
+                component
+                for component in evidence_components
+                if component in EVIDENCE_BACKED_COMPONENTS
+                or bool(title_products & evidence_products)
+            }
     display_size_pattern = re.compile(r"(?<!\d)(\d(?:\.\d+)?)\s*(?:-?inch|英寸)")
     title_display_sizes = {
         f"display-size:{match.group(1)}-inch"
@@ -2087,6 +2593,36 @@ def build_event_identity(
     ):
         components.add("product-release-mix")
     title_actions = _extract_patterns(title_lower, ACTION_PATTERNS)
+    if "price-change" in title_actions:
+        price_mentions = list(
+            re.finditer(
+                r"\b(?:price increase|price hike)\b|(?:涨价|提价|上调价格|上调售价|降价)",
+                title_lower,
+            )
+        )
+        if price_mentions and all(
+            re.search(
+                r"(?:\b(?:no|not|without)\b\s*|(?:不|不会|未|没有|并未)\s*)$",
+                title_lower[max(0, match.start() - 12) : match.start()],
+            )
+            for match in price_mentions
+        ):
+            title_actions.discard("price-change")
+    if re.search(
+        r"\b(?:denies?|disputes?|refutes?|counters?|pours?(?:\s+cold)?\s+water\s+on)\b"
+        r".{0,90}\b(?:rumou?r|report|claim)\b|"
+        r"(?:否认|反驳).{0,48}(?:传闻|报道|说法)|"
+        r"(?:否认|反驳).{0,72}(?:不存在|没有|不实)|"
+        r"(?:传闻|报道|说法).{0,48}(?:不实|被否认|遭否认)",
+        title_lower,
+    ):
+        title_actions.add("claim-denial")
+    if re.search(
+        r"\benters?\s+(?:the\s+)?[a-z][a-z -]{0,24}\s+market\b|"
+        r"(?:进入|登陆)[^，。！？:：]{0,16}市场",
+        title_lower,
+    ):
+        title_actions.add("retail-availability")
     actions = set(title_actions)
     if re.search(
         r"\b(?:to|will|would|could|may|might|expected\s+to|reportedly\s+to)\s+feature\b",
@@ -2136,10 +2672,23 @@ def build_event_identity(
         r"orders?\s+(?:a\s+)?(?:new\s+)?(?:series|film|movie|documentary|docuseries))\b|"
         r"(?:最终季|完结|收官|确定首播|公布首播|预订.{0,12}(?:剧集|电影|纪录片))"
     )
-    if re.search(content_lifecycle_pattern, title_lower):
+    content_lifecycle_subject = bool(
+        products
+        & {
+            "apple-arcade",
+            "apple-music",
+            "apple-tv",
+        }
+        or re.search(
+            r"\b(?:series|film|movie|documentary|docuseries|show|season)\b|"
+            r"(?:剧集|电影|影片|纪录片|节目|季度|最终季)",
+            f"{title_lower} {lead_lower[:240]}",
+        )
+    )
+    if content_lifecycle_subject and re.search(content_lifecycle_pattern, title_lower):
         title_actions.add("content-release")
         actions.add("content-release")
-    elif re.search(content_lifecycle_pattern, lead_lower[:500]):
+    elif content_lifecycle_subject and re.search(content_lifecycle_pattern, lead_lower[:500]):
         actions.add("content-release")
     official_product_communication = bool(
         re.search(
@@ -2330,6 +2879,10 @@ def build_event_identity(
                 release_scope,
             ) or re.search(
                 r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\s+"
+                r"(?:round\s+of\s+)?developer\s+betas?\b",
+                release_scope,
+            ) or re.search(
+                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\s+"
                 r"(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s+[a-z][a-z0-9-]+){0,2}\s+"
                 r"public betas?\b",
                 main_title,
@@ -2355,7 +2908,7 @@ def build_event_identity(
                 "十": "10",
             }
             chinese_match = re.search(
-                r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*(?:开发者)?测试版",
+                r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*(?:开发者)?(?:测试版|预览版)",
                 release_scope,
             )
             if chinese_match:
@@ -2365,7 +2918,7 @@ def build_event_identity(
                     numbered_beta_stages = [f"beta-{number}"]
     title_is_release_wave = bool(
         re.search(
-            r"\b(?:releases?|released|seeds?|seeded|rolls? out|now available|available now|is here|are out now|arrives?|revised|surfaces?|is coming soon|are coming soon|coming next week)\b|"
+            r"\b(?:releases?|released|seeds?|seeded|rolls? out|now available|available now|is here|are out now|arrives?|lands?|revised|surfaces?|is coming soon|are coming soon|coming next week)\b|"
             r"\bstarts?\s+round\b|\bversion\s*2\s+update\b|"
             r"(?:即将发布|最快.{0,8}发布|发布|推送|释出|修订版)|(?:正式版|候选版).{0,12}上线",
             main_title,
@@ -2410,6 +2963,10 @@ def build_event_identity(
         }
         for platform in platform_names:
             components.add(f"os-wave-platform:{platform}:{release_stages[0]}")
+    components |= {
+        f"evidence-named-subject:{subject}"
+        for subject in _explicit_evidence_first_party_subjects(identity_evidence)
+    }
     return EventIdentity(
         products=frozenset(products),
         components=frozenset(components),
@@ -2435,5 +2992,5 @@ def build_event_identity(
         ),
         title_named_subjects=frozenset(_title_primary_named_subjects(title, lead)),
         content_form=content_form,
-        scope=_title_scope(title, lead),
+        scope=title_scope,
     )
