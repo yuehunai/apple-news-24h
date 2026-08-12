@@ -26649,6 +26649,12 @@ def classify_relevance_tier(
         return "weak", "third-party AI model using an Apple device only as its runtime"
     if is_third_party_consumer_app_update_on_apple_platform(title, text):
         return "weak", "third-party app update on an Apple platform without a direct Apple action"
+    if (
+        semantic_identity.scope == "third-party-context"
+        and event_kind == "security_privacy"
+        and not is_direct_apple_security_bulletin_research_story(title, text)
+    ):
+        return "weak", "third-party product security issue affecting Apple platforms without an Apple platform flaw"
     if is_repackaged_multi_action_apple_analysis(title, text):
         return "weak", "analysis repackaging existing Apple programs without a new action"
     if is_first_party_trade_in_valuation_change_story(title, text):

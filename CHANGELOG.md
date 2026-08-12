@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.53.0 - 2026-08-12
+
+- Added structured subject-and-predicate assertions for Apple TV works, OS code disclosures, service entitlements, legal cases, supplier actions, regional launches, personnel changes, promotions, and product specifications so concrete event identity outranks broad topic overlap.
+- Improved multilingual reconciliation for unreleased-iPhone code lists, China Apple Intelligence evidence, iCloud Private Relay litigation, public beta release trains, Liquid Glass changes, Apple Pay leadership, and other same-action coverage while keeping AirPods firmware and separately named Apple TV works independent.
+- Tightened supply-chain and hardware boundaries so capacity constraints, price negotiations, component-cost forecasts, stockpiling, supplier qualification, product pricing, and policy approval remain separate actions even when they share suppliers, shortages, reports, or background paragraphs.
+- Improved relevance handling so third-party app vulnerabilities, AI agents, competitor comparisons, and numbered feature compilations without a new standalone Apple action remain reviewable in `deferred_events` instead of entering the final brief.
+- Updated skill and fallback guidance with an explicit `event.id -> bullet` ledger and expanded regression coverage from 982 to 999 tests; concurrent live validation preserved the same 100 URLs and source counts without runtime regression, while clean-agent validation produced zero merge warnings and correctly separated content, code, firmware, and supply-chain boundaries.
+
 ## 1.52.0 - 2026-08-11
 
 - Added typed title-and-lead event identities for subjects, predicates, products and platforms, components, evidence, claim lifecycles, legal stages, OS release waves, and market facts, enabling deterministic splits and reunions without fuzzy bridges.

@@ -1235,6 +1235,20 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
         if subject:
             subjects.add(subject)
 
+    # Feature reports often establish a branded UI object through a
+    # causative comparison rather than explicit naming language, for example
+    # "make <Name> more ...". Preserve that syntactic subject so translations
+    # and the original report share a concrete event identity.
+    for match in re.finditer(
+        r"\b(?:make|makes|making|set|sets|adjust|adjusts|change|changes)\s+"
+        r"([A-Z][A-Za-z0-9+.-]*(?:\s+[A-Z][A-Za-z0-9+.-]*){1,3})\s+"
+        r"(?:more|less|higher|lower|clearer|darker|lighter)\b",
+        scoped,
+    ):
+        subject = _canonical_named_subject(match.group(1))
+        if subject:
+            subjects.add(subject)
+
     for match in re.finditer(
         r"(?<![A-Za-z0-9])(?:M\d+\s+Extreme|[A-Z]{1,4}\d{3,5})(?![A-Za-z0-9])",
         scoped,
@@ -1727,6 +1741,7 @@ def _content_form(title: str, lead: str = "") -> str:
     if (not current_attributed_report) and re.search(
         r"\b(?:rumors? point to|everything we know|"
         r"what to expect|these \d+ (?:new )?(?:features|changes)|"
+        r"\d+ new things .+ (?:can do|to try|to know)|"
         r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+\d+\s+"
         r"(?:new\s+)?(?:products?|devices?)|"
         r"\d+ rumored features|latest (?:apple )?rumors?|all (?:the )?(?:apple )?rumors?|"
@@ -1746,6 +1761,12 @@ def _content_form(title: str, lead: str = "") -> str:
         r"\b(?:adds?|gets?|gains?|brings?)\s+(?:two|three|four|five|six|seven|eight|nine|ten|\d+)\s+"
         r"(?:new\s+)?(?:iphone\s+|ipad\s+|mac\s+)?(?:features?|changes?|upgrades?)\b|"
         r"(?:新增|带来|加入)\s*(?:两|三|四|五|六|七|八|九|十|\d+)\s*(?:项|个)?(?:新)?(?:功能|变化|升级)",
+        lower,
+    ):
+        return "roundup"
+    if re.search(
+        r"(?:\d+|[一二三四五六七八九十]+)\s*项(?:功能|变化|升级|更新)"
+        r".{0,20}(?:汇总|盘点|全(?:部)?(?:扒出|梳理|整理)|一览)",
         lower,
     ):
         return "roundup"
@@ -1892,16 +1913,24 @@ def _title_scope(title: str, lead: str) -> str:
             r"app store\b|苹果).{2,80}\b(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)|"
             r"updat(?:es|ed|ing)|adds?|added|brings?|brought|tests?|tested|testing|"
             r"being tested|available|arrives?|coming|rolls? out)\b.{0,60}\b(?:on|for|to)\s+(?:select\s+)?"
-            r"(?:iphone|ipad|mac|apple watch)(?:\s+users?)?\b",
+            r"(?:iphone|ipad|mac|apple watch|ios|ipados|macos|watchos|tvos|visionos)(?:\s+users?)?\b",
             title_lower,
         )
         or re.search(
             r"^(?!apple\b|iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
             r"tvos\b|visionos\b|airpods\b|icloud\b|safari\b|siri\b|carplay\b|xcode\b|"
             r"app store\b|苹果).{2,80}\b(?:on|for|to)\s+(?:select\s+)?"
-            r"(?:iphone|ipad|mac|apple watch)(?:\s+users?)?\b.{0,50}\b"
+            r"(?:iphone|ipad|mac|apple watch|ios|ipados|macos|watchos|tvos|visionos)(?:\s+users?)?\b.{0,50}\b"
             r"(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)|updat(?:es|ed|ing)|adds?|added|"
             r"brings?|brought|tests?|tested|testing|available|arrives?|coming|rolls? out)\b",
+            title_lower,
+        )
+        or re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
+            r"tvos\b|visionos\b|airpods\b|icloud\b|safari\b|苹果).{2,70}"
+            r"\b(?:flaw|vulnerability|bug|exploit|malware|attack)\b.{0,90}"
+            r"\b(?:including|affect(?:s|ed|ing)?|on|for)\b.{0,24}"
+            r"\b(?:iphone|ipad|mac|ios|ipados|macos|watchos)\b",
             title_lower,
         )
     )
@@ -2593,6 +2622,13 @@ def build_event_identity(
     ):
         components.add("product-release-mix")
     title_actions = _extract_patterns(title_lower, ACTION_PATTERNS)
+    if re.search(
+        r"\b(?:lets?|allows?|enables?)\s+(?:you|users?|people)\s+(?:to\s+)?"
+        r"(?:make|set|adjust|change|choose|use|view|control)\b|"
+        r"(?:让|允许|支持)用户.{0,18}(?:调整|设置|更改|选择|使用|查看|控制)",
+        title_lower,
+    ):
+        title_actions.add("feature-change")
     if "price-change" in title_actions:
         price_mentions = list(
             re.finditer(
@@ -2883,7 +2919,9 @@ def build_event_identity(
                 release_scope,
             ) or re.search(
                 r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\s+"
-                r"(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s+[a-z][a-z0-9-]+){0,2}\s+"
+                r"(?:ios|ipados|macos|watchos|tvos|visionos)"
+                r"(?:\s*(?:,|and|&|/)?\s*(?:ios|ipados|macos|watchos|tvos|visionos))*"
+                r"(?:\s+[a-z][a-z0-9-]+){0,2}\s+"
                 r"public betas?\b",
                 main_title,
             )
@@ -2911,6 +2949,11 @@ def build_event_identity(
                 r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*(?:开发者)?(?:测试版|预览版)",
                 release_scope,
             )
+            if not chinese_match:
+                chinese_match = re.search(
+                    r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*公测(?:版|测试版)?",
+                    release_scope,
+                )
             if chinese_match:
                 raw_number = chinese_match.group(1)
                 number = raw_number if raw_number.isdigit() else chinese_number_map.get(raw_number)
