@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.53.0 - 2026-08-12
+### 1.54.0 - 2026-08-13
 
-- Added structured subject-and-predicate assertions for Apple TV works, OS code disclosures, service entitlements, legal cases, supplier actions, regional launches, personnel changes, promotions, and product specifications so concrete event identity outranks broad topic overlap.
-- Improved multilingual reconciliation for unreleased-iPhone code lists, China Apple Intelligence evidence, iCloud Private Relay litigation, public beta release trains, Liquid Glass changes, Apple Pay leadership, and other same-action coverage while keeping AirPods firmware and separately named Apple TV works independent.
-- Tightened supply-chain and hardware boundaries so capacity constraints, price negotiations, component-cost forecasts, stockpiling, supplier qualification, product pricing, and policy approval remain separate actions even when they share suppliers, shortages, reports, or background paragraphs.
-- Improved relevance handling so third-party app vulnerabilities, AI agents, competitor comparisons, and numbered feature compilations without a new standalone Apple action remain reviewable in `deferred_events` instead of entering the final brief.
-- Updated skill and fallback guidance with an explicit `event.id -> bullet` ledger and expanded regression coverage from 982 to 999 tests; concurrent live validation preserved the same 100 URLs and source counts without runtime regression, while clean-agent validation produced zero merge warnings and correctly separated content, code, firmware, and supply-chain boundaries.
+- Added action-owner-first relevance decisions so third-party apps, products, compatibility launches, comparisons, and speculative references remain `weak` when Apple is only the platform, target, benchmark, or background context.
+- Added typed subject-and-action assertions for OS components, built-in apps, watch faces, Apple TV works, service entitlements, legal stages, personnel changes, product leaks, supplier actions, and first-party follow-ups so multilingual reports merge only on concrete event identity.
+- Improved event reconciliation by preventing same-publisher, shared-version, publication-date, episode-count, generic-verb, and body-background bridges from joining unrelated reports, while preserving source-specific `key_facts` as constrained structured evidence.
+- Improved final event boundaries for watchOS app changes and watch-face colors, separately named Apple TV productions, iPhone screen-protector leaks, product supply constraints, official content upgrades, and direct Apple platform or App Store actions.
+- Updated fallback policy guidance and expanded regression coverage from 999 to 1,019 tests; concurrent live validation preserved identical source counts and all 77 URLs without runtime regression, while clean-agent validation produced 29 one-to-one brief items with all 56 main-event URLs, no deferred URLs, and no merge warnings.
 
 ## What It Does
 
@@ -37,7 +37,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
 - `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
 - `scripts/apple_news_core/event_reconciler.py` preserves accepted seed clusters, applies explicit action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py`, `tests/test_20260805_event_reconciliation.py`, `tests/test_20260806_relevance_boundaries.py`, `tests/test_20260811_structured_reconciliation.py`, and `tests/test_20260812_assertion_reconciliation.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, supplier actions, content boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `tests/test_event_identity_architecture.py`, `tests/test_20260805_event_reconciliation.py`, `tests/test_20260806_relevance_boundaries.py`, `tests/test_20260811_structured_reconciliation.py`, `tests/test_20260812_assertion_reconciliation.py`, and `tests/test_20260813_primary_action_boundaries.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, supplier actions, content boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 

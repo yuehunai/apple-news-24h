@@ -171,7 +171,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("siri", ("siri",)),
     ("apple-store-app", ("apple store app", "apple store 应用", "apple store应用", "苹果商店应用")),
     ("app-store", ("app store", "appstore", "应用商店")),
-    ("apple-wallet", ("apple wallet", "苹果钱包", "数字车钥匙")),
+    ("apple-wallet", ("apple wallet", "苹果 wallet", "苹果钱包", "数字车钥匙")),
     ("apple-pay", ("apple pay", "苹果支付")),
     ("apple-card", ("apple card", "苹果卡")),
     ("xcode", ("xcode",)),
@@ -326,6 +326,8 @@ COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "trade in value",
             "trade in values",
             "以旧换新",
+            "换购",
+            "估价",
             "折抵价",
             "折抵价值",
             "折抵估值",
@@ -865,6 +867,12 @@ OS_COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("os-component:weather", ("apple weather", "weather app", "天气 app", "天气应用")),
     ("os-component:shortcuts", ("apple shortcuts", "shortcuts app", "快捷指令")),
     ("os-component:settings", ("settings app", "system settings", "设置 app", "系统设置")),
+    ("os-component:siri", ("siri app", "siri 应用", "siri app 应用")),
+    ("os-component:find-my", ("find my app", "find my 应用", "查找 app", "查找应用")),
+    (
+        "os-component:watch-face",
+        ("watch face", "watch faces", "表盘", "表面配色"),
+    ),
 )
 
 
@@ -1309,6 +1317,8 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
         "could",
         "debuts",
         "improves",
+        "hires",
+        "is",
         "launches",
         "plans",
         "product",
@@ -1316,8 +1326,10 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
         "raises",
         "releases",
         "reportedly",
+        "says",
         "seeds",
         "shares",
+        "skipping",
         "testing",
         "updates",
         "will",
@@ -1327,9 +1339,19 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
         r"(?:\s+(?!Apple\b)[A-Z][A-Za-z0-9+-]{2,30}){0,2})\b",
         scoped,
     ):
-        branded_noun = match.group(1)
-        if branded_noun.split()[0].lower() in apple_named_stopwords:
+        branded_parts = match.group(1).split()
+        stop_index = next(
+            (
+                index
+                for index, part in enumerate(branded_parts)
+                if part.lower() in apple_named_stopwords
+            ),
+            len(branded_parts),
+        )
+        branded_parts = branded_parts[:stop_index]
+        if not branded_parts:
             continue
+        branded_noun = " ".join(branded_parts)
         subject = _canonical_named_subject(f"Apple {branded_noun}")
         if subject:
             subjects.add(subject)
@@ -1890,7 +1912,7 @@ def _title_scope(title: str, lead: str) -> str:
         re.search(
             r"(?:better than|versus|\bvs\.?\b|rival(?:s|ing)?|compared (?:with|to)|beats?|"
             r"overtakes?|surpasses?|dethrones?|exceeds?|挑战|对标|媲美|优于|胜过|超越|超过|力压|"
-            r"接近|相当于|追平|向.{0,20}看齐|酷似|类似于)"
+            r"接近|相当于|追平|向.{0,20}看齐|酷似|类似(?:于)?)"
             r".{0,50}(?:apple|iphone|ipad|mac|airpods|苹果)",
             title_lower,
         )
@@ -1913,7 +1935,7 @@ def _title_scope(title: str, lead: str) -> str:
             r"app store\b|苹果).{2,80}\b(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)|"
             r"updat(?:es|ed|ing)|adds?|added|brings?|brought|tests?|tested|testing|"
             r"being tested|available|arrives?|coming|rolls? out)\b.{0,60}\b(?:on|for|to)\s+(?:select\s+)?"
-            r"(?:iphone|ipad|mac|apple watch|ios|ipados|macos|watchos|tvos|visionos)(?:\s+users?)?\b",
+            r"(?:iphone|ipad|mac|apple watch|apple devices?|apple platforms?|ios|ipados|macos|watchos|tvos|visionos)(?:\s+users?)?\b",
             title_lower,
         )
         or re.search(
@@ -2020,6 +2042,27 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    framed_third_party_action = bool(
+        re.search(
+            r"^(?:apple|苹果).{0,48}[：:]\s*"
+            r"(?!apple\b|苹果|iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
+            r"tvos\b|visionos\b|airpods\b|icloud\b|safari\b|siri\b|carplay\b|xcode\b|app store\b)"
+            r"[a-z0-9][a-z0-9.+-]*(?:\s+[a-z0-9][a-z0-9.+-]*){0,4}.{0,36}"
+            r"(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)|updat(?:es|ed|ing)|"
+            r"发布|推出|更新|上线|上架)",
+            title_lower,
+        )
+    )
+    speculative_comparison = bool(
+        re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b|苹果).{2,110}"
+            r"\b(?:hints?|suggests?|signals?|shows?)\b.{0,36}"
+            r"(?:what\s+)?apple(?:'s)?\b|"
+            r"^(?!苹果|iphone|ipad|mac|airpods).{2,90}(?:暗示|预示|折射|可见)"
+            r".{0,30}(?:苹果|iphone|ipad|mac|airpods)",
+            title_lower,
+        )
+    )
     if direct_target or direct_relationship:
         return "apple-direct"
     contextual_non_apple_action = bool(
@@ -2046,6 +2089,13 @@ def _title_scope(title: str, lead: str) -> str:
             r"(?:ios|ipados|macos|watchos|tvos|visionos|iphone|ipad|mac|苹果平台|苹果应用商店)",
             title_lower,
         )
+        or re.search(
+            r"^(?!苹果|iphone|ipad|ios|ipados|mac(?:book|os)?|watchos|tvos|visionos|airpods)"
+            r".{2,90}(?:发布|推出|上市|更新|新增|上线|上架).{0,70}"
+            r"(?:支持(?:为)?|兼容|适配).{0,24}(?:苹果|iphone|ipad|mac|airpods|苹果平台)",
+            title_lower,
+        )
+        or framed_third_party_action
     )
     if contextual_non_apple_action:
         return "third-party-context"
@@ -2061,6 +2111,7 @@ def _title_scope(title: str, lead: str) -> str:
         or subject_first_comparison
         or subject_first_apple_followup
         or subject_first_apple_response
+        or speculative_comparison
     ):
         return "third-party-context"
     if apple_in_title:
@@ -2220,6 +2271,16 @@ def build_event_identity(
         title_components.add("component-cost-analysis")
     title_components |= _extract_patterns(title_lower, OS_COMPONENT_PATTERNS)
     components = set(title_components)
+    if content_form != "roundup" and title_products & {
+        "ios",
+        "ipados",
+        "macos",
+        "watchos",
+        "tvos",
+        "visionos",
+        "apple-watch",
+    }:
+        components |= _extract_patterns(lead_lower[:620], OS_COMPONENT_PATTERNS)
     if "apple-tv" in products:
         lifecycle_patterns = (
             (

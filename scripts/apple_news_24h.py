@@ -19780,6 +19780,8 @@ def is_title_led_apple_product_supply_constraint_story(title: str, text: str) ->
             "apple online store",
             "apple's website",
             "apple website",
+            "shipping estimates at apple",
+            "delivery estimates at apple",
             "retail inventory",
             "shipping estimate",
             "delivery estimate",
@@ -20822,6 +20824,33 @@ def is_broad_multi_vendor_market_report(text: str, title: str = "") -> bool:
         return False
     if score_terms(lower, ["shipment", "shipments", "market share", "market", "omdia", "counterpoint", "出货", "份额", "市场"]) <= 0:
         return False
+    if (
+        title_lower
+        and score_terms(title_lower, ["apple", "iphone", "ipad", "mac", "macbook", "apple watch", "苹果"]) <= 0
+        and score_terms(
+            title_lower,
+            [
+                "smartphone market",
+                "smartphone sales",
+                "phone market",
+                "phone sales",
+                "shipments",
+                "market share",
+                "counterpoint",
+                "omdia",
+                "idc",
+                "canalys",
+                "智能手机市场",
+                "智能手机销量",
+                "手机市场",
+                "手机销量",
+                "出货量",
+                "市场份额",
+            ],
+        )
+        > 0
+    ):
+        return True
     title_competitor_count = sum(
         1
         for term in [
@@ -21070,6 +21099,15 @@ def is_multi_vendor_market_report_with_material_apple_metrics(text: str, title: 
             sentence,
         ):
             continue
+        apple_match = re.search(apple_pattern, sentence)
+        if apple_match:
+            aggregate_scope = sentence[apple_match.start() :]
+            if re.search(
+                rf"^{apple_pattern}\s*(?:、|,|，|\band\b).{{1,100}}"
+                r"(?:combined|collectively|合计|总(?:销量|出货|份额|营收))",
+                aggregate_scope,
+            ):
+                continue
         if re.search(
             rf"{apple_pattern}[^。.!?，,；;\n]{{0,100}}\d+(?:\.\d+)?\s*(?:%|万|million|billion)",
             sentence,
@@ -25334,6 +25372,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     lower = text.lower()
     title_lower = title.lower()
     semantic_identity = title_led_identity(title, summary)
+    if is_apple_tv_purchase_4k_upgrade_story(text):
+        return "service_content"
     if first_party_document_lifecycle_key(title, text, semantic_identity):
         return "os_app"
     if is_apple_operated_activity_challenge_story(title, text):
@@ -26633,6 +26673,78 @@ def classify_relevance_tier(
         "market-ranking",
     }:
         return "weak", "analysis or opinion without a new standalone Apple action"
+    # Resolve who owns the headline action before product, version, price, or
+    # hardware heuristics can promote the article. Apple platform mentions in
+    # a compatibility, comparison, or recipient role are not first-party
+    # actions. Preserve only direct interoperability, Apple-data integration,
+    # App Store enforcement, and concrete Apple-platform security exceptions.
+    if semantic_identity.scope == "third-party-context":
+        if is_title_primary_apple_legal_proceeding_story(title, text):
+            return "strong", "Apple-specific lawsuit or legal proceeding"
+        if (
+            is_official_apple_accessories_page_update_story(title, text)
+            or is_official_apple_accessory_market_story(text)
+        ):
+            return "strong", "Apple first-party shopping surface or official accessory availability change"
+        if is_apple_tv_purchase_4k_upgrade_story(text):
+            return "strong", "Apple TV app purchased-content upgrade or entitlement event"
+        direct_apple_price_response = (
+            score_terms(
+                lower,
+                [
+                    "apple's response",
+                    "apple said",
+                    "apple says",
+                    "苹果回应",
+                    "苹果表示",
+                    "苹果称",
+                ],
+            )
+            > 0
+            and is_price_response_or_rationale_fact(text)
+            and (
+                score_terms(
+                    lower,
+                    [
+                        "price increase",
+                        "price hike",
+                        "上调价格",
+                        "提高价格",
+                        "涨价",
+                        "调价",
+                    ],
+                )
+                > 0
+                or re.search(
+                    r"\b(?:rais(?:e|es|ed|ing)|increas(?:e|es|ed|ing)|hik(?:e|es|ed|ing))\b"
+                    r".{0,36}\bprices?\b|(?:上调|提高|增加).{0,24}(?:售价|价格)",
+                    lower,
+                )
+                is not None
+            )
+        )
+        if direct_apple_price_response:
+            return "strong", "attributed Apple product-price response and component-cost rationale"
+        if is_title_led_apple_component_procurement_story(title, text):
+            return "strong", "direct Apple component procurement for a named product constraint"
+        if is_title_led_named_apple_product_supplier_action_story(title, text):
+            return "strong", "named supplier qualification or component-supply action for an Apple product"
+        if is_apple_owned_brand_engineering_strategy_story(title, text):
+            return "strong", "Apple-owned hardware brand engineering or product-strategy report"
+        if is_apple_wallet_car_key_partner_support_story(title, text):
+            return "ecosystem", "Apple Wallet car key partner support or code-reference event"
+        if is_third_party_platform_update_improving_apple_device_interop(title, text):
+            return "ecosystem", "third-party platform update with a concrete Apple-device interoperability improvement"
+        if is_direct_third_party_apple_data_integration_story(title, text):
+            return "ecosystem", "third-party rollout with direct first-party Apple data integration"
+        if is_app_store_delisting_or_restoration_story(title, text):
+            return "strong", "direct App Store delisting, restoration, or enforcement action"
+        if (
+            is_direct_apple_security_bulletin_research_story(title, text)
+            or is_direct_apple_platform_security_impact_story(title, text)
+        ):
+            return "strong", "concrete Apple platform vulnerability, patch, or credited security research"
+        return "weak", "third-party app, product, or non-Apple action using Apple as platform, compatibility, comparison, or speculative context"
     if first_party_document_lifecycle_key(title, text, semantic_identity):
         return "strong", "first-party Apple document lifecycle update"
     if is_apple_operated_activity_challenge_story(title, text):
@@ -26924,6 +27036,11 @@ def classify_relevance_tier(
         return "strong", "material Apple stock or market-value move tied to company actions"
     if is_reader_purchase_intent_poll_without_new_apple_action(title, lead_scope):
         return "weak", "publisher reader poll without a new standalone Apple action"
+    if (
+        is_broad_multi_vendor_market_report(text, title)
+        and not is_multi_vendor_market_report_with_material_apple_metrics(text, title)
+    ):
+        return "weak", "broad multi-vendor market report without Apple-specific shipment or share detail"
     if is_apple_specific_market_share_report_story(
         text, title
     ) or is_multi_vendor_market_report_with_material_apple_metrics(text, title):
@@ -28444,7 +28561,11 @@ def refresh_event_metadata(event: Event) -> None:
         event.relevance_reason = "named supplier qualification or component-supply action for an Apple product"
         event.category = "hardware_products"
         return
-    if title_identities and all(identity.scope == "third-party-context" for identity in title_identities):
+    if (
+        title_identities
+        and all(identity.scope == "third-party-context" for identity in title_identities)
+        and all(article.relevance_tier != "strong" for article in event.articles)
+    ):
         explicit_interop = any(
             is_third_party_platform_update_improving_apple_device_interop(
                 article.title,
@@ -30539,11 +30660,19 @@ def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
         | CROSS_PRODUCT_IDENTITY_FACETS
     )
     title_regions = extract_regions(article.title)
+    structured_evidence = " ".join(
+        clean_sentence(value)
+        for value in article.key_facts[:4]
+        if clean_sentence(value)
+    )[:1600]
     return build_reconciliation_profile(
         title=article.title,
         lead=" ".join(
             part
-            for part in (article.summary, article_source_primary_fact(article))
+            for part in (
+                article.summary,
+                article_source_primary_fact(article),
+            )
             if part
         ),
         identity=identity,
@@ -30582,6 +30711,7 @@ def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
             )
         ),
         event_kind=article.event_kind,
+        evidence=structured_evidence,
     )
 
 
@@ -30603,6 +30733,22 @@ def reconcile_article_relevance(
             profile.promotion_reason
             or "title-led direct Apple action confirmed by structured identity"
         )
+        return True
+    if (
+        article.relevance_tier == "weak"
+        and not profile.hard_boundary
+        and any(
+            key.startswith(
+                (
+                    "structured-assertion:app-store:",
+                    "structured-assertion:iphone-camera:reference-image-",
+                )
+            )
+            for key in profile.event_keys
+        )
+    ):
+        article.relevance_tier = "strong"
+        article.relevance_reason = "structured first-party Apple action confirmed by article evidence"
         return True
     if not profile.defer_reason or article.relevance_tier in {"weak", "ecosystem"}:
         return changed
@@ -32275,6 +32421,17 @@ def build_event_summary(articles: list[Article]) -> tuple[str, str, list[str]]:
         key=lambda item: (SOURCE_PRIORITY.get(item.source, 99), item.published_utc),
     )[0]
     title = clean_sentence(representative.title)
+    direct_supply_fact = article_source_primary_fact(representative)
+    if (
+        representative.relevance_tier == "strong"
+        and re.search(r"\bwhere\s+to\s+buy\b|\bshopping\s+guide\b|购买(?:渠道|指南)", title, re.I)
+        and is_title_led_apple_product_supply_constraint_story(
+            representative.title,
+            " ".join([representative.summary, *representative.key_facts[:5]]),
+        )
+        and direct_supply_fact
+    ):
+        title = direct_supply_fact
     details: list[str] = []
     seen: set[str] = set()
     for article in sorted(
