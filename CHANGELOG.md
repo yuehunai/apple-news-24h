@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.55.0 - 2026-08-15
+
+- Added authoritative title-and-lead event identities for content form, action ownership, first-party model development, leadership transitions, commercial launches, withdrawals, and catalog expansions so direct Apple actions remain strong across languages.
+- Improved reconciliation with source-independent Apple action keys, allowing sparse multilingual reports about the same concrete action to merge while preventing roundups, body background, and generic Apple or product terms from bridging unrelated events.
+- Improved relevance and classification boundaries so consumer-behavior research, comparisons, third-party platform stories, and editorial recaps remain `weak`, while measured Apple market results and named first-party hardware refreshes retain the correct event kind and category.
+- Simplified the main crawler by removing obsolete helpers, repeated classifier branches, and 27 unreachable duplicate `detect_event_kind()` conditions, leaving structured identity modules as the authoritative decision layer instead of stacking legacy fallbacks.
+- Updated fallback policy guidance and expanded regression coverage from 1,019 to 1,037 tests; concurrent live validation preserved all 49 source URLs and event boundaries without relative runtime regression, while clean-agent validation retained every main-event URL with no deferred URLs or merge warnings.
+
 ## 1.54.0 - 2026-08-13
 
 - Added action-owner-first relevance decisions so third-party apps, products, compatibility launches, comparisons, and speculative references remain `weak` when Apple is only the platform, target, benchmark, or background context.

@@ -42,6 +42,7 @@ from apple_news_core.event_identity import (  # noqa: E402
     DIRECT_IDENTITY_FACETS,
     build_event_identity,
     high_confidence_direct_apple_action,
+    is_authoritative_first_party_action,
     is_direct_first_party_feature_change,
     is_non_apple_comparison_title,
     is_non_apple_title_context,
@@ -2567,6 +2568,52 @@ def is_direct_third_party_apple_data_integration_story(title: str, text: str) ->
         ],
     ) <= 0:
         return False
+    routine_home_accessory = bool(
+        score_terms(lead, ["homekit"]) > 0
+        and score_terms(
+            title_lower,
+            [
+                "bulb",
+                "camera",
+                "doorbell",
+                "lamp",
+                "light",
+                "lock",
+                "outlet",
+                "sensor",
+                "switch",
+                "thermostat",
+                "筒灯",
+                "射灯",
+                "灯",
+                "门铃",
+                "门锁",
+                "摄像头",
+                "传感器",
+                "开关",
+                "插座",
+                "温控器",
+            ],
+        )
+        > 0
+        and score_terms(
+            lead,
+            [
+                "apple changes",
+                "apple expands",
+                "apple announced",
+                "homekit update",
+                "homekit upgrade",
+                "苹果宣布",
+                "苹果扩展",
+                "homekit 更新",
+                "homekit 升级",
+            ],
+        )
+        <= 0
+    )
+    if routine_home_accessory:
+        return False
     return not bool(
         re.match(r"^(?:why|opinion|commentary|analysis)\b|^(?:为何|为什么|评论|观点|分析)[：:]?", title_lower)
         or re.search(r"\b(?:could|may|might) be (?:a )?(?:privacy|security) risk\b", title_lower)
@@ -2575,6 +2622,81 @@ def is_direct_third_party_apple_data_integration_story(title: str, text: str) ->
             title_lower,
         )
     )
+
+
+def is_routine_third_party_apple_compatibility_product_story(
+    title: str,
+    text: str,
+) -> bool:
+    """Identify a vendor product launch where Apple is only a compatibility target."""
+    title_lower = title.lower()
+    lead = title_and_lead_scope(title, text, limit=1000).lower()
+    if score_terms(
+        lead,
+        [
+            "homekit",
+            "works with apple home",
+            "compatible with apple home",
+            "made for iphone",
+            "支持苹果 home",
+            "接入苹果 homekit",
+            "兼容苹果 homekit",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(
+        title_lower,
+        [
+            "bulb",
+            "camera",
+            "doorbell",
+            "lamp",
+            "light",
+            "lock",
+            "outlet",
+            "sensor",
+            "switch",
+            "thermostat",
+            "筒灯",
+            "射灯",
+            "灯",
+            "门铃",
+            "门锁",
+            "摄像头",
+            "传感器",
+            "开关",
+            "插座",
+            "温控器",
+        ],
+    ) <= 0:
+        return False
+    if score_terms(
+        lead,
+        [
+            "apple changes",
+            "apple expands",
+            "apple announced",
+            "homekit update",
+            "homekit upgrade",
+            "苹果宣布",
+            "苹果扩展",
+            "homekit 更新",
+            "homekit 升级",
+        ],
+    ) > 0:
+        return False
+    return score_terms(
+        title_lower,
+        [
+            "launches",
+            "released",
+            "available",
+            "发售",
+            "发布",
+            "开售",
+            "上市",
+        ],
+    ) > 0
 
 
 def is_official_apple_accessories_page_update_story(title: str, text: str) -> bool:
@@ -4169,10 +4291,6 @@ def same_legacy_macos_pair_update_event(article: Article, event: Event) -> bool:
         if article_versions and existing_versions and not (article_versions & existing_versions):
             return False
     return True
-
-
-def os_release_title_specific_facets(article: Article) -> set[str]:
-    return os_release_title_specific_facets_from_title(article.title)
 
 
 def os_release_title_specific_facets_from_title(title: str) -> set[str]:
@@ -6865,6 +6983,54 @@ def is_rumor_feature_recap_without_new_reporting(title: str, text: str) -> bool:
     return recap_evidence > 0
 
 
+def is_editorial_multi_generation_roadmap_recap(title: str, text: str) -> bool:
+    """Detect rhetorical roadmap recaps spanning product generations without a new report."""
+    title_lower = clean_sentence(title).lower()
+    generations = {
+        match.group(1)
+        for match in re.finditer(
+            r"\biphone\s*(\d{1,2})(?=$|[^a-z0-9])",
+            title_lower,
+        )
+    }
+    implied_leading_generation = re.match(
+        r"^\s*(\d{2})\s*(?:还没|尚未|仍未|未).{0,12}(?:发布|上市|亮相)",
+        title_lower,
+    )
+    if implied_leading_generation:
+        generations.add(implied_leading_generation.group(1))
+    if len(generations) < 2:
+        return False
+    editorial_framing = bool(
+        re.search(
+            r"\b(?:already know|know already|everything (?:we|you) know|no secrets?|"
+            r"before .{0,24}(?:launch|release))\b|"
+            r"(?:提前知道|都知道|已经知道|全知道|一切已知|还没.{0,16}就|尚未.{0,16}就|无秘密|没有秘密)",
+            title_lower,
+        )
+    )
+    if not editorial_framing:
+        return False
+    lead = title_and_lead_scope(title, text, limit=900).lower()
+    current_report = score_terms(
+        lead,
+        [
+            "new report",
+            "reported today",
+            "according to bloomberg",
+            "according to analyst",
+            "research note",
+            "supply-chain report",
+            "最新报道",
+            "今日报告",
+            "分析师称",
+            "研报称",
+            "供应链报告",
+        ],
+    ) > 0
+    return not current_report
+
+
 def is_unsourced_multi_product_outlook_without_new_reporting(title: str, text: str) -> bool:
     """Detect publisher-built Apple product calendars that only aggregate prior rumors."""
     title_lower = title.lower()
@@ -9315,10 +9481,6 @@ def is_source_daily_brief_candidate(candidate: Candidate, source: Source | None 
     return False
 
 
-def is_ithome_daily_brief_candidate(candidate: Candidate, source: Source | None = None) -> bool:
-    return is_source_daily_brief_candidate(candidate, source)
-
-
 GENERIC_LINK_TITLES = {
     "1 comment",
     "comments",
@@ -9690,11 +9852,6 @@ def is_relevant_candidate(
     if exclude_score > 0 and strong_score <= 0:
         return False
     return True
-
-
-def source_default_tz(sources_by_name: dict[str, Source], source_name: str) -> str:
-    source = sources_by_name.get(source_name)
-    return source.default_tz if source else "UTC"
 
 
 def tz_from_token(token: str | None, default_tz_name: str) -> Any:
@@ -11352,7 +11509,7 @@ def multi_product_hardware_roadmap_variants(
     title_subjects = multi_product_hardware_subjects(title)
     explicit_multi_product = bool(
         re.search(
-            r"\b(?:two|three|four|five|six|several|multiple|\d+)\b"
+            r"\b(?:two|three|four|five|six|several|multiple|(?!(?:19|20)\d{2}\b)\d{1,2})\b"
             r".{0,45}\b(?:new\s+)?(?:apple\s+)?(?:hardware\s+)?products?\b|"
             r"(?:多达|至少|共计|共有|将有)?\s*(?:两|三|四|五|六|\d+)\s*款"
             r".{0,28}(?:苹果)?(?:新品|产品|设备)",
@@ -14146,6 +14303,115 @@ def is_apple_hardware_product_launch_story(text: str, title: str = "") -> bool:
     ) > 0:
         return False
     return True
+
+
+def is_title_led_first_party_hardware_refresh_story(title: str, text: str) -> bool:
+    """Recognize a named Apple hardware launch without borrowing body context."""
+    identity = title_led_identity(title, text)
+    hardware_products = {
+        "airpods",
+        "apple-watch",
+        "beats",
+        "homepod",
+        "ipad",
+        "ipad-air",
+        "ipad-base",
+        "ipad-mini",
+        "ipad-pro",
+        "iphone",
+        "mac",
+        "mac-mini",
+        "mac-pro",
+        "mac-studio",
+        "macbook",
+        "vision-pro",
+    }
+    software_products = {
+        "ios",
+        "ipados",
+        "macos",
+        "watchos",
+        "tvos",
+        "visionos",
+    }
+    if (
+        identity.content_form != "news"
+        or identity.scope != "apple-direct"
+        or not (identity.title_products & hardware_products)
+        or identity.title_products & software_products
+    ):
+        return False
+    title_lower = title.lower()
+    launch_or_refresh = score_terms(
+        title_lower,
+        [
+            "launch",
+            "launches",
+            "launching",
+            "to launch",
+            "coming this fall",
+            "coming later this year",
+            "debut",
+            "arrive",
+            "unveil",
+            "new model",
+            "next-generation",
+            "second-generation",
+            "refresh",
+            "redesign",
+            "推出",
+            "发布",
+            "登场",
+            "亮相",
+            "换代",
+            "新款",
+            "第二代",
+            "秋季亮相",
+            "今秋亮相",
+        ],
+    ) > 0
+    if not launch_or_refresh:
+        return False
+    scoped_text = title_and_lead_scope(title, text, limit=800).lower()
+    return score_terms(
+        scoped_text,
+        [
+            "design",
+            "redesign",
+            "camera",
+            "display",
+            "screen",
+            "panel",
+            "chip",
+            "processor",
+            "modem",
+            "sensor",
+            "battery",
+            "memory",
+            "ram",
+            "storage",
+            "speaker",
+            "microphone",
+            "uwb",
+            "connectivity",
+            "外观",
+            "设计",
+            "摄像头",
+            "相机",
+            "屏幕",
+            "面板",
+            "芯片",
+            "处理器",
+            "调制解调器",
+            "传感器",
+            "电池",
+            "内存",
+            "存储",
+            "扬声器",
+            "麦克风",
+            "连接",
+        ],
+    ) > 0
 
 
 def is_direct_apple_hardware_roadmap_story(text: str, title: str = "") -> bool:
@@ -17250,12 +17516,20 @@ def is_direct_apple_executive_strategy_statement_story(title: str, text: str) ->
     executive_terms = [
         "incoming apple ceo",
         "apple ceo",
+        "apple services chief",
+        "apple tv chief",
+        "apple tv senior vice president",
+        "eddy cue",
         "john ternus",
         "ternus",
         "tim cook",
         "候任 ceo",
         "苹果 ceo",
         "苹果首席执行官",
+        "苹果服务主管",
+        "苹果电视主管",
+        "埃迪·库伊",
+        "埃迪 库伊",
         "特努斯",
         "库克",
     ]
@@ -17276,9 +17550,17 @@ def is_direct_apple_executive_strategy_statement_story(title: str, text: str) ->
             "plans to build on",
             "keep building",
             "will continue",
+            "hints at",
+            "strongly suggests",
+            "interested in more",
+            "there will be",
+            "hope so",
             "表示",
             "称",
             "承诺",
+            "暗示",
+            "希望",
+            "有兴趣",
             "将继续",
             "继续推动",
             "继续发展",
@@ -19906,10 +20188,6 @@ def is_apple_chip_process_roadmap_story(text: str) -> bool:
     ) > 0
 
 
-def price_subtopic_facets(facets: set[str]) -> set[str]:
-    return facets & APPLE_PRICE_SUBTOPIC_FACETS
-
-
 def price_detail_facets(facets: set[str]) -> set[str]:
     return facets & APPLE_PRICE_DETAIL_FACETS
 
@@ -20956,21 +21234,63 @@ def is_apple_specific_market_share_report_story(text: str, title: str = "") -> b
         headline_scope,
         [
             "market share",
+            "market",
             "smartphone market",
             "pc market",
+            "pc市场",
+            "orders",
+            "order share",
+            "counterpoint",
+            "canalys",
+            "idc",
+            "omdia",
+            "shipments",
+            "shipment",
+            "sales share",
+            "revenue share",
+            "unit sales",
+            "quarter",
+            "市场份额",
+            "市场",
+            "份额",
+            "订单",
+            "采购份额",
+            "智能手机市场",
+            "个人电脑市场",
+            "出货",
+            "销量占比",
+            "营收份额",
+            "季度",
+            "排名",
+        ],
+    ) > 0
+    if not market_report_signal:
+        return False
+    if product_forecast_signal and score_terms(
+        headline_scope,
+        [
+            "market share",
+            "market",
+            "smartphone market",
+            "pc market",
+            "pc市场",
+            "orders",
+            "order share",
             "counterpoint",
             "canalys",
             "idc",
             "omdia",
             "quarter",
             "市场份额",
+            "市场",
+            "份额",
+            "订单",
+            "采购份额",
             "智能手机市场",
             "个人电脑市场",
             "季度",
-            "排名",
         ],
-    ) > 0
-    if product_forecast_signal and not market_report_signal:
+    ) <= 0:
         return False
     if score_terms(
         scope,
@@ -23416,8 +23736,6 @@ def _topic_facets_from_text(text: str) -> set[str]:
         facets.add("apple-watch-redesign")
     if is_apple_watch_band_sensor_story(lower):
         facets.add("apple-watch-band-sensor-rumor")
-    if is_apple_watch_band_sensor_story(lower):
-        facets.add("apple-watch-band-sensor-rumor")
     if is_official_apple_refurbished_product_story(lower):
         facets.add(official_apple_refurbished_product_facet(lower))
     if is_apple_music_top_artists_chart_story(lower):
@@ -25440,6 +25758,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if is_direct_apple_product_adoption_story(title, text):
         return "hardware_market"
+    if is_title_led_first_party_hardware_refresh_story(title, text):
+        return "hardware_market"
     if (
         semantic_identity.scope == "apple-direct"
         and "shazam" in semantic_identity.title_products
@@ -25746,11 +26066,7 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if is_direct_apple_first_party_developer_guidance_story(title, text):
         return "developer_program"
-    if is_title_led_direct_apple_hardware_roadmap_story(title, text):
-        return "hardware_market"
     if is_apple_cross_device_pairing_api_story(title, text):
-        return "ecosystem_interop"
-    if is_direct_third_party_apple_data_integration_story(title, text):
         return "ecosystem_interop"
     if is_material_apple_stock_move_story(title, text):
         return "hardware_market"
@@ -25831,30 +26147,16 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "service_content"
     if is_apple_tv_hardware_story(title):
         return "hardware_market"
-    if is_apple_on_device_ai_model_compression_story(text):
-        return "os_app"
-    if is_third_party_ai_model_release_for_apple_device_without_apple_action(title, text):
-        return "third_party_ecosystem"
-    if is_india_tariff_iphone_manufacturing_story(text):
-        return "hardware_market"
-    if is_russia_fas_app_preinstall_regulation_story(text):
-        return "regional_regulation"
     if is_apple_memory_supplier_sourcing_story(text):
         return "hardware_market"
     if is_non_apple_component_market_background_story(title, text):
         return "third_party_ecosystem"
     if is_apple_broadcom_chip_supply_deal_story(text, title):
         return "hardware_market"
-    if is_apple_specific_market_share_report_story(text, title):
-        return "hardware_market"
     if is_broad_multi_vendor_market_report(text, title):
         return "third_party_ecosystem"
-    if is_title_primary_apple_legal_proceeding_story(title, text):
-        return "legal_antitrust"
     if is_apple_executive_government_meeting_story(title, text):
         return "company_org"
-    if is_direct_apple_regional_platform_regulation_story(title, text):
-        return "regional_regulation"
     if is_direct_apple_airpods_firmware_story(title, text):
         return "os_app"
     if is_siri_ai_third_party_app_data_access_feature(title, text):
@@ -25907,8 +26209,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if is_apple_os_feature_or_summary_story(text) and is_title_primary_software_system_story(title, text):
         return "os_app"
-    if is_competitor_launch_against_apple_story(title, text):
-        return "third_party_ecosystem"
     if is_siri_ai_eu_dma_regulatory_meeting_story(text):
         return "regional_regulation"
     if is_epic_app_store_appeal_story(text):
@@ -25930,8 +26230,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "ecosystem_interop"
     if is_apple_online_store_status_story(title, text):
         return "retail_store"
-    if is_official_apple_refurbished_product_story(text):
-        return "retail_store"
     if is_apple_pay_rewards_story(text):
         return "wallet_feature"
     if is_apple_tv_hardware_story(text):
@@ -25939,8 +26237,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if score_terms(lower, ["apple arcade", "苹果 arcade"]) > 0:
         return "service_content"
     if is_apple_tv_awards_nominations_story(text):
-        return "service_content"
-    if is_apple_tv_purchase_4k_upgrade_story(text):
         return "service_content"
     if (
         is_apple_tv_mlb_schedule_story(text)
@@ -25950,13 +26246,9 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "service_content"
     if is_uk_cma_app_store_payment_nfc_story(text):
         return "regional_regulation"
-    if is_airdrop_vulnerability_story(text):
-        return "security_privacy"
     if is_apple_creator_studio_story(text):
         return "os_app"
     if is_iwork_apps_update_story(text):
-        return "os_app"
-    if is_apple_on_device_ai_model_compression_story(text):
         return "os_app"
     if is_brazil_app_store_policy_story(text):
         return "app_store_trust"
@@ -25982,8 +26274,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "third_party_ecosystem"
     if is_apple_product_price_increase_story(text, title):
         return "hardware_market"
-    if is_apple_product_data_leak_story(text, title) and not is_apple_support_security_guidance_story(title, text):
-        return "hardware_market"
     if is_apple_company_org_change_story(text):
         return "company_org"
     if is_apple_executive_company_story(text):
@@ -26000,10 +26290,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "third_party_ecosystem"
     if is_multi_vendor_chip_or_phone_roadmap_background_story(title, text):
         return "third_party_ecosystem"
-    if is_competitor_display_panel_story_using_apple_as_background(title, text):
-        return "third_party_ecosystem"
-    if is_apple_product_price_increase_story(text, title):
-        return "hardware_market"
     if is_apple_product_data_leak_story(text, title):
         return "hardware_market"
     if os_release_facets_from_text(text):
@@ -26012,13 +26298,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "general_company"
     if is_direct_apple_hardware_roadmap_story(text, title):
         return "hardware_market"
-    if is_apple_os_feature_or_summary_story(text) and score_terms(lower, OS_SUMMARY_TERMS) > 0:
-        return "os_app"
-    if is_apple_wallet_feature_story(text) and score_terms(
-        title_lower,
-        ["apple wallet", "wallet", "digital id", "digital-id", "钱包", "数字身份证", "数字身份", "身份核验"],
-    ) > 0:
-        return "wallet_feature"
     if is_title_primary_software_system_story(title, text):
         return "os_app"
     if app_store_policy_score(lower) > 0:
@@ -26027,34 +26306,20 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "third_party_ecosystem"
     if is_third_party_platform_availability_candidate(text):
         return "third_party_ecosystem"
-    if is_apple_display_panel_supply_chain_story(text) or is_foldable_iphone_supply_chain_story(text):
-        return "hardware_market"
     if is_third_party_surveillance_context_story(text) or is_third_party_device_management_service_story(text):
         return "third_party_ecosystem"
     if is_routine_recap_comparison_or_buying_advice(title, text):
         return "general_company"
-    if is_apple_tv_hardware_story(text):
-        return "hardware_market"
     if is_apple_hardware_product_launch_story(text, title):
         return "hardware_market"
-    if is_apple_executive_company_story(text):
-        if score_terms(lower, ["services", "apple tv", "apple tv+", "apple music", "app store", "icloud", "streaming", "服务", "苹果电视", "苹果音乐"]) > 0:
-            return "service_content"
-        return "general_company"
     if is_apple_car_asset_story(text):
         return "hardware_market"
     if is_apple_strategic_transaction_story(text):
         return "general_company"
-    if is_messages_platform_candidate(text):
-        return "messages_platform"
-    if is_apple_os_feature_or_summary_story(text) and score_terms(lower, OS_SUMMARY_TERMS) > 0:
-        return "os_app"
     if is_apple_wallet_feature_story(text):
         return "wallet_feature"
     if is_apple_os_feature_or_summary_story(text):
         return "os_app"
-    if is_routine_third_party_apple_platform_story(text):
-        return "third_party_ecosystem"
     if is_third_party_accessory_platform_compatibility_story(title, text):
         return "third_party_ecosystem"
     if is_apple_developer_tool_story(text):
@@ -26063,8 +26328,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "hardware_market"
     if is_unreleased_beats_hardware_story(text):
         return "hardware_market"
-    if is_carplay_platform_feature_story(text):
-        return "os_app"
     if is_third_party_benchmark_comparison_story(text):
         return "third_party_ecosystem"
     if "visionos-m5-ai-features" in topic_facets_from_text(text):
@@ -26077,18 +26340,10 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "health_research"
     if is_apple_research_candidate(text):
         return "apple_research"
-    if is_messages_platform_candidate(text):
-        return "messages_platform"
     if is_service_content_story(text):
         return "service_content"
-    if app_store_policy_score(lower) > 0:
-        return "app_store_trust"
-    if is_third_party_platform_availability_candidate(text):
-        return "third_party_ecosystem"
     if is_third_party_xr_smart_glasses_context_story(text):
         return "third_party_ecosystem"
-    if "iphone-mirroring" in topic_facets_from_text(text):
-        return "os_app"
     if is_macos_terminal_paste_security_story(text):
         return "security_privacy"
     if is_third_party_security_software_promo_story(text):
@@ -26129,8 +26384,6 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
         return "security_privacy"
     if score_terms(lower, ["ad", "advertisement", "campaign", "commercial", "广告", "营销"]) > 0:
         return "marketing_ad"
-    if is_service_content_story(text):
-        return "service_content"
     if (
         score_terms(
             lower,
@@ -26658,14 +26911,25 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
-    if semantic_identity.content_form == "third_party_spotlight":
-        return "weak", "deal, buying advice, or third-party product spotlight without a new Apple action"
-    if (
-        semantic_identity.content_form == "deal"
-        and is_routine_retail_discount_story(title, text)
-    ):
-        return "weak", "routine third-party retail discount without a new Apple action"
-    if semantic_identity.content_form == "analysis" and not semantic_identity.title_actions & {
+    if is_routine_third_party_apple_compatibility_product_story(title, text):
+        return "weak", "routine third-party product compatibility without an Apple platform change"
+    title_lead_scope = f"{title} {lead_only[:360]}"
+    if is_official_apple_refurbished_product_story(title_lead_scope):
+        return "strong", "Apple official refurbished product availability or pricing change"
+    if is_official_apple_education_promotion_story(title, title_lead_scope):
+        return "strong", "live Apple education promotion with regional eligibility and benefits"
+    if is_concrete_apple_event_operations_story(title, text):
+        return "strong", "current reporting on concrete Apple event operations or presentation format"
+    editorial_form = semantic_identity.content_form
+    if editorial_form in {
+        "buying_advice",
+        "deal",
+        "podcast",
+        "third_party_spotlight",
+        "tutorial",
+    }:
+        return "weak", f"editorial {editorial_form.replace('_', ' ')} without a new Apple action"
+    if editorial_form == "analysis" and not semantic_identity.title_actions & {
         "legal",
         "regulation",
         "transaction",
@@ -26673,6 +26937,26 @@ def classify_relevance_tier(
         "market-ranking",
     }:
         return "weak", "analysis or opinion without a new standalone Apple action"
+    if (
+        editorial_form == "poll"
+        and not is_current_versioned_first_party_feature_story(title, text)
+        and not is_app_store_delisting_or_restoration_story(title, text)
+    ):
+        return "weak", "reader poll or purchase-choice prompt without a new Apple action"
+    if (
+        editorial_form == "roundup"
+        and not is_current_versioned_first_party_feature_story(title, text)
+        and not (
+            is_direct_first_party_feature_change(title, summary)
+            and semantic_identity.title_products
+            & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
+        )
+        and not is_direct_apple_os_component_change_story(title, text)
+        and not is_carplay_platform_feature_story(text)
+    ):
+        return "weak", "recap or roundup without a new standalone Apple action"
+    if is_editorial_multi_generation_roadmap_recap(title, text):
+        return "weak", "editorial multi-generation roadmap recap without a new standalone report"
     # Resolve who owns the headline action before product, version, price, or
     # hardware heuristics can promote the article. Apple platform mentions in
     # a compatibility, comparison, or recipient role are not first-party
@@ -26745,16 +27029,12 @@ def classify_relevance_tier(
         ):
             return "strong", "concrete Apple platform vulnerability, patch, or credited security research"
         return "weak", "third-party app, product, or non-Apple action using Apple as platform, compatibility, comparison, or speculative context"
+    if is_authoritative_first_party_action(semantic_identity):
+        return "strong", "title-led direct Apple action"
     if first_party_document_lifecycle_key(title, text, semantic_identity):
         return "strong", "first-party Apple document lifecycle update"
     if is_apple_operated_activity_challenge_story(title, text):
         return "strong", "Apple-operated fitness or activity challenge"
-    if (
-        semantic_identity.content_form == "poll"
-        and not is_current_versioned_first_party_feature_story(title, text)
-        and not is_app_store_delisting_or_restoration_story(title, text)
-    ):
-        return "weak", "reader poll or purchase-choice prompt without a new Apple action"
     if is_third_party_employer_asset_disposal_story(title, text):
         return "weak", "third-party employer asset disposal with Apple hardware used only as company equipment"
     if is_third_party_ai_model_release_for_apple_device_without_apple_action(title, text):
@@ -26792,8 +27072,6 @@ def classify_relevance_tier(
         return "strong", "measured applied research centered on a first-party Apple product"
     if is_apple_product_driven_market_forecast_story(title, text):
         return "strong", "measured market forecast explicitly driven by an Apple product"
-    if is_concrete_apple_event_operations_story(title, text):
-        return "strong", "current reporting on concrete Apple event operations or presentation format"
     if is_apple_hardware_leadership_personnel_story(title, text):
         return "strong", "Apple hardware leadership hiring or succession action"
     if is_icloud_post_employment_file_access_story(title, text):
@@ -26831,6 +27109,8 @@ def classify_relevance_tier(
         return "strong", "Apple-specific Russia app preinstall or antimonopoly regulation"
     if is_current_versioned_first_party_feature_story(title, text):
         return "strong", "current versioned Apple OS or first-party app feature change"
+    if is_direct_apple_executive_strategy_statement_story(title, text):
+        return "strong", "attributed Apple executive statement about a first-party business or service"
     if (
         is_apple_opinion_without_new_reporting(title, text)
         or is_apple_product_commentary_analysis_without_new_reporting(title, text)
@@ -26898,10 +27178,6 @@ def classify_relevance_tier(
         return "strong", "specific future Apple hardware model report"
     if is_direct_apple_leadership_strategy_story(title, text):
         return "strong", "attributed Apple executive strategy or leadership statement"
-    if is_official_apple_refurbished_product_story(text):
-        return "strong", "Apple official refurbished product availability or pricing change"
-    if is_official_apple_education_promotion_story(title, text):
-        return "strong", "live Apple education promotion with regional eligibility and benefits"
     if is_apple_supplier_commercial_outlook_story(title, text):
         return "strong", "Apple-specific supplier revenue or component-share outlook"
     if (
@@ -26914,24 +27190,12 @@ def classify_relevance_tier(
         and not is_apple_investment_stance_commentary_without_new_action(title, text)
     ):
         return "strong", "title-led Apple product or service price change"
-    if is_third_party_consumer_app_update_on_apple_platform(title, text):
-        return "weak", "third-party app update on an Apple platform without a direct Apple action"
     if is_third_party_app_vulnerability_without_apple_platform_flaw(title, text):
         return "weak", "third-party app vulnerability without an Apple platform flaw or patch"
     if is_how_to_guide_without_new_apple_action(title, text) or is_personal_usage_or_settings_guide_without_new_apple_action(
         title, text
     ):
         return "weak", "how-to, settings walkthrough, or consumer PSA without a new Apple action"
-    if semantic_identity.content_form in {"deal", "buying_advice", "third_party_spotlight"}:
-        return "weak", "deal, buying advice, or third-party product spotlight without a new Apple action"
-    if semantic_identity.content_form == "analysis" and not semantic_identity.title_actions & {
-        "legal",
-        "regulation",
-        "transaction",
-        "market-report",
-        "market-ranking",
-    }:
-        return "weak", "analysis or opinion without a new standalone Apple action"
     if is_existing_apple_feature_user_anecdote_without_new_action(title, text):
         return "weak", "personal anecdote about an existing Apple feature without a new Apple action"
     if is_single_user_apple_product_durability_anecdote_without_new_action(title, text):
@@ -26946,18 +27210,10 @@ def classify_relevance_tier(
         return "strong", "Apple-owned program, plan, or device-leasing action"
     if is_apple_operated_compatibility_list_update_story(title, text):
         return "strong", "Apple-operated compatibility or certification list update"
-    if is_title_led_direct_apple_hardware_roadmap_story(title, text):
-        return "strong", "title-led Apple hardware roadmap or product-development event"
     if is_third_party_accessory_platform_compatibility_story(title, text):
         return "weak", "third-party accessory story using an Apple product as the target platform"
     if is_current_attributed_single_subject_report(title, text):
         return "strong", "current attributed report with a concrete Apple product action"
-    if is_direct_apple_smart_glasses_roadmap_story(title, text):
-        return "strong", "Apple-led smart-glasses development or launch roadmap"
-    if is_rumor_feature_recap_without_new_reporting(title, text):
-        return "weak", "rumor feature roundup without new standalone reporting"
-    if semantic_identity.content_form in {"tutorial", "podcast"}:
-        return "weak", "tutorial or podcast without a new standalone Apple action"
     if is_direct_apple_regulatory_trade_action_story(title, text):
         return "strong", "government trade or regulatory action directly targeting Apple"
     if is_apple_display_supplier_price_negotiation_story(title, text):
@@ -26968,8 +27224,6 @@ def classify_relevance_tier(
         return "strong", "physical incident at an Apple facility"
     if is_direct_apple_platform_security_impact_story(title, text):
         return "strong", "concrete Apple platform vulnerability or exploit impact"
-    if is_direct_apple_first_party_program_story(title, summary):
-        return "strong", "Apple-owned program, plan, or device-leasing action"
     if is_direct_apple_product_patent_story(title, text):
         return "strong", "Apple product patent or hardware design disclosure"
     if is_official_apple_product_communication_story(title, summary):
@@ -26978,8 +27232,6 @@ def classify_relevance_tier(
         return "ecosystem", "third-party platform update with a concrete Apple-device interoperability improvement"
     if is_third_party_apple_data_privacy_commentary_story(title, text):
         return "weak", "privacy or risk commentary about an existing Apple data integration"
-    if is_direct_third_party_apple_data_integration_story(title, text):
-        return "ecosystem", "third-party rollout with direct first-party Apple data integration"
     if (
         is_non_apple_device_comparison_story(title, text)
         or is_non_apple_primary_subject_with_incidental_apple_context(title, text)
@@ -27041,9 +27293,7 @@ def classify_relevance_tier(
         and not is_multi_vendor_market_report_with_material_apple_metrics(text, title)
     ):
         return "weak", "broad multi-vendor market report without Apple-specific shipment or share detail"
-    if is_apple_specific_market_share_report_story(
-        text, title
-    ) or is_multi_vendor_market_report_with_material_apple_metrics(text, title):
+    if is_multi_vendor_market_report_with_material_apple_metrics(text, title):
         return "strong", "Apple-specific hardware shipment or market-share report"
     if is_legal_case_person_profile_without_new_action(title, lead_scope):
         return "weak", "person or career profile around an existing Apple case without a new legal action"
@@ -27087,34 +27337,6 @@ def classify_relevance_tier(
         return "weak", "Mac roadmap recap, commentary, or comparison without new standalone reporting"
     if direct_mac_roadmap:
         return "strong", "direct Apple Mac product roadmap event"
-    if is_rumor_feature_recap_without_new_reporting(title, text):
-        return "weak", "rumor feature roundup without new standalone reporting"
-    if semantic_identity.content_form in {"deal", "buying_advice", "third_party_spotlight"}:
-        return "weak", "deal, buying advice, or third-party app spotlight without a new Apple action"
-    if semantic_identity.content_form == "analysis" and not semantic_identity.title_actions & {
-        "legal",
-        "regulation",
-        "transaction",
-        "market-report",
-        "market-ranking",
-    }:
-        return "weak", "analysis without a new standalone Apple action"
-    if (
-        semantic_identity.content_form == "poll"
-        and not is_direct_first_party_feature_change(title, summary)
-        and not is_direct_apple_os_component_change_story(title, text)
-    ):
-        return "weak", "reader poll without a new standalone Apple action"
-    if (
-        semantic_identity.content_form == "roundup"
-        and not is_direct_first_party_feature_change(title, summary)
-        and not is_carplay_platform_feature_story(text)
-    ):
-        return "weak", "recap or roundup without a new standalone Apple action"
-    if is_third_party_consumer_app_update_on_apple_platform(title, text):
-        return "weak", "third-party app update on an Apple platform without a direct Apple action"
-    if is_third_party_accessory_platform_compatibility_story(title, text):
-        return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
     if is_apple_analyst_rating_target_story(title, text):
         return "strong", "Apple analyst rating or price-target action"
     if is_apple_investment_stance_commentary_without_new_action(title, text):
@@ -27123,16 +27345,10 @@ def classify_relevance_tier(
         return "weak", "speculative legal participation analysis without a new filing, ruling, or confirmed action"
     if is_direct_apple_regional_platform_regulation_story(title, text):
         return "strong", "Apple-specific regional platform regulation event"
-    if is_title_primary_apple_legal_proceeding_story(title, text):
-        return "strong", "Apple-specific lawsuit or legal proceeding"
     if is_apple_on_device_ai_model_compression_story(text):
         return "strong", "Apple evaluation of on-device AI model compression technology"
-    if is_third_party_ai_model_release_for_apple_device_without_apple_action(title, text):
-        return "weak", "third-party AI model release with Apple devices used only as compatibility context"
     if is_title_primary_apple_market_share_story(title, text):
         return "strong", "Apple-specific hardware shipment or market-share report"
-    if is_apple_wallet_car_key_partner_support_story(title, text):
-        return "strong", "Apple Wallet car key partner support or code-reference event"
     if high_confidence_direct_apple_action(semantic_identity):
         return "strong", "title-led direct Apple action"
     if is_routine_recap_comparison_or_buying_advice(title, text):
@@ -27141,14 +27357,6 @@ def classify_relevance_tier(
         return "strong", "Apple display-panel specification or hardware roadmap report"
     if is_non_apple_device_comparison_story(title, text):
         return "weak", "non-Apple device story using an Apple product mainly as comparison context"
-    if is_how_to_guide_without_new_apple_action(title, text):
-        return "weak", "how-to or troubleshooting guide without a new Apple action"
-    if is_apple_opinion_without_new_reporting(title, text) or is_apple_product_commentary_analysis_without_new_reporting(
-        title, text
-    ):
-        return "weak", "opinion or commentary without new Apple reporting"
-    if is_routine_recap_comparison_or_buying_advice(title, text):
-        return "weak", "third-party or routine recap, comparison, hands-on, or buying advice without a new Apple action"
     if is_apple_strategic_transaction_story(title):
         return "strong", "Apple strategic transaction or merger discussion"
     if (
@@ -27156,8 +27364,6 @@ def classify_relevance_tier(
         or is_third_party_app_platform_launch_story(title, text)
     ):
         return "weak", "third-party app or service Apple-platform launch without a direct Apple action"
-    if is_non_apple_primary_subject_with_incidental_apple_context(title, text):
-        return "weak", "non-Apple primary subject with Apple used only as incidental context"
     if is_non_apple_primary_legal_story_with_incidental_apple_context(
         title,
         summary,
@@ -27186,8 +27392,6 @@ def classify_relevance_tier(
         return "strong", "Apple first-party developer or platform design guidance"
     if is_apple_cross_device_pairing_api_story(title, text):
         return "strong", "Apple cross-device pairing API or interoperability action"
-    if is_material_apple_stock_move_story(title, text):
-        return "strong", "material Apple stock or market-value move tied to company actions"
     if is_os_beta_advice_or_feature_roundup_title(title):
         return "weak", "OS beta advice, impressions, or feature roundup without a new standalone action"
     if is_os_release_availability_title(title) and not is_non_actionable_recap_title(title) and (
@@ -27197,24 +27401,18 @@ def classify_relevance_tier(
         return "strong", "Apple OS release, beta, RC, or security update"
     if is_non_actionable_recap_title(title):
         return "weak", "routine recap without a new standalone Apple action"
-    if is_rumor_feature_recap_without_new_reporting(title, text):
-        return "weak", "rumor feature recap without new standalone reporting"
     if is_third_party_cross_platform_desktop_client_update(title, text):
         return "weak", "third-party cross-platform desktop client update without a direct Apple action"
     if is_ai_generated_apple_product_image_debunk_without_new_action(title, text):
         return "weak", "AI-generated Apple product image debunk without a new Apple action"
     if is_apple_chip_tariff_exemption_story(title, text):
         return "strong", "Apple chip-production commitment tied to a tariff exemption"
-    if is_apple_device_battery_regulation_story(text):
-        return "strong", "battery regulation directly affects an Apple hardware product"
     if (
         is_direct_apple_regulated_technology_access_story(title, text)
         and not is_apple_restricted_memory_supplier_approval_story(text)
         and not is_apple_memory_supplier_sourcing_story(text)
     ):
         return "strong", "government action directly changes Apple's access to regulated technology"
-    if is_direct_apple_platform_malware_report_story(title, text):
-        return "strong", "direct macOS malware or credential-theft report"
     if is_direct_messages_malicious_content_warning_story(title, text):
         return "strong", "Apple Messages malicious-content warning or detection change"
     if is_apple_vintage_hardware_auction_story(title, text):
@@ -27227,8 +27425,6 @@ def classify_relevance_tier(
         return "weak", "independent developer project with Apple platform experience used only as background"
     if is_direct_apple_os_component_change_story(title, text):
         return "strong", "direct Apple OS or built-in component change"
-    if is_apple_strategic_transaction_story(title):
-        return "strong", "Apple strategic transaction or merger discussion"
     direct_legal_scope = title_and_lead_scope(title, summary, limit=1400)
     if is_title_primary_apple_legal_proceeding_story(title, direct_legal_scope):
         return "strong", "Apple-specific lawsuit or legal proceeding"
@@ -27237,21 +27433,10 @@ def classify_relevance_tier(
         and not is_non_apple_component_market_background_story(title, text)
     ):
         return "strong", "Apple-specific hardware shipment or market-share report"
-    if (
-        is_third_party_app_or_service_status_story(title, text)
-        or is_third_party_app_platform_launch_story(title, text)
-    ):
-        return "weak", "third-party app or service Apple-platform launch without a direct Apple action"
     if is_carplay_platform_feature_story(text):
         return "strong", "Apple CarPlay platform feature change"
-    if is_how_to_guide_without_new_apple_action(title, text):
-        return "weak", "how-to or troubleshooting guide without a new Apple action"
     if is_service_content_story(title_and_lead_scope(title, summary, limit=1000)):
         return "strong", "Apple-specific service content event"
-    if is_broad_multi_vendor_market_report(text, title):
-        return "weak", "broad multi-vendor market report without Apple-specific shipment or share detail"
-    if is_routine_recap_comparison_or_buying_advice(title, text):
-        return "weak", "third-party or routine recap, comparison, hands-on, or buying advice without a new Apple action"
     if is_official_apple_product_campaign_story(title, text):
         return "strong", "official Apple product campaign or marketing action"
     if is_usage_podcast_or_third_party_project_without_new_apple_action(title, text):
@@ -27266,8 +27451,6 @@ def classify_relevance_tier(
         return "strong", "official Apple privacy campaign or advertising action"
     if is_apple_executive_event_attendance_story(title, text):
         return "strong", "Apple executive or leadership event attendance"
-    if is_apple_wallet_car_key_partner_support_story(title, text):
-        return "strong", "Apple Wallet car key partner support or code-reference event"
     if is_camera_airpods_code_clue_story(text):
         return "strong", "Apple camera-equipped AirPods code clue or product-development event"
     if is_camera_airpods_development_suspension_story(text):
@@ -27280,34 +27463,18 @@ def classify_relevance_tier(
         return "strong", "Apple iCloud service entitlement or subscription perk"
     if is_icloud_home_ai_camera_subscription_story(text):
         return "strong", "Apple Home app AI camera iCloud subscription requirement"
-    if is_apple_on_device_ai_model_compression_story(text):
-        return "strong", "Apple on-device AI model compression or larger local model event"
     if is_safari_mcp_server_story(text):
         return "strong", "Safari Technology Preview or Safari MCP developer tooling event"
     if is_hide_my_email_vulnerability_story(text):
         return "strong", "Apple Hide My Email privacy vulnerability"
     if is_airdrop_vulnerability_story(text):
         return "strong", "Apple AirDrop security vulnerability or ecosystem impact"
-    if is_russia_fas_app_preinstall_regulation_story(text):
-        return "strong", "Apple-specific Russia app preinstall or antimonopoly regulation"
-    if is_india_tariff_iphone_manufacturing_story(text):
-        return "strong", "India tariff exemption affecting Apple iPhone manufacturing"
     if is_direct_apple_supplier_cost_change_story(title, text):
         return "strong", "supplier price change directly affecting Apple product input costs"
-    if is_non_apple_component_market_background_story(title, text):
-        return "weak", "non-Apple component or industry price story using Apple mainly as background"
     if is_apple_broadcom_chip_supply_deal_story(text, title):
         return "strong", "Apple-specific Broadcom chip supply partnership event"
-    if is_apple_specific_market_share_report_story(text, title):
-        return "strong", "Apple-specific hardware shipment or market-share report"
-    if is_broad_multi_vendor_market_report(text, title):
-        return "weak", "broad multi-vendor market report without Apple-specific shipment or share detail"
-    if is_title_primary_apple_legal_proceeding_story(title, text):
-        return "strong", "Apple-specific lawsuit or legal proceeding"
     if is_apple_executive_government_meeting_story(title, text):
         return "strong", "Apple executive, government, or regional investment meeting"
-    if is_direct_apple_regional_platform_regulation_story(title, text):
-        return "strong", "Apple-specific regional platform regulation event"
     if is_direct_apple_airpods_firmware_story(title, text):
         return "strong", "Apple AirPods or Beats firmware update"
     if is_siri_ai_third_party_app_data_access_feature(title, text):
@@ -27335,24 +27502,10 @@ def classify_relevance_tier(
         return "weak", "non-Apple product story using iPhone design or color only as reference context"
     if is_competitor_display_panel_story_using_apple_as_background(title, text):
         return "weak", "competitor display-panel or supply-chain story using Apple mainly as prior-order context"
-    if is_direct_iphone_hardware_spec_rumor_story(title, text):
-        return "strong", "Apple iPhone hardware specification rumor"
-    if is_routine_recap_comparison_or_buying_advice(title, text):
-        return "weak", "third-party or routine recap, comparison, hands-on, or buying advice without a new Apple action"
-    if is_apple_opinion_without_new_reporting(title, text):
-        return "weak", "opinion or commentary without new Apple reporting"
-    if is_how_to_guide_without_new_apple_action(title, text):
-        return "weak", "how-to or troubleshooting guide without a new Apple action"
-    if is_usage_podcast_or_third_party_project_without_new_apple_action(title, text):
-        return "weak", "personal usage, podcast, or third-party Apple-device project without a new Apple action"
     if is_third_party_ai_agent_for_mac_without_apple_action(title, text):
         return "weak", "third-party AI agent for Mac without a direct Apple platform action"
     if is_third_party_game_or_cross_platform_launch_story(title, text):
         return "weak", "third-party game, app, or cross-platform launch without a direct Apple action"
-    if is_non_apple_device_comparison_story(title, text):
-        return "weak", "non-Apple device story using iPhone or Apple mainly as comparison context"
-    if is_third_party_consumer_app_update_on_apple_platform(title, text):
-        return "weak", "third-party app or consumer service update on Apple platforms without a direct Apple action"
     if is_third_party_browser_security_feature_story(title, text):
         return "weak", "third-party browser security feature with Apple platforms used mainly as compatibility context"
     if is_third_party_reference_or_explainer_project_story(title, text):
@@ -27363,8 +27516,6 @@ def classify_relevance_tier(
         return "weak", "non-Apple research using an Apple product mainly as study context"
     if is_third_party_device_management_service_story(text):
         return "weak", "third-party device-management or security service for Apple devices"
-    if is_third_party_accessory_platform_compatibility_story(title, text):
-        return "weak", "third-party accessory story with Apple platform compatibility used mainly as context"
     if is_non_apple_public_response_with_apple_purchase_context(title, text):
         return "weak", "non-Apple organization response using Apple hardware purchase mainly as context"
     if is_apple_display_panel_supply_chain_story(text) or is_foldable_iphone_supply_chain_story(text):
@@ -27377,18 +27528,12 @@ def classify_relevance_tier(
         return "strong", "Apple TV app purchased-content upgrade or entitlement event"
     if is_apple_tv_awards_nominations_story(text):
         return "strong", "Apple TV awards or nominations event"
-    if is_competitor_launch_against_apple_story(title, text):
-        return "weak", "third-party or competitor product launch using Apple mainly as comparison context"
     if is_siri_ai_eu_dma_regulatory_meeting_story(text):
         return "strong", "Apple-specific EU Digital Markets Act and Siri AI regulatory meeting"
     if is_uk_cma_app_store_payment_nfc_story(text):
         return "strong", "Apple-specific regional regulation event"
     if is_epic_app_store_appeal_story(text):
         return "strong", "Apple-specific App Store legal appeal event"
-    if is_third_party_financial_service_with_apple_pay_support(title, text):
-        return "weak", "third-party financial service with Apple Pay used only as a supported payment method"
-    if is_airdrop_vulnerability_story(text):
-        return "strong", "Apple AirDrop security vulnerability or ecosystem impact"
     if "iphone-color-mockup" in topic_facets_from_text(f"{title} {summary}"):
         return "strong", "Apple iPhone color, mockup, or physical-part rumor"
     if score_terms(lower, ["apple arcade", "苹果 arcade"]) > 0 and score_terms(
@@ -27402,10 +27547,6 @@ def classify_relevance_tier(
         and semantic_identity.scope != "third-party-context"
     ):
         return "strong", "Apple platform trust, store policy, or review event"
-    if is_apple_strategic_transaction_story(title):
-        return "strong", "Apple strategic transaction or merger discussion"
-    if is_apple_product_commentary_analysis_without_new_reporting(title, text):
-        return "weak", "Apple product commentary or analysis without a new Apple action"
     if semantic_identity.scope == "third-party-context" and event_kind in {"app_store_trust", "company_org"}:
         return "weak", "third-party title subject with Apple store or company terms only in supporting context"
     if event_kind == "company_org" and "apple-company-org-change" in semantic_identity.facets:
@@ -27416,12 +27557,6 @@ def classify_relevance_tier(
         return "weak", "third-party app or service on a legacy Apple platform without a new Apple action"
     if is_third_party_legacy_apple_hardware_replica_story(title, text):
         return "weak", "third-party project recreating legacy Apple hardware without a new Apple action"
-    if is_third_party_app_or_service_status_story(title, text):
-        return "weak", "third-party app or service Apple-platform status story without a direct Apple action"
-    if is_third_party_app_platform_launch_story(title, text):
-        return "weak", "third-party app or service Apple-platform story without a direct Apple platform action"
-    if is_non_apple_primary_subject_with_incidental_apple_context(title, text):
-        return "weak", "non-Apple primary subject with Apple used only as incidental context"
     if is_former_apple_staff_background_story(text):
         return "weak", "third-party company story using former Apple staff as background"
     if event_kind == "company_org":
@@ -27432,20 +27567,8 @@ def classify_relevance_tier(
         return "weak", "third-party vendor response to an Apple product used mainly as market context"
     if is_competitor_or_company_story_using_apple_as_benchmark(title, text):
         return "weak", "competitor or third-party company story using Apple mainly as benchmark context"
-    if is_multi_vendor_chip_or_phone_roadmap_background_story(title, text):
-        return "weak", "multi-vendor chip or phone roadmap story using Apple mainly as context"
-    if is_competitor_display_panel_story_using_apple_as_background(title, text):
-        return "weak", "competitor display-panel or supply-chain story using Apple mainly as prior-order context"
-    if is_apple_display_panel_supply_chain_story(text) or is_foldable_iphone_supply_chain_story(text):
-        return "strong", "Apple hardware supply-chain or display-panel roadmap event"
     if is_third_party_surveillance_context_story(text):
         return "weak", "third-party surveillance story using Apple devices mainly as context"
-    if is_third_party_device_management_service_story(text):
-        return "weak", "third-party device-management service for Apple devices"
-    if is_multi_vendor_chip_or_phone_roadmap_background_story(title, text):
-        return "weak", "multi-vendor chip or phone roadmap story using Apple mainly as context"
-    if is_non_apple_product_design_reference_story(title, text):
-        return "weak", "non-Apple product story using iPhone design or color only as reference context"
     if (
         event_kind == "os_app"
         and semantic_identity.scope != "third-party-context"
@@ -27458,8 +27581,6 @@ def classify_relevance_tier(
         return "strong", "Apple-specific wallet feature event"
     if is_apple_tv_hardware_story(text):
         return "strong", "Apple TV hardware event"
-    if is_apple_product_data_leak_story(text, title):
-        return "strong", "Apple product or supplier data-leak event"
     if os_release_facets_from_text(text):
         return "strong", "Apple OS release, beta, RC, or security update"
     if is_apple_hardware_product_launch_story(text, title):
@@ -27497,40 +27618,22 @@ def classify_relevance_tier(
         return "strong", "Apple first-party developer tool or Xcode capability change"
     if is_official_apple_accessory_market_story(text):
         return "strong", "Apple official hardware accessory availability change"
-    if is_official_apple_refurbished_product_story(text):
-        return "strong", "Apple official refurbished product availability or pricing change"
-    if is_carplay_platform_feature_story(text):
-        return "strong", "Apple CarPlay platform feature change"
-    if is_airdrop_vulnerability_story(text):
-        return "strong", "Apple AirDrop security vulnerability or ecosystem impact"
     if is_third_party_benchmark_comparison_story(text):
         return "weak", "third-party benchmark comparison using Apple mainly as context"
     if is_apple_car_asset_story(text):
         return "strong", "Apple vehicle testing asset or hardware-related company action"
-    if is_non_apple_product_research_context_story(text):
-        return "weak", "non-Apple research using an Apple product mainly as study context"
     if is_non_apple_price_followup_story(title, text):
         return "weak", "non-Apple product price story using Apple pricing mainly as context"
-    if is_non_apple_component_market_background_story(title, text):
-        return "weak", "non-Apple component or industry price story using Apple mainly as background"
-    if is_multi_vendor_chip_or_phone_roadmap_background_story(title, text):
-        return "weak", "multi-vendor chip or phone roadmap story using Apple mainly as context"
     if is_apple_company_org_change_story(text):
         return "strong", "Apple company leadership, design, or organization change"
     if is_apple_executive_company_story(text):
         return "strong", "Apple executive, company, or services leadership event"
-    if is_apple_strategic_transaction_story(text):
-        return "strong", "Apple strategic transaction or merger discussion"
-    if is_former_apple_staff_background_story(text):
-        return "weak", "third-party company story using former Apple staff as background"
     if is_legacy_apple_protocol_third_party_removal(text):
         return "weak", "third-party project removing a legacy Apple protocol without a new Apple action"
     if is_third_party_xr_smart_glasses_context_story(text):
         return "weak", "third-party XR or smart-glasses story with Apple used mainly as context"
     if is_apple_product_price_increase_story(text, title):
         return "strong", "Apple-specific hardware pricing or cost event"
-    if is_broad_multi_vendor_market_report(text, title):
-        return "weak", "broad multi-vendor market report without Apple-specific shipment or share detail"
     if is_generic_consumer_electronics_health_safety_story(title, text):
         return "weak", "generic consumer-electronics safety story with Apple products used as examples"
     if event_kind == "app_store_trust" and apple_score > 0:
@@ -27609,6 +27712,8 @@ def choose_category(title: str, summary: str) -> str:
     if is_apple_display_supplier_price_negotiation_story(title, text):
         return "hardware_products"
     if is_title_led_direct_apple_hardware_roadmap_story(title, summary):
+        return "hardware_products"
+    if is_title_led_first_party_hardware_refresh_story(title, summary):
         return "hardware_products"
     if is_service_content_story(lead_scope):
         return "software_systems"
@@ -32514,28 +32619,6 @@ def event_summary_article(event: Event) -> Article:
     )
 
 
-def event_summary_event(event: Event) -> Event:
-    article = event_summary_article(event)
-    return Event(
-        event_id=event.event_id,
-        category=event.category,
-        title=event.title,
-        summary=event.summary,
-        key_facts=list(event.key_facts),
-        published_utc=event.published_utc,
-        published_raw=event.published_raw,
-        published_source=event.published_source,
-        confidence=event.confidence,
-        articles=[article],
-        tokens=set(article.tokens),
-        event_kind=event.event_kind,
-        relevance_tier=event.relevance_tier,
-        relevance_reason=event.relevance_reason,
-        regions=set(event.regions),
-        merge_warnings=list(event.merge_warnings),
-    )
-
-
 def event_summary_primary_facets(event: Event) -> set[str]:
     context = " ".join([event.summary, *event.key_facts[:8]])
     return effective_topic_facets(primary_topic_facets(event.title, context))
@@ -32798,17 +32881,6 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
         if len(anchors) >= 2 and platforms:
             keys.add(("system-performance-optimization", platforms))
     return keys
-
-
-def events_summary_merge_allowed(left: Event, right: Event) -> bool:
-    left_facets = event_summary_primary_facets(left)
-    right_facets = event_summary_primary_facets(right)
-    common_facets = left_facets & right_facets
-    if not (common_facets & SUMMARY_LEVEL_EVENT_MERGE_FACETS):
-        return False
-    left_guard_facets = event_merge_guard_facets(left)
-    right_guard_facets = event_merge_guard_facets(right)
-    return merge_guard_facets_compatible(left_guard_facets, right_guard_facets)
 
 
 def events_same_iphone_physical_dimension_rumor(left: Event, right: Event) -> bool:

@@ -12,13 +12,13 @@
 
 ## 最新更新
 
-### 1.54.0 - 2026-08-13
+### 1.55.0 - 2026-08-15
 
-- 新增动作主体优先的相关性判定：当 Apple 仅是运行平台、兼容目标、比较基准或背景时，第三方应用、产品、兼容性发布、对比和推测内容保持为 `weak`。
-- 新增面向系统组件、内置 App、表盘、Apple TV 作品、服务权益、法律阶段、人事变化、产品泄露、供应商动作和第一方后续的类型化主体与动作断言，使跨语言报道仅在具体事件身份一致时归并。
-- 改进事件归并，阻止同一发布者、共享系统版本、发布日期、集数、泛化动词和正文背景成为无关报道的桥接条件，同时将各来源 `key_facts` 仅作为受约束的结构化证据使用。
-- 改进 watchOS 应用变化与表盘配色、不同 Apple TV 作品、iPhone 保护膜泄露、产品供应限制、官方内容升级，以及直接 Apple 平台或 App Store 动作的最终事件边界。
-- 更新手动兜底规则，并将回归测试由 999 项增加到 1,019 项；并发联网验证保持各来源计数及全部 77 个 URL 不变且无性能回退，纯净子代理验证生成 29 条一一对应的简报，完整保留 56 个主事件 URL，不含延后事件且无聚类警告。
+- 新增以标题和导语为权威依据的事件身份，覆盖内容形式、动作主体、第一方模型开发、管理层交接、商业发布、撤回和目录扩充，使跨语言的直接 Apple 动作稳定保持强相关。
+- 改进基于来源无关 Apple 动作键的事件归并，使描述同一具体动作的稀疏跨语言报道可以合并，同时阻止汇总稿、正文背景及泛化 Apple 或产品词桥接无关事件。
+- 改进相关性与分类边界，使用户行为研究、对比、第三方平台报道和编辑汇总保持为 `weak`，同时让可量化的 Apple 市场结果及明确的第一方硬件换代保留正确的事件类型和分类。
+- 精简主爬虫，移除废弃辅助函数、重复分类分支以及 `detect_event_kind()` 中 27 组不可达重复条件，确立结构化事件身份模块的权威决策地位，避免继续叠加旧式兜底补丁。
+- 更新手动兜底规则，并将回归测试由 1,019 项增加到 1,037 项；并发联网验证完整保留 49 个来源 URL 和事件边界且无相对性能回退，纯净子代理验证保留全部主事件 URL，不含延后事件且无聚类警告。
 
 ## 它会做什么
 
@@ -37,7 +37,7 @@
 - `scripts/apple_news_core/event_identity.py` 将文章标题和导语转换为结构化事件身份，覆盖产品、组件、参与方、动作、地区、法律案件、内容形态和命名主体。正文只作为受约束的辅助证据，避免相关文章和背景段落重新定义事件。
 - `scripts/apple_news_core/event_matcher.py` 使用保守的产品、组件、动作、地区、法律案件和主体兼容性规则比较事件身份。将该决策层保持为纯函数，使同事件聚类可以独立测试，也更便于维护。
 - `scripts/apple_news_core/event_reconciler.py` 保留已接受的种子聚类，应用明确动作边界，并通过精确跨来源事件签名归并报道，避免泛相似度或传递桥接重新打开已经确定的事件组。
-- `tests/test_event_identity_architecture.py`、`tests/test_20260805_event_reconciliation.py`、`tests/test_20260806_relevance_boundaries.py`、`tests/test_20260811_structured_reconciliation.py`、`tests/test_20260812_assertion_reconciliation.py` 和 `tests/test_20260813_primary_action_boundaries.py` 为身份提取、匹配、结构化断言归并、动作主体、供应商动作、内容边界和相关性分层提供聚焦的回归测试；现有爬虫测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
+- `tests/test_event_identity_architecture.py`、`tests/test_20260805_event_reconciliation.py`、`tests/test_20260806_relevance_boundaries.py`、`tests/test_20260811_structured_reconciliation.py`、`tests/test_20260812_assertion_reconciliation.py`、`tests/test_20260813_primary_action_boundaries.py`、`tests/test_20260814_positive_event_cohesion.py` 和 `tests/test_20260815_authoritative_event_identity.py` 为身份提取、匹配、结构化断言归并、动作主体、正向事件聚合、供应商动作、内容边界和相关性分层提供聚焦的回归测试；现有爬虫测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
 
 ## 它不会做什么
 

@@ -172,6 +172,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("apple-store-app", ("apple store app", "apple store 应用", "apple store应用", "苹果商店应用")),
     ("app-store", ("app store", "appstore", "应用商店")),
     ("apple-wallet", ("apple wallet", "苹果 wallet", "苹果钱包", "数字车钥匙")),
+    ("apple-maps", ("apple maps", "苹果地图")),
     ("apple-pay", ("apple pay", "苹果支付")),
     ("apple-card", ("apple card", "苹果卡")),
     ("xcode", ("xcode",)),
@@ -838,6 +839,81 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "未能发布",
             "搁置",
             "放弃该项目",
+        ),
+    ),
+    (
+        "model-development",
+        (
+            "trained its own ai model",
+            "trained own ai model",
+            "training its own custom model",
+            "developed its own ai model",
+            "自研 ai 模型",
+            "自研ai模型",
+            "训练自研 ai 模型",
+            "训练了一款 ai 模型",
+            "训练了一款“中国定制”大模型",
+            "训练中国专属自研ai大模型",
+            "训练中国市场自研 ai 模型",
+        ),
+    ),
+    (
+        "leadership-transition",
+        (
+            "steps down as ceo",
+            "leaving the ceo role",
+            "before leaving the apple ceo role",
+            "final weeks as apple ceo",
+            "apple legacy",
+            "leadership transition",
+            "卸任苹果 ceo",
+            "卸任苹果ceo",
+            "卸任前",
+            "交接采访",
+            "领导层交接",
+        ),
+    ),
+    (
+        "commercial-launch",
+        (
+            "opens ad booking",
+            "opens advertising booking",
+            "ads coming soon",
+            "available to book",
+            "accepting ad reservations",
+            "广告位招商",
+            "广告位开始接受",
+            "广告预订",
+            "开放广告预订",
+        ),
+    ),
+    (
+        "withdrawal",
+        (
+            "withdraws ad",
+            "withdraws campaign",
+            "pulls ad",
+            "pulls campaign",
+            "removes ad",
+            "removes poster",
+            "撤下争议广告",
+            "撤下争议宣传",
+            "撤下广告",
+            "撤回广告",
+            "撤下宣传海报",
+        ),
+    ),
+    (
+        "catalog-expansion",
+        (
+            "adds new configurations to refurb store",
+            "adds new configs to refurb store",
+            "adds to refurb store",
+            "expands refurbished store",
+            "expands refurb store",
+            "扩充官翻阵容",
+            "扩充官方翻新",
+            "官翻阵容新增",
         ),
     ),
 )
@@ -1682,6 +1758,12 @@ def _content_form(title: str, lead: str = "") -> str:
         and not re.search(r"\b(?:launches|releases|updates|adds|announces)\b", lower)
     ):
         return "podcast"
+    if re.match(r"^psa:\s+", lower) and not re.search(
+        r"\b(?:launches?|releases?|announces?|rolls? out|changes?|adds?|removes?)\b|"
+        r"(?:发布|推出|宣布|上线|变更|新增|移除)",
+        lower,
+    ):
+        return "tutorial"
     if re.match(
         r"^(?:add|enable|disable|turn on|turn off|show|hide|change|set up)\b"
         r".{0,90}\b(?:on|to|for)\s+(?:your\s+)?(?:iphone|ipad|mac|apple watch)\b",
@@ -1700,8 +1782,28 @@ def _content_form(title: str, lead: str = "") -> str:
         or re.search(r"(?:vote|投票|你会怎么|你会如何|你是否).*[?？]?$", lower)
     ):
         return "poll"
+    if re.match(
+        r"^(?:[^:]{1,90}:\s*)?(?:when\s+is|when\s+will).{0,90}"
+        r"\b(?:next\s+)?apple\s+(?:event|keynote)\b",
+        lower,
+    ):
+        return "analysis"
     if re.match(r"^apple\s*,?\s+please\b", lower) or re.search(
         r"(?:还|是否)?值得(?:购买|买|升级)吗[?？]?$",
+        lower,
+    ):
+        return "analysis"
+    if re.search(
+        r"\b(?:could|may|might|will)\s+(?:push|tempt|convince|persuade|make)\s+"
+        r"(?:you|users?|owners?)\s+to\s+(?:buy|upgrade)\b|"
+        r"(?:可能|或将|会).{0,18}(?:促使|吸引|说服|让).{0,12}(?:用户|你).{0,12}(?:购买|升级|换机)",
+        lower,
+    ):
+        return "buying_advice"
+    if re.search(
+        r"\bhere['’]s\s+(?:the\s+)?one\s+i(?:'ve| have)\s+been\s+(?:loving|using)\b|"
+        r"\b(?:one|feature)\s+i(?:'ve| have)\s+been\s+(?:loving|using)\b|"
+        r"(?:我一直|我最近).{0,12}(?:喜欢|在用|使用).{0,18}(?:功能|表盘|应用)",
         lower,
     ):
         return "analysis"
@@ -1753,6 +1855,34 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ):
         return "roundup"
+    if (not current_attributed_report) and re.match(
+        r"^what['’]?s\s+coming\s+in\s+[a-z]+\b.{0,100}"
+        r"\b(?:iphones?|ipads?|macs?|apple\s+watches?|airpods|products?)\b",
+        lower,
+    ):
+        return "roundup"
+    if (not current_attributed_report) and re.search(
+        r"\b(?:models?|products?|devices?)\s+(?:launch|arrive|debut)\s+"
+        r"(?:next|this)\s+(?:week|month|season|fall|spring)\b.{0,40}"
+        r"\bhere['’]s\s+what['’]s\s+coming\b|"
+        r"(?:多款|系列).{0,16}(?:新品|产品|设备).{0,18}(?:即将|下月|下周).{0,18}(?:汇总|一览|有哪些)",
+        lower,
+    ):
+        return "roundup"
+    if (not current_attributed_report) and re.search(
+        r"\b(?:outlook|preview|roundup)\b.{0,24}\beverything\s+(?:expected|rumored|known)\b|"
+        r"(?:前瞻|展望|汇总).{0,20}(?:全部|所有|已知|预期|传闻)",
+        lower,
+    ):
+        return "roundup"
+    if (not current_attributed_report) and re.search(
+        r"\b(?:besides|beyond|alongside)\b.{0,36}\b(?:iphone|ipad|macbook|apple watch)\b"
+        r".{0,36}\b(?:other|rival|competing)\b.{0,24}\b(?:phones?|products?|flagships?)\b|"
+        r"(?:iphone|ipad|macbook|apple watch).{0,24}之外.{0,12}(?:还有|另有|也有).{0,18}"
+        r"(?:这些|多款|其他).{0,12}(?:手机|产品|旗舰|新品)",
+        lower,
+    ):
+        return "roundup"
     if (not current_attributed_report) and re.search(
         r"(?:等|共|多达)\s*[一二三四五六七八九十百\d]+\s*款"
         r"(?:苹果)?(?:新品|产品|设备).{0,28}"
@@ -1767,7 +1897,7 @@ def _content_form(title: str, lead: str = "") -> str:
         r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+\d+\s+"
         r"(?:new\s+)?(?:products?|devices?)|"
         r"\d+ rumored features|latest (?:apple )?rumors?|all (?:the )?(?:apple )?rumors?|"
-        r"rumors? so far|best .+ to try)\b|传闻汇总|功能汇总|值得期待的\s*\d+",
+        r"rumors? so far|best .+ to try)\b|传闻汇总|消息汇总|功能汇总|值得期待的\s*\d+",
         lower,
     ) or (not current_attributed_report) and re.match(
         r"^(?:everything new|here['’]s what['’]s new|what['’]s new with)\b",
@@ -1818,9 +1948,21 @@ def _content_form(title: str, lead: str = "") -> str:
         return "analysis"
     if re.search(r"\bno[- ]brainer\s+upgrade\b", lower):
         return "buying_advice"
+    if re.search(
+        r"\brelease\s+date\s*,\s*features?\s*,\s*price\s*,\s*(?:and\s+)?rumors?\b",
+        lower,
+    ):
+        return "buying_advice"
     if re.match(r"^(?:do|does|did|can|could)\s+we\s+need\s+to\s+worry\b", lower):
         return "analysis"
-    if re.search(
+    policy_incentive = bool(
+        re.search(
+            r"\b(?:tax|tariff)\s+(?:break|breaks|incentive|incentives|relief|exemption|exemptions)\b|"
+            r"(?:税收|关税|所得税).{0,10}(?:优惠|减免|豁免|激励)",
+            lower,
+        )
+    )
+    if not policy_incentive and re.search(
         r"\b(?:weekend deals?|daily deals?|best deals?|deal roundup|prime day|shopping guide)\b|"
         r"\b(?:up to\s+)?[$£€¥]\s*\d+(?:[.,]\d+)?\s+off\b|"
         r"(?:周末|每日|今日)?(?:优惠|好价|促销)(?:汇总|合集)?",
@@ -1855,6 +1997,12 @@ def _content_form(title: str, lead: str = "") -> str:
         r"\b(?:event|keynote)\s+date\b.{0,45}\b(?:years?|history|pattern|announcements?)\b|"
         r"\b(?:years?|history)\s+of\s+apple\s+announcements?\b|"
         r"(?:发布会|活动)(?:日期|时间).{0,28}(?:历年|历史|规律|回顾|推算)",
+        lower,
+    ):
+        return "analysis"
+    if re.search(
+        r"\b(?:one|two|three|\d+)\s+years?\s+later\b.{0,90}"
+        r"\b(?:what\s+held\s+up|what\s+didn['’]?t|long[- ]term|review)\b",
         lower,
     ):
         return "analysis"
@@ -1917,6 +2065,11 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
         or re.search(r"(?:向|与).{0,24}(?:apple|iphone|ipad|mac|airpods|苹果).{0,12}(?:看齐|相似|类似)", title_lower)
+        or re.search(
+            r"(?:hard|difficult)\s+to\s+(?:beat|match|challenge).{0,30}(?:apple|iphone|ipad|macbook|airpods)\b|"
+            r"(?:难|很难)(?:打|敌|撼动|胜过|匹敌).{0,24}(?:apple|iphone|ipad|macbook|airpods|苹果)",
+            title_lower,
+        )
     )
     platform_only = bool(
         re.search(
@@ -1925,6 +2078,11 @@ def _title_scope(title: str, lead: str) -> str:
         )
         or re.search(
             r"(?:应用|游戏|服务|客户端|工具|浏览器|软件|戒指|头显).{0,28}(?:登陆|上线|支持|适配).{0,16}(?:iphone|ipad|mac|苹果平台)",
+            title_lower,
+        )
+        or re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b|苹果).{2,70}"
+            r"\b(?:native\s+mac\s+ports?|mac\s+ports?)\b",
             title_lower,
         )
     )
@@ -2013,6 +2171,32 @@ def _title_scope(title: str, lead: str) -> str:
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b).{2,80}with apple(?:'s)?\b.{0,35}\blooming\b|"
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b).{2,90}(?:closest thing|alternative|answer).{0,24}(?:to|for).{0,28}(?:apple|iphone|ipad|mac|airpods)\b",
             title_lower,
+        )
+    )
+    title_clauses = [
+        clause.strip()
+        for clause in re.split(r"[!！?？:：]", title_lower)
+        if clause.strip()
+    ]
+    comparison_hook_then_non_apple_action = bool(
+        len(title_clauses) >= 2
+        and not first_party_prefix
+        and re.search(r"(?:apple|iphone|ipad|macbook|airpods|苹果)", title_clauses[0])
+        and re.search(
+            r"(?:compete|rival|challenge|versus|\bvs\.?\b|compare|match|surpass|"
+            r"对标|挑战|比肩|媲美|超越|赶超|三分天下|跟.{0,18}(?:苹果|iphone)|"
+            r"与.{0,18}(?:苹果|iphone))",
+            title_clauses[0],
+        )
+        and not re.match(
+            r"^(?:apple(?:'s)?|iphone|ipad|macbook|apple watch|airpods|vision pro|苹果)",
+            " ".join(title_clauses[1:]),
+        )
+        and re.search(
+            r"(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)|ship(?:s|ped|ping)?|"
+            r"deliver(?:s|ed|ing)?|debut(?:s|ed|ing)?|announce(?:s|d|ing)?|"
+            r"发布|推出|上市|开售|交付|亮相|完成|宣布)",
+            " ".join(title_clauses[1:]),
         )
     )
     subject_first_apple_followup = bool(
@@ -2109,14 +2293,15 @@ def _title_scope(title: str, lead: str) -> str:
         or subject_first_apple_hypothetical
         or subject_first_service_integration
         or subject_first_comparison
+        or comparison_hook_then_non_apple_action
         or subject_first_apple_followup
         or subject_first_apple_response
         or speculative_comparison
     ):
         return "third-party-context"
+    if platform_only and not title_lower.startswith(tuple(APPLE_TITLE_TERMS)):
+        return "third-party-context"
     if apple_in_title:
-        if platform_only and not title_lower.startswith(tuple(APPLE_TITLE_TERMS)):
-            return "third-party-context"
         return "apple-direct"
     return "unknown"
 
@@ -2171,6 +2356,39 @@ def is_direct_first_party_feature_change(title: str, lead: str) -> bool:
     return bool(first_party_feature or versioned_platform)
 
 
+def is_authoritative_first_party_action(identity: EventIdentity) -> bool:
+    """Return true for source-independent direct-action classes.
+
+    These actions are intentionally narrow in structure rather than tied to a
+    publication or individual story. They can safely outrank legacy topic
+    heuristics because the title establishes both Apple ownership and a current
+    action, while editorial forms have already been excluded.
+    """
+    if identity.scope != "apple-direct" or identity.content_form != "news":
+        return False
+    concrete_actions = identity.title_actions & {
+        "catalog-expansion",
+        "commercial-launch",
+        "leadership-transition",
+        "model-development",
+        "withdrawal",
+    }
+    return bool(
+        concrete_actions
+        and (
+            identity.title_products
+            or identity.title_named_subjects
+            or identity.title_actors
+            or identity.title_components
+            & {
+                "apple-leadership",
+                "first-party-model-development",
+                "official-refurbished-catalog",
+            }
+        )
+    )
+
+
 def high_confidence_direct_apple_action(identity: EventIdentity) -> bool:
     """Return true when title-led semantics prove a direct Apple action."""
     if identity.scope != "apple-direct" or identity.content_form != "news":
@@ -2209,6 +2427,8 @@ def high_confidence_direct_apple_action(identity: EventIdentity) -> bool:
         and "shopping-assistant" in identity.components
     ):
         return True
+    if is_authoritative_first_party_action(identity):
+        return True
     return False
 
 
@@ -2224,6 +2444,17 @@ def build_event_identity(
     content_form = _content_form(title, lead)
     title_scope = _title_scope(title, lead)
     title_products = _collapse_product_hierarchy(_extract_patterns(title_lower, PRODUCT_PATTERNS))
+    first_party_model_scope = f"{title_lower} {lead_lower[:260]}"
+    if (
+        title_scope == "apple-direct"
+        and re.search(r"\b(?:ai|artificial intelligence)\b|(?:ai|人工智能|大模型)", first_party_model_scope)
+        and re.search(
+            r"\b(?:train(?:s|ed|ing)?|develop(?:s|ed|ing)?|custom model|own model)\b|"
+            r"(?:训练|自研|自主研发|定制).{0,20}(?:模型|大模型)",
+            first_party_model_scope,
+        )
+    ):
+        title_products.add("apple-intelligence")
     if (
         re.match(r"^beats\b", title_lower)
         and re.search(
@@ -2260,6 +2491,23 @@ def build_event_identity(
     if content_form != "roundup" and not (title_products & direct_service_products):
         products |= _extract_patterns(lead_lower[:260], PRODUCT_PATTERNS) & direct_service_products
     title_components = _extract_patterns(title_lower, COMPONENT_PATTERNS)
+    leadership_scope = f"{title_lower} {lead_lower[:260]}"
+    if (
+        title_scope == "apple-direct"
+        and re.search(r"\b(?:tim cook|apple ceo|chief executive)\b|(?:库克|苹果\s*ceo|首席执行官)", leadership_scope)
+        and re.search(
+            r"\b(?:legacy|transition|steps? down|leav(?:e|es|ing)|final weeks?|succession)\b|"
+            r"(?:卸任|交接|接班|任期|管理遗产|领导层)",
+            leadership_scope,
+        )
+    ):
+        title_components.add("apple-leadership")
+    if (
+        title_scope == "apple-direct"
+        and re.search(r"\b(?:refurbished|refurb)\b|(?:官翻|官方翻新)", title_lower)
+        and re.search(r"\b(?:store|catalog)\b|(?:商店|阵容|目录)", title_lower)
+    ):
+        title_components.add("official-refurbished-catalog")
     if re.search(
         r"\b(?:cost|costs|costing)\b.{0,28}\b(?:build|built|make|manufacture|produce)\b|"
         r"\b(?:cost|costs|costing)\b.{0,36}\b(?:more|less)\b.{0,18}"
@@ -2683,6 +2931,41 @@ def build_event_identity(
     ):
         components.add("product-release-mix")
     title_actions = _extract_patterns(title_lower, ACTION_PATTERNS)
+    if (
+        title_scope == "apple-direct"
+        and "apple-intelligence" in title_products
+        and re.search(
+            r"\b(?:train(?:s|ed|ing)?|develop(?:s|ed|ing)?|custom model|own model)\b|"
+            r"(?:训练|自研|自主研发|定制).{0,20}(?:模型|大模型)",
+            title_lower,
+        )
+    ):
+        title_actions.add("model-development")
+    if "apple-leadership" in title_components:
+        title_actions.add("leadership-transition")
+    if (
+        title_scope == "apple-direct"
+        and "apple-maps" in title_products
+        and re.search(
+            r"\b(?:open(?:s|ed)?|accept(?:s|ed|ing)?|available)\b.{0,32}"
+            r"\b(?:ad|ads|advertising)\b.{0,24}\b(?:book|booking|reservation)\b|"
+            r"\b(?:ad|ads|advertising)\b.{0,24}\b(?:book|booking|reservation|available)\b|"
+            r"(?:广告位|地图广告).{0,20}(?:招商|预订|接受|开放)",
+            title_lower,
+        )
+    ):
+        title_actions.add("commercial-launch")
+    if (
+        title_scope == "apple-direct"
+        and re.search(r"\b(?:ad|advertising|campaign|poster)\b|(?:广告|宣传海报|宣传活动)", title_lower)
+        and re.search(r"\b(?:withdraw(?:s|n)?|pull(?:s|ed)?|remove(?:s|d)?)\b|(?:撤下|撤回|移除)", title_lower)
+    ):
+        title_actions.add("withdrawal")
+    if (
+        "official-refurbished-catalog" in title_components
+        and re.search(r"\b(?:add(?:s|ed|ing)?|expand(?:s|ed|ing)?)\b|(?:新增|扩充|扩展)", title_lower)
+    ):
+        title_actions.add("catalog-expansion")
     if re.search(
         r"\b(?:lets?|allows?|enables?)\s+(?:you|users?|people)\s+(?:to\s+)?"
         r"(?:make|set|adjust|change|choose|use|view|control)\b|"

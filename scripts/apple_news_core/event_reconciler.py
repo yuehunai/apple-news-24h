@@ -504,6 +504,21 @@ def _title_fact_signatures(title: str, lead: str) -> set[str]:
 def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
     """Return a title-led Apple TV work and action without using publisher data."""
     raw = f"{title}. {lead[:600]}"
+    viewing_record_match = re.search(
+        r"\b([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Za-z0-9'’.-]+){0,7}?)\s+"
+        r"season\s+\d+\b.{0,90}\b(?:biggest\s+(?:launch|premiere)|"
+        r"viewing\s+record|premiere\s+record|most[- ]watched)\b",
+        title,
+        re.I,
+    )
+    if viewing_record_match:
+        subject = re.sub(
+            r"[^a-z0-9]+",
+            "-",
+            _normalized(viewing_record_match.group(1)),
+        ).strip("-")
+        if subject and subject not in _GENERIC_SUBJECT_WORDS:
+            return subject, "viewing-record"
     trailer_for_match = re.search(
         r"\bApple\s+TV\s+(?:releases?|shares?|publishes?|unveils?)\s+"
         r"(?:a\s+|the\s+|new\s+|first\s+)*"
@@ -529,6 +544,20 @@ def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
         subject = re.sub(r"[^a-z0-9]+", "-", _normalized(season_progress_match.group(1))).strip("-")
         if subject and subject not in _GENERIC_SUBJECT_WORDS:
             return subject, "production-update"
+    continuation_hint = re.search(
+        r"\b(?:hints?|suggests?|signals?)\s+(?:at\s+)?(?:more|future)\s+"
+        r"[\"'“‘]?([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Za-z0-9'’.-]+){0,7}?)[\"'”’]?\s+seasons?\b",
+        title,
+        re.I,
+    )
+    if continuation_hint:
+        subject = re.sub(
+            r"[^a-z0-9]+",
+            "-",
+            _normalized(continuation_hint.group(1)),
+        ).strip("-")
+        if subject and subject not in _GENERIC_SUBJECT_WORDS:
+            return subject, "continuation"
     title_match = re.search(
         r"\bApple\s+TV\s+(?:releases?|shares?|unveils?)\s+(?:a\s+|new\s+)*"
         r"([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Za-z0-9'’.-]+){0,7})\s+"
@@ -582,6 +611,72 @@ def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
         if subject and subject not in _GENERIC_SUBJECT_WORDS:
             return subject, action
     return None
+
+
+def _product_lifecycle_subjects(text: str, identity: EventIdentity) -> set[str]:
+    """Return concrete products affected by an official lifecycle-list action."""
+    subjects: set[str] = set()
+    if re.search(r"(?<![a-z0-9])iphone\s*x(?![a-z0-9])", text):
+        subjects.add("iphone-x")
+    for generation in re.findall(r"(?<![a-z0-9])iphone\s*(\d{1,2})(?!\d)", text):
+        subjects.add(f"iphone-{generation}")
+    if re.search(r"\bmacbook\s+pro\b|macbook\s*pro|苹果笔记本", text):
+        subjects.add("macbook-pro")
+    if re.search(r"\bmacbook\s+air\b|macbook\s*air", text):
+        subjects.add("macbook-air")
+    if re.search(r"\bipad\s+mini\b|ipad\s*mini", text):
+        subjects.add("ipad-mini")
+    if re.search(r"\bipad\s+pro\b|ipad\s*pro", text):
+        subjects.add("ipad-pro")
+    if not subjects:
+        subjects |= {
+            product
+            for product in identity.title_products
+            if product in {
+                "airpods",
+                "apple-watch",
+                "homepod",
+                "imac",
+                "ipad",
+                "iphone",
+                "mac-mini",
+                "mac-pro",
+                "mac-studio",
+                "macbook",
+                "vision-pro",
+            }
+        }
+    return subjects
+
+
+def _first_party_facility_subject(text: str) -> str:
+    manufacturing = _contains(
+        text,
+        "manufacturing",
+        "factory",
+        "production line",
+        "制造",
+        "工厂",
+        "生产线",
+    )
+    training = _contains(
+        text,
+        "training",
+        "education courses",
+        "training school",
+        "培训",
+        "教育课程",
+        "培训学校",
+    )
+    if manufacturing and training:
+        return "manufacturing-center"
+    if _contains(text, "advanced manufacturing center", "先进制造中心"):
+        return "manufacturing-center"
+    if _contains(text, "manufacturing center", "制造中心"):
+        return "manufacturing-center"
+    if _contains(text, "developer center", "开发者中心"):
+        return "developer-center"
+    return ""
 
 
 def _app_store_impersonation_subject(title: str, lead: str) -> str:
@@ -791,6 +886,377 @@ def _structured_assertion_keys(
         boundaries.add(f"structured-subject:apple-tv:{subject}")
         separation |= {f"content-title:{subject}", f"content-action:{action}"}
 
+    apple_tv_viewing_record = bool(
+        ("apple-tv" in identity.products or _contains(evidence_scope, "apple tv", "apple tv+"))
+        and _contains(
+            evidence_scope,
+            "viewing record",
+            "premiere record",
+            "biggest launch",
+            "biggest premiere",
+            "highest viewing",
+            "最高收视",
+            "首播纪录",
+            "观看纪录",
+            "最大首播",
+        )
+    )
+    season = re.search(
+        r"\bseason\s*(\d+)\b|第\s*(\d+|[一二三四五六七八九十])\s*季",
+        evidence_scope,
+    )
+    if apple_tv_viewing_record and season:
+        season_number = next(value for value in season.groups() if value)
+        season_number = {
+            "一": "1",
+            "二": "2",
+            "三": "3",
+            "四": "4",
+            "五": "5",
+            "六": "6",
+            "七": "7",
+            "八": "8",
+            "九": "9",
+            "十": "10",
+        }.get(season_number, season_number)
+        event_keys.add(
+            f"structured-assertion:apple-tv:season-{season_number}:viewing-record"
+        )
+        separation.add("content-action:viewing-record")
+
+    classic_catalog_addition = bool(
+        ("apple-tv" in identity.products or _contains(evidence_scope, "apple tv", "apple tv+"))
+        and _contains(
+            evidence_scope,
+            "classic movies",
+            "classic films",
+            "经典影片",
+            "经典电影",
+            "经典片库",
+        )
+        and _contains(
+            evidence_scope,
+            "adds",
+            "added",
+            "gains",
+            "collection",
+            "catalog",
+            "stream for free",
+            "no extra cost",
+            "新增",
+            "加入",
+            "片库",
+            "免费观看",
+            "无需额外付费",
+        )
+    )
+    if classic_catalog_addition:
+        key = "structured-assertion:apple-tv:classic-movie-catalog:addition"
+        event_keys.add(key)
+        boundaries.add("structured-subject:apple-tv:classic-movie-catalog")
+        separation |= {
+            "content-title:classic-movie-catalog",
+            "content-action:catalog-addition",
+        }
+
+    lifecycle_action = bool(
+        (
+            _contains(
+                title_scope,
+                "obsolete",
+                "vintage products list",
+                "obsolete products list",
+                "停产产品",
+                "停产名单",
+                "过时产品",
+                "复古产品",
+            )
+            or re.search(r"停产[\"'”’]?[\s·]*产品", title_scope)
+        )
+        and _contains(
+            evidence_scope,
+            "apple",
+            "苹果",
+            "repairs",
+            "parts",
+            "service",
+            "维修",
+            "零件",
+            "服务",
+        )
+    )
+    if lifecycle_action:
+        lifecycle_subjects = _product_lifecycle_subjects(evidence_scope, identity)
+        for subject in lifecycle_subjects:
+            event_keys.add(
+                f"structured-assertion:product-lifecycle:{subject}:obsolete"
+            )
+            separation.add(f"assertion-subject:product-lifecycle:{subject}")
+        boundaries.add("structured-action:product-lifecycle-obsolete")
+        separation.add("assertion-action:product-lifecycle-obsolete")
+
+    third_party_software_fix = bool(
+        _contains(evidence_scope, "linux", "kernel", "内核")
+        and _contains(title_scope, "fix", "patch", "power", "功耗", "修复", "根治")
+        and identity.title_products
+    )
+    if third_party_software_fix:
+        boundaries.add("structured-action:third-party-software-fix")
+        separation.add("assertion-action:third-party-software-fix")
+
+    facility_subject = _first_party_facility_subject(evidence_scope)
+    facility_opening = bool(
+        facility_subject
+        and identity.scope == "apple-direct"
+        and (
+            _contains(
+                title_scope,
+                "opens",
+                "opened",
+                "opening",
+                "launches",
+                "开设",
+                "启用",
+                "揭幕",
+                "落成",
+            )
+            or (
+                _contains(title_scope, "visits", "tours", "参观", "到访")
+                and _contains(
+                    evidence_scope,
+                    "opens",
+                    "opened",
+                    "opening",
+                "new center",
+                "new factory",
+                "new facility",
+                "training school",
+                "manufacturing school",
+                "开设",
+                "启用",
+                "揭幕",
+                "新中心",
+                "新工厂",
+                "新设施",
+                "培训学校",
+                "制造学校",
+                )
+            )
+        )
+    )
+    if facility_opening:
+        key = f"structured-assertion:apple-facility:{facility_subject}:opening"
+        event_keys.add(key)
+        boundaries.add(f"structured-subject:apple-facility:{facility_subject}")
+        separation |= {
+            f"assertion-subject:apple-facility:{facility_subject}",
+            "assertion-action:facility-opening",
+        }
+
+    app_store_ratings_fraud = bool(
+        "app-store" in identity.products
+        and _contains(evidence_scope, "rating", "ratings", "review", "reviews", "评分", "评论")
+        and _contains(
+            evidence_scope,
+            "fraud",
+            "fake",
+            "misleading",
+            "欺诈",
+            "虚假",
+            "误导",
+        )
+        and _contains(
+            evidence_scope,
+            "developer",
+            "reported",
+            "feedback",
+            "undetected",
+            "开发者",
+            "反馈",
+            "举报",
+            "未发现",
+        )
+    )
+    if app_store_ratings_fraud:
+        key = "structured-assertion:app-store:ratings-review-fraud:developer-report"
+        event_keys.add(key)
+        boundaries.add("structured-subject:app-store:ratings-review-fraud")
+        separation |= {
+            "assertion-subject:app-store:ratings-review-fraud",
+            "assertion-action:developer-fraud-report",
+        }
+
+    spyware_warning = bool(
+        identity.scope == "apple-direct"
+        and _contains(evidence_scope, "spyware", "间谍软件")
+        and _contains(
+            evidence_scope,
+            "warning",
+            "warnings",
+            "threat notification",
+            "threat notifications",
+            "警报",
+            "警告",
+            "威胁通知",
+        )
+        and _contains(title_scope, "apple", "苹果")
+    )
+    if spyware_warning:
+        key = "structured-assertion:apple-security:mercenary-spyware:threat-warning"
+        event_keys.add(key)
+        boundaries.add("structured-subject:apple-security:mercenary-spyware")
+        separation |= {
+            "assertion-subject:apple-security:mercenary-spyware",
+            "assertion-action:threat-warning",
+        }
+
+    recording_indicator_patent = bool(
+        _contains(evidence_scope, "apple glasses", "苹果 glasses", "苹果智能眼镜")
+        and _contains(evidence_scope, "patent", "专利")
+        and _contains(evidence_scope, "recording", "record", "录制", "录像")
+        and _contains(
+            evidence_scope,
+            "chime",
+            "audio alert",
+            "audible",
+            "notification",
+            "提示音",
+            "音频提示",
+            "声音提醒",
+        )
+    )
+    if recording_indicator_patent:
+        key = "structured-assertion:apple-glasses:recording-indicator:patent"
+        event_keys.add(key)
+        boundaries.add("structured-subject:apple-glasses:recording-indicator")
+        separation |= {
+            "assertion-subject:apple-glasses:recording-indicator",
+            "assertion-action:patent-disclosure",
+        }
+
+    foldable_us_first_rollout = bool(
+        (
+            "foldable-iphone" in identity.products
+            or _contains(evidence_scope, "foldable iphone", "iphone ultra", "折叠屏 iphone", "折叠屏iphone")
+        )
+        and _contains(
+            evidence_scope,
+            "us only at launch",
+            "launch only in the us",
+            "only in the us",
+            "launch in the us first",
+            "us first",
+            "prioritize the us",
+            "staggered market rollout",
+            "优先供应美国",
+            "首批优先",
+            "美国市场首发",
+            "分区域阶梯上市",
+        )
+    )
+    if foldable_us_first_rollout:
+        key = "structured-assertion:foldable-iphone:staggered-us-first-rollout"
+        event_keys.add(key)
+        boundaries.add("structured-subject:foldable-iphone:regional-rollout")
+        separation |= {
+            "assertion-subject:foldable-iphone:regional-rollout",
+            "assertion-action:staggered-us-first-rollout",
+        }
+
+    iphone_pro_model = re.search(
+        r"(?<![a-z0-9])iphone\s*(\d{1,2})\s*pro(?:\s*(max))?(?![a-z0-9])",
+        evidence_scope,
+    )
+    oled_panel_cost_reduction = bool(
+        iphone_pro_model
+        and _contains(evidence_scope, "oled", "display panel", "screen panel", "屏幕", "面板")
+        and _contains(evidence_scope, "cost", "price", "成本", "价格", "报价")
+        and _contains(
+            evidence_scope,
+            "lower",
+            "lowest",
+            "decrease",
+            "decline",
+            "cut",
+            "falls",
+            "压价",
+            "下降",
+            "降低",
+            "低至",
+            "最低价",
+        )
+    )
+    if oled_panel_cost_reduction:
+        model = f"iphone-{iphone_pro_model.group(1)}-pro"
+        if iphone_pro_model.group(2):
+            model += "-max"
+        key = f"structured-assertion:{model}:oled-panel-cost:reduction"
+        event_keys.add(key)
+        boundaries.add(f"structured-subject:{model}:oled-panel-cost")
+        separation |= {
+            f"assertion-subject:{model}:oled-panel-cost",
+            "assertion-action:component-cost-reduction",
+        }
+
+    app_store_external_commission = bool(
+        ("app-store" in identity.products or _contains(evidence_scope, "epic"))
+        and _contains(
+            evidence_scope,
+            "external purchase",
+            "outside the app store",
+            "off-app store",
+            "linking outside",
+            "links outside",
+            "purchases made outside",
+            "external payment",
+            "外链",
+            "外部购买",
+            "外链购买",
+            "外部支付",
+        )
+        and _contains(evidence_scope, "commission", "fee", "佣金", "抽成", "费率")
+    )
+    title_led_court_timing_action = bool(
+        _contains(title_scope, "supreme court", "scotus", "最高法院")
+        and _contains(
+            title_scope,
+            "delay",
+            "pause",
+            "stay",
+            "24 hours",
+            "one day",
+            "晚一天",
+            "延期",
+            "暂停",
+            "批准",
+        )
+    )
+    commission_proposal = bool(
+        app_store_external_commission
+        and not title_led_court_timing_action
+        and _contains(
+            primary_scope,
+            "proposes",
+            "proposal",
+            "files",
+            "filed",
+            "submits",
+            "submitted",
+            "拟推行",
+            "提交",
+            "方案",
+        )
+    )
+    if commission_proposal:
+        key = "structured-assertion:app-store:external-purchase-commission:proposal"
+        event_keys.add(key)
+        boundaries.add("structured-subject:app-store:external-purchase-commission")
+        separation |= {
+            "assertion-subject:app-store:external-purchase-commission",
+            "assertion-action:commission-proposal",
+            "legal-stage:proposal-filing",
+        }
+
     purchased_content_upgrade = (
         "apple-tv" in identity.products
         and _contains(text, "4k")
@@ -864,6 +1330,7 @@ def _structured_assertion_keys(
 
     app_store_supreme_court_pause = (
         "app-store" in identity.products
+        and not commission_proposal
         and _contains(text, "supreme court", "scotus", "最高法院")
         and _contains(
             text,
@@ -887,6 +1354,23 @@ def _structured_assertion_keys(
         separation |= {
             "assertion-subject:app-store:supreme-court",
             "assertion-action:administrative-pause",
+        }
+
+    app_store_court_stay_denial = bool(
+        ("app-store" in identity.products or _contains(evidence_scope, "epic"))
+        and not commission_proposal
+        and _contains(text, "supreme court", "scotus", "最高法院")
+        and _contains(text, "denies", "denied", "rejects", "rejected", "驳回", "拒绝")
+        and _contains(text, "stay", "pause", "delay", "延期", "暂停", "推迟")
+    )
+    if app_store_court_stay_denial:
+        key = "structured-assertion:app-store:supreme-court:stay-denial"
+        event_keys.add(key)
+        boundaries.add("structured-subject:app-store:supreme-court")
+        separation |= {
+            "assertion-subject:app-store:supreme-court",
+            "assertion-action:court-stay-denial",
+            "legal-stage:court-stay-denial",
         }
 
     supplier_entities = _canonical_supplier_entities(text)
@@ -2219,6 +2703,12 @@ def _title_proves_first_party_subject(title: str, identity: EventIdentity) -> bo
         return True
     if identity.title_products - {"app-store"}:
         return True
+    if identity.title_components & {
+        "apple-leadership",
+        "first-party-model-development",
+        "official-refurbished-catalog",
+    }:
+        return True
     return bool(
         re.match(
             r"^(?:apple(?:'s)?|app store|苹果)",
@@ -2398,6 +2888,57 @@ def _official_refurbished_store_action(text: str) -> bool:
     )
 
 
+def _canonical_first_party_action_keys(
+    identity: EventIdentity,
+) -> set[str]:
+    """Project a direct title claim onto a source-independent event key.
+
+    The projection intentionally uses only action classes whose subject can be
+    established without article-body context. This lets translations and
+    differently worded headlines reconcile while keeping product roundups and
+    multi-action stories out of the same bucket.
+    """
+    if identity.scope != "apple-direct" or identity.content_form != "news":
+        return set()
+    actions = identity.title_actions & {
+        "catalog-expansion",
+        "commercial-launch",
+        "leadership-transition",
+        "model-development",
+        "withdrawal",
+    }
+    if not actions:
+        actions = identity.actions & {
+            "catalog-expansion",
+            "commercial-launch",
+            "leadership-transition",
+            "model-development",
+            "withdrawal",
+        }
+    if not actions:
+        return set()
+
+    subjects: set[str] = set()
+    if "official-refurbished-catalog" in identity.components:
+        subjects.add("official-refurbished-catalog")
+    if "apple-leadership" in identity.components:
+        subjects.add("apple-leadership")
+    direct_products = identity.title_products & {
+        "apple-intelligence",
+        "apple-maps",
+        "iphone",
+    }
+    if len(direct_products) == 1:
+        subjects |= direct_products
+    if not subjects:
+        return set()
+    return {
+        f"canonical-apple-action:{subject}:{action}"
+        for subject in subjects
+        for action in actions
+    }
+
+
 def _product_anniversary_milestone(title: str) -> tuple[str, str] | None:
     milestone = re.search(
         r"\bturns?\s+(\d{1,3})\b|"
@@ -2457,6 +2998,13 @@ def build_reconciliation_profile(
     event_keys |= assertion_events
     boundary_keys |= assertion_boundaries
     separation_keys |= assertion_separation
+    canonical_action_keys = _canonical_first_party_action_keys(identity)
+    event_keys |= canonical_action_keys
+    boundary_keys |= canonical_action_keys
+    separation_keys |= {
+        f"action:{key.rsplit(':', 1)[-1]}"
+        for key in canonical_action_keys
+    }
     structured_direct_assertion = bool(
         any(key.startswith("structured-assertion:") for key in assertion_events)
     )
@@ -2464,8 +3012,11 @@ def build_reconciliation_profile(
         key.startswith(
             (
                 "structured-assertion:apple-display-inventory:",
+                "structured-assertion:apple-facility:",
+                "structured-assertion:apple-glasses:",
                 "structured-assertion:iphone-anniversary-redesign:",
                 "structured-assertion:iphone-",
+                "structured-assertion:product-lifecycle:",
             )
         )
         for key in assertion_events
@@ -2860,9 +3411,10 @@ def build_reconciliation_profile(
         )
     )
     if macbook_models and refurbished_store_action:
+        event_keys.add("canonical-apple-action:official-refurbished-catalog:catalog-expansion")
+        boundary_keys.add("canonical-apple-action:official-refurbished-catalog:catalog-expansion")
         for model in macbook_models:
             event_keys.add(f"apple-retail:refurbished:macbook-{model}")
-            separation_keys.add(f"product-model:macbook-{model}")
         boundary_keys.add("apple-retail:refurbished-macbook")
         separation_keys.add("action:official-refurbished-availability")
         category_hint = "hardware_products"
@@ -3177,8 +3729,24 @@ def build_reconciliation_profile(
         boundary_keys.clear()
 
     versioned_os_action = _versioned_os_feature_report(text, identity)
-    editorial_inference_without_new_reporting = relevance_reason.startswith(
-        "editorial hardware inference"
+    editorial_inference_without_new_reporting = relevance_tier == "weak" and relevance_reason.startswith(
+        (
+            "analysis or opinion",
+            "analysis without",
+            "buying advice",
+            "deal, buying advice",
+            "editorial ",
+            "how-to",
+            "multi-product outlook",
+            "opinion or commentary",
+            "personal ",
+            "reader poll",
+            "recap or roundup",
+            "routine recap",
+            "rumor feature recap",
+            "rumor feature roundup",
+            "tutorial or podcast",
+        )
     )
     trusted_direct_action = bool(
         (trusted_direct_action or structured_direct_assertion)
@@ -3348,9 +3916,28 @@ def _explicit_separation_conflict(
         for key in right.separation_keys
         if key.startswith("action:")
     }
+    left_predicates = {
+        key.removeprefix("predicate:")
+        for key in left.separation_keys
+        if key.startswith("predicate:")
+    }
+    right_predicates = {
+        key.removeprefix("predicate:")
+        for key in right.separation_keys
+        if key.startswith("predicate:")
+    }
     if (
         (left_assertion_actions and right_title_actions == {"feature-change"})
         or (right_assertion_actions and left_title_actions == {"feature-change"})
+    ):
+        return True
+    lifecycle_action = "product-lifecycle-obsolete"
+    if (
+        lifecycle_action in left_assertion_actions
+        and lifecycle_action not in right_assertion_actions
+    ) or (
+        lifecycle_action in right_assertion_actions
+        and lifecycle_action not in left_assertion_actions
     ):
         return True
     return False
@@ -3389,6 +3976,14 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
         return False
     if left.event_keys & right.event_keys:
         return False
+    left_assertions = {
+        key for key in left.event_keys if key.startswith("structured-assertion:")
+    }
+    right_assertions = {
+        key for key in right.event_keys if key.startswith("structured-assertion:")
+    }
+    if left_assertions and right_assertions and left_assertions.isdisjoint(right_assertions):
+        return True
     left_release = {
         key for key in left.event_keys if key.startswith("apple-os-release-wave:")
     }
@@ -3574,6 +4169,12 @@ def reconcile_articles(
             and left_generations.isdisjoint(right_generations)
         ):
             return True
+        left_foldable = "foldable-iphone" in left.title_products
+        right_foldable = "foldable-iphone" in right.title_products
+        if left_foldable != right_foldable and (
+            left_generations or right_generations
+        ):
+            return True
         left_is_analyst_action = "analyst-target-action" in left.title_components
         right_is_analyst_action = "analyst-target-action" in right.title_components
         if left_is_analyst_action != right_is_analyst_action:
@@ -3738,6 +4339,9 @@ def reconcile_articles(
         assertion_join = any(
             key.startswith("structured-assertion:") for key in join_keys
         )
+        canonical_action_join = any(
+            key.startswith("canonical-apple-action:") for key in join_keys
+        )
         evidence_join = any(
             key.startswith(STRUCTURED_EVIDENCE_KEY_PREFIXES)
             for key in join_keys
@@ -3765,6 +4369,7 @@ def reconcile_articles(
                     and not cross_product_release_join
                     and not evidence_join
                     and not assertion_join
+                    and not canonical_action_join
                     and len(join_namespaces) < 2
                 ):
                     return
