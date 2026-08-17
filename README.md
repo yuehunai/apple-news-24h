@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.55.0 - 2026-08-15
+### 1.56.0 - 2026-08-17
 
-- Added authoritative title-and-lead event identities for content form, action ownership, first-party model development, leadership transitions, commercial launches, withdrawals, and catalog expansions so direct Apple actions remain strong across languages.
-- Improved reconciliation with source-independent Apple action keys, allowing sparse multilingual reports about the same concrete action to merge while preventing roundups, body background, and generic Apple or product terms from bridging unrelated events.
-- Improved relevance and classification boundaries so consumer-behavior research, comparisons, third-party platform stories, and editorial recaps remain `weak`, while measured Apple market results and named first-party hardware refreshes retain the correct event kind and category.
-- Simplified the main crawler by removing obsolete helpers, repeated classifier branches, and 27 unreachable duplicate `detect_event_kind()` conditions, leaving structured identity modules as the authoritative decision layer instead of stacking legacy fallbacks.
-- Updated fallback policy guidance and expanded regression coverage from 1,019 to 1,037 tests; concurrent live validation preserved all 49 source URLs and event boundaries without relative runtime regression, while clean-agent validation retained every main-event URL with no deferred URLs or merge warnings.
+- Added authoritative content-form and action-owner handling for editorial feature proposals, unattributed roadmap roundups, and third-party app changes on Apple platforms so body background cannot promote them into the required brief.
+- Improved deterministic reconciliation with publisher-independent canonical headline evidence, preserving exact cross-source duplicates despite extraction differences without reopening fuzzy product or topic bridges.
+- Improved relevance boundaries for former-Apple biography, user-built utilities, cross-platform security comparisons, component-cost analysis, and competitor context while keeping direct Apple price forecasts and first-party platform changes strong.
+- Simplified the main crawler by removing a duplicated Mac-roadmap relevance branch and narrowing legacy OS/security helpers to obey the structured title-and-lead identity instead of overriding it.
+- Updated fallback policy guidance and expanded regression coverage from 1,037 to 1,046 tests; concurrent live validation preserved the same 10-URL union in 48.64/53.66 seconds, while clean-agent validation produced two main events, eight correctly deferred items, and zero merge warnings.
 
 ## What It Does
 
@@ -37,7 +37,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
 - `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
 - `scripts/apple_news_core/event_reconciler.py` preserves accepted seed clusters, applies explicit action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py`, `tests/test_20260805_event_reconciliation.py`, `tests/test_20260806_relevance_boundaries.py`, `tests/test_20260811_structured_reconciliation.py`, `tests/test_20260812_assertion_reconciliation.py`, `tests/test_20260813_primary_action_boundaries.py`, `tests/test_20260814_positive_event_cohesion.py`, and `tests/test_20260815_authoritative_event_identity.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, positive event cohesion, supplier actions, content boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `tests/test_event_identity_architecture.py`, `tests/test_20260805_event_reconciliation.py`, `tests/test_20260806_relevance_boundaries.py`, `tests/test_20260811_structured_reconciliation.py`, `tests/test_20260812_assertion_reconciliation.py`, `tests/test_20260813_primary_action_boundaries.py`, `tests/test_20260814_positive_event_cohesion.py`, `tests/test_20260815_authoritative_event_identity.py`, `tests/test_20260816_authoritative_pipeline_cleanup.py`, and `tests/test_20260817_action_owner_cleanup.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, positive event cohesion, supplier actions, content boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 

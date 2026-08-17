@@ -3591,6 +3591,9 @@ def is_direct_apple_os_component_change_story(title: str, text: str) -> bool:
     """Prefer a direct OS/component headline over unrelated body context."""
     title_lower = title.lower()
     lead_lower = f"{title} {text[:700]}".lower()
+    identity = build_event_identity(title, lead_lower)
+    if identity.scope != "apple-direct":
+        return False
     if score_terms(
         title_lower,
         [
@@ -6497,7 +6500,7 @@ def is_apple_os_support_compatibility_story(text: str) -> bool:
 
 def is_apple_silicon_third_party_os_driver_compatibility_story(title: str, text: str) -> bool:
     """Identify concrete software-stack enablement for Apple Silicon hardware."""
-    scope = title_and_lead_scope(title, text, limit=1600).lower()
+    scope = primary_topic_scope_for_fact_filter(title, text).lower()
     if is_competitor_apple_marketing_comparison(scope):
         return False
     apple_hardware_anchor = score_terms(
@@ -16458,13 +16461,11 @@ def is_direct_apple_platform_security_impact_story(title: str, text: str) -> boo
             "swap out",
             "arbitrary code execution",
             "run malware",
-            "malware",
             "cannot be patched",
             "绕过",
             "替换可执行文件",
             "替换攻击",
             "运行恶意软件",
-            "恶意软件",
             "任意代码执行",
             "无法修复",
         ],
@@ -27299,44 +27300,6 @@ def classify_relevance_tier(
         return "weak", "person or career profile around an existing Apple case without a new legal action"
     if is_supplier_wealth_profile_without_new_apple_action(title, lead_scope):
         return "weak", "supplier-founder wealth profile with Apple history used as background"
-    direct_mac_roadmap = (
-        semantic_identity.content_form == "news"
-        and semantic_identity.scope == "apple-direct"
-        and semantic_identity.title_products
-        & {"mac", "macbook", "imac", "mac-mini", "mac-studio", "mac-pro"}
-        and semantic_identity.title_products
-        <= {"mac", "macbook", "imac", "mac-mini", "mac-studio", "mac-pro"}
-        and (
-            "macbook-product-roadmap" in semantic_identity.facets
-            or bool(
-                semantic_identity.title_components
-                & {
-                    "macbook-model:air",
-                    "macbook-model:neo",
-                    "macbook-model:pro",
-                    "macbook-model:ultra",
-                    "oled-display",
-                    "roadmap-projection",
-                }
-            )
-        )
-        and semantic_identity.actions & {"delay-roadmap", "pilot-testing", "retail-availability"}
-    )
-    if direct_mac_roadmap and (
-        is_competitor_or_company_story_using_apple_as_benchmark(title, text)
-        or is_third_party_benchmark_comparison_story(text)
-    ):
-        return "weak", "third-party benchmark comparison using Apple mainly as context"
-    if direct_mac_roadmap and (
-        is_rumor_feature_recap_without_new_reporting(title, text)
-        or is_routine_recap_comparison_or_buying_advice(title, text)
-        or is_non_apple_device_comparison_story(title, text)
-        or is_apple_opinion_without_new_reporting(title, text)
-        or is_apple_product_commentary_analysis_without_new_reporting(title, text)
-    ):
-        return "weak", "Mac roadmap recap, commentary, or comparison without new standalone reporting"
-    if direct_mac_roadmap:
-        return "strong", "direct Apple Mac product roadmap event"
     if is_apple_analyst_rating_target_story(title, text):
         return "strong", "Apple analyst rating or price-target action"
     if is_apple_investment_stance_commentary_without_new_action(title, text):

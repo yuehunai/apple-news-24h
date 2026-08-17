@@ -1788,6 +1788,13 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ):
         return "analysis"
+    if re.match(
+        r"^(?:it['’]s|it\s+is|now\s+is)\s+time\s+for\s+"
+        r"(?:apple|iphone|ipad|ios|ipados|macos|watchos|tvos|visionos|safari|siri)\b"
+        r".{0,80}\bto\s+(?:have|get|add|adopt|offer|support|bring)\b",
+        lower,
+    ):
+        return "analysis"
     if re.match(r"^apple\s*,?\s+please\b", lower) or re.search(
         r"(?:还|是否)?值得(?:购买|买|升级)吗[?？]?$",
         lower,
@@ -1848,6 +1855,13 @@ def _content_form(title: str, lead: str = "") -> str:
             lead_lower,
         )
     )
+    if (not current_attributed_report) and re.search(
+        r"\b(?:product|hardware|device)?\s*roadmap\b.{0,70}\bhere['’]s\s+what['’]s\s+coming\b|"
+        r"\bhere['’]s\s+what['’]s\s+coming\b.{0,70}\b(?:product|hardware|device)?\s*roadmap\b|"
+        r"(?:产品|硬件|设备)?路线图.{0,36}(?:即将推出|即将发布|有哪些|一览)",
+        lower,
+    ):
+        return "roundup"
     if (not current_attributed_report) and re.search(
         r"(?:发布会|活动).{0,28}(?:将|预计|有望|可能|大概率).{0,18}"
         r"(?:推|推出|发布|带来|亮相).{0,10}"
@@ -2173,6 +2187,20 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    subject_first_metric_comparison = bool(
+        re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|mac\b|macos\b|airpods\b|苹果)"
+            r"[^:：]{2,70}[:：].{0,150}(?:apple|iphone|ipad|mac(?:book|os)?|airpods|苹果)"
+            r".{0,45}(?:\d+(?:\.\d+)?\s*(?:x|times?|倍)|higher|lower|more|less|高于|低于|多于|少于)",
+            title_lower,
+        )
+        or re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|mac\b|macos\b|airpods\b|苹果)"
+            r"[^:：]{2,70}[:：].{0,150}(?:\d+(?:\.\d+)?\s*(?:x|times?|倍)|higher|lower|more|less|高于|低于)"
+            r".{0,45}(?:apple|iphone|ipad|mac(?:book|os)?|airpods|苹果)",
+            title_lower,
+        )
+    )
     title_clauses = [
         clause.strip()
         for clause in re.split(r"[!！?？:：]", title_lower)
@@ -2247,6 +2275,12 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    if (
+        (subject_first_comparison or subject_first_metric_comparison)
+        and not first_party_prefix
+        and not direct_relationship
+    ):
+        return "third-party-context"
     if direct_target or direct_relationship:
         return "apple-direct"
     contextual_non_apple_action = bool(
@@ -2269,8 +2303,15 @@ def _title_scope(title: str, lead: str) -> str:
         or re.search(
             r"^(?!苹果|iphone|ipad|ios|ipados|mac(?:book|os)?|watchos|tvos|visionos|airpods)"
             r"[a-z][a-z0-9.+-]*(?:\s+[a-z][a-z0-9.+-]*){0,3}.{0,36}"
-            r"(?:发布|推出|更新|新增|扩充|强化|上线|上架|适配).{0,70}"
+            r"(?:宣布|计划|发布|推出|引入|加入|更新|新增|扩充|强化|上线|上架|适配).{0,70}"
             r"(?:ios|ipados|macos|watchos|tvos|visionos|iphone|ipad|mac|苹果平台|苹果应用商店)",
+            title_lower,
+        )
+        or re.search(
+            r"^(?!苹果|iphone|ipad|ios|ipados|mac(?:book|os)?|watchos|tvos|visionos|airpods)"
+            r"[^:：]{2,55}(?:宣布|计划|开始|正在|正为|将为).{0,45}"
+            r"(?:苹果\s*)?(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s*版|平台)?"
+            r".{0,60}(?:引入|加入|新增|推出|上线|更新|测试|推送)",
             title_lower,
         )
         or re.search(
@@ -3130,6 +3171,7 @@ def build_event_identity(
         primary_intent = "memory-supplier-policy"
     elif (
         ("price-change" in title_actions or "apple-product-price-increase" in facets)
+        and "component-cost-analysis" not in title_components
         and not re.search(r"\b(?:no|not|won['’]t|will\s+not)\b.{0,18}\b(?:price|prices|pricing)\b|(?:不|不会|未).{0,8}(?:涨价|提价|上调价格)", title_lower)
     ):
         primary_intent = "product-price-change"
@@ -3149,6 +3191,9 @@ def build_event_identity(
     if primary_intent:
         title_components.add(f"primary-intent:{primary_intent}")
         components.add(f"primary-intent:{primary_intent}")
+        if primary_intent == "product-price-change":
+            title_actions.add("price-change")
+            actions.add("price-change")
     actors = _title_named_actors(title)
     if not actors:
         actors = _title_named_actors(f"{title} {lead[:180]}")

@@ -28,6 +28,7 @@ ArticleT = TypeVar("ArticleT")
 
 
 STRUCTURED_EVIDENCE_KEY_PREFIXES = (
+    "structured-canonical-title:",
     "structured-attributed-measure:",
     "structured-component-measure:",
     "structured-component-period:",
@@ -78,6 +79,21 @@ def _normalized(value: str) -> str:
     value = unicodedata.normalize("NFKC", value or "").lower()
     value = value.replace("’", "'").replace("–", "-").replace("—", "-")
     return re.sub(r"\s+", " ", value).strip()
+
+
+def _canonical_title(value: str) -> str:
+    """Remove publisher chrome while preserving the reported headline."""
+    title = _normalized(value)
+    publisher_suffix = (
+        r"\s+(?:[-|]\s*)?(?:apple\s+苹果\s+-\s+)?"
+        r"(?:9to5mac|appleinsider|cnbeta(?:\.com)?|macrumors|the\s+verge|"
+        r"it\s*之家|快科技|爱范儿)\.?$"
+    )
+    previous = ""
+    while title != previous:
+        previous = title
+        title = re.sub(publisher_suffix, "", title).strip(" -|")
+    return title
 
 
 def _contains(text: str, *phrases: str) -> bool:
@@ -2988,6 +3004,12 @@ def build_reconciliation_profile(
     separation_keys |= _predicate_separation_keys(identity)
     category_hint = ""
     content_form = _reconciliation_content_form(title_text, identity)
+
+    canonical_title = _canonical_title(title_text)
+    if content_form == "news" and len(canonical_title) >= 18:
+        canonical_title_key = f"structured-canonical-title:{canonical_title}"
+        event_keys.add(canonical_title_key)
+        boundary_keys.add(canonical_title_key)
 
     assertion_events, assertion_boundaries, assertion_separation = _structured_assertion_keys(
         title,

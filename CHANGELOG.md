@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.56.0 - 2026-08-17
+
+- Added authoritative content-form and action-owner handling for editorial feature proposals, unattributed roadmap roundups, and third-party app changes on Apple platforms so body background cannot promote them into the required brief.
+- Improved deterministic reconciliation with publisher-independent canonical headline evidence, preserving exact cross-source duplicates despite extraction differences without reopening fuzzy product or topic bridges.
+- Improved relevance boundaries for former-Apple biography, user-built utilities, cross-platform security comparisons, component-cost analysis, and competitor context while keeping direct Apple price forecasts and first-party platform changes strong.
+- Simplified the main crawler by removing a duplicated Mac-roadmap relevance branch and narrowing legacy OS/security helpers to obey the structured title-and-lead identity instead of overriding it.
+- Updated fallback policy guidance and expanded regression coverage from 1,037 to 1,046 tests; concurrent live validation preserved the same 10-URL union in 48.64/53.66 seconds, while clean-agent validation produced two main events, eight correctly deferred items, and zero merge warnings.
+
 ## 1.55.0 - 2026-08-15
 
 - Added authoritative title-and-lead event identities for content form, action ownership, first-party model development, leadership transitions, commercial launches, withdrawals, and catalog expansions so direct Apple actions remain strong across languages.
