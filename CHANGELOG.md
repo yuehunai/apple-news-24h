@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.57.0 - 2026-08-18
+
+- Added authoritative title-and-lead identities for OS release stages, security and regulatory actions, first-party services, platform compatibility, and product-roadmap children, keeping developer betas, public betas, release candidates, stable updates, and distinct product actions separate.
+- Reworked deterministic reconciliation so the core reconciler is the sole final event-boundary authority, with the legacy clusterer limited to recall hints instead of repeatedly splitting and reconsolidating events from broad products, topics, or body background.
+- Improved compound-report handling for mixed OS release trains and genuine multi-product code disclosures, preserving source-specific facts while projecting independent iMac, Beats, MacBook, home, Apple TV, AirPods, HomePod, and iPhone hardware events with stable categories.
+- Improved relevance and cleanup boundaries for third-party comparisons, editorial roundups, affiliate tails, and incidental Apple references while retaining concrete Apple Silicon ecosystem support, first-party service changes, direct legal actions, and Apple hardware production reports.
+- Updated fallback policy guidance and expanded regression coverage from 1,046 to 1,089 tests; concurrent live validation preserved all 93 source URLs and identical discovery counts while reducing runtime from 103.62 to 98.63 seconds, and clean-agent validation produced zero merge warnings or deferred-event recoveries.
+
 ## 1.56.0 - 2026-08-17
 
 - Added authoritative content-form and action-owner handling for editorial feature proposals, unattributed roadmap roundups, and third-party app changes on Apple platforms so body background cannot promote them into the required brief.

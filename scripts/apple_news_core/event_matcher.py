@@ -98,6 +98,8 @@ def _high_confidence_components(components: frozenset[str]) -> set[str]:
 FIRST_PARTY_SERVICE_PRODUCTS = {
     "apple-arcade",
     "apple-books",
+    "apple-fitness",
+    "apple-wallet",
     "apple-music",
     "apple-one",
     "apple-sports",

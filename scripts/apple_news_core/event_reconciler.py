@@ -21,7 +21,7 @@ from .event_identity import (
     PRODUCT_PATTERNS,
     primary_assertion_components,
 )
-from .event_matcher import identity_pair_decision
+from .event_matcher import FIRST_PARTY_SERVICE_PRODUCTS, identity_pair_decision
 
 
 ArticleT = TypeVar("ArticleT")
@@ -1831,17 +1831,12 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
         "安全漏洞",
         "漏洞",
     )
-    release_announcement = _contains(
-        title,
-        "release",
-        "released",
-        "now available",
-        "rolls out",
-        "land",
-        "lands",
-        "发布",
-        "推送",
-        "正式版",
+    release_announcement = bool(
+        re.search(
+            r"\b(?:releas(?:e|es|ed|ing)|ships?|shipped|now available|rolls out|land|lands)\b|"
+            r"(?:发布|推送|正式版)",
+            title,
+        )
     )
     if security_bulletin and not release_announcement:
         return False
@@ -1849,7 +1844,7 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     versioned_title = bool(
         re.search(
             r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
-            r"(?:\s+[a-z][a-z-]+){0,2}\s+\d+(?:\.\d+)?\b",
+            r"(?:\s+[a-z][a-z-]+){0,2}\s+\d+(?:\.\d+){0,2}\b",
             title,
             flags=re.IGNORECASE,
         )
@@ -1859,7 +1854,7 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
             release_announcement
             and re.search(
                 r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
-                r"(?:\s+[a-z][a-z-]+){0,2}\s+\d+(?:\.\d+)?\b",
+                r"(?:\s+[a-z][a-z-]+){0,2}\s+\d+(?:\.\d+){0,2}\b",
                 text,
                 flags=re.IGNORECASE,
             )
@@ -1876,6 +1871,7 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     explicit_feature_change = "feature-change" in identity.title_actions
     current_change = bool(
         explicit_feature_change
+        or (numbered_incremental and release_announcement)
         or (
             identity.content_form == "news"
             and _contains(
@@ -1907,17 +1903,10 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
         )
         or (
             identity.content_form == "news"
-            and _contains(
+            and re.search(
+                r"\b(?:releas(?:e|es|ed|ing)|ships?|shipped|seeds|now available|rolls out|land|lands)\b|"
+                r"(?:发布|推送)",
                 title,
-                "release",
-                "released",
-                "seeds",
-                "now available",
-                "rolls out",
-                "land",
-                "lands",
-                "发布",
-                "推送",
             )
         )
     )
@@ -1981,7 +1970,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
     if not release_waves:
         version_match = re.search(
             r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
-            r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+)?)\b",
+            r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+){0,2})\b",
             text,
             flags=re.IGNORECASE,
         )
@@ -2016,7 +2005,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
     else:
         version_match = re.search(
             r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
-            r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+)?)\b",
+            r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+){0,2})\b",
             title,
             flags=re.IGNORECASE,
         )
@@ -3004,6 +2993,29 @@ def build_reconciliation_profile(
     separation_keys |= _predicate_separation_keys(identity)
     category_hint = ""
     content_form = _reconciliation_content_form(title_text, identity)
+    projected_hardware_roadmap = bool(
+        re.fullmatch(r"apple\s+.+\s+roadmap\s+update", title_text)
+        and identity.scope == "apple-direct"
+        and identity.title_products
+        & {
+            "airpods",
+            "apple-home-hub",
+            "apple-tv",
+            "apple-watch",
+            "beats",
+            "foldable-iphone",
+            "homepod",
+            "imac",
+            "ipad",
+            "iphone",
+            "mac",
+            "mac-mini",
+            "mac-pro",
+            "mac-studio",
+            "macbook",
+            "vision-pro",
+        }
+    )
 
     canonical_title = _canonical_title(title_text)
     if content_form == "news" and len(canonical_title) >= 18:
@@ -3011,12 +3023,56 @@ def build_reconciliation_profile(
         event_keys.add(canonical_title_key)
         boundary_keys.add(canonical_title_key)
 
-    assertion_events, assertion_boundaries, assertion_separation = _structured_assertion_keys(
-        title,
-        lead,
-        identity,
-        evidence,
-    )
+    macos_maintenance_branches: set[str] = set()
+    if "macos" in title_text and re.search(
+        r"\b(?:updates?|security fixes?|now available)\b|(?:更新|修复)",
+        title_text,
+    ):
+        macos_maintenance_branches.update(
+            match.group(1)
+            for match in re.finditer(
+                r"\bmacos\s+([a-z][a-z-]{2,})\b",
+                title_text,
+            )
+        )
+        macos_maintenance_branches.update(
+            match.group(1)
+            for match in re.finditer(
+                r"(?:&|/|\band\b)\s*([a-z][a-z-]{2,})"
+                r"(?=\s+(?:\d+(?:\.\d+){1,2}|updates?|now\b|available\b|更新|修复|$))",
+                title_text,
+            )
+        )
+        macos_maintenance_branches -= {
+            "macos",
+            "new",
+            "older",
+            "security",
+            "software",
+            "system",
+            "update",
+        }
+    if len(macos_maintenance_branches) >= 2:
+        branch_key = "-".join(sorted(macos_maintenance_branches))
+        maintenance_key = f"canonical-apple-action:macos-maintenance:{branch_key}"
+        event_keys.add(maintenance_key)
+        boundary_keys.add(maintenance_key)
+        separation_keys.add("action:os-maintenance-update")
+        category_hint = "software_systems"
+
+    if projected_hardware_roadmap:
+        assertion_events: set[str] = set()
+        assertion_boundaries: set[str] = set()
+        assertion_separation: set[str] = set()
+        category_hint = "hardware_products"
+        separation_keys.add("predicate:hardware-product-roadmap")
+    else:
+        assertion_events, assertion_boundaries, assertion_separation = _structured_assertion_keys(
+            title,
+            lead,
+            identity,
+            evidence,
+        )
     event_keys |= assertion_events
     boundary_keys |= assertion_boundaries
     separation_keys |= assertion_separation
@@ -3030,6 +3086,222 @@ def build_reconciliation_profile(
     structured_direct_assertion = bool(
         any(key.startswith("structured-assertion:") for key in assertion_events)
     )
+    security_ids = {
+        match.lower()
+        for match in re.findall(
+            r"\bCVE-\d{4}-\d{4,7}\b",
+            f"{text} {_normalized(evidence)}",
+            flags=re.IGNORECASE,
+        )
+    }
+    if security_ids and identity.scope in {"apple-direct", "unknown"} and (
+        identity.title_products
+        & {"ios", "ipados", "mac", "macos", "watchos", "tvos", "visionos", "safari"}
+        or _contains(text, "apple", "苹果")
+    ):
+        for security_id in security_ids:
+            event_keys.add(f"apple-security:cve:{security_id}")
+            boundary_keys.add(f"apple-security:cve:{security_id}")
+        separation_keys.add("action:security-vulnerability")
+        category_hint = "software_systems"
+    security_components = {
+        component.removeprefix("os-component:")
+        for component in identity.components
+        if component.startswith("os-component:")
+    }
+    if security_components and "security" in identity.actions and (
+        identity.scope in {"apple-direct", "unknown"}
+        or identity.title_products
+        & {"ios", "ipados", "mac", "macos", "watchos", "tvos", "visionos", "safari"}
+    ):
+        for component in security_components:
+            event_keys.add(f"apple-security:os-component:{component}")
+            boundary_keys.add(f"apple-security:os-component:{component}")
+        separation_keys.add("action:security-vulnerability")
+        category_hint = "software_systems"
+    cross_platform_message_reply = bool(
+        identity.scope == "apple-direct"
+        and "ios" in identity.title_products
+        and _contains(
+            title_text,
+            "replying to android texts",
+            "reply to android texts",
+            "green bubble",
+            "安卓绿色气泡",
+            "绿色气泡信息",
+            "回复安卓消息",
+            "回复安卓",
+        )
+    )
+    if cross_platform_message_reply:
+        event_keys.add("apple-messages:cross-platform-inline-reply")
+        boundary_keys.add("apple-messages:cross-platform-inline-reply")
+        separation_keys.add("action:cross-platform-message-reply")
+        category_hint = "software_systems"
+    chip_performance_report = bool(
+        identity.scope == "apple-direct"
+        and re.search(r"\b[am]\d{1,2}(?:\s*(?:pro|max|ultra))?\b", title_text)
+        and _contains(
+            title_text,
+            "performance",
+            "speed",
+            "faster",
+            "efficiency",
+            "efficient",
+            "power consumption",
+            "性能",
+            "速度",
+            "能效",
+            "功耗",
+        )
+        and not (identity.title_actions & {"price-change"})
+    )
+    if chip_performance_report:
+        chip_names = {
+            re.sub(r"\s+", "-", match.lower())
+            for match in re.findall(
+                r"\b[am]\d{1,2}(?:\s*(?:pro|max|ultra))?\b",
+                title_text,
+            )
+        }
+        for chip_name in chip_names:
+            event_keys.add(f"apple-chip-performance:{chip_name}")
+            boundary_keys.add(f"apple-chip-performance:{chip_name}")
+        separation_keys.add("action:chip-performance-report")
+        category_hint = "hardware_products"
+    tracking_transparency_policy_action = bool(
+        _contains(
+            text,
+            "app tracking transparency",
+            "tracking transparency",
+            "att consent",
+            "att prompt",
+            "广告数据授权规则",
+            "广告跟踪授权",
+            "应用跟踪透明度",
+        )
+        and (
+            "regulation" in identity.actions
+            or _contains(
+                text,
+                "regulator",
+                "regulatory",
+                "agreement",
+                "ordered",
+                "comply",
+                "监管",
+                "协议",
+                "同意",
+                "要求",
+                "合规",
+            )
+        )
+    )
+    if tracking_transparency_policy_action:
+        event_keys.add("apple-platform-policy:app-tracking-transparency:regulatory-change")
+        boundary_keys.add("apple-platform-policy:app-tracking-transparency")
+        separation_keys.add("action:platform-policy-regulatory-change")
+        category_hint = "software_systems"
+    os_signing_closure = bool(
+        re.search(
+            r"\b(?:stops?|stopped|ceases?|ceased)\s+signing\b|"
+            r"\bno\s+longer\s+signs?\b|"
+            r"(?:停止签署|停止签名|关闭.{0,12}签名(?:验证|通道)?)",
+            title_text,
+        )
+    )
+    if os_signing_closure:
+        signing_versions = {
+            match.group(1)
+            for match in re.finditer(
+                r"(?:\bios\s*)?(\d{2,3}(?:\.\d+){1,2})\b",
+                title_text,
+            )
+        }
+        for version in signing_versions:
+            event_keys.add(f"apple-os-signing-closure:ios:{version}")
+        boundary_keys.add("apple-os-signing-closure:ios")
+        separation_keys.add("action:os-signing-closure")
+        category_hint = "software_systems"
+    first_party_service_capability_signal = ""
+    if (
+        "apple-fitness" in identity.title_products
+        and _contains(
+            text,
+            "live production",
+            "live-to-tape",
+            "live sessions",
+            "live content",
+            "multi-camera",
+            "直播制作",
+            "直播内容",
+            "直播健身",
+            "多机位录播",
+        )
+        and _contains(
+            text,
+            "job listing",
+            "job opening",
+            "hiring",
+            "recruiting",
+            "producer",
+            "招聘信息",
+            "招聘",
+            "制片人",
+        )
+    ):
+        first_party_service_capability_signal = (
+            "canonical-apple-action:apple-fitness:live-production-hiring"
+        )
+    elif (
+        "apple-wallet" in identity.title_products
+        and _contains(
+            text,
+            "driver's license",
+            "drivers license",
+            "driver license",
+            "mobile id",
+            "digital id",
+            "数字驾照",
+            "电子驾照",
+            "数字身份证",
+            "移动身份证",
+        )
+        and _contains(
+            text,
+            "expand",
+            "expands",
+            "expanding",
+            "coming to",
+            "launch",
+            "support to follow",
+            "more states",
+            "扩展",
+            "扩大",
+            "新增",
+            "上线",
+            "支持",
+            "更多州",
+        )
+    ):
+        first_party_service_capability_signal = (
+            "canonical-apple-action:apple-wallet:digital-id-regional-expansion"
+        )
+    if first_party_service_capability_signal:
+        event_keys.add(first_party_service_capability_signal)
+        boundary_keys.add(first_party_service_capability_signal)
+        separation_keys.add("action:first-party-service-capability-signal")
+        category_hint = "software_systems"
+    versioned_os_compatibility_action = bool(
+        identity.scope == "apple-direct"
+        and "os-compatibility" in identity.facets
+        and identity.title_products
+        & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
+    )
+    if versioned_os_compatibility_action:
+        boundary_keys.add("apple-os-compatibility:device-feature-matrix")
+        separation_keys.add("action:os-device-feature-compatibility")
+        category_hint = "software_systems"
     if any(
         key.startswith(
             (
@@ -3751,6 +4023,13 @@ def build_reconciliation_profile(
         boundary_keys.clear()
 
     versioned_os_action = _versioned_os_feature_report(text, identity)
+    release_announcement_keys = {
+        key
+        for key in event_keys
+        if key.startswith(("apple-os-release-wave:", "apple-os-platform-release-wave:"))
+    }
+    if versioned_os_action and release_announcement_keys:
+        separation_keys.add("predicate:os-release-announcement")
     editorial_inference_without_new_reporting = relevance_tier == "weak" and relevance_reason.startswith(
         (
             "analysis or opinion",
@@ -3775,10 +4054,20 @@ def build_reconciliation_profile(
         and not editorial_inference_without_new_reporting
         and _title_proves_first_party_subject(title_text, identity)
     )
-    structural_direct_action = trusted_direct_action or versioned_os_action
+    structural_direct_action = (
+        trusted_direct_action
+        or versioned_os_action
+        or tracking_transparency_policy_action
+        or bool(first_party_service_capability_signal)
+        or versioned_os_compatibility_action
+    )
     promotion_reason = ""
     if versioned_os_action:
         promotion_reason = "current versioned Apple OS release or feature report"
+    elif versioned_os_compatibility_action:
+        promotion_reason = "current Apple OS device and feature compatibility matrix"
+    elif first_party_service_capability_signal:
+        promotion_reason = "title-led first-party service capability action"
     elif trusted_direct_action:
         promotion_reason = "title-led direct Apple action confirmed by structured identity"
     defer_reason = _unsupported_third_party_reason(
@@ -3839,6 +4128,34 @@ def build_reconciliation_profile(
 def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
     if _weak_editorial_profile(left) != _weak_editorial_profile(right):
         return True
+    if left.identity is not None and right.identity is not None:
+        shared_action_keys = {
+            key
+            for key in left.event_keys & right.event_keys
+            if key.startswith(
+                (
+                    "apple-os-release-wave:",
+                    "canonical-apple-action:",
+                    "structured-assertion:",
+                )
+            )
+        }
+        if (
+            (left.identity.content_form == "roundup")
+            != (right.identity.content_form == "roundup")
+            and not (left.exact_facets & right.exact_facets)
+            and not shared_action_keys
+        ):
+            return True
+        left_services = left.identity.title_products & FIRST_PARTY_SERVICE_PRODUCTS
+        right_services = right.identity.title_products & FIRST_PARTY_SERVICE_PRODUCTS
+        if (
+            left_services
+            and right_services
+            and left_services.isdisjoint(right_services)
+            and not (left.exact_facets & right.exact_facets)
+        ):
+            return True
     left_release = {
         key for key in left.event_keys if key.startswith("apple-os-release-wave:")
     }
@@ -3893,6 +4210,17 @@ def _explicit_separation_conflict(
     right: ReconciliationProfile,
 ) -> bool:
     """Keep explicit product/action boundaries authoritative during reunion."""
+    shared_release_keys = {
+        key
+        for key in left.event_keys & right.event_keys
+        if key.startswith(("apple-os-release-wave:", "apple-os-platform-release-wave:"))
+    }
+    if (
+        shared_release_keys
+        and "predicate:os-release-announcement" in left.separation_keys
+        and "predicate:os-release-announcement" in right.separation_keys
+    ):
+        return False
     shared_assertions = {
         key
         for key in left.event_keys & right.event_keys
@@ -3965,10 +4293,114 @@ def _explicit_separation_conflict(
     return False
 
 
+def _release_wave_parts(key: str) -> tuple[str, str, str]:
+    value = key.removeprefix("apple-os-release-wave:")
+    parts = value.split(":", 2)
+    version, stage = parts[:2]
+    return version, stage, parts[2] if len(parts) == 3 else ""
+
+
+def _release_waves_conflict(
+    left_release: set[str],
+    right_release: set[str],
+) -> bool:
+    if not left_release or not right_release or not left_release.isdisjoint(right_release):
+        return False
+    return not all(
+        left_stage == right_stage
+        and (
+            not left_platform
+            or not right_platform
+            or left_platform == right_platform
+        )
+        and (
+            left_version == right_version
+            or left_version.startswith(f"{right_version}.")
+            or right_version.startswith(f"{left_version}.")
+        )
+        for left_key in left_release
+        for right_key in right_release
+        for left_version, left_stage, left_platform in [_release_wave_parts(left_key)]
+        for right_version, right_stage, right_platform in [_release_wave_parts(right_key)]
+    )
+
+
+def _profile_release_stages(profile: ReconciliationProfile) -> set[str]:
+    stages: set[str] = set()
+    for key in profile.event_keys:
+        if key.startswith("apple-os-release-wave:"):
+            _version, stage, _platform = _release_wave_parts(key)
+            stages.add(stage)
+        elif key.startswith("apple-os-platform-release-wave:"):
+            _platform, stage = key.removeprefix(
+                "apple-os-platform-release-wave:"
+            ).split(":", 1)
+            stages.add(stage)
+    return stages
+
+
+def _profile_release_channels(profile: ReconciliationProfile) -> set[str]:
+    identity = profile.identity
+    if identity is None:
+        return set()
+    return {
+        component.removeprefix("os-release-channel:")
+        for component in identity.components
+        if component.startswith("os-release-channel:")
+    }
+
+
+def _profile_release_conflict(
+    left: ReconciliationProfile,
+    right: ReconciliationProfile,
+) -> bool:
+    left_release = {
+        key for key in left.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    right_release = {
+        key for key in right.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    if _release_waves_conflict(left_release, right_release):
+        return True
+    left_stages = _profile_release_stages(left)
+    right_stages = _profile_release_stages(right)
+    if left_stages and right_stages and left_stages.isdisjoint(right_stages):
+        return True
+    left_channels = _profile_release_channels(left)
+    right_channels = _profile_release_channels(right)
+    return bool(
+        left_channels
+        and right_channels
+        and left_channels.isdisjoint(right_channels)
+    )
+
+
 def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
     """Return only conflicts strong enough to split an accepted seed event."""
     if _weak_editorial_profile(left) != _weak_editorial_profile(right):
         return True
+    if (
+        left.relevance_tier == "weak"
+        and right.relevance_tier == "weak"
+        and left.identity is not None
+        and right.identity is not None
+        and left.identity.scope == "third-party-context"
+        and right.identity.scope == "third-party-context"
+        and not (left.event_keys & right.event_keys)
+        and not (left.exact_facets & right.exact_facets)
+    ):
+        left_specific_subjects = (
+            left.identity.named_subjects
+            | left.identity.actors
+            | left.identity.counterparties
+        ) - left.identity.title_products
+        right_specific_subjects = (
+            right.identity.named_subjects
+            | right.identity.actors
+            | right.identity.counterparties
+        ) - right.identity.title_products
+        if not (left_specific_subjects & right_specific_subjects):
+            return True
     if _explicit_separation_conflict(left, right):
         return True
     left_legal_stages = {
@@ -3994,6 +4426,43 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
         other_identity = other.identity
         if other_identity is not None and "airpods" not in other_identity.title_products:
             return True
+    left_release = {
+        key for key in left.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    right_release = {
+        key for key in right.event_keys if key.startswith("apple-os-release-wave:")
+    }
+    if _profile_release_conflict(left, right):
+        return True
+    if left.identity is not None and right.identity is not None:
+        left_form = left.identity.content_form
+        right_form = right.identity.content_form
+        shared_action_keys = {
+            key
+            for key in left.event_keys & right.event_keys
+            if key.startswith(
+                (
+                    "apple-os-release-wave:",
+                    "canonical-apple-action:",
+                    "structured-assertion:",
+                )
+            )
+        }
+        if (
+            (left_form == "roundup") != (right_form == "roundup")
+            and not (left.exact_facets & right.exact_facets)
+            and not shared_action_keys
+        ):
+            return True
+        left_services = left.identity.title_products & FIRST_PARTY_SERVICE_PRODUCTS
+        right_services = right.identity.title_products & FIRST_PARTY_SERVICE_PRODUCTS
+        if (
+            left_services
+            and right_services
+            and left_services.isdisjoint(right_services)
+            and not (left.exact_facets & right.exact_facets)
+        ):
+            return True
     if left.exact_facets & right.exact_facets:
         return False
     if left.event_keys & right.event_keys:
@@ -4006,12 +4475,6 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
     }
     if left_assertions and right_assertions and left_assertions.isdisjoint(right_assertions):
         return True
-    left_release = {
-        key for key in left.event_keys if key.startswith("apple-os-release-wave:")
-    }
-    right_release = {
-        key for key in right.event_keys if key.startswith("apple-os-release-wave:")
-    }
     left_features = {
         key for key in left.event_keys if key.startswith("apple-os-feature-scope:")
     }
@@ -4024,6 +4487,15 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
     right_roundups = {
         key for key in right.event_keys if key.startswith("apple-os-feature-roundup:")
     }
+    if bool(left_release) != bool(right_release):
+        non_release = right if left_release else left
+        if (
+            non_release.identity is not None
+            and non_release.identity.actions
+            & {"legal", "regulation", "security", "transaction"}
+            and not (left.event_keys & right.event_keys)
+        ):
+            return True
     if (left_release and right_features) or (right_release and left_features):
         return True
     if (
@@ -4032,6 +4504,69 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
     ):
         return True
     if bool(left.hard_boundary) != bool(right.hard_boundary) and not (left.event_keys & right.event_keys):
+        return True
+    if left.identity is not None and right.identity is not None:
+        left_identity = left.identity
+        right_identity = right.identity
+        shared_specific_subject = bool(
+            (left_identity.named_subjects & right_identity.named_subjects)
+            or (left_identity.counterparties & right_identity.counterparties)
+            or (left_identity.case_topics & right_identity.case_topics)
+            or (left_identity.title_products & right_identity.title_products)
+        )
+        if "legal" in left_identity.actions & right_identity.actions:
+            left_legal_subjects = (
+                left_identity.named_subjects
+                | left_identity.counterparties
+                | left_identity.case_topics
+                | left_identity.title_products
+            )
+            right_legal_subjects = (
+                right_identity.named_subjects
+                | right_identity.counterparties
+                | right_identity.case_topics
+                | right_identity.title_products
+            )
+            if (
+                left_legal_subjects
+                and right_legal_subjects
+                and left_legal_subjects.isdisjoint(right_legal_subjects)
+            ):
+                return True
+        high_signal_actions = {"legal", "regulation", "security", "transaction"}
+        left_actions = left_identity.actions & high_signal_actions
+        right_actions = right_identity.actions & high_signal_actions
+        if (
+            left_actions
+            and right_actions
+            and left_actions.isdisjoint(right_actions)
+            and not shared_specific_subject
+            and not (left.event_keys & right.event_keys)
+            and not (left.exact_facets & right.exact_facets)
+        ):
+            return True
+    left_policy_boundaries = {
+        key for key in left.boundary_keys if key.startswith("apple-platform-policy:")
+    }
+    right_policy_boundaries = {
+        key for key in right.boundary_keys if key.startswith("apple-platform-policy:")
+    }
+    left_incident_boundaries = {
+        key for key in left.boundary_keys if key.startswith("structured-subject:")
+    }
+    right_incident_boundaries = {
+        key for key in right.boundary_keys if key.startswith("structured-subject:")
+    }
+    if (
+        (
+            left_policy_boundaries
+            and right_incident_boundaries
+            or right_policy_boundaries
+            and left_incident_boundaries
+        )
+        and not (left.event_keys & right.event_keys)
+        and not (left.exact_facets & right.exact_facets)
+    ):
         return True
     if (
         left.hard_boundary
@@ -4123,6 +4658,10 @@ def supported_reconciliation_event_keys(
     union = {key for profile in profiles for key in profile.event_keys}
     supported: set[str] = set()
     for key in union:
+        if key.startswith("structured-canonical-title:"):
+            if all(key in profile.event_keys for profile in profiles):
+                supported.add(key)
+            continue
         if key.startswith("apple-os-release-wave:"):
             conflicting = any(
                 {
@@ -4339,6 +4878,20 @@ def reconcile_articles(
             index = parent[index]
         return index
 
+    def merge_roots(left_index: int, right_index: int) -> None:
+        left_root = root(left_index)
+        right_root = root(right_index)
+        if left_root == right_root:
+            return
+        if right_root < left_root:
+            left_root, right_root = right_root, left_root
+        groups[left_root] = sorted(
+            [*groups[left_root], *groups[right_root]],
+            key=_stable_article_key,
+        )
+        groups[right_root] = []
+        parent[right_root] = left_root
+
     def union(
         left_index: int,
         right_index: int,
@@ -4356,7 +4909,8 @@ def reconcile_articles(
             return
         join_namespaces = {_event_key_namespace(key) for key in join_keys}
         cross_product_release_join = any(
-            key.startswith("apple-os-release-wave:") for key in join_keys
+            key.startswith(("apple-os-release-wave:", "apple-os-platform-release-wave:"))
+            for key in join_keys
         )
         assertion_join = any(
             key.startswith("structured-assertion:") for key in join_keys
@@ -4373,6 +4927,9 @@ def reconcile_articles(
                 left_profile = profiles[id(left)]
                 right_profile = profiles[id(right)]
                 if _profiles_conflict(
+                    left_profile,
+                    right_profile,
+                ) or _profile_release_conflict(
                     left_profile,
                     right_profile,
                 ) or _explicit_separation_conflict(left_profile, right_profile):
@@ -4436,12 +4993,7 @@ def reconcile_articles(
                     and right_namespaces & join_namespaces
                 ):
                     return
-        if right_root < left_root:
-            left_root, right_root = right_root, left_root
-            left_group, right_group = right_group, left_group
-        groups[left_root] = sorted([*left_group, *right_group], key=_stable_article_key)
-        groups[right_root] = []
-        parent[right_root] = left_root
+        merge_roots(left_root, right_root)
 
     for key in sorted(key_buckets):
         members = key_buckets[key]
@@ -4543,7 +5095,11 @@ def reconcile_articles(
             for right in candidate_anchors
         ):
             continue
-        union(unknown_root, candidate_root, require_shared_keys=False)
+        # The candidate was selected by a unique version/stage and a matching
+        # platform anchor above. Merge the roots directly so unrelated product
+        # identities elsewhere in the already-built cross-platform wave cannot
+        # veto this validated sparse attachment.
+        merge_roots(unknown_root, candidate_root)
     groups = [group for index, group in enumerate(groups) if group and root(index) == index]
 
     groups.sort(key=lambda group: tuple(_stable_article_key(article) for article in group))

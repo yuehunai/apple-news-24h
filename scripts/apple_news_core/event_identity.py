@@ -89,6 +89,8 @@ APPLE_TITLE_TERMS = (
     "app store",
     "apple wallet",
     "apple pay",
+    "apple fitness+",
+    "fitness+",
     "苹果",
 )
 
@@ -131,6 +133,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
         ),
     ),
     ("vision-pro", ("vision pro", "visionos")),
+    ("airtag", ("airtag", "air tag")),
     ("apple-tv", ("apple tv", "tvos", "苹果 tv", "苹果电视")),
     (
         "apple-home-hub",
@@ -174,6 +177,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("apple-wallet", ("apple wallet", "苹果 wallet", "苹果钱包", "数字车钥匙")),
     ("apple-maps", ("apple maps", "苹果地图")),
     ("apple-pay", ("apple pay", "苹果支付")),
+    ("apple-fitness", ("apple fitness+", "fitness+", "苹果 fitness+", "苹果fitness+")),
     ("apple-card", ("apple card", "苹果卡")),
     ("xcode", ("xcode",)),
     ("carplay", ("carplay",)),
@@ -659,6 +663,9 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
         (
             "vulnerability",
             "security flaw",
+            "flaw",
+            "exploited",
+            "actively exploited",
             "privacy flaw",
             "malware",
             "stealer",
@@ -674,7 +681,7 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "勒索",
         ),
     ),
-    ("regulation", ("regulator", "regulatory", "approved", "approval", "filing", "registered", "fine", "ordered to remove", "demand to pull", "investigation", "备案", "获批", "监管", "罚款", "合规", "检方要求", "要求下架", "下架")),
+    ("regulation", ("regulator", "regulatory", "approved", "approval", "filing", "registered", "fine", "ordered to remove", "ordered to stop", "required to change", "demand to pull", "investigation", "备案", "获批", "监管", "罚款", "合规", "检方要求", "要求调整", "要求下架", "下架")),
     ("transaction", ("acquire", "acquisition", "merger", "partner", "partnership", "evaluate", "evaluation", "talks", "lease", "leases", "leased", "leasing", "收购", "合作", "接洽", "评估", "洽谈", "租赁", "租下", "承租")),
     ("supply-production", ("order", "orders", "supplier", "supply", "production", "mass production", "manufacture", "量产", "订单", "供应", "供应商", "供货", "生产")),
     ("investment-capacity", ("investment", "invest", "plant", "plants", "fab", "factory", "capacity", "扩产", "投资", "工厂", "晶圆厂", "产能")),
@@ -923,6 +930,7 @@ OS_COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("os-component:lock-screen", ("lock screen", "锁屏")),
     ("os-component:home-screen", ("home screen", "主屏幕")),
     ("os-component:control-center", ("control center", "控制中心")),
+    ("os-component:screen-sharing", ("screen sharing", "屏幕共享")),
     ("os-component:photos", ("apple photos", "photos app", "照片 app", "照片应用")),
     (
         "os-component:mail",
@@ -938,7 +946,21 @@ OS_COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "邮件撰写",
         ),
     ),
-    ("os-component:messages", ("apple messages", "messages app", "信息 app", "信息应用")),
+    (
+        "os-component:messages",
+        (
+            "apple messages",
+            "messages app",
+            "android texts",
+            "green bubble",
+            "green bubbles",
+            "信息 app",
+            "信息应用",
+            "安卓消息",
+            "安卓绿色气泡",
+            "绿色气泡信息",
+        ),
+    ),
     ("os-component:notes", ("apple notes", "notes app", "备忘录")),
     ("os-component:weather", ("apple weather", "weather app", "天气 app", "天气应用")),
     ("os-component:shortcuts", ("apple shortcuts", "shortcuts app", "快捷指令")),
@@ -1713,6 +1735,18 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
         ("antitrust", ("antitrust", "anti-monopoly", "反垄断", "垄断诉讼")),
         ("trade-secret", ("trade secret", "trade-secret", "商业机密", "商业秘密", "窃取机密")),
         ("privacy", ("privacy", "hide my email", "隐私", "隐藏我的邮件", "隐藏电子邮件")),
+        (
+            "anti-stalking",
+            (
+                "anti-stalking",
+                "anti stalking",
+                "stalking alert",
+                "stalking protection",
+                "反跟踪",
+                "防跟踪",
+                "跟踪警报",
+            ),
+        ),
         ("patent", ("patent", "专利")),
     )
     for name, terms in aliases:
@@ -1923,6 +1957,14 @@ def _content_form(title: str, lead: str = "") -> str:
         and re.search(r"\b(?:recaps?|previously reported|rumored so far|no new reporting)\b|汇总此前|此前传闻|无新增", lead_lower)
     ):
         return "roundup"
+    if (not current_attributed_report) and re.search(
+        r"^(?:iphone|ipad|mac(?:book)?|apple watch|airpods|vision pro)\b"
+        r".{0,48}\b(?:two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+)\b"
+        r"\s+(?:new\s+)?(?:features?|changes?|upgrades?)\b.{0,48}"
+        r"\b(?:coming|expected|rumored|to expect)\b",
+        lower,
+    ):
+        return "roundup"
     if re.search(
         r"\b(?:adds?|gets?|gains?|brings?)\s+(?:two|three|four|five|six|seven|eight|nine|ten|\d+)\s+"
         r"(?:new\s+)?(?:iphone\s+|ipad\s+|mac\s+)?(?:features?|changes?|upgrades?)\b|"
@@ -2020,6 +2062,20 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ):
         return "analysis"
+    repeated_incident_retrospective = bool(
+        re.search(
+            r"\b(?:repeated|recurring|again and again)\b.{0,48}\b(?:failure|failures|issue|issues|flaw|flaws)\b|"
+            r"(?:屡现|屡次|反复|一再).{0,32}(?:漏洞|失误|失守|问题|案例)",
+            lower,
+        )
+        and re.search(
+            r"\b(?:promise|promises|credibility|trust)\b.{0,30}\b(?:questioned|challenged|under scrutiny)\b|"
+            r"(?:承诺|可信度|信任|机制).{0,24}(?:遭|受|被)?(?:到)?质疑",
+            lower,
+        )
+    )
+    if repeated_incident_retrospective:
+        return "analysis"
     if re.search(
         r"^(?:analyst|analysis|opinion|commentary)\b|"
         r"^(?:分析师|机构观点|评论)[：:]|(?:分析师|评论人士).{0,24}(?:认为|称|表示)|"
@@ -2039,7 +2095,12 @@ def _content_form(title: str, lead: str = "") -> str:
 def _title_scope(title: str, lead: str) -> str:
     title_lower = _normalized(title)
     lead_lower = _normalized(lead)[:600]
+    if lead_lower.startswith(title_lower):
+        lead_lower = lead_lower[len(title_lower) :].lstrip(" .:-：")
     apple_in_title = _contains_any(title_lower, APPLE_TITLE_TERMS)
+    title_products = _collapse_product_hierarchy(
+        _extract_patterns(title_lower, PRODUCT_PATTERNS)
+    )
     beats_first_party_technical = bool(
         re.match(r"^beats\b", title_lower)
         and re.search(
@@ -2073,7 +2134,7 @@ def _title_scope(title: str, lead: str) -> str:
     comparison = bool(
         re.search(
             r"(?:better than|versus|\bvs\.?\b|rival(?:s|ing)?|compared (?:with|to)|beats?|"
-            r"overtakes?|surpasses?|dethrones?|exceeds?|挑战|对标|媲美|优于|胜过|超越|超过|力压|"
+            r"overtakes?|surpasses?|dethrones?|exceeds?|挑战|对标|剑指|对决|抗衡|交锋|媲美|优于|胜过|超越|超过|力压|"
             r"接近|相当于|追平|向.{0,20}看齐|酷似|类似(?:于)?)"
             r".{0,50}(?:apple|iphone|ipad|mac|airpods|苹果)",
             title_lower,
@@ -2212,7 +2273,8 @@ def _title_scope(title: str, lead: str) -> str:
         and re.search(r"(?:apple|iphone|ipad|macbook|airpods|苹果)", title_clauses[0])
         and re.search(
             r"(?:compete|rival|challenge|versus|\bvs\.?\b|compare|match|surpass|"
-            r"对标|挑战|比肩|媲美|超越|赶超|三分天下|跟.{0,18}(?:苹果|iphone)|"
+            r"对标|挑战|剑指|对决|抗衡|交锋|比肩|媲美|超越|赶超|三分天下|"
+            r"比.{0,18}(?:苹果|iphone|ipad|macbook|airpods).{0,12}更|跟.{0,18}(?:苹果|iphone)|"
             r"与.{0,18}(?:苹果|iphone))",
             title_clauses[0],
         )
@@ -2223,8 +2285,31 @@ def _title_scope(title: str, lead: str) -> str:
         and re.search(
             r"(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)|ship(?:s|ped|ping)?|"
             r"deliver(?:s|ed|ing)?|debut(?:s|ed|ing)?|announce(?:s|d|ing)?|"
-            r"发布|推出|上市|开售|交付|亮相|完成|宣布)",
+            r"发布|推出|上新|上市|开售|交付|亮相|完成|宣布|曝光)",
             " ".join(title_clauses[1:]),
+        )
+    )
+    independent_user_tool_action = bool(
+        title_products
+        and not first_party_prefix
+        and re.search(
+            r"\b(?:reddit\s+)?users?\b.{0,100}\b(?:self[- ](?:built|made|developed)|"
+            r"open[- ]source|custom)\b.{0,30}\b(?:app|tool|utility|script)\b|"
+            r"(?:reddit\s*)?用户.{0,100}(?:自研|自制|自行开发|开源|自定义).{0,24}(?:应用|工具|脚本|程序)",
+            f"{title_lower} {lead_lower[:360]}",
+        )
+        and not re.search(
+            r"(?:apple|苹果).{0,24}(?:发布|推出|更新|修复|开发|宣布|收购|招聘)",
+            title_lower,
+        )
+    )
+    platform_edition_third_party_action = bool(
+        re.search(
+            r"^(?:mac|ios|ipados|iphone|ipad|apple watch)\s*(?:版|version|app)\s*"
+            r"(?!(?:apple|ios|ipados|macos|watchos|tvos|visionos|safari|xcode|airpods)\b)"
+            r"[a-z][a-z0-9.+-]*(?:\s+[a-z0-9][a-z0-9.+-]*){0,3}\s+"
+            r"(?:发布|推出|更新|上线|上架|launch(?:es|ed)?|releas(?:es|ed)?|updat(?:es|ed)?)",
+            title_lower,
         )
     )
     subject_first_apple_followup = bool(
@@ -2275,13 +2360,35 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    first_party_evidence_signal = bool(
+        title_products
+        and re.search(
+            r"\b(?:job|hiring|recruiting)\s+(?:listing|post|posting)|"
+            r"\b(?:code|filing|document|support document)\b|"
+            r"(?:招聘(?:信息|启事)?|招募信息|代码|备案文件|支持文档)",
+            title_lower,
+        )
+        and re.match(r"^(?:apple\b|苹果)", lead_lower)
+        and re.search(
+            r"\b(?:hires?|hiring|recruits?|plans?|tests?|develops?|builds?|adds?|"
+            r"launches?|releases?|updates?)\b|"
+            r"(?:招聘|招募|计划|测试|开发|构建|新增|推出|发布|更新)",
+            lead_lower[:360],
+        )
+    )
     if (
         (subject_first_comparison or subject_first_metric_comparison)
         and not first_party_prefix
         and not direct_relationship
     ):
         return "third-party-context"
-    if direct_target or direct_relationship:
+    if (
+        comparison_hook_then_non_apple_action
+        or independent_user_tool_action
+        or platform_edition_third_party_action
+    ):
+        return "third-party-context"
+    if direct_target or direct_relationship or first_party_evidence_signal:
         return "apple-direct"
     contextual_non_apple_action = bool(
         re.search(
@@ -2324,7 +2431,46 @@ def _title_scope(title: str, lead: str) -> str:
     )
     if contextual_non_apple_action:
         return "third-party-context"
-    if first_party_prefix or direct_first_party_content:
+    embedded_first_party_subject_action = bool(
+        title_products
+        and re.search(r"(?:apple|苹果).{0,28}(?:fitness\+|[a-z][a-z0-9 +.-]{1,28})", title_lower)
+        and re.search(
+            r"\b(?:launch(?:es|ed|ing)?|release(?:s|d|ing)?|rolls? out|adds?|"
+            r"hires?|hiring|recruits?|plans?|tests?|updates?)\b|"
+            r"(?:发布|推出|上线|新增|招聘|招募|计划|测试|更新|调整|收购)",
+            title_lower,
+        )
+        and not (
+            comparison
+            or subject_first_comparison
+            or subject_first_metric_comparison
+            or subject_first_apple_hypothetical
+            or subject_first_service_integration
+            or speculative_comparison
+        )
+    )
+    apple_chip_report = bool(
+        re.search(r"\b[am]\d{1,2}(?:\s*(?:pro|max|ultra))?\b", title_lower)
+        and re.match(
+            r"^(?:apple(?:'s)?|苹果|传苹果|消息称苹果|报道称苹果|"
+            r"leaker\b|report\b|rumor\b|消息\b|报道称|传闻|爆料|"
+            r"[am]\d{1,2}(?:\s*(?:pro|max|ultra))?\b)",
+            title_lower,
+        )
+        and re.search(
+            r"\b(?:report|reported|rumor|rumored|leak|leaker|details?|gains?|"
+            r"faster|performance|speed|efficiency|cost|price)\b|"
+            r"(?:消息|报道|传闻|爆料|性能|速度|能效|成本|价格)",
+            title_lower,
+        )
+        and re.search(r"\bapple(?:'s)?\b|苹果", lead_lower[:360])
+    )
+    if (
+        first_party_prefix
+        or direct_first_party_content
+        or embedded_first_party_subject_action
+        or apple_chip_report
+    ):
         return "apple-direct"
     if (
         comparison
@@ -3262,15 +3408,32 @@ def build_event_identity(
             {
                 _normalized_os_version(match.group(1))
                 for match in re.finditer(
-                    r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*(\d+(?:\.\d+)?)\b",
+                    r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*(\d+(?:\.\d+){0,2})\b",
                     f"{title_lower} {lead_lower[:260]}",
                 )
             }
         )
     main_title = re.split(r"[\[\(（【]", title_lower, maxsplit=1)[0]
+    title_release_versions = sorted(
+        {
+            _normalized_os_version(match.group(1))
+            for match in re.finditer(
+                r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*(\d+(?:\.\d+){0,2})\b",
+                main_title,
+            )
+        }
+    )
     title_is_public_beta = bool(
         re.search(r"\bpublic betas?\b|公测(?:版|测试版)?", main_title)
     )
+    if title_is_public_beta:
+        components.add("os-release-channel:public")
+    elif re.search(
+        r"\b(?:developer(?:s)?|developer beta)\b|"
+        r"(?:开发者预览版|开发者测试版|开发者测试)",
+        main_title,
+    ):
+        components.add("os-release-channel:developer")
     title_has_explicit_beta_number = bool(
         re.search(r"\bbeta\s*\d+\b|测试版\s*\d+|第\s*\d+\s*(?:个|版)?\s*测试版", main_title)
     )
@@ -3279,12 +3442,62 @@ def build_event_identity(
         for facet in facets
         if re.fullmatch(r"os-release-beta-\d+", facet)
     )
+    title_beta_match = re.search(r"\bbeta\s*(\d+)\b", main_title)
+    title_public_beta_match = re.search(
+        r"\bpublic\s+beta\s*(\d+)\b|"
+        r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*公测(?:版|测试版)?",
+        main_title,
+    )
+    chinese_number_map = {
+        "一": "1",
+        "二": "2",
+        "三": "3",
+        "四": "4",
+        "五": "5",
+        "六": "6",
+        "七": "7",
+        "八": "8",
+        "九": "9",
+        "十": "10",
+    }
+    if title_is_public_beta and title_public_beta_match:
+        raw_number = title_public_beta_match.group(1) or title_public_beta_match.group(2)
+        number = raw_number if raw_number.isdigit() else chinese_number_map.get(raw_number)
+        if number:
+            numbered_beta_stages = [f"beta-{number}"]
+    elif title_beta_match:
+        numbered_beta_stages = [f"beta-{title_beta_match.group(1)}"]
     if not numbered_beta_stages:
         release_scope = f"{main_title} {lead_lower[:220]}"
-        beta_match = re.search(r"\bbeta\s*(\d+)\b", release_scope)
+        if title_is_public_beta:
+            public_lead_match = re.search(
+                r"\bpublic\s+betas?\s*(\d+)\b|"
+                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\s+"
+                r"(?:(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s+\d+(?:\.\d+){0,2})?\s+)?"
+                r"public\s+betas?\b|"
+                r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*公测(?:版|测试版)?",
+                lead_lower[:220],
+            )
+            if public_lead_match:
+                raw_number = next(value for value in public_lead_match.groups() if value)
+                number = (
+                    raw_number
+                    if raw_number.isdigit()
+                    else chinese_number_map.get(raw_number)
+                    or {
+                        "one": "1", "first": "1", "two": "2", "second": "2",
+                        "three": "3", "third": "3", "four": "4", "fourth": "4",
+                        "five": "5", "fifth": "5", "six": "6", "sixth": "6",
+                    }.get(raw_number)
+                )
+                if number:
+                    numbered_beta_stages = [f"beta-{number}"]
+        beta_match = None if title_is_public_beta else re.search(
+            r"\bbeta\s*(\d+)\b", release_scope
+        )
         if beta_match:
             numbered_beta_stages = [f"beta-{beta_match.group(1)}"]
-        else:
+        elif not numbered_beta_stages and not title_is_public_beta:
             ordinal_numbers = {
                 "one": "1",
                 "first": "1",
@@ -3322,18 +3535,6 @@ def build_event_identity(
                 if not (title_is_public_beta and ordinal == "1"):
                     numbered_beta_stages = [f"beta-{ordinal}"]
         if not numbered_beta_stages:
-            chinese_number_map = {
-                "一": "1",
-                "二": "2",
-                "三": "3",
-                "四": "4",
-                "五": "5",
-                "六": "6",
-                "七": "7",
-                "八": "8",
-                "九": "9",
-                "十": "10",
-            }
             chinese_match = re.search(
                 r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*(?:开发者)?(?:测试版|预览版)",
                 release_scope,
@@ -3348,17 +3549,49 @@ def build_event_identity(
                 number = raw_number if raw_number.isdigit() else chinese_number_map.get(raw_number)
                 if number:
                     numbered_beta_stages = [f"beta-{number}"]
-    title_is_release_wave = bool(
+    title_is_signing_closure = bool(
         re.search(
-            r"\b(?:releases?|released|seeds?|seeded|rolls? out|now available|available now|is here|are out now|arrives?|lands?|revised|surfaces?|is coming soon|are coming soon|coming next week)\b|"
+            r"\b(?:stops?|stopped|ceases?|ceased)\s+signing\b|"
+            r"\bno\s+longer\s+signs?\b|"
+            r"(?:停止签署|停止签名|关闭.{0,12}签名(?:验证|通道)?)",
+            main_title,
+        )
+    )
+    title_is_release_wave = not title_is_signing_closure and bool(
+        re.search(
+            r"\b(?:releases?|released|ships?|shipped|seeds?|seeded|rolls? out|now available|available now|is here|are out now|arrives?|lands?|revised|surfaces?|is coming soon|are coming soon|coming next week)\b|"
             r"\bstarts?\s+round\b|\bversion\s*2\s+update\b|"
             r"(?:即将发布|最快.{0,8}发布|发布|推送|释出|修订版)|(?:正式版|候选版).{0,12}上线",
             main_title,
         )
     )
-    if "os-release-rc" in facets:
+    title_has_beta_stage = bool(
+        numbered_beta_stages
+        and re.search(r"\bbetas?\b|(?:开发者|公测|测试版|预览版)", main_title)
+    )
+    title_has_rc_stage = bool(
+        re.search(r"\brelease candidates?\b|\brc\b|候选版", main_title)
+    )
+    title_has_final_stage = bool(
+        title_is_release_wave
+        and not title_is_public_beta
+        and not title_has_beta_stage
+        and not title_has_rc_stage
+        and re.search(
+            r"\b(?:releases?|released|ships?|shipped|rolls? out|now available|available now|is here|are out now|arrives?|lands?)\b|"
+            r"(?:正式发布|正式推送|正式版|面向全体用户|面向公众|"
+            r"推送.{0,24}安全更新|发布.{0,24}安全更新|安全更新.{0,12}(?:发布|推送))",
+            main_title,
+        )
+    )
+    mixed_title_release_stages = bool(
+        title_has_beta_stage
+        and re.search(r"(?:安全更新|正式版|面向全体用户|面向公众)", main_title)
+        and len(title_release_versions) > 1
+    )
+    if title_has_rc_stage:
         release_stages = ["rc"]
-    elif "os-release-final" in facets:
+    elif title_has_final_stage:
         release_stages = ["final"]
     elif (
         title_is_public_beta
@@ -3368,11 +3601,23 @@ def build_event_identity(
         "os-release-public-beta" in facets and not numbered_beta_stages
     ):
         release_stages = ["public-beta"]
+    elif title_has_beta_stage:
+        release_stages = numbered_beta_stages
+    elif "os-release-rc" in facets:
+        release_stages = ["rc"]
+    elif "os-release-final" in facets:
+        release_stages = ["final"]
     else:
         release_stages = numbered_beta_stages
-    if release_versions and release_stages and title_is_release_wave:
-        components.add(f"os-wave:{release_versions[0]}:{release_stages[0]}")
-    if release_stages and title_is_release_wave:
+    if (
+        release_versions
+        and release_stages
+        and title_is_release_wave
+        and not mixed_title_release_stages
+    ):
+        preferred_versions = title_release_versions or release_versions
+        components.add(f"os-wave:{preferred_versions[0]}:{release_stages[0]}")
+    if release_stages and title_is_release_wave and not mixed_title_release_stages:
         platform_names = {
             match.group(1)
             for match in re.finditer(

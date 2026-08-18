@@ -2932,6 +2932,45 @@ def is_current_versioned_first_party_feature_story(title: str, text: str) -> boo
     )
 
 
+def is_current_versioned_apple_device_compatibility_story(title: str, text: str) -> bool:
+    """Recognize factual OS/device support matrices rather than reader-choice polls."""
+    title_lower = clean_sentence(title).lower()
+    lead = title_and_lead_scope(title, text, limit=1200).lower()
+    identity = title_led_identity(title, lead)
+    if identity.scope != "apple-direct":
+        return False
+    if not re.search(
+        r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s+\d+(?:\.\d+){0,2}\b",
+        title_lower,
+    ):
+        return False
+    if not re.search(
+        r"^(?:which|what)\s+(?:iphones?|ipads?|macs?|apple watches?|devices?)\s+"
+        r"(?:support|get|can use)\b|"
+        r"\b(?:supported|compatible)\s+(?:iphones?|ipads?|macs?|apple watches?|devices?)\b|"
+        r"^(?:哪些|什么)\s*(?:iphone|ipad|mac|apple watch|设备).{0,24}(?:支持|兼容|可用)",
+        title_lower,
+    ):
+        return False
+    compatibility_evidence = bool(
+        re.search(
+            r"\b(?:compatible with|supports?|support tiers?|requirements?|requires?|"
+            r"and later|or later|only\s+\w+\s+(?:iphones?|ipads?|macs?|devices?))\b|"
+            r"(?:兼容|支持机型|支持列表|分为.{0,10}档|仅.{0,12}(?:款|台).{0,8}支持|及后续机型|最低要求)",
+            lead,
+        )
+    )
+    concrete_boundary = bool(
+        re.search(
+            r"\b(?:iphone|ipad|mac|apple watch)\s+\d+\b|"
+            r"\b\d+\s*gb\b|\b(?:two|three|four|five|\d+)\s+(?:tiers?|models?|devices?)\b|"
+            r"(?:iphone|ipad|mac|apple watch)\s*\d+|\d+\s*gb|(?:两|三|四|五|六|\d+)\s*(?:档|款|台)",
+            lead,
+        )
+    )
+    return compatibility_evidence and concrete_boundary
+
+
 def is_third_party_apple_data_privacy_commentary_story(title: str, text: str) -> bool:
     """Identify risk/commentary framing about an existing Apple data integration."""
     title_lower = title.lower()
@@ -6501,6 +6540,27 @@ def is_apple_os_support_compatibility_story(text: str) -> bool:
 def is_apple_silicon_third_party_os_driver_compatibility_story(title: str, text: str) -> bool:
     """Identify concrete software-stack enablement for Apple Silicon hardware."""
     scope = primary_topic_scope_for_fact_filter(title, text).lower()
+    title_stack_anchor = score_terms(
+        title.lower(),
+        [
+            "asahi linux",
+            "linux",
+            "kernel",
+            "mesa",
+            "rusticl",
+            "opencl",
+            "opengl",
+            "vulkan",
+            "graphics driver",
+            "gpu driver",
+            "kernel driver",
+            "内核",
+            "开源驱动",
+            "图形驱动",
+        ],
+    ) > 0
+    if not title_stack_anchor:
+        return False
     if is_competitor_apple_marketing_comparison(scope):
         return False
     apple_hardware_anchor = score_terms(
@@ -10224,7 +10284,7 @@ TRAILING_PROMO_SECTION_PATTERNS = (
     r"(?:prime\s+day\s+)?savings\s+on\s+apple\s+gear",
     r"apple\s+gear\s+savings",
     r"shop\s+at\s+apple\s+with\s+\d{1,2}%\s+discount\s+on\s+certified\s+refurbished",
-    r"certified\s+refurbished\s+products?\s+\d{1,2}%\s+off\s+at\s+apple\.com",
+    r"certified\s+refurbished\s+(?:apple\s+)?products?\s+\d{1,2}%\s+off\s+at\s+apple\.com",
     r"best\s+[a-z0-9+,&'’\-\s]{2,90}\s+accessories\b",
     r"best\s+(?:iphone|ipad|mac|airpods|apple\s+tv\s+4k|apple\s+watch(?:\s+and\s+iphone)?|iphone\s+and\s+apple\s+watch|vision\s+pro|apple)\s+"
     r"(?:accessories|deals\s+and\s+accessories)",
@@ -11378,11 +11438,16 @@ def smart_home_roadmap_article_variants(
 
 def iphone_report_subjects(value: str) -> set[str]:
     lower = value.lower()
+    primary_scope = re.split(
+        r"\b(?:compared\s+(?:with|to)|versus|vs\.?|than)\b|(?:相比|相较|对比)",
+        lower,
+        maxsplit=1,
+    )[0]
     subjects: set[str] = set()
-    if score_terms(lower, ["foldable iphone", "iphone fold", "iphone ultra", "折叠 iphone", "折叠屏", "折叠机型"]) > 0:
+    if score_terms(primary_scope, ["foldable iphone", "iphone fold", "iphone ultra", "折叠 iphone", "折叠屏", "折叠机型"]) > 0:
         subjects.add("foldable-iphone")
     if score_terms(
-        lower,
+        primary_scope,
         [
             "anniversary iphone",
             "20th-anniversary iphone",
@@ -11395,7 +11460,10 @@ def iphone_report_subjects(value: str) -> set[str]:
         ],
     ) > 0:
         subjects.add("anniversary-iphone")
-    for match in re.finditer(r"\biphone\s*(\d{2})(?:\s+(?:pro(?:\s+max)?|air|e))?\b", lower):
+    for match in re.finditer(
+        r"\biphone\s*(\d{2})(?:\s+(?:pro(?:\s+max)?|air|e))?\b",
+        primary_scope,
+    ):
         subjects.add(f"iphone-{match.group(1)}")
     return subjects
 
@@ -11477,9 +11545,14 @@ def multi_family_iphone_report_variants(
 
 
 MULTI_PRODUCT_HARDWARE_SUBJECTS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
+    ("apple-home-hub", "Home hub", ("home hub", "家庭中枢", "家庭配件 j490", "家庭配件 j491")),
+    ("camera-airpods", "camera-equipped AirPods", ("camera-equipped airpods", "camera airpods", "摄像头 airpods", "配备摄像头的 airpods", "图像流")),
+    ("airpods-pro", "AirPods Pro", ("airpods pro", "airpodspro")),
     ("iphone", "iPhone", ("iphone", "折叠屏手机", "折叠 iphone", "折叠iphone")),
     ("airpods", "AirPods", ("airpods", "苹果耳机")),
+    ("beats", "Beats", ("beats", "苹果 beats")),
     ("macbook", "MacBook", ("macbook", "苹果笔记本")),
+    ("imac", "iMac", ("imac",)),
     ("ipad", "iPad", ("ipad", "苹果平板")),
     ("apple-watch", "Apple Watch", ("apple watch", "苹果手表")),
     ("vision-pro", "Vision Pro", ("vision pro", "苹果头显")),
@@ -11490,11 +11563,14 @@ MULTI_PRODUCT_HARDWARE_SUBJECTS: tuple[tuple[str, str, tuple[str, ...]], ...] = 
 
 def multi_product_hardware_subjects(value: str) -> set[str]:
     lower = value.lower()
-    return {
+    subjects = {
         subject
         for subject, _label, terms in MULTI_PRODUCT_HARDWARE_SUBJECTS
         if score_terms(lower, terms) > 0
     }
+    if subjects & {"camera-airpods", "airpods-pro"}:
+        subjects.discard("airpods")
+    return subjects
 
 
 def multi_product_hardware_roadmap_variants(
@@ -11510,6 +11586,32 @@ def multi_product_hardware_roadmap_variants(
     if len(combined_subjects) < 2:
         return original
     title_subjects = multi_product_hardware_subjects(title)
+    values: list[str] = []
+    seen: set[str] = set()
+    for value in [*key_facts, *re.split(r"(?<=[.!?。！？])\s*", summary)]:
+        add_unique_text(values, seen, clean_sentence(value), min_chars=12)
+    grouped: dict[str, list[str]] = {}
+    for value in values:
+        subjects = multi_product_hardware_subjects(value)
+        if len(subjects) == 1:
+            grouped.setdefault(next(iter(subjects)), []).append(value)
+    structured_multi_product_report = bool(
+        len(grouped) >= 2
+        and re.search(
+            r"\b(?:code|codes|identifier|identifiers|codename|codenames|reference|references)\b|"
+            r"(?:代码|标识符|产品标识|代号|资源清单)",
+            title,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:unreleased|upcoming|new)\b.{0,36}\b(?:apple\s+)?(?:products?|devices?|hardware)\b|"
+            r"\b(?:products?|devices?|hardware)\b.{0,36}\b(?:code|identifier|codename|reference)\b|"
+            r"(?:未发布|即将推出|多款|新款).{0,24}(?:苹果)?(?:产品|设备|硬件|新品)|"
+            r"(?:产品|设备|硬件|新品).{0,24}(?:代码|标识符|产品标识|代号|资源清单)",
+            title,
+            re.I,
+        )
+    )
     explicit_multi_product = bool(
         re.search(
             r"\b(?:two|three|four|five|six|several|multiple|(?!(?:19|20)\d{2}\b)\d{1,2})\b"
@@ -11544,6 +11646,7 @@ def multi_product_hardware_roadmap_variants(
             )
             > 0
         )
+        or structured_multi_product_report
     )
     if not explicit_multi_product:
         return original
@@ -11557,15 +11660,6 @@ def multi_product_hardware_roadmap_variants(
     }:
         return original
 
-    values: list[str] = []
-    seen: set[str] = set()
-    for value in [*key_facts, *re.split(r"(?<=[.!?。！？])\s*", summary)]:
-        add_unique_text(values, seen, clean_sentence(value), min_chars=12)
-    grouped: dict[str, list[str]] = {}
-    for value in values:
-        subjects = multi_product_hardware_subjects(value)
-        if len(subjects) == 1:
-            grouped.setdefault(next(iter(subjects)), []).append(value)
     if len(grouped) < 2:
         return original
 
@@ -11601,6 +11695,85 @@ def compound_article_variants(
     key_facts: list[str],
 ) -> list[tuple[str, str, list[str]]]:
     """Split one source when its own reporting establishes separate Apple actions."""
+    source_title = re.split(
+        r"\s+-\s+(?=(?:apple\b|cnbeta\b|9to5mac\b|it\s*之家\b))",
+        clean_sentence(title),
+        maxsplit=1,
+        flags=re.I,
+    )[0]
+    release_clauses = [
+        clean_sentence(clause).strip(" ,，;；:-")
+        for clause in re.split(
+            r"(?:[,，]?\s*(?:并?同时|另一方面)\s*|\s+(?:while|and\s+also)\s+|[;；])",
+            source_title,
+            flags=re.I,
+        )
+        if clean_sentence(clause).strip(" ,，;；:-")
+    ]
+    projected_release_clauses: list[tuple[str, set[tuple[str, str]]]] = []
+    if len(release_clauses) >= 2:
+        for clause in release_clauses:
+            projected_title = clause
+            if score_terms(projected_title.lower(), ["apple", "苹果"]) == 0:
+                projected_title = (
+                    f"苹果{projected_title}"
+                    if re.search(r"[\u3400-\u9fff]", projected_title)
+                    else f"Apple {projected_title}"
+                )
+            identity = title_led_identity(projected_title, "")
+            release_signatures = {
+                (match.group(1), match.group(2))
+                for component in identity.components
+                for match in [
+                    re.fullmatch(r"os-wave:([^:]+):([^:]+)", component)
+                ]
+                if match
+            }
+            if release_signatures:
+                projected_release_clauses.append((projected_title, release_signatures))
+    if (
+        len(projected_release_clauses) >= 2
+        and len(
+            {
+                signature
+                for _projected_title, signatures in projected_release_clauses
+                for signature in signatures
+            }
+        )
+        >= 2
+    ):
+        fact_parts: list[str] = []
+        fact_seen: set[str] = set()
+        for value in [summary, *key_facts]:
+            for part in re.split(
+                r"(?:[。！？]|(?<=[.!?])\s+|[,，]?\s*(?:并?同时|另一方面)\s*|[;；])",
+                clean_sentence(value),
+                flags=re.I,
+            ):
+                add_unique_text(fact_parts, fact_seen, part, min_chars=12)
+        variants: list[tuple[str, str, list[str]]] = []
+        for projected_title, signatures in projected_release_clauses:
+            versions = {version for version, _stage in signatures}
+            scoped_facts = [
+                fact
+                for fact in fact_parts
+                if any(
+                    re.search(
+                        rf"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*{re.escape(version)}\b",
+                        fact,
+                        re.I,
+                    )
+                    for version in versions
+                )
+            ]
+            variants.append(
+                (
+                    projected_title,
+                    " ".join(scoped_facts) or projected_title,
+                    scoped_facts[:MAX_KEY_FACTS],
+                )
+            )
+        return variants
     if is_direct_apple_restricted_mode_clarification_story(
         title,
         " ".join([summary, *key_facts[:6]]),
@@ -15539,6 +15712,35 @@ def is_title_led_direct_apple_hardware_roadmap_story(title: str, text: str) -> b
         and identity.scope == "apple-direct"
         and ("apple-home-hub" in identity.title_products or editorial_home_hub_title)
         and is_direct_apple_hardware_roadmap_story(text, title)
+    )
+
+
+def is_projected_apple_hardware_roadmap_story(title: str, text: str) -> bool:
+    """Recognize the crawler's product-scoped projection contract."""
+    if not re.fullmatch(r"apple\s+.+\s+roadmap\s+update", clean_sentence(title), re.I):
+        return False
+    identity = title_led_identity(title, text)
+    return bool(
+        identity.scope == "apple-direct"
+        and identity.title_products
+        & {
+            "airpods",
+            "apple-home-hub",
+            "apple-tv",
+            "apple-watch",
+            "beats",
+            "foldable-iphone",
+            "homepod",
+            "imac",
+            "ipad",
+            "iphone",
+            "mac",
+            "mac-mini",
+            "mac-pro",
+            "mac-studio",
+            "macbook",
+            "vision-pro",
+        }
     )
 
 
@@ -25691,6 +25893,33 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     lower = text.lower()
     title_lower = title.lower()
     semantic_identity = title_led_identity(title, summary)
+    if is_projected_apple_hardware_roadmap_story(title, text):
+        return "hardware_market"
+    if (
+        semantic_identity.scope == "apple-direct"
+        and semantic_identity.title_actions
+        & {"investment-capacity", "supply-production"}
+        and semantic_identity.title_products
+        & {
+            "airpods",
+            "apple-home-hub",
+            "apple-tv",
+            "apple-watch",
+            "beats",
+            "foldable-iphone",
+            "homepod",
+            "imac",
+            "ipad",
+            "iphone",
+            "mac",
+            "mac-mini",
+            "mac-pro",
+            "mac-studio",
+            "macbook",
+            "vision-pro",
+        }
+    ):
+        return "hardware_market"
     if is_apple_tv_purchase_4k_upgrade_story(text):
         return "service_content"
     if first_party_document_lifecycle_key(title, text, semantic_identity):
@@ -25698,6 +25927,8 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     if is_apple_operated_activity_challenge_story(title, text):
         return "service_content"
     if is_apple_operated_compatibility_list_update_story(title, text):
+        return "os_compatibility"
+    if is_current_versioned_apple_device_compatibility_story(title, text):
         return "os_compatibility"
     if is_non_apple_company_financial_result_with_apple_background(title, text):
         return "third_party_ecosystem"
@@ -26921,6 +27152,8 @@ def classify_relevance_tier(
         return "strong", "live Apple education promotion with regional eligibility and benefits"
     if is_concrete_apple_event_operations_story(title, text):
         return "strong", "current reporting on concrete Apple event operations or presentation format"
+    if is_current_versioned_apple_device_compatibility_story(title, text):
+        return "strong", "current Apple OS device and feature compatibility matrix"
     editorial_form = semantic_identity.content_form
     if editorial_form in {
         "buying_advice",
@@ -26956,6 +27189,63 @@ def classify_relevance_tier(
         and not is_carplay_platform_feature_story(text)
     ):
         return "weak", "recap or roundup without a new standalone Apple action"
+    if (
+        semantic_identity.scope == "apple-direct"
+        and semantic_identity.content_form == "news"
+        and not is_rumor_feature_recap_without_new_reporting(title, text)
+        and not re.search(
+            r"\b(?:den(?:y|ies|ied)|debunk(?:s|ed)?|refut(?:e|es|ed)|false)\b|"
+            r"(?:否认|否定|辟谣|推翻|不实)",
+            title.lower(),
+        )
+        and any(
+            component.startswith("apple-silicon-generation:")
+            for component in semantic_identity.title_components
+        )
+        and score_terms(
+            title.lower(),
+            [
+                "report",
+                "rumor",
+                "leak",
+                "leaker",
+                "details",
+                "performance",
+                "speed",
+                "efficiency",
+                "cost",
+                "消息",
+                "报道",
+                "传闻",
+                "爆料",
+                "性能",
+                "速度",
+                "能效",
+                "成本",
+            ],
+        )
+        > 0
+    ):
+        return "strong", "title-led Apple silicon specification or performance report"
+    if (
+        semantic_identity.scope == "apple-direct"
+        and semantic_identity.content_form == "news"
+        and "regulation" in semantic_identity.actions
+        and score_terms(
+            title_lead_scope.lower(),
+            [
+                "app tracking transparency",
+                "tracking transparency",
+                "att consent",
+                "att prompt",
+                "广告数据授权规则",
+                "广告跟踪授权",
+                "应用跟踪透明度",
+            ],
+        )
+        > 0
+    ):
+        return "strong", "regulatory action directly changes a first-party Apple platform policy"
     if is_editorial_multi_generation_roadmap_recap(title, text):
         return "weak", "editorial multi-generation roadmap recap without a new standalone report"
     # Resolve who owns the headline action before product, version, price, or
@@ -26963,6 +27253,8 @@ def classify_relevance_tier(
     # a compatibility, comparison, or recipient role are not first-party
     # actions. Preserve only direct interoperability, Apple-data integration,
     # App Store enforcement, and concrete Apple-platform security exceptions.
+    if is_apple_silicon_third_party_os_driver_compatibility_story(title, text):
+        return "ecosystem", "third-party OS or driver compatibility advancement for Apple Silicon"
     if semantic_identity.scope == "third-party-context":
         if is_title_primary_apple_legal_proceeding_story(title, text):
             return "strong", "Apple-specific lawsuit or legal proceeding"
@@ -27244,8 +27536,6 @@ def classify_relevance_tier(
         or is_multi_vendor_market_report_with_material_apple_metrics(text, title)
     ):
         return "weak", "non-Apple primary subject using Apple only as comparison or compatibility context"
-    if is_apple_silicon_third_party_os_driver_compatibility_story(title, text):
-        return "ecosystem", "third-party OS or driver compatibility advancement for Apple Silicon"
     if (
         semantic_identity.content_form == "hands_on"
         and semantic_identity.title_products
@@ -27661,11 +27951,50 @@ def classify_relevance_tier(
     return "weak", "no strong Apple action"
 
 
+def classify_projected_article_relevance(
+    source_title: str,
+    title: str,
+    summary: str,
+    key_facts: list[str],
+    source_name: str,
+) -> tuple[str, str]:
+    """Classify a projected item without discarding its source article's editorial form."""
+    tier, reason = classify_relevance_tier(
+        title,
+        summary,
+        key_facts,
+        source_name,
+    )
+    if clean_sentence(source_title) == clean_sentence(title):
+        return tier, reason
+    source_identity = title_led_identity(source_title, summary)
+    if not is_roundup_article_title(source_title) and source_identity.content_form not in {
+        "buying_advice",
+        "deal",
+        "poll",
+        "roundup",
+        "third_party_spotlight",
+        "tutorial",
+    }:
+        return tier, reason
+    source_tier, source_reason = classify_relevance_tier(
+        source_title,
+        summary,
+        key_facts,
+        source_name,
+    )
+    if source_tier == "weak":
+        return "weak", source_reason
+    return tier, reason
+
+
 def choose_category(title: str, summary: str) -> str:
     text = f"{title} {summary}"
     title_text = title.lower()
     lead_scope = title_and_lead_scope(title, summary, limit=1500)
     semantic_identity = title_led_identity(title, summary)
+    if is_projected_apple_hardware_roadmap_story(title, text):
+        return "hardware_products"
     if is_apple_product_applied_research_story(title, text):
         return "hardware_products"
     if is_apple_product_driven_market_forecast_story(title, text):
@@ -28641,13 +28970,31 @@ def refresh_event_metadata(event: Event) -> None:
             )
             for article in event.articles
         )
-        event.event_kind = "ecosystem_interop" if explicit_interop else "third_party_ecosystem"
-        event.relevance_tier = "ecosystem" if explicit_interop else "weak"
-        event.relevance_reason = (
-            "third-party platform update with a concrete Apple-device interoperability improvement"
-            if explicit_interop
-            else "third-party title subject with Apple used only as comparison or compatibility context"
+        apple_silicon_compatibility = any(
+            is_apple_silicon_third_party_os_driver_compatibility_story(
+                article.title,
+                " ".join([article.summary, *article.key_facts[:5]]),
+            )
+            for article in event.articles
         )
+        if apple_silicon_compatibility:
+            event.event_kind = "os_compatibility"
+            event.relevance_tier = "ecosystem"
+            event.relevance_reason = (
+                "third-party OS or driver compatibility advancement for Apple Silicon"
+            )
+        elif explicit_interop:
+            event.event_kind = "ecosystem_interop"
+            event.relevance_tier = "ecosystem"
+            event.relevance_reason = (
+                "third-party platform update with a concrete Apple-device interoperability improvement"
+            )
+        else:
+            event.event_kind = "third_party_ecosystem"
+            event.relevance_tier = "weak"
+            event.relevance_reason = (
+                "third-party title subject with Apple used only as comparison or compatibility context"
+            )
         event.category = article_category
         return
     if is_apple_device_battery_regulation_story(identity_scope):
@@ -32555,6 +32902,23 @@ def rebuild_event_from_articles(event: Event, articles: list[Article]) -> Event:
     event.merge_warnings = event_merge_warnings(event.articles)
     event.title, event.summary, event.key_facts = build_event_summary(event.articles)
     refresh_event_metadata(event)
+    if (
+        len(event.articles) > 1
+        and len(set(kinds)) == 1
+        and all(
+            article_title_led_event_identity(article).scope == "apple-direct"
+            for article in event.articles
+        )
+    ):
+        # Aggregate summaries intentionally combine facts from every source.
+        # Background facts must not replace a unanimous title-level event kind.
+        event.event_kind = kinds[0]
+        event.category = event_category_from_metadata(
+            event.title,
+            event.summary,
+            event.key_facts,
+            kinds[0],
+        )
     if articles_form_cohesive_os_release_wave(event.articles):
         event.event_kind = "os_app"
         event.category = "software_systems"
@@ -33208,7 +33572,12 @@ def consolidate_events(events: list[Event]) -> list[Event]:
 
 def event_from_article_group(source_event: Event, articles: list[Article]) -> Event:
     event_id = hashlib.sha1(
-        " ".join(sorted(normalize_url(article.url) for article in articles)).encode("utf-8")
+        " ".join(
+            sorted(
+                f"{normalize_url(article.url)}\x1f{clean_sentence(article.title).lower()}"
+                for article in articles
+            )
+        ).encode("utf-8")
     ).hexdigest()[:12]
     event = Event(
         event_id=event_id,
@@ -33412,91 +33781,46 @@ def split_mixed_topic_events(events: list[Event]) -> list[Event]:
     return split_events
 
 
-def _cluster_seed_events(articles: list[Article]) -> list[Event]:
+def provisional_seed_groups(articles: list[Article]) -> list[list[Article]]:
+    """Generate one-pass recall-oriented hints; the core reconciler owns final boundaries."""
     events: list[Event] = []
     for article in sorted(articles, key=lambda item: item.published_utc):
-        candidates = [event for event in events if should_merge(article, event)]
         matched = max(
-            candidates,
+            (event for event in events if should_merge(article, event)),
             key=lambda event: article_event_match_affinity(article, event),
             default=None,
         )
-        if matched:
-            matched.articles.append(article)
-            matched.tokens |= article.tokens
-            if article.published_utc < matched.published_utc:
-                matched.published_utc = article.published_utc
-                matched.published_raw = article.published_raw
-                matched.published_source = article.published_source
-                matched.confidence = article.confidence
-            if matched.category != article.category:
-                categories = [item.category for item in matched.articles]
-                matched.category = max(set(categories), key=categories.count)
-            kinds = [item.event_kind for item in matched.articles]
-            matched.event_kind = max(set(kinds), key=kinds.count)
-            matched.relevance_tier, matched.relevance_reason = event_relevance_tier(matched.articles)
-            matched.regions = set().union(*(item.regions for item in matched.articles))
-            matched.merge_warnings = event_merge_warnings(matched.articles)
-            matched.title, matched.summary, matched.key_facts = build_event_summary(matched.articles)
-            refresh_event_metadata(matched)
-        else:
-            title, summary, key_facts = build_event_summary([article])
-            event_id = hashlib.sha1(
-                f"{article.published_utc.isoformat()} {article.title}".encode("utf-8")
-            ).hexdigest()[:12]
-            event = Event(
-                event_id=event_id,
-                category=article.category,
-                title=title,
-                summary=summary,
-                key_facts=key_facts,
-                published_utc=article.published_utc,
-                published_raw=article.published_raw,
-                published_source=article.published_source,
-                confidence=article.confidence,
-                articles=[article],
-                tokens=set(article.tokens),
-                event_kind=article.event_kind,
-                relevance_tier=article.relevance_tier,
-                relevance_reason=article.relevance_reason,
-                regions=set(article.regions),
-                merge_warnings=event_merge_warnings([article]),
-            )
-            refresh_event_metadata(event)
-            events.append(event)
-    consolidated = consolidate_events(events)
-    split_events = split_mixed_topic_events(consolidated)
-    reconsolidated = consolidate_events(split_events)
-    return sorted(reconsolidated, key=lambda event: event.published_utc)
+        if matched is None:
+            events.append(singleton_merge_event(article))
+            continue
+        replacement = event_from_article_group(
+            matched,
+            [*matched.articles, article],
+        )
+        events[events.index(matched)] = replacement
+    # A single recall pass preserves sparse translations that have no shared
+    # structured key yet. The core reconciler remains the sole final boundary
+    # authority; legacy split/reconsolidate passes must not mutate these hints.
+    return [event.articles for event in consolidate_events(events)]
 
 
 def cluster_articles(articles: list[Article]) -> list[Event]:
-    seed_events = _cluster_seed_events(articles)
-    seed_events_by_articles = {
-        frozenset(id(article) for article in event.articles): event
-        for event in seed_events
-    }
+    seed_groups = provisional_seed_groups(articles)
     profiles = {
         id(article): article_reconciliation_profile(article)
         for article in articles
     }
-    changed_article_ids = {
-        id(article)
-        for article in articles
-        if reconcile_article_relevance(article, profiles[id(article)])
-    }
+    for article in articles:
+        reconcile_article_relevance(article, profiles[id(article)])
 
     reconciled_groups = reconcile_articles(
         articles,
         profile_for=lambda article: profiles[id(article)],
-        initial_groups=[event.articles for event in seed_events],
+        initial_groups=seed_groups,
     )
     events = []
     for group in reconciled_groups:
-        group_ids = frozenset(id(article) for article in group)
-        event = seed_events_by_articles.get(group_ids)
-        if event is None or changed_article_ids & group_ids:
-            event = event_from_article_group(singleton_merge_event(group[0]), list(group))
+        event = event_from_article_group(singleton_merge_event(group[0]), list(group))
         shared_event_keys = supported_reconciliation_event_keys(
             [profiles[id(article)] for article in group]
         )
@@ -33510,13 +33834,48 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
                     "mixed relevance tiers",
                 }
             ]
+        source_kinds = [article.event_kind for article in group]
+        dominant_kind = max(set(source_kinds), key=source_kinds.count)
+        if (
+            len(group) > 1
+            and source_kinds.count(dominant_kind) > len(group) / 2
+            and shared_event_keys
+            and all(
+                profiles[id(article)].identity is not None
+                and profiles[id(article)].identity.scope == "apple-direct"
+                for article in group
+            )
+        ):
+            event.event_kind = dominant_kind
+            event.category = event_category_from_metadata(
+                event.title,
+                event.summary,
+                event.key_facts,
+                dominant_kind,
+            )
         category_hints = {
             profiles[id(article)].category_hint
             for article in group
             if profiles[id(article)].category_hint
         }
         if len(category_hints) == 1:
+            # Structured reconciliation hints are the final category authority;
+            # aggregate summaries can contain software or hardware background.
             event.category = next(iter(category_hints))
+        trusted_direct_profiles = [
+            profiles[id(article)]
+            for article in group
+            if profiles[id(article)].trusted_direct_action
+        ]
+        if (
+            trusted_direct_profiles
+            and all(article.relevance_tier != "weak" for article in group)
+            and event.relevance_tier == "weak"
+        ):
+            event.relevance_tier = "strong"
+            event.relevance_reason = (
+                "structured title and lead evidence identifies a direct Apple action"
+            )
         defer_reasons = {
             profiles[id(article)].defer_reason
             for article in group
@@ -33923,7 +34282,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             token_summary = " ".join([article_summary[:1200], *article_key_facts[:5]])
             tokens = article_tokens(article_title, token_summary)
             event_kind = detect_event_kind(article_title, event_context_summary, article_key_facts)
-            relevance_tier, relevance_reason = classify_relevance_tier(
+            relevance_tier, relevance_reason = classify_projected_article_relevance(
+                candidate.title,
                 article_title,
                 event_context_summary,
                 article_key_facts,
