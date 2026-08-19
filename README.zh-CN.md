@@ -12,13 +12,13 @@
 
 ## 最新更新
 
-### 1.57.0 - 2026-08-18
+### 1.58.0 - 2026-08-19
 
-- 新增基于标题和导语的权威事件身份，覆盖系统发布阶段、安全与监管动作、第一方服务、平台兼容性和产品路线图子事件，稳定区分开发者测试版、公开测试版、候选版、正式更新及不同产品动作。
-- 重构确定性归并流程，由核心 reconciler 独立负责最终事件边界，旧聚类器仅提供召回提示，不再根据宽泛产品、主题或正文背景反复拆分和重新归并事件。
-- 改进混合系统发布列车和真实多产品代码披露的复合报道处理，在保留各来源独立事实的同时，稳定投影并分类 iMac、Beats、MacBook、家庭设备、Apple TV、AirPods、HomePod 和 iPhone 等独立硬件事件。
-- 改进第三方对比、编辑型汇总、推广尾部和偶发 Apple 引用的相关性与清理边界，同时保留明确的 Apple Silicon 生态支持、第一方服务变化、直接法律行动和 Apple 硬件生产报道。
-- 更新手动兜底规则，并将回归测试由 1,046 项增加到 1,089 项；并发联网验证保持 93 个来源 URL 和完全一致的发现数量，运行时间由 103.62 秒降至 98.63 秒，纯净子代理验证没有聚类警告或延后事件回收。
+- 移除旧的第二轮传递式模糊归并，由结构化 reconciler 独立负责最终事件边界，避免宽泛的规范标题、产品或主题键重新打开已经确定的事件组。
+- 新增正向主张投影和更严格的“主体＋动作”身份，改进稀疏跨来源报道、App Store 执法、监管服务影响、系统功能、产品路线图和第一方活动挑战的精确归并。
+- 改进动作归属相关性边界，使第三方工具、浏览器报道、观点文章、未来支持回顾以及仅把 Apple 设备记录作为证据的非 Apple 案件保持 `weak`，同时保留直接 Apple 平台、法律、服务和产品动作。
+- 改进第一方小组件与 Smart Stack、App Store 下架、当前 iOS 内置 App 变化、Home Hub 软件、Apple Card 权益、产品世代和地区报道的分类与事件边界，不依赖宽泛关键词例外。
+- 更新手动兜底规则，并将回归测试由 1,089 项增加到 1,109 项；并发联网验证保持 78 个来源 URL 和完全一致的发现数量，运行时间由 73.47 秒降至 69.96 秒，纯净子代理验证无聚类警告，并完整覆盖全部 61 个保留来源 URL。
 
 ## 它会做什么
 
@@ -37,7 +37,7 @@
 - `scripts/apple_news_core/event_identity.py` 将文章标题和导语转换为结构化事件身份，覆盖产品、组件、参与方、动作、地区、法律案件、内容形态和命名主体。正文只作为受约束的辅助证据，避免相关文章和背景段落重新定义事件。
 - `scripts/apple_news_core/event_matcher.py` 使用保守的产品、组件、动作、地区、法律案件和主体兼容性规则比较事件身份。将该决策层保持为纯函数，使同事件聚类可以独立测试，也更便于维护。
 - `scripts/apple_news_core/event_reconciler.py` 保留已接受的种子聚类，应用明确动作边界，并通过精确跨来源事件签名归并报道，避免泛相似度或传递桥接重新打开已经确定的事件组。
-- `tests/test_event_identity_architecture.py`、`tests/test_20260805_event_reconciliation.py`、`tests/test_20260806_relevance_boundaries.py`、`tests/test_20260811_structured_reconciliation.py`、`tests/test_20260812_assertion_reconciliation.py`、`tests/test_20260813_primary_action_boundaries.py`、`tests/test_20260814_positive_event_cohesion.py`、`tests/test_20260815_authoritative_event_identity.py`、`tests/test_20260816_authoritative_pipeline_cleanup.py` 和 `tests/test_20260817_action_owner_cleanup.py` 为身份提取、匹配、结构化断言归并、动作主体、正向事件聚合、供应商动作、内容边界和相关性分层提供聚焦的回归测试；现有爬虫测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
+- `tests/test_event_identity_architecture.py`、`tests/test_20260805_event_reconciliation.py`、`tests/test_20260806_relevance_boundaries.py`、`tests/test_20260811_structured_reconciliation.py`、`tests/test_20260812_assertion_reconciliation.py`、`tests/test_20260813_primary_action_boundaries.py`、`tests/test_20260814_positive_event_cohesion.py`、`tests/test_20260815_authoritative_event_identity.py`、`tests/test_20260816_authoritative_pipeline_cleanup.py`、`tests/test_20260817_action_owner_cleanup.py`、`tests/test_20260818_authoritative_boundaries.py` 和 `tests/test_20260819_primary_claim_boundaries.py` 为身份提取、匹配、结构化断言归并、动作主体、正向事件聚合、供应商动作、主张投影、内容边界和相关性分层提供聚焦的回归测试；现有爬虫测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
 
 ## 它不会做什么
 

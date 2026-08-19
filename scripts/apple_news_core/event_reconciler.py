@@ -520,6 +520,22 @@ def _title_fact_signatures(title: str, lead: str) -> set[str]:
 def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
     """Return a title-led Apple TV work and action without using publisher data."""
     raw = f"{title}. {lead[:600]}"
+    season_trailer_match = re.search(
+        r"\b(?:apple(?:\s+tv)?\s+)?(?:releases?|released|shares?|shared|unveils?|unveiled)\s+"
+        r"(?:a\s+|the\s+|new\s+|first\s+)*"
+        r"([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Za-z0-9'’.-]+){0,7}?)\s+"
+        r"season\s+\d+\s+(?:trailer|teaser)\b",
+        raw,
+        re.I,
+    )
+    if season_trailer_match:
+        subject = re.sub(
+            r"[^a-z0-9]+",
+            "-",
+            _normalized(season_trailer_match.group(1)),
+        ).strip("-")
+        if subject and subject not in _GENERIC_SUBJECT_WORDS:
+            return subject, "trailer"
     viewing_record_match = re.search(
         r"\b([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Za-z0-9'’.-]+){0,7}?)\s+"
         r"season\s+\d+\b.{0,90}\b(?:biggest\s+(?:launch|premiere)|"
@@ -536,7 +552,7 @@ def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
         if subject and subject not in _GENERIC_SUBJECT_WORDS:
             return subject, "viewing-record"
     trailer_for_match = re.search(
-        r"\bApple\s+TV\s+(?:releases?|shares?|publishes?|unveils?)\s+"
+        r"\bApple(?:\s+TV)?\s+(?:releases?|released|shares?|shared|publishes?|unveils?)\s+"
         r"(?:a\s+|the\s+|new\s+|first\s+)*"
         r"(?:trailer|teaser)\s+for\s+"
         r"([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Za-z0-9'’.-]+){0,7}?)"
@@ -595,6 +611,19 @@ def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
         subject = re.sub(r"[^a-z0-9]+", "-", _normalized(quoted_trailer.group(1))).strip("-")
         if subject and subject not in _GENERIC_SUBJECT_WORDS:
             return subject, "trailer"
+    release_work_match = re.search(
+        r"\b([A-Z][A-Za-z0-9'’.-]+(?:\s+[A-Z][A-Za-z0-9'’.-]+){1,7})"
+        r"(?=\s+(?:will\s+stream\s+on|for|on)\s+Apple\s+TV\b|[,，]\s*(?:by|由)\b)",
+        raw,
+    )
+    if release_work_match:
+        subject = re.sub(
+            r"[^a-z0-9]+",
+            "-",
+            _normalized(release_work_match.group(1)),
+        ).strip("-")
+        if subject and subject not in _GENERIC_SUBJECT_WORDS:
+            return subject, "new-project"
     patterns = (
         (
             r"\bfuture\s+([A-Z][A-Za-z0-9'’.-]*(?:\s+[A-Z][A-Za-z0-9'’.-]*){0,7})\s+seasons?\b",
@@ -892,10 +921,14 @@ def _structured_assertion_keys(
         separation |= {"assertion-subject:icloud-private-relay", "assertion-action:class-action"}
 
     primary_lead = primary_scope.removeprefix(f"{title_scope}. ")
-    content = _content_work_assertion(title, primary_lead)
+    content = _content_work_assertion(title, lead)
     if content and (
         "apple-tv" in identity.products
         or _contains(evidence_scope, "apple tv", "apple tv+", "apple tv plus")
+        or (
+            identity.scope == "apple-direct"
+            and re.match(r"^apple\b", title_scope)
+        )
     ):
         subject, action = content
         event_keys.add(f"structured-assertion:apple-tv:{subject}:{action}")
@@ -1819,6 +1852,7 @@ def _apple_first_party_home_camera_roadmap(title: str, text: str) -> bool:
 
 def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     title = text.split(". ", 1)[0]
+    lead = text.split(". ", 1)[1] if ". " in text else ""
     security_bulletin = _contains(
         title,
         "security fix",
@@ -1869,8 +1903,19 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
         )
     )
     explicit_feature_change = "feature-change" in identity.title_actions
+    direct_first_party_lead_change = bool(
+        re.search(
+            r"\bapple\s+(?:(?:is|has|will|plans?\s+to|continues?\s+to)\s+)?"
+            r"(?:adds?|adding|brings?|bringing|changes?|changing|updates?|updating|"
+            r"redesigns?|redesigning|integrates?|integrating|moves?|moving)\b|"
+            r"(?:苹果).{0,35}(?:新增|加入|带来|调整|更改|更新|重设计|整合|移入)",
+            lead,
+            re.I,
+        )
+    )
     current_change = bool(
         explicit_feature_change
+        or direct_first_party_lead_change
         or (numbered_incremental and release_announcement)
         or (
             identity.content_form == "news"
@@ -2416,17 +2461,27 @@ def _app_store_subjects(title: str, identity: EventIdentity) -> set[str]:
             r"([a-z][a-z0-9.+-]{2,30})(?:\b|[?？])",
             title,
         )
+    if not object_match:
+        object_match = re.search(
+            r"(?:下架|移除|撤下)\s*(?:了)?\s*"
+            r"([A-Za-z][A-Za-z0-9.+-]{2,30})(?:\b|[?？])",
+            title,
+        )
     if object_match and object_match.group(1) not in ignored:
         return {object_match.group(1)}
-    candidates = [
-        token
-        for token in re.findall(r"(?<![a-z0-9])([a-z][a-z0-9.+-]{2,30})(?![a-z0-9])", title)
-        if token not in ignored
-    ]
-    if candidates:
-        return {candidates[0]}
+    leading_subject = re.match(
+        r"^([A-Za-z][A-Za-z0-9.+-]{2,30})(?:\s|[：:，,])",
+        title,
+    )
+    if leading_subject and leading_subject.group(1) not in ignored:
+        return {leading_subject.group(1)}
     subjects = _subject_tokens(title, identity)
-    return {subject for subject in subjects if subject not in ignored}
+    return {
+        subject
+        for subject in subjects
+        if subject not in ignored
+        and subject in identity.title_named_subjects
+    }
 
 
 def _reconciliation_content_form(title: str, identity: EventIdentity) -> str:
@@ -2752,13 +2807,118 @@ def _legal_case_key(identity: EventIdentity) -> str:
     return ":".join(parts)
 
 
+def _editorial_or_third_party_claim_reason(
+    title: str,
+    text: str,
+    identity: EventIdentity,
+) -> str:
+    """Resolve headline ownership before Apple product terms can promote it."""
+    title_text = _canonical_title(title)
+    comparison_to_apple = bool(
+        re.search(
+            r"\b(?:catch(?:es|ing)?\s+up(?:\s+to|\s+with)?|"
+            r"close[sd]?\s+the\s+gap\s+with|outpace[sd]?|outperform[sd]?|"
+            r"beats?\s+out|rival[sd]?|versus|vs\.?)\s+"
+            r"(?:apple|iphone|ipad|mac(?:book|os)?|safari|watchos|tvos|visionos)\b|"
+            r"(?:追赶|赶超|媲美|对标|对比|挑战|超越)"
+            r"[^，。,:;；]{0,14}(?:苹果|iphone|ipad|mac|safari)",
+            title,
+            re.I,
+        )
+    )
+    direct_apple_title = bool(
+        re.search(r"^(?:apple(?:'s|’s)?|苹果)", title_text)
+        or re.search(
+            r"^(?:report|leak|code|sources?|消息|报道|泄露|代码|文件|爆料)"
+            r"[^。.!?]{0,32}(?:apple(?:'s|’s)?|苹果)",
+            title_text,
+        )
+    )
+    if (
+        not direct_apple_title
+        and comparison_to_apple
+    ):
+        return "non-Apple primary subject using Apple only as comparison context"
+
+    attributed_reporting = _contains(
+        title_text,
+        "report",
+        "reported",
+        "sources",
+        "filing",
+        "document",
+        "according to",
+        "报道称",
+        "消息称",
+        "文件显示",
+        "爆料",
+    )
+    first_person_editorial = bool(
+        re.search(
+            r"\b(?:i|we)\s+(?:would|could|want|wish|would\s+like)\b.{0,70}"
+            r"\b(?:change|fix|see|remove|add)\b|"
+            r"\bone\s+(?:design\s+)?decision\b.{0,55}\bi\s+would\s+change\b|"
+            r"(?:我|我们).{0,24}(?:希望|想要|会去|建议).{0,24}(?:改变|修改|加入|移除)",
+            title_text,
+        )
+    )
+    if first_person_editorial and not attributed_reporting:
+        return "opinion or commentary without a new Apple action"
+
+    future_recap_question = bool(
+        re.search(
+            r"\b(?:which|what|where)\b.{0,55}\b(?:is|are|comes?|coming)\s+next\??$|"
+            r"(?:哪些|什么|哪里).{0,30}(?:下一批|接下来|即将).{0,20}[?？]?$",
+            title_text,
+        )
+    )
+    current_action = bool(
+        identity.title_actions
+        or _contains(
+            title_text,
+            "announces",
+            "launches",
+            "releases",
+            "adds",
+            "expands",
+            "宣布",
+            "推出",
+            "发布",
+            "新增",
+            "扩展",
+        )
+    )
+    if future_recap_question and not current_action:
+        return "editorial future-support recap without a new Apple action"
+
+    third_party_builder = bool(
+        not re.match(r"^(?:apple(?:'s)?|苹果)", title_text)
+        and _contains(title_text, "ios", "ipados", "macos", "watchos", "visionos", "iphone", "ipad", "mac")
+        and re.search(
+            r"\b(?:developer|editor|author|user|outlet|publication)\b.{0,55}"
+            r"\b(?:builds?|built|creates?|created|develops?|developed|made)\b.{0,35}"
+            r"\b(?:app|tool|utility|widget)\b|"
+            r"(?:外媒|媒体|编辑|作者|开发者|用户|网友).{0,40}"
+            r"(?:开发|制作|打造).{0,30}(?:应用|工具|程序|组件)",
+            title_text,
+        )
+    )
+    if third_party_builder:
+        return "third-party developer utility using an Apple platform without an Apple action"
+    return ""
+
+
 def _unsupported_third_party_reason(
+    title: str,
     text: str,
     identity: EventIdentity,
     exact_facets: frozenset[str],
     relevance_tier: str,
     trusted_direct_action: bool,
 ) -> str:
+    claim_reason = _editorial_or_third_party_claim_reason(title, text, identity)
+    if claim_reason:
+        return claim_reason
     if relevance_tier == "ecosystem" or trusted_direct_action:
         return ""
     if _versioned_os_feature_report(text, identity):
@@ -2944,6 +3104,629 @@ def _canonical_first_party_action_keys(
     }
 
 
+def _primary_claim_projection(
+    title: str,
+    lead: str,
+    identity: EventIdentity,
+    regions: Iterable[str],
+    evidence: str = "",
+) -> tuple[set[str], set[str], set[str], str, bool]:
+    """Return a title-led subject/predicate frame for sparse cross-source news.
+
+    Legacy topic matching is intentionally recall-oriented and can place nearby
+    Apple stories in one provisional seed. These keys describe the concrete
+    claim made by the headline and first substantive lead, so reconciliation
+    can require positive identity instead of treating missing conflicts as
+    proof that two reports are the same.
+    """
+    title_text, text = _primary_assertion_scope(title, lead)
+    claim_evidence = f"{text} {_normalized(evidence)[:1400]}".strip()
+    event_keys: set[str] = set()
+    boundaries: set[str] = set()
+    separation: set[str] = set()
+    category_hint = ""
+    trusted_direct_action = False
+
+    def add_claim(
+        subject: str,
+        predicate: str,
+        *,
+        qualifier: str = "",
+        category: str = "",
+        trusted: bool = True,
+    ) -> None:
+        nonlocal category_hint, trusted_direct_action
+        suffix = f":{qualifier}" if qualifier else ""
+        event_keys.add(f"primary-claim:{subject}:{predicate}{suffix}")
+        boundaries.add(f"primary-claim-subject:{subject}")
+        separation.add(f"primary-claim-subject:{subject}")
+        separation.add(f"primary-claim-predicate:{predicate}")
+        if category:
+            category_hint = category
+        trusted_direct_action = trusted_direct_action or trusted
+
+    direct_title_subject = bool(
+        identity.scope == "apple-direct"
+        or re.search(r"^(?:apple(?:'s|’s)?|苹果)", title_text)
+        or re.search(
+            r"^(?:report|leak|code|sources?|消息|报道|泄露|代码|文件|爆料)"
+            r"[^。.!?]{0,32}(?:apple(?:'s|’s)?|苹果)",
+            title_text,
+        )
+    )
+
+    title_products = sorted(identity.title_products)
+    production_subjects = list(title_products)
+    if re.search(
+        r"\b(?:foldable|folding)\s+(?:apple\s+)?iphone\b|"
+        r"(?:折叠屏|折叠式)\s*iphone|iphone\s*(?:ultra|fold)",
+        text,
+    ):
+        production_subjects = ["foldable-iphone"]
+    production_volume = re.search(
+        r"(?<!\d)(\d{1,4}(?:\.\d+)?)\s*(million|万)\s*(?:units?|台)?",
+        text,
+    )
+    production_action = bool(
+        identity.actions & {"supply-production"}
+        or _contains(
+            text,
+            "production target",
+            "production goal",
+            "orders to",
+            "order target",
+            "units this year",
+            "产量目标",
+            "生产目标",
+            "年产目标",
+            "订单上调",
+        )
+    )
+    if len(production_subjects) == 1 and production_volume and production_action:
+        value = float(production_volume.group(1))
+        multiplier = 1_000_000 if production_volume.group(2) == "million" else 10_000
+        normalized_units = str(int(value * multiplier))
+        add_claim(
+            production_subjects[0],
+            "production-target",
+            qualifier=f"units-{normalized_units}",
+            category="hardware_products",
+            trusted=direct_title_subject,
+        )
+
+    if re.search(r"\bsiri\s+remote\b|siri\s*remote\s*遥控器", text) and _contains(
+        text,
+        "new",
+        "next",
+        "upgraded",
+        "upgrade",
+        "upcoming",
+        "code hints",
+        "identifier",
+        "新一代",
+        "新款",
+        "升级款",
+        "代码",
+        "标识",
+        "曝光",
+    ):
+        add_claim(
+            "siri-remote",
+            "hardware-refresh",
+            category="hardware_products",
+            trusted=direct_title_subject,
+        )
+
+    if (
+        "apple-home-hub" in identity.title_products
+        and _contains(
+            text,
+            "widget gallery",
+            "smart stack",
+            "widget support",
+            "widget mirroring",
+            "小组件图库",
+            "小组件库",
+            "智能叠放",
+            "小组件镜像",
+            "支持小组件",
+            "搭载小组件",
+        )
+    ):
+        add_claim(
+            "apple-home-hub",
+            "widget-capability",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    cashback_percent = re.search(
+        r"(?<!\d)(\d{1,2}(?:\.\d+)?)\s*%[^。.!?]{0,40}"
+        r"(?:daily cash|cash\s*back|cashback|返现)|"
+        r"(?:daily cash|cash\s*back|cashback|返现)[^。.!?]{0,40}"
+        r"(?<!\d)(\d{1,2}(?:\.\d+)?)\s*%",
+        text,
+    )
+    if "apple-card" in identity.title_products and cashback_percent:
+        percentage = cashback_percent.group(1) or cashback_percent.group(2)
+        add_claim(
+            "apple-card",
+            "cashback-offer",
+            qualifier=f"percent-{percentage}",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    app_store_subject = (
+        "app-store" in identity.title_products
+        or _contains(title_text, "app store", "应用商店")
+        or (
+            re.match(r"^(?:apple|苹果)", title_text)
+            and _contains(
+                text,
+                "business terms for apps",
+                "commercial terms for apps",
+                "应用商业条款",
+            )
+        )
+    )
+    app_store_distribution_policy = bool(
+        _contains(text, "app store", "应用商店", "app marketplaces", "应用市场")
+        and _contains(
+            text,
+            "alternative app marketplace",
+            "alternative app marketplaces",
+            "third-party app marketplace",
+            "third-party app marketplaces",
+            "web distribution",
+            "external links",
+            "third-party payment",
+            "third-party platforms",
+            "第三方应用商店",
+            "替代应用市场",
+            "网页分发",
+            "外部链接",
+            "第三方支付",
+            "第三方平台",
+        )
+        and _contains(
+            text,
+            "change",
+            "changes",
+            "agreement",
+            "allow",
+            "adding",
+            "调整",
+            "落地",
+            "协议",
+            "允许",
+            "开放",
+        )
+    )
+    if app_store_distribution_policy:
+        region_values = {
+            region for region in regions if region and region != "multi-region"
+        }
+        if _contains(text, "brazil", "巴西"):
+            region_values.add("brazil")
+        qualifier = ",".join(sorted(region_values)) or "global"
+        add_claim(
+            "app-store",
+            "distribution-payment-policy-change",
+            qualifier=qualifier,
+            category="software_systems",
+            trusted=direct_title_subject or identity.scope == "apple-direct",
+        )
+    app_store_terms = bool(
+        app_store_subject
+        and _contains(
+            text,
+            "terms",
+            "rules",
+            "app store changes",
+            "fees",
+            "fee structure",
+            "external payments",
+            "business terms",
+            "商业条款",
+            "应用商业条款",
+            "新规",
+            "费率",
+            "收费结构",
+            "外部支付",
+        )
+        and _contains(
+            title_text,
+            "overhaul",
+            "change",
+            "changes",
+            "new",
+            "lower",
+            "unified",
+            "settle",
+            "settles",
+            "squashes",
+            "announces",
+            "调整",
+            "变更",
+            "新条款",
+            "降低",
+            "统一",
+            "宣布",
+        )
+        and (
+            _contains(text, "european union", " eu ", "europe", "欧盟", "欧洲")
+            or bool({region for region in regions if region and region != "multi-region"})
+        )
+    )
+    if app_store_terms:
+        region_values = {
+            region for region in regions if region and region != "multi-region"
+        }
+        if _contains(text, "european union", " eu ", "europe", "欧盟", "欧洲"):
+            region_values.add("europe")
+        qualifier = ",".join(sorted(region_values)) or "global"
+        add_claim(
+            "app-store",
+            "commercial-terms-change",
+            qualifier=qualifier,
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    app_store_commission_context = bool(
+        _contains(claim_evidence, "app store", "应用商店")
+        and _contains(
+            claim_evidence,
+            "commission revenue",
+            "commission income",
+            "commission",
+            "佣金收入",
+            "佣金",
+        )
+    )
+    app_store_commission_pressure_title = bool(
+        _contains(
+            title_text,
+            "commission revenue",
+            "app store revenue",
+            "commission income",
+            "make any commission",
+            "regulated away",
+            "佣金收入",
+            "服务收入",
+            "佣金",
+        )
+        or (
+            _contains(title_text, "services business", "service revenue", "服务业务", "服务收入")
+            and app_store_commission_context
+        )
+    )
+    commission_revenue_pressure = bool(
+        (app_store_subject or (direct_title_subject and app_store_commission_context))
+        and app_store_commission_pressure_title
+        and _contains(
+            claim_evidence,
+            "down",
+            "decline",
+            "declining",
+            "fall",
+            "falling",
+            "danger",
+            "may not",
+            "pressure",
+            "erosion",
+            "下降",
+            "下滑",
+            "冲击",
+            "侵蚀",
+            "无法收取",
+            "可能不再",
+        )
+    )
+    if commission_revenue_pressure:
+        add_claim(
+            "app-store",
+            "commission-revenue-pressure",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+        if (
+            _contains(
+                claim_evidence,
+                "regulator",
+                "regulatory",
+                "regulation",
+                "反垄断",
+                "监管",
+            )
+            and _contains(
+                claim_evidence,
+                "services business",
+                "services growth",
+                "service revenue",
+                "services revenue",
+                "服务业务",
+                "服务收入",
+            )
+        ):
+            add_claim(
+                "apple-services",
+                "regulatory-financial-impact",
+                category="software_systems",
+                trusted=direct_title_subject,
+            )
+
+    if (
+        _contains(text, "app store", "应用商店")
+        and _contains(
+            title_text,
+            "pulls",
+            "pulled",
+            "removes",
+            "removed",
+            "delists",
+            "delisted",
+            "下架",
+            "移除",
+            "撤下",
+        )
+    ):
+        add_claim(
+            "app-store",
+            "app-enforcement-removal",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    airpods_generation = re.search(
+        r"\bairpods\s*(\d{1,2})\b|airpods\s*第?\s*(\d{1,2})\s*代",
+        title_text,
+    )
+    if airpods_generation and _contains(
+        text,
+        "model",
+        "models",
+        "identifier",
+        "identifiers",
+        "referenced",
+        "code",
+        "型号",
+        "标识",
+        "代码",
+        "曝光",
+    ):
+        generation = airpods_generation.group(1) or airpods_generation.group(2)
+        add_claim(
+            f"airpods-generation-{generation}",
+            "model-identifier-leak",
+            category="hardware_products",
+            trusted=direct_title_subject,
+        )
+
+    if (
+        "airpods" in identity.title_products
+        and _contains(
+            text,
+            "leak",
+            "leaked",
+            "demo",
+            "video",
+            "code",
+            "codename",
+            "launch",
+            "naming",
+            "named",
+            "曝光",
+            "演示",
+            "视频",
+            "代码",
+            "代号",
+            "推出",
+            "命名",
+        )
+        and (
+            re.search(
+                r"\bcamera(?:-equipped)?\s+airpods\b|"
+                r"\bairpods\b[^。.!?]{0,28}\bcameras?\b",
+                text,
+            )
+            or re.search(
+                r"(?:摄像头|相机)[^。！？]{0,20}airpods|"
+                r"airpods[^。！？]{0,20}(?:摄像头|相机)",
+                text,
+            )
+        )
+    ):
+        add_claim(
+            "camera-airpods",
+            "product-capability-leak",
+            category="hardware_products",
+            trusted=direct_title_subject,
+        )
+
+    if (
+        "tvos" in identity.title_products
+        and "siri" in identity.title_products
+        and _contains(
+            text,
+            "siri ai",
+            "siri 条目",
+            "siri entry",
+            "siri app",
+            "siri 应用",
+        )
+    ):
+        add_claim(
+            "tvos-siri",
+            "ai-capability",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    if (
+        identity.title_products
+        & {"app-store", "apple-music", "apple-tv", "icloud"}
+        and (
+            _contains(
+                title_text,
+                "outage",
+                "experiencing issues",
+                "service issues",
+                "service interruption",
+                "服务中断",
+                "出现故障",
+                "服务问题",
+                "宕机",
+            )
+            or re.search(
+                r"\b(?:is|are|currently|services?)\s+down\b|"
+                r"(?:服务|系统).{0,10}(?:不可用|中断|故障)",
+                title_text,
+            )
+        )
+    ):
+        add_claim(
+            "apple-online-services",
+            "service-outage",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    if (
+        "ipad" in identity.title_products
+        and _contains(text, "patent", "专利")
+        and _contains(text, "camera control", "相机控制", "相机按键")
+    ):
+        add_claim(
+            "ipad-camera-control",
+            "patent-disclosure",
+            category="hardware_products",
+            trusted=direct_title_subject,
+        )
+
+    iphone_model = next(
+        (
+            component.removeprefix("iphone-model:")
+            for component in identity.title_components
+            if component.startswith("iphone-model:")
+        ),
+        "",
+    )
+    if (
+        iphone_model
+        and _contains(claim_evidence, "variable aperture", "可变光圈")
+        and _contains(claim_evidence, "exclusive", "only", "独占", "独享")
+    ):
+        add_claim(
+            f"iphone-{iphone_model}-camera",
+            "exclusive-variable-aperture",
+            category="hardware_products",
+            trusted=direct_title_subject,
+        )
+
+    doj_antitrust_response = bool(
+        _contains(text, "department of justice", " doj ", "司法部")
+        and _contains(text, "antitrust", "反垄断")
+        and _contains(
+            title_text,
+            "responds",
+            "rejects",
+            "rebuts",
+            "refutes",
+            "反驳",
+            "驳斥",
+            "回应",
+        )
+    )
+    if doj_antitrust_response:
+        add_claim(
+            "apple-doj-antitrust-case",
+            "legal-response",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    regulatory_service_impact = bool(
+        _contains(text, "antitrust", "regulator", "regulatory", "反垄断", "监管机构")
+        and _contains(text, "services business", "service revenue", "服务业务", "服务收入")
+        and _contains(
+            title_text,
+            "erodes",
+            "erosion",
+            "hits",
+            "impact",
+            "pressure",
+            "侵蚀",
+            "冲击",
+            "影响",
+            "打压",
+        )
+    )
+    if regulatory_service_impact:
+        add_claim(
+            "apple-services",
+            "regulatory-financial-impact",
+            category="software_systems",
+            trusted=direct_title_subject,
+        )
+
+    regulatory_meeting = bool(
+        _contains(
+            text,
+            "virtual meeting",
+            "constructive talks",
+            "constructive meeting",
+            "held talks",
+            "举行建设性会谈",
+            "建设性虚拟会晤",
+            "举行建设性虚拟会晤",
+        )
+        and _contains(
+            text,
+            "eu tech chief",
+            "european commission",
+            "digital markets act",
+            " dma ",
+            "欧盟科技主管",
+            "欧盟委员会",
+            "欧盟科技事务负责人",
+        )
+        and _contains(text, "siri", "ai tools", "ai 工具", "新版 siri")
+        and _contains(text, "tim cook", "库克")
+    )
+    if regulatory_meeting:
+        add_claim(
+            "apple-eu-ai-interoperability",
+            "regulatory-meeting",
+            category="software_systems",
+            trusted=True,
+        )
+
+    award_evidence = f"{title_text}. {_normalized(lead)[:900]}"
+    executive_award = bool(
+        _contains(award_evidence, "person of the year", "年度人物")
+        and _contains(award_evidence, "award", "recognized", "named", "获奖", "授予")
+        and _contains(award_evidence, "cannes lions", "戛纳狮子")
+        and _contains(award_evidence, "apple tv", "apple music", "苹果服务")
+    )
+    if executive_award:
+        add_claim(
+            "apple-services-executive",
+            "industry-award",
+            category="software_systems",
+            trusted=True,
+        )
+
+    return (
+        event_keys,
+        boundaries,
+        separation,
+        category_hint,
+        trusted_direct_action,
+    )
+
+
 def _product_anniversary_milestone(title: str) -> tuple[str, str] | None:
     milestone = re.search(
         r"\bturns?\s+(\d{1,3})\b|"
@@ -3083,6 +3866,19 @@ def build_reconciliation_profile(
         f"action:{key.rsplit(':', 1)[-1]}"
         for key in canonical_action_keys
     }
+    (
+        primary_claim_events,
+        primary_claim_boundaries,
+        primary_claim_separation,
+        primary_claim_category,
+        primary_claim_trusted,
+    ) = _primary_claim_projection(title, lead, identity, regions, evidence)
+    event_keys |= primary_claim_events
+    boundary_keys |= primary_claim_boundaries
+    separation_keys |= primary_claim_separation
+    if primary_claim_category:
+        category_hint = primary_claim_category
+    trusted_direct_action = trusted_direct_action or primary_claim_trusted
     structured_direct_assertion = bool(
         any(key.startswith("structured-assertion:") for key in assertion_events)
     )
@@ -3486,11 +4282,20 @@ def build_reconciliation_profile(
                 event_keys.add(f"structured-legal-settlement:{measurement}")
     removal_stage = _app_store_removal_stage(f"{title_text}. {primary_lead}")
     if removal_stage:
-        removal_subjects = _app_store_subjects(title_text, identity) or {"unknown-app"}
+        removal_subjects = _app_store_subjects(title_text, identity)
+        removal_attributions = {
+            component.removeprefix("report-attribution:")
+            for component in identity.components
+            if component.startswith("report-attribution:")
+        }
         incident_event_keys = {
             key
             for key in event_keys
             if key.startswith("structured-assertion:app-store:")
+        }
+        incident_event_keys |= {
+            f"app-store-removal-report:{attribution}:{removal_stage}"
+            for attribution in removal_attributions
         }
         incident_boundaries = {
             key
@@ -4030,23 +4835,28 @@ def build_reconciliation_profile(
     }
     if versioned_os_action and release_announcement_keys:
         separation_keys.add("predicate:os-release-announcement")
-    editorial_inference_without_new_reporting = relevance_tier == "weak" and relevance_reason.startswith(
-        (
-            "analysis or opinion",
-            "analysis without",
-            "buying advice",
-            "deal, buying advice",
-            "editorial ",
-            "how-to",
-            "multi-product outlook",
-            "opinion or commentary",
-            "personal ",
-            "reader poll",
-            "recap or roundup",
-            "routine recap",
-            "rumor feature recap",
-            "rumor feature roundup",
-            "tutorial or podcast",
+    editorial_inference_without_new_reporting = (
+        not primary_claim_trusted
+        and not versioned_os_action
+        and relevance_tier == "weak"
+        and relevance_reason.startswith(
+            (
+                "analysis or opinion",
+                "analysis without",
+                "buying advice",
+                "deal, buying advice",
+                "editorial ",
+                "how-to",
+                "multi-product outlook",
+                "opinion or commentary",
+                "personal ",
+                "reader poll",
+                "recap or roundup",
+                "routine recap",
+                "rumor feature recap",
+                "rumor feature roundup",
+                "tutorial or podcast",
+            )
         )
     )
     trusted_direct_action = bool(
@@ -4071,6 +4881,7 @@ def build_reconciliation_profile(
     elif trusted_direct_action:
         promotion_reason = "title-led direct Apple action confirmed by structured identity"
     defer_reason = _unsupported_third_party_reason(
+        title,
         text,
         identity,
         exact,
@@ -4087,6 +4898,8 @@ def build_reconciliation_profile(
     if editorial_inference_without_new_reporting:
         defer_reason = relevance_reason
         hard_boundary = "editorial-inference-without-new-reporting"
+    if defer_reason:
+        structural_direct_action = False
     if (
         not hard_boundary
         and not structural_direct_action
@@ -4234,6 +5047,8 @@ def _explicit_separation_conflict(
         "content-title:",
         "content-action:",
         "os-feature-subject:",
+        "primary-claim-subject:",
+        "primary-claim-predicate:",
         "product-family:",
         "product-model:",
         "legal-party:",
@@ -4691,6 +5506,19 @@ def supported_reconciliation_event_keys(
             ):
                 supported.add(key)
             continue
+        if key.startswith("primary-claim:"):
+            namespace = _event_key_namespace(key)
+            if all(
+                not {
+                    candidate
+                    for candidate in profile.event_keys
+                    if _event_key_namespace(candidate) == namespace
+                }
+                or key in profile.event_keys
+                for profile in profiles
+            ):
+                supported.add(key)
+            continue
         if all(not profile.event_keys or key in profile.event_keys for profile in profiles):
             supported.add(key)
     return supported
@@ -4916,7 +5744,8 @@ def reconcile_articles(
             key.startswith("structured-assertion:") for key in join_keys
         )
         canonical_action_join = any(
-            key.startswith("canonical-apple-action:") for key in join_keys
+            key.startswith(("canonical-apple-action:", "primary-claim:"))
+            for key in join_keys
         )
         evidence_join = any(
             key.startswith(STRUCTURED_EVIDENCE_KEY_PREFIXES)

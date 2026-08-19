@@ -11671,6 +11671,43 @@ def multi_product_hardware_roadmap_variants(
         for fact in facts:
             add_unique_text(scoped_facts, scoped_seen, fact)
         scoped_text = " ".join(scoped_facts).lower()
+        if structured_multi_product_report:
+            known_mapping = score_terms(
+                scoped_text,
+                [
+                    "known and sold",
+                    "already sold",
+                    "currently sold",
+                    "confirmed by apple",
+                    "confirmed mainland",
+                    "used for a known",
+                    "belongs to the",
+                    "已知产品",
+                    "已经上市",
+                    "已上市",
+                    "在售产品",
+                    "苹果已确认",
+                    "现有产品",
+                ],
+            ) > 0
+            unreleased_mapping = score_terms(
+                scoped_text,
+                [
+                    "unreleased",
+                    "upcoming",
+                    "new model",
+                    "unknown model",
+                    "not yet released",
+                    "未发布",
+                    "即将推出",
+                    "新款",
+                    "未知型号",
+                    "尚未上市",
+                    "代码线索",
+                ],
+            ) > 0
+            if known_mapping and not unreleased_mapping:
+                continue
         specific_label = labels[subject]
         for pattern, label in (
             (r"\biphone\s+ultra\b|\bfoldable\s+iphone\b|折叠(?:屏)?\s*iphone", "iPhone Ultra"),
@@ -11686,7 +11723,7 @@ def multi_product_hardware_roadmap_variants(
         variants.append(
             (variant_title, " ".join(scoped_facts[:6]), scoped_facts[:MAX_KEY_FACTS])
         )
-    return variants
+    return variants or original
 
 
 def compound_article_variants(
@@ -11789,7 +11826,7 @@ def compound_article_variants(
     if len(numbered_variants) > 1:
         return numbered_variants
     multi_product_variants = multi_product_hardware_roadmap_variants(title, summary, key_facts)
-    if len(multi_product_variants) > 1:
+    if multi_product_variants != [(title, summary, key_facts)]:
         return multi_product_variants
     iphone_variants = multi_family_iphone_report_variants(title, summary, key_facts)
     if len(iphone_variants) > 1:
@@ -13012,6 +13049,73 @@ def is_crime_case_with_apple_device_as_goods(title: str, text: str) -> bool:
         ["apple sued", "apple filed", "apple responded", "苹果起诉", "苹果报案", "苹果回应"],
     ) > 0
     return crime_context and device_as_goods and not direct_apple_action
+
+
+def is_non_apple_case_using_apple_device_records_as_evidence(title: str, text: str) -> bool:
+    """Treat a non-Apple case as context when device records are only evidence."""
+    lead = title_and_lead_scope(title, text, limit=1400).lower()
+    if effective_apple_term_score(f"{title} {lead}") <= 0:
+        return False
+    case_context = score_terms(
+        lead,
+        [
+            "criminal trial",
+            "murder trial",
+            "criminal case",
+            "homicide",
+            "murder",
+            "prosecutor",
+            "prosecution",
+            "defendant",
+            "刑事案件",
+            "刑事审判",
+            "谋杀案",
+            "凶杀案",
+            "检方",
+            "检察官",
+            "被告",
+            "庭审",
+        ],
+    ) > 0
+    evidentiary_role = score_terms(
+        lead,
+        [
+            "used as evidence",
+            "as evidence",
+            "device records",
+            "health records",
+            "health data",
+            "call logs",
+            "search history",
+            "forensic data",
+            "digital forensics",
+            "作为证据",
+            "用作证据",
+            "设备记录",
+            "健康记录",
+            "健康数据",
+            "通话记录",
+            "搜索记录",
+            "数字取证",
+        ],
+    ) > 0
+    direct_apple_action = score_terms(
+        lead,
+        [
+            "apple sued",
+            "apple filed",
+            "apple responded",
+            "apple disclosed",
+            "apple was ordered",
+            "apple subpoenaed",
+            "苹果起诉",
+            "苹果回应",
+            "苹果披露",
+            "苹果被要求",
+            "苹果收到传票",
+        ],
+    ) > 0
+    return case_context and evidentiary_role and not direct_apple_action
 
 
 def is_bootrom_secure_rom_exploit_story(text: str) -> bool:
@@ -26760,7 +26864,13 @@ def is_apple_operated_activity_challenge_story(title: str, text: str) -> bool:
         re.match(r"^(?:apple(?:'s)?|苹果(?:公司)?)\b", title_lower)
         or re.match(r"^苹果", title_lower)
     )
-    if not apple_title_actor:
+    branded_challenge = bool(
+        re.search(
+            r"\bapple\s+watch\s+(?:activity|fitness|workout)\s+challenge\b",
+            title_lower,
+        )
+    )
+    if not (apple_title_actor or branded_challenge):
         return False
     challenge = score_terms(
         scope,
@@ -26805,7 +26915,20 @@ def is_apple_operated_activity_challenge_story(title: str, text: str) -> bool:
             "邀请 apple watch 用户",
         ],
     ) > 0
-    return challenge and first_party_surface and reward_or_invitation
+    direct_launch = score_terms(
+        scope,
+        [
+            "apple will launch",
+            "apple launches",
+            "apple announced",
+            "苹果将推出",
+            "苹果推出",
+            "苹果宣布",
+        ],
+    ) > 0
+    return challenge and first_party_surface and (
+        reward_or_invitation or (branded_challenge and direct_launch)
+    )
 
 
 def is_direct_apple_restricted_mode_clarification_story(title: str, text: str) -> bool:
@@ -27497,6 +27620,8 @@ def classify_relevance_tier(
         return "weak", "third-party carrier or network outage affecting Apple devices"
     if is_crime_case_with_apple_device_as_goods(title, text):
         return "weak", "crime or fraud case where Apple devices are incidental goods"
+    if is_non_apple_case_using_apple_device_records_as_evidence(title, text):
+        return "weak", "non-Apple case where Apple device records are only evidence"
     if is_third_party_financial_service_with_apple_pay_support(title, text):
         return "weak", "third-party financial service with Apple Wallet or Apple Pay support"
     if is_direct_apple_first_party_program_story(title, summary):
@@ -33535,41 +33660,6 @@ def article_event_match_affinity(article: Article, event: Event) -> int:
     return score
 
 
-def event_merge_affinity(left: Event, right: Event) -> int:
-    return max(
-        (
-            article_event_match_affinity(article, right)
-            for article in left.articles
-        ),
-        default=0,
-    )
-
-
-def consolidate_events(events: list[Event]) -> list[Event]:
-    changed = True
-    while changed:
-        changed = False
-        consolidated: list[Event] = []
-        for event in sorted(events, key=lambda item: item.published_utc):
-            candidates = [
-                existing
-                for existing in consolidated
-                if events_should_merge(event, existing)
-            ]
-            matched = max(
-                candidates,
-                key=lambda existing: event_merge_affinity(event, existing),
-                default=None,
-            )
-            if matched is None:
-                consolidated.append(event)
-                continue
-            rebuild_event_from_articles(matched, [*matched.articles, *event.articles])
-            changed = True
-        events = consolidated
-    return events
-
-
 def event_from_article_group(source_event: Event, articles: list[Article]) -> Event:
     event_id = hashlib.sha1(
         " ".join(
@@ -33798,10 +33888,10 @@ def provisional_seed_groups(articles: list[Article]) -> list[list[Article]]:
             [*matched.articles, article],
         )
         events[events.index(matched)] = replacement
-    # A single recall pass preserves sparse translations that have no shared
-    # structured key yet. The core reconciler remains the sole final boundary
-    # authority; legacy split/reconsolidate passes must not mutate these hints.
-    return [event.articles for event in consolidate_events(events)]
+    # Keep these groups as recall hints only. Re-running the legacy event-level
+    # consolidator here made topic similarity transitive before the structured
+    # reconciler could inspect article-level subject and action boundaries.
+    return [event.articles for event in events]
 
 
 def cluster_articles(articles: list[Article]) -> list[Event]:
@@ -33821,18 +33911,25 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
     events = []
     for group in reconciled_groups:
         event = event_from_article_group(singleton_merge_event(group[0]), list(group))
-        shared_event_keys = supported_reconciliation_event_keys(
-            [profiles[id(article)] for article in group]
-        )
+        group_profiles = [profiles[id(article)] for article in group]
+        shared_event_keys = supported_reconciliation_event_keys(group_profiles)
         if shared_event_keys:
+            common_primary_claim = any(
+                key.startswith("primary-claim:")
+                and all(key in profile.event_keys for profile in group_profiles)
+                for key in shared_event_keys
+            )
+            removable_warnings = {
+                "mixed event kinds",
+                "mixed primary topic facets",
+                "mixed relevance tiers",
+            }
+            if common_primary_claim:
+                removable_warnings.add("multiple region-specific markers")
             event.merge_warnings = [
                 warning
                 for warning in event.merge_warnings
-                if warning not in {
-                    "mixed event kinds",
-                    "mixed primary topic facets",
-                    "mixed relevance tiers",
-                }
+                if warning not in removable_warnings
             ]
         source_kinds = [article.event_kind for article in group]
         dominant_kind = max(set(source_kinds), key=source_kinds.count)

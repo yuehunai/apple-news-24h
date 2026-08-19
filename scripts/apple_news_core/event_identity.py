@@ -836,7 +836,6 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "canceling",
             "scrapped",
             "abandoned",
-            "unreleased",
             "not to release",
             "decided not to release",
             "discontinued the project",
@@ -1673,6 +1672,10 @@ def _report_attribution_components(title: str, lead: str = "") -> set[str]:
         r"\b([A-Z][A-Za-z0-9&+.'-]{2,30}(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,2})\s+"
         r"(?:reports?|says|estimates?|forecasts?|projects?|data\s+shows)\b",
         r"(?:根据|据)\s*([A-Za-z][A-Za-z0-9&+.'-]{2,30})(?:\s|的|，|,)",
+        r"(?:根据|据)?(?:外媒|媒体|科技媒体)\s*"
+        r"([A-Za-z][A-Za-z0-9&+.'-]{2,30})\s*(?:报道|披露|联系)",
+        r"\b([A-Z][A-Z0-9&+.'-]{2,30})\s+"
+        r"(?:reports?|reported|contacted|reached\s+out)\b",
         r"(?:分析师|研究员)[^。；,，\n]{0,24}?[（(]\s*([A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){0,2})\s*[）)]",
         r"(?:分析师|研究员)[^。；,，\n]{0,24}?([A-Z][A-Za-z'.-]+(?:\s*[A-Z][A-Za-z'.-]+)?)",
         r"([\u4e00-\u9fffA-Za-z][\u4e00-\u9fffA-Za-z0-9&+.'-]{1,23})"

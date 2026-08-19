@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.58.0 - 2026-08-19
+
+- Removed the legacy second transitive fuzzy consolidation pass so structured reconciliation remains the sole final event-boundary authority and broad canonical-title, product, or topic keys cannot reopen settled groups.
+- Added positive primary-claim projection and stronger subject-plus-action identities, improving exact cross-source reconciliation for sparse reports, App Store enforcement, regulatory service impact, OS features, product roadmaps, and first-party activity challenges.
+- Improved action-owner relevance boundaries so third-party utilities, browser stories, opinion pieces, future-support recaps, and non-Apple cases that merely use Apple-device records remain `weak`, while direct Apple platform, legal, service, and product actions stay eligible.
+- Improved classification and event boundaries for first-party widgets and Smart Stack features, App Store removals, current iOS built-in-app changes, Home Hub software, Apple Card benefits, product generations, and region-specific reports without broad keyword exceptions.
+- Updated fallback policy guidance and expanded regression coverage from 1,089 to 1,109 tests; concurrent live validation preserved all 78 source URLs and identical discovery counts while reducing runtime from 73.47 to 69.96 seconds, and clean-agent validation produced zero merge warnings with exact coverage of all 61 retained source URLs.
+
 ## 1.57.0 - 2026-08-18
 
 - Added authoritative title-and-lead identities for OS release stages, security and regulatory actions, first-party services, platform compatibility, and product-roadmap children, keeping developer betas, public betas, release candidates, stable updates, and distinct product actions separate.
