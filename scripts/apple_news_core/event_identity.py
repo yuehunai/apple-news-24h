@@ -930,6 +930,7 @@ OS_COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("os-component:home-screen", ("home screen", "主屏幕")),
     ("os-component:control-center", ("control center", "控制中心")),
     ("os-component:screen-sharing", ("screen sharing", "屏幕共享")),
+    ("os-component:camera", ("camera app", "相机 app", "相机应用")),
     ("os-component:photos", ("apple photos", "photos app", "照片 app", "照片应用")),
     (
         "os-component:mail",
@@ -1851,6 +1852,42 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ):
         return "analysis"
+    if (
+        re.search(
+            r"\b(?:best|biggest|main)\s+reason\s+(?:yet\s+)?to\b|"
+            r"\b(?:one of )?my favorite\b|"
+            r"(?:最值得|最大|最主要).{0,12}(?:理由|原因)",
+            lower,
+        )
+        and re.search(
+            r"\bi\s+(?:use|wear|rely|imagine|think|believe|often|already)\b|"
+            r"\bi['’]ve\b|\bmy favorite\b|"
+            r"(?:我(?:一直|经常|已经|认为|觉得|想象|依赖|使用|佩戴)|我最喜欢)",
+            lead_lower,
+        )
+    ):
+        return "analysis"
+    if (
+        (
+            re.search(
+                r"\bhow\b.{0,90}\b(?:helped|shaped|enabled|led to|made possible)\b|"
+                r"如何.{0,60}(?:助推|塑造|催生|促成|成就)",
+                lower,
+            )
+            or re.search(r"\b(?:origin story|historical retrospective)\b|历史回顾", lower)
+        )
+        and re.search(
+            r"\b(?:19\d{2}|20\d{2})\b|\b(?:19)?(?:70|80|90)s\b|"
+            r"(?:上世纪|历史上|当年|\d{2}年代|二十多年前|三十多年前|四十多年前)",
+            f"{lower} {lead_lower}",
+        )
+        and not re.search(
+            r"\b(?:today|now|new report|announces?|launches?|releases?|sues?|investigates?)\b|"
+            r"(?:今日|最新|宣布|推出|发布|起诉|调查)",
+            lower,
+        )
+    ):
+        return "analysis"
     custom_vendor = re.search(
         r"(?<![a-z0-9])(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b)"
         r"([a-z][a-z0-9.+-]{2,30})(?![a-z0-9]).{0,36}"
@@ -1945,14 +1982,22 @@ def _content_form(title: str, lead: str = "") -> str:
         r"\b(?:rumors? point to|everything we know|"
         r"what to expect|these \d+ (?:new )?(?:features|changes)|"
         r"\d+ new things .+ (?:can do|to try|to know)|"
-        r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+\d+\s+"
+        r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+\d+\+?\s+"
         r"(?:new\s+)?(?:products?|devices?)|"
         r"\d+ rumored features|latest (?:apple )?rumors?|all (?:the )?(?:apple )?rumors?|"
         r"rumors? so far|best .+ to try)\b|传闻汇总|消息汇总|功能汇总|值得期待的\s*\d+",
         lower,
-    ) or (not current_attributed_report) and re.match(
-        r"^(?:everything new|here['’]s what['’]s new|what['’]s new with)\b",
-        lower,
+    ) or (
+        not current_attributed_report
+        and re.match(
+            r"^(?:everything new|here['’]s what['’]s new|what['’]s new with)\b",
+            lower,
+        )
+        and not re.match(
+            r"^what['’]s new with (?:the )?[a-z][a-z -]{1,40} app in "
+            r"(?:ios|ipados|macos|watchos|tvos|visionos)\s+\d+(?:\.\d+){0,2}\b",
+            lower,
+        )
     ) or (not current_attributed_report and "更新汇总" in lower) or (
         not current_attributed_report
         and
@@ -2028,9 +2073,13 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ):
         return "deal"
-    if re.search(r"\b(?:discounts?|markdowns?|savings?|sale)\b", lower) and re.search(
-        r"[$£€¥]\s*\d|\b\d+(?:\.\d+)?\s*%|\bup to\b|\boff\b",
-        lower,
+    if (
+        re.search(r"\b(?:discounts?|markdowns?|savings?|sale|lowest price|record low)\b", lower)
+        and re.search(
+            r"[$£€¥]\s*\d|\b\d+(?:\.\d+)?\s*%|\bup to\b|\boff\b|"
+            r"\bbelow\s+(?:the\s+)?(?:list|retail)\s+price\b",
+            f"{lower} {lead_lower}",
+        )
     ):
         return "deal"
     if re.search(

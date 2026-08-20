@@ -26,7 +26,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 from html.parser import HTMLParser
@@ -11581,6 +11581,15 @@ def multi_product_hardware_roadmap_variants(
     """Project an explicit multi-product roadmap onto its product-level actions."""
     original = [(title, summary, key_facts)]
     title_lower = title.lower()
+    if re.search(
+        r"\b(?:unidentified|unresolved|unknown)\b.{0,36}"
+        r"\b(?:device|product|hardware)\s+identifiers?\b|"
+        r"(?:未识别|未确认|无法确认|尚未确认).{0,18}(?:设备|产品|硬件).{0,12}(?:标识|型号)|"
+        r"(?:设备|产品|硬件).{0,12}(?:标识|型号).{0,18}(?:未识别|未确认|无法确认|尚未确认)",
+        title_lower,
+        re.I,
+    ):
+        return original
     combined = " ".join([title, summary, *key_facts])
     combined_subjects = multi_product_hardware_subjects(combined)
     if len(combined_subjects) < 2:
@@ -11595,12 +11604,13 @@ def multi_product_hardware_roadmap_variants(
         subjects = multi_product_hardware_subjects(value)
         if len(subjects) == 1:
             grouped.setdefault(next(iter(subjects)), []).append(value)
+    structured_report_scope = f"{title} {summary[:1600]}"
     structured_multi_product_report = bool(
         len(grouped) >= 2
         and re.search(
             r"\b(?:code|codes|identifier|identifiers|codename|codenames|reference|references)\b|"
             r"(?:代码|标识符|产品标识|代号|资源清单)",
-            title,
+            structured_report_scope,
             re.I,
         )
         and re.search(
@@ -11608,7 +11618,7 @@ def multi_product_hardware_roadmap_variants(
             r"\b(?:products?|devices?|hardware)\b.{0,36}\b(?:code|identifier|codename|reference)\b|"
             r"(?:未发布|即将推出|多款|新款).{0,24}(?:苹果)?(?:产品|设备|硬件|新品)|"
             r"(?:产品|设备|硬件|新品).{0,24}(?:代码|标识符|产品标识|代号|资源清单)",
-            title,
+            structured_report_scope,
             re.I,
         )
     )
@@ -11670,7 +11680,11 @@ def multi_product_hardware_roadmap_variants(
         scoped_seen: set[str] = set()
         for fact in facts:
             add_unique_text(scoped_facts, scoped_seen, fact)
-        scoped_text = " ".join(scoped_facts).lower()
+        # Short, identifier-dense facts can be below the normal summary-text
+        # length threshold. They still carry the strongest evidence for a
+        # structured child action, so use the raw group for identity checks.
+        evidence_facts = scoped_facts or facts
+        scoped_text = " ".join(evidence_facts).lower()
         if structured_multi_product_report:
             known_mapping = score_terms(
                 scoped_text,
@@ -11708,6 +11722,21 @@ def multi_product_hardware_roadmap_variants(
             ) > 0
             if known_mapping and not unreleased_mapping:
                 continue
+            concrete_subject_evidence = bool(
+                unreleased_mapping
+                or re.search(
+                    r"\b(?:code|identifier|codename|reference|model number|project id|"
+                    r"prototype|testing|in development|canceled|cancelled|delayed|"
+                    r"production|resource list)\b|"
+                    r"\b[a-z][a-z0-9]{0,20}\d{2,}(?:,\d+)?\b|"
+                    r"(?:代码|标识符|产品标识|代号|型号|项目编号|原型机|测试中|开发中|"
+                    r"取消|延期|量产|资源清单)",
+                    scoped_text,
+                    re.I,
+                )
+            )
+            if not concrete_subject_evidence:
+                continue
         specific_label = labels[subject]
         for pattern, label in (
             (r"\biphone\s+ultra\b|\bfoldable\s+iphone\b|折叠(?:屏)?\s*iphone", "iPhone Ultra"),
@@ -11721,7 +11750,7 @@ def multi_product_hardware_roadmap_variants(
             specific_label = f"{labels[subject]} Ultra"
         variant_title = f"Apple {specific_label} roadmap update"
         variants.append(
-            (variant_title, " ".join(scoped_facts[:6]), scoped_facts[:MAX_KEY_FACTS])
+            (variant_title, " ".join(evidence_facts[:6]), evidence_facts[:MAX_KEY_FACTS])
         )
     return variants or original
 
@@ -31205,7 +31234,7 @@ def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
         for value in article.key_facts[:4]
         if clean_sentence(value)
     )[:1600]
-    return build_reconciliation_profile(
+    profile = build_reconciliation_profile(
         title=article.title,
         lead=" ".join(
             part
@@ -31253,6 +31282,12 @@ def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
         event_kind=article.event_kind,
         evidence=structured_evidence,
     )
+    if article.category in {
+        "software_systems",
+        "hardware_products",
+    }:
+        profile = replace(profile, observed_category=article.category)
+    return profile
 
 
 def reconcile_article_relevance(

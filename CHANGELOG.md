@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.59.0 - 2026-08-20
+
+- Added action-owner-aware identities for third-party Apple-platform apps, first-party Home Hub software, Beats product leaks, App Store commercial terms, and unreleased-device identifier disclosures so direct Apple actions retain stable subjects and categories.
+- Improved seed-group conflict handling with observed-category evidence and stronger primary-subject, OS-component, and roadmap boundaries, preventing unrelated software, hardware, and generic roadmap claims from sharing an event.
+- Tightened structured-report projection so each generated product child requires local subject-and-action evidence, while unresolved multi-device identifiers remain one aggregate disclosure instead of creating synthetic MacBook, iPad, or iPhone events.
+- Improved content-form and relevance boundaries for routine deals, product roundups, third-party archives, first-person commentary, and historical retrospectives while preserving focused current built-in-app reports and source-complete same-action coverage.
+- Updated fallback policy guidance and expanded regression coverage from 1,109 to 1,124 tests; concurrent live validation preserved identical discovery counts and all 48 source URLs in 66.63/66.98 seconds, while clean-agent validation produced zero merge warnings with all 31 main and deferred event IDs uniquely accounted for.
+
 ## 1.58.0 - 2026-08-19
 
 - Removed the legacy second transitive fuzzy consolidation pass so structured reconciliation remains the sole final event-boundary authority and broad canonical-title, product, or topic keys cannot reopen settled groups.

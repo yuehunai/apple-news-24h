@@ -47,6 +47,7 @@ class ReconciliationProfile:
     separation_keys: frozenset[str] = frozenset()
     defer_reason: str = ""
     category_hint: str = ""
+    observed_category: str = ""
     hard_boundary: str = ""
     identity: EventIdentity | None = None
     relevance_tier: str = "strong"
@@ -2079,6 +2080,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
     if not components:
         component_patterns = (
             ("messages", ("messages", "信息 app", "信息应用")),
+            ("camera", ("camera app", "相机 app", "相机应用")),
             ("mail", ("mail", "邮件 app", "邮件应用")),
             ("notes", ("notes", "备忘录")),
             ("weather", ("weather", "天气 app", "天气应用")),
@@ -2771,7 +2773,7 @@ def _title_proves_first_party_subject(title: str, identity: EventIdentity) -> bo
         return True
     return bool(
         re.match(
-            r"^(?:apple(?:'s)?|app store|苹果)",
+            r"^(?:apple(?:'s)?|app store|beats\b|苹果)",
             _normalized(title),
         )
     )
@@ -2891,6 +2893,21 @@ def _editorial_or_third_party_claim_reason(
     if future_recap_question and not current_action:
         return "editorial future-support recap without a new Apple action"
 
+    if (
+        _contains(title_text, "archive", "档案", "存档", "历史刊物", "往期杂志")
+        and _contains(text, "past", "history", "issues", "历史", "往期", "旧刊")
+        and not _contains(
+            title_text,
+            "apple launches",
+            "apple releases",
+            "apple opens",
+            "苹果推出",
+            "苹果发布",
+            "苹果开放",
+        )
+    ):
+        return "third-party archive or retrospective without a new Apple action"
+
     third_party_builder = bool(
         not re.match(r"^(?:apple(?:'s)?|苹果)", title_text)
         and _contains(title_text, "ios", "ipados", "macos", "watchos", "visionos", "iphone", "ipad", "mac")
@@ -2916,6 +2933,8 @@ def _unsupported_third_party_reason(
     relevance_tier: str,
     trusted_direct_action: bool,
 ) -> str:
+    if _third_party_platform_app_action(title, text):
+        return "third-party app launch on an Apple platform without a direct Apple action"
     claim_reason = _editorial_or_third_party_claim_reason(title, text, identity)
     if claim_reason:
         return claim_reason
@@ -3104,6 +3123,107 @@ def _canonical_first_party_action_keys(
     }
 
 
+def _third_party_platform_app_action(title: str, lead: str) -> tuple[str, str] | None:
+    """Identify a third-party app owner separately from its Apple platform."""
+    title_text = _normalized(title)
+    if re.match(
+        r"^(?:apple(?:'s)?|苹果|ios\b|ipados\b|macos\b|watchos\b|tvos\b|visionos\b)",
+        title_text,
+    ):
+        return None
+    platform = next(
+        (
+            value
+            for value, terms in (
+                ("macos", ("mac app", "macos", "for mac", "to mac", "mac 应用", "mac 客户端", "登陆 mac", "登陆mac")),
+                ("ios", ("ios app", "for iphone", "to iphone", "iphone 应用", "ios 应用")),
+                ("ipados", ("ipados app", "for ipad", "to ipad", "ipad 应用")),
+                ("watchos", ("watchos app", "apple watch app", "watch 应用")),
+                ("visionos", ("visionos app", "vision pro app", "vision pro 应用")),
+                ("tvos", ("tvos app", "apple tv app", "apple tv 应用")),
+            )
+            if _contains(title_text, *terms)
+        ),
+        "",
+    )
+    if not platform or not re.search(
+        r"\b(?:app|application|client)\b|(?:应用|客户端|桌面端)",
+        title_text,
+    ):
+        return None
+    if not _contains(
+        title_text,
+        "launch",
+        "release",
+        "available",
+        "getting",
+        "comes to",
+        "arrives",
+        "推出",
+        "发布",
+        "上线",
+        "登陆",
+        "登录",
+    ):
+        return None
+
+    capitalized = re.findall(
+        r"(?<![A-Za-z0-9])"
+        r"[A-Z][A-Za-z0-9.+-]*(?:\s+[A-Z][A-Za-z0-9.+-]*){0,2}"
+        r"(?![A-Za-z0-9])",
+        title,
+    )
+    rejected = {
+        "app",
+        "apple",
+        "apple tv",
+        "iphone",
+        "ipad",
+        "mac",
+        "macos",
+        "watchos",
+        "vision pro",
+    }
+    product_terms = {"airpods", "iphone", "ipad", "macbook", "homepod", "vision pro"}
+    named = [
+        re.sub(
+            r"\s+(?:launches?|releases?|arrives?|gets?)$",
+            "",
+            value,
+            flags=re.I,
+        )
+        for value in capitalized
+        if _normalized(value) not in rejected
+        and not _normalized(value).startswith(("apple ", "mac ", "ios "))
+        and not any(term in _normalized(value) for term in product_terms)
+    ]
+    # Prefer the leading publisher/product name. Later capitalized phrases are
+    # commonly feature names (for example screen sharing or dictation), not
+    # the owner of the app. If a later candidate extends the same leading
+    # owner token, retain that fuller product name across translated headlines.
+    owner = ""
+    if named:
+        first_root = _normalized(named[0]).split()[0]
+        same_owner = [
+            value
+            for value in named
+            if _normalized(value).split()[0] == first_root
+        ]
+        owner = max(same_owner, key=lambda value: (len(value.split()), len(value)))
+    if not owner:
+        owner = re.split(
+            r"\b(?:is getting|comes? to|launch(?:es|ed)?|releases?|arrives?)\b|"
+            r"(?:推出|发布|上线|登陆|登录)",
+            title_text,
+            maxsplit=1,
+        )[0].strip(" :-—–")
+    owner_slug = re.sub(r"[^a-z0-9]+", "-", _normalized(owner)).strip("-")
+    rejected_slugs = {re.sub(r"[^a-z0-9]+", "-", value).strip("-") for value in rejected}
+    if not owner_slug or owner_slug in rejected_slugs or owner_slug.startswith("apple-"):
+        return None
+    return owner_slug, platform
+
+
 def _primary_claim_projection(
     title: str,
     lead: str,
@@ -3259,7 +3379,7 @@ def _primary_claim_projection(
 
     app_store_subject = (
         "app-store" in identity.title_products
-        or _contains(title_text, "app store", "应用商店")
+        or _contains(text, "app store", "应用商店")
         or (
             re.match(r"^(?:apple|苹果)", title_text)
             and _contains(
@@ -3332,14 +3452,19 @@ def _primary_claim_projection(
             "应用商业条款",
             "新规",
             "费率",
+            "收费",
             "收费结构",
             "外部支付",
         )
         and _contains(
-            title_text,
+            text,
             "overhaul",
             "change",
             "changes",
+            "changed",
+            "updated",
+            "revised",
+            "adjusted",
             "new",
             "lower",
             "unified",
@@ -3350,6 +3475,7 @@ def _primary_claim_projection(
             "调整",
             "变更",
             "新条款",
+            "新规",
             "降低",
             "统一",
             "宣布",
@@ -3371,7 +3497,7 @@ def _primary_claim_projection(
             "commercial-terms-change",
             qualifier=qualifier,
             category="software_systems",
-            trusted=direct_title_subject,
+            trusted=True,
         )
 
     app_store_commission_context = bool(
@@ -3515,6 +3641,9 @@ def _primary_claim_projection(
             "code",
             "codename",
             "launch",
+            "delay",
+            "delayed",
+            "on track",
             "naming",
             "named",
             "曝光",
@@ -3523,6 +3652,8 @@ def _primary_claim_projection(
             "代码",
             "代号",
             "推出",
+            "延期",
+            "延至",
             "命名",
         )
         and (
@@ -3715,6 +3846,83 @@ def _primary_claim_projection(
             "apple-services-executive",
             "industry-award",
             category="software_systems",
+            trusted=True,
+        )
+
+    third_party_app_action = _third_party_platform_app_action(title, lead)
+    if third_party_app_action:
+        owner, platform = third_party_app_action
+        add_claim(
+            f"third-party-app-{owner}",
+            "platform-app-launch",
+            qualifier=platform,
+            category="software_systems",
+            trusted=False,
+        )
+
+    home_hub_subject = bool(
+        "apple-home-hub" in identity.title_products
+        or identity.title_named_subjects & {"homepad", "homehub", "home-hub"}
+        or _contains(title_text, "homepad", "home hub", "homehub")
+        or (
+            re.match(r"^(?:apple(?:'s|’s)?|苹果)", title_text)
+            and _contains(title_text, "home automation", "smart home", "家庭自动化", "智能家居")
+            and identity.named_subjects & {"homepad", "homehub", "home-hub"}
+        )
+    )
+    if home_hub_subject and _contains(
+        claim_evidence,
+        "widget gallery",
+        "smart stack",
+        "widget support",
+        "widget mirroring",
+        "小组件图库",
+        "小组件库",
+        "智能叠放",
+        "小组件镜像",
+        "支持小组件",
+        "搭载小组件",
+    ) and _contains(claim_evidence, "code", "macos", "代码", "文件"):
+        add_claim(
+            "apple-home-hub",
+            "widget-capability",
+            category="software_systems",
+            trusted=True,
+        )
+
+    beats_model = re.search(r"\bbeats\s*(\d{2,4})(?!\d)", title_text)
+    if beats_model and _contains(
+        text,
+        "listing",
+        "retail",
+        "spec",
+        "leak",
+        "anc",
+        "ipx",
+        "零售",
+        "规格",
+        "泄露",
+        "曝光",
+        "降噪",
+        "防水",
+    ):
+        add_claim(
+            f"beats-model-{beats_model.group(1)}",
+            "product-specification-leak",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    if re.search(
+        r"\b(?:unidentified|unknown|unreleased)\s+(?:apple\s+)?(?:device|product)\s+identifiers?\b|"
+        r"(?:未识别|未知|未发布).{0,12}(?:设备|产品).{0,8}(?:标识|型号)|"
+        r"(?:设备|产品).{0,8}(?:标识|型号).{0,12}(?:未识别|未知)",
+        title_text,
+    ) and _contains(text, "macos", "system code", "code", "系统代码", "代码"):
+        add_claim(
+            "apple-unreleased-device-identifiers",
+            "code-disclosure",
+            category="hardware_products",
             trusted=True,
         )
 
@@ -4836,8 +5044,7 @@ def build_reconciliation_profile(
     if versioned_os_action and release_announcement_keys:
         separation_keys.add("predicate:os-release-announcement")
     editorial_inference_without_new_reporting = (
-        not primary_claim_trusted
-        and not versioned_os_action
+        not versioned_os_action
         and relevance_tier == "weak"
         and relevance_reason.startswith(
             (
@@ -5276,6 +5483,75 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
             and right_services
             and left_services.isdisjoint(right_services)
             and not (left.exact_facets & right.exact_facets)
+        ):
+            return True
+    left_primary_subjects = {
+        key
+        for key in left.boundary_keys
+        if key.startswith("primary-claim-subject:")
+    }
+    right_primary_subjects = {
+        key
+        for key in right.boundary_keys
+        if key.startswith("primary-claim-subject:")
+    }
+    if (
+        left_primary_subjects
+        and right_primary_subjects
+        and left_primary_subjects.isdisjoint(right_primary_subjects)
+        and not (left.event_keys & right.event_keys)
+    ):
+        return True
+    left_os_features = {
+        key
+        for key in left.event_keys
+        if key.startswith("apple-os-feature-scope:")
+    }
+    right_os_features = {
+        key
+        for key in right.event_keys
+        if key.startswith("apple-os-feature-scope:")
+    }
+    if (
+        ((left_primary_subjects and right_os_features)
+         or (right_primary_subjects and left_os_features))
+        and not (left.event_keys & right.event_keys)
+    ):
+        return True
+    if left_primary_subjects != right_primary_subjects and not (left.event_keys & right.event_keys):
+        primary = left if left_primary_subjects else right
+        companion = right if left_primary_subjects else left
+        if (
+            (primary.category_hint or primary.observed_category) == "hardware_products"
+            and (companion.category_hint or companion.observed_category) == "software_systems"
+            and not (left.exact_facets & right.exact_facets)
+        ):
+            return True
+    left_generic_roadmap = any(
+        re.fullmatch(r"structured-canonical-title:apple .+ roadmap update", key)
+        for key in left.event_keys
+    )
+    right_generic_roadmap = any(
+        re.fullmatch(r"structured-canonical-title:apple .+ roadmap update", key)
+        for key in right.event_keys
+    )
+    if (
+        left_generic_roadmap != right_generic_roadmap
+        and not (left.event_keys & right.event_keys)
+    ):
+        concrete = right if left_generic_roadmap else left
+        concrete_primary_subjects = (
+            right_primary_subjects if left_generic_roadmap else left_primary_subjects
+        )
+        if (
+            concrete_primary_subjects
+            or (concrete.category_hint or concrete.observed_category)
+            and (concrete.category_hint or concrete.observed_category)
+            != (
+                (left.category_hint or left.observed_category)
+                if left_generic_roadmap
+                else (right.category_hint or right.observed_category)
+            )
         ):
             return True
     if left.exact_facets & right.exact_facets:
