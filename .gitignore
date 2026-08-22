@@ -17,6 +17,7 @@ venv/
 env/
 
 AGENTS.md
+docs/
 latest.json
 diagnostics.json
 apple-news-24h/

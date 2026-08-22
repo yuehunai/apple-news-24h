@@ -12,13 +12,13 @@
 
 ## 最新更新
 
-### 1.59.0 - 2026-08-20
+### 1.60.0 - 2026-08-22
 
-- 新增动作归属感知的事件身份，覆盖第三方 Apple 平台应用、第一方 Home Hub 软件、Beats 产品泄露、App Store 商业条款和未发布设备标识披露，使直接 Apple 动作保持稳定的主体与分类。
-- 改进种子事件组冲突处理，引入观测分类证据及更严格的主主体、系统组件和路线图边界，避免不相关的软件、硬件和泛路线图主张共享同一事件。
-- 收紧结构化报道投影，要求每个生成的产品子事件都具有局部主体和动作证据；未解析的多设备标识则保持一个整体披露，不再合成虚假的 MacBook、iPad 或 iPhone 事件。
-- 改进例行促销、产品汇总、第三方档案、第一人称评论和历史回顾的内容形态与相关性边界，同时保留聚焦当前变化的内置 App 报道及来源完整的同动作覆盖。
-- 更新手动兜底规则，并将回归测试由 1,109 项增加到 1,124 项；并发联网验证保持完全一致的发现数量和全部 48 个来源 URL，运行时间为 66.63/66.98 秒，纯净子代理验证无聚类警告，31 个主事件和延后事件 ID 均完成唯一落账。
+- 新增聚类前主张投影，仅在多标题第一方服务页面中的每个子事件都具有局部命名主体、具体动作和支持事实时才执行拆分，使独立 Apple TV 内容保持分离，并避免从背景文字生成虚假子事件。
+- 将结构化协调器设为文章相关性与分类的权威判定层，为硬件组件、配色、零售包装、平台上线、供应商动作和量化市场报告增加变更对象身份，避免聚合摘要重新分类或桥接无关事件。
+- 改进同源不同报道、第三方 Apple 平台工具、地区市场数据、当前产品里程碑、历史上手文章，以及 Apple Pay、AirPods、MacBook Pro、Apple Watch 和组织调整等直接动作的事件边界。
+- 移除主抓取器中重复的事件组级相关性重分类路径及旧辅助函数，减少相互冲突的后处理，同时保留宽召回发现分组作为结构化协调器的候选方案。
+- 更新手动兜底规则，并将回归测试由 1,124 项增加到 1,152 项；并发联网验证保持逐来源发现数量完全一致并覆盖全部 59 个来源 URL，运行时间由 55.3 秒降至 51.7 秒，纯净子代理验证无聚类警告，42 个主事件和延后事件 ID 均完成唯一落账。
 
 ## 它会做什么
 
@@ -34,10 +34,11 @@
 ## 架构
 
 - `scripts/apple_news_24h.py` 负责来源发现、页面抓取、时间核验、文章提取、事件编排及 Markdown/JSON 渲染。
+- `scripts/apple_news_core/article_projector.py` 仅在每个子事件都具有局部命名主体、具体动作和支持事实时，将一个来源页面投影为多个可独立报道的第一方内容主张，从而同时避免服务事件混聚和由背景文字生成虚假子事件。
 - `scripts/apple_news_core/event_identity.py` 将文章标题和导语转换为结构化事件身份，覆盖产品、组件、参与方、动作、地区、法律案件、内容形态和命名主体。正文只作为受约束的辅助证据，避免相关文章和背景段落重新定义事件。
 - `scripts/apple_news_core/event_matcher.py` 使用保守的产品、组件、动作、地区、法律案件和主体兼容性规则比较事件身份。将该决策层保持为纯函数，使同事件聚类可以独立测试，也更便于维护。
 - `scripts/apple_news_core/event_reconciler.py` 保留已接受的种子聚类，应用明确动作边界，并通过精确跨来源事件签名归并报道，避免泛相似度或传递桥接重新打开已经确定的事件组。
-- `tests/test_event_identity_architecture.py`、`tests/test_20260805_event_reconciliation.py`、`tests/test_20260806_relevance_boundaries.py`、`tests/test_20260811_structured_reconciliation.py`、`tests/test_20260812_assertion_reconciliation.py`、`tests/test_20260813_primary_action_boundaries.py`、`tests/test_20260814_positive_event_cohesion.py`、`tests/test_20260815_authoritative_event_identity.py`、`tests/test_20260816_authoritative_pipeline_cleanup.py`、`tests/test_20260817_action_owner_cleanup.py`、`tests/test_20260818_authoritative_boundaries.py`、`tests/test_20260819_primary_claim_boundaries.py` 和 `tests/test_20260820_owner_and_seed_evidence.py` 为身份提取、匹配、结构化断言归并、动作主体、正向事件聚合、供应商动作、主张投影、内容边界、种子证据和相关性分层提供聚焦的回归测试；现有爬虫测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
+- `tests/test_event_identity_architecture.py` 及截至 `tests/test_20260822_authoritative_event_pipeline.py` 的按日期命名协调测试，为身份提取、匹配、结构化断言归并、动作归属、主张投影、变更对象边界、种子证据和相关性分层提供聚焦回归覆盖；现有抓取器测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
 
 ## 它不会做什么
 

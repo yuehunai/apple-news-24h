@@ -739,12 +739,6 @@ class EventIdentityArchitectureTests(unittest.TestCase):
         self.assertTrue(module.should_merge(english, module.singleton_merge_event(chinese)))
         self.assertTrue(module.should_merge(chinese, module.singleton_merge_event(english)))
         self.assertTrue(module.articles_share_cohesive_title_identity([english, chinese]))
-        refreshed = module.singleton_merge_event(english)
-        module.refresh_event_metadata(refreshed)
-        self.assertTrue(
-            module.should_merge(chinese, refreshed),
-            (refreshed.event_kind, refreshed.relevance_tier, refreshed.category),
-        )
         clusters = module.cluster_articles([english, chinese])
         self.assertEqual(
             len(clusters),
@@ -2672,28 +2666,7 @@ class EventIdentityArchitectureTests(unittest.TestCase):
             "IT之家",
         )
         self.assertEqual([english.relevance_tier, chinese.relevance_tier], ["strong", "strong"])
-        event = module.Event(
-            event_id="anniversary-iphone",
-            category="hardware_products",
-            title=english.title,
-            summary=(
-                "Apple's 20th anniversary iPhone is expected in fall 2027. It is unlike curved "
-                "screens seen on Android phones. 产品预计有 6.3 英寸、6.9 英寸两种版本可选，"
-                "类似 iPhone 18 Pro / iPhone 18 Pro Max。"
-            ),
-            key_facts=[],
-            published_utc=english.published_utc,
-            published_raw=english.published_raw,
-            published_source=english.published_source,
-            confidence=english.confidence,
-            articles=[english, chinese],
-            tokens=english.tokens | chinese.tokens,
-            event_kind="hardware_market",
-            relevance_tier="strong",
-            relevance_reason="direct Apple hardware report",
-        )
-
-        module.refresh_event_metadata(event)
+        event = module.cluster_articles([english, chinese])[0]
 
         self.assertEqual(event.relevance_tier, "strong")
 

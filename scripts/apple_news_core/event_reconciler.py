@@ -2508,6 +2508,28 @@ def _reconciliation_content_form(title: str, identity: EventIdentity) -> str:
 
 
 def _legal_action_stage_text(text: str) -> str:
+    if (
+        _contains(
+            text,
+            "opposition to the motion to dismiss",
+            "asks the court to deny",
+            "asked the court to deny",
+            "should be denied",
+            "hits back at",
+            "fires back at",
+        )
+        or re.search(
+            r"\b(?:opposition to|denying)\b.{0,55}"
+            r"\b(?:dismissal|motion to dismiss|request for dismissal)\b",
+            text,
+        )
+        or re.search(
+            r"(?:反驳|反对|要求法院拒绝|要求法院驳回).{0,28}"
+            r"(?:驳回诉讼|撤诉|驳回动议|驳回申请|撤销诉讼)",
+            text,
+        )
+    ):
+        return "dismissal-opposition"
     if _contains(
         text,
         "motion to dismiss",
@@ -2759,6 +2781,26 @@ def _predicate_separation_keys(identity: EventIdentity) -> set[str]:
     return keys
 
 
+def _title_predicate_separation_keys(title: str) -> set[str]:
+    """Extract concrete title predicates that generic product actions miss."""
+    title_text = _canonical_title(title)
+    keys: set[str] = set()
+    if re.search(
+        r"\b(?:packaging box|retail packaging|retail box|product box)\b|"
+        r"(?:包装盒|零售包装盒|产品包装盒)",
+        title_text,
+    ):
+        keys.add("primary-claim-predicate:retail-packaging-disclosure")
+    if re.search(
+        r"\b(?:colors?|finishes?|colourways?)\b.{0,24}"
+        r"\b(?:revealed|unveiled|leaked|lineup)\b|"
+        r"(?:配色|颜色|外观色).{0,20}(?:揭晓|曝光|流出|阵容|新增)",
+        title_text,
+    ):
+        keys.add("primary-claim-predicate:finish-lineup-disclosure")
+    return keys
+
+
 def _title_proves_first_party_subject(title: str, identity: EventIdentity) -> bool:
     """Require explicit title ownership before promoting an initially weak item."""
     if identity.title_named_subjects:
@@ -2791,6 +2833,98 @@ def _weak_topic_separation_key(title: str) -> str:
     return ""
 
 
+def _changed_object_separation_keys(
+    title: str,
+    lead: str,
+    identity: EventIdentity,
+) -> set[str]:
+    """Extract the concrete object changed by a product report.
+
+    A shared product family is not an event identity. Only the headline and
+    first lead sentence are used, preventing background specification lists
+    from creating artificial conflicts.
+    """
+    if not identity.title_products:
+        return set()
+    scope = f"{_normalized(title)}. {_short_lead_scope(lead, sentences=1, limit=420)}"
+    patterns = {
+        "case-material": (
+            r"\b(?:ceramic|titanium|aluminum|aluminium|stainless steel|case material|housing material)\b",
+            r"(?:陶瓷|钛金属|钛合金|铝合金|不锈钢|表壳材质|机身材质|外壳材质)",
+        ),
+        "processor": (
+            r"\b(?:processor|chipset|soc|s\d{1,2}\s+chip|m\d(?:\s+(?:pro|max|ultra))?\s+chip)\b",
+            r"(?:处理器|芯片|soc)",
+        ),
+        "display": (
+            r"\b(?:display panel|oled display|oled panel|mini-led|microled|refresh rate)\b",
+            r"(?:屏幕|显示屏|面板|刷新率)",
+        ),
+        "camera": (
+            r"\b(?:camera|sensor|aperture|telephoto|lens)\b",
+            r"(?:相机|摄像头|传感器|光圈|长焦|镜头|主摄|超广角|双摄|单摄|影像)",
+        ),
+        "battery": (r"\b(?:battery|charging|mah)\b", r"(?:电池|续航|充电|毫安时)"),
+        "modem": (r"\b(?:modem|baseband|cellular chip)\b", r"(?:调制解调器|基带|蜂窝芯片)"),
+        "memory-storage": (r"\b(?:ram|memory|dram|nand|storage)\b", r"(?:内存|存储|闪存)"),
+        "thermal-design": (
+            r"\b(?:vapor chamber|thermal design|cooling system|heat spreader)\b",
+            r"(?:均热板|散热设计|散热系统)",
+        ),
+        "retail-packaging": (
+            r"\b(?:packaging box|retail packaging|retail box|product box)\b",
+            r"(?:包装盒|零售包装盒|产品包装盒)",
+        ),
+        "finish-color": (
+            r"\b(?:color|colors|colour|colours|finish|finishes|colourway|colourways)\b",
+            r"(?:配色|颜色|机身色|外观色)",
+        ),
+    }
+    return {
+        f"changed-object:{name}"
+        for name, alternatives in patterns.items()
+        if any(re.search(pattern, scope, re.I) for pattern in alternatives)
+    }
+
+
+def _first_party_content_claim(title: str, identity: EventIdentity) -> tuple[str, str] | None:
+    """Return a named first-party content subject and its concrete action."""
+    if "apple-tv" not in identity.title_products:
+        return None
+    title_text = _canonical_title(title)
+    match = re.match(
+        r"^apple tv\s+['\"](?P<subject>[^'\"]{2,90})['\"]\s+"
+        r"(?P<action>release|return|renewal|trailer release)\b",
+        title_text,
+    )
+    if not match:
+        match = re.match(
+            r"^(?:(?:emmy|award)[- ]winning\s+)?(?P<subject>[a-z0-9][a-z0-9 '&:.-]{1,80}?)\s+"
+            r"(?P<action>returns?|premieres?|debuts?|releases?)\s+(?:to|on)\s+apple tv\b",
+            title_text,
+        )
+    if not match:
+        return None
+    raw_subject = re.sub(
+        r"(?:['’]s\s+)?(?:first|second|third|fourth|fifth|\d+(?:st|nd|rd|th))\s+season$",
+        "",
+        match.group("subject"),
+        flags=re.I,
+    ).strip()
+    subject = re.sub(r"[^a-z0-9]+", "-", raw_subject).strip("-")
+    raw_action = match.group("action")
+    action = (
+        "return"
+        if raw_action.startswith("return")
+        else "release"
+        if raw_action.startswith(("premier", "debut", "release"))
+        else raw_action.replace(" ", "-")
+    )
+    if not subject:
+        return None
+    return subject, action
+
+
 def _legal_case_key(identity: EventIdentity) -> str:
     topics = set(identity.case_topics)
     topic_terms = {
@@ -2816,6 +2950,48 @@ def _editorial_or_third_party_claim_reason(
 ) -> str:
     """Resolve headline ownership before Apple product terms can promote it."""
     title_text = _canonical_title(title)
+    tutorial_title = bool(
+        re.match(
+            r"^(?:(?:\d+|ten)\s+)?(?:ways?\s+to|how\s+to|when\s+to|"
+            r"tips?\s+(?:to|for)|guide\s+to)\b|^(?:如何|怎么|怎样|何时|\d+\s*个?技巧)",
+            title_text,
+        )
+    )
+    if tutorial_title:
+        return "editorial tutorial without a new Apple action"
+    routine_refurb_roundup = bool(
+        _contains(title_text, "refurb store", "refurbished store", "官翻", "翻新商店")
+        and _contains(title_text, "offers", "deals", "discount", "save", "more", "优惠", "折扣", "降价")
+        and not _contains(
+            title_text,
+            "adds",
+            "expands",
+            "launches",
+            "new configurations",
+            "新增",
+            "扩展",
+            "上架新配置",
+        )
+    )
+    if routine_refurb_roundup:
+        return "editorial deal roundup without a new Apple action"
+    anniversary_recap = bool(
+        re.search(
+            r"\bturns?\s+(?:\d{1,3}|one|two|three|four|five|six|seven|eight|nine|ten)\b|"
+            r"\b(?:celebrates?|marks?)\s+(?:its\s+)?\d{1,3}(?:st|nd|rd|th)?\s+anniversary\b|"
+            r"(?:迎来|问世|发布|诞生|庆祝).{0,12}\d{1,3}\s*周年",
+            title_text,
+        )
+    )
+    title_current_action = bool(
+        re.search(
+            r"\b(?:announces?|launches?|releases?|introduces?|adds?|expands?|"
+            r"opens?)\b|(?:宣布|推出|发布|新增|扩展|开放)",
+            title_text,
+        )
+    )
+    if anniversary_recap and not title_current_action:
+        return "anniversary or retrospective recap without a new Apple action"
     comparison_to_apple = bool(
         re.search(
             r"\b(?:catch(?:es|ing)?\s+up(?:\s+to|\s+with)?|"
@@ -2841,6 +3017,31 @@ def _editorial_or_third_party_claim_reason(
         and comparison_to_apple
     ):
         return "non-Apple primary subject using Apple only as comparison context"
+    primary_clause, separator, trailing_clause = title_text.partition(":")
+    if not separator:
+        primary_clause, separator, trailing_clause = title_text.partition("：")
+    apple_subject = re.compile(
+        r"\b(?:apple|iphone|ipad|mac(?:book|os)?|airpods|watchos|tvos|visionos|safari)\b|苹果",
+        re.I,
+    )
+    if (
+        separator
+        and title_current_action
+        and not apple_subject.search(primary_clause)
+        and apple_subject.search(trailing_clause)
+    ):
+        return "non-Apple primary subject using Apple only as comparison context"
+
+    retrospective_hands_on = bool(
+        identity.content_form in {"hands_on", "review"}
+        and re.search(
+            r"\b(?:revisiting|revisit|looking\s+back|look\s+back|throwback|"
+            r"resharing|from\s+20\d{2})\b|(?:回顾|重温|旧款|往年体验|重新分享)",
+            title_text,
+        )
+    )
+    if retrospective_hands_on:
+        return f"editorial {identity.content_form.replace('_', ' ')} without a new Apple action"
 
     attributed_reporting = _contains(
         title_text,
@@ -2912,11 +3113,11 @@ def _editorial_or_third_party_claim_reason(
         not re.match(r"^(?:apple(?:'s)?|苹果)", title_text)
         and _contains(title_text, "ios", "ipados", "macos", "watchos", "visionos", "iphone", "ipad", "mac")
         and re.search(
-            r"\b(?:developer|editor|author|user|outlet|publication)\b.{0,55}"
-            r"\b(?:builds?|built|creates?|created|develops?|developed|made)\b.{0,35}"
-            r"\b(?:app|tool|utility|widget)\b|"
-            r"(?:外媒|媒体|编辑|作者|开发者|用户|网友).{0,40}"
-            r"(?:开发|制作|打造).{0,30}(?:应用|工具|程序|组件)",
+            r"\b(?:developer|editor|author|user|outlet|publication)\b.{0,75}"
+            r"\b(?:builds?|built|creates?|created|develops?|developed|made)\b.{0,45}"
+            r"\b(?:app|tool|utility|widget|driver)\b|"
+            r"(?:外媒|媒体|编辑|作者|开发者|用户|网友).{0,70}"
+            r"(?:开发|制作|打造|编写).{0,45}(?:应用|工具|程序|组件|驱动)",
             title_text,
         )
     )
@@ -2934,7 +3135,14 @@ def _unsupported_third_party_reason(
     trusted_direct_action: bool,
 ) -> str:
     if _third_party_platform_app_action(title, text):
-        return "third-party app launch on an Apple platform without a direct Apple action"
+        return "third-party software action on an Apple platform without a direct Apple action"
+    if _third_party_accessory_action(title, text):
+        return "third-party accessory without an Apple product or platform change"
+    if (
+        "non-apple-component-market-background" in identity.facets
+        and not _measured_apple_market_result_keys(title, text, text)
+    ):
+        return "broad multi-vendor market report without a measured Apple result"
     claim_reason = _editorial_or_third_party_claim_reason(title, text, identity)
     if claim_reason:
         return claim_reason
@@ -3025,10 +3233,10 @@ def _hard_third_party_boundary(text: str, defer_reason: str) -> str:
         text,
     ):
         return "independent-third-party-platform-update"
-    if defer_reason.startswith((
+    if defer_reason.startswith("third-party ") or defer_reason.startswith((
         "editorial ",
         "competitor benchmark",
-        "third-party accessory",
+        "anniversary or retrospective",
         "unsupported third-party",
         "third-party CarPlay",
         "third-party employer asset disposal",
@@ -3123,8 +3331,11 @@ def _canonical_first_party_action_keys(
     }
 
 
-def _third_party_platform_app_action(title: str, lead: str) -> tuple[str, str] | None:
-    """Identify a third-party app owner separately from its Apple platform."""
+def _third_party_platform_app_action(
+    title: str,
+    lead: str,
+) -> tuple[str, str, str] | None:
+    """Identify a third-party software owner separately from its Apple target."""
     title_text = _normalized(title)
     if re.match(
         r"^(?:apple(?:'s)?|苹果|ios\b|ipados\b|macos\b|watchos\b|tvos\b|visionos\b)",
@@ -3135,8 +3346,38 @@ def _third_party_platform_app_action(title: str, lead: str) -> tuple[str, str] |
         (
             value
             for value, terms in (
-                ("macos", ("mac app", "macos", "for mac", "to mac", "mac 应用", "mac 客户端", "登陆 mac", "登陆mac")),
-                ("ios", ("ios app", "for iphone", "to iphone", "iphone 应用", "ios 应用")),
+                (
+                    "macos",
+                    (
+                        "mac app",
+                        "macos",
+                        "for mac",
+                        "on mac",
+                        "on the mac",
+                        "to mac",
+                        "mac端",
+                        "mac 端",
+                        "mac 应用",
+                        "mac 客户端",
+                        "mac 桌面端",
+                        "mac 原生版",
+                        "mac 版",
+                        "登陆 mac",
+                        "登陆mac",
+                    ),
+                ),
+                (
+                    "ios",
+                    (
+                        "ios app",
+                        "for iphone",
+                        "to iphone",
+                        "iphone 应用",
+                        "ios 应用",
+                        "ios版",
+                        "ios 版",
+                    ),
+                ),
                 ("ipados", ("ipados app", "for ipad", "to ipad", "ipad 应用")),
                 ("watchos", ("watchos app", "apple watch app", "watch 应用")),
                 ("visionos", ("visionos app", "vision pro app", "vision pro 应用")),
@@ -3146,19 +3387,51 @@ def _third_party_platform_app_action(title: str, lead: str) -> tuple[str, str] |
         ),
         "",
     )
-    if not platform or not re.search(
-        r"\b(?:app|application|client)\b|(?:应用|客户端|桌面端)",
-        title_text,
-    ):
+    software_subject = bool(
+        re.search(
+            r"\b(?:app|application|client|game|integration|plugin|utility|messages?|imessages?)\b|"
+            r"(?:应用|客户端|桌面端|原生版|游戏|插件|工具)|"
+            r"(?:ios|ipados|macos|watchos|visionos|tvos)\s*版",
+            title_text,
+        )
+        or _contains(title_text, "imessage", "messages", "信息应用", "信息”应用")
+    )
+    if not platform or not software_subject:
         return None
     if not _contains(
         title_text,
+        "add",
+        "adds",
+        "added",
+        "gain",
+        "gains",
+        "update",
+        "updates",
+        "can read",
+        "can now read",
+        "can send",
+        "can now send",
+        "control",
+        "controls",
+        "can control",
+        "can now control",
         "launch",
         "release",
         "available",
         "getting",
         "comes to",
         "arrives",
+        "support",
+        "supports",
+        "新增",
+        "更新",
+        "接入",
+        "集成",
+        "支持",
+        "控制",
+        "读取",
+        "发送",
+        "开放",
         "推出",
         "发布",
         "上线",
@@ -3187,7 +3460,7 @@ def _third_party_platform_app_action(title: str, lead: str) -> tuple[str, str] |
     product_terms = {"airpods", "iphone", "ipad", "macbook", "homepod", "vision pro"}
     named = [
         re.sub(
-            r"\s+(?:launches?|releases?|arrives?|gets?)$",
+            r"\s+(?:can(?:\s+now)?|will|adds?|updates?|launches?|releases?|arrives?|gets?)\b.*$",
             "",
             value,
             flags=re.I,
@@ -3217,11 +3490,66 @@ def _third_party_platform_app_action(title: str, lead: str) -> tuple[str, str] |
             title_text,
             maxsplit=1,
         )[0].strip(" :-—–")
-    owner_slug = re.sub(r"[^a-z0-9]+", "-", _normalized(owner)).strip("-")
+    owner_slug = re.sub(r"[^\w]+", "-", _normalized(owner)).strip("-")
     rejected_slugs = {re.sub(r"[^a-z0-9]+", "-", value).strip("-") for value in rejected}
     if not owner_slug or owner_slug in rejected_slugs or owner_slug.startswith("apple-"):
         return None
-    return owner_slug, platform
+    target = "platform"
+    if _contains(title_text, "messages", "imessage", "信息应用", "信息”应用", "信息 app"):
+        target = "messages"
+    elif _contains(title_text, "carplay"):
+        target = "carplay"
+    return owner_slug, platform, target
+
+
+def _third_party_accessory_action(title: str, text: str) -> bool:
+    """Return true when a vendor accessory merely targets Apple devices."""
+    title_text = _normalized(title)
+    if re.match(r"^(?:apple(?:'s)?|苹果(?:官方)?)(?:\b|\s)", title_text):
+        return False
+    accessory_subject = bool(
+        re.search(
+            r"\b(?:adapter|case|charger|charging stand|controller|dock|keyboard|"
+            r"power bank|screen protector|stand)\b|"
+            r"(?:充电器|充电基座|充电宝|保护壳|保护套|转接器|适配器|支架|键盘|手柄)",
+            title_text,
+        )
+    )
+    apple_target = _contains(
+        title_text,
+        "iphone",
+        "ipad",
+        "macbook",
+        "airpods",
+        "apple watch",
+        "ios",
+    )
+    vendor_action = _contains(
+        title_text,
+        "launch",
+        "release",
+        "hands-on",
+        "compatible",
+        "support",
+        "推出",
+        "发布",
+        "首发",
+        "开箱",
+        "兼容",
+        "适配",
+        "支持",
+    )
+    official_apple_action = _contains(
+        title_text,
+        "apple launches",
+        "apple releases",
+        "apple unveils",
+        "苹果推出",
+        "苹果发布",
+        "苹果上架",
+        "苹果官方",
+    )
+    return bool(accessory_subject and apple_target and vendor_action and not official_apple_action)
 
 
 def _primary_claim_projection(
@@ -3274,6 +3602,182 @@ def _primary_claim_projection(
             title_text,
         )
     )
+
+    apple_music_ai_label_action = bool(
+        "apple-music" in identity.products
+        and _contains(
+            claim_evidence,
+            "ai-generated",
+            "ai generated",
+            "ai content",
+            "artificial intelligence",
+            "机器生成",
+            "ai 生成",
+        )
+        and _contains(
+            claim_evidence,
+            "label",
+            "labels",
+            "labeled",
+            "labelled",
+            "transparency tag",
+            "disclosure",
+            "标注",
+            "标签",
+            "披露",
+        )
+        and _contains(
+            claim_evidence,
+            "require",
+            "required",
+            "mandatory",
+            "must",
+            "will soon",
+            "强制",
+            "要求",
+            "必须",
+            "年底",
+        )
+    )
+    if apple_music_ai_label_action:
+        add_claim(
+            "apple-music-ai-content",
+            "mandatory-disclosure-label",
+            category="software_systems",
+            trusted=direct_title_subject or identity.scope == "apple-direct",
+        )
+
+    workforce_reduction = bool(
+        re.search(r"\bapple(?:['’]s)?\b|苹果", title_text)
+        and _contains(
+            claim_evidence,
+            "layoff",
+            "layoffs",
+            "laid off",
+            "lays off",
+            "job cuts",
+            "cuts jobs",
+            "cutting jobs",
+            "laying off",
+            "trims staff",
+            "trimming staff",
+            "guts",
+            "裁员",
+            "裁撤",
+            "裁减",
+            "裁掉",
+        )
+    )
+    if workforce_reduction:
+        workforce_subject = ""
+        if _contains(
+            claim_evidence,
+            "vision group",
+            "vision products",
+            "vr team",
+            "vision 业务组",
+            "vr 研发团队",
+        ) or (
+            _contains(claim_evidence, "vr", "vision")
+            and _contains(
+                claim_evidence,
+                "team",
+                "group",
+                "division",
+                "department",
+                "团队",
+                "部门",
+                "业务组",
+            )
+        ):
+            workforce_subject = "apple-vision-group"
+        else:
+            direct_units = sorted(
+                identity.title_products
+                or {
+                    product
+                    for product in identity.products
+                    if product not in {"apple", "ios", "macos"}
+                }
+            )
+            if len(direct_units) == 1:
+                workforce_subject = f"apple-{direct_units[0].removeprefix('apple-')}-group"
+        if workforce_subject:
+            add_claim(
+                workforce_subject,
+                "workforce-reduction",
+                category="hardware_products",
+                trusted=True,
+            )
+
+    iphone_launch_schedule = bool(
+        "iphone" in identity.products
+        and _contains(
+            text,
+            "won't launch",
+            "will not launch",
+            "missing from",
+            "pushed to",
+            "delayed until",
+            "launch schedule",
+            "缺席",
+            "不会发布",
+            "延后",
+            "推迟",
+            "发布节奏",
+        )
+        and _contains(
+            text,
+            "september",
+            "next month",
+            "early 20",
+            "first quarter",
+            "march",
+            "9 月",
+            "9月",
+            "明年",
+            "第一季度",
+            "3 月",
+            "3月",
+        )
+    )
+    if iphone_launch_schedule:
+        model_subjects = sorted(
+            component
+            for component in identity.title_components
+            if component.startswith("iphone-model:")
+        )
+        generation_subjects = sorted(
+            component
+            for component in identity.title_components
+            if component.startswith("product-generation:iphone-")
+        )
+        launch_subject = next(iter(model_subjects or generation_subjects), "iphone")
+        add_claim(
+            launch_subject,
+            "launch-schedule-change",
+            category="hardware_products",
+            trusted=direct_title_subject or identity.scope == "apple-direct",
+        )
+
+    market_result_keys = _measured_apple_market_result_keys(title, lead, evidence)
+    if market_result_keys:
+        event_keys |= market_result_keys
+        separation.add("primary-claim-predicate:measured-apple-market-result")
+        market_scopes = {
+            tuple(key.split(":")[1:4])
+            for key in market_result_keys
+            if key.startswith("structured-market-result:")
+        }
+        market_regions = {region for _firm, region, _period in market_scopes}
+        market_firms = {firm for firm, _region, _period in market_scopes}
+        if len(market_regions) == 1 and len(market_firms) == 1:
+            separation.add(
+                "market-report-scope:"
+                f"{next(iter(market_firms))}:{next(iter(market_regions))}"
+            )
+        category_hint = "hardware_products"
+        trusted_direct_action = True
 
     title_products = sorted(identity.title_products)
     production_subjects = list(title_products)
@@ -3440,7 +3944,7 @@ def _primary_claim_projection(
     app_store_terms = bool(
         app_store_subject
         and _contains(
-            text,
+            claim_evidence,
             "terms",
             "rules",
             "app store changes",
@@ -3457,7 +3961,7 @@ def _primary_claim_projection(
             "外部支付",
         )
         and _contains(
-            text,
+            claim_evidence,
             "overhaul",
             "change",
             "changes",
@@ -3481,7 +3985,7 @@ def _primary_claim_projection(
             "宣布",
         )
         and (
-            _contains(text, "european union", " eu ", "europe", "欧盟", "欧洲")
+            _contains(claim_evidence, "european union", " eu ", "europe", "欧盟", "欧洲")
             or bool({region for region in regions if region and region != "multi-region"})
         )
     )
@@ -3489,7 +3993,7 @@ def _primary_claim_projection(
         region_values = {
             region for region in regions if region and region != "multi-region"
         }
-        if _contains(text, "european union", " eu ", "europe", "欧盟", "欧洲"):
+        if _contains(claim_evidence, "european union", " eu ", "europe", "欧盟", "欧洲"):
             region_values.add("europe")
         qualifier = ",".join(sorted(region_values)) or "global"
         add_claim(
@@ -3630,8 +4134,34 @@ def _primary_claim_projection(
             trusted=direct_title_subject,
         )
 
+    camera_airpods_title_action = bool(
+        (
+            direct_title_subject
+            or re.match(r"^airpods?\b", title_text)
+        )
+        and _contains(
+            title_text,
+            "leak",
+            "demo",
+            "code",
+            "rumor",
+            "learned",
+            "detect",
+            "capture",
+            "delay",
+            "delayed",
+            "曝光",
+            "演示",
+            "代码",
+            "传闻",
+            "功能揭晓",
+            "延期",
+            "延至",
+        )
+    )
     if (
         "airpods" in identity.title_products
+        and camera_airpods_title_action
         and _contains(
             text,
             "leak",
@@ -3646,6 +4176,11 @@ def _primary_claim_projection(
             "on track",
             "naming",
             "named",
+            "rumor",
+            "rumors",
+            "learned",
+            "detect people",
+            "capture",
             "曝光",
             "演示",
             "视频",
@@ -3658,8 +4193,8 @@ def _primary_claim_projection(
         )
         and (
             re.search(
-                r"\bcamera(?:-equipped)?\s+airpods\b|"
-                r"\bairpods\b[^。.!?]{0,28}\bcameras?\b",
+                r"\bcamera(?:-equipped)?\s+airpods?\b|"
+                r"\bairpods?\b[^。.!?]{0,28}\bcameras?\b",
                 text,
             )
             or re.search(
@@ -3675,6 +4210,61 @@ def _primary_claim_projection(
             category="hardware_products",
             trusted=direct_title_subject,
         )
+
+    macbook_generation = re.search(r"\b(m\d)\s+macbook\s+pro\b", text)
+    if (
+        macbook_generation
+        and _contains(
+            claim_evidence,
+            "gpu",
+            "memory bandwidth",
+            "vapor chamber",
+            "thermal",
+            "内存带宽",
+            "均热板",
+            "散热",
+        )
+    ):
+        add_claim(
+            f"{macbook_generation.group(1)}-macbook-pro",
+            "product-specification-report",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    apple_pay_rollout = bool(
+        "apple-pay" in identity.products
+        and _contains(
+            text,
+            "begin accepting",
+            "launching apple pay",
+            "apple pay rollout",
+            "adding apple pay",
+            "apple pay is coming",
+            "support apple pay",
+            "支持 apple pay",
+            "接入 apple pay",
+            "开始支持 apple pay",
+        )
+    )
+    if apple_pay_rollout:
+        actor_aliases = (
+            ("walmart", ("walmart", "沃尔玛")),
+            ("sams-club", ("sam's club", "sams club", "山姆会员商店", "山姆")),
+        )
+        actors = {
+            canonical
+            for canonical, aliases in actor_aliases
+            if _contains(text, *aliases)
+        }
+        retailer = "walmart" if "walmart" in actors else next(iter(actors), "")
+        if retailer:
+            add_claim(
+                f"retailer-{retailer}-apple-pay",
+                "platform-rollout",
+                category="software_systems",
+                trusted=True,
+            )
 
     if (
         "tvos" in identity.title_products
@@ -3851,10 +4441,10 @@ def _primary_claim_projection(
 
     third_party_app_action = _third_party_platform_app_action(title, lead)
     if third_party_app_action:
-        owner, platform = third_party_app_action
+        owner, platform, target = third_party_app_action
         add_claim(
-            f"third-party-app-{owner}",
-            "platform-app-launch",
+            f"third-party-software-{owner}-{target}",
+            "platform-software-action",
             qualifier=platform,
             category="software_systems",
             trusted=False,
@@ -3959,6 +4549,107 @@ def _product_anniversary_milestone(title: str) -> tuple[str, str] | None:
     return product, years
 
 
+def _measured_apple_market_result_keys(
+    title: str,
+    lead: str,
+    evidence: str,
+) -> set[str]:
+    """Project quantified Apple market results with their report context."""
+    scope = _normalized(". ".join(part for part in (title, lead, evidence) if part))
+    firm = next(
+        (
+            name
+            for name, aliases in (
+                ("counterpoint", ("counterpoint",)),
+                ("canalys", ("canalys",)),
+                ("idc", (" idc ", "idc report", "idc 报告")),
+                ("omdia", ("omdia",)),
+                ("trendforce", ("trendforce",)),
+            )
+            if _contains(f" {scope} ", *aliases)
+        ),
+        "",
+    )
+    if not firm or not _contains(
+        scope,
+        "market share",
+        "shipments",
+        "sales",
+        "份额",
+        "出货量",
+        "销量",
+    ):
+        return set()
+
+    region_aliases = (
+        ("europe", ("europe", "european", "欧洲")),
+        ("latin-america", ("latin america", "latam", "拉美", "拉丁美洲")),
+        ("india", ("india", "印度")),
+        ("china", ("china", "中国")),
+        ("global", ("global", "worldwide", "全球")),
+    )
+    sentences = [
+        sentence.strip()
+        for sentence in re.split(r"(?:[。！？]|(?<=[.!?])\s+)", scope)
+        if sentence.strip()
+    ]
+    current_regions: set[str] = set()
+    current_period = ""
+    current_quarter = ""
+    keys: set[str] = set()
+    for sentence in sentences:
+        sentence_regions = {
+            region
+            for region, aliases in region_aliases
+            if _contains(sentence, *aliases)
+        }
+        if sentence_regions:
+            current_regions = sentence_regions
+        period_match = re.search(r"\b(20\d{2})\s*[- ]?q([1-4])\b", sentence)
+        if not period_match:
+            period_match = re.search(r"\bq([1-4])\s*(20\d{2})\b", sentence)
+            if period_match:
+                current_quarter = f"q{period_match.group(1)}"
+                current_period = f"{period_match.group(2)}-q{period_match.group(1)}"
+        else:
+            current_quarter = f"q{period_match.group(2)}"
+            current_period = f"{period_match.group(1)}-q{period_match.group(2)}"
+        if not period_match:
+            quarter_match = re.search(
+                r"\b(first|second|third|fourth) quarter\b|第?([一二三四1234])季度",
+                sentence,
+            )
+            year_match = re.search(r"\b(20\d{2})\b", sentence)
+            if quarter_match:
+                quarter_map = {
+                    "first": "1", "second": "2", "third": "3", "fourth": "4",
+                    "一": "1", "二": "2", "三": "3", "四": "4",
+                }
+                raw_quarter = quarter_match.group(1) or quarter_match.group(2)
+                current_quarter = f"q{quarter_map.get(raw_quarter, raw_quarter)}"
+                if year_match:
+                    current_period = f"{year_match.group(1)}-{current_quarter}"
+        if not current_regions or not (current_period or current_quarter):
+            continue
+        if not _contains(sentence, "apple", "iphone", "苹果"):
+            continue
+        percentages = {
+            value.rstrip("0").rstrip(".") if "." in value else value
+            for value in re.findall(
+                r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:%|percent(?:age)?(?:\s+points?)?)",
+                sentence,
+            )
+        }
+        for region in current_regions:
+            for percentage in percentages:
+                for period in {current_period, current_quarter} - {""}:
+                    keys.add(
+                        "structured-market-result:"
+                        f"{firm}:{region}:{period}:apple-percent:{percentage}"
+                    )
+    return keys
+
+
 def build_reconciliation_profile(
     *,
     title: str,
@@ -3982,6 +4673,9 @@ def build_reconciliation_profile(
     boundary_keys: set[str] = set()
     separation_keys = _product_separation_keys(identity)
     separation_keys |= _predicate_separation_keys(identity)
+    separation_keys |= _title_predicate_separation_keys(title)
+    changed_object_keys = _changed_object_separation_keys(title, lead, identity)
+    separation_keys |= changed_object_keys
     category_hint = ""
     content_form = _reconciliation_content_form(title_text, identity)
     projected_hardware_roadmap = bool(
@@ -4087,6 +4781,38 @@ def build_reconciliation_profile(
     if primary_claim_category:
         category_hint = primary_claim_category
     trusted_direct_action = trusted_direct_action or primary_claim_trusted
+    content_claim = _first_party_content_claim(title, identity)
+    if content_claim:
+        content_subject, content_action = content_claim
+        content_key = f"primary-claim:apple-tv-content:{content_subject}:{content_action}"
+        event_keys.add(content_key)
+        boundary_keys.add(f"content-title:{content_subject}")
+        separation_keys |= {
+            f"content-title:{content_subject}",
+            f"content-action:{content_action}",
+        }
+        category_hint = "software_systems"
+        trusted_direct_action = True
+    hardware_products = identity.title_products & {
+        "airpods",
+        "apple-home-hub",
+        "apple-tv",
+        "apple-watch",
+        "beats",
+        "foldable-iphone",
+        "homepod",
+        "imac",
+        "ipad",
+        "iphone",
+        "mac",
+        "mac-mini",
+        "mac-pro",
+        "mac-studio",
+        "macbook",
+        "vision-pro",
+    }
+    if changed_object_keys and hardware_products:
+        category_hint = "hardware_products"
     structured_direct_assertion = bool(
         any(key.startswith("structured-assertion:") for key in assertion_events)
     )
@@ -4403,22 +5129,6 @@ def build_reconciliation_profile(
             for measurement in status_measurements:
                 event_keys.add(
                     f"structured-claim-status:{subject}:{measurement}"
-                )
-    if "hardware-market-performance" in claim_components:
-        periods = sorted(
-            measurement.removeprefix("period:")
-            for measurement in measurements
-            if measurement.startswith("period:")
-        )
-        percentages = sorted(
-            measurement.removeprefix("percent:")
-            for measurement in measurements
-            if measurement.startswith("percent:")
-        )
-        for period in periods:
-            for percentage in percentages:
-                event_keys.add(
-                    f"structured-market-result:{period}:percent:{percentage}"
                 )
     for entity in attributed_entities:
         for product in claim_products:
@@ -5071,8 +5781,14 @@ def build_reconciliation_profile(
         and not editorial_inference_without_new_reporting
         and _title_proves_first_party_subject(title_text, identity)
     )
+    measured_apple_market_action = any(
+        key.startswith("structured-market-result:")
+        and ":apple-percent:" in key
+        for key in event_keys
+    )
     structural_direct_action = (
         trusted_direct_action
+        or measured_apple_market_action
         or versioned_os_action
         or tracking_transparency_policy_action
         or bool(first_party_service_capability_signal)
@@ -5085,6 +5801,8 @@ def build_reconciliation_profile(
         promotion_reason = "current Apple OS device and feature compatibility matrix"
     elif first_party_service_capability_signal:
         promotion_reason = "title-led first-party service capability action"
+    elif measured_apple_market_action:
+        promotion_reason = "measured Apple market result with report, region, period, and value"
     elif trusted_direct_action:
         promotion_reason = "title-led direct Apple action confirmed by structured identity"
     defer_reason = _unsupported_third_party_reason(
@@ -5130,6 +5848,31 @@ def build_reconciliation_profile(
         weak_topic = _weak_topic_separation_key(title_text)
         if weak_topic:
             separation_keys.add(weak_topic)
+    supplier_workforce_action = bool(
+        _contains(
+            title_text,
+            "hire",
+            "hires",
+            "hiring",
+            "recruit",
+            "recruits",
+            "recruiting",
+            "招聘",
+            "扩招",
+            "招工",
+            "增聘",
+        )
+        and identity.title_products
+    )
+    supplier_operating_result = bool(
+        _contains(text, "ship", "ships", "shipped", "shipment", "shipments", "出货", "供应")
+        and _contains(text, "supplier", "display", "panel", "component", "供应商", "面板", "零部件")
+        and bool(re.search(r"\b\d+(?:\.\d+)?\s*(?:%|percent|million|billion)\b|\d+(?:\.\d+)?\s*(?:万|亿|%)", text))
+    )
+    if supplier_workforce_action:
+        separation_keys.add("primary-claim-predicate:supplier-workforce-expansion")
+    if supplier_operating_result:
+        separation_keys.add("primary-claim-predicate:supplier-operating-result")
     return ReconciliationProfile(
         event_keys=frozenset(event_keys),
         boundary_keys=frozenset(boundary_keys),
@@ -5201,8 +5944,12 @@ def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile
     shared_boundaries = left.boundary_keys & right.boundary_keys
     if shared_boundaries and left.event_keys and right.event_keys and not (left.event_keys & right.event_keys):
         return True
-    if bool(left.hard_boundary) != bool(right.hard_boundary) and not (left.event_keys & right.event_keys):
-        return True
+    if bool(left.hard_boundary) != bool(right.hard_boundary):
+        hard_boundary = left.hard_boundary or right.hard_boundary
+        if hard_boundary == "independent-third-party-action":
+            return True
+        if not (left.event_keys & right.event_keys):
+            return True
     return False
 
 
@@ -5217,7 +5964,9 @@ def _weak_editorial_profile(profile: ReconciliationProfile) -> bool:
             "analysis",
             "buying_advice",
             "deal",
+            "hands_on",
             "podcast",
+            "review",
             "roundup",
             "third_party_spotlight",
             "tutorial",
@@ -5230,6 +5979,22 @@ def _explicit_separation_conflict(
     right: ReconciliationProfile,
 ) -> bool:
     """Keep explicit product/action boundaries authoritative during reunion."""
+    def market_regions(profile: ReconciliationProfile) -> set[str]:
+        return {
+            key.split(":", 4)[2]
+            for key in profile.event_keys
+            if key.startswith("structured-market-result:")
+            and len(key.split(":", 4)) == 5
+        }
+
+    left_market_regions = market_regions(left)
+    right_market_regions = market_regions(right)
+    if (
+        left_market_regions
+        and right_market_regions
+        and left_market_regions.isdisjoint(right_market_regions)
+    ):
+        return True
     shared_release_keys = {
         key
         for key in left.event_keys & right.event_keys
@@ -5256,9 +6021,11 @@ def _explicit_separation_conflict(
         "os-feature-subject:",
         "primary-claim-subject:",
         "primary-claim-predicate:",
+        "changed-object:",
         "product-family:",
         "product-model:",
         "legal-party:",
+        "market-report-scope:",
     ):
         left_values = {
             key for key in left.separation_keys if key.startswith(namespace)
@@ -5401,6 +6168,10 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
     """Return only conflicts strong enough to split an accepted seed event."""
     if _weak_editorial_profile(left) != _weak_editorial_profile(right):
         return True
+    if bool(left.hard_boundary) != bool(right.hard_boundary):
+        hard_boundary = left.hard_boundary or right.hard_boundary
+        if hard_boundary == "independent-third-party-action":
+            return True
     if (
         left.relevance_tier == "weak"
         and right.relevance_tier == "weak"
@@ -5594,8 +6365,12 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
         or (right_roundups and (left_release or left_features))
     ):
         return True
-    if bool(left.hard_boundary) != bool(right.hard_boundary) and not (left.event_keys & right.event_keys):
-        return True
+    if bool(left.hard_boundary) != bool(right.hard_boundary):
+        hard_boundary = left.hard_boundary or right.hard_boundary
+        if hard_boundary == "independent-third-party-action":
+            return True
+        if not (left.event_keys & right.event_keys):
+            return True
     if left.identity is not None and right.identity is not None:
         left_identity = left.identity
         right_identity = right.identity
@@ -5800,13 +6575,59 @@ def supported_reconciliation_event_keys(
     return supported
 
 
+def resolve_reconciliation_outcome(
+    profile: ReconciliationProfile,
+    *,
+    observed_tier: str,
+    observed_reason: str,
+    observed_category: str,
+) -> tuple[str, str, str]:
+    """Resolve relevance and category once from the structured profile."""
+    category = profile.category_hint or observed_category
+    if profile.defer_reason and observed_tier not in {"weak", "ecosystem"}:
+        return "weak", profile.defer_reason, category
+    if (
+        observed_tier == "weak"
+        and profile.trusted_direct_action
+        and not profile.hard_boundary
+    ):
+        return (
+            "strong",
+            profile.promotion_reason
+            or "title-led direct Apple action confirmed by structured identity",
+            category,
+        )
+    structured_first_party_override = any(
+        key.startswith(
+            (
+                "structured-assertion:app-store:",
+                "structured-assertion:iphone-camera:reference-image-",
+            )
+        )
+        for key in profile.event_keys
+    )
+    if (
+        observed_tier == "weak"
+        and not profile.hard_boundary
+        and structured_first_party_override
+    ):
+        return (
+            "strong",
+            "structured first-party Apple action confirmed by article evidence",
+            category,
+        )
+    if profile.defer_reason and observed_tier == "weak":
+        return "weak", profile.defer_reason, category
+    return observed_tier, observed_reason, category
+
+
 def reconcile_articles(
     articles: Sequence[ArticleT],
     *,
     profile_for: Callable[[ArticleT], ReconciliationProfile],
     initial_groups: Sequence[Sequence[ArticleT]],
 ) -> tuple[tuple[ArticleT, ...], ...]:
-    """Split explicit conflicts, then reconcile groups by exact event identity."""
+    """Split recall-oriented seeds, then reunite exact event identities."""
     ordered = sorted(articles, key=_stable_article_key)
     profiles = {id(article): profile_for(article) for article in ordered}
 
@@ -5906,6 +6727,42 @@ def reconcile_articles(
         def seed_conflicts(left: ArticleT, right: ArticleT) -> bool:
             left_profile = profiles[id(left)]
             right_profile = profiles[id(right)]
+            if (
+                getattr(left, "source", "")
+                and getattr(left, "source", "") == getattr(right, "source", "")
+                and getattr(left, "url", "") != getattr(right, "url", "")
+            ):
+                shared_keys = supported_reconciliation_event_keys(
+                    [left_profile, right_profile]
+                )
+                shared_action_keys = {
+                    key
+                    for key in shared_keys
+                    if not key.startswith("structured-canonical-title:")
+                }
+                pair_identity_match = bool(
+                    left_profile.identity is not None
+                    and right_profile.identity is not None
+                    and identity_pair_decision(
+                        left_profile.identity,
+                        right_profile.identity,
+                    )
+                    == "match"
+                )
+                shared_title_components = bool(
+                    left_profile.identity is not None
+                    and right_profile.identity is not None
+                    and (
+                        left_profile.identity.title_components
+                        & right_profile.identity.title_components
+                    )
+                )
+                if (
+                    not shared_action_keys
+                    and not pair_identity_match
+                    and not shared_title_components
+                ):
+                    return True
             return _seed_profiles_conflict(
                 left_profile,
                 right_profile,
@@ -5952,7 +6809,6 @@ def reconcile_articles(
         split_seed = split_seed_group(unique_seed)
         groups.extend(split_seed)
     groups.extend([[article] for article in ordered if id(article) not in seen])
-
     def supported_event_keys(group: Sequence[ArticleT]) -> set[str]:
         return supported_reconciliation_event_keys(
             [profiles[id(article)] for article in group]
@@ -5996,12 +6852,7 @@ def reconcile_articles(
         groups[right_root] = []
         parent[right_root] = left_root
 
-    def union(
-        left_index: int,
-        right_index: int,
-        *,
-        require_shared_keys: bool = True,
-    ) -> None:
+    def union(left_index: int, right_index: int) -> None:
         left_root = root(left_index)
         right_root = root(right_index)
         if left_root == right_root:
@@ -6009,7 +6860,7 @@ def reconcile_articles(
         left_group = groups[left_root]
         right_group = groups[right_root]
         join_keys = supported_event_keys(left_group) & supported_event_keys(right_group)
-        if require_shared_keys and not join_keys:
+        if not join_keys:
             return
         join_namespaces = {_event_key_namespace(key) for key in join_keys}
         cross_product_release_join = any(
@@ -6081,8 +6932,6 @@ def reconcile_articles(
                     continue
                 if cross_product_release_join:
                     continue
-                if not require_shared_keys:
-                    return
                 left_namespaces = {
                     _event_key_namespace(key) for key in left_profile.event_keys
                 }

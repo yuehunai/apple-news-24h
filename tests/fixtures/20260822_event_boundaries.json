@@ -1,0 +1,330 @@
+{
+  "groups": {
+    "vision-layoffs": [
+      {
+        "source": "MacRumors",
+        "url": "https://www.macrumors.com/2026/08/21/apple-lays-off-vision-products-employees/",
+        "title": "Apple Reportedly Lays Off 60 Vision Products Group Employees",
+        "summary": "Apple reportedly laid off at least 60 employees from its Vision Products Group and VR development team.",
+        "key_facts": ["The layoffs affected Apple Vision development roles."],
+        "published_at": "2026-08-21T11:28:45+00:00"
+      },
+      {
+        "source": "MacRumors",
+        "url": "https://www.macrumors.com/2026/08/21/apple-guts-vision-pro-teams/",
+        "title": "Apple Guts Vision Pro Gaming and Immersive Video Teams, Trims Siri Staff",
+        "summary": "Apple cut Vision Pro gaming and immersive video roles while also trimming Siri and software staff in the same restructuring.",
+        "key_facts": ["The combined restructuring affected more than 200 jobs."],
+        "published_at": "2026-08-21T19:16:15+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/apple-lays-off-200-people-across-vision-pro-and-siri-teams/",
+        "title": "Apple lays off 200+ across Vision Pro and Siri teams",
+        "summary": "Apple cut more than 200 jobs across Vision Pro, Siri and software teams in the same reorganization.",
+        "key_facts": ["About 100 positions came from Vision and another 100 from Siri and software."],
+        "published_at": "2026-08-21T19:17:51+00:00"
+      },
+      {
+        "source": "AppleInsider",
+        "url": "https://appleinsider.com/articles/26/08/21/apples-latest-layoffs-extend-past-just-vision-pro-development-teams",
+        "title": "Apple's latest layoffs extend past just Vision Pro development teams",
+        "summary": "Apple's Vision layoffs extended to Siri as part of the same company reorganization.",
+        "key_facts": ["The combined cuts were reported at about 200 roles."],
+        "published_at": "2026-08-21T19:09:00+00:00"
+      },
+      {
+        "source": "IT之家",
+        "url": "https://www.ithome.com/0/992/888.htm",
+        "title": "消息称苹果收缩 Vision Pro 相关业务，波及 Siri 等团队裁员共约 200 人",
+        "summary": "苹果同步调整 Vision Pro、Siri 和软件团队，本轮裁员约 200 人。",
+        "key_facts": ["这是同一轮业务重组。"],
+        "published_at": "2026-08-21T22:48:46+00:00"
+      },
+      {
+        "source": "快科技",
+        "url": "https://news.mydrivers.com/1/1145/1145321.htm",
+        "title": "苹果VR团队大瘦身：至少60名开发员工被裁 头显项目优先级下调",
+        "summary": "苹果裁减至少 60 名 Vision 和 VR 开发人员，后续报道显示它属于同一轮 200 人重组。",
+        "key_facts": ["公司降低了 Vision Pro 游戏和沉浸式视频优先级。"],
+        "published_at": "2026-08-21T02:51:22+00:00"
+      },
+      {
+        "source": "cnBeta",
+        "url": "https://www.cnbeta.com.tw/articles/tech/1574400.htm",
+        "title": "苹果开启重大业务调整 大幅裁减Vision Pro与Siri团队员工",
+        "summary": "苹果在同一轮业务调整中裁减 Vision Pro、Siri 和软件团队约 200 人。",
+        "key_facts": ["公司同时新增面向 Siri AI 的职位。"],
+        "published_at": "2026-08-21T23:38:00+00:00"
+      },
+      {
+        "source": "The Verge",
+        "url": "https://www.theverge.com/tech/983451/apple-layoffs-vision-pro-siri",
+        "title": "Apple is laying off staffers working on the Vision Pro and Siri",
+        "summary": "Apple is laying off staff on the Siri and Vision Pro teams, including closing gaming and immersive-content work in the same restructuring.",
+        "key_facts": ["Bloomberg reported more than 200 jobs affected across the teams."],
+        "published_at": "2026-08-21T19:44:55+00:00"
+      }
+    ],
+    "camera-airpods": [
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/airpods-pro-with-cameras-biggest-leak-yet-features/",
+        "title": "AirPods with cameras: everything we learned this week",
+        "summary": "Code in macOS 26.7 disclosed how camera-equipped AirPods capture paired still images for Visual Intelligence.",
+        "key_facts": ["The B790 prototype used paired RGB cameras and no video recording."],
+        "published_at": "2026-08-21T18:20:00+00:00"
+      },
+      {
+        "source": "AppleInsider",
+        "url": "https://appleinsider.com/articles/26/08/21/airpod-cameras-will-detect-people-and-warn-about-image-capture-with-a-status-light",
+        "title": "AirPod cameras will detect people, and warn about image capture with a status light",
+        "summary": "The same macOS 26.7 code shows camera-equipped AirPods detecting people and displaying a capture indicator.",
+        "key_facts": ["The cameras feed still images to Visual Intelligence."],
+        "published_at": "2026-08-21T18:30:00+00:00"
+      },
+      {
+        "source": "快科技",
+        "url": "https://news.mydrivers.com/1/1145/1145562.htm",
+        "title": "苹果首款带摄像头的耳机！AirPods神秘新品功能揭晓",
+        "summary": "macOS 26.7 代码披露了摄像头 AirPods 的双目静态图像和 Visual Intelligence 功能。",
+        "key_facts": ["代码对应 B790 原型和后续 B798 路线。"],
+        "published_at": "2026-08-22T00:15:00+00:00"
+      },
+      {
+        "source": "MacRumors",
+        "url": "https://www.macrumors.com/guide/airpods-ultra/",
+        "title": "Apple's Camera-Equipped AirPods: All the New Rumors",
+        "summary": "A current update consolidates the same macOS 26.7 camera-AirPods disclosure, including paired still images, Visual Intelligence and the B790/B798 roadmap.",
+        "key_facts": ["The current code describes the same camera capability disclosed by the other reports."],
+        "published_at": "2026-08-21T20:02:41+00:00"
+      }
+    ],
+    "m6-macbook-pro": [
+      {
+        "source": "AppleInsider",
+        "url": "https://appleinsider.com/articles/26/08/21/m6-macbook-pro-rumors-improved-performance-in-a-familiar-form-factor",
+        "title": "M6 MacBook Pro rumor: Improved performance, in a familiar form factor",
+        "summary": "A report describes the J804 14-inch M6 MacBook Pro with a 12-core GPU, 200GB/s memory bandwidth and vapor-chamber cooling.",
+        "key_facts": ["The entry model keeps the current chassis and Mini LED display."],
+        "published_at": "2026-08-21T18:00:00+00:00"
+      },
+      {
+        "source": "IT之家",
+        "url": "https://www.ithome.com/0/992/892.htm",
+        "title": "苹果 14 英寸 M6 MacBook Pro 前瞻：12 核 GPU、200GB/s 内存带宽、升级均热板散热",
+        "summary": "同一份 J804 报告称 M6 MacBook Pro 配备 12 核 GPU、200GB/s 内存带宽和均热板。",
+        "key_facts": ["入门款保留现有机身和 Mini LED 屏幕。"],
+        "published_at": "2026-08-21T23:10:00+00:00"
+      },
+      {
+        "source": "快科技",
+        "url": "https://news.mydrivers.com/1/1145/1145579.htm",
+        "title": "苹果下代MacBook Pro GPU规模再扩大 内存带宽暴涨至200GB/s",
+        "summary": "根据 AppleInsider 披露的同一份报告，代号 J804 的 14 英寸 M6 MacBook Pro 将采用 12 核 GPU、200GB/s 内存带宽和均热板。",
+        "key_facts": ["该机型沿用现有机身。"],
+        "published_at": "2026-08-22T01:23:30+00:00"
+      }
+    ],
+    "apple-watch-actions": [
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/apple-watch-series-5-edition/",
+        "title": "Revisiting Apple Watch Edition: Hands-on with the white ceramic Series 5",
+        "summary": "The current report says Apple Watch Series 12 will bring back a ceramic case and uses Series 5 history as context.",
+        "key_facts": ["The new action is the return of ceramic case material for Series 12."],
+        "published_at": "2026-08-21T20:20:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/apple-watch-series-12-and-ultra-4-to-get-one-big-upgrade-at-perfect-time/",
+        "title": "Apple Watch Series 12 and Ultra 4 to get one big upgrade at perfect time",
+        "summary": "Apple Watch Series 12 and Ultra 4 are expected to adopt a new S11 or S12 processor for Siri AI.",
+        "key_facts": ["The changed object is the processor, not the case material."],
+        "published_at": "2026-08-21T20:25:00+00:00"
+      }
+    ],
+    "apple-tv-pages": [
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/apple-tv-has-three-big-new-releases-coming-soon/",
+        "title": "Apple TV has three big new releases coming very soon",
+        "summary": "Dark Matter season 2 premieres August 28. The original movie Mayday premieres September 4. Slow Horses season 6 premieres September 16.",
+        "key_facts": [
+          "Dark Matter season 2 premieres August 28 and runs through October 30.",
+          "Mayday premieres on Apple TV on September 4.",
+          "Slow Horses season 6 premieres September 16 and runs through October 21."
+        ],
+        "published_at": "2026-08-21T19:50:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/emmy-winning-stillwater-returns-to-apple-tv-with-five-new-episodes/",
+        "title": "Emmy-winning Stillwater returns to Apple TV with five new episodes",
+        "summary": "Apple TV released five new Stillwater episodes as a separate content action.",
+        "key_facts": ["All five episodes are available now."],
+        "published_at": "2026-08-21T20:10:00+00:00"
+      }
+    ],
+    "walmart-apple-pay": [
+      {
+        "source": "MacRumors",
+        "url": "https://www.macrumors.com/2026/08/21/walmart-to-begin-accepting-apple-pay-in-us/",
+        "title": "Walmart to Begin Accepting Apple Pay in U.S. Stores",
+        "summary": "Walmart will roll out Apple Pay to U.S. stores beginning August 24.",
+        "key_facts": ["All U.S. stores are expected to support it by the end of 2026."],
+        "published_at": "2026-08-21T18:00:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/walmart-finally-launching-apple-pay-support-next-week/",
+        "title": "Walmart is finally launching Apple Pay support next week",
+        "summary": "Walmart will begin the same Apple Pay rollout on August 24.",
+        "key_facts": ["The rollout covers Walmart and Sam's Club."],
+        "published_at": "2026-08-21T18:05:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/when-is-apple-pay-coming-to-your-walmart-heres-the-full-schedule/",
+        "title": "Walmart Apple Pay rollout: when it launches in your state",
+        "summary": "The state schedule details the same Walmart Apple Pay rollout through October.",
+        "key_facts": ["Nationwide completion is expected by the end of 2026."],
+        "published_at": "2026-08-21T18:10:00+00:00"
+      },
+      {
+        "source": "AppleInsider",
+        "url": "https://appleinsider.com/articles/26/08/21/finally-apple-pay-is-coming-to-walmart-stores-in-the-us",
+        "title": "Finally, Apple Pay is coming to Walmart stores in the US",
+        "summary": "Walmart confirmed the same phased Apple Pay launch.",
+        "key_facts": ["The deployment starts August 24."],
+        "published_at": "2026-08-21T18:15:00+00:00"
+      },
+      {
+        "source": "The Verge",
+        "url": "https://www.theverge.com/tech/983336/walmart-apple-google-pay-launch",
+        "title": "Walmart is finally adding Apple Pay and Google Pay",
+        "summary": "Walmart is adding Apple Pay in the same nationwide NFC-payment rollout.",
+        "key_facts": ["The retailer plans to finish U.S. stores in 2026."],
+        "published_at": "2026-08-21T18:20:00+00:00"
+      },
+      {
+        "source": "IT之家",
+        "url": "https://www.ithome.com/0/992/880.htm",
+        "title": "多年后的妥协：沃尔玛、山姆会员商店终于开始支持 Apple Pay、Google Pay",
+        "summary": "沃尔玛和山姆将从 8 月 24 日起分批接入 Apple Pay，并在 2026 年底前覆盖美国门店。",
+        "key_facts": ["这是同一个分州上线行动。"],
+        "published_at": "2026-08-21T22:20:00+00:00"
+      }
+    ],
+    "hardware-action-boundaries": [
+      {
+        "source": "快科技",
+        "url": "https://news.mydrivers.com/1/1145/1145460.htm",
+        "title": "iPhone 18 Pro四款配色揭晓：新增红色、灰色 星宇橙谢幕",
+        "summary": "苹果预计发布 iPhone 18 Pro 系列，爆料列出四款机身配色。",
+        "key_facts": ["四款配色包括红色、灰色、银色和蓝色。"],
+        "published_at": "2026-08-21T08:24:42+00:00"
+      },
+      {
+        "source": "cnBeta",
+        "url": "https://www.cnbeta.com.tw/articles/tech/1574432.htm",
+        "title": "iPhone 18 Pro Max包装盒流出：清新配色撞脸远峰蓝",
+        "summary": "疑似 iPhone 18 Pro Max 包装盒流出，盒面显示天蓝色。",
+        "key_facts": ["包装盒真实性仍存疑。"],
+        "published_at": "2026-08-22T00:27:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/apple-watch-series-5-edition/",
+        "title": "Revisiting Apple Watch Edition: Hands-on with the white ceramic Series 5",
+        "summary": "A republished 2019 hands-on revisits the white ceramic Apple Watch Series 5.",
+        "key_facts": ["The current introduction points readers back to the old hands-on."],
+        "published_at": "2026-08-21T15:00:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/apple-watch-series-12-and-ultra-4-to-get-one-big-upgrade-at-perfect-time/",
+        "title": "Apple Watch Series 12 and Ultra 4 to get one big upgrade at perfect time",
+        "summary": "The new Apple Watch models are rumored to gain a more powerful chip.",
+        "key_facts": ["The chip upgrade is tied to Siri AI performance."],
+        "published_at": "2026-08-21T20:53:21+00:00"
+      }
+    ],
+    "competitor-apple-boundary": [
+      {
+        "source": "快科技",
+        "url": "https://news.mydrivers.com/1/1145/1145544.htm",
+        "title": "小米自研玄戒芯片即将发布：给苹果上点压力",
+        "summary": "小米集团总裁透露玄戒 O1 累计出货量超过百万，全新一代小米玄戒芯片即将发布。",
+        "key_facts": ["小米玄戒 O1 已用于小米手机和平板。"],
+        "published_at": "2026-08-21T14:10:28+00:00"
+      },
+      {
+        "source": "cnBeta",
+        "url": "https://www.cnbeta.com.tw/articles/tech/1574432.htm",
+        "title": "iPhone 18 Pro Max包装盒流出：清新配色撞脸远峰蓝",
+        "summary": "疑似 iPhone 18 Pro Max 包装盒流出，盒面显示天蓝色。",
+        "key_facts": ["包装盒真实性仍存疑。"],
+        "published_at": "2026-08-22T00:27:00+00:00"
+      }
+    ],
+    "main-queue-noise": [
+      {
+        "source": "IT之家",
+        "url": "https://www.ithome.com/0/992/832.htm",
+        "title": "青少年开发者借助 Claude Code AI 编程工具，成功为惠普打印机冷门机型开发出苹果 macOS 原生驱动",
+        "summary": "青少年开发者借助 Claude Code，仅用 4 小时就为缺少官方支持的惠普激光打印机开发出 macOS 原生驱动。",
+        "key_facts": ["项目已经开源，支持惠普 HP Laser 1003、1006 和 1008 系列打印机。"],
+        "published_at": "2026-08-21T11:14:14+00:00"
+      },
+      {
+        "source": "AppleInsider",
+        "url": "https://appleinsider.com/inside/ipad/tips/when-to-reuse-sell-or-recycle-an-old-iphone-or-ipad",
+        "title": "When to reuse, sell or recycle an old iPhone or iPad",
+        "summary": "A how-to guide explains when owners should reuse, sell or recycle existing devices.",
+        "key_facts": [],
+        "published_at": "2026-08-21T12:00:00+00:00"
+      },
+      {
+        "source": "AppleInsider",
+        "url": "https://appleinsider.com/articles/26/08/21/chatgpt-can-now-control-messages-on-the-mac-for-some-reason",
+        "title": "ChatGPT can now control Messages on the Mac for some reason",
+        "summary": "OpenAI updated its third-party Mac app to read and send Messages with permission; Apple made no platform change.",
+        "key_facts": [],
+        "published_at": "2026-08-21T13:00:00+00:00"
+      },
+      {
+        "source": "快科技",
+        "url": "https://news.mydrivers.com/1/1145/1145544.htm",
+        "title": "小米自研玄戒芯片即将发布：给苹果上点压力",
+        "summary": "小米集团总裁透露玄戒 O1 累计出货量超过百万，全新一代小米玄戒芯片即将发布。",
+        "key_facts": ["小米玄戒 O1 已用于小米手机和平板。"],
+        "published_at": "2026-08-21T14:00:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/another-russian-banking-app-in-disguise-has-topped-the-us-app-store/",
+        "title": "Another disguised Russian banking app has topped the US iPhone App Store",
+        "summary": "A third-party banking app disguised itself and reached the App Store chart; Apple announced no new action or response.",
+        "key_facts": [],
+        "published_at": "2026-08-21T15:00:00+00:00"
+      },
+      {
+        "source": "9to5Mac",
+        "url": "https://9to5mac.com/2026/08/21/apple-refurb-store-apple-tv-4k-ultra/",
+        "title": "Apple refurb store: Apple TV 4K is back, Apple Watch Ultra 3 offers, more",
+        "summary": "A routine certified-refurbished inventory and discount roundup lists Apple TV and Apple Watch prices.",
+        "key_facts": [],
+        "published_at": "2026-08-21T21:00:00+00:00"
+      },
+      {
+        "source": "MacRumors",
+        "url": "https://www.macrumors.com/guide/iphone-battery-life-10-tips/",
+        "title": "10 Ways to Improve Your iPhone's Battery Life",
+        "summary": "A tutorial lists settings users can change to extend battery life; it contains no new Apple action.",
+        "key_facts": [],
+        "published_at": "2026-08-21T22:53:00+00:00"
+      }
+    ]
+  }
+}

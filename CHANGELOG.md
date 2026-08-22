@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.60.0 - 2026-08-22
+
+- Added pre-reconciliation claim projection for multi-title first-party service pages, requiring local named-subject, concrete-action, and supporting-fact evidence so independent Apple TV releases stay separate without creating synthetic children from background text.
+- Made the structured reconciler authoritative for article relevance and category, with changed-object identities for hardware components, finishes, retail packaging, platform rollouts, supplier actions, and measured market reports so aggregate summaries cannot reclassify or bridge unrelated events.
+- Improved event boundaries for same-publisher reports, third-party Apple-platform utilities, regional market measurements, current product milestones, retrospective hands-on articles, and direct Apple Pay, AirPods, MacBook Pro, Apple Watch, and organizational actions.
+- Removed the duplicated group-level relevance reclassification path and related legacy helpers from the main crawler, reducing conflicting post-processing while keeping recall-oriented discovery groups as proposals for structured reconciliation.
+- Updated fallback policy guidance and expanded regression coverage from 1,124 to 1,152 tests; concurrent live validation preserved identical per-source discovery counts and all 59 source URLs while reducing runtime from 55.3 to 51.7 seconds, and clean-agent validation produced zero merge warnings with all 42 main and deferred event IDs uniquely accounted for.
+
 ## 1.59.0 - 2026-08-20
 
 - Added action-owner-aware identities for third-party Apple-platform apps, first-party Home Hub software, Beats product leaks, App Store commercial terms, and unreleased-device identifier disclosures so direct Apple actions retain stable subjects and categories.

@@ -48,11 +48,13 @@ from apple_news_core.event_identity import (  # noqa: E402
     is_non_apple_title_context,
 )
 from apple_news_core.event_matcher import identity_pair_decision  # noqa: E402
+from apple_news_core.article_projector import project_first_party_content_claims  # noqa: E402
 from apple_news_core.event_reconciler import (  # noqa: E402
     ReconciliationProfile,
     build_reconciliation_profile,
     first_party_document_lifecycle_key,
     reconcile_articles,
+    resolve_reconciliation_outcome,
     supported_reconciliation_event_keys,
 )
 
@@ -11851,6 +11853,12 @@ def compound_article_variants(
     service_variants = service_content_announcement_variants(title, summary, key_facts)
     if len(service_variants) > 1:
         return service_variants
+    content_claims = project_first_party_content_claims(title, summary, key_facts)
+    if content_claims:
+        return [
+            (claim.title, claim.summary, list(claim.key_facts))
+            for claim in content_claims
+        ]
     numbered_variants = numbered_first_party_announcement_variants(title, summary, key_facts)
     if len(numbered_variants) > 1:
         return numbered_variants
@@ -29024,349 +29032,6 @@ def event_category_from_metadata(title: str, summary: str, key_facts: list[str],
     return choose_category(title, context)
 
 
-def event_source_for_reclassification(event: Event) -> str:
-    if any(article.source == "Apple Newsroom" for article in event.articles):
-        return "Apple Newsroom"
-    return event.articles[0].source if event.articles else ""
-
-
-def articles_share_title_product_generation(articles: list[Article]) -> bool:
-    if len(articles) < 2:
-        return False
-    generation_sets = [
-        {
-            component
-            for component in article_title_led_event_identity(article).title_components
-            if component.startswith("product-generation:")
-        }
-        for article in articles
-    ]
-    return bool(generation_sets) and all(generation_sets) and bool(
-        set.intersection(*generation_sets)
-    )
-
-
-def refresh_event_metadata(event: Event) -> None:
-    article_kind = event.event_kind
-    article_category = event.category
-    article_tier, article_reason = event_relevance_tier(event.articles) if event.articles else (event.relevance_tier, event.relevance_reason)
-    summary_kind = detect_event_kind(event.title, event.summary, event.key_facts)
-    summary_tier, summary_reason = classify_relevance_tier(
-        event.title,
-        event.summary,
-        event.key_facts,
-        event_source_for_reclassification(event),
-    )
-    identity_scope = title_and_lead_scope(event.title, event.summary, limit=1500)
-    title_identities = [article_title_led_event_identity(article) for article in event.articles]
-    if event.articles and all(
-        is_title_led_apple_component_procurement_story(
-            article.title,
-            " ".join([article.summary, *article.key_facts[:5]]),
-        )
-        for article in event.articles
-    ):
-        event.event_kind = "hardware_market"
-        event.relevance_tier = "strong"
-        event.relevance_reason = "direct Apple component procurement to address a named product supply constraint"
-        event.category = "hardware_products"
-        return
-    if any(
-        is_direct_apple_platform_security_impact_story(
-            article.title,
-            " ".join([article.summary, *article.key_facts[:5]]),
-        )
-        for article in event.articles
-    ):
-        event.event_kind = "security_privacy"
-        event.relevance_tier = "strong"
-        event.relevance_reason = "concrete Apple platform vulnerability or exploit impact"
-        event.category = event_category_from_metadata(
-            event.title,
-            event.summary,
-            event.key_facts,
-            event.event_kind,
-        )
-        return
-    if event.articles and all(
-        is_apple_owned_brand_engineering_strategy_story(
-            article.title,
-            " ".join([article.summary, *article.key_facts[:5]]),
-        )
-        for article in event.articles
-    ):
-        event.event_kind = "hardware_market"
-        event.relevance_tier = "strong"
-        event.relevance_reason = "Apple-owned hardware brand engineering or product-strategy report"
-        event.category = "hardware_products"
-        return
-    if event.articles and all(
-        is_title_led_named_apple_product_supplier_action_story(
-            article.title,
-            " ".join([article.summary, *article.key_facts[:5]]),
-        )
-        for article in event.articles
-    ):
-        event.event_kind = "hardware_market"
-        event.relevance_tier = "strong"
-        event.relevance_reason = "named supplier qualification or component-supply action for an Apple product"
-        event.category = "hardware_products"
-        return
-    if (
-        title_identities
-        and all(identity.scope == "third-party-context" for identity in title_identities)
-        and all(article.relevance_tier != "strong" for article in event.articles)
-    ):
-        explicit_interop = any(
-            is_third_party_platform_update_improving_apple_device_interop(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            for article in event.articles
-        )
-        apple_silicon_compatibility = any(
-            is_apple_silicon_third_party_os_driver_compatibility_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            for article in event.articles
-        )
-        if apple_silicon_compatibility:
-            event.event_kind = "os_compatibility"
-            event.relevance_tier = "ecosystem"
-            event.relevance_reason = (
-                "third-party OS or driver compatibility advancement for Apple Silicon"
-            )
-        elif explicit_interop:
-            event.event_kind = "ecosystem_interop"
-            event.relevance_tier = "ecosystem"
-            event.relevance_reason = (
-                "third-party platform update with a concrete Apple-device interoperability improvement"
-            )
-        else:
-            event.event_kind = "third_party_ecosystem"
-            event.relevance_tier = "weak"
-            event.relevance_reason = (
-                "third-party title subject with Apple used only as comparison or compatibility context"
-            )
-        event.category = article_category
-        return
-    if is_apple_device_battery_regulation_story(identity_scope):
-        event.event_kind = "hardware_market"
-        event.relevance_tier = article_tier
-        event.relevance_reason = article_reason
-        event.category = "hardware_products"
-        return
-    if len(event.articles) > 1 and all(
-        same_named_service_content_action_event(left, singleton_merge_event(right))
-        for index, left in enumerate(event.articles)
-        for right in event.articles[index + 1 :]
-    ):
-        event.event_kind = "service_content"
-        event.relevance_tier = article_tier
-        event.relevance_reason = article_reason
-        event.category = "software_systems"
-        return
-    if is_title_primary_apple_legal_proceeding_story(event.title, identity_scope):
-        event.event_kind = "legal_antitrust"
-        event.relevance_tier = article_tier
-        event.relevance_reason = article_reason
-        event.category = event_category_from_metadata(
-            event.title,
-            event.summary,
-            event.key_facts,
-            event.event_kind,
-        )
-        return
-    priority = {"weak": 0, "ecosystem": 1, "strong": 2}
-    if event.articles and all(article.relevance_tier == "weak" for article in event.articles):
-        event.event_kind = article_kind
-        event.relevance_tier = article_tier
-        event.relevance_reason = article_reason
-        event.category = article_category
-        return
-    summary_context = " ".join([event.summary, *event.key_facts[:5]])
-    summary_indicates_weak_context = (
-        is_third_party_ai_agent_for_mac_without_apple_action(event.title, summary_context)
-        or is_third_party_game_or_cross_platform_launch_story(event.title, summary_context)
-        or is_non_apple_device_comparison_story(event.title, summary_context)
-        or is_third_party_consumer_app_update_on_apple_platform(event.title, summary_context)
-        or is_third_party_browser_security_feature_story(event.title, summary_context)
-        or is_third_party_reference_or_explainer_project_story(event.title, summary_context)
-        or is_third_party_custom_unreleased_apple_product_story(event.title, summary_context)
-        or is_non_apple_product_design_reference_story(event.title, summary_context)
-        or is_non_apple_product_research_context_story(summary_context)
-        or is_third_party_device_management_service_story(summary_context)
-        or is_third_party_app_platform_launch_story(event.title, summary_context)
-        or is_non_apple_public_response_with_apple_purchase_context(event.title, summary_context)
-        or is_former_apple_figure_commentary_without_new_apple_action(event.title, summary_context)
-        or is_usage_podcast_or_third_party_project_without_new_apple_action(event.title, summary_context)
-        or is_non_apple_component_market_background_story(event.title, summary_context)
-    )
-    article_group_indicates_weak_context = bool(event.articles) and all(
-        (
-            is_third_party_ai_agent_for_mac_without_apple_action(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_third_party_game_or_cross_platform_launch_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_non_apple_device_comparison_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_third_party_consumer_app_update_on_apple_platform(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_third_party_browser_security_feature_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_third_party_reference_or_explainer_project_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_third_party_custom_unreleased_apple_product_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_non_apple_product_design_reference_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_non_apple_product_research_context_story(
-                " ".join([article.summary, *article.key_facts[:5]])
-            )
-            or is_third_party_device_management_service_story(
-                " ".join([article.summary, *article.key_facts[:5]])
-            )
-            or is_third_party_app_platform_launch_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_non_apple_public_response_with_apple_purchase_context(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_former_apple_figure_commentary_without_new_apple_action(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_usage_podcast_or_third_party_project_without_new_apple_action(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_non_apple_component_market_background_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-        )
-        for article in event.articles
-    )
-    protected_direct_action = bool(event.articles) and all(
-        article.relevance_tier == "strong"
-        and article_title_led_event_identity(article).scope == "apple-direct"
-        and (
-            is_direct_apple_product_patent_story(
-                article.title,
-                " ".join([article.summary, *article.key_facts[:5]]),
-            )
-            or is_official_apple_product_communication_story(article.title, article.summary)
-            or is_direct_apple_first_party_program_story(article.title, article.summary)
-            or high_confidence_direct_apple_action(
-                article_title_led_event_identity(article)
-            )
-        )
-        for article in event.articles
-    )
-    protected_cohesive_product_generation = (
-        event.event_kind == "hardware_market"
-        and articles_share_title_product_generation(event.articles)
-        and all(
-            article.relevance_tier == "strong"
-            and article_title_led_event_identity(article).scope == "apple-direct"
-            for article in event.articles
-        )
-    )
-    protected_direct_action = protected_direct_action or protected_cohesive_product_generation
-    summary_allows_downgrade = not protected_direct_action and (
-        is_routine_recap_comparison_or_buying_advice(event.title, event.summary) or (
-        summary_tier == "weak"
-        and (
-            effective_apple_term_score(f"{event.title} {summary_context}") <= 0
-            or is_non_apple_primary_subject_with_incidental_apple_context(event.title, summary_context)
-            or is_former_apple_staff_background_story(summary_context)
-            or is_legacy_apple_platform_third_party_app_story(event.title, summary_context)
-            or is_third_party_legacy_apple_hardware_replica_story(event.title, summary_context)
-            or is_third_party_app_or_service_status_story(event.title, summary_context)
-            or is_third_party_accessory_platform_compatibility_story(event.title, summary_context)
-            or is_third_party_custom_unreleased_apple_product_story(event.title, summary_context)
-            or is_non_apple_product_design_reference_story(event.title, summary_context)
-            or is_third_party_app_platform_launch_story(event.title, summary_context)
-            or is_third_party_game_or_cross_platform_launch_story(event.title, summary_context)
-            or is_non_apple_public_response_with_apple_purchase_context(event.title, summary_context)
-            or is_former_apple_figure_commentary_without_new_apple_action(event.title, summary_context)
-            or is_non_apple_component_market_background_story(event.title, summary_context)
-            or is_usage_podcast_or_third_party_project_without_new_apple_action(event.title, summary_context)
-        )
-        )
-    )
-    if (
-        priority.get(article_tier, 0) > priority.get(summary_tier, 0)
-        and not summary_allows_downgrade
-        and (
-            protected_direct_action
-            or (
-                not (summary_tier == "weak" and summary_indicates_weak_context)
-                and not (summary_tier == "weak" and article_group_indicates_weak_context)
-            )
-        )
-    ):
-        event.event_kind = article_kind
-        event.relevance_tier = article_tier
-        event.relevance_reason = article_reason
-        event.category = article_category
-        return
-    if (
-        article_tier == "weak"
-        and priority.get(summary_tier, 0) > priority.get(article_tier, 0)
-        and summary_indicates_weak_context
-    ):
-        event.event_kind = article_kind
-        event.relevance_tier = article_tier
-        event.relevance_reason = article_reason
-        event.category = article_category
-        return
-    if (
-        event.articles
-        and article_kind != "general_company"
-        and summary_kind == "general_company"
-        and all(article.event_kind == article_kind for article in event.articles)
-    ):
-        event.event_kind = article_kind
-        event.relevance_tier = article_tier
-        event.relevance_reason = article_reason
-        event.category = article_category
-        return
-    if (
-        article_kind in HARDWARE_EVENT_KINDS
-        and summary_tier == "strong"
-        and is_apple_product_data_leak_story(" ".join([event.title, event.summary, *event.key_facts[:8]]), event.title)
-    ):
-        event.event_kind = article_kind
-        event.relevance_tier = summary_tier
-        event.relevance_reason = summary_reason
-        event.category = article_category
-        return
-    event.event_kind = summary_kind
-    event.relevance_tier = summary_tier
-    event.relevance_reason = summary_reason
-    event.category = event_category_from_metadata(event.title, event.summary, event.key_facts, event.event_kind)
-
-
 def articles_form_cohesive_os_release_wave(articles: list[Article]) -> bool:
     if len(articles) < 2:
         return False
@@ -31294,42 +30959,20 @@ def reconcile_article_relevance(
     article: Article,
     profile: ReconciliationProfile,
 ) -> bool:
-    changed = False
-    if profile.category_hint:
-        changed = article.category != profile.category_hint
-        article.category = profile.category_hint
-    if (
-        article.relevance_tier == "weak"
-        and profile.trusted_direct_action
-        and not profile.hard_boundary
-    ):
-        article.relevance_tier = "strong"
-        article.relevance_reason = (
-            profile.promotion_reason
-            or "title-led direct Apple action confirmed by structured identity"
-        )
-        return True
-    if (
-        article.relevance_tier == "weak"
-        and not profile.hard_boundary
-        and any(
-            key.startswith(
-                (
-                    "structured-assertion:app-store:",
-                    "structured-assertion:iphone-camera:reference-image-",
-                )
-            )
-            for key in profile.event_keys
-        )
-    ):
-        article.relevance_tier = "strong"
-        article.relevance_reason = "structured first-party Apple action confirmed by article evidence"
-        return True
-    if not profile.defer_reason or article.relevance_tier in {"weak", "ecosystem"}:
-        return changed
-    changed = True
-    article.relevance_tier = "weak"
-    article.relevance_reason = profile.defer_reason
+    tier, reason, category = resolve_reconciliation_outcome(
+        profile,
+        observed_tier=article.relevance_tier,
+        observed_reason=article.relevance_reason,
+        observed_category=article.category,
+    )
+    changed = (
+        tier != article.relevance_tier
+        or reason != article.relevance_reason
+        or category != article.category
+    )
+    article.relevance_tier = tier
+    article.relevance_reason = reason
+    article.category = category
     return changed
 
 
@@ -33061,7 +32704,6 @@ def rebuild_event_from_articles(event: Event, articles: list[Article]) -> Event:
     event.regions = set().union(*(item.regions for item in event.articles))
     event.merge_warnings = event_merge_warnings(event.articles)
     event.title, event.summary, event.key_facts = build_event_summary(event.articles)
-    refresh_event_metadata(event)
     if (
         len(event.articles) > 1
         and len(set(kinds)) == 1
@@ -33907,7 +33549,7 @@ def split_mixed_topic_events(events: list[Event]) -> list[Event]:
 
 
 def provisional_seed_groups(articles: list[Article]) -> list[list[Article]]:
-    """Generate one-pass recall-oriented hints; the core reconciler owns final boundaries."""
+    """Generate recall-only groups; the structured reconciler owns boundaries."""
     events: list[Event] = []
     for article in sorted(articles, key=lambda item: item.published_utc):
         matched = max(
@@ -33918,14 +33560,10 @@ def provisional_seed_groups(articles: list[Article]) -> list[list[Article]]:
         if matched is None:
             events.append(singleton_merge_event(article))
             continue
-        replacement = event_from_article_group(
+        events[events.index(matched)] = event_from_article_group(
             matched,
             [*matched.articles, article],
         )
-        events[events.index(matched)] = replacement
-    # Keep these groups as recall hints only. Re-running the legacy event-level
-    # consolidator here made topic similarity transitive before the structured
-    # reconciler could inspect article-level subject and action boundaries.
     return [event.articles for event in events]
 
 
@@ -33994,34 +33632,6 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
             # Structured reconciliation hints are the final category authority;
             # aggregate summaries can contain software or hardware background.
             event.category = next(iter(category_hints))
-        trusted_direct_profiles = [
-            profiles[id(article)]
-            for article in group
-            if profiles[id(article)].trusted_direct_action
-        ]
-        if (
-            trusted_direct_profiles
-            and all(article.relevance_tier != "weak" for article in group)
-            and event.relevance_tier == "weak"
-        ):
-            event.relevance_tier = "strong"
-            event.relevance_reason = (
-                "structured title and lead evidence identifies a direct Apple action"
-            )
-        defer_reasons = {
-            profiles[id(article)].defer_reason
-            for article in group
-            if profiles[id(article)].defer_reason
-        }
-        if defer_reasons and all(
-            profiles[id(article)].defer_reason
-            for article in group
-        ) and not any(
-            profiles[id(article)].trusted_direct_action
-            for article in group
-        ) and event.relevance_tier != "ecosystem":
-            event.relevance_tier = "weak"
-            event.relevance_reason = sorted(defer_reasons)[0]
         events.append(event)
     return sorted(events, key=lambda event: (event.published_utc, event.event_id))
 

@@ -1808,7 +1808,7 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(events), 2)
 
-    def test_refresh_event_metadata_does_not_downgrade_strong_article_group(self):
+    def test_cluster_metadata_does_not_downgrade_strong_article_group(self):
         module = load_module()
         article = article_for(
             module,
@@ -1819,25 +1819,7 @@ class RelevanceRuleTests(unittest.TestCase):
             ),
             source="AppleInsider",
         )
-        event = module.Event(
-            event_id="promo",
-            category=article.category,
-            title="Third-party Vision Pro accessory now available",
-            summary="A third-party accessory story uses Apple products mainly as platform context.",
-            key_facts=[],
-            published_utc=article.published_utc,
-            published_raw=article.published_raw,
-            published_source=article.published_source,
-            confidence=article.confidence,
-            articles=[article],
-            tokens=set(article.tokens),
-            event_kind=article.event_kind,
-            relevance_tier=article.relevance_tier,
-            relevance_reason=article.relevance_reason,
-            regions=set(article.regions),
-        )
-
-        module.refresh_event_metadata(event)
+        event = module.cluster_articles([article])[0]
 
         self.assertEqual(event.relevance_tier, "strong")
 
