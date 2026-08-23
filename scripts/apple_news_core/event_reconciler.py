@@ -2959,6 +2959,10 @@ def _editorial_or_third_party_claim_reason(
     )
     if tutorial_title:
         return "editorial tutorial without a new Apple action"
+    if identity.content_form == "tutorial":
+        return "editorial tutorial or settings advice without a new Apple action"
+    if identity.content_form == "user_anecdote":
+        return "editorial single-user workaround without a new Apple action"
     routine_refurb_roundup = bool(
         _contains(title_text, "refurb store", "refurbished store", "官翻", "翻新商店")
         and _contains(title_text, "offers", "deals", "discount", "save", "more", "优惠", "折扣", "降价")
@@ -3206,7 +3210,15 @@ def _unsupported_third_party_reason(
         # A concrete, crawler-verified Apple action outranks weaker editorial
         # cues when the article itself is not an explicit roundup.
         return ""
-    if content_form in {"buying_advice", "deal", "podcast", "poll", "roundup", "tutorial"}:
+    if content_form in {
+        "buying_advice",
+        "deal",
+        "podcast",
+        "poll",
+        "roundup",
+        "tutorial",
+        "user_anecdote",
+    }:
         return f"editorial {content_form.replace('_', ' ')} without a new Apple action"
     if re.match(r"^(?:no,|yes,|why\b|my\b)", text) and not identity.title_actions:
         return "opinion or commentary without a new Apple action"
@@ -5970,6 +5982,7 @@ def _weak_editorial_profile(profile: ReconciliationProfile) -> bool:
             "roundup",
             "third_party_spotlight",
             "tutorial",
+            "user_anecdote",
         }
     )
 

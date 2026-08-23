@@ -1808,6 +1808,61 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ) or re.search(r"\b(?:here['’]s the fix|troubleshooting guide|fix seems to work)\b|故障排查|解决办法", lower):
         return "tutorial"
+    settings_advice = bool(
+        (
+            re.search(
+                r"\b(?:turn|switch)\s+(?:(?:off|on)\s+(?:this|the)|(?:this|the)\s+)"
+                r"\s*(?:default\s+)?(?:setting|option)(?:\s+(?:off|on))?\b|"
+                r"\b(?:disable|enable|change|adjust)\s+(?:this|the)\s+(?:default\s+)?(?:setting|option)\b|"
+                r"(?:设置|功能|选项).{0,12}(?:建议|最好|可以|应该|应当).{0,10}"
+                r"(?:关闭|关掉|开启|打开|调整|更改)",
+                lower,
+            )
+            or re.search(
+                r"(?:建议|最好|可以|应该|应当).{0,10}(?:关闭|关掉|开启|打开|调整|更改)"
+                r".{0,12}(?:设置|功能|选项)",
+                lower,
+            )
+        )
+        and re.search(
+            r"\b(?:blurry|blurred|drain(?:ing)?|overheat(?:ing)?|slow|stuck|problem|issue)\b|"
+            r"(?:总是|模糊|发糊|不清晰|耗电|掉电|发热|卡顿|失灵|问题|怎么办)",
+            lower,
+        )
+        and not re.search(
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\s+\d+(?:\.\d+){0,2}\b"
+            r".{0,45}\b(?:adds?|changes?|updates?|introduces?|removes?)\b|"
+            r"(?:苹果|apple).{0,28}(?:宣布|发布|推出|新增|调整|移除|announces?|releases?|adds?|changes?|removes?)",
+            lower,
+        )
+    )
+    if settings_advice:
+        return "tutorial"
+    single_user_workaround = bool(
+        re.search(
+            r"\b(?:a|one|reddit)\s+(?:user|owner|reader)\b|"
+            r"(?:一位|一名|这个|该)?(?:reddit\s*)?(?:用户|网友|机主|读者)|(?:老哥|小哥)",
+            f"{lower} {lead_lower}",
+        )
+        and re.search(
+            r"\b(?:broken|cracked|damaged|failed|failure|repair|screen damage|display damage)\b|"
+            r"(?:摔坏|损坏|坏掉|故障|维修|碎屏|屏幕坏|屏幕损坏)",
+            f"{lower} {lead_lower}",
+        )
+        and re.search(
+            r"\b(?:workaround|diy|self-made|home-made|open-source|rubber band|"
+            r"fix(?:es|ed)?|solv(?:es|ed)|uses? an? old)\b|"
+            r"(?:解决方案|变通方案|自制|自行|开源|橡皮筋|反手|旧款.{0,12}(?:替代|充当|作为))",
+            f"{lower} {lead_lower}",
+        )
+        and not re.search(
+            r"(?:apple|苹果).{0,28}(?:宣布|发布|推出|扩展|新增|更新|修复|召回|"
+            r"announces?|releases?|launches?|expands?|adds?|updates?|fixes?|recalls?)",
+            lower,
+        )
+    )
+    if single_user_workaround:
+        return "user_anecdote"
     if (
         "poll" in lower
         or re.match(r"^(?:what|which|would|will|should)\b.*\?", lower)
@@ -2166,6 +2221,10 @@ def _title_scope(title: str, lead: str) -> str:
             r"^(?:苹果|传苹果|消息称苹果|报道称苹果)",
             title_lower,
         )
+        or re.match(
+            r"^(?:iphone|ipad|macbook|airpods|apple watch)(?=[^a-z0-9]|$)",
+            title_lower,
+        )
     ) or beats_first_party_technical
     direct_target = bool(
         re.search(
@@ -2189,6 +2248,14 @@ def _title_scope(title: str, lead: str) -> str:
             r"overtakes?|surpasses?|dethrones?|exceeds?|挑战|对标|剑指|对决|抗衡|交锋|媲美|优于|胜过|超越|超过|力压|"
             r"接近|相当于|追平|向.{0,20}看齐|酷似|类似(?:于)?)"
             r".{0,50}(?:apple|iphone|ipad|mac|airpods|苹果)",
+            title_lower,
+        )
+        or re.search(
+            r"^(?!apple\b|iphone\b|ipad\b|mac(?:book)?\b|airpods\b|苹果)"
+            r"[^:：!！?？]{1,80}(?:launch(?:es|ed|ing)?|releas(?:es|ed|ing)?|"
+            r"introduc(?:es|ed|ing)?|debut(?:s|ed|ing)?|发布|推出|上新|上市|开售|亮相)"
+            r"[^:：!！?？]{0,60}(?:apple|iphone|ipad|mac(?:book)?|airpods|苹果)"
+            r"[^:：!！?？]{0,40}(?:rival|competitor|alternative|counterpart|竞品|对手|替代品)",
             title_lower,
         )
         or re.search(r"(?:向|与).{0,24}(?:apple|iphone|ipad|mac|airpods|苹果).{0,12}(?:看齐|相似|类似)", title_lower)

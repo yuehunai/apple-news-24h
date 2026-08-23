@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.61.0 - 2026-08-23
+
+- Added structured settings-advice and single-user repair/workaround content forms so symptom-driven tutorials and anecdotal fixes remain deferred unless the title and lead report a current Apple release, support, or repair-program action.
+- Improved action-owner recognition for competitor product launches across English and Chinese title orders, keeping Apple products as comparison context while preserving direct Apple hardware, pricing, repair, and measured market actions.
+- Fixed first-party product-prefix parsing for CJK-adjacent titles and prevented comparison clauses after headline separators from overriding the title-led Apple subject.
+- Updated fallback policy guidance for settings advice, user repair anecdotes, and competitor positioning regardless of whether comparison wording appears before or after the Apple product name.
+- Expanded regression coverage from 1,152 to 1,156 tests; concurrent live validation preserved identical per-source discovery, detail-selection, article, and all 14 source-URL coverage in about 50 seconds while moving the three false-positive main events into `deferred_events`, and clean-agent validation accounted for all 13 event IDs with zero merge warnings.
+
 ## 1.60.0 - 2026-08-22
 
 - Added pre-reconciliation claim projection for multi-title first-party service pages, requiring local named-subject, concrete-action, and supporting-fact evidence so independent Apple TV releases stay separate without creating synthetic children from background text.
