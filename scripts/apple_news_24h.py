@@ -10274,6 +10274,8 @@ def extract_title(text: str, fallback: str) -> str:
 
 TRAILING_PROMO_SECTION_PATTERNS = (
     r"my\s+top\s+deals\b",
+    r"my\s+favorite\s+(?:apple\s+)?(?:deals|offers)\b"
+    r"(?:\s+(?:right\s+now|today|this\s+week))?",
     r"my\s+favorite\s+apple\s+accessory\s+recommendations",
     r"my\s+favorite\s+(?:carplay|iphone|ipad|mac|apple\s+watch|apple\s+tv|vision\s+pro|airpods|apple)\s+accessories",
     r"my\s+favorite\s+(?:iphone|ipad|mac|apple\s+watch|apple\s+tv|vision\s+pro|airpods|apple)\s+links",
@@ -11374,6 +11376,22 @@ def smart_home_roadmap_article_variants(
     """Project a genuine multi-product smart-home roadmap into product actions."""
     original = [(title, summary, key_facts)]
     title_lower = title.lower()
+    # A retail-layout, merchandising, or launch-preparation report has one
+    # operational predicate. Product roadmaps in its background explain the
+    # operation; they are not independent claims owned by that source page.
+    retail_operation = bool(
+        re.search(
+            r"\b(?:apple\s+)?(?:retail\s+)?stores?\b.{0,65}"
+            r"(?:prepar|rearrang|layout|display|merchandis|refresh)|"
+            r"\b(?:layout|display|merchandis)\b.{0,45}\b(?:stores?|retail)\b|"
+            r"(?:苹果)?零售店.{0,40}(?:准备|调整|重组|改版|布局|陈列|展区)|"
+            r"(?:布局|陈列|展区).{0,30}(?:零售店|门店)",
+            title_lower,
+            re.I,
+        )
+    )
+    if retail_operation:
+        return original
     umbrella_title = bool(
         re.search(
             r"\b(?:smart[- ]home\s+(?:products?|hardware|lineup|refresh)|"
@@ -11554,7 +11572,9 @@ MULTI_PRODUCT_HARDWARE_SUBJECTS: tuple[tuple[str, str, tuple[str, ...]], ...] = 
     ("airpods", "AirPods", ("airpods", "苹果耳机")),
     ("beats", "Beats", ("beats", "苹果 beats")),
     ("macbook", "MacBook", ("macbook", "苹果笔记本")),
+    ("mac-mini", "Mac mini", ("mac mini",)),
     ("imac", "iMac", ("imac",)),
+    ("ipad-mini", "iPad mini", ("ipad mini",)),
     ("ipad", "iPad", ("ipad", "苹果平板")),
     ("apple-watch", "Apple Watch", ("apple watch", "苹果手表")),
     ("vision-pro", "Vision Pro", ("vision pro", "苹果头显")),
@@ -11565,6 +11585,13 @@ MULTI_PRODUCT_HARDWARE_SUBJECTS: tuple[tuple[str, str, tuple[str, ...]], ...] = 
 
 def multi_product_hardware_subjects(value: str) -> set[str]:
     lower = value.lower()
+    lower = re.sub(
+        r"(?:\b(?:besides|apart from|other than)\b|(?:除|除了))"
+        r"[^。.!?，,；;]{0,40}(?:\b(?:aside|too)\b|(?:以外|之外|外))[,，]?",
+        " ",
+        lower,
+        flags=re.I,
+    )
     subjects = {
         subject
         for subject, _label, terms in MULTI_PRODUCT_HARDWARE_SUBJECTS
@@ -11572,6 +11599,8 @@ def multi_product_hardware_subjects(value: str) -> set[str]:
     }
     if subjects & {"camera-airpods", "airpods-pro"}:
         subjects.discard("airpods")
+    if "ipad-mini" in subjects:
+        subjects.discard("ipad")
     return subjects
 
 
@@ -11599,8 +11628,9 @@ def multi_product_hardware_roadmap_variants(
     title_subjects = multi_product_hardware_subjects(title)
     values: list[str] = []
     seen: set[str] = set()
-    for value in [*key_facts, *re.split(r"(?<=[.!?。！？])\s*", summary)]:
-        add_unique_text(values, seen, clean_sentence(value), min_chars=12)
+    for raw_value in [summary, *key_facts]:
+        for value in re.split(r"(?<=[.!?。！？])\s*", raw_value):
+            add_unique_text(values, seen, clean_sentence(value), min_chars=12)
     grouped: dict[str, list[str]] = {}
     for value in values:
         subjects = multi_product_hardware_subjects(value)
@@ -11658,22 +11688,40 @@ def multi_product_hardware_roadmap_variants(
             )
             > 0
         )
+        or (
+            len(title_subjects) >= 2
+            and re.search(
+                r"\b(?:days? away|within (?:the )?(?:next )?few days|coming days|"
+                r"launch(?:es|ing)?|release(?:s|d|ing)?|scheduled|in (?:september|october))\b|"
+                r"(?:未来几天|数日)(?:之)?内.{0,10}(?:发布|推出|亮相)|"
+                r"(?:发布|推出|亮相|定档).{0,12}(?:\d{1,2}\s*月|年内)",
+                title_lower,
+                re.I,
+            )
+        )
         or structured_multi_product_report
     )
     if not explicit_multi_product:
         return original
     identity = title_led_identity(title, summary)
-    if identity.scope != "apple-direct" or identity.content_form in {
-        "buying_advice",
-        "deal",
-        "poll",
-        "roundup",
-        "tutorial",
-    }:
+    if identity.scope != "apple-direct" or identity.content_form != "news":
         return original
 
     if len(grouped) < 2:
         return original
+
+    explicit_launch_report = bool(
+        re.search(
+            r"\b(?:two|three|four|five|six|several|multiple|(?!(?:19|20)\d{2}\b)\d{1,2})\b"
+            r".{0,45}\b(?:new\s+)?(?:apple\s+)?(?:hardware\s+)?products?\b",
+            title_lower,
+        )
+        and re.search(
+            r"\b(?:rumored|reported|expected|will|plans?|set)\b.{0,45}"
+            r"\b(?:launch|release|ship|arrive|debut)\b",
+            title_lower,
+        )
+    )
 
     labels = {subject: label for subject, label, _terms in MULTI_PRODUCT_HARDWARE_SUBJECTS}
     variants: list[tuple[str, str, list[str]]] = []
@@ -11687,58 +11735,92 @@ def multi_product_hardware_roadmap_variants(
         # structured child action, so use the raw group for identity checks.
         evidence_facts = scoped_facts or facts
         scoped_text = " ".join(evidence_facts).lower()
-        if structured_multi_product_report:
-            known_mapping = score_terms(
+        deictic_co_launch = bool(
+            re.search(
+                r"\b(?:during|at)\s+(?:the\s+)?event\b|\b(?:alongside|at the same time)\b|"
+                r"(?:届时|同场|同步).{0,24}(?:发布|推出|亮相|上市|登场)",
                 scoped_text,
-                [
-                    "known and sold",
-                    "already sold",
-                    "currently sold",
-                    "confirmed by apple",
-                    "confirmed mainland",
-                    "used for a known",
-                    "belongs to the",
-                    "已知产品",
-                    "已经上市",
-                    "已上市",
-                    "在售产品",
-                    "苹果已确认",
-                    "现有产品",
-                ],
-            ) > 0
-            unreleased_mapping = score_terms(
-                scoped_text,
-                [
-                    "unreleased",
-                    "upcoming",
-                    "new model",
-                    "unknown model",
-                    "not yet released",
-                    "未发布",
-                    "即将推出",
-                    "新款",
-                    "未知型号",
-                    "尚未上市",
-                    "代码线索",
-                ],
-            ) > 0
-            if known_mapping and not unreleased_mapping:
-                continue
-            concrete_subject_evidence = bool(
-                unreleased_mapping
-                or re.search(
-                    r"\b(?:code|identifier|codename|reference|model number|project id|"
-                    r"prototype|testing|in development|canceled|cancelled|delayed|"
-                    r"production|resource list)\b|"
-                    r"\b[a-z][a-z0-9]{0,20}\d{2,}(?:,\d+)?\b|"
-                    r"(?:代码|标识符|产品标识|代号|型号|项目编号|原型机|测试中|开发中|"
-                    r"取消|延期|量产|资源清单)",
-                    scoped_text,
-                    re.I,
-                )
+                re.I,
             )
-            if not concrete_subject_evidence:
-                continue
+        )
+        standalone_launch_window = bool(
+            re.search(
+                r"\b(?:within (?:the )?(?:next )?few days|coming days|next month|"
+                r"january|february|march|april|may|june|july|august|september|"
+                r"october|november|december|20\d{2}\s*q[1-4])\b|"
+                r"(?:未来几天|数日内|下月|明年|20\d{2}\s*年|\d{1,2}\s*月)",
+                scoped_text,
+                re.I,
+            )
+        )
+        # A sentence that only says another product will launch "then" is
+        # context for the parent report, not an independently owned roadmap
+        # claim. Keep it when the sentence supplies its own concrete window.
+        if deictic_co_launch and not standalone_launch_window:
+            continue
+        known_mapping = score_terms(
+            scoped_text,
+            [
+                "known and sold",
+                "already sold",
+                "currently sold",
+                "confirmed by apple",
+                "confirmed mainland",
+                "used for a known",
+                "belongs to the",
+                "已知产品",
+                "已经上市",
+                "已上市",
+                "在售产品",
+                "苹果已确认",
+                "现有产品",
+            ],
+        ) > 0
+        unreleased_mapping = score_terms(
+            scoped_text,
+            [
+                "unreleased",
+                "upcoming",
+                "new model",
+                "unknown model",
+                "not yet released",
+                "未发布",
+                "即将推出",
+                "新款",
+                "未知型号",
+                "尚未上市",
+                "代码线索",
+            ],
+        ) > 0
+        if known_mapping and not unreleased_mapping:
+            continue
+        concrete_subject_evidence = bool(
+            unreleased_mapping
+            or re.search(
+                r"\b(?:code|identifier|codename|reference|model number|project id|"
+                r"prototype|testing|in development|canceled|cancelled|delayed|"
+                r"production|resource list|will launch|will release|will ship|"
+                r"starts? production|enters? production|scheduled to launch|"
+                r"expected to launch|reportedly|according to)\b|"
+                r"\b[a-z][a-z0-9]{0,20}\d{2,}(?:,\d+)?\b|"
+                r"(?:代码|标识符|产品标识|代号|型号|项目编号|原型机|测试中|开发中|"
+                r"取消|延期|量产|资源清单|将推出|将发布|将出货|计划发布|预计发布|"
+                r"有望.{0,18}(?:推出|发布|亮相)|(?:推出|发布|亮相)|消息称|据称|据报道)",
+                scoped_text,
+                re.I,
+            )
+        )
+        first_person_inference = bool(
+            re.search(
+                r"\b(?:i\s+(?:think|suspect|imagine|hope|expect|am|have|use)|"
+                r"i['’](?:m|ve)|my\s+(?:main|favorite))\b|"
+                r"(?:我(?:认为|怀疑|猜测|希望|期待|一直|正在|使用)|我最喜欢)",
+                scoped_text,
+                re.I,
+            )
+        )
+        if (not concrete_subject_evidence and not explicit_launch_report) or first_person_inference:
+            continue
         specific_label = labels[subject]
         for pattern, label in (
             (r"\biphone\s+ultra\b|\bfoldable\s+iphone\b|折叠(?:屏)?\s*iphone", "iPhone Ultra"),

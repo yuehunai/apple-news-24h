@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.62.0 - 2026-08-25
+
+- Made structured reconciliation authoritative over legacy recall seeds, using title-and-lead action ownership and concrete subject boundaries to split broad service, roadmap, leadership, release, and content bridges before final event output.
+- Added structured identities for versioned OS betas and release candidates, first-party shopping and Home Hub features, Apple TV content and sports actions, named Wallet transit-card availability, internal AI servers, event scheduling, and current hardware launch windows.
+- Improved multi-product report projection with sentence-scoped subjects, actions, dates, and supporting facts, preserving independently reportable product launches while rejecting background mentions and deictic co-launch statements without their own event evidence.
+- Tightened relevance handling for first-person product previews, non-Apple benchmark or comparison stories, and third-party customized Apple devices while keeping direct Apple platform releases, hardware roadmaps, and source-complete same-action coverage eligible.
+- Updated fallback policy guidance and expanded regression coverage from 1,156 to 1,190 tests; concurrent live validation preserved identical discovery and detail-selection counts plus all 96 source URLs in 69.8/73.2 seconds, and clean-agent validation retained all 31 main events, left 18 weak candidates deferred, and required no manual boundary correction.
+
 ## 1.61.0 - 2026-08-23
 
 - Added structured settings-advice and single-user repair/workaround content forms so symptom-driven tutorials and anecdotal fixes remain deferred unless the title and lead report a current Apple release, support, or repair-program action.

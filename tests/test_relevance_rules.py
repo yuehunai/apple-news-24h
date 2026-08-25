@@ -2049,6 +2049,40 @@ class RelevanceRuleTests(unittest.TestCase):
         self.assertNotIn("AirPods Pro 3", combined)
         self.assertNotIn("45W Fast Charger", combined)
 
+    def test_9to5_trailing_favorite_deals_block_does_not_enter_article_facts(self):
+        module = load_module()
+        source = source_named(module, "9to5Mac")
+        page = """
+        <html>
+          <head>
+            <meta property="article:published_time" content="2026-08-23T20:00:00+00:00" />
+            <meta property="og:description" content="External testers praised Apple's foldable iPhone hinge and inner display." />
+          </head>
+          <body>
+            <div class="container med post-content">
+              <p>External testers praised the foldable iPhone hinge and inner display, but noted that it lacks a telephoto camera. The larger inner display also supports tablet-style app layouts for productivity and video.</p>
+              <h2>My favorite Apple deals right now:</h2>
+              <ul>
+                <li>AirPods Pro 3 $190 (Reg. $249)</li>
+                <li>M5 Pro MacBook Pro $2,699 (Reg. $3,199)</li>
+              </ul>
+            </div>
+          </body>
+        </html>
+        """
+        candidate = module.Candidate(
+            source="9to5Mac",
+            url="https://9to5mac.com/2026/08/23/foldable-iphone-testers/",
+            title="What people who've used the foldable iPhone like most",
+        )
+
+        title, summary, facts, *_ = module.extract_article(candidate, source, page, {})
+        combined = " ".join([summary, *facts])
+
+        self.assertIn("telephoto camera", combined)
+        self.assertNotIn("AirPods Pro 3", combined)
+        self.assertNotIn("M5 Pro MacBook Pro", combined)
+
     def test_9to5_certified_refurbished_footer_does_not_enter_article_facts(self):
         module = load_module()
         source = source_named(module, "9to5Mac")

@@ -1103,10 +1103,15 @@ _SUPPLIER_COMPONENT_CLASSES: tuple[tuple[str, tuple[str, ...]], ...] = (
             "nand",
             "memory chip",
             "memory chips",
+            "memory product",
+            "memory products",
             "storage chip",
             "storage chips",
+            "storage product",
+            "storage products",
             "内存",
             "存储芯片",
+            "存储产品",
             "闪存",
         ),
     ),
@@ -1673,6 +1678,8 @@ def _report_attribution_components(title: str, lead: str = "") -> set[str]:
         r"\b([A-Z][A-Za-z0-9&+.'-]{2,30}(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,2})\s+"
         r"(?:reports?|says|estimates?|forecasts?|projects?|data\s+shows)\b",
         r"(?:根据|据)\s*([A-Za-z][A-Za-z0-9&+.'-]{2,30})(?:\s|的|，|,)",
+        r"(?:根据|据)\s*([\u4e00-\u9fff]{2,12})(?:社|媒体|机构)?"
+        r"(?:的[^。；,，\n]{0,28})?(?:报道|消息|披露|称)",
         r"(?:根据|据)?(?:外媒|媒体|科技媒体)\s*"
         r"([A-Za-z][A-Za-z0-9&+.'-]{2,30})\s*(?:报道|披露|联系)",
         r"\b([A-Z][A-Z0-9&+.'-]{2,30})\s+"
@@ -1786,6 +1793,44 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
 def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
+    first_person_multi_product_preview = bool(
+        re.search(
+            r"\b(?:two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\b"
+            r".{0,45}\b(?:new\s+)?(?:apple\s+)?(?:products?|devices?)\b|"
+            r"(?:两|三|四|五|六|七|八|九|十|\d+)\s*款.{0,24}(?:苹果)?(?:产品|设备|新品)",
+            lower,
+        )
+        and re.search(
+            r"\b(?:i(?:'m| am)|we(?:'re| are))\b.{0,50}"
+            r"\b(?:excited|eager|looking forward|can['’]?t wait|most interested)\b|"
+            r"(?:我|我们).{0,28}(?:最期待|很期待|感兴趣|迫不及待)",
+            f"{lower} {lead_lower}",
+        )
+        and not re.search(
+            r"\b(?:new report|according to|sources? say|bloomberg reports|"
+            r"apple (?:plans?|will|is testing|is developing))\b|"
+            r"(?:最新报道|据.{0,18}(?:报道|消息|透露)|消息称|苹果(?:计划|将|正在测试|正在开发))",
+            lead_lower,
+        )
+    )
+    if first_person_multi_product_preview:
+        return "analysis"
+    retrospective_without_new_action = bool(
+        re.match(r"^how\s+(?:apple|iphone|ipad|mac|airpods)\b", lower)
+        and re.search(
+            r"\b(?:last\s+(?:week|month|year)|previously|earlier|already)\b|"
+            r"(?:上周|上月|去年|此前|早前|已经)",
+            lead_lower,
+        )
+        and re.search(
+            r"\b(?:had|has|have)\s+(?:already\s+)?appeared\s+in\s+previous\b|"
+            r"\b(?:previously reported|already reported|no new reporting|not new information)\b|"
+            r"(?:此前已经|早已).{0,24}(?:出现|报道|披露)|(?:没有|并无)新增(?:消息|信息|动作)",
+            lead_lower,
+        )
+    )
+    if retrospective_without_new_action:
+        return "analysis"
     if re.search(r"\b(?:podcast|episode|overtime)\b", lower) or (
         re.search(
             r"\b(?:podcast episode|weekly podcast|video-first podcast|"
@@ -1953,7 +1998,7 @@ def _content_form(title: str, lead: str = "") -> str:
         custom_vendor
         and re.search(
             r"\b(?:custom|customized|bespoke|luxury|modified)\b|"
-            r"(?:定制版|定制款|高奢定制|奢华定制|改装版)",
+            r"(?:(?:高奢|奢华|纯银)定制|定制(?:版|款|机|设备|折叠|手机)|改装版)",
             lower,
         )
         and not re.search(
@@ -2183,6 +2228,42 @@ def _content_form(title: str, lead: str = "") -> str:
     )
     if repeated_incident_retrospective:
         return "analysis"
+    attributed_strategy_commentary = bool(
+        re.search(
+            r"\b(?:needs? to|should|must|has to)\b.{0,70}"
+            r"(?:compete|win|succeed|respond|strategy|market)|"
+            r"(?:苹果).{0,16}(?:得|需要|应该|应当|必须).{0,45}"
+            r"(?:竞争|取胜|突围|应对|战略|策略|市场|打好)",
+            lower,
+        )
+        and not re.search(
+            r"\b(?:will launch|will release|will ship|is testing|is developing|"
+            r"production|supplier|shipment)\b|"
+            r"(?:将发布|将推出|将上市|正在测试|正在开发|量产|供应商|出货)",
+            lower,
+        )
+    )
+    if attributed_strategy_commentary:
+        return "analysis"
+    speculative_editorial_framing = bool(
+        re.search(
+            r"\b(?:anyone|anybody)(?:['’]s| is) guess\b|"
+            r"\b(?:we|you|i) can only guess\b|"
+            r"\byour guess is as good as mine\b|\bpure speculation\b|"
+            r"(?:谁也|任何人都)?(?:说不准|不好说)|"
+            r"(?:只能|仅能|纯属)?猜(?:测|想|一猜)",
+            lower,
+        )
+        and not re.search(
+            r"\b(?:new report|according to|sources? say|apple (?:plans?|will|is considering)|"
+            r"supplier|production|shipment)\b|"
+            r"(?:最新报道|据.{0,18}(?:报道|消息|透露)|消息称|苹果(?:计划|将|正在|考虑)|"
+            r"供应商|量产|出货)",
+            lower,
+        )
+    )
+    if speculative_editorial_framing:
+        return "analysis"
     if re.search(
         r"^(?:analyst|analysis|opinion|commentary)\b|"
         r"^(?:分析师|机构观点|评论)[：:]|(?:分析师|评论人士).{0,24}(?:认为|称|表示)|"
@@ -2226,6 +2307,28 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     ) or beats_first_party_technical
+    versioned_first_party_os_release = bool(
+        re.search(
+            r"\b(?:release candidates?|rcs?|public betas?|developer betas?|betas?|updates?)\b"
+            r".{0,90}\b(?:ios|ipados|macos|watchos|tvos|visionos)\b|"
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos)\b.{0,90}"
+            r"\b(?:release candidates?|rcs?|public betas?|developer betas?|betas?|updates?)\b|"
+            r"(?:候选版|公测版|开发者测试版|测试版|系统更新).{0,50}"
+            r"(?:ios|ipados|macos|watchos|tvos|visionos)|"
+            r"(?:ios|ipados|macos|watchos|tvos|visionos).{0,50}"
+            r"(?:候选版|公测版|开发者测试版|测试版|系统更新)",
+            title_lower,
+        )
+        and re.search(
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
+            r"(?:\s+[a-z][a-z-]+){0,2}\s+\d+(?:\.\d+){0,2}\b",
+            f"{title_lower} {lead_lower[:240]}",
+        )
+        and not re.match(
+            r"^(?!apple\b|苹果).{2,70}\b(?:app|game|client|tool|browser|plugin)\b",
+            title_lower,
+        )
+    )
     direct_target = bool(
         re.search(
             r"(?:sues?|sued|fines?|threatens?|investigates?|orders?|blocks?|approves?|起诉|罚款|调查|要求|批准).{0,45}(?:apple|苹果)|"
@@ -2245,8 +2348,8 @@ def _title_scope(title: str, lead: str) -> str:
     comparison = bool(
         re.search(
             r"(?:better than|versus|\bvs\.?\b|rival(?:s|ing)?|compared (?:with|to)|beats?|"
-            r"overtakes?|surpasses?|dethrones?|exceeds?|挑战|对标|剑指|对决|抗衡|交锋|媲美|优于|胜过|超越|超过|力压|"
-            r"接近|相当于|追平|向.{0,20}看齐|酷似|类似(?:于)?)"
+            r"overtakes?|surpasses?|dethrones?|exceeds?|leads?|ahead\s+of|挑战|对标|剑指|对决|抗衡|交锋|媲美|优于|胜过|超越|超过|领先|力压|"
+            r"接近|相当于|追平|向.{0,20}看齐|酷似|撞脸|类似(?:于)?)"
             r".{0,50}(?:apple|iphone|ipad|mac|airpods|苹果)",
             title_lower,
         )
@@ -2586,6 +2689,7 @@ def _title_scope(title: str, lead: str) -> str:
     )
     if (
         first_party_prefix
+        or versioned_first_party_os_release
         or direct_first_party_content
         or embedded_first_party_subject_action
         or apple_chip_report
@@ -2630,7 +2734,7 @@ def is_non_apple_comparison_title(title: str) -> bool:
         re.search(
             r"(?:better than|versus|\bvs\.?\b|rival(?:s|ing)?|compared (?:with|to)|beats?|"
             r"closest thing.{0,18}(?:to|for)|alternative.{0,18}(?:to|for)|answer.{0,18}(?:to|for)|"
-            r"挑战|对标|媲美|优于|胜过).{0,50}(?:apple|iphone|ipad|mac|airpods|苹果)",
+            r"leads?|ahead\s+of|挑战|对标|媲美|优于|胜过|领先).{0,50}(?:apple|iphone|ipad|mac|airpods|苹果)",
             title_lower,
         )
     )
@@ -2797,7 +2901,11 @@ def build_event_identity(
     if content_form != "roundup" and not (title_products & direct_service_products):
         products |= _extract_patterns(lead_lower[:260], PRODUCT_PATTERNS) & direct_service_products
     title_components = _extract_patterns(title_lower, COMPONENT_PATTERNS)
-    leadership_scope = f"{title_lower} {lead_lower[:260]}"
+    # Leadership changes are primary article identity only when the headline
+    # itself owns that action. Product reports often mention an outgoing CEO in
+    # their lead as timing context; allowing that background to define title
+    # components bridges unrelated roadmap and succession stories.
+    leadership_scope = title_lower
     if (
         title_scope == "apple-direct"
         and re.search(r"\b(?:tim cook|apple ceo|chief executive)\b|(?:库克|苹果\s*ceo|首席执行官)", leadership_scope)
@@ -3591,7 +3699,7 @@ def build_event_identity(
         if title_is_public_beta:
             public_lead_match = re.search(
                 r"\bpublic\s+betas?\s*(\d+)\b|"
-                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\s+"
+                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth|seven|seventh|eight|eighth|nine|ninth|ten|tenth)\s+"
                 r"(?:(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s+\d+(?:\.\d+){0,2})?\s+)?"
                 r"public\s+betas?\b|"
                 r"第\s*([一二三四五六七八九十\d]+)\s*(?:个|轮)?\s*公测(?:版|测试版)?",
@@ -3607,6 +3715,8 @@ def build_event_identity(
                         "one": "1", "first": "1", "two": "2", "second": "2",
                         "three": "3", "third": "3", "four": "4", "fourth": "4",
                         "five": "5", "fifth": "5", "six": "6", "sixth": "6",
+                        "seven": "7", "seventh": "7", "eight": "8", "eighth": "8",
+                        "nine": "9", "ninth": "9", "ten": "10", "tenth": "10",
                     }.get(raw_number)
                 )
                 if number:
@@ -3630,20 +3740,35 @@ def build_event_identity(
                 "fifth": "5",
                 "six": "6",
                 "sixth": "6",
+                "seven": "7",
+                "seventh": "7",
+                "eight": "8",
+                "eighth": "8",
+                "nine": "9",
+                "ninth": "9",
+                "ten": "10",
+                "tenth": "10",
             }
             ordinal_match = re.search(
-                r"\b(?:round|developer beta)\s+(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\b",
+                r"\b(?:round|developer beta)\s+(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth|seven|seventh|eight|eighth|nine|ninth|ten|tenth)\b",
                 release_scope,
             ) or re.search(
-                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\s+"
+                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth|seven|seventh|eight|eighth|nine|ninth|ten|tenth)\s+"
                 r"(?:round\s+of\s+)?developer\s+betas?\b",
                 release_scope,
             ) or re.search(
-                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth)\s+"
+                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth|seven|seventh|eight|eighth|nine|ninth|ten|tenth)\s+"
                 r"(?:ios|ipados|macos|watchos|tvos|visionos)"
                 r"(?:\s*(?:,|and|&|/)?\s*(?:ios|ipados|macos|watchos|tvos|visionos))*"
                 r"(?:\s+[a-z][a-z0-9-]+){0,2}\s+"
                 r"public betas?\b",
+                main_title,
+            ) or re.search(
+                r"\b(one|first|two|second|three|third|four|fourth|five|fifth|six|sixth|seven|seventh|eight|eighth|nine|ninth|ten|tenth)\s+"
+                r"(?:ios|ipados|macos|watchos|tvos|visionos)"
+                r"(?:\s+\d+(?:\.\d+){0,2})?"
+                r"(?:\s*(?:,|and|&|/)?\s*(?:ios|ipados|macos|watchos|tvos|visionos)"
+                r"(?:\s+\d+(?:\.\d+){0,2})?)*\s+betas?\b",
                 main_title,
             )
             if ordinal_match:
