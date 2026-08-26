@@ -32,6 +32,7 @@ class EventIdentity:
     title_named_subjects: frozenset[str]
     content_form: str
     scope: str
+    action_owner: str
 
     @property
     def specific_anchors(self) -> frozenset[str]:
@@ -134,6 +135,18 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ),
     ("vision-pro", ("vision pro", "visionos")),
     ("airtag", ("airtag", "air tag")),
+    ("magic-keyboard", ("magic keyboard", "妙控键盘")),
+    ("polishing-cloth", ("polishing cloth", "polishingcloth", "抛光布", "擦拭布")),
+    (
+        "apple-power-adapter",
+        (
+            "apple power adapter",
+            "apple's power adapter",
+            "apple’s power adapter",
+            "dynamic power adapter",
+            "动态电源适配器",
+        ),
+    ),
     ("apple-tv", ("apple tv", "tvos", "苹果 tv", "苹果电视")),
     (
         "apple-home-hub",
@@ -144,6 +157,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "apple smart home hub",
             "苹果家庭中枢",
             "苹果智能家居中枢",
+            "苹果智能家居显示屏",
             "家庭中枢设备",
             "智能家居中枢设备",
         ),
@@ -187,6 +201,29 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 
 COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "first-party-accessibility-guidance",
+        (
+            "accessibility settings",
+            "built-in accessibility features",
+            "assistive features",
+            "辅助功能设置",
+            "内置辅助功能",
+            "无障碍功能",
+        ),
+    ),
+    ("keyboard-key-labels", ("key symbols", "symbol-only labels", "key labels", "按键符号", "符号标识", "按键标识")),
+    ("genlock", ("genlock",)),
+    ("maps-advertising", ("apple maps ads", "maps advertising", "地图广告")),
+    (
+        "private-cloud-compute-server",
+        (
+            "private cloud compute server",
+            "pcc server",
+            "private cloud compute 服务器",
+            "私有云计算服务器",
+        ),
+    ),
     (
         "component-cost-analysis",
         (
@@ -663,6 +700,8 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
         (
             "vulnerability",
             "security flaw",
+            "security issue",
+            "security issues",
             "flaw",
             "exploited",
             "actively exploited",
@@ -694,6 +733,9 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "refurbished",
             "launch",
             "release",
+            "coming in",
+            "coming this",
+            "coming next",
             "enters the market",
             "market entry",
             "推出",
@@ -740,6 +782,10 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "changed",
             "brings",
             "brought",
+            "come to",
+            "comes to",
+            "can connect",
+            "supports",
             "develops",
             "developing",
             "working on",
@@ -763,6 +809,11 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "移除",
             "更新",
             "调整",
+            "首次支持",
+            "开始支持",
+            "搭载",
+            "支持",
+            "可连接",
         ),
     ),
     (
@@ -920,6 +971,79 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "扩充官翻阵容",
             "扩充官方翻新",
             "官翻阵容新增",
+        ),
+    ),
+    (
+        "product-launch",
+        (
+            "announces",
+            "announced",
+            "debuts",
+            "debuted",
+            "introduces",
+            "introduced",
+            "launches",
+            "launched",
+            "releases",
+            "released",
+            "reveals",
+            "revealed",
+            "unveils",
+            "unveiled",
+            "goes live",
+            "is now live",
+            "are now live",
+            "is here",
+            "are here",
+            "发布",
+            "推出",
+            "上线",
+            "登场",
+            "亮相",
+            "问世",
+            "揭晓",
+            "正式开售",
+        ),
+    ),
+    (
+        "availability-expansion",
+        (
+            "expands to more countries",
+            "expands to more markets",
+            "expands availability",
+            "now available in",
+            "rolls out in",
+            "覆盖更多国家",
+            "扩展至更多",
+            "登陆更多市场",
+            "扩大销售范围",
+        ),
+    ),
+    (
+        "product-refresh",
+        (
+            "quietly refreshes",
+            "quietly refreshed",
+            "refreshes",
+            "refreshed",
+            "new version",
+            "新版",
+            "新款",
+            "悄然更新",
+        ),
+    ),
+    (
+        "product-disclosure",
+        (
+            "leaked photos",
+            "photos reveal",
+            "photos show",
+            "code reveals",
+            "code shows",
+            "泄露照片",
+            "照片曝光",
+            "代码显示",
+            "代码揭示",
         ),
     ),
 )
@@ -1082,6 +1206,20 @@ def _cached_extract_patterns(
 
 def _extract_patterns(text: str, patterns: tuple[tuple[str, tuple[str, ...]], ...]) -> set[str]:
     return set(_cached_extract_patterns(text, patterns))
+
+
+def _modifier_only_product_mentions(text: str, product: str) -> bool:
+    """Return true when every title mention is only a comparison adjective."""
+    matches = []
+    for alias in dict(PRODUCT_PATTERNS).get(product, ()):
+        matcher = re.compile(
+            rf"(?<![a-z0-9]){re.escape(alias)}(?![a-z0-9])"
+        )
+        matches.extend(matcher.finditer(text))
+    return bool(matches) and all(
+        re.match(r"^(?:-|\s)+(?:style|like|inspired)(?:\b|-)", text[match.end() :])
+        for match in matches
+    )
 
 
 def primary_assertion_components(value: str) -> frozenset[str]:
@@ -1793,6 +1931,49 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
 def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
+    if re.search(r"\bwhere\s+to\s+pre-?order\b", lower):
+        return "buying_advice"
+    if re.search(
+        r"\b(?:available|order|pre-?order).{0,36}\b(?:amazon|best buy|b&h|walmart)\b|"
+        r"\b(?:amazon|best buy|b&h|walmart)\b.{0,36}\b(?:available|order|pre-?order)\b",
+        lower,
+    ):
+        return "deal"
+    schedule_inference = bool(
+        re.search(
+            r"\b(?:pre[- ]?orders?|release date|launch date)\b|"
+            r"(?:预购|发布日期|发售日期)",
+            lower,
+        )
+        and re.search(
+            r"\b(?:has yet to|has not)\s+(?:reveal|announce|confirm)\b|"
+            r"(?:尚未|还未|没有)(?:公布|宣布|确认)",
+            lead_lower,
+        )
+        and len(
+            re.findall(
+                r"\b(?:familiar|historical|usual)\s+pattern\b|"
+                r"\b(?:most likely|another possibility|until proven otherwise|would likely)\b|"
+                r"(?:历年节奏|历史规律|最可能|另一种可能|推演)",
+                lead_lower,
+            )
+        )
+        >= 2
+        and not re.search(
+            r"\b(?:according to|new report|sources? say|analyst|leaker)\b|"
+            r"(?:据.{0,16}(?:报道|消息|透露)|分析师|爆料人|最新报告)",
+            lead_lower,
+        )
+    )
+    if schedule_inference:
+        return "analysis"
+    if re.search(
+        r"\b(?:recaps?|compiles?)\b.{0,50}\b(?:existing|earlier|previously reported|prior)\b"
+        r".{0,45}\b(?:rumou?rs?|roadmap|reports?)\b|"
+        r"(?:汇总|盘点|整理).{0,24}(?:既有|此前|过去).{0,24}(?:传闻|爆料|路线图|报道)",
+        lead_lower,
+    ):
+        return "roundup"
     first_person_multi_product_preview = bool(
         re.search(
             r"\b(?:two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\b"
@@ -1831,6 +2012,32 @@ def _content_form(title: str, lead: str = "") -> str:
     )
     if retrospective_without_new_action:
         return "analysis"
+    if re.search(
+        r"\b(?:how\s+to|hidden\s+(?:tips?|tricks?)|things?\s+you\s+can\s+do)\b|"
+        r"(?:教程|使用技巧|隐藏玩法|冷知识|这些玩法|这样使用|赶快用起来)",
+        lower,
+    ) and not re.search(
+        r"\b(?:announces?|launches?|releases?|rolls?\s+out|adds?|removes?|changes?)\b|"
+        r"(?:宣布|发布|推出|上线|新增|移除|调整)",
+        lower,
+    ):
+        return "tutorial"
+    if re.search(
+        r"\b(?:ways?|reasons?)\b.{0,70}\b(?:could|may|might)\b.{0,55}"
+        r"\b(?:upgrade|improve|change|benefit|gain|get)\w*\b|"
+        r"\bwhat\b.{0,45}\b(?:reveals?|means?)\b.{0,50}\bfor\b|"
+        r"(?:从|根据).{0,35}(?:推测|推演|畅想).{0,45}(?:可能|或将|有望)",
+        lower,
+    ):
+        return "analysis"
+    if re.search(
+        r"\beverything\b.{0,55}\b(?:apple\s+)?(?:announced|released|unveiled|launched)\b|"
+        r"\ball\b.{0,45}\b(?:announcements?|releases?|launches?)\b|"
+        r"(?:今日|本周|发布会|新品).{0,24}(?:全部|完整)?(?:汇总|盘点)|"
+        r"(?:全部|完整).{0,24}(?:发布|新品|更新).{0,14}(?:汇总|盘点)",
+        lower,
+    ):
+        return "roundup"
     if re.search(r"\b(?:podcast|episode|overtime)\b", lower) or (
         re.search(
             r"\b(?:podcast episode|weekly podcast|video-first podcast|"
@@ -1939,10 +2146,32 @@ def _content_form(title: str, lead: str = "") -> str:
     ):
         return "analysis"
     if re.search(
+        r"\b(?:these\s+are|this\s+is)\b.{0,90}\b(?:it|apple)\s+"
+        r"(?:has|needs)\s+to\b|"
+        r"(?:这种|这类).{0,35}(?:苹果|它).{0,16}(?:必须|需要|应该)",
+        lower,
+    ):
+        return "analysis"
+    if re.search(
+        r"\b(?:that|which)\s+i\s+(?:would|wish\s+apple\s+would)\s+change\b|"
+        r"\bi\s+(?:would|wish\s+apple\s+would)\s+change\b|"
+        r"(?:我希望|我会|我想让).{0,24}(?:苹果|macos|ios|设计|功能).{0,18}(?:改变|调整|修改)",
+        lower,
+    ):
+        return "analysis"
+    if re.search(
         r"\b(?:could|may|might|will)\s+(?:push|tempt|convince|persuade|make)\s+"
         r"(?:you|users?|owners?)\s+to\s+(?:buy|upgrade)\b|"
         r"(?:可能|或将|会).{0,18}(?:促使|吸引|说服|让).{0,12}(?:用户|你).{0,12}(?:购买|升级|换机)",
         lower,
+    ):
+        return "buying_advice"
+    if re.search(
+        r"\b(?:buy|upgrade|get)\s+(?:it\s+)?now\b.{0,36}\b(?:or|versus|vs\.?)\b"
+        r".{0,36}\bwait\b|"
+        r"(?:现在|当下).{0,18}(?:买|购买|入手|上车|升级|换机).{0,14}"
+        r"(?:还是|或是|或者).{0,14}(?:等|等待)",
+        f"{lower} {lead_lower}",
     ):
         return "buying_advice"
     if re.search(
@@ -1952,14 +2181,14 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ):
         return "analysis"
-    if (
-        re.search(
-            r"\b(?:best|biggest|main)\s+reason\s+(?:yet\s+)?to\b|"
-            r"\b(?:one of )?my favorite\b|"
-            r"(?:最值得|最大|最主要).{0,12}(?:理由|原因)",
-            lower,
-        )
-        and re.search(
+    if re.search(
+        r"\b(?:best|biggest|main)\s+reason\s+(?:yet\s+)?to\b|"
+        r"\b(?:one of )?my favorite\b|"
+        r"(?:最值得|最大|最主要).{0,12}(?:理由|原因)",
+        lower,
+    ) and (
+        re.search(r"\b(?:about to|could|may|might)\b", lower)
+        or re.search(
             r"\bi\s+(?:use|wear|rely|imagine|think|believe|often|already)\b|"
             r"\bi['’]ve\b|\bmy favorite\b|"
             r"(?:我(?:一直|经常|已经|认为|觉得|想象|依赖|使用|佩戴)|我最喜欢)",
@@ -2050,7 +2279,8 @@ def _content_form(title: str, lead: str = "") -> str:
     ):
         return "roundup"
     if (not current_attributed_report) and re.search(
-        r"\b(?:models?|products?|devices?)\s+(?:launch|arrive|debut)\s+"
+        r"\b(?:models?|products?|devices?|macs?|iphones?|ipads?|airpods)\s+"
+        r"(?:are\s+|will\s+)?(?:launch(?:ing)?|arriv(?:e|ing)|debut(?:ing)?)\s+"
         r"(?:next|this)\s+(?:week|month|season|fall|spring)\b.{0,40}"
         r"\bhere['’]s\s+what['’]s\s+coming\b|"
         r"(?:多款|系列).{0,16}(?:新品|产品|设备).{0,18}(?:即将|下月|下周).{0,18}(?:汇总|一览|有哪些)",
@@ -2081,6 +2311,8 @@ def _content_form(title: str, lead: str = "") -> str:
     if (not current_attributed_report) and re.search(
         r"\b(?:rumors? point to|everything we know|"
         r"what to expect|these \d+ (?:new )?(?:features|changes)|"
+        r"\d+\s+(?:new\s+)?(?:features?|changes?|upgrades?)\s+"
+        r"(?:worth|to)\s+(?:test(?:ing)?|try(?:ing)?|know|use)|"
         r"\d+ new things .+ (?:can do|to try|to know)|"
         r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+\d+\+?\s+"
         r"(?:new\s+)?(?:products?|devices?)|"
@@ -2721,6 +2953,96 @@ def is_non_apple_title_context(title: str, lead: str) -> bool:
     return _title_scope(title, lead) == "third-party-context"
 
 
+def _primary_action_owner(
+    title: str,
+    lead: str,
+    *,
+    scope: str,
+    content_form: str,
+    title_actions: set[str],
+    title_products: set[str],
+) -> str:
+    """Identify who owns the headline action without consulting body facts."""
+    if scope == "third-party-context":
+        return "third-party"
+    if scope != "apple-direct" or content_form != "news" or not title_actions:
+        return "unknown"
+
+    title_text = _normalized(title)
+    lead_text = _normalized(lead)[:360]
+    if re.search(
+        r"\b(?:iphone|ipad|apple watch|airpods|mac(?:book)?)\s+"
+        r"(?:data|records?|logs?|location|history)\b",
+        title_text,
+    ) and re.search(
+        r"\b(?:murder|criminal|crime|trial|prosecutors?|police|evidence)\b|"
+        r"(?:谋杀|刑事|犯罪|审判|检方|警方|证据)",
+        f"{title_text} {lead_text}",
+    ):
+        return "third-party"
+    if re.search(
+        r"\b(?:former|ex-)\s+apple\s+(?:employee|staff|engineer|designer|executive)s?\b|"
+        r"(?:苹果|apple).{0,12}(?:前员工|前工程师|前设计师|前高管)",
+        title_text,
+    ) and re.search(
+        r"\b(?:startup|founds?|launches?|releases?|unveils?)\b|"
+        r"(?:创业|创办|成立|推出|发布|亮相)",
+        title_text,
+    ):
+        return "third-party"
+    owner_clause = re.sub(
+        r"^(?:mark\s+gurman|gurman|bloomberg|report|reports?|rumou?r|leak|"
+        r"古尔曼|彭博社?|消息|报道称|报道|爆料)[^:：]{0,24}[：:]\s*",
+        "",
+        title_text,
+    )
+    owner_clause = re.sub(
+        r"^(?:\d+(?:\.\d+)?\s*(?:元|美元|英镑|欧元)[，,、:]?\s*)",
+        "",
+        owner_clause,
+    )
+    owner_clause = re.sub(
+        r"^(?:breaking|just in|news flash|快讯|刚刚|突发)[,，:：]\s*",
+        "",
+        owner_clause,
+    )
+    owner_clause = re.sub(
+        r"^(?:new|updated|all-new|next-generation|新款|全新|新版)\s*",
+        "",
+        owner_clause,
+    )
+    owner_clause = re.sub(
+        r"^[^!！]{1,20}[!！]\s*(?=(?:苹果(?:公司|官网|旗下)?|"
+        r"(?:apple(?:'s)?|iphone|ipad|mac(?:book|os| mini| studio| pro)?|"
+        r"imac|apple watch|airpods)\b))",
+        "",
+        owner_clause,
+    )
+    first_party_subject = bool(
+        re.match(
+            r"^(?:apple(?:'s)?|苹果(?:公司|官网|旗下)?|iphone|ipad|ios|ipados|"
+            r"mac(?:book|os| mini| studio| pro)?|imac|watchos|apple watch|tvos|"
+            r"apple tv|visionos|vision pro|airpods|icloud|safari|siri|shazam|"
+            r"carplay|xcode|app store|beats\b)",
+            owner_clause,
+        )
+    )
+    first_party_lead = bool(
+        re.match(r"^(?:apple(?:'s)?|苹果(?:公司)?)(?:\s|正|将|已|计划|宣布|推出|发布|更新)", lead_text)
+    )
+    if first_party_subject or first_party_lead:
+        return "apple"
+
+    direct_target = bool(
+        re.search(
+            r"(?:sues?|sued|fines?|threatens?|investigates?|orders?|blocks?|approves?|"
+            r"起诉|罚款|调查|要求|批准).{0,45}(?:apple|苹果)",
+            title_text,
+        )
+    )
+    return "apple-target" if direct_target else "unknown"
+
+
 def is_non_apple_comparison_title(title: str) -> bool:
     title_lower = _normalized(title)
     if bool(
@@ -2803,6 +3125,24 @@ def high_confidence_direct_apple_action(identity: EventIdentity) -> bool:
     """Return true when title-led semantics prove a direct Apple action."""
     if identity.scope != "apple-direct" or identity.content_form != "news":
         return False
+    if identity.action_owner == "apple" and identity.title_actions & {
+        "availability-expansion",
+        "catalog-expansion",
+        "commercial-launch",
+        "content-release",
+        "feature-change",
+        "leadership-transition",
+        "model-development",
+        "price-change",
+        "product-disclosure",
+        "product-launch",
+        "product-refresh",
+        "retail-availability",
+        "supply-production",
+        "transaction",
+        "withdrawal",
+    }:
+        return True
     if "market-cap" in identity.components and "market-ranking" in identity.actions:
         return True
     if "customer-loyalty" in identity.components and "market-report" in identity.actions:
@@ -2854,6 +3194,20 @@ def build_event_identity(
     content_form = _content_form(title, lead)
     title_scope = _title_scope(title, lead)
     title_products = _collapse_product_hierarchy(_extract_patterns(title_lower, PRODUCT_PATTERNS))
+    title_products = {
+        product
+        for product in title_products
+        if not _modifier_only_product_mentions(title_lower, product)
+    }
+    if (
+        "apple-intelligence" in title_products
+        and re.search(r"苹果智能(?:家居|家庭|音箱|显示屏|中枢)", title_lower)
+        and not re.search(r"\b(?:ai|apple intelligence)\b|人工智能|大模型", title_lower)
+    ):
+        # “苹果智能家居” describes a physical product family, not the
+        # Apple Intelligence service. Substring aliases must not change the
+        # article owner or category.
+        title_products.discard("apple-intelligence")
     first_party_model_scope = f"{title_lower} {lead_lower[:260]}"
     if (
         title_scope == "apple-direct"
@@ -3426,6 +3780,16 @@ def build_event_identity(
         actions.add("feature-change")
     if content_form != "roundup":
         actions |= _extract_patterns(lead_lower[:500], ACTION_PATTERNS)
+    availability_expansion_pattern = (
+        r"\b(?:expand(?:s|ed|ing)?|extend(?:s|ed|ing)?|roll(?:s|ed|ing)?\s+out)\b"
+        r".{0,48}\b(?:availability|coverage|sales|markets?|countries|regions?)\b|"
+        r"(?:扩大|扩展|拓展).{0,32}(?:销售|供应|覆盖|上市).{0,16}(?:范围|市场|国家|地区)?"
+    )
+    if re.search(availability_expansion_pattern, title_lower):
+        title_actions.add("availability-expansion")
+        actions.add("availability-expansion")
+    elif re.search(availability_expansion_pattern, lead_lower[:500]):
+        actions.add("availability-expansion")
     integration_pattern = (
         r"\b(?:integrates?|integrated|integration|connect(?:ed|s|ing)?|embeds?|embedded|"
         r"power(?:s|ed|ing)?\s+(?:the\s+)?navigation|at\s+the\s+core\s+of)\b|"
@@ -3914,4 +4278,12 @@ def build_event_identity(
         title_named_subjects=frozenset(_title_primary_named_subjects(title, lead)),
         content_form=content_form,
         scope=title_scope,
+        action_owner=_primary_action_owner(
+            title,
+            lead,
+            scope=title_scope,
+            content_form=content_form,
+            title_actions=title_actions,
+            title_products=title_products,
+        ),
     )

@@ -48,7 +48,10 @@ from apple_news_core.event_identity import (  # noqa: E402
     is_non_apple_title_context,
 )
 from apple_news_core.event_matcher import identity_pair_decision  # noqa: E402
-from apple_news_core.article_projector import project_first_party_content_claims  # noqa: E402
+from apple_news_core.article_projector import (  # noqa: E402
+    project_first_party_content_claims,
+    project_multi_subject_apple_silicon_claims,
+)
 from apple_news_core.event_reconciler import (  # noqa: E402
     ReconciliationProfile,
     build_reconciliation_profile,
@@ -10520,6 +10523,12 @@ def extract_text_units(text: str) -> list[tuple[str, str]]:
 
 def fact_noise(value: str) -> bool:
     lower = value.lower()
+    if (
+        len(value) < 140
+        and re.match(r"^[*•-]?\s*(?:buy|shop|save|get)\b", lower)
+        and re.search(r"\b(?:discount|deal|off|refurbished|amazon|best buy)\b", lower)
+    ):
+        return True
     if re.search(r"\blet us know\b.*\b(?:comments?|tips@|below)\b", lower):
         return True
     if (
@@ -11929,6 +11938,16 @@ def compound_article_variants(
         " ".join([summary, *key_facts[:6]]),
     ):
         return [(title, summary, key_facts)]
+    silicon_claims = project_multi_subject_apple_silicon_claims(
+        title,
+        summary,
+        key_facts,
+    )
+    if silicon_claims:
+        return [
+            (claim.title, claim.summary, list(claim.key_facts))
+            for claim in silicon_claims
+        ]
     smart_home_variants = smart_home_roadmap_article_variants(title, summary, key_facts)
     if smart_home_variants != [(title, summary, key_facts)]:
         return smart_home_variants
@@ -29218,6 +29237,7 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
     cohesive_os_wave = articles_form_cohesive_os_release_wave(articles)
     cohesive_named_os_component = articles_form_cohesive_named_os_component_action(articles)
     cohesive_market_report = articles_form_cohesive_market_report(articles)
+    same_global_market_report = articles_form_same_global_market_report(articles)
     cohesive_first_party_program = len(articles) > 1 and all(
         is_direct_apple_first_party_program_story(item.title, item.summary)
         for item in articles
@@ -29272,6 +29292,8 @@ def event_merge_warnings(articles: list[Article]) -> list[str]:
         and not any(item.event_kind not in REGION_SENSITIVE_EVENT_KINDS for item in articles)
         and not (common_facets & REGION_WARNING_EXEMPT_FACETS)
         and not title_identity_cohesive
+        and not cohesive_market_report
+        and not same_global_market_report
         and not cohesive_company_valuation
         and not cohesive_restricted_memory_supplier_action
     ):
@@ -29608,7 +29630,8 @@ def market_report_periods(title: str, lead: str) -> set[str]:
         normalized_scope = re.sub(r"(20\d{2})\s*年\s*", r"\1 ", scope)
         periods: set[str] = set()
         for match in re.finditer(
-            r"\b(20\d{2})\s*[- ]?q([1-4])\b|\bq([1-4])\s*(20\d{2})\b",
+            r"(?<![a-z0-9])(20\d{2})\s*[- ]?q([1-4])(?![a-z0-9])|"
+            r"(?<![a-z0-9])q([1-4])\s*(20\d{2})(?![a-z0-9])",
             normalized_scope,
         ):
             year = match.group(1) or match.group(4)
@@ -29740,6 +29763,23 @@ def articles_form_cohesive_market_report(articles: list[Article]) -> bool:
             )
             if matching_dimensions < 2:
                 return False
+    return True
+
+
+def articles_form_same_global_market_report(articles: list[Article]) -> bool:
+    if len(articles) < 2:
+        return False
+    title_regions = [market_report_regions(article.title, "") for article in articles]
+    if any(regions and "global" not in regions for regions in title_regions):
+        return False
+    for extractor in (
+        market_report_research_firms,
+        market_report_segments,
+        market_report_periods,
+    ):
+        values = [extractor(article.title, article.summary) for article in articles]
+        if not all(values) or not set.intersection(*values):
+            return False
     return True
 
 
@@ -30997,8 +31037,7 @@ def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
         relevance_tier=article.relevance_tier,
         relevance_reason=article.relevance_reason,
         trusted_direct_action=(
-            high_confidence_direct_apple_action(identity)
-            or is_title_led_apple_component_procurement_story(
+            is_title_led_apple_component_procurement_story(
                 article.title,
                 " ".join([article.summary, *article.key_facts[:5]]),
             )
@@ -33661,6 +33700,8 @@ def cluster_articles(articles: list[Article]) -> list[Event]:
     reconciled_groups = reconcile_articles(
         articles,
         profile_for=lambda article: profiles[id(article)],
+        # Legacy matching proposes recall-oriented candidates only. The
+        # structured reconciler owns the final event boundary.
         initial_groups=seed_groups,
     )
     events = []

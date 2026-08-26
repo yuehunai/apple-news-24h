@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.62.0 - 2026-08-25
+### 1.63.0 - 2026-08-26
 
-- Made structured reconciliation authoritative over legacy recall seeds, using title-and-lead action ownership and concrete subject boundaries to split broad service, roadmap, leadership, release, and content bridges before final event output.
-- Added structured identities for versioned OS betas and release candidates, first-party shopping and Home Hub features, Apple TV content and sports actions, named Wallet transit-card availability, internal AI servers, event scheduling, and current hardware launch windows.
-- Improved multi-product report projection with sentence-scoped subjects, actions, dates, and supporting facts, preserving independently reportable product launches while rejecting background mentions and deictic co-launch statements without their own event evidence.
-- Tightened relevance handling for first-person product previews, non-Apple benchmark or comparison stories, and third-party customized Apple devices while keeping direct Apple platform releases, hardware roadmaps, and source-complete same-action coverage eligible.
-- Updated fallback policy guidance and expanded regression coverage from 1,156 to 1,190 tests; concurrent live validation preserved identical discovery and detail-selection counts plus all 96 source URLs in 69.8/73.2 seconds, and clean-agent validation retained all 31 main events, left 18 weak candidates deferred, and required no manual boundary correction.
+- Made title-and-lead structured authority resilient to stale legacy recall evidence, separating first-party launches, capabilities, pricing, configurations, market reports, and editorial or third-party context before final reconciliation.
+- Added subject-scoped Apple silicon projection for compound M6 and M5 Ultra announcements, preserving each chip's own facts and source attribution without allowing shared launch prose to bridge chip, device, or price events.
+- Improved exact cross-language reconciliation for current OS feature matrices, Home Hub and accessibility reports, external-display capabilities, named content works, product launches, and measured global market reports while keeping unrelated actions separate.
+- Tightened deferred-event handling for inferred release dates, historical-cadence forecasts, shopping and comparison articles, editorial roundups, and weak background mentions; final briefs no longer mine weak roundup bodies for standalone facts.
+- Updated architecture guidance and expanded regression coverage from 1,190 to 1,229 tests; concurrent live validation preserved identical discovery, detail-selection, article, and 110 unique source-URL coverage in about 79 seconds, while clean-agent validation produced zero merge warnings and covered all 88 main-event source links.
 
 ## What It Does
 
@@ -34,11 +34,11 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 ## Architecture
 
 - `scripts/apple_news_24h.py` handles source discovery, page fetching, timestamp verification, article extraction, event orchestration, and Markdown/JSON rendering.
-- `scripts/apple_news_core/article_projector.py` projects a source page into independently reportable first-party content claims only when each child has a local named subject, concrete action, and supporting facts, preventing both mixed service events and synthetic children derived from background text.
+- `scripts/apple_news_core/article_projector.py` projects a source page into independently reportable first-party content and product claims only when each child has a local named subject, concrete action, and supporting facts. It also splits compound Apple silicon announcements into subject-scoped chip claims without turning shared launch prose or background text into synthetic children.
 - `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
 - `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
 - `scripts/apple_news_core/event_reconciler.py` treats legacy seed clusters as recall proposals, applies authoritative structured action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py` and the dated reconciliation suites through `tests/test_20260825_authoritative_structural_pipeline.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, seed evidence, content-form boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `tests/test_event_identity_architecture.py` and the dated reconciliation suites through `tests/test_20260826_structured_authority.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, seed evidence, content-form boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 

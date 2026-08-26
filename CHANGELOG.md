@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.63.0 - 2026-08-26
+
+- Made title-and-lead structured authority resilient to stale legacy recall evidence, separating first-party launches, capabilities, pricing, configurations, market reports, and editorial or third-party context before final reconciliation.
+- Added subject-scoped Apple silicon projection for compound M6 and M5 Ultra announcements, preserving each chip's own facts and source attribution without allowing shared launch prose to bridge chip, device, or price events.
+- Improved exact cross-language reconciliation for current OS feature matrices, Home Hub and accessibility reports, external-display capabilities, named content works, product launches, and measured global market reports while keeping unrelated actions separate.
+- Tightened deferred-event handling for inferred release dates, historical-cadence forecasts, shopping and comparison articles, editorial roundups, and weak background mentions; final briefs no longer mine weak roundup bodies for standalone facts.
+- Updated architecture guidance and expanded regression coverage from 1,190 to 1,229 tests; concurrent live validation preserved identical discovery, detail-selection, article, and 110 unique source-URL coverage in about 79 seconds, while clean-agent validation produced zero merge warnings and covered all 88 main-event source links.
+
 ## 1.62.0 - 2026-08-25
 
 - Made structured reconciliation authoritative over legacy recall seeds, using title-and-lead action ownership and concrete subject boundaries to split broad service, roadmap, leadership, release, and content bridges before final event output.

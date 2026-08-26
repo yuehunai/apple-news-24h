@@ -14,6 +14,8 @@ import re
 import unicodedata
 from typing import Sequence
 
+from .event_identity import build_event_identity
+
 
 @dataclass(frozen=True)
 class ClaimProjection:
@@ -74,6 +76,17 @@ _LEADING_CHROME = re.compile(
     re.I,
 )
 
+_APPLE_SILICON_SUBJECT = re.compile(
+    r"(?<![a-z0-9])m(?P<generation>\d{1,2})"
+    r"(?:\s+(?P<tier>ultra|max|pro))?(?![a-z0-9])",
+    re.I,
+)
+_APPLE_SILICON_RELEASE = re.compile(
+    r"\b(?:apple\s+)?(?:announces?|introduces?|launches?|unveils?|debuts?|releases?)\b|"
+    r"(?:苹果).{0,30}(?:发布|推出|问世|亮相|登场)",
+    re.I,
+)
+
 
 def _clean(value: str) -> str:
     value = unicodedata.normalize("NFKC", value or "")
@@ -85,7 +98,10 @@ def _sentences(values: Sequence[str]) -> list[str]:
     result: list[str] = []
     seen: set[str] = set()
     for value in values:
-        for part in re.split(r"(?<=[.!?。！？])\s*|[;；]\s*", _clean(value)):
+        for part in re.split(
+            r"(?<=[。！？])\s*|(?<=[.!?])\s+|[;；]\s*",
+            _clean(value),
+        ):
             part = _clean(part)
             key = part.casefold()
             if len(part) < 10 or key in seen:
@@ -93,6 +109,113 @@ def _sentences(values: Sequence[str]) -> list[str]:
             seen.add(key)
             result.append(part)
     return result
+
+
+def _apple_silicon_subjects(value: str) -> tuple[str, ...]:
+    subjects: list[str] = []
+    seen: set[str] = set()
+    for match in _APPLE_SILICON_SUBJECT.finditer(_clean(value)):
+        generation = f"M{match.group('generation')}"
+        tier = (match.group("tier") or "").title()
+        subject = f"{generation} {tier}".strip()
+        key = subject.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        subjects.append(subject)
+    return tuple(subjects)
+
+
+def project_multi_subject_apple_silicon_claims(
+    title: str,
+    summary: str,
+    key_facts: Sequence[str],
+) -> tuple[ClaimProjection, ...]:
+    """Project one direct release page onto each named Apple silicon subject.
+
+    A launch page can announce multiple chips, then present unlabeled table rows
+    beneath each chip heading.  Keeping the page whole lets rows from one chip
+    become mandatory facts for another.  Projection is title-gated and follows
+    the ordered subject transitions in the extracted facts; ordinary comparison
+    mentions in the body cannot create a projection.
+    """
+    clean_title = _clean(title)
+    title_subjects = _apple_silicon_subjects(clean_title)
+    if len(title_subjects) < 2:
+        return ()
+    if not re.search(r"\bapple\b|苹果", clean_title, re.I):
+        return ()
+    if not _APPLE_SILICON_RELEASE.search(clean_title):
+        return ()
+    identity = build_event_identity(title, summary)
+    if identity.title_products - {"mac"}:
+        return ()
+
+    title_subject_keys = {subject.casefold(): subject for subject in title_subjects}
+    assigned: dict[str, list[str]] = {subject: [] for subject in title_subjects}
+    seen: dict[str, set[str]] = {subject: set() for subject in title_subjects}
+    exclusive_subjects: set[str] = set()
+    current_subject = ""
+
+    for sentence in _sentences((summary, *key_facts)):
+        mentioned = {
+            title_subject_keys[subject.casefold()]
+            for subject in _apple_silicon_subjects(sentence)
+            if subject.casefold() in title_subject_keys
+        }
+        if len(mentioned) == 1:
+            current_subject = next(iter(mentioned))
+            exclusive_subjects.add(current_subject)
+            targets = (current_subject,)
+        elif len(mentioned) > 1:
+            # The shared launch sentence establishes provenance but does not
+            # define the active section for following unlabeled specification rows.
+            targets = tuple(sorted(mentioned))
+            current_subject = ""
+        elif current_subject:
+            targets = (current_subject,)
+        else:
+            continue
+
+        for subject in targets:
+            key = sentence.casefold()
+            if key in seen[subject]:
+                continue
+            seen[subject].add(key)
+            assigned[subject].append(sentence)
+
+    projections: list[ClaimProjection] = []
+    for subject in title_subjects:
+        facts = assigned[subject]
+        # A title-level multi-chip announcement still belongs to every named
+        # chip even if a sparse official page has no extracted specification list.
+        # When detailed facts exist, require an exclusive subject transition so
+        # one shared sentence cannot manufacture two rich child events.
+        if facts and subject not in exclusive_subjects:
+            facts = []
+        projected_summary = next(
+            (
+                fact
+                for fact in facts
+                if {
+                    title_subject_keys[mentioned.casefold()]
+                    for mentioned in _apple_silicon_subjects(fact)
+                    if mentioned.casefold() in title_subject_keys
+                }
+                == {subject}
+            ),
+            facts[0] if facts else _clean(summary),
+        )
+        projections.append(
+            ClaimProjection(
+                title=f"Apple {subject} chip release",
+                summary=projected_summary or f"Apple announced the {subject} chip.",
+                key_facts=tuple(facts),
+                subject=subject,
+                action="release",
+            )
+        )
+    return tuple(projections)
 
 
 def _content_subject(sentence: str, action_match: re.Match[str]) -> str:

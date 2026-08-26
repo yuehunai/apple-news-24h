@@ -458,6 +458,25 @@ def identity_pair_decision(left: EventIdentity, right: EventIdentity) -> MergeDe
         for component in right.title_components
         if component.startswith("apple-silicon-generation:")
     }
+    if bool(left_chip_generations) != bool(right_chip_generations):
+        chip_identity = left if left_chip_generations else right
+        companion_identity = right if left_chip_generations else left
+        companion_primary_intents = {
+            component
+            for component in companion_identity.title_components
+            if component.startswith("primary-intent:")
+        }
+        if (
+            not chip_identity.title_products
+            and (
+                companion_identity.title_products
+                or companion_primary_intents
+            )
+        ):
+            # A chip generation named only in one headline owns that event.
+            # Device, price, or other title-led actions may mention the chip in
+            # their body, but that background cannot turn them into chip news.
+            return "conflict"
     if (
         left_chip_generations
         and right_chip_generations
