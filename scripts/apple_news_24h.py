@@ -1715,43 +1715,112 @@ def fetch_detail_page_texts(
 ) -> list[str | None]:
     if not candidates:
         diagnostics["detail_fetch_workers"] = 0
+        diagnostics["detail_fetch_retry_count"] = 0
+        diagnostics["detail_fetch_retry_recovered"] = 0
         return []
     workers = min(DEFAULT_DETAIL_FETCH_WORKERS, len(candidates))
     diagnostics["detail_fetch_workers"] = workers
-    if workers <= 1:
-        return [fetch_url(candidate.url, cache_dir, diagnostics) for candidate in candidates]
-
     results: list[str | None] = [None] * len(candidates)
-    failed_fetches: list[dict[str, Any]] = []
+    first_failures: dict[int, list[dict[str, Any]]] = {}
 
-    def fetch_one(index: int, candidate: Candidate) -> tuple[int, str | None, list[dict[str, Any]]]:
+    def fetch_one(
+        index: int,
+        candidate: Candidate,
+        retries: int | None,
+    ) -> tuple[int, str | None, list[dict[str, Any]]]:
         local_diagnostics: dict[str, Any] = {"failed_fetches": []}
-        page_text = fetch_url(candidate.url, cache_dir, local_diagnostics)
+        page_text = fetch_url(
+            candidate.url,
+            cache_dir,
+            local_diagnostics,
+            retries=retries,
+        )
         return index, page_text, list(local_diagnostics.get("failed_fetches", []))
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
-        future_map = {
-            executor.submit(fetch_one, index, candidate): index
-            for index, candidate in enumerate(candidates)
-        }
-        for future in concurrent.futures.as_completed(future_map):
-            index = future_map[future]
-            try:
-                result_index, page_text, local_failed_fetches = future.result()
-            except Exception as exc:
+    def run_pass(
+        indexes: list[int],
+        *,
+        retries: int | None,
+    ) -> dict[int, list[dict[str, Any]]]:
+        pass_failures: dict[int, list[dict[str, Any]]] = {}
+        if not indexes:
+            return pass_failures
+        pass_workers = min(DEFAULT_DETAIL_FETCH_WORKERS, len(indexes))
+        if pass_workers <= 1:
+            for index in indexes:
                 candidate = candidates[index]
-                results[index] = None
-                failed_fetches.append(
-                    {
-                        "url": candidate.url,
-                        "error": f"{type(exc).__name__}: {exc}",
-                    }
-                )
-                continue
-            results[result_index] = page_text
-            failed_fetches.extend(local_failed_fetches)
+                try:
+                    result_index, page_text, local_failures = fetch_one(
+                        index,
+                        candidate,
+                        retries,
+                    )
+                except Exception as exc:
+                    page_text = None
+                    result_index = index
+                    local_failures = [
+                        {
+                            "url": candidate.url,
+                            "error": f"{type(exc).__name__}: {exc}",
+                        }
+                    ]
+                results[result_index] = page_text
+                if page_text is None:
+                    pass_failures[result_index] = local_failures
+            return pass_failures
 
-    diagnostics.setdefault("failed_fetches", []).extend(failed_fetches)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=pass_workers) as executor:
+            future_map = {
+                executor.submit(fetch_one, index, candidates[index], retries): index
+                for index in indexes
+            }
+            for future in concurrent.futures.as_completed(future_map):
+                index = future_map[future]
+                try:
+                    result_index, page_text, local_failures = future.result()
+                except Exception as exc:
+                    candidate = candidates[index]
+                    result_index = index
+                    page_text = None
+                    local_failures = [
+                        {
+                            "url": candidate.url,
+                            "error": f"{type(exc).__name__}: {exc}",
+                        }
+                    ]
+                results[result_index] = page_text
+                if page_text is None:
+                    pass_failures[result_index] = local_failures
+        return pass_failures
+
+    first_failures = run_pass(list(range(len(candidates))), retries=None)
+    retry_indexes = sorted(first_failures)
+    diagnostics["detail_fetch_retry_count"] = len(retry_indexes)
+    retry_failures = run_pass(retry_indexes, retries=0)
+    recovered_indexes = [index for index in retry_indexes if results[index] is not None]
+    diagnostics["detail_fetch_retry_recovered"] = len(recovered_indexes)
+    if recovered_indexes:
+        diagnostics.setdefault("transient_detail_fetches", []).extend(
+            failure
+            for index in recovered_indexes
+            for failure in first_failures.get(index, [])
+        )
+    terminal_failures = [
+        failure
+        for index in retry_indexes
+        if results[index] is None
+        for failure in (
+            retry_failures.get(index)
+            or first_failures.get(index)
+            or [
+                {
+                    "url": candidates[index].url,
+                    "error": "detail fetch failed without an exception record",
+                }
+            ]
+        )
+    ]
+    diagnostics.setdefault("failed_fetches", []).extend(terminal_failures)
     return results
 
 
@@ -27416,6 +27485,8 @@ def classify_relevance_tier(
     if is_current_versioned_apple_device_compatibility_story(title, text):
         return "strong", "current Apple OS device and feature compatibility matrix"
     editorial_form = semantic_identity.content_form
+    if "consumer-purchase-intent" in semantic_identity.title_components:
+        return "weak", "consumer purchase-intent survey without a direct Apple action"
     if editorial_form in {
         "buying_advice",
         "deal",

@@ -991,6 +991,8 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "unveils",
             "unveiled",
             "goes live",
+            "is already live",
+            "are already live",
             "is now live",
             "are now live",
             "is here",
@@ -1931,6 +1933,44 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
 def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
+    if re.search(
+        r"\b(?:concept|fan[- ]made)\s+(?:video|film|teaser|render)\b|"
+        r"\b(?:video|teaser|render)\b.{0,35}\b(?:imagines?|fan[- ]made)\b|"
+        r"\bconcept\b.{0,35}\b(?:show(?:s|ing)?|imagin(?:e|es|ing)|present(?:s|ing)?)\b|"
+        r"\bnot\s+(?:a\s+)?(?:real\s+)?apple\s+(?:ad|advertisement|video)\b|"
+        r"(?:概念视频|粉丝制作|民间制作).{0,20}(?:想象|设想|演示|展示)",
+        f"{lower} {lead_lower}",
+    ):
+        return "analysis"
+    if (
+        re.search(
+            r"\b(?:pre[- ]?orders?|release date|availability date)\b|"
+            r"(?:预购日期|发售日期|上市日期)",
+            lower,
+        )
+        and re.search(
+            r"\b(?:educated guess|historical pattern|history suggests|most likely|"
+            r"likely date|we can guess|prediction)\b|"
+            r"(?:根据历史|历年规律|推测|推演|预计日期|大概率)",
+            lead_lower,
+        )
+        and not re.search(
+            r"\b(?:according to|new report|sources? say|analyst|leaker)\b|"
+            r"(?:据.{0,16}(?:报道|消息|透露)|分析师|爆料人|最新报告)",
+            lead_lower,
+        )
+    ):
+        return "analysis"
+    if (
+        _contains_any(lower, ("apple", "苹果"))
+        and re.search(
+            r"\b(?:collectively|multiple\s+(?:companies|vendors)|several\s+(?:companies|vendors))\b|"
+            r"(?:多家|多个|集体).{0,20}(?:公司|厂商|品牌)?.{0,10}(?:涨价|提价|调价)",
+            lower,
+        )
+        and re.search(r"\b(?:prices?|pricing)\b|(?:涨价|提价|调价|价格)", lower)
+    ):
+        return "roundup"
     if re.search(r"\bwhere\s+to\s+pre-?order\b", lower):
         return "buying_advice"
     if re.search(
@@ -1972,6 +2012,21 @@ def _content_form(title: str, lead: str = "") -> str:
         r".{0,45}\b(?:rumou?rs?|roadmap|reports?)\b|"
         r"(?:汇总|盘点|整理).{0,24}(?:既有|此前|过去).{0,24}(?:传闻|爆料|路线图|报道)",
         lead_lower,
+    ):
+        return "roundup"
+    if re.search(
+        r"\b(?:two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\b"
+        r".{0,18}\b(?:new\s+)?(?:features?|changes?|upgrades?)\b"
+        r".{0,42}\b(?:worth\s+(?:the\s+)?wait|worth\s+waiting\s+for)\b|"
+        r"(?:两|三|四|五|六|七|八|九|十|\d+)\s*(?:项|个)?(?:新)?(?:功能|变化|升级)"
+        r".{0,30}(?:值得等待|值得期待)",
+        lower,
+    ):
+        return "roundup"
+    if re.search(
+        r"(?:[一二三四五六七八九十百\d]+)\s*(?:大|项|个)?\s*"
+        r"(?:核心)?(?:亮点|卖点|功能|特性)(?:汇总|盘点|一览)",
+        lower,
     ):
         return "roundup"
     first_person_multi_product_preview = bool(
@@ -3255,6 +3310,35 @@ def build_event_identity(
     if content_form != "roundup" and not (title_products & direct_service_products):
         products |= _extract_patterns(lead_lower[:260], PRODUCT_PATTERNS) & direct_service_products
     title_components = _extract_patterns(title_lower, COMPONENT_PATTERNS)
+    if (
+        re.search(r"\bspotlight\b|聚焦(?:搜索)?", title_lower)
+        and re.search(r"\bindex(?:ing|ed)?\b|索引", title_lower)
+    ):
+        # Cross-language support coverage commonly describes the same index
+        # rebuild with different word order. Preserve the concrete component
+        # instead of falling back to a generic OS feature identity.
+        title_components.add("spotlight-index-preparation")
+    purchase_intent_title = bool(
+        title_products
+        and (
+            re.search(r"\b(?:survey|poll|purchase intent|willingness to pay)\b|(?:购买意愿|调查显示|民调)", title_lower)
+            or (
+                re.search(r"(?<!\d)\d+(?:\.\d+)?\s*%", title_lower)
+                and re.search(
+                    r"\b(?:interested|interest|buy|purchase|pay for it|willing to pay)\b|"
+                    r"(?:感兴趣|没兴趣|不感兴趣|购买|愿意支付|嫌贵|价格接受)",
+                    title_lower,
+                )
+            )
+        )
+    )
+    if purchase_intent_title:
+        title_components.add("consumer-purchase-intent")
+    if "apple-wallet" in title_products:
+        if re.search(r"\bpassport\b|护照", title_lower):
+            title_components.add("wallet-document:passport")
+        if re.search(r"\bdriver['’]?s?\s+licen[cs]e\b|驾照|驾驶证", title_lower):
+            title_components.add("wallet-document:driver-license")
     # Leadership changes are primary article identity only when the headline
     # itself owns that action. Product reports often mention an outgoing CEO in
     # their lead as timing context; allowing that background to define title
@@ -3699,6 +3783,8 @@ def build_event_identity(
     ):
         components.add("product-release-mix")
     title_actions = _extract_patterns(title_lower, ACTION_PATTERNS)
+    if "consumer-purchase-intent" in title_components:
+        title_actions.add("market-report")
     if (
         title_scope == "apple-direct"
         and "apple-intelligence" in title_products

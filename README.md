@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.63.0 - 2026-08-26
+### 1.64.0 - 2026-08-27
 
-- Made title-and-lead structured authority resilient to stale legacy recall evidence, separating first-party launches, capabilities, pricing, configurations, market reports, and editorial or third-party context before final reconciliation.
-- Added subject-scoped Apple silicon projection for compound M6 and M5 Ultra announcements, preserving each chip's own facts and source attribution without allowing shared launch prose to bridge chip, device, or price events.
-- Improved exact cross-language reconciliation for current OS feature matrices, Home Hub and accessibility reports, external-display capabilities, named content works, product launches, and measured global market reports while keeping unrelated actions separate.
-- Tightened deferred-event handling for inferred release dates, historical-cadence forecasts, shopping and comparison articles, editorial roundups, and weak background mentions; final briefs no longer mine weak roundup bodies for standalone facts.
-- Updated architecture guidance and expanded regression coverage from 1,190 to 1,229 tests; concurrent live validation preserved identical discovery, detail-selection, article, and 110 unique source-URL coverage in about 79 seconds, while clean-agent validation produced zero merge warnings and covered all 88 main-event source links.
+- Added first-party launch-campaign identities that reconcile official event announcements, localized taglines and dates, and social hashmoji activations while keeping production reports, forecasts, and purchase-intent surveys as separate actions.
+- Improved exact cross-source reconciliation with title-led subject and action authority for Spotlight changes, Wallet document support, pending-order Mac mini upgrades, foldable-device component leaks, Apple TV cast announcements, Apple Support AI, Genlock, measured market results, and legal-case scheduling.
+- Added one bounded second pass for transient selected detail-page failures, preserving discovery coverage and diagnostics without broadly repeating successful fetches.
+- Tightened relevance handling for editorial comparisons, concept pieces, guessed dates, multi-vendor summaries, and purchase-intent surveys so weak contextual coverage remains reviewable without entering the required brief.
+- Updated fallback policy guidance and expanded regression coverage from 1,229 to 1,247 tests; concurrent live validation preserved identical discovery, detail-selection, article, and all 115 source-URL coverage in about 96 seconds, while clean-agent validation produced zero merge warnings and kept the purchase survey deferred from the 41-event brief ledger.
 
 ## What It Does
 
@@ -38,7 +38,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
 - `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
 - `scripts/apple_news_core/event_reconciler.py` treats legacy seed clusters as recall proposals, applies authoritative structured action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py` and the dated reconciliation suites through `tests/test_20260826_structured_authority.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, seed evidence, content-form boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `tests/test_event_identity_architecture.py` and the dated reconciliation suites through `tests/test_20260827_event_campaign_boundaries.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, launch campaigns, seed evidence, content-form boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 

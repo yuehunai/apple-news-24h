@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.64.0 - 2026-08-27
+
+- Added first-party launch-campaign identities that reconcile official event announcements, localized taglines and dates, and social hashmoji activations while keeping production reports, forecasts, and purchase-intent surveys as separate actions.
+- Improved exact cross-source reconciliation with title-led subject and action authority for Spotlight changes, Wallet document support, pending-order Mac mini upgrades, foldable-device component leaks, Apple TV cast announcements, Apple Support AI, Genlock, measured market results, and legal-case scheduling.
+- Added one bounded second pass for transient selected detail-page failures, preserving discovery coverage and diagnostics without broadly repeating successful fetches.
+- Tightened relevance handling for editorial comparisons, concept pieces, guessed dates, multi-vendor summaries, and purchase-intent surveys so weak contextual coverage remains reviewable without entering the required brief.
+- Updated fallback policy guidance and expanded regression coverage from 1,229 to 1,247 tests; concurrent live validation preserved identical discovery, detail-selection, article, and all 115 source-URL coverage in about 96 seconds, while clean-agent validation produced zero merge warnings and kept the purchase survey deferred from the 41-event brief ledger.
+
 ## 1.63.0 - 2026-08-26
 
 - Made title-and-lead structured authority resilient to stale legacy recall evidence, separating first-party launches, capabilities, pricing, configurations, market reports, and editorial or third-party context before final reconciliation.
