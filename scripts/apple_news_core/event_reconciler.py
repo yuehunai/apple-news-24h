@@ -941,6 +941,21 @@ def _product_lifecycle_subjects(text: str, identity: EventIdentity) -> set[str]:
 
 
 def _first_party_facility_subject(text: str) -> str:
+    if _contains(
+        text,
+        "apple education center",
+        "apple educational center",
+        "苹果教育中心",
+    ):
+        return "education-center"
+    if _contains(text, "apple developer center", "苹果开发者中心"):
+        return "developer-center"
+    if _contains(
+        text,
+        "apple advanced manufacturing center",
+        "苹果先进制造中心",
+    ):
+        return "manufacturing-center"
     manufacturing = _contains(
         text,
         "manufacturing",
@@ -959,14 +974,46 @@ def _first_party_facility_subject(text: str) -> str:
         "教育课程",
         "培训学校",
     )
-    if manufacturing and training:
-        return "manufacturing-center"
     if _contains(text, "advanced manufacturing center", "先进制造中心"):
         return "manufacturing-center"
     if _contains(text, "manufacturing center", "制造中心"):
         return "manufacturing-center"
     if _contains(text, "developer center", "开发者中心"):
         return "developer-center"
+    if _contains(
+        text,
+        "education center",
+        "educational center",
+        "training center",
+        "learning center",
+        "education programme center",
+        "education program center",
+        "教育中心",
+        "培训中心",
+        "学习中心",
+    ):
+        return "education-center"
+    if manufacturing and training:
+        return "manufacturing-center"
+    return ""
+
+
+def _first_party_facility_location(title: str) -> str:
+    """Return a title-owned facility location without relying on a region table."""
+    title_text = _normalized(title)
+    patterns = (
+        r"\b(?:center|centre|facility|school|campus)\s+in\s+([a-z][a-z .'-]{2,30})$",
+        r"\bin\s+([a-z][a-z .'-]{2,30})\s+(?:gets?|opens?|welcomes?|with)\b",
+        r"\bin\s+([a-z][a-z .'-]{2,30})$",
+        r"在([^，。,:：]{2,18}?)(?:设立|建立|落地|开设|启用).{0,16}(?:中心|学校|园区)",
+    )
+    for pattern in patterns:
+        match = re.search(pattern, title_text, re.I)
+        if not match:
+            continue
+        location = re.sub(r"[^a-z0-9\u3400-\u9fff]+", "-", match.group(1)).strip("-")
+        if location:
+            return location
     return ""
 
 
@@ -1020,6 +1067,7 @@ def _structured_assertion_keys(
     lead: str,
     identity: EventIdentity,
     evidence: str = "",
+    regions: Iterable[str] = (),
 ) -> tuple[set[str], set[str], set[str]]:
     """Build subject/predicate assertions used before broad topic similarity."""
     title_scope, primary_scope = _primary_assertion_scope(title, lead)
@@ -1422,14 +1470,42 @@ def _structured_assertion_keys(
         and (
             _contains(
                 title_scope,
+                "announces",
+                "announced",
+                "establishes",
+                "established",
+                "sets up",
+                "set up",
+                "expands",
                 "opens",
                 "opened",
                 "opening",
                 "launches",
+                "宣布",
+                "设立",
+                "建立",
+                "落地",
+                "扩展",
+                "扩大",
                 "开设",
                 "启用",
                 "揭幕",
                 "落成",
+            )
+            or (
+                re.search(
+                    r"\bnew\s+(?:apple\s+)?(?:education|educational|training|learning)\s+center\b|"
+                    r"(?:全新|首个|新建?)(?:苹果)?(?:教育|培训|学习)中心",
+                    title_scope,
+                    re.I,
+                )
+                and _contains(
+                    evidence_scope,
+                    "apple announced",
+                    "apple has announced",
+                    "苹果宣布",
+                    "苹果公司宣布",
+                )
             )
             or (
                 _contains(title_scope, "visits", "tours", "参观", "到访")
@@ -1456,7 +1532,23 @@ def _structured_assertion_keys(
         )
     )
     if facility_opening:
-        key = f"structured-assertion:apple-facility:{facility_subject}:opening"
+        title_location = _first_party_facility_location(title)
+        region_values = sorted(
+            region for region in regions if region and region != "multi-region"
+        )
+        facility_products = sorted(identity.products & _HARDWARE_FIRST_PARTY_PRODUCTS)
+        if facility_subject == "manufacturing-center" and len(facility_products) == 1:
+            qualifier = f"product-{facility_products[0]}"
+        else:
+            qualifier = (
+                (region_values[0] if len(region_values) == 1 else "")
+                or title_location
+            )
+        qualifier_suffix = f":{qualifier}" if qualifier else ""
+        key = (
+            f"structured-assertion:apple-facility:{facility_subject}:opening"
+            f"{qualifier_suffix}"
+        )
         event_keys.add(key)
         boundaries.add(f"structured-subject:apple-facility:{facility_subject}")
         separation |= {
@@ -3176,6 +3268,8 @@ def _title_predicate_separation_keys(title: str) -> set[str]:
     """Extract concrete title predicates that generic product actions miss."""
     title_text = _canonical_title(title)
     keys: set[str] = set()
+    if _apple_event_invitation_interpretation_context(title):
+        keys.add("primary-claim-predicate:event-invitation-feature-interpretation")
     if re.search(
         r"\b(?:packaging box|retail packaging|retail box|product box)\b|"
         r"(?:包装盒|零售包装盒|产品包装盒)",
@@ -3555,6 +3649,99 @@ def _apple_event_campaign_title_context(title: str) -> bool:
     return explicit_campaign_asset or explicit_schedule
 
 
+def _apple_event_invitation_interpretation_context(title: str, lead: str = "") -> bool:
+    """Identify media interpretation of event artwork, not Apple's event action."""
+    title_text = _canonical_title(title)
+    invitation_subject = bool(
+        re.search(
+            r"\b(?:apple\s+)?(?:event\s+)?(?:invite|invitation|logo|artwork|graphic)\b|"
+            r"(?:苹果)?(?:发布会|活动)?(?:邀请函|标志|logo|图案|视觉)",
+            title_text,
+            re.I,
+        )
+    )
+    interpretation_action = bool(
+        re.search(
+            r"\b(?:hints?|suggests?|teases?|clues?|interprets?|reads?\s+into)\b|"
+            r"(?:暗示|解读|玄机|剧透|线索|指向|卖点)",
+            title_text,
+            re.I,
+        )
+    )
+    product_feature = bool(
+        re.search(
+            r"\b(?:iphone|ipad|mac|apple\s+watch|airpods)\b|"
+            r"(?:苹果)?(?:手机|平板|电脑|手表|耳机)|(?:光圈|相机|配色|颜色)",
+            f"{title_text} {_short_lead_scope(lead, sentences=1, limit=360)}",
+            re.I,
+        )
+    )
+    return invitation_subject and interpretation_action and product_feature
+
+
+def _apple_event_invitation_interpretation_key(
+    title: str,
+    lead: str,
+    identity: EventIdentity,
+    changed_objects: Iterable[str],
+) -> str:
+    if not _apple_event_invitation_interpretation_context(title, lead):
+        return ""
+    products = sorted(
+        identity.title_products
+        & {
+            "airpods",
+            "apple-watch",
+            "foldable-iphone",
+            "ipad",
+            "iphone",
+            "mac",
+            "macbook",
+        }
+    )
+    objects = sorted(
+        value.removeprefix("changed-object:")
+        for value in changed_objects
+        if value.startswith("changed-object:")
+    )
+    if not products:
+        return ""
+    count_scope = f"{_normalized(title)} {_short_lead_scope(lead, sentences=1, limit=360)}"
+    count_aliases = {
+        "one": "1",
+        "two": "2",
+        "three": "3",
+        "four": "4",
+        "five": "5",
+        "一": "1",
+        "两": "2",
+        "二": "2",
+        "三": "3",
+        "四": "4",
+        "五": "5",
+    }
+    count_match = re.search(
+        r"\b(one|two|three|four|five|[1-5])\b"
+        r"(?:\s+[a-z0-9-]+){0,6}\s+"
+        r"(?:features?|clues?|details?|selling\s+points?)\b|"
+        r"([一二两三四五1-5])\s*(?:大|项|个)?(?:卖点|功能|特性|细节|线索)",
+        count_scope,
+        re.I,
+    )
+    if count_match:
+        count_value = next(value for value in count_match.groups() if value)
+        count_value = count_aliases.get(count_value.lower(), count_value)
+        qualifier = f"count-{count_value}"
+    elif objects:
+        qualifier = "+".join(objects)
+    else:
+        return ""
+    return (
+        "primary-claim:apple-event-invitation:"
+        f"{'+'.join(products)}:feature-interpretation:{qualifier}"
+    )
+
+
 def _apple_event_occurrence_keys(title: str, lead: str) -> set[str]:
     """Project timezone-tolerant calendar anchors for one announced event.
 
@@ -3562,7 +3749,10 @@ def _apple_event_occurrence_keys(title: str, lead: str) -> set[str]:
     Adjacent calendar aliases are safe here because the title must itself be an
     event announcement or a campaign asset published in the same 24-hour run.
     """
-    if not _apple_event_campaign_title_context(title):
+    if (
+        not _apple_event_campaign_title_context(title)
+        or _apple_event_invitation_interpretation_context(title, lead)
+    ):
         return set()
     scope = _normalized(f"{title} {lead[:700]}")
     month_days: set[tuple[int, int]] = set()
@@ -3612,7 +3802,10 @@ def _apple_event_campaign_key(title: str, lead: str) -> str:
     rumors outside the campaign while allowing source-specific follow-ups to
     contribute facts to the same announced event.
     """
-    if not _apple_event_campaign_title_context(title):
+    if (
+        not _apple_event_campaign_title_context(title)
+        or _apple_event_invitation_interpretation_context(title, lead)
+    ):
         return ""
     raw_scope = " ".join(part for part in (title, lead[:700]) if part)
     scope = _normalized(raw_scope)
@@ -4141,6 +4334,48 @@ def _canonical_first_party_action_keys(
         for subject in subjects
         for action in actions
     }
+
+
+def _editorial_source_proves_current_first_party_action(
+    title: str,
+    lead: str,
+    identity: EventIdentity,
+) -> bool:
+    """Let editorial framing carry an independently stated Apple action."""
+    if (
+        identity.content_form not in {"hands_on", "review"}
+        or identity.scope != "apple-direct"
+        or not identity.title_products
+    ):
+        return False
+    lead_scope = _short_lead_scope(lead, sentences=2, limit=520)
+    lead_scope = re.sub(
+        r"^[^。.!?]{0,40}(?:消息|讯)[,，:：]?\s*",
+        "",
+        lead_scope,
+    )
+    first_party_owner = bool(
+        re.search(
+            r"^(?:apple(?:'s|’s)?|apple\s+(?:officially|today)|苹果(?:公司|官方)?)"
+            r".{0,90}\b(?:launch(?:ed|es)?|release(?:d|s)?|introduc(?:ed|es)?|"
+            r"list(?:ed|s)?|made\s+available|lower(?:ed|s)?|rais(?:ed|es)?)\b|"
+            r"^(?:苹果(?:公司|官方)?).{0,90}(?:上架|发布|推出|开售|上市|降价|涨价|调价)",
+            lead_scope,
+            re.I,
+        )
+    )
+    current_action = bool(
+        identity.title_actions & {"price-change", "product-launch", "retail-availability"}
+        or re.search(
+            r"\b(?:now\s+available|launch(?:ed|es)?|release(?:d|s)?|introduc(?:ed|es)?|"
+            r"list(?:ed|s)?|lower(?:ed|s)?|rais(?:ed|es)?\s+(?:the\s+)?price)\b|"
+            r"(?:近日|今日|现已).{0,24}(?:上架|发布|推出|开售|上市)|"
+            r"(?:价格|售价).{0,16}(?:下调|上调|降至|涨至)|(?:降价|涨价|调价)",
+            f"{_normalized(title)} {lead_scope}",
+            re.I,
+        )
+    )
+    return first_party_owner and current_action
 
 
 def _third_party_platform_app_action(
@@ -4866,6 +5101,7 @@ def _primary_claim_projection(
     )
     event_schedule_subject = bool(
         _apple_event_schedule_title(title_text)
+        and not _apple_event_invitation_interpretation_context(title, lead)
         and schedule_reporting_signal
         and _contains(
             claim_evidence,
@@ -4971,9 +5207,40 @@ def _primary_claim_projection(
             trusted=True,
         )
 
+    current_hardware_details_report = bool(
+        direct_title_subject
+        and hardware_products
+        and identity.content_form == "news"
+        and re.search(
+            r"\b(?:hidden|new|additional|technical)?\s*"
+            r"(?:details?|specifications?|specs?|configurations?)\b|"
+            r"(?:隐藏|新增|更多|技术)?(?:细节|规格|配置)(?:曝光|披露|公开)?",
+            title_text,
+            re.I,
+        )
+    )
+    if current_hardware_details_report:
+        generation = next(
+            (
+                component.removeprefix("apple-silicon-generation:")
+                for component in identity.components
+                if component.startswith("apple-silicon-generation:")
+            ),
+            "",
+        )
+        for product in sorted(hardware_products):
+            add_claim(
+                product,
+                "technical-details-disclosure",
+                qualifier=generation,
+                category="hardware_products",
+                trusted=True,
+            )
+
     current_hardware_refresh_report = bool(
         direct_title_subject
         and hardware_products
+        and not any(key.startswith("primary-claim:") for key in event_keys)
         and any(
             component.startswith("apple-silicon-generation:")
             for component in identity.title_components
@@ -6809,6 +7076,11 @@ def build_reconciliation_profile(
     caller_trusted_direct_action = trusted_direct_action
     title_text = _normalized(title)
     text = f"{title_text}. {_normalized(lead)[:900]}"
+    editorial_first_party_action = _editorial_source_proves_current_first_party_action(
+        title,
+        lead,
+        identity,
+    )
     exact = frozenset(exact_facets)
     # Facets remain inputs to the existing domain matcher.  They are not
     # automatically cross-event keys: even a precise facet can describe more
@@ -6837,6 +7109,13 @@ def build_reconciliation_profile(
         primary_evidence_products or evidence_products,
     )
     category_hint = _structured_category_hint(identity, structured_title_subjects)
+    if editorial_first_party_action and len(identity.title_products) == 1:
+        editorial_product = next(iter(identity.title_products))
+        editorial_update_key = f"structured-title-product-update:{editorial_product}"
+        event_keys.add(editorial_update_key)
+        boundary_keys.add(editorial_update_key)
+        if editorial_product in _HARDWARE_FIRST_PARTY_PRODUCTS or editorial_product == "polishing-cloth":
+            category_hint = "hardware_products"
     content_form = _reconciliation_content_form(title_text, identity)
     if (
         content_form == "news"
@@ -7013,6 +7292,7 @@ def build_reconciliation_profile(
             lead,
             identity,
             evidence,
+            regions,
         )
     event_keys |= assertion_events
     boundary_keys |= assertion_boundaries
@@ -7039,14 +7319,31 @@ def build_reconciliation_profile(
     if primary_claim_category:
         category_hint = primary_claim_category
     trusted_direct_action = trusted_direct_action or primary_claim_trusted
-    event_campaign_key = _apple_event_campaign_key(title, lead)
+    invitation_interpretation_key = _apple_event_invitation_interpretation_key(
+        title,
+        lead,
+        identity,
+        changed_object_keys,
+    )
+    if invitation_interpretation_key:
+        event_keys.add(invitation_interpretation_key)
+        boundary_keys.add(invitation_interpretation_key)
+        separation_keys |= {
+            "primary-claim-subject:apple-event-invitation",
+            "primary-claim-predicate:event-invitation-feature-interpretation",
+        }
+        category_hint = "hardware_products"
+        trusted_direct_action = True
+    event_campaign_key = "" if invitation_interpretation_key else _apple_event_campaign_key(title, lead)
     if event_campaign_key:
         event_keys.add(event_campaign_key)
         boundary_keys.add(event_campaign_key)
         separation_keys.add("primary-claim-subject:apple-event-campaign")
         category_hint = "hardware_products"
         trusted_direct_action = True
-    event_occurrence_keys = _apple_event_occurrence_keys(title, lead)
+    event_occurrence_keys = (
+        set() if invitation_interpretation_key else _apple_event_occurrence_keys(title, lead)
+    )
     if event_occurrence_keys:
         event_keys |= event_occurrence_keys
         boundary_keys |= event_occurrence_keys
@@ -8063,6 +8360,8 @@ def build_reconciliation_profile(
     editorial_inference_without_new_reporting = bool(
         unverified_final_os_schedule
         or (
+            not editorial_first_party_action
+            and
             not versioned_os_action
             and not versioned_os_compatibility_action
             and not current_generation_product_report
@@ -8070,6 +8369,7 @@ def build_reconciliation_profile(
             and not current_event_schedule_report
             and not event_format_plan
             and not exact
+            and not structured_direct_assertion
             and content_form
             in {
                 "analysis",
@@ -8098,6 +8398,7 @@ def build_reconciliation_profile(
                 (trusted_direct_action or structured_direct_assertion)
                 and _title_proves_first_party_subject(title_text, identity)
             )
+            or editorial_first_party_action
         )
     )
     measured_apple_market_action = any(
@@ -8124,6 +8425,8 @@ def build_reconciliation_profile(
         promotion_reason = "measured Apple market result with report, region, period, and value"
     elif trusted_direct_action:
         promotion_reason = "title-led direct Apple action confirmed by structured identity"
+    elif editorial_first_party_action:
+        promotion_reason = "current first-party Apple action independently stated by editorial source"
     defer_reason = _unsupported_third_party_reason(
         title,
         text,
@@ -8135,6 +8438,8 @@ def build_reconciliation_profile(
     if event_format_plan:
         # A concrete, currently reported operating format is itself the event
         # action; an analytical headline angle must not demote that evidence.
+        defer_reason = ""
+    if editorial_first_party_action:
         defer_reason = ""
     if not event_format_plan and _retrospective_explainer_without_new_action(
         title,
@@ -8215,6 +8520,19 @@ def build_reconciliation_profile(
         # system disclosure into hardware (or a procurement action into
         # software) based on incidental entities in the article body.
         category_hint = primary_claim_category
+    elif any(
+        key.startswith("structured-assertion:apple-facility:education-center:opening")
+        for key in event_keys
+    ):
+        category_hint = "software_systems"
+    elif (
+        identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+        and any(
+            key.startswith("structured-title-action:apple-silicon-generation:")
+            for key in event_keys
+        )
+    ):
+        category_hint = "hardware_products"
     return ReconciliationProfile(
         event_keys=frozenset(event_keys),
         boundary_keys=frozenset(boundary_keys),
@@ -8431,6 +8749,18 @@ def _explicit_separation_conflict(
         and "predicate:os-release-announcement" in right.separation_keys
     ):
         return False
+    left_facility_assertions = {
+        key
+        for key in left.event_keys
+        if key.startswith("structured-assertion:apple-facility:")
+    }
+    right_facility_assertions = {
+        key
+        for key in right.event_keys
+        if key.startswith("structured-assertion:apple-facility:")
+    }
+    if bool(left_facility_assertions) != bool(right_facility_assertions):
+        return True
     shared_assertions = {
         key
         for key in left.event_keys & right.event_keys
@@ -8438,6 +8768,20 @@ def _explicit_separation_conflict(
     }
     if shared_assertions:
         return False
+
+    def pending_order_predicates(profile: ReconciliationProfile) -> set[str]:
+        return {
+            key.removeprefix("primary-claim-predicate:")
+            for key in profile.separation_keys
+            if key.startswith("primary-claim-predicate:pending-order-")
+        }
+
+    left_pending_order = pending_order_predicates(left)
+    right_pending_order = pending_order_predicates(right)
+    if left_pending_order != right_pending_order and (
+        left_pending_order or right_pending_order
+    ):
+        return True
     for namespace in (
         "assertion-subject:",
         "assertion-action:",

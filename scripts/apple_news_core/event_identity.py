@@ -1942,6 +1942,37 @@ def _content_form(title: str, lead: str = "") -> str:
         f"{lower} {lead_lower}",
     ):
         return "analysis"
+    direct_apple_trade_in_change = bool(
+        re.search(r"^(?:apple(?:'s|’s)?|苹果)", lower)
+        and re.search(
+            r"\b(?:raises?|updates?|increases?|changes?|adjusts?)\b.{0,40}"
+            r"\b(?:trade[- ]?in|resale)\s+(?:values?|offers?)\b|"
+            r"(?:上调|更新|调整|提高).{0,24}(?:以旧换新|折抵|回收)(?:价|价值|报价)",
+            lower,
+        )
+    )
+    third_party_resale_analysis = bool(
+        not direct_apple_trade_in_change
+        and re.search(
+            r"\b(?:trade[- ]?in|resale)\s+(?:value|values|price|prices|estimate|estimates)\b|"
+            r"(?:旧机|二手(?:手机|设备)?).{0,12}(?:回收价|二手价|保值率)|"
+            r"(?:回收价|二手价|保值率).{0,12}(?:下跌|跌幅|损失|调查|分析|参考)",
+            lower,
+        )
+        and re.search(
+            r"\b(?:survey|study|analysis|comparison|aggregator|estimates?|finds?|says?)\b|"
+            r"(?:调查|分析|比价|平台|机构|参考|称|报告)",
+            f"{lower} {lead_lower}",
+        )
+    )
+    if third_party_resale_analysis:
+        return "analysis"
+    if re.match(
+        r"^(?:skip|avoid|replace)\b.{0,100}\b(?:with|using)\s+"
+        r"(?:these|one\s+of\s+these|an?|your\s+own)\b",
+        lower,
+    ):
+        return "buying_advice"
     if (
         re.search(
             r"\b(?:pre[- ]?orders?|release date|availability date)\b|"
@@ -3266,7 +3297,7 @@ def build_event_identity(
     first_party_model_scope = f"{title_lower} {lead_lower[:260]}"
     if (
         title_scope == "apple-direct"
-        and re.search(r"\b(?:ai|artificial intelligence)\b|(?:ai|人工智能|大模型)", first_party_model_scope)
+        and re.search(r"\b(?:ai|artificial intelligence)\b|(?:人工智能|大模型)", first_party_model_scope)
         and re.search(
             r"\b(?:train(?:s|ed|ing)?|develop(?:s|ed|ing)?|custom model|own model)\b|"
             r"(?:训练|自研|自主研发|定制).{0,20}(?:模型|大模型)",

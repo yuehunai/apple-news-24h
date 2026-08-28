@@ -11900,16 +11900,21 @@ def multi_product_hardware_roadmap_variants(
         if (not concrete_subject_evidence and not explicit_launch_report) or first_person_inference:
             continue
         specific_label = labels[subject]
-        for pattern, label in (
-            (r"\biphone\s+ultra\b|\bfoldable\s+iphone\b|折叠(?:屏)?\s*iphone", "iPhone Ultra"),
-            (r"\bairpods\s+ultra\b", "AirPods Ultra"),
-            (r"\bmacbook\s+ultra\b", "MacBook Ultra"),
+        for pattern, generic_pattern, label in (
+            (
+                r"\biphone\s+ultra\b|\bfoldable\s+iphone\b|折叠(?:屏)?\s*iphone",
+                r"\biphone\b|苹果(?:手机|新机)",
+                "iPhone Ultra",
+            ),
+            (r"\bairpods\s+ultra\b", r"\bairpods\b|苹果耳机", "AirPods Ultra"),
+            (r"\bmacbook\s+ultra\b", r"\bmacbook\b|苹果笔记本", "MacBook Ultra"),
         ):
-            if re.search(pattern, scoped_text):
+            if not re.search(pattern, scoped_text):
+                continue
+            remaining_scope = re.sub(pattern, " ", scoped_text, flags=re.I)
+            if not re.search(generic_pattern, remaining_scope, re.I):
                 specific_label = label
                 break
-        if "ultra" in title_lower and subject in {"iphone", "airpods", "macbook"}:
-            specific_label = f"{labels[subject]} Ultra"
         variant_title = f"Apple {specific_label} roadmap update"
         variants.append(
             (variant_title, " ".join(evidence_facts[:6]), evidence_facts[:MAX_KEY_FACTS])
@@ -12734,6 +12739,7 @@ REGION_TERMS = {
     "latin-america": ["latin america", "拉美", "拉丁美洲"],
     "united-kingdom": ["united kingdom", "uk", "britain", "英国"],
     "russia": ["russia", "russian", "俄罗斯", "俄联邦"],
+    "vietnam": ["vietnam", "vietnamese", "越南"],
 }
 
 REGION_SENSITIVE_EVENT_KINDS = {
