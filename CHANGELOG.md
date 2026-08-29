@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.66.0 - 2026-08-29
+
+- Added structured cross-language identities for Apple disaster-relief commitments, named Apple TV rights acquisitions, model-and-date preorder schedules, and completed Apple-history artifact auctions.
+- Improved action-owner and content-form boundaries so third-party products that merely support Apple Home, first-person experience or upgrade articles, and multi-year rumor catalogs remain deferred, while current versioned OS changes and official Apple Store checkout or financing options remain eligible.
+- Improved event reconciliation for Apple TV rights reports and preorder timing whose supporting product context differs across sources, without reopening broad product, platform, or publication-date clusters.
+- Improved disaster-relief key-fact filtering and Nepal/Tibet region normalization, preserving affected areas and aid details while excluding unrelated leadership, succession, social-account, and communications commentary.
+- Updated fallback policy guidance and expanded regression coverage from 1,254 to 1,264 tests; concurrent live validation preserved identical discovery, detail selection, article counts, and all 47 source URLs in 71.59/76.88 seconds, while clean-agent validation produced 17 independent main events with zero merge warnings and no deferred promotion.
+
 ## 1.65.0 - 2026-08-28
 
 - Added cross-language first-party facility identities keyed by facility type, region, and concrete opening or expansion action, keeping education centers separate from manufacturing background, donations, staffing, and unrelated community programs.

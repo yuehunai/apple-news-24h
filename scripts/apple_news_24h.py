@@ -11109,6 +11109,41 @@ KEY_FACT_BOUNDARY_ACTION_GROUPS = {
     "personnel": ("ceo", "executive", "hire", "retire", "高管", "任命", "返聘", "退休"),
     "supply": ("supplier", "production", "shipment", "factory", "供应", "量产", "出货", "工厂"),
     "content": ("series", "season", "film", "trailer", "剧集", "电影", "预告", "续订"),
+    "relief": ("donation", "donate", "aid", "relief", "rebuilding", "捐款", "捐助", "援助", "救灾", "重建"),
+}
+
+KEY_FACT_EXCLUSIVE_PRIMARY_ACTIONS = {"relief"}
+
+KEY_FACT_EXCLUSIVE_CONTEXT_TERMS = {
+    "relief": (
+        "donation",
+        "donate",
+        "aid",
+        "relief",
+        "rebuilding",
+        "flood",
+        "mudslide",
+        "earthquake",
+        "wildfire",
+        "disaster",
+        "victim",
+        "killed",
+        "missing",
+        "捐款",
+        "捐助",
+        "援助",
+        "救灾",
+        "重建",
+        "洪灾",
+        "洪水",
+        "泥石流",
+        "地震",
+        "野火",
+        "灾害",
+        "受灾",
+        "遇难",
+        "失踪",
+    ),
 }
 
 
@@ -11163,10 +11198,33 @@ def filter_key_facts_for_primary_topic(title: str, summary: str, key_facts: list
     primary_scope = primary_topic_scope_for_fact_filter(title, summary)
     primary_facets = topic_boundary_facets_for_text(title, primary_scope)
     primary_facets |= os_release_facets_from_text(primary_scope)
-    if not primary_facets:
-        return key_facts
-    filtered: list[str] = []
+    title_actions = _key_fact_boundary_markers(title, KEY_FACT_BOUNDARY_ACTION_GROUPS)
+    action_filtered: list[str] = []
     for fact in key_facts:
+        for action in title_actions & KEY_FACT_EXCLUSIVE_PRIMARY_ACTIONS:
+            context_terms = KEY_FACT_EXCLUSIVE_CONTEXT_TERMS[action]
+            fact = " ".join(
+                sentence
+                for sentence in re.split(
+                    r"(?<=[。！？])\s*|(?<=[.!?])\s+",
+                    clean_sentence(fact),
+                )
+                if score_terms(sentence, context_terms) > 0
+            )
+        if not fact:
+            continue
+        fact_actions = _key_fact_boundary_markers(fact, KEY_FACT_BOUNDARY_ACTION_GROUPS)
+        if (
+            title_actions & KEY_FACT_EXCLUSIVE_PRIMARY_ACTIONS
+            and fact_actions
+            and not (title_actions & fact_actions)
+        ):
+            continue
+        action_filtered.append(fact)
+    if not primary_facets:
+        return action_filtered
+    filtered: list[str] = []
+    for fact in action_filtered:
         if not key_fact_requires_topic_boundary_analysis(title, primary_scope, fact):
             filtered.append(fact)
             continue
@@ -12740,6 +12798,8 @@ REGION_TERMS = {
     "united-kingdom": ["united kingdom", "uk", "britain", "英国"],
     "russia": ["russia", "russian", "俄罗斯", "俄联邦"],
     "vietnam": ["vietnam", "vietnamese", "越南"],
+    "nepal": ["nepal", "nepalese", "尼泊尔"],
+    "tibet": ["tibet", "tibetan", "西藏"],
 }
 
 REGION_SENSITIVE_EVENT_KINDS = {

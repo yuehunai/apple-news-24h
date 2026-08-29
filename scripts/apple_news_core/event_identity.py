@@ -1934,6 +1934,22 @@ def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
     if re.search(
+        r"\bmy\s+(?:frustration|experience|take|thoughts?)\b|"
+        r"\bi(?:'m| am)\s+(?:excited|eager|tempted)\s+to\s+(?:buy|try|upgrade)\b|"
+        r"\b(?:features?|changes?|upgrades?)\s+i(?:'m| am)\s+"
+        r"(?:excited|eager|tempted)\s+to\s+(?:buy|try|upgrade)\b|"
+        r"(?:我的|我对).{0,20}(?:不满|体验|看法|想法)|"
+        r"我(?:很|最)?(?:期待|想要|打算).{0,18}(?:购买|尝试|升级|换机)",
+        lower,
+    ):
+        return "analysis"
+    if re.search(
+        r"\brumou?rs?\s*:\s*[^:]{2,100}(?:,|/|\band\b)[^:]{2,100}$|"
+        r"(?:传闻|爆料)(?:汇总|盘点|一览)?\s*[：:].{2,100}(?:、|，|/|和).{2,100}$",
+        lower,
+    ):
+        return "roundup"
+    if re.search(
         r"\b(?:concept|fan[- ]made)\s+(?:video|film|teaser|render)\b|"
         r"\b(?:video|teaser|render)\b.{0,35}\b(?:imagines?|fan[- ]made)\b|"
         r"\bconcept\b.{0,35}\b(?:show(?:s|ing)?|imagin(?:e|es|ing)|present(?:s|ing)?)\b|"

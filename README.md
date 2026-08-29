@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.65.0 - 2026-08-28
+### 1.66.0 - 2026-08-29
 
-- Added cross-language first-party facility identities keyed by facility type, region, and concrete opening or expansion action, keeping education centers separate from manufacturing background, donations, staffing, and unrelated community programs.
-- Improved event boundaries for official event scheduling versus invitation-art interpretation, Mac mini roadmaps versus pending-order upgrades and technical disclosures, and multi-product projections whose facts do not exclusively belong to an `Ultra`, Pro, Air, or other subtype.
-- Improved title-and-lead action authority so editorial hands-on coverage of current Apple product launches and price changes can join direct first-party events, while third-party resale studies, trade-in estimates, shopping alternatives, and imperative recommendations remain deferred.
-- Fixed ordinary education and training language being misread as Apple Intelligence evidence, and kept explicit hardware detail disclosures in the correct product category without reopening broad legacy clusters.
-- Updated fallback policy guidance and expanded regression coverage from 1,247 to 1,254 tests; concurrent live validation preserved identical discovery, detail selection, article counts, and all 69 source-URL occurrences in 76.94/77.50 seconds, while clean-agent validation produced zero merge warnings and retained all 47 main-event source occurrences without manual regrouping or deferred promotion.
+- Added structured cross-language identities for Apple disaster-relief commitments, named Apple TV rights acquisitions, model-and-date preorder schedules, and completed Apple-history artifact auctions.
+- Improved action-owner and content-form boundaries so third-party products that merely support Apple Home, first-person experience or upgrade articles, and multi-year rumor catalogs remain deferred, while current versioned OS changes and official Apple Store checkout or financing options remain eligible.
+- Improved event reconciliation for Apple TV rights reports and preorder timing whose supporting product context differs across sources, without reopening broad product, platform, or publication-date clusters.
+- Improved disaster-relief key-fact filtering and Nepal/Tibet region normalization, preserving affected areas and aid details while excluding unrelated leadership, succession, social-account, and communications commentary.
+- Updated fallback policy guidance and expanded regression coverage from 1,254 to 1,264 tests; concurrent live validation preserved identical discovery, detail selection, article counts, and all 47 source URLs in 71.59/76.88 seconds, while clean-agent validation produced 17 independent main events with zero merge warnings and no deferred promotion.
 
 ## What It Does
 

@@ -9,6 +9,7 @@ without relying on publication-specific title keywords.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date, timedelta
 from itertools import combinations
 import re
 import unicodedata
@@ -2319,6 +2320,30 @@ def _apple_first_party_home_camera_roadmap(title: str, text: str) -> bool:
 def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     title = text.split(". ", 1)[0]
     lead = text.split(". ", 1)[1] if ". " in text else ""
+    proposal_pattern = (
+        r"\b(?:i|we)\s+(?:would|should|wish(?:ed)?\s+(?:apple\s+)?would)\s+"
+        r"(?:change|add|remove|redesign|fix|improve)\b|"
+        r"\bapple\s+(?:should|needs?\s+to|ought\s+to)\s+"
+        r"(?:change|add|remove|redesign|fix|improve)\b|"
+        r"(?:我|我们)(?:会|希望|认为苹果应当|认为苹果应该).{0,24}"
+        r"(?:改变|新增|移除|重设计|修复|改进)"
+    )
+    proposal_or_wishlist = bool(
+        re.search(proposal_pattern, title, re.I)
+    )
+    asserted_title_scope = re.sub(proposal_pattern, "", title, flags=re.I)
+    asserted_current_change = bool(
+        re.search(
+            r"\b(?:adds?|added|adding|brings?|brought|changes?|changed|changing|"
+            r"updates?|updated|updating|upgrades?|upgraded|upgrading|removes?|removed|"
+            r"redesigns?|redesigned|fixes?|fixed|expands?|expanded)\b|"
+            r"(?:新增|加入|带来|调整|更改|更新|升级|移除|重设计|修复|扩展)",
+            asserted_title_scope,
+            re.I,
+        )
+    )
+    if proposal_or_wishlist and not asserted_current_change:
+        return False
     security_bulletin = _contains(
         title,
         "security fix",
@@ -3476,6 +3501,54 @@ def _first_party_content_claim(
     if "apple-tv" not in identity.title_products:
         return None
     title_text = _canonical_title(title)
+    rights_scope = f"{title}. {lead[:700]}"
+    rights_action = bool(
+        re.search(
+            r"\b(?:apple tv\s+)?(?:acquires?|acquired|buys?|bought|(?:has|have) picked up|picks? up|"
+            r"secures?)\b.{0,90}\b(?:rights?|streaming|series|show|film|movie|comedy)\b|"
+            r"\b(?:worldwide|global)(?:\s+streaming)?\s+rights?\b|"
+            r"(?:apple tv|苹果 tv).{0,36}(?:买下|购得|收购|取得|拿下).{0,36}"
+            r"(?:版权|播映权|流媒体权利|剧集|影片|电影)",
+            rights_scope,
+            re.I,
+        )
+    )
+    if rights_action:
+        subject_candidates = [
+            candidate.strip()
+            for candidate in re.findall(r"[《‘“\"']([^》’”\"']{2,90})[》’”\"']", rights_scope)
+            if candidate.strip().lower() not in {"apple tv", "apple tv+"}
+        ]
+        for pattern in (
+            r"(?:worldwide|global)(?:\s+streaming)?\s+rights?\s+to\s+"
+            r"(?:the\s+)?(?:(?:bbc|british)\s+)?"
+            r"(?:(?:comedy|series|drama|film|movie|show)\s+)?"
+            r"([A-Z][A-Za-z0-9'’:&.-]*(?:\s+[A-Z][A-Za-z0-9'’:&.-]*){0,7})",
+            r"\b(?:comedy\s+series|comedy|series|drama|film|movie|show)\s*,?\s*"
+            r"([A-Z][A-Za-z0-9'’:&.-]*(?:\s+[A-Z][A-Za-z0-9'’:&.-]*){0,7})",
+        ):
+            match = re.search(pattern, rights_scope)
+            if match:
+                subject_candidates.append(match.group(1).strip())
+        if subject_candidates:
+            ignored_subjects = {
+                "apple tv",
+                "bbc",
+                "british",
+                "global streaming",
+                "worldwide rights",
+            }
+            raw_subject = next(
+                (
+                    candidate
+                    for candidate in subject_candidates
+                    if _normalized(candidate) not in ignored_subjects
+                ),
+                "",
+            )
+            subject = re.sub(r"[^a-z0-9]+", "-", raw_subject.lower()).strip("-")
+            if subject:
+                return subject, "rights-acquisition"
     match = re.match(
         r"^apple tv\s+['\"](?P<subject>[^'\"]{2,90})['\"]\s+"
         r"(?P<action>release|return|renewal|trailer release)\b",
@@ -4113,6 +4186,8 @@ def _unsupported_third_party_reason(
     relevance_tier: str,
     trusted_direct_action: bool,
 ) -> str:
+    if _official_apple_store_transaction_option_action(title, text):
+        return ""
     if "consumer-purchase-intent" in identity.title_components:
         return "consumer purchase-intent survey without a direct Apple action"
     if (
@@ -4138,10 +4213,16 @@ def _unsupported_third_party_reason(
         return "broad multi-vendor market report without a measured Apple result"
     claim_reason = _editorial_or_third_party_claim_reason(title, text, identity)
     if claim_reason:
+        versioned_editorial_feature = bool(
+            claim_reason == "analysis or explanation without a new title-led Apple action"
+            and _versioned_os_feature_report(text, identity)
+        )
+        if versioned_editorial_feature:
+            claim_reason = ""
         false_non_apple_owner_signal = claim_reason.startswith(
             "non-Apple primary subject"
         ) and trusted_direct_action
-        if not false_non_apple_owner_signal:
+        if claim_reason and not false_non_apple_owner_signal:
             return claim_reason
     if relevance_tier == "ecosystem" or trusted_direct_action:
         return ""
@@ -4283,6 +4364,63 @@ def _official_refurbished_store_action(text: str) -> bool:
             "扩充",
         )
     )
+
+
+def _official_apple_store_transaction_option_action(title: str, lead: str) -> bool:
+    """Recognize a material checkout change on Apple's own retail surface.
+
+    A bank, wallet, or credit provider can own the announcement while the
+    changed capability belongs to Apple Store checkout. This is different
+    from a third-party app merely becoming available on an Apple platform.
+    """
+    text = _normalized(f"{title}. {lead[:900]}")
+    official_store = bool(
+        re.search(
+            r"\b(?:apple\s+online\s+store|apple\s+store\s+online(?:\s+store)?)\b|"
+            r"苹果\s*apple\s*store\s*在线商店|苹果在线商店",
+            text,
+        )
+    )
+    if not official_store or _contains(text, "app store", "应用商店"):
+        return False
+    transaction_option = _contains(
+        text,
+        "payment option",
+        "payment method",
+        "pay with",
+        "checkout",
+        "financing",
+        "installment",
+        "interest-free",
+        "interest free",
+        "credit card",
+        "debit card",
+        "付款选项",
+        "支付方式",
+        "结账",
+        "分期",
+        "免息",
+        "信用卡",
+        "借记卡",
+    )
+    buyer_can_use = bool(
+        re.search(
+            r"\b(?:customers?|users?|shoppers?)\b.{0,90}\b(?:can|may|able\s+to)\b"
+            r".{0,90}\b(?:pay|choose|select|use|finance|buy|purchase)\b|"
+            r"(?:用户|消费者|顾客).{0,90}(?:可|可以|能够|选择).{0,90}"
+            r"(?:付款|支付|分期|免息|购买|选购)",
+            text,
+        )
+    )
+    apple_retail_purchase = bool(
+        re.search(
+            r"\b(?:buy|buying|purchase|purchasing|order|ordering)\b.{0,80}"
+            r"\b(?:iphone|ipad|mac|apple\s+watch|airpods)\b|"
+            r"(?:购买|选购|下单).{0,80}(?:iphone|ipad|mac|apple\s*watch|airpods|苹果产品)",
+            text,
+        )
+    )
+    return transaction_option and buyer_can_use and apple_retail_purchase
 
 
 def _canonical_first_party_action_keys(
@@ -4554,6 +4692,30 @@ def _third_party_accessory_action(title: str, text: str) -> bool:
     title_text = _normalized(title)
     if re.match(r"^(?:apple(?:'s)?|苹果(?:官方)?)(?:\b|\s)", title_text):
         return False
+    primary_clause, separator, compatibility_clause = title_text.partition(":")
+    if not separator:
+        primary_clause, separator, compatibility_clause = title_text.partition("：")
+    compatibility_only_launch = bool(
+        separator
+        and not re.search(
+            r"\b(?:apple|iphone|ipad|mac(?:book)?|airpods|homepod|apple watch)\b|苹果",
+            primary_clause,
+        )
+        and re.search(
+            r"\b(?:launch(?:es|ed)?|release(?:s|d)?|goes? on sale|now available)\b|"
+            r"(?:推出|发布|开售|上市|发售|现已开卖)",
+            primary_clause,
+        )
+        and re.search(
+            r"\b(?:supports?|compatible with|works with|integrates? with)\b.{0,30}"
+            r"\b(?:apple home|homekit|iphone|ipad|mac|apple watch|homepod)\b|"
+            r"(?:支持|兼容|适配|接入|可接入|原生支持).{0,24}"
+            r"(?:apple home|homekit|iphone|ipad|mac|apple watch|homepod|苹果 home|苹果家庭)",
+            compatibility_clause,
+        )
+    )
+    if compatibility_only_launch:
+        return True
     accessory_subject = bool(
         re.search(
             r"\b(?:adapter|case|charger|charging stand|controller|dock|keyboard|"
@@ -4649,6 +4811,163 @@ def _primary_claim_projection(
             title_text,
         )
     )
+
+    normalized_regions = {
+        region for region in regions if region and region != "multi-region"
+    }
+    disaster_relief_action = bool(
+        normalized_regions
+        and (
+            identity.scope == "apple-direct"
+            or _contains(text, "apple", "苹果")
+        )
+        and re.search(
+            r"\b(?:donat(?:e|es|ed|ion)|pledges?|aid)\b.{0,70}"
+            r"\b(?:relief|rebuilding|recovery|victims?)\b|"
+            r"\b(?:relief|rebuilding|recovery)\b.{0,70}"
+            r"\b(?:donat(?:e|es|ed|ion)|pledges?|aid)\b|"
+            r"(?:捐款|捐助|援助|提供援助).{0,50}(?:救援|救灾|重建|灾后恢复)|"
+            r"(?:救援|救灾|重建|灾后恢复).{0,50}(?:捐款|捐助|援助|提供援助)",
+            text,
+        )
+        and re.search(
+            r"\b(?:floods?|mudslides?|earthquakes?|wildfires?|typhoons?|hurricanes?)\b|"
+            r"(?:洪水|洪灾|山洪|泥石流|地震|山火|台风|飓风|自然灾害)",
+            text,
+        )
+    )
+    if disaster_relief_action:
+        for region in sorted(normalized_regions):
+            add_claim(
+                f"apple-disaster-relief-{region}",
+                "donation",
+                category="software_systems",
+                trusted=True,
+            )
+
+    preorder_scope = f"{title_text}. {_short_lead_scope(lead, sentences=1, limit=420)}"
+    preorder_action = bool(
+        re.search(r"\bpre[- ]?orders?\b|(?:预购|预售)", title_text)
+        and re.search(
+            r"\b(?:may|might|could|will|reportedly|expected to|set to)\b|"
+            r"(?:可能|或将|预计|据称|消息称|报道)",
+            preorder_scope,
+        )
+    )
+    preorder_date = ""
+    preorder_date_scope = f"{preorder_scope}. {_normalized(evidence)[:1400]}"
+    month_names = {
+        "january": 1,
+        "february": 2,
+        "march": 3,
+        "april": 4,
+        "may": 5,
+        "june": 6,
+        "july": 7,
+        "august": 8,
+        "september": 9,
+        "october": 10,
+        "november": 11,
+        "december": 12,
+    }
+    english_date = re.search(
+        r"\bpre[- ]?orders?\b[^。.!?]{0,100}\b("
+        + "|".join(month_names)
+        + r")\s+(\d{1,2})(?:st|nd|rd|th)?\b",
+        preorder_date_scope,
+    )
+    chinese_date = re.search(
+        r"(?:预购|预售)[^。！？]{0,70}(\d{1,2})\s*月\s*(\d{1,2})\s*日|"
+        r"(\d{1,2})\s*月\s*(\d{1,2})\s*日[^。！？]{0,70}(?:预购|预售)",
+        preorder_date_scope,
+    )
+    iso_date = re.search(
+        r"\bpre[- ]?orders?\b[^。.!?]{0,80}\b(?:20\d{2}-)?(\d{1,2})-(\d{1,2})\b",
+        preorder_date_scope,
+    )
+    if english_date:
+        preorder_date = f"{month_names[english_date.group(1)]:02d}-{int(english_date.group(2)):02d}"
+    elif chinese_date:
+        month = chinese_date.group(1) or chinese_date.group(3)
+        day = chinese_date.group(2) or chinese_date.group(4)
+        preorder_date = f"{int(month):02d}-{int(day):02d}"
+    elif iso_date:
+        preorder_date = f"{int(iso_date.group(1)):02d}-{int(iso_date.group(2)):02d}"
+    if not preorder_date:
+        avoided_date = re.search(
+            r"\b(?:sidestep|avoid|move away from)\b[^。.!?]{0,45}\b("
+            + "|".join(month_names)
+            + r")\s+(\d{1,2})(?:st|nd|rd|th)?\b[^。.!?]{0,65}"
+            r"\b(?:moving|pushing|delaying)\b[^。.!?]{0,35}"
+            r"\b(?:to saturday|to the next day|by a day)\b",
+            preorder_date_scope,
+        )
+        if avoided_date:
+            shifted = date(
+                2000,
+                month_names[avoided_date.group(1)],
+                int(avoided_date.group(2)),
+            ) + timedelta(days=1)
+            preorder_date = f"{shifted.month:02d}-{shifted.day:02d}"
+    if preorder_action and preorder_date:
+        component_subjects = [
+            f"{namespace}-{component.split(':', 1)[1]}"
+            for prefix, namespace in (
+                ("iphone-model:", "iphone"),
+                ("iphone-family:", "iphone"),
+                ("macbook-model:", "macbook"),
+            )
+            for component in sorted(identity.title_components)
+            if component.startswith(prefix)
+        ]
+        preorder_subject = component_subjects[0] if component_subjects else ""
+        if not preorder_subject and len(identity.title_products) == 1:
+            preorder_subject = next(iter(identity.title_products))
+        if preorder_subject:
+            add_claim(
+                preorder_subject,
+                "preorder-schedule",
+                qualifier=preorder_date,
+                category="hardware_products",
+                trusted=True,
+            )
+
+    historical_auction_scope = f"{title_text}. {_short_lead_scope(lead, sentences=1, limit=420)}"
+    historical_actor = (
+        "steve-jobs"
+        if re.search(r"\bsteve jobs\b|乔布斯", historical_auction_scope)
+        else ""
+    )
+    artifact_patterns = (
+        ("science-project", r"\bscience (?:fair )?project\b|科学(?:展览|实验|展会)?项目"),
+        ("business-card", r"\bbusiness card\b|名片"),
+        ("signed-letter", r"\bsigned (?:fan )?letter\b|签名.{0,8}信(?:件)?"),
+        ("apple-1", r"\bapple[- ]?1\b|apple-1|苹果一号"),
+        ("prototype", r"\bprototype\b|原型机"),
+    )
+    historical_artifact = next(
+        (
+            name
+            for name, pattern in artifact_patterns
+            if re.search(pattern, historical_auction_scope)
+        ),
+        "",
+    )
+    historical_auction_action = bool(
+        historical_actor
+        and historical_artifact
+        and re.search(
+            r"\b(?:auction(?:ed)?|sells?|sold)\b|(?:拍卖|成交|落槌)",
+            historical_auction_scope,
+        )
+    )
+    if historical_auction_action:
+        add_claim(
+            f"apple-history-{historical_actor}-{historical_artifact}",
+            "auction-sale",
+            category="hardware_products",
+            trusted=True,
+        )
 
     mac_mini_scope = f"{title_text} {_normalized(lead)[:520]}"
     if "mac-mini" in identity.title_products:
@@ -7528,6 +7847,13 @@ def build_reconciliation_profile(
         boundary_keys.add("apple-os-signing-closure:ios")
         separation_keys.add("action:os-signing-closure")
         category_hint = "software_systems"
+    official_apple_store_transaction_option_action = (
+        _official_apple_store_transaction_option_action(title, lead)
+    )
+    if official_apple_store_transaction_option_action:
+        boundary_keys.add("apple-store-retail:transaction-option")
+        separation_keys.add("action:official-retail-transaction-option")
+        category_hint = "hardware_products"
     first_party_service_capability_signal = ""
     if (
         "apple-fitness" in identity.title_products
@@ -8412,6 +8738,7 @@ def build_reconciliation_profile(
         or versioned_os_action
         or tracking_transparency_policy_action
         or bool(first_party_service_capability_signal)
+        or official_apple_store_transaction_option_action
         or versioned_os_compatibility_action
     )
     promotion_reason = ""
@@ -8421,6 +8748,8 @@ def build_reconciliation_profile(
         promotion_reason = "current Apple OS device and feature compatibility matrix"
     elif first_party_service_capability_signal:
         promotion_reason = "title-led first-party service capability action"
+    elif official_apple_store_transaction_option_action:
+        promotion_reason = "official Apple Store checkout or financing option change"
     elif measured_apple_market_action:
         promotion_reason = "measured Apple market result with report, region, period, and value"
     elif trusted_direct_action:
