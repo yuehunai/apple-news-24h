@@ -2317,9 +2317,54 @@ def _apple_first_party_home_camera_roadmap(title: str, text: str) -> bool:
     return title_has_apple_platform and apple_camera and roadmap_action
 
 
+def _third_party_app_availability_without_platform_change(
+    title: str,
+    lead: str,
+) -> bool:
+    """Return true when an OS name is context for a third-party app action.
+
+    A version number alone must not transfer action ownership from an app or
+    service vendor to Apple.  A first-party API, policy, or platform-capability
+    change remains eligible because the title explicitly assigns that action
+    to Apple or the platform.
+    """
+    third_party_subject = bool(
+        re.search(
+            r"\bthird[- ]party\b.{0,24}\b(?:apps?|services?)\b|"
+            r"(?:第三方).{0,18}(?:应用|服务|聊天机器人)",
+            title,
+            re.I,
+        )
+    )
+    availability_action = bool(
+        re.search(
+            r"\b(?:available|availability|arrives?|coming|supports?|integrates?|"
+            r"adds?\s+support|works?\s+with)\b|"
+            r"(?:接入|上线|可用|支持|适配|兼容)",
+            title,
+            re.I,
+        )
+    )
+    first_party_platform_change = bool(
+        re.search(
+            r"\b(?:apple|ios|ipados|macos|watchos|tvos|visionos|carplay)\b"
+            r".{0,42}\b(?:opens?|enables?|introduces?|adds?|changes?|updates?|"
+            r"expands?)\b.{0,42}\b(?:api|framework|policy|platform|third[- ]party\s+app\s+support)\b|"
+            r"(?:苹果|ios|ipados|macos|watchos|tvos|visionos|carplay)"
+            r".{0,32}(?:开放|启用|引入|新增|调整|更新|扩展)"
+            r".{0,32}(?:接口|框架|政策|平台能力|第三方应用支持)",
+            f"{title}. {lead}",
+            re.I,
+        )
+    )
+    return third_party_subject and availability_action and not first_party_platform_change
+
+
 def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     title = text.split(". ", 1)[0]
     lead = text.split(". ", 1)[1] if ". " in text else ""
+    if _third_party_app_availability_without_platform_change(title, lead):
+        return False
     proposal_pattern = (
         r"\b(?:i|we)\s+(?:would|should|wish(?:ed)?\s+(?:apple\s+)?would)\s+"
         r"(?:change|add|remove|redesign|fix|improve)\b|"
@@ -4761,6 +4806,191 @@ def _third_party_accessory_action(title: str, text: str) -> bool:
     return bool(accessory_subject and apple_target and vendor_action and not official_apple_action)
 
 
+def _leading_project_subject(title: str) -> str:
+    """Extract a bounded project name that owns a compatibility milestone."""
+    match = re.match(
+        r"^([a-z][a-z0-9.+-]*(?:\s+[a-z][a-z0-9.+-]*){0,3}?)"
+        r"(?=(?:\s+(?:near(?:s|ing)?|approach(?:es|ing)?|adds?|gets?|gains?|"
+        r"releases?|ships?|supports?|brings?))|(?:\s*(?:即将|将|已|接近|支持|适配)))",
+        _normalized(title),
+    )
+    if not match:
+        return ""
+    subject = match.group(1).strip()
+    ignored = {
+        "apple",
+        "apple silicon",
+        "iphone",
+        "ipad",
+        "linux",
+        "mac",
+        "macbook",
+        "report",
+    }
+    if subject in ignored:
+        return ""
+    return re.sub(r"[^a-z0-9]+", "-", subject).strip("-")
+
+
+def _platform_compatibility_milestone(
+    title: str,
+    lead: str,
+    evidence: str,
+    identity: EventIdentity,
+) -> tuple[str, str, str] | None:
+    """Project a project/platform/version milestone across language variants."""
+    scope = f"{_normalized(title)}. {_normalized(lead)[:700]} {_normalized(evidence)[:900]}"
+    project = _leading_project_subject(title)
+    generation_match = re.search(r"(?<![a-z0-9])m([1-9])(?:\s|$|[^a-z0-9])", _normalized(title))
+    compatibility = bool(
+        re.search(
+            r"\b(?:support|compatib(?:le|ility)|enablement|driver)\b|"
+            r"(?:支持|适配|兼容|驱动)",
+            scope,
+        )
+    )
+    apple_platform = bool(
+        re.search(r"\bapple\s+silicon\b|\bapple['’]?s\s+m[1-9]\b|苹果.{0,12}m[1-9](?:\s*系列)?\s*芯片", scope)
+        or any(
+            component.startswith("apple-silicon-generation:")
+            for component in identity.components
+        )
+    )
+    if not (project and generation_match and compatibility and apple_platform):
+        return None
+    if re.search(
+        r"\b(?:near(?:s|ing)?|almost|close\s+to|coming\s+soon)\b.{0,48}"
+        r"\b(?:release|ship|availability)\b|"
+        r"(?:即将|接近|几乎).{0,30}(?:发布|推出|可用)",
+        scope,
+    ):
+        milestone = "release-imminent"
+    elif re.search(
+        r"\b(?:released|shipped|now\s+available)\b|(?:正式发布|现已可用|已经发布)",
+        scope,
+    ):
+        milestone = "released"
+    else:
+        milestone = "support-development"
+    return project, f"apple-silicon-m{generation_match.group(1)}", milestone
+
+
+def _repair_cost_estimate(
+    title: str,
+    lead: str,
+    evidence: str,
+    identity: EventIdentity,
+) -> tuple[str, str, str] | None:
+    """Project a named product/component/amount repair-cost estimate."""
+    title_scope = _normalized(title)
+    evidence_scope = f"{title_scope}. {_normalized(lead)[:750]} {_normalized(evidence)[:1400]}"
+    repair_action = bool(
+        re.search(
+            r"\b(?:repair|replacement|replace|service\s+fee)\b|"
+            r"(?:维修|更换|换屏|维修费用|维修费)",
+            evidence_scope,
+        )
+    )
+    if not repair_action:
+        return None
+    products = identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+    if len(products) != 1:
+        return None
+    component = ""
+    if re.search(r"\b(?:inner\s+)?(?:display|screen)\b|(?:内屏|屏幕|显示屏)", evidence_scope):
+        component = "display"
+    elif re.search(r"\bbattery\b|电池", evidence_scope):
+        component = "battery"
+    if not component:
+        return None
+    repair_matches = list(
+        re.finditer(r"\b(?:repair|replacement|replace)\b|(?:维修|更换|换屏)", evidence_scope)
+    )
+    amount_matches = list(
+        re.finditer(
+            r"\$\s*([\d,]{2,})|([\d,]{2,})\s*(?:usd|u\.s\.\s*dollars?|美元)",
+            evidence_scope,
+        )
+    )
+    amount = ""
+    if repair_matches and amount_matches:
+        for candidate in amount_matches:
+            distance = min(
+                abs(candidate.start() - repair.start())
+                for repair in repair_matches
+            )
+            local_context = evidence_scope[
+                max(0, candidate.start() - 60) : candidate.end() + 60
+            ]
+            whole_product_price = bool(
+                re.search(
+                    r"\b(?:starting|launch|retail)\s+price\b|"
+                    r"(?:起售价|整机(?:定价|售价)|新机售价|手机售价)",
+                    local_context,
+                )
+            )
+            if distance <= 180 and not whole_product_price:
+                amount = (candidate.group(1) or candidate.group(2)).replace(",", "")
+                break
+    if not amount:
+        return None
+    product = next(iter(products))
+    return f"{product}-{component}", "repair-cost-estimate", f"usd-{amount}"
+
+
+def _unreleased_hardware_launch_roadmap(
+    title: str,
+    lead: str,
+    evidence: str,
+    identity: EventIdentity,
+) -> tuple[str, str] | None:
+    """Project a first-party product and future launch year without source wording."""
+    title_scope = _normalized(title)
+    scope = f"{title_scope}. {_normalized(lead)[:700]} {_normalized(evidence)[:900]}"
+    products = identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+    named_apple_glasses = bool(re.search(
+        r"(?:\bapple(?:'s)?\b|苹果).{0,28}(?:smart\s+glasses|ai\s+glasses|智能眼镜|ai\s*眼镜)",
+        title_scope,
+    ))
+    if named_apple_glasses:
+        products = {"apple-glasses"}
+    if len(products) != 1:
+        return None
+    future_year = re.search(r"\b(20(?:2[6-9]|3\d))\b", scope)
+    title_year = re.search(r"\b(20(?:2[6-9]|3\d))\b", title_scope)
+    first_party_subject = bool(
+        re.search(r"\bapple(?:'s)?\b|苹果", title_scope)
+        and identity.scope == "apple-direct"
+    )
+    launch_pattern = (
+        r"\b(?:launch(?:es|ed|ing)?|reveal(?:s|ed|ing)?|unveil(?:s|ed|ing)?|"
+        r"debut(?:s|ed|ing)?|ship(?:s|ped|ping)?|release(?:s|d|ing)?)\b|"
+        r"(?:发布|推出|亮相|揭晓|发售|上市|出货)"
+    )
+    launch_action = bool(re.search(launch_pattern, scope))
+    title_launch_action = bool(re.search(launch_pattern, title_scope))
+    future_modality = bool(
+        re.search(
+            r"\b(?:will|plans?\s+to|expected\s+to|set\s+to|next\s+year|"
+            r"as\s+soon\s+as|reportedly)\b|"
+            r"(?:计划|预计|有望|将于|即将|明年|据称|传闻)",
+            title_scope,
+        )
+    )
+    future_title_action = bool(
+        future_modality
+        or (title_year and title_launch_action)
+    )
+    if not (
+        first_party_subject
+        and future_year
+        and launch_action
+        and future_title_action
+    ):
+        return None
+    return next(iter(products)), future_year.group(1)
+
+
 def _primary_claim_projection(
     title: str,
     lead: str,
@@ -4811,6 +5041,49 @@ def _primary_claim_projection(
             title_text,
         )
     )
+
+    if identity.content_form == "news":
+        compatibility_milestone = _platform_compatibility_milestone(
+            title,
+            lead,
+            evidence,
+            identity,
+        )
+        if compatibility_milestone:
+            project, platform_generation, milestone = compatibility_milestone
+            add_claim(
+                f"third-party-platform-{project}-{platform_generation}",
+                milestone,
+                category="software_systems",
+                trusted=False,
+            )
+
+        repair_cost = _repair_cost_estimate(title, lead, evidence, identity)
+        if repair_cost:
+            repair_subject, repair_predicate, repair_amount = repair_cost
+            add_claim(
+                repair_subject,
+                repair_predicate,
+                qualifier=repair_amount,
+                category="hardware_products",
+                trusted=True,
+            )
+
+        hardware_roadmap = _unreleased_hardware_launch_roadmap(
+            title,
+            lead,
+            evidence,
+            identity,
+        )
+        if hardware_roadmap:
+            roadmap_product, roadmap_year = hardware_roadmap
+            add_claim(
+                roadmap_product,
+                "launch-roadmap",
+                qualifier=roadmap_year,
+                category="hardware_products",
+                trusted=True,
+            )
 
     normalized_regions = {
         region for region in regions if region and region != "multi-region"
@@ -7436,6 +7709,10 @@ def build_reconciliation_profile(
         if editorial_product in _HARDWARE_FIRST_PARTY_PRODUCTS or editorial_product == "polishing-cloth":
             category_hint = "hardware_products"
     content_form = _reconciliation_content_form(title_text, identity)
+    third_party_app_availability = _third_party_app_availability_without_platform_change(
+        title_text,
+        lead,
+    )
     if (
         content_form == "news"
         and len(primary_evidence_products & _HARDWARE_FIRST_PARTY_PRODUCTS) >= 3
@@ -7497,12 +7774,15 @@ def build_reconciliation_profile(
         )
         event_keys.add(changed_object_key)
     structured_action_owner = bool(
-        identity.action_owner == "apple"
-        or (
-            identity.scope == "apple-direct"
-            and identity.content_form == "news"
-            and structured_title_subjects & _SPECIFIC_FIRST_PARTY_PRODUCTS
-            and structured_title_actions
+        not third_party_app_availability
+        and (
+            identity.action_owner == "apple"
+            or (
+                identity.scope == "apple-direct"
+                and identity.content_form == "news"
+                and structured_title_subjects & _SPECIFIC_FIRST_PARTY_PRODUCTS
+                and structured_title_actions
+            )
         )
     )
     if (
@@ -7706,6 +7986,7 @@ def build_reconciliation_profile(
     )
     title_owned_direct_action = bool(
         identity.action_owner == "apple"
+        and not third_party_app_availability
         and content_form == "news"
         and identity.title_actions
         and not projected_hardware_roadmap

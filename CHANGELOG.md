@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.67.0 - 2026-08-30
+
+- Added typed cross-language identities for named Apple Silicon compatibility projects, Apple hardware component repair-cost estimates, and unreleased first-party hardware launch roadmaps.
+- Improved action ownership so a versioned Apple OS or CarPlay name cannot promote a third-party app availability story unless Apple or the platform introduces a concrete API, policy, interoperability, or first-party capability change.
+- Improved content-form boundaries so event-preview roundups, first-person product-usage stories, and single-user battery or support-eligibility experiments remain deferred without suppressing direct Apple actions.
+- Tightened structured evidence for repair amounts and future roadmaps, excluding whole-device prices, competitor comparisons, historical dates, and multi-product background from event identity.
+- Updated fallback policy guidance and expanded regression coverage from 1,264 to 1,271 tests; concurrent live validation lost no baseline URL, added one discovered source URL, and ran in 65.57/65.95 seconds, while clean-agent validation produced 8 main events, 13 correctly deferred events, and zero merge warnings.
+
 ## 1.66.0 - 2026-08-29
 
 - Added structured cross-language identities for Apple disaster-relief commitments, named Apple TV rights acquisitions, model-and-date preorder schedules, and completed Apple-history artifact auctions.

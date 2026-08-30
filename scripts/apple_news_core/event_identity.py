@@ -1934,6 +1934,49 @@ def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
     if re.search(
+        r"^(?:as\s+(?:a|an)\b|i(?:'m| am|'ve| have)\b).{0,90}"
+        r"\b(?:my\s+favorite|favorite\s+way|how\s+i\s+use|way\s+to\s+use)\b|"
+        r"\bmy\s+favorite\s+way\s+to\s+use\b|"
+        r"^(?:作为|身为).{0,28}(?:用户|使用者).{0,40}(?:我最喜欢|我的用法|使用方式)",
+        lower,
+    ):
+        return "analysis"
+    single_user_support_experiment = bool(
+        re.search(
+            r"\b(?:a|one)\s+(?:user|owner|customer)\b|"
+            r"\b(?:iphone|ipad|macbook|apple\s+watch)\s+(?:user|owner)\b|"
+            r"(?:m[1-9](?:\s+(?:pro|max|ultra))?).{0,8}(?:用户|机主)|"
+            r"(?:一位|一名|这个|该)?(?:用户|机主|消费者)",
+            f"{lower} {lead_lower}",
+        )
+        and re.search(
+            r"\b(?:battery\s+(?:health|cycle)|cycles?\s+(?:the\s+)?battery|"
+            r"discharg(?:e|es|ed|ing))\b|(?:电池健康|电池循环|充放电|循环充电)",
+            f"{lower} {lead_lower}",
+        )
+        and re.search(
+            r"\b(?:qualif(?:y|ies|ied)|trigger|eligib(?:le|ility)|free\s+replacement|"
+            r"applecare\+?)\b|(?:符合|触发|达到).{0,18}(?:免费)?(?:更换|维修)(?:条件|资格)|"
+            r"(?:免费换|免费更换|applecare\+?)",
+            f"{lower} {lead_lower}",
+        )
+        and not re.search(
+            r"(?:apple|苹果).{0,28}(?:宣布|发布|推出|调整|变更|扩大|"
+            r"announces?|releases?|launches?|changes?|expands?)",
+            lower,
+        )
+    )
+    if single_user_support_experiment:
+        return "user_anecdote"
+    if re.search(
+        r"\b(?:apple\s+)?(?:event|keynote)\b.{0,42}"
+        r"\b(?:highlights?|what\s+to\s+expect|everything\s+to\s+know|all\s+the\s+details)\b|"
+        r"(?:苹果)?(?:秋季|春季|新品)?发布会.{0,20}(?:看点|前瞻|展望)"
+        r"(?:.{0,10}(?:都在|一览|汇总|盘点|合集))?",
+        lower,
+    ):
+        return "roundup"
+    if re.search(
         r"\bmy\s+(?:frustration|experience|take|thoughts?)\b|"
         r"\bi(?:'m| am)\s+(?:excited|eager|tempted)\s+to\s+(?:buy|try|upgrade)\b|"
         r"\b(?:features?|changes?|upgrades?)\s+i(?:'m| am)\s+"
