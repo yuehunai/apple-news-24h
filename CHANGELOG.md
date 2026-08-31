@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.68.0 - 2026-08-31
+
+- Made seed and profile boundary checks symmetric so product roadmaps, executive succession, partner facilities, and product features cannot merge differently based on article order or shared Apple context.
+- Added typed cross-language identities for accessory compatibility evaluations, component adoption, multi-product roadmap projections, CEO transitions, partner innovation facilities, and revived independent-repair cases.
+- Improved action-owner resolution with headline and opening-lead evidence, keeping third-party Apple-platform app updates deferred unless Apple changes an API, policy, interoperability behavior, security surface, or first-party capability.
+- Updated fallback policy guidance for facility, legal-stage, multi-product, and third-party-platform event boundaries.
+- Added eight focused regression tests, expanding the suite from 1,271 to 1,279 tests; concurrent live validation preserved all 42 reviewed URLs, reduced runtime from 71.96 to 66.89 seconds, and clean-agent validation produced 16 main events, 9 deferred events, and zero merge warnings or manual boundary corrections.
+
 ## 1.67.0 - 2026-08-30
 
 - Added typed cross-language identities for named Apple Silicon compatibility projects, Apple hardware component repair-cost estimates, and unreleased first-party hardware launch roadmaps.

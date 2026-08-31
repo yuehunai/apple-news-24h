@@ -12,13 +12,13 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.67.0 - 2026-08-30
+### 1.68.0 - 2026-08-31
 
-- Added typed cross-language identities for named Apple Silicon compatibility projects, Apple hardware component repair-cost estimates, and unreleased first-party hardware launch roadmaps.
-- Improved action ownership so a versioned Apple OS or CarPlay name cannot promote a third-party app availability story unless Apple or the platform introduces a concrete API, policy, interoperability, or first-party capability change.
-- Improved content-form boundaries so event-preview roundups, first-person product-usage stories, and single-user battery or support-eligibility experiments remain deferred without suppressing direct Apple actions.
-- Tightened structured evidence for repair amounts and future roadmaps, excluding whole-device prices, competitor comparisons, historical dates, and multi-product background from event identity.
-- Updated fallback policy guidance and expanded regression coverage from 1,264 to 1,271 tests; concurrent live validation lost no baseline URL, added one discovered source URL, and ran in 65.57/65.95 seconds, while clean-agent validation produced 8 main events, 13 correctly deferred events, and zero merge warnings.
+- Made seed and profile boundary checks symmetric so product roadmaps, executive succession, partner facilities, and product features cannot merge differently based on article order or shared Apple context.
+- Added typed cross-language identities for accessory compatibility evaluations, component adoption, multi-product roadmap projections, CEO transitions, partner innovation facilities, and revived independent-repair cases.
+- Improved action-owner resolution with headline and opening-lead evidence, keeping third-party Apple-platform app updates deferred unless Apple changes an API, policy, interoperability behavior, security surface, or first-party capability.
+- Updated fallback policy guidance for facility, legal-stage, multi-product, and third-party-platform event boundaries.
+- Added eight focused regression tests, expanding the suite from 1,271 to 1,279 tests; concurrent live validation preserved all 42 reviewed URLs, reduced runtime from 71.96 to 66.89 seconds, and clean-agent validation produced 16 main events, 9 deferred events, and zero merge warnings or manual boundary corrections.
 
 ## What It Does
 
@@ -38,7 +38,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
 - `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
 - `scripts/apple_news_core/event_reconciler.py` treats legacy seed clusters as recall proposals, applies authoritative structured action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py` and the dated reconciliation suites through `tests/test_20260830_structured_identity_and_relevance.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, launch campaigns, first-party facilities, event interpretation, content-form boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `tests/test_event_identity_architecture.py` and the dated reconciliation suites through `tests/test_20260831_structured_event_repair.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, launch campaigns, first-party facilities, event interpretation, content-form boundaries, and relevance tiers; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 

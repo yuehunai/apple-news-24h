@@ -46,6 +46,7 @@ from apple_news_core.event_identity import (  # noqa: E402
     is_direct_first_party_feature_change,
     is_non_apple_comparison_title,
     is_non_apple_title_context,
+    is_third_party_app_action_on_apple_platform,
 )
 from apple_news_core.event_matcher import identity_pair_decision  # noqa: E402
 from apple_news_core.article_projector import (  # noqa: E402
@@ -11764,9 +11765,38 @@ def multi_product_hardware_roadmap_variants(
     title_subjects = multi_product_hardware_subjects(title)
     values: list[str] = []
     seen: set[str] = set()
+    title_owned_clause_subjects: set[str] = set()
+    if len(title_subjects) >= 2:
+        for title_clause in re.split(r"[,，;；]", title):
+            cleaned_clause = clean_sentence(title_clause).strip(" ,，;；:-")
+            clause_subjects = multi_product_hardware_subjects(cleaned_clause)
+            if len(clause_subjects) != 1:
+                continue
+            if not re.search(
+                r"\b(?:will|expected|expects?|launch(?:es|ed|ing)?|release(?:s|d|ing)?|"
+                r"ship(?:s|ped|ping)?|arrive(?:s|d|ing)?|coming)\b|"
+                r"(?:预计|预期|将于|将在|发布|推出|上市|亮相|登场|面世)",
+                cleaned_clause,
+                re.I,
+            ):
+                continue
+            add_unique_text(values, seen, cleaned_clause, min_chars=12)
+            title_owned_clause_subjects.update(clause_subjects)
     for raw_value in [summary, *key_facts]:
-        for value in re.split(r"(?<=[.!?。！？])\s*", raw_value):
-            add_unique_text(values, seen, clean_sentence(value), min_chars=12)
+        for sentence in re.split(r"(?<=[.!?。！？])\s*", raw_value):
+            # A report often states one owned product action before
+            # "alongside" and then lists the rest of an event lineup. Split
+            # that coordination boundary so the owned action can be projected;
+            # the multi-product lineup clause remains background because it
+            # still contains several subjects and no independent predicate.
+            for value in re.split(
+                r"\s+\b(?:alongside|together with)\b\s+|"
+                r"(?:并)?与(?=[^。！？]{0,80}(?:一同|共同|同步))",
+                sentence,
+                maxsplit=1,
+                flags=re.I,
+            ):
+                add_unique_text(values, seen, clean_sentence(value), min_chars=12)
     grouped: dict[str, list[str]] = {}
     for value in values:
         subjects = multi_product_hardware_subjects(value)
@@ -11835,6 +11865,7 @@ def multi_product_hardware_roadmap_variants(
                 re.I,
             )
         )
+        or len(title_owned_clause_subjects) >= 2
         or structured_multi_product_report
     )
     if not explicit_multi_product:
@@ -11936,8 +11967,10 @@ def multi_product_hardware_roadmap_variants(
                 r"\b(?:code|identifier|codename|reference|model number|project id|"
                 r"prototype|testing|in development|canceled|cancelled|delayed|"
                 r"production|resource list|will launch|will release|will ship|"
+                r"will be launched|will be released|will be shipped|"
                 r"starts? production|enters? production|scheduled to launch|"
-                r"expected to launch|reportedly|according to)\b|"
+                r"expected to launch|expects?\b.{0,64}\bto\s+(?:launch|release|ship)|"
+                r"reportedly|according to)\b|"
                 r"\b[a-z][a-z0-9]{0,20}\d{2,}(?:,\d+)?\b|"
                 r"(?:代码|标识符|产品标识|代号|型号|项目编号|原型机|测试中|开发中|"
                 r"取消|延期|量产|资源清单|将推出|将发布|将出货|计划发布|预计发布|"
@@ -27539,6 +27572,8 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    if is_third_party_app_action_on_apple_platform(title, lead_only):
+        return "weak", "third-party app update without an Apple platform change"
     if is_routine_third_party_apple_compatibility_product_story(title, text):
         return "weak", "routine third-party product compatibility without an Apple platform change"
     title_lead_scope = f"{title} {lead_only[:360]}"

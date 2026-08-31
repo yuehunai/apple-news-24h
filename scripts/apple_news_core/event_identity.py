@@ -103,7 +103,23 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("watchos", ("watchos",)),
     ("tvos", ("tvos",)),
     ("visionos", ("visionos",)),
-    ("foldable-iphone", ("foldable iphone", "folding iphone", "iphone fold", "iphone ultra", "折叠屏 iphone", "折叠 iphone", "折叠屏iphone", "折叠iphone")),
+    (
+        "foldable-iphone",
+        (
+            "foldable iphone",
+            "folding iphone",
+            "iphone fold",
+            "iphone ultra",
+            "折叠屏 iphone",
+            "折叠 iphone",
+            "折叠版 iphone",
+            "折叠屏版 iphone",
+            "折叠屏iphone",
+            "折叠iphone",
+            "折叠版iphone",
+            "折叠屏版iphone",
+        ),
+    ),
     ("iphone", ("iphone",)),
     ("ipad-mini", ("ipad mini", "ipadmini")),
     ("ipad-air", ("ipad air", "ipadair")),
@@ -1899,6 +1915,17 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
             ),
         ),
         ("patent", ("patent", "专利")),
+        (
+            "independent-repair",
+            (
+                "independent repair",
+                "third-party repair",
+                "right to repair",
+                "独立维修",
+                "第三方维修",
+                "维修权",
+            ),
+        ),
     )
     for name, terms in aliases:
         if _contains_any(text, terms):
@@ -3096,6 +3123,78 @@ def _title_scope(title: str, lead: str) -> str:
 def is_non_apple_title_context(title: str, lead: str) -> bool:
     """Return true only when Apple is comparison, compatibility, or list context."""
     return _title_scope(title, lead) == "third-party-context"
+
+
+def is_third_party_app_action_on_apple_platform(title: str, lead: str) -> bool:
+    """Return true when an Apple platform is only the target of an app update.
+
+    Editorial headlines sometimes make a platform the grammatical subject even
+    though the lead assigns the current action to an independently maintained
+    app.  The ownership test therefore requires both a generic app object in
+    the title and a vendor/app-owned availability or release statement in the
+    lead.  A real Apple API, policy, framework, or platform-capability change
+    remains first party.
+    """
+    title_text = _normalized(title)
+    lead_text = _normalized(lead)[:900]
+    apple_platform = bool(
+        re.search(
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos|carplay|apple watch|"
+            r"apple tv|vision pro)\b|(?:苹果|apple).{0,12}(?:平台|系统)",
+            title_text,
+            re.I,
+        )
+    )
+    generic_app_object = bool(
+        re.search(
+            r"\b(?:an?|another|major|new|third[- ]party)\s+"
+            r"(?:[a-z0-9-]+\s+){0,3}(?:app|client|service|utility)\b|"
+            r"(?:一款|新的|第三方).{0,16}(?:应用|客户端|服务|工具)",
+            title_text,
+            re.I,
+        )
+    )
+    app_owned_action = bool(
+        re.search(
+            r"\b(?:app|client|service|utility)\b.{0,80}"
+            r"\b(?:now\s+works?|adds?|added|released?|launch(?:ed|es)?|"
+            r"arriv(?:ed|es)|supports?|available)\b.{0,80}"
+            r"\b(?:ios|ipados|macos|watchos|tvos|visionos|carplay|apple watch|"
+            r"apple tv|vision pro)\b|"
+            r"\b(?:update|version)\b.{0,80}\b(?:adds?|added|brings?|supports?)\b"
+            r".{0,80}\b(?:ios|ipados|macos|watchos|tvos|visionos|carplay)\b|"
+            r"(?:应用|客户端|服务|工具).{0,50}(?:更新|版本|现已|开始)"
+            r".{0,50}(?:支持|适配|登陆|登录|接入).{0,24}"
+            r"(?:ios|ipados|macos|watchos|tvos|visionos|carplay|苹果平台)",
+            lead_text,
+            re.I,
+        )
+        or re.search(
+            r"\b(?:released?|launch(?:ed|es)?|adds?|added)\b.{0,80}"
+            r"\b(?:dedicated\s+)?(?:ios|ipados|macos|watchos|tvos|visionos|"
+            r"carplay|apple watch|apple tv|vision pro)\s+app\b",
+            lead_text,
+            re.I,
+        )
+    )
+    first_party_platform_change = bool(
+        re.search(
+            r"\bapple\b.{0,60}\b(?:announc(?:ed|es)|introduc(?:ed|es)|"
+            r"open(?:ed|s)|enabl(?:ed|es)|chang(?:ed|es)|expand(?:ed|s))\b"
+            r".{0,80}\b(?:api|framework|policy|platform|capability|"
+            r"third[- ]party\s+app\s+support)\b|"
+            r"(?:苹果|平台).{0,40}(?:宣布|开放|启用|引入|调整|扩展)"
+            r".{0,50}(?:接口|框架|政策|平台能力|第三方应用支持)",
+            f"{title_text}. {lead_text}",
+            re.I,
+        )
+    )
+    return (
+        apple_platform
+        and generic_app_object
+        and app_owned_action
+        and not first_party_platform_change
+    )
 
 
 def _primary_action_owner(

@@ -17,9 +17,11 @@ from typing import Callable, Iterable, Sequence, TypeVar
 
 from .event_identity import (
     EVIDENCE_BACKED_COMPONENTS,
+    COMPONENT_PATTERNS,
     EventIdentity,
     LEAD_IDENTITY_COMPONENTS,
     PRODUCT_PATTERNS,
+    is_third_party_app_action_on_apple_platform,
     primary_assertion_components,
 )
 from .event_matcher import FIRST_PARTY_SERVICE_PRODUCTS, identity_pair_decision
@@ -953,6 +955,19 @@ def _first_party_facility_subject(text: str) -> str:
         return "developer-center"
     if _contains(
         text,
+        "innovation center",
+        "innovation centre",
+        "research center",
+        "research centre",
+        "engineering center",
+        "engineering centre",
+        "创新中心",
+        "研发中心",
+        "工程中心",
+    ):
+        return "innovation-center"
+    if _contains(
+        text,
         "apple advanced manufacturing center",
         "苹果先进制造中心",
     ):
@@ -1016,6 +1031,131 @@ def _first_party_facility_location(title: str) -> str:
         if location:
             return location
     return ""
+
+
+def _hardware_accessory_evaluation_claim(
+    title: str,
+    lead: str,
+    identity: EventIdentity,
+) -> tuple[str, str] | None:
+    """Return a product/accessory pair for one compatibility evaluation.
+
+    Testing, considering, and deciding not to ship an accessory are successive
+    descriptions of the same prototype decision, not separate product events.
+    The relation is derived from the title and short lead so unrelated product
+    background cannot create the claim.
+    """
+    if identity.scope != "apple-direct" or identity.content_form != "news":
+        return None
+    products = identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+    if len(products) != 1:
+        return None
+    text = f"{_normalized(title)}. {_normalized(lead)[:700]}"
+    accessory = ""
+    for name, pattern in (
+        ("stylus", r"\b(?:apple\s+pencil|stylus|digital\s+pen)\b|(?:触控笔|手写笔)"),
+        ("keyboard", r"\b(?:magic\s+keyboard|keyboard)\b|(?:妙控键盘|键盘)"),
+        ("controller", r"\b(?:game\s+controller|controller)\b|(?:游戏手柄|控制器)"),
+    ):
+        if re.search(pattern, text, re.I):
+            accessory = name
+            break
+    if not accessory:
+        return None
+    evaluation = bool(
+        re.search(
+            r"\b(?:test(?:ed|ing)?|prototype|consider(?:ed|ing)?|evaluate(?:d|s|ing)?|"
+            r"support(?:ed|s|ing)?|compatib(?:le|ility)|not\s+expected\s+to\s+(?:ship|launch)|"
+            r"won['’]t\s+(?:ship|launch|support)|will\s+not\s+(?:ship|launch|support))\b|"
+            r"(?:测试|原型|考虑|评估|支持|兼容|不会|不太可能|无缘).{0,24}"
+            r"(?:量产|推出|发布|上市|支持|兼容)?",
+            text,
+            re.I,
+        )
+    )
+    if not evaluation:
+        return None
+    return next(iter(products)), accessory
+
+
+def _hardware_component_adoption_claims(
+    title: str,
+    lead: str,
+    identity: EventIdentity,
+) -> set[tuple[str, str]]:
+    """Return title-owned product/component adoption relations.
+
+    This normalizes wording such as "first with", "will use", and "expected
+    with" while keeping supplier orders, cost analyses, and generic component
+    background outside the relation.
+    """
+    if identity.scope != "apple-direct" or identity.content_form != "news":
+        return set()
+    products = identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+    if len(products) != 1:
+        return set()
+    if identity.title_actions & {"supply-production", "price-change", "legal"}:
+        return set()
+    text = f"{_normalized(title)}. {_normalized(lead)[:700]}"
+    title_components = {
+        component
+        for component in identity.title_components
+        if ":" not in component
+    }
+    adoption = bool(
+        re.search(
+            r"\b(?:first|debut|adopt(?:s|ed|ing)?|use(?:s|d|ing)?|feature(?:s|d|ing)?|"
+            r"equip(?:ped|s)?|come(?:s)?\s+with|launch(?:es|ed|ing)?\s+with|"
+            r"expected\b.{0,45}\b(?:with|to\s+use|to\s+feature))\b|"
+            r"(?:首次|首度|改用|采用|搭载|配备|换用|将用|预计).{0,36}"
+            r"(?:推出|发布|搭载|采用|配备|屏幕|面板|芯片|传感器|摄像头|电池|调制解调器)?",
+            text,
+            re.I,
+        )
+        or (
+            title_components
+            and identity.title_actions
+            & {
+                "delay-roadmap",
+                "product-launch",
+                "product-refresh",
+                "retail-availability",
+            }
+        )
+    )
+    if not adoption:
+        return set()
+    physical_markers = (
+        "display",
+        "panel",
+        "camera",
+        "sensor",
+        "battery",
+        "modem",
+        "processor",
+        "chip",
+        "memory",
+        "case-material",
+        "glass",
+        "thermal",
+        "speaker",
+        "keyboard",
+    )
+    components = {
+        component
+        for component in title_components
+        if any(marker in component for marker in physical_markers)
+    }
+    if re.fullmatch(r"apple\s+.+\s+roadmap\s+update", _normalized(title)):
+        components |= {
+            component
+            for component, terms in COMPONENT_PATTERNS
+            if ":" not in component
+            and any(marker in component for marker in physical_markers)
+            and _contains(text, *terms)
+        }
+    product = next(iter(products))
+    return {(product, component) for component in components}
 
 
 def _app_store_impersonation_subject(title: str, lead: str) -> str:
@@ -3050,6 +3190,32 @@ def _reconciliation_content_form(title: str, identity: EventIdentity) -> str:
 
 
 def _legal_action_stage_text(text: str) -> str:
+    if (
+        _contains(
+            text,
+            "court revives",
+            "court revived",
+            "appeals court revives",
+            "appeals court restored",
+            "case can proceed",
+            "case may proceed",
+            "lawsuit can proceed",
+            "lawsuit may proceed",
+            "恢复审理",
+            "恢复诉讼",
+            "案件继续推进",
+            "诉讼继续推进",
+            "推翻驳回裁定",
+        )
+        or re.search(
+            r"\b(?:court|appeals court|panel)\b.{0,45}"
+            r"\b(?:reviv(?:es|ed)|restore(?:s|d)|reinstate(?:s|d)|resurrect(?:s|ed))\b"
+            r".{0,45}\b(?:case|lawsuit|claim)\b",
+            text,
+            re.I,
+        )
+    ):
+        return "case-revival"
     if (
         _contains(
             text,
@@ -5577,20 +5743,33 @@ def _primary_claim_projection(
         )
 
     leadership_transition = bool(
-        _contains(title_text, "tim cook", "库克")
-        and _contains(
-            title_text,
-            "step down",
-            "steps down",
-            "farewell",
-            "going away",
-            "replaced steve jobs",
-            "卸任",
-            "告别",
-            "欢送",
-            "接任",
-            "继任",
-            "take over",
+        (
+            _contains(title_text, "tim cook", "库克")
+            and _contains(
+                title_text,
+                "step down",
+                "steps down",
+                "farewell",
+                "going away",
+                "replaced steve jobs",
+                "卸任",
+                "告别",
+                "欢送",
+                "接任",
+                "继任",
+                "take over",
+            )
+        )
+        or (
+            identity.scope == "apple-direct"
+            and re.search(r"ceo|首席执行官", title_text, re.I)
+            and re.search(
+                r"\b(?:assume(?:s|d|ing)?|become(?:s|ing)?|start(?:s|ing)?\s+as|"
+                r"succeed(?:s|ed|ing)?|take(?:s|n|ing)?\s+over)\b|"
+                r"(?:上任|就任|接任|继任|接棒|正式履职)",
+                title_text,
+                re.I,
+            )
         )
     )
     if leadership_transition:
@@ -7709,9 +7888,9 @@ def build_reconciliation_profile(
         if editorial_product in _HARDWARE_FIRST_PARTY_PRODUCTS or editorial_product == "polishing-cloth":
             category_hint = "hardware_products"
     content_form = _reconciliation_content_form(title_text, identity)
-    third_party_app_availability = _third_party_app_availability_without_platform_change(
-        title_text,
-        lead,
+    third_party_app_availability = (
+        _third_party_app_availability_without_platform_change(title_text, lead)
+        or is_third_party_app_action_on_apple_platform(title_text, lead)
     )
     if (
         content_form == "news"
@@ -7754,6 +7933,38 @@ def build_reconciliation_profile(
         canonical_title_key = f"structured-canonical-title:{canonical_title}"
         event_keys.add(canonical_title_key)
         boundary_keys.add(canonical_title_key)
+
+    accessory_evaluation = _hardware_accessory_evaluation_claim(
+        title_text,
+        lead,
+        identity,
+    )
+    if accessory_evaluation:
+        product, accessory = accessory_evaluation
+        accessory_key = (
+            f"canonical-apple-action:{product}:{accessory}-compatibility-evaluation"
+        )
+        event_keys.add(accessory_key)
+        boundary_keys.add(f"structured-subject:{product}:{accessory}")
+        separation_keys |= {
+            f"primary-claim-subject:{product}:{accessory}",
+            "primary-claim-predicate:accessory-compatibility-evaluation",
+        }
+        category_hint = "hardware_products"
+
+    for product, component in _hardware_component_adoption_claims(
+        title_text,
+        lead,
+        identity,
+    ):
+        component_key = f"canonical-apple-action:{product}:{component}-adoption"
+        event_keys.add(component_key)
+        boundary_keys.add(f"structured-subject:{product}:{component}")
+        separation_keys |= {
+            f"primary-claim-subject:{product}:{component}",
+            "primary-claim-predicate:hardware-component-adoption",
+        }
+        category_hint = "hardware_products"
 
     structured_title_actions = _structured_title_action_classes(identity)
     primary_changed_object, primary_changed_measure = (
@@ -9045,6 +9256,10 @@ def build_reconciliation_profile(
         relevance_tier,
         structural_direct_action,
     )
+    if third_party_app_availability and not defer_reason:
+        defer_reason = (
+            "third-party app availability without an Apple platform change"
+        )
     if event_format_plan:
         # A concrete, currently reported operating format is itself the event
         # action; an analytical headline angle must not demote that evidence.
@@ -9135,6 +9350,11 @@ def build_reconciliation_profile(
         for key in event_keys
     ):
         category_hint = "software_systems"
+    elif any(
+        key.startswith("structured-assertion:apple-facility:")
+        for key in event_keys
+    ):
+        category_hint = "hardware_products"
     elif (
         identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
         and any(
@@ -9703,11 +9923,12 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
     ):
         return True
     if left_primary_subjects != right_primary_subjects and not (left.event_keys & right.event_keys):
-        primary = left if left_primary_subjects else right
-        companion = right if left_primary_subjects else left
+        categories = {
+            left.category_hint or left.observed_category,
+            right.category_hint or right.observed_category,
+        }
         if (
-            (primary.category_hint or primary.observed_category) == "hardware_products"
-            and (companion.category_hint or companion.observed_category) == "software_systems"
+            categories == {"hardware_products", "software_systems"}
             and not (left.exact_facets & right.exact_facets)
         ):
             return True
