@@ -21,8 +21,12 @@ from .event_identity import (
     EventIdentity,
     LEAD_IDENTITY_COMPONENTS,
     PRODUCT_PATTERNS,
+    is_direct_apple_product_lifecycle_action,
+    is_direct_first_party_named_object_change,
+    is_material_apple_device_operational_deployment,
     is_third_party_app_action_on_apple_platform,
     primary_assertion_components,
+    quantified_apple_company_performance_subject,
 )
 from .event_matcher import FIRST_PARTY_SERVICE_PRODUCTS, identity_pair_decision
 
@@ -922,6 +926,8 @@ def _product_lifecycle_subjects(text: str, identity: EventIdentity) -> set[str]:
         subjects.add("ipad-mini")
     if re.search(r"\bipad\s+pro\b|ipad\s*pro", text):
         subjects.add("ipad-pro")
+    if not subjects and re.search(r"\bmacs?\b|(?:三|3)\s*款\s*mac", text):
+        subjects.add("mac")
     if not subjects:
         subjects |= {
             product
@@ -1046,6 +1052,14 @@ def _hardware_accessory_evaluation_claim(
     background cannot create the claim.
     """
     if identity.scope != "apple-direct" or identity.content_form != "news":
+        return None
+    if re.search(
+        r"\b(?:obsolete|vintage)\b.{0,36}\b(?:products?\s+)?list\b|"
+        r"(?:过时|复古|停产).{0,18}(?:产品)?(?:名单|列表)|"
+        r"(?:列入|进入).{0,20}(?:过时|复古|停产)(?:产品)?(?:名单|列表)",
+        _normalized(title),
+        re.I,
+    ):
         return None
     products = identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
     if len(products) != 1:
@@ -1569,7 +1583,9 @@ def _structured_assertion_keys(
                 "停产产品",
                 "停产名单",
                 "过时产品",
+                "过时名单",
                 "复古产品",
+                "复古名单",
             )
             or re.search(r"停产[\"'”’]?[\s·]*产品", title_scope)
         )
@@ -4156,6 +4172,8 @@ def _editorial_or_third_party_claim_reason(
 ) -> str:
     """Resolve headline ownership before Apple product terms can promote it."""
     title_text = _canonical_title(title)
+    if quantified_apple_company_performance_subject(title, text):
+        return ""
     if _retrospective_explainer_without_new_action(title_text, text):
         return "analysis or explanation without a new title-led Apple action"
     tutorial_title = bool(
@@ -4413,7 +4431,10 @@ def _unsupported_third_party_reason(
         )
     ):
         return "non-Apple primary subject with Apple only in background context"
-    if _third_party_platform_app_action(title, text):
+    if (
+        _third_party_platform_app_action(title, text)
+        and not is_material_apple_device_operational_deployment(title, text)
+    ):
         return "third-party software action on an Apple platform without a direct Apple action"
     if _third_party_accessory_action(title, text):
         return "third-party accessory without an Apple product or platform change"
@@ -5173,7 +5194,11 @@ def _primary_claim_projection(
     proof that two reports are the same.
     """
     title_text, text = _primary_assertion_scope(title, lead)
+    full_title_text = _canonical_title(title)
     claim_evidence = f"{text} {_normalized(evidence)[:1400]}".strip()
+    extended_claim_evidence = (
+        f"{full_title_text} {_normalized(lead)[:1600]} {_normalized(evidence)[:1400]}"
+    ).strip()
     event_keys: set[str] = set()
     boundaries: set[str] = set()
     separation: set[str] = set()
@@ -5207,6 +5232,533 @@ def _primary_claim_projection(
             title_text,
         )
     )
+
+    first_party_rename_product = next(
+        iter(
+            identity.title_products
+            & {
+                "app-store",
+                "apple-books",
+                "apple-maps",
+                "apple-music",
+                "apple-sports",
+                "apple-tv",
+                "apple-wallet",
+                "icloud",
+                "safari",
+            }
+        ),
+        "",
+    )
+    title_owned_rename = bool(
+        first_party_rename_product
+        and is_direct_first_party_named_object_change(full_title_text, lead)
+    )
+    rename_target = ""
+    if title_owned_rename:
+        for pattern in (
+            r"\b(?:use|uses|using|display|displays|show|shows|label|labels|mark|marks)\b"
+            r"[^'\"“”]{0,50}['\"“]([^'\"“”]{2,60})['\"”][^.!?]{0,40}"
+            r"\binstead\s+of\b",
+            r"\bbring(?:s|ing)?\s+up\b[^.!?]{0,100}\b(?:if|when)\b[^.!?]{0,60}"
+            r"\bsearch(?:es|ing)?\s+(?:for\s+)?['\"“]([^'\"“”]{2,60})['\"”]",
+            r"\b(?:update|updates|updated|change|changes|changed|rename|renames|renamed)\b"
+            r"[^'\"“”]{0,50}['\"“][^'\"“”]{2,60}['\"”]\s+(?:to|as)\s+"
+            r"['\"“]([^'\"“”]{2,60})['\"”]",
+            r"(?:改名为|更名为|重命名为|改称|标注为|显示为)\s*[“\"]([^”\"]{2,30})[”\"]",
+            r"\b(?:rename|renames|renamed|renaming|relabel|relabels|relabeled|relabeling)\b"
+            r"[^'\"“”]{0,80}['\"“]([^'\"“”]{2,60})['\"”]",
+            r"\b(?:change(?:s|d)?|rename(?:s|d)?|relabel(?:s|ed)?)\b[^。.!?]{0,90}?"
+            r"\bto\s+([a-z][a-z0-9 .'-]{2,50}?)(?=\s+(?:as|for|in)\b|[,.;!?]|$)",
+            r"\b(?:display|displays|show|shows)\s+([a-z][a-z0-9 .'-]{2,50}?)\s+instead\s+of\b",
+            r"(?:改名为|更名为|重命名为|改称|标注为|显示为)([^，。！？:：\s]{2,30})",
+        ):
+            match = re.search(pattern, extended_claim_evidence, re.I)
+            if not match:
+                continue
+            rename_target = re.sub(
+                r"[^a-z0-9\u3400-\u9fff]+",
+                "-",
+                _normalized(match.group(1)),
+            ).strip("-")
+            if rename_target:
+                break
+    if first_party_rename_product and rename_target:
+        add_claim(
+            f"first-party-app-{first_party_rename_product}",
+            "named-object-rename",
+            qualifier=rename_target,
+            category="software_systems",
+            trusted=True,
+        )
+        named_object_classes = (
+            ("lake", r"\blake\b|湖"),
+            ("gulf", r"\bgulf\b|海湾|湾"),
+            ("river", r"\briver\b|河"),
+            ("sea", r"\bsea\b|海"),
+            ("mountain", r"\bmount(?:ain)?\b|山"),
+            ("island", r"\bisland\b|岛"),
+            ("road", r"\b(?:road|street|avenue|highway)\b|(?:道路|公路|街道|大街)"),
+            ("airport", r"\bairport\b|机场"),
+            ("station", r"\bstation\b|车站"),
+            ("park", r"\bpark\b|公园"),
+            ("city", r"\bcity\b|城市|市"),
+            ("country", r"\bcountry\b|国家|国"),
+        )
+        named_object_class = next(
+            (
+                object_class
+                for object_class, pattern in named_object_classes
+                if re.search(pattern, full_title_text, re.I)
+            ),
+            "",
+        )
+        explicit_regions = sorted(set(regions) - {"multi-region"})
+        if named_object_class and explicit_regions:
+            event_keys.add(
+                f"primary-claim:first-party-app-{first_party_rename_product}:"
+                f"named-object-rename-class:{named_object_class}:"
+                f"{','.join(explicit_regions)}"
+            )
+
+    explicit_catalog_scale = bool(
+        re.search(
+            r"\b(?:10|ten|eleven|11)\+?\s+(?:products?|devices?|models?)\b|"
+            r"(?:10|十|11|十一)(?:余|多|\+)?\s*款(?:在售)?(?:产品|设备|机型)",
+            title_text,
+            re.I,
+        )
+        and len(identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS) >= 2
+    )
+    catalog_withdrawal = bool(
+        (identity.scope == "apple-direct" or _contains(title_text, "apple", "苹果"))
+        and re.search(
+            r"\b(?:discontinu(?:e|es|ed|ing)|withdraw(?:s|n|ing)?|remove(?:s|d|ing)?|"
+            r"drop(?:s|ped|ping)?|retire(?:s|d|ing)?)\b|"
+            r"(?:下架|停售|停产|停止销售|退出在售阵容|移出产品线)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:products?|devices?|models?|lineup|catalog)\b|"
+            r"(?:多款|款设备|款(?:在售)?产品|产品阵容|在售阵容|官网产品)",
+            title_text,
+            re.I,
+        )
+        and (
+            len(_bounded_evidence_products(claim_evidence)) >= 2
+            or explicit_catalog_scale
+        )
+    )
+    if catalog_withdrawal:
+        add_claim(
+            "apple-product-catalog",
+            "multi-product-withdrawal-forecast",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    executive_farewell = bool(
+        re.search(
+            r"\b(?:signs?\s+off|farewell|thanks?\s+(?:apple\s+)?staff)\b|"
+            r"\b(?:comments?|responds?|response|message|memo|letter|email|note|post|writes?|says?|remarks?)\b"
+            r".{0,48}\b(?:final|last)\s+day\b|"
+            r"\b(?:final|last)\s+day\b.{0,48}"
+            r"\b(?:comments?|responds?|response|message|memo|letter|email|note|post|writes?|says?|remarks?)\b|"
+            r"(?:告别.{0,8}(?:信|内部信)|最后一封.{0,12}内部信|告别员工|感谢员工)|"
+            r"(?:最后一天).{0,30}(?:回应|致信|发信|内部信|备忘录|发文|留言|感谢|告别)|"
+            r"(?:回应|致信|发信|内部信|备忘录|发文|留言|感谢|告别).{0,30}(?:最后一天)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:ceo|chief executive|tim cook|john ternus)\b|"
+            r"(?:首席执行官|库克|特努斯)",
+            title_text,
+            re.I,
+        )
+    )
+    if executive_farewell:
+        add_claim(
+            "apple-leadership",
+            "executive-farewell-communication",
+            category="software_systems",
+            trusted=True,
+        )
+
+    company_hall_award = bool(
+        _contains(title_text, "apple", "苹果")
+        and re.search(
+            r"\b(?:induct(?:ed|s)?|honou?red|recognized|named)\b|"
+            r"(?:入选|获表彰|获授|列入)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:creative|brand)\s+hall\s+of\s+fame\b|"
+            r"(?:创意|品牌)名人堂",
+            title_text,
+            re.I,
+        )
+    )
+    if company_hall_award:
+        add_claim(
+            "apple-brand",
+            "hall-of-fame-induction",
+            category="software_systems",
+            trusted=True,
+        )
+
+    personnel_role_change = bool(
+        re.search(r"\bphil\s+schiller\b|菲尔[·・.\s]*席勒", title_text, re.I)
+        and re.search(
+            r"\b(?:steps?\s+(?:down|back)|scales?\s+back|no\s+longer\s+working|"
+            r"leav(?:es|ing)\s+(?:his\s+)?(?:biggest\s+)?(?:job|jobs|duties))\b|"
+            r"(?:卸任|退出|不再负责|缩减|淡出).{0,24}(?:职责|工作|管理|负责人)?",
+            title_text,
+            re.I,
+        )
+    )
+    if personnel_role_change:
+        add_claim(
+            "apple-personnel-phil-schiller",
+            "role-reduction",
+            category="software_systems",
+            trusted=True,
+        )
+
+    executive_profile_asset_update = bool(
+        re.search(r"\b(?:ceo|chief executive)\b|(?:首席执行官|ceo)", title_text, re.I)
+        and re.search(
+            r"\b(?:profile\s+(?:photo|image)|avatar|headshot)\b|(?:头像|个人资料图片)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:replac(?:e|es|ed|ing)|updat(?:e|es|ed|ing)|swap(?:s|ped|ping)?)\b|"
+            r"(?:更换|替换|更新)",
+            title_text,
+            re.I,
+        )
+    )
+    if executive_profile_asset_update:
+        add_claim(
+            "apple-leadership",
+            "ceo-social-profile-image-update",
+            category="software_systems",
+            trusted=True,
+        )
+
+    executive_social_account = bool(
+        re.search(r"\b(?:ceo|chief executive)\b|(?:首席执行官|新任\s*ceo)", title_text, re.I)
+        and re.search(
+            r"\b(?:on|joins?|opens?|launches?|starts?)\s+(?:an?\s+)?(?:x|twitter|weibo)\b|"
+            r"\bfirst\s+(?:post|message)\b|"
+            r"(?:入驻|开通|启用).{0,18}(?:微博|社交账号|社交平台|x\s*平台)|"
+            r"(?:首条|第一条).{0,10}(?:博文|帖子|消息|动态)",
+            title_text,
+            re.I,
+        )
+    )
+    if executive_social_account:
+        add_claim(
+            "apple-leadership",
+            "ceo-social-account-launch",
+            category="software_systems",
+            trusted=True,
+        )
+
+    executive_compensation_signal = bool(
+        re.search(
+            r"\b(?:salary|compensation|equity award|stock award)\b|"
+            r"(?:薪酬|年薪|工资|股权奖励|股票奖励)",
+            title_text,
+            re.I,
+        )
+        or re.search(
+            r"\bpaying\b.{1,64}\bto\s+(?:run|lead|serve\s+as\s+(?:the\s+)?ceo)\b|"
+            r"\b(?:what|how\s+much)\b.{0,40}\bpay(?:ing)?\b.{0,40}"
+            r"\b(?:ceo|chief executive)\b",
+            title_text,
+            re.I,
+        )
+    )
+    executive_compensation = executive_compensation_signal and bool(
+        re.search(r"\b(?:apple|ceo|chief executive)\b|(?:苹果|首席执行官)", title_text, re.I)
+        or re.search(r"\b(?:new\s+)?ceo\b|(?:新任\s*ceo|首席执行官)", text, re.I)
+    )
+    if executive_compensation:
+        add_claim(
+            "apple-leadership",
+            "ceo-compensation-disclosure",
+            category="software_systems",
+            trusted=True,
+        )
+
+    executive_memo_title_signal = bool(
+        re.search(
+            r"\b(?:memo|letter|email)\b|"
+            r"\baddresses?\s+(?:apple\s+)?staff\b|"
+            r"(?:内部信|公开信|全员信|备忘录|致员工|致全体员工)",
+            full_title_text,
+            re.I,
+        )
+        or (
+            re.search(
+                r"\b(?:teases?|promises?|says?)\b.{0,45}\b(?:launch|event|products?)\b|"
+                r"(?:放话|预告|透露).{0,32}(?:下周|新品|发布|活动)",
+                full_title_text,
+                re.I,
+            )
+            and re.search(
+                r"\b(?:memo|letter|email)\b|(?:内部信|公开信|全员信|备忘录)",
+                extended_claim_evidence,
+                re.I,
+            )
+        )
+    )
+    first_executive_employee_memo = bool(
+        executive_memo_title_signal
+        and
+        re.search(
+            r"\b(?:memo|letter|email|message)\b.{0,42}\b(?:employees?|staff|company[- ]wide)\b|"
+            r"\b(?:employees?|staff|company[- ]wide)\b.{0,42}\b(?:memo|letter|email|message)\b|"
+            r"(?:首封|第一封|全员|内部).{0,24}(?:内部信|公开信|信件|备忘录|邮件)|"
+            r"(?:内部信|公开信|备忘录|全员信).{0,20}(?:首封|第一封|上任)|"
+            r"(?:发给|致).{0,16}(?:全体|全员|内部).{0,12}(?:员工|职员).{0,12}(?:公开信|信件|备忘录|邮件)",
+            extended_claim_evidence,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:first\s+day|first\s+(?:company[- ]wide\s+)?memo|new\s+(?:apple\s+)?ceo)\b|"
+            r"(?:首封|第一封|上任|新(?:任)?\s*ceo|(?:正式)?(?:出任|接任|就任).{0,20}(?:苹果)?\s*ceo)",
+            extended_claim_evidence,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:ceo|chief executive)\b|(?:首席执行官|ceo)",
+            extended_claim_evidence,
+            re.I,
+        )
+    )
+    if first_executive_employee_memo:
+        add_claim(
+            "apple-leadership",
+            "ceo-first-employee-memo",
+            category="software_systems",
+            trusted=True,
+        )
+
+    corporate_services_role_exit = bool(
+        re.search(
+            r"\b(?:apple|former\s+apple|ex-apple)\b.{0,44}\b(?:cfo|executive|luca\s+maestri)\b|"
+            r"\b(?:luca\s+maestri|cfo|executive)\b.{0,44}\bapple\b|"
+            r"(?:苹果).{0,32}(?:首席财务官|高管|马斯特里)|(?:马斯特里).{0,32}(?:苹果|首席财务官|高管)",
+            full_title_text,
+            re.I,
+        )
+        and re.search(
+            r"\bcorporate services\b|企业服务(?:部门|职责)?",
+            extended_claim_evidence,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:isn['’]?t\s+running|no\s+longer\s+runs?|step(?:s|ped|ping)?\s+down|leaves?|exits?)\b|"
+            r"(?:卸任|退出|不再负责|离任)",
+            extended_claim_evidence,
+            re.I,
+        )
+    )
+    if corporate_services_role_exit:
+        add_claim(
+            "apple-corporate-services",
+            "role-exit",
+            category="software_systems",
+            trusted=True,
+        )
+
+    inbox_accessory_policy_denial = bool(
+        _contains(full_title_text, "apple", "iphone", "苹果")
+        and _contains(
+            full_title_text,
+            "charger",
+            "earpods",
+            "in-box accessories",
+            "充电头",
+            "充电器",
+            "耳机",
+            "随盒配件",
+        )
+        and (
+            re.search(
+                r"\b(?:den(?:y|ies|ied)|no\s+(?:notice|policy|change)|not\s+restor(?:e|ing))\b|"
+                r"(?:否认|辟谣|没有通知|未发布通知|并未恢复|不再附赠)",
+                full_title_text,
+                re.I,
+            )
+            or (
+                re.search(r"\b(?:official\s+response|responds?)\b|官方回应", full_title_text, re.I)
+                and re.search(
+                    r"\b(?:den(?:y|ies|ied)|no\s+(?:notice|policy|change)|not\s+restor(?:e|ing))\b|"
+                    r"(?:否认|辟谣|没有.{0,10}通知|未发布.{0,10}(?:通知|政策)|并未恢复|没有.{0,10}政策变更)",
+                    extended_claim_evidence,
+                    re.I,
+                )
+            )
+        )
+    )
+    if inbox_accessory_policy_denial:
+        add_claim(
+            "iphone-in-box-accessories",
+            "policy-denial",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    foldable_magsafe_support = bool(
+        "foldable-iphone" in identity.title_products
+        and _contains(title_text, "magsafe", "磁吸充电")
+        and re.search(
+            r"\b(?:has|have|support(?:s|ed|ing)?|include(?:s|d)?)\b|"
+            r"(?:支持|配备|搭载|有望支持)",
+            title_text,
+            re.I,
+        )
+    )
+    if foldable_magsafe_support:
+        add_claim(
+            "foldable-iphone",
+            "magsafe-support",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    mac_intel_support_removal = bool(
+        _contains(claim_evidence, "mac", "mac app store", "mac 开发者")
+        and _contains(title_text, "intel", "英特尔", "arm64")
+        and re.search(
+            r"\b(?:drop|remove|end|stop|phase\s+out).{0,20}\bsupport\b|"
+            r"\barm64[- ]only\b|"
+            r"(?:移除|停止|终止|放弃).{0,16}(?:支持|兼容)|仅支持\s*arm64",
+            title_text,
+            re.I,
+        )
+    )
+    if mac_intel_support_removal:
+        add_claim(
+            "mac-developer-distribution",
+            "intel-support-removal",
+            category="software_systems",
+            trusted=True,
+        )
+
+    legal_openai_response = bool(
+        _contains(title_text, "openai")
+        and _contains(claim_evidence, "trade secret", "trade-secret", "商业机密", "商业秘密")
+        and re.search(
+            r"\b(?:den(?:y|ies|ied)|reject(?:s|ed)?|responds?|response)\b|"
+            r"\b(?:mess|problem)\b.{0,36}\b(?:apple['’]?s\s+own\s+making|of\s+apple['’]?s\s+own\s+making)\b|"
+            r"\bnot\s+our\s+fault\b|"
+            r"(?:否认|回应).{0,28}(?:窃取|窃密|指控|商业机密|商业秘密)|"
+            r"(?:自己造成|一手造成).{0,18}(?:混乱|问题)|"
+            r"(?:自身|自己).{0,12}(?:应为|应该为).{0,18}(?:混乱|问题).{0,8}负责",
+            title_text,
+            re.I,
+        )
+    )
+    if legal_openai_response:
+        add_claim(
+            "apple-openai-trade-secret-case",
+            "response-filing",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    legal_evidence_disclosure = bool(
+        not legal_openai_response
+        and (
+            re.search(
+                r"^apple\b.{0,30}\b(?:accuses?|alleges?|claims?)\b.{0,40}\bopenai\b"
+                r".{0,60}\b(?:destroy(?:ed|ing|uction)?|withhold(?:s|ing)?)\b.{0,20}\bevidence\b",
+                title_text,
+                re.I,
+            )
+            or (
+                _contains(claim_evidence, "openai")
+                and _contains(
+                    claim_evidence,
+                    "trade secret",
+                    "trade-secret",
+                    "商业机密",
+                    "商业秘密",
+                )
+                and re.search(
+                    r"\b(?:new|shocking|forensic)\s+evidence\b|"
+                    r"\b(?:stolen|theft|destroy(?:ed|ing|uction))\b.{0,42}\bevidence\b|"
+                    r"^apple\s+(?:says?|alleges?|claims?).{0,100}"
+                    r"\b(?:stolen|theft|destroy(?:ed|ing|uction))\b|"
+                    r"(?:新证据|惊人证据|震撼证据|取证证据|销毁证据)",
+                    claim_evidence,
+                    re.I,
+                )
+            )
+        )
+    )
+    if legal_evidence_disclosure:
+        add_claim(
+            "apple-openai-trade-secret-case",
+            "evidence-disclosure",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    mac_desktop_ai_timing = bool(
+        _contains(claim_evidence, "mac mini", "mini / studio", "mini/studio")
+        and _contains(claim_evidence, "mac studio", "mini / studio", "mini/studio")
+        and _contains(
+            claim_evidence,
+            "unusual timing",
+            "unusually timed",
+            "early launch",
+            "launched early",
+            "early announcement",
+            "提前发布",
+            "提前更新",
+            "上新",
+        )
+        and _contains(
+            claim_evidence,
+            "ai demand",
+            "enterprise demand",
+            "enterprise appetite",
+            "strong demand",
+            "ai hardware",
+            "ai 需求",
+            "企业需求",
+            "ai 硬件",
+        )
+        or bool(
+            _contains(claim_evidence, "mac mini", "mini / studio", "mini/studio")
+            and _contains(claim_evidence, "mac studio", "mini / studio", "mini/studio")
+            and _contains(
+                title_text,
+                "unusual timing",
+                "unusually timed",
+                "all about ai",
+                "提前发布",
+                "提前更新",
+                "提前上新",
+            )
+            and _contains(title_text, "ai", "人工智能")
+        )
+    )
+    if mac_desktop_ai_timing:
+        add_claim(
+            "apple-mac-mini-studio",
+            "ai-demand-accelerated-refresh",
+            category="hardware_products",
+            trusted=True,
+        )
 
     if identity.content_form == "news":
         compatibility_milestone = _platform_compatibility_milestone(
@@ -5742,33 +6294,66 @@ def _primary_claim_projection(
             trusted=True,
         )
 
-    leadership_transition = bool(
-        (
-            _contains(title_text, "tim cook", "库克")
-            and _contains(
-                title_text,
-                "step down",
-                "steps down",
-                "farewell",
-                "going away",
-                "replaced steve jobs",
-                "卸任",
-                "告别",
-                "欢送",
-                "接任",
-                "继任",
-                "take over",
-            )
+    executive_transition_interview = bool(
+        re.search(
+            r"\b(?:ceo|chief executive|tim cook|john ternus)\b|"
+            r"(?:首席执行官|库克|特努斯|ceo)",
+            title_text,
+            re.I,
         )
-        or (
-            identity.scope == "apple-direct"
-            and re.search(r"ceo|首席执行官", title_text, re.I)
-            and re.search(
-                r"\b(?:assume(?:s|d|ing)?|become(?:s|ing)?|start(?:s|ing)?\s+as|"
-                r"succeed(?:s|ed|ing)?|take(?:s|n|ing)?\s+over)\b|"
-                r"(?:上任|就任|接任|继任|接棒|正式履职)",
-                title_text,
-                re.I,
+        and re.search(
+            r"\b(?:interview|reflects?|looks?\s+back|discusses?\s+(?:his|her)\s+legacy)\b|"
+            r"(?:接受采访|专访|回顾|谈及).{0,24}(?:经历|任期|遗产|管理)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:before\s+(?:leaving|stepping\s+down)|final\s+days?)\b|"
+            r"(?:卸任前|离任前|交接前)",
+            title_text,
+            re.I,
+        )
+    )
+    if executive_transition_interview:
+        add_claim(
+            "apple-leadership",
+            "transition-interview",
+            category="software_systems",
+            trusted=True,
+        )
+
+    leadership_transition = bool(
+        not executive_farewell
+        and not executive_transition_interview
+        and (
+            (
+                _contains(title_text, "tim cook", "库克")
+                and _contains(
+                    title_text,
+                    "step down",
+                    "steps down",
+                    "farewell",
+                    "going away",
+                    "replaced steve jobs",
+                    "卸任",
+                    "告别",
+                    "欢送",
+                    "接任",
+                    "继任",
+                    "take over",
+                )
+            )
+            or (
+                identity.scope == "apple-direct"
+                and re.search(r"ceo|首席执行官", title_text, re.I)
+                and re.search(
+                    r"\b(?:assume(?:s|d|ing)?|become(?:s|ing)?|start(?:s|ing)?\s+as|"
+                    r"succeed(?:s|ed|ing)?|take(?:s|n|ing)?\s+over|"
+                    r"is\s+now(?:\s+apple['’]?s)?(?:\s+the)?\s+ceo)\b|"
+                    r"(?:上任|就任|出任|接任|继任|接棒|正式履职|正式出任)",
+                    title_text,
+                    re.I,
+                )
             )
         )
     )
@@ -5779,6 +6364,18 @@ def _primary_claim_projection(
             category="software_systems",
             trusted=True,
         )
+    if (
+        first_executive_employee_memo
+        or inbox_accessory_policy_denial
+        or executive_profile_asset_update
+        or executive_social_account
+    ):
+        event_keys.discard("primary-claim:apple-leadership:ceo-transition")
+        separation.discard("primary-claim-predicate:ceo-transition")
+        if inbox_accessory_policy_denial:
+            category_hint = "hardware_products"
+        else:
+            category_hint = "software_systems"
 
     transit_card_subject = _named_transit_card_subject(title_text) or _named_transit_card_subject(text)
     transit_card_availability = bool(
@@ -5832,6 +6429,26 @@ def _primary_claim_projection(
     )
     launch_claim_scope = text if projected_roadmap_title else title_text
     launch_subjects = _reported_hardware_launch_subjects(launch_claim_scope, identity)
+    explicit_launch_timing_report = bool(
+        len(hardware_products) == 1
+        and re.search(
+            r"\b(?:release|launch|shipping|availability)\s+(?:timing|window|date)\b|"
+            r"(?:发售|上市|开售|出货).{0,14}(?:时间|窗口|日期)|"
+            r"(?:预计|预估|据称|报道称).{0,20}(?:本月|下月|\d{1,2}\s*月|20\d{2})"
+            r".{0,16}(?:发售|上市|开售|出货)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:next\s+week|next\s+month|in\s+(?:september|october)|"
+            r"by\s+(?:late\s+)?(?:september|october)|20\d{2})\b|"
+            r"(?:本月|下月|\d{1,2}\s*月|20\d{2}\s*年)",
+            claim_evidence,
+            re.I,
+        )
+    )
+    if explicit_launch_timing_report:
+        launch_subjects |= hardware_products
     if (
         projected_roadmap_title
         and len(hardware_products) == 1
@@ -6147,13 +6764,16 @@ def _primary_claim_projection(
     )
     if workforce_reduction:
         workforce_subject = ""
-        if _contains(
+        if (
+            identity.products & {"vision-pro", "visionos"}
+            or _contains(
             claim_evidence,
             "vision group",
             "vision products",
             "vr team",
             "vision 业务组",
             "vr 研发团队",
+            )
         ) or (
             _contains(claim_evidence, "vr", "vision")
             and _contains(
@@ -6162,9 +6782,11 @@ def _primary_claim_projection(
                 "group",
                 "division",
                 "department",
+                "organization",
                 "团队",
                 "部门",
                 "业务组",
+                "组织",
             )
         ):
             workforce_subject = "apple-vision-group"
@@ -7186,6 +7808,43 @@ def _measured_apple_market_result_keys(
     evidence: str,
 ) -> set[str]:
     """Project quantified Apple market results with their report context."""
+    title_scope = _normalized(title)
+    primary_lead = _primary_assertion_scope("", lead)[1]
+    title_or_lead_owns_result = any(
+        _contains(scope, "apple", "iphone", "苹果")
+        and _contains(
+            scope,
+            "market share",
+            "shipments",
+            "sales",
+            "best selling",
+            "best-selling",
+            "份额",
+            "出货量",
+            "销量",
+            "畅销",
+            "销量榜",
+        )
+        for scope in (title_scope, primary_lead)
+    )
+    if not title_or_lead_owns_result:
+        title_or_lead_owns_result = bool(
+            _contains(primary_lead, "apple", "iphone", "苹果")
+            and re.search(
+                r"\b(?:grew|growth|rose|increased|gained|outperformed)\b|"
+                r"(?:增长|上升|提升|逆势|扩大)",
+                primary_lead,
+                re.I,
+            )
+            and re.search(
+                r"(?:apple|iphone|苹果).{0,90}(?:\d+(?:\.\d+)?\s*%|"
+                r"market share|shipments|sales|份额|出货量|销量)",
+                _normalized(evidence),
+                re.I,
+            )
+        )
+    if not title_or_lead_owns_result:
+        return set()
     scope = _normalized(". ".join(part for part in (title, lead, evidence) if part))
     firm = next(
         (
@@ -7859,6 +8518,16 @@ def build_reconciliation_profile(
     event_keys: set[str] = set()
     boundary_keys: set[str] = set()
     separation_keys = _product_separation_keys(identity)
+    company_performance_subject = quantified_apple_company_performance_subject(
+        title,
+        lead,
+    )
+    if company_performance_subject:
+        event_key = f"structured-company-performance:{company_performance_subject}"
+        event_keys.add(event_key)
+        boundary_keys.add(event_key)
+        separation_keys.add("primary-claim-predicate:quantified-company-performance")
+        trusted_direct_action = True
     separation_keys |= _predicate_separation_keys(identity)
     separation_keys |= _title_predicate_separation_keys(title)
     changed_object_keys = _changed_object_separation_keys(title, lead, identity)
@@ -7880,6 +8549,8 @@ def build_reconciliation_profile(
         primary_evidence_products or evidence_products,
     )
     category_hint = _structured_category_hint(identity, structured_title_subjects)
+    if company_performance_subject:
+        category_hint = "software_systems"
     if editorial_first_party_action and len(identity.title_products) == 1:
         editorial_product = next(iter(identity.title_products))
         editorial_update_key = f"structured-title-product-update:{editorial_product}"
@@ -8123,12 +8794,69 @@ def build_reconciliation_profile(
         primary_claim_category,
         primary_claim_trusted,
     ) = _primary_claim_projection(title, lead, identity, regions, evidence)
-    event_keys |= primary_claim_events
-    boundary_keys |= primary_claim_boundaries
-    separation_keys |= primary_claim_separation
+    dominant_primary_claim_subjects = {
+        "primary-claim:apple-leadership:ceo-transition": "apple-leadership",
+        "primary-claim:apple-leadership:transition-interview": "apple-leadership",
+        "primary-claim:apple-leadership:ceo-first-employee-memo": "apple-leadership",
+        "primary-claim:apple-leadership:ceo-social-account-launch": "apple-leadership",
+        "primary-claim:apple-leadership:ceo-social-profile-image-update": "apple-leadership",
+        "primary-claim:iphone-in-box-accessories:policy-denial": "iphone-in-box-accessories",
+        "primary-claim:apple-openai-trade-secret-case:response-filing": "apple-openai-trade-secret-case",
+        "primary-claim:apple-openai-trade-secret-case:evidence-disclosure": "apple-openai-trade-secret-case",
+    }
+    dominant_primary_claims = primary_claim_events & dominant_primary_claim_subjects.keys()
+    ceo_transition_claim = "primary-claim:apple-leadership:ceo-transition"
+    if ceo_transition_claim in dominant_primary_claims and len(primary_claim_events) > 1:
+        # A regulatory meeting, document, or other concrete action can mention
+        # the succession as context. In that case the generic transition key
+        # must not replace the more specific primary claim.
+        dominant_primary_claims = set(dominant_primary_claims)
+        dominant_primary_claims.discard(ceo_transition_claim)
+    if dominant_primary_claims:
+        # A concrete document, policy response, legal filing stage, or formal
+        # lifecycle action owns the event. Product guesses and background
+        # transitions found elsewhere in the page may enrich facts, but must
+        # not remain as alternate merge bridges.
+        event_keys = set(dominant_primary_claims)
+        dominant_subjects = {
+            dominant_primary_claim_subjects[key]
+            for key in dominant_primary_claims
+        }
+        dominant_predicates = {
+            key.rsplit(":", 1)[-1]
+            for key in dominant_primary_claims
+        }
+        boundary_keys = {
+            f"primary-claim-subject:{subject}"
+            for subject in dominant_subjects
+        }
+        separation_keys = {
+            key
+            for key in primary_claim_separation
+            if key.startswith("primary-claim-")
+            and (
+                key.removeprefix("primary-claim-predicate:") in dominant_predicates
+                or key.removeprefix("primary-claim-subject:") in dominant_subjects
+            )
+        }
+    else:
+        event_keys |= primary_claim_events
+        boundary_keys |= primary_claim_boundaries
+        separation_keys |= primary_claim_separation
     if primary_claim_category:
         category_hint = primary_claim_category
     trusted_direct_action = trusted_direct_action or primary_claim_trusted
+    executive_farewell_key = (
+        "primary-claim:apple-leadership:executive-farewell-communication"
+    )
+    if executive_farewell_key in primary_claim_events:
+        event_keys.discard(
+            "canonical-apple-action:apple-leadership:leadership-transition"
+        )
+        boundary_keys.discard(
+            "canonical-apple-action:apple-leadership:leadership-transition"
+        )
+        separation_keys.discard("action:leadership-transition")
     invitation_interpretation_key = _apple_event_invitation_interpretation_key(
         title,
         lead,
@@ -8195,6 +8923,21 @@ def build_reconciliation_profile(
     structured_direct_assertion = bool(
         any(key.startswith("structured-assertion:") for key in assertion_events)
     )
+    direct_product_lifecycle_action = is_direct_apple_product_lifecycle_action(
+        title,
+        f"{lead} {evidence}",
+    )
+    if direct_product_lifecycle_action:
+        lifecycle_scope = f"{title_text} {_normalized(lead)[:900]} {_normalized(evidence)[:1200]}"
+        lifecycle_subjects = _product_lifecycle_subjects(lifecycle_scope, identity)
+        for subject in lifecycle_subjects:
+            event_keys.add(
+                f"structured-assertion:product-lifecycle:{subject}:obsolete"
+            )
+            separation_keys.add(f"assertion-subject:product-lifecycle:{subject}")
+        boundary_keys.add("structured-action:product-lifecycle-obsolete")
+        separation_keys.add("assertion-action:product-lifecycle-obsolete")
+        category_hint = "hardware_products"
     title_owned_direct_action = bool(
         identity.action_owner == "apple"
         and not third_party_app_availability
@@ -8593,7 +9336,35 @@ def build_reconciliation_profile(
             if measurement.startswith("money:"):
                 event_keys.add(f"structured-legal-settlement:{measurement}")
     removal_stage = _app_store_removal_stage(f"{title_text}. {primary_lead}")
-    if removal_stage:
+    app_store_removal_context = bool(
+        "app-store" in identity.products
+        or _contains(
+            f"{title_text}. {primary_lead}",
+            "app store",
+            "apple app store",
+            "应用商店",
+            "苹果应用商店",
+        )
+        or re.search(
+            r"\bapple\b.{0,32}\b(?:pull(?:s|ed)?|remove(?:s|d)?|delist(?:s|ed)?)\b"
+            r".{0,36}\b(?:app|application)\b|"
+            r"(?:苹果).{0,28}(?:下架|移除|撤下).{0,28}(?:应用|\bapp\b)|"
+            r"(?:应用|\bapp\b).{0,28}(?:遭|被).{0,12}(?:苹果).{0,12}(?:下架|移除|撤下)",
+            f"{title_text}. {primary_lead}",
+            re.I,
+        )
+    )
+    support_capability_removal = any(
+        key.endswith(
+            (
+                ":intel-support-removal",
+                ":platform-support-removal",
+                ":compatibility-support-removal",
+            )
+        )
+        for key in primary_claim_events
+    )
+    if removal_stage and app_store_removal_context and not support_capability_removal:
         removal_subjects = _app_store_subjects(title_text, identity)
         removal_attributions = {
             component.removeprefix("report-attribution:")
@@ -9133,7 +9904,12 @@ def build_reconciliation_profile(
     if "feature-change" in identity.title_actions and identity.title_products:
         separation_keys.add("action:feature-change")
 
-    if content_form == "event_preview" and not event_format_plan:
+    if (
+        content_form == "event_preview"
+        and not event_format_plan
+        and "primary-claim:apple-product-catalog:multi-product-withdrawal-forecast"
+        not in primary_claim_events
+    ):
         # Background facts in an editorial preview must not impersonate the
         # concrete actions they recap.
         event_keys.clear()
@@ -9210,6 +9986,7 @@ def build_reconciliation_profile(
         and (
             caller_trusted_direct_action
             or title_owned_direct_action
+            or direct_product_lifecycle_action
             or (primary_claim_trusted and content_form == "news")
             or (bool(content_claim) and content_form == "news")
             or (
@@ -9232,6 +10009,7 @@ def build_reconciliation_profile(
         or bool(first_party_service_capability_signal)
         or official_apple_store_transaction_option_action
         or versioned_os_compatibility_action
+        or direct_product_lifecycle_action
     )
     promotion_reason = ""
     if versioned_os_action:
@@ -9244,6 +10022,8 @@ def build_reconciliation_profile(
         promotion_reason = "official Apple Store checkout or financing option change"
     elif measured_apple_market_action:
         promotion_reason = "measured Apple market result with report, region, period, and value"
+    elif direct_product_lifecycle_action:
+        promotion_reason = "official Apple product lifecycle and repair-support change"
     elif trusted_direct_action:
         promotion_reason = "title-led direct Apple action confirmed by structured identity"
     elif editorial_first_party_action:
@@ -9264,11 +10044,17 @@ def build_reconciliation_profile(
         # A concrete, currently reported operating format is itself the event
         # action; an analytical headline angle must not demote that evidence.
         defer_reason = ""
+    if direct_product_lifecycle_action:
+        defer_reason = ""
     if editorial_first_party_action:
         defer_reason = ""
-    if not event_format_plan and _retrospective_explainer_without_new_action(
-        title,
-        f"{text}. {_normalized(evidence)[:1800]}",
+    if (
+        not event_format_plan
+        and not company_performance_subject
+        and _retrospective_explainer_without_new_action(
+            title,
+            f"{text}. {_normalized(evidence)[:1800]}",
+        )
     ):
         defer_reason = "analysis or explanation without a new title-led Apple action"
     if (
@@ -9339,12 +10125,31 @@ def build_reconciliation_profile(
         separation_keys.add("primary-claim-predicate:supplier-workforce-expansion")
     if supplier_operating_result:
         separation_keys.add("primary-claim-predicate:supplier-operating-result")
+    title_owned_versioned_os_feature = bool(
+        event_kind == "os_app"
+        and re.match(
+            r"^(?:ios|ipados|macos|watchos|tvos|visionos)\s+\d+(?:\.\d+)*\b",
+            title_text,
+            re.I,
+        )
+        and not (
+            re.search(
+                r"\b(?:hint(?:s|ed)?\s+at|reveal(?:s|ed)?|leak(?:s|ed)?|code\s+(?:shows?|suggests?))\b|"
+                r"(?:代码|文件).{0,18}(?:暗示|曝光|泄露)",
+                title_text,
+                re.I,
+            )
+            and identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+        )
+    )
     if primary_claim_category:
         # A title-led concrete claim owns the event category. Later generic
         # product/background rules may enrich the profile, but must not turn a
         # system disclosure into hardware (or a procurement action into
         # software) based on incidental entities in the article body.
         category_hint = primary_claim_category
+    elif title_owned_versioned_os_feature:
+        category_hint = "software_systems"
     elif any(
         key.startswith("structured-assertion:apple-facility:education-center:opening")
         for key in event_keys
@@ -9379,6 +10184,14 @@ def build_reconciliation_profile(
 
 
 def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
+    if any(
+        key.startswith("primary-claim:")
+        for key in left.event_keys & right.event_keys
+    ):
+        # Exact primary claims encode both canonical subject and concrete
+        # action. They are stronger identity evidence than incidental product
+        # names or background actors elsewhere in either page.
+        return False
     if _direct_title_subject_conflict(left, right):
         return True
     if _direct_title_action_conflict(left, right):
@@ -9770,6 +10583,16 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
         hard_boundary = left.hard_boundary or right.hard_boundary
         if hard_boundary == "independent-third-party-action":
             return True
+    catalog_lifecycle_key = (
+        "primary-claim:apple-product-catalog:multi-product-withdrawal-forecast"
+    )
+    if (catalog_lifecycle_key in left.event_keys) != (
+        catalog_lifecycle_key in right.event_keys
+    ):
+        # A catalog-wide withdrawal is one aggregate lifecycle action. Product
+        # names in its enumerated list cannot attach it to a single-model
+        # launch, specification, or availability story before exact reunion.
+        return True
     if (
         left.relevance_tier == "weak"
         and right.relevance_tier == "weak"
@@ -9827,6 +10650,13 @@ def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationPr
         left_legal_stages
         and right_legal_stages
         and left_legal_stages.isdisjoint(right_legal_stages)
+        and not (
+            left.event_keys
+            & right.event_keys
+            & {
+                "primary-claim:apple-openai-trade-secret-case:evidence-disclosure"
+            }
+        )
     ):
         return True
     left_firmware = {
@@ -10495,19 +11325,33 @@ def reconcile_articles(
                     )
                     == "match"
                 )
-                shared_title_components = bool(
-                    left_profile.identity is not None
-                    and right_profile.identity is not None
-                    and (
-                        left_profile.identity.title_components
-                        & right_profile.identity.title_components
-                    )
+                exact_relation = bool(
+                    left_profile.exact_facets & right_profile.exact_facets
+                )
+                shared_changed_object = {
+                    key
+                    for key in left_profile.separation_keys
+                    & right_profile.separation_keys
+                    if key.startswith("changed-object:")
+                }
+                shared_product_boundary = {
+                    key
+                    for key in left_profile.separation_keys
+                    & right_profile.separation_keys
+                    if key.startswith(("product-family:", "product-model:"))
+                }
+                same_product_change = bool(
+                    shared_changed_object and shared_product_boundary
                 )
                 if (
                     not shared_action_keys
                     and not pair_identity_match
-                    and not shared_title_components
+                    and not exact_relation
+                    and not same_product_change
                 ):
+                    # Separate stories from one publisher need positive event
+                    # evidence. Generic product or generation components are
+                    # not sufficient to make two URLs the same event.
                     return True
             return _seed_profiles_conflict(
                 left_profile,
@@ -10645,10 +11489,18 @@ def reconcile_articles(
                 # canonical action or concrete assertion may override legacy
                 # topic/relevance noise; otherwise unrelated products can be
                 # bridged by shared supply-chain background.
+                release_action_join = bool(
+                    cross_product_release_join
+                    and "predicate:os-release-announcement"
+                    in left_profile.separation_keys
+                    and "predicate:os-release-announcement"
+                    in right_profile.separation_keys
+                )
                 authoritative_claim_join = bool(
                     canonical_action_join
                     or assertion_join
                     or structured_product_update_join
+                    or release_action_join
                 )
                 if _profile_release_conflict(left_profile, right_profile):
                     return False
@@ -10870,8 +11722,15 @@ def reconcile_articles(
         if not candidate_anchors:
             continue
         if any(
-            _profiles_conflict(profiles[id(left)], profiles[id(right)])
-            or explicit_identity_conflict(profiles[id(left)], profiles[id(right)])
+            _profile_release_conflict(profiles[id(left)], profiles[id(right)])
+            or (
+                "predicate:os-release-announcement"
+                not in profiles[id(left)].separation_keys
+            )
+            or (
+                "predicate:os-release-announcement"
+                not in profiles[id(right)].separation_keys
+            )
             for left in unknown_group
             for right in candidate_anchors
         ):
@@ -10916,6 +11775,23 @@ def reconcile_articles(
 
     for group in release_input_groups:
         supported_group_keys = supported_event_keys(group)
+        coherent_os_release_wave = bool(
+            any(
+                key.startswith("apple-os-release-wave:")
+                for key in supported_group_keys
+            )
+            and all(
+                "predicate:os-release-announcement"
+                in profiles[id(article)].separation_keys
+                for article in group
+            )
+        )
+        if coherent_os_release_wave:
+            # A cross-platform OS release train is already a concrete event.
+            # Hardware release cleanup must not reinterpret a Vision Pro token
+            # as a product launch and peel codename-only OS reports back out.
+            release_checked_groups.append(group)
+            continue
         coherent_event_campaign = any(
             key.startswith(("apple-event-campaign:", "apple-event-occurrence:"))
             for key in supported_group_keys

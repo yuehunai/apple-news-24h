@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 1.70.0 - 2026-09-02
+
+- Added title-and-lead event identities for multi-product catalog withdrawals and mockup disclosures, regulated Apple-device deployments, quantified Apple company performance, official product-lifecycle changes, and first-party named-object updates.
+- Improved cross-language reconciliation for CEO appointments, compensation, employee memos, social-account actions, role exits, Apple Maps renames, legal filing stages, Vision workforce changes, foldable-device MagSafe support, and Mac App Store Intel support policy.
+- Tightened structured boundaries so product-lifecycle reports cannot bridge into display-feature stories, distinct executive and legal actions remain separate, and current OS features retain software classification despite hardware context.
+- Improved relevance handling for third-party Apple-platform apps, leadership scorecards, historical interviews, non-Apple comparisons, personal hands-on articles, and multi-brand price reports while preserving direct Apple actions, measured company reports, and operational deployments.
+- Updated skill and fallback-policy guidance and added 51 focused regression tests, expanding the suite from 1,279 to 1,330 tests; clean-agent validation produced 30 main events and 23 deferred events, retained all 75 main-event source URLs, and required no manual regrouping or deferred promotion.
+
 ## 1.68.0 - 2026-08-31
 
 - Made seed and profile boundary checks symmetric so product roadmaps, executive succession, partner facilities, and product features cannot merge differently based on article order or shared Apple context.

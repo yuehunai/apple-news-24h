@@ -43,10 +43,14 @@ from apple_news_core.event_identity import (  # noqa: E402
     build_event_identity,
     high_confidence_direct_apple_action,
     is_authoritative_first_party_action,
+    is_direct_apple_product_lifecycle_action,
+    is_direct_first_party_named_object_change,
     is_direct_first_party_feature_change,
+    is_material_apple_device_operational_deployment,
     is_non_apple_comparison_title,
     is_non_apple_title_context,
     is_third_party_app_action_on_apple_platform,
+    quantified_apple_company_performance_subject,
 )
 from apple_news_core.event_matcher import identity_pair_decision  # noqa: E402
 from apple_news_core.article_projector import (  # noqa: E402
@@ -5746,14 +5750,10 @@ def is_direct_apple_regulated_technology_access_story(title: str, text: str) -> 
             "data center",
             "data centre",
             "advanced computing",
-            "equipment",
-            "technology",
             "半导体",
             "芯片",
             "服务器",
             "数据中心",
-            "设备",
-            "技术",
         ],
     ) > 0
 
@@ -11741,6 +11741,102 @@ def multi_product_hardware_subjects(value: str) -> set[str]:
     return subjects
 
 
+def is_multi_product_catalog_withdrawal_story(
+    title: str,
+    summary: str = "",
+    key_facts: list[str] | None = None,
+) -> bool:
+    """Return true for one Apple lineup withdrawal forecast spanning products.
+
+    A catalog-level removal is one action over the current lineup.  It must not
+    be projected into independent product roadmaps merely because the article
+    enumerates the affected devices and their likely replacements.
+    """
+    title_text = clean_sentence(title).lower()
+    evidence_text = " ".join(
+        clean_sentence(value)
+        for value in [summary, *(key_facts or [])[:6]]
+        if clean_sentence(value)
+    ).lower()[:2400]
+    withdrawal = bool(
+        re.search(
+            r"\b(?:discontinu(?:e|es|ed|ing)|withdraw(?:s|n|ing)?|remove(?:s|d|ing)?|"
+            r"drop(?:s|ped|ping)?|retire(?:s|d|ing)?)\b|"
+            r"(?:下架|停售|停产|停止销售|退出在售阵容|移出产品线)",
+            title_text,
+            re.I,
+        )
+    )
+    catalog_scope = bool(
+        re.search(
+            r"\b(?:products?|devices?|models?|lineup|catalog)\b|"
+            r"(?:多款|款设备|款产品|产品阵容|在售阵容|官网产品)",
+            title_text,
+            re.I,
+        )
+    )
+    affected_families = multi_product_hardware_subjects(
+        f"{title_text}. {evidence_text}"
+    )
+    apple_owned = bool(
+        effective_apple_term_score(title_text) > 0
+        or re.search(r"^(?:apple|苹果)", title_text)
+    )
+    return withdrawal and catalog_scope and apple_owned and len(affected_families) >= 2
+
+
+def is_single_multi_product_mockup_disclosure_story(
+    title: str,
+    summary: str,
+    key_facts: list[str],
+) -> bool:
+    """Keep one physical mockup disclosure as one source-owned action."""
+    title_text = clean_sentence(title).lower()
+    identity = build_event_identity(title, summary)
+    distinct_model_signals = len(
+        {
+            component
+            for component in identity.title_components
+            if component.startswith("iphone-model:")
+        }
+    )
+    if "foldable-iphone" in identity.title_products:
+        distinct_model_signals += 1
+    if (
+        len(multi_product_hardware_subjects(title_text)) < 2
+        and distinct_model_signals < 2
+    ):
+        return False
+    physical_representation = bool(
+        re.search(
+            r"\b(?:mockups?|dummy\s+(?:models?|units?)|physical\s+models?|"
+            r"non[- ]functional\s+(?:models?|units?))\b|"
+            r"(?:机模|模型机|展示模型|非功能性样机)",
+            title_text,
+            re.I,
+        )
+    )
+    single_disclosure = bool(
+        re.search(
+            r"\b(?:reveals?|revealed|shown?|shows?|showcased?|displayed?|"
+            r"surfaces?|leaks?|leaked|video)\b|(?:曝光|展示|亮相|现身|视频)",
+            title_text,
+            re.I,
+        )
+    )
+    if not (physical_representation and single_disclosure):
+        return False
+    combined = " ".join([title, summary, *key_facts[:8]]).lower()
+    return not bool(
+        re.search(
+            r"\b(?:separately|in\s+a\s+separate\s+report)\b|"
+            r"(?:分别来自|另一份报告|另一则消息|单独报道)",
+            combined,
+            re.I,
+        )
+    )
+
+
 def multi_product_hardware_roadmap_variants(
     title: str,
     summary: str,
@@ -11749,6 +11845,11 @@ def multi_product_hardware_roadmap_variants(
     """Project an explicit multi-product roadmap onto its product-level actions."""
     original = [(title, summary, key_facts)]
     title_lower = title.lower()
+    if (
+        is_multi_product_catalog_withdrawal_story(title, summary, key_facts)
+        or is_single_multi_product_mockup_disclosure_story(title, summary, key_facts)
+    ):
+        return original
     if re.search(
         r"\b(?:unidentified|unresolved|unknown)\b.{0,36}"
         r"\b(?:device|product|hardware)\s+identifiers?\b|"
@@ -12019,6 +12120,8 @@ def compound_article_variants(
     key_facts: list[str],
 ) -> list[tuple[str, str, list[str]]]:
     """Split one source when its own reporting establishes separate Apple actions."""
+    if is_single_multi_product_mockup_disclosure_story(title, summary, key_facts):
+        return [(title, summary, key_facts)]
     source_title = re.split(
         r"\s+-\s+(?=(?:apple\b|cnbeta\b|9to5mac\b|it\s*之家\b))",
         clean_sentence(title),
@@ -14184,6 +14287,8 @@ def is_apple_company_org_change_story(text: str) -> bool:
         [
             "apple executive",
             "apple exec",
+            "apple cfo",
+            "ex-apple cfo",
             "top executive",
             "another executive",
             "departing executive",
@@ -14193,6 +14298,7 @@ def is_apple_company_org_change_story(text: str) -> bool:
             "senior vice president",
             "vice president",
             "苹果高管",
+            "苹果首席财务官",
             "苹果高级副总裁",
             "高级副总裁",
             "高管",
@@ -14218,6 +14324,11 @@ def is_apple_company_org_change_story(text: str) -> bool:
             "moved to",
             "poached",
             "hired",
+            "step down",
+            "steps down",
+            "stepped down",
+            "no longer runs",
+            "isn't running",
             "recruited",
             "to openai",
             "离职",
@@ -14226,6 +14337,9 @@ def is_apple_company_org_change_story(text: str) -> bool:
             "加入",
             "挖角",
             "聘请",
+            "卸任",
+            "不再负责",
+            "退出职责",
         ],
     )
     structural_change_score = score_terms(
@@ -22302,6 +22416,9 @@ def is_third_party_app_or_service_status_story(title: str, text: str) -> bool:
     title_lower = title.lower()
     lower = text.lower()
     combined = f"{title} {text}"
+    semantic_identity = title_led_identity(title, text)
+    if semantic_identity.title_actions & {"legal", "regulation"}:
+        return False
     if is_final_cut_camera_update_story(f"{title} {text}"):
         return False
     if is_apple_creator_studio_story(f"{title} {text}"):
@@ -23646,7 +23763,10 @@ def is_direct_apple_product_adoption_story(title: str, text: str) -> bool:
             scope,
         )
     )
-    return institution and adoption and (attributed or measured)
+    if institution and adoption and (attributed or measured):
+        return True
+
+    return is_material_apple_device_operational_deployment(title, scope)
 
 
 def is_apple_pencil_product_roadmap_story(title: str, text: str) -> bool:
@@ -26303,8 +26423,12 @@ def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = No
     lower = text.lower()
     title_lower = title.lower()
     semantic_identity = title_led_identity(title, summary)
+    if is_direct_apple_product_lifecycle_action(title, summary):
+        return "hardware_market"
     if is_projected_apple_hardware_roadmap_story(title, text):
         return "hardware_market"
+    if is_direct_first_party_named_object_change(title, summary):
+        return "os_app"
     if (
         semantic_identity.scope == "apple-direct"
         and semantic_identity.title_actions
@@ -27572,6 +27696,29 @@ def classify_relevance_tier(
     )
     if source_name == "Apple Newsroom":
         return "strong", "official Apple source"
+    external_leadership_opinion = bool(
+        re.search(r"\b(?:ceo|chief executive)\b|(?:首席执行官|ceo)", title, re.I)
+        and re.search(
+            r"\b(?:praises?|applauds?|endorses?|backs?|rates?)\b|"
+            r"(?:夸赞|称赞|盛赞|评价|看好)",
+            title,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:should|would|will|could)\b.{0,24}\b(?:good|great|strong|excellent|best)\b|"
+            r"(?:应该|应当|会|将会).{0,12}(?:很好|出色|优秀|合格|称职)",
+            title,
+            re.I,
+        )
+    )
+    if external_leadership_opinion:
+        return "weak", "external opinion about Apple leadership without a new Apple action"
+    if is_direct_apple_product_adoption_story(title, text):
+        return "strong", "measured institutional adoption of a first-party Apple product"
+    if is_direct_apple_product_lifecycle_action(title, lead_only):
+        return "strong", "official Apple product lifecycle and repair-support change"
+    if quantified_apple_company_performance_subject(title, summary):
+        return "strong", "current quantified Apple company-performance report"
     if is_third_party_app_action_on_apple_platform(title, lead_only):
         return "weak", "third-party app update without an Apple platform change"
     if is_routine_third_party_apple_compatibility_product_story(title, text):
@@ -27596,6 +27743,12 @@ def classify_relevance_tier(
         "tutorial",
     }:
         return "weak", f"editorial {editorial_form.replace('_', ' ')} without a new Apple action"
+    if (
+        editorial_form == "analysis"
+        and "market-ranking" in semantic_identity.title_actions
+        and not quantified_apple_company_performance_subject(title, summary)
+    ):
+        return "weak", "leadership or company-performance retrospective without a current attributed report"
     if editorial_form == "analysis" and not semantic_identity.title_actions & {
         "legal",
         "regulation",
@@ -28751,6 +28904,11 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
         score += 40
     elif tier == "ecosystem":
         score += 30
+    if quantified_apple_company_performance_subject(
+        candidate.title,
+        f"{candidate.summary} {candidate.context}",
+    ):
+        score += 35
     if (
         is_third_party_platform_availability_candidate(text)
         and (

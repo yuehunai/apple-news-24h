@@ -811,6 +811,10 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "improved",
             "removes",
             "removed",
+            "rename",
+            "renames",
+            "renamed",
+            "renaming",
             "upgrade",
             "update",
             "new feature",
@@ -823,6 +827,9 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "改进",
             "升级",
             "移除",
+            "改名",
+            "更名",
+            "重命名",
             "更新",
             "调整",
             "首次支持",
@@ -1960,6 +1967,89 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
 def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
+    named_platform_app_spotlight = bool(
+        not re.match(
+            r"^(?:apple(?:'s)?|苹果|ios\b|ipados\b|macos\b|watchos\b|tvos\b|visionos\b)",
+            lower,
+        )
+        and re.search(
+            r"^[a-z][a-z0-9.+-]*(?:\s+[a-z][a-z0-9.+-]*){0,3}\s+"
+            r"(?:is|offers?)\b.{0,70}\b(?:ios|ipados|macos|watchos|tvos|visionos|"
+            r"iphone|ipad|mac|apple\s+watch|vision\s+pro)\s+(?:app|application)\b",
+            lower,
+        )
+        and not re.search(
+            r"\b(?:from|by)\s+apple\b|\bapple\s+(?:launch(?:es|ed)?|release(?:s|d)?|"
+            r"introduc(?:es|ed)?)\b|(?:苹果(?:推出|发布|上线))",
+            f"{lower} {lead_lower[:300]}",
+        )
+    )
+    if named_platform_app_spotlight:
+        return "third_party_spotlight"
+    leadership_scorecard = bool(
+        re.search(
+            r"\b(?:tim\s+cook|john\s+ternus|steve\s+jobs|apple\s+ceo)\b|"
+            r"(?:库克|特努斯|乔布斯|苹果\s*ceo)",
+            lower,
+        )
+        and (
+            re.search(
+                r"\b(?:wins?\s+and\s+(?:misses|losses)|hits?\s+and\s+misses|"
+                r"got\s+right\s+and\s+wrong)\b|(?:功过|成败|得失|做对了什么|做错了什么)",
+                lower,
+            )
+            or (
+                re.search(r"\blegacy\b|遗产", lower)
+                and not re.search(
+                    r"\b(?:reflect(?:s|ed)?|comments?|says?|speaks?|leav(?:e|es|ing)|"
+                    r"resign(?:s|ed|ing)?)\b|(?:回顾并回应|发表|表示|称|离任|离职|卸任)",
+                    lower,
+                )
+            )
+        )
+    )
+    historical_media = bool(
+        re.search(r"\b(?:apple|steve\s+jobs|tim\s+cook)\b|(?:苹果|乔布斯|库克)", lower)
+        and re.search(r"\b(?:19\d{2}|200\d|201[0-5])\b", lower)
+        and re.search(
+            r"\b(?:vintage|resurfac(?:e|es|ed)|old\s+(?:video|interview)|archive[sd]?|interview)\b|"
+            r"(?:旧(?:视频|采访)|早年采访|历史采访|重新流传|重现)",
+            f"{lower} {lead_lower}",
+        )
+        and not re.search(
+            r"\b(?:auction(?:ed)?|sold|sells?|launch(?:es|ed)?|release(?:s|d)?|publishes?)\b|"
+            r"(?:拍卖|成交|出售|推出|发布)",
+            lower,
+        )
+    )
+    if leadership_scorecard or historical_media:
+        return "analysis"
+    multi_vendor_catalog = bool(
+        _contains_any(lower, APPLE_TITLE_TERMS)
+        and len(
+            {
+                vendor
+                for vendor, aliases in (
+                    ("samsung", ("samsung", "三星")),
+                    ("google", ("google", "pixel", "谷歌")),
+                    ("huawei", ("huawei", "mate ", "华为")),
+                    ("xiaomi", ("xiaomi", "redmi", "小米", "红米")),
+                    ("oppo", ("oppo",)),
+                    ("vivo", ("vivo", "iqoo")),
+                    ("honor", ("honor", "荣耀")),
+                )
+                if _contains_any(lower, aliases)
+            }
+        )
+        >= 2
+        and re.search(
+            r"\b(?:prices?|release dates?|launch dates?|schedule|lineup|list)\b|"
+            r"(?:售价|价格|发布时间|发布日期|档期|一览|清单|名单)",
+            lower,
+        )
+    )
+    if multi_vendor_catalog:
+        return "roundup"
     if re.search(
         r"^(?:as\s+(?:a|an)\b|i(?:'m| am|'ve| have)\b).{0,90}"
         r"\b(?:my\s+favorite|favorite\s+way|how\s+i\s+use|way\s+to\s+use)\b|"
@@ -1998,7 +2088,7 @@ def _content_form(title: str, lead: str = "") -> str:
     if re.search(
         r"\b(?:apple\s+)?(?:event|keynote)\b.{0,42}"
         r"\b(?:highlights?|what\s+to\s+expect|everything\s+to\s+know|all\s+the\s+details)\b|"
-        r"(?:苹果)?(?:秋季|春季|新品)?发布会.{0,20}(?:看点|前瞻|展望)"
+        r"(?:苹果)?(?:秋季|春季|新品)?发布会.{0,20}(?:看点|看头|前瞻|展望)"
         r"(?:.{0,10}(?:都在|一览|汇总|盘点|合集))?",
         lower,
     ):
@@ -2632,6 +2722,28 @@ def _content_form(title: str, lead: str = "") -> str:
     )
     if repeated_incident_retrospective:
         return "analysis"
+    leadership_retrospective = bool(
+        re.search(
+            r"\b(?:as\s+(?:apple\s+)?ceo|years?\s+as\s+(?:apple\s+)?ceo)\b"
+            r".{0,90}\b(?:the\s+(?:man|woman|leader)|legacy|tenure|era|grew|built)\b|"
+            r"\b(?:\d{1,2}|ten|fifteen|twenty)\s+years?\b.{0,70}"
+            r"\b(?:legacy|tenure|era|market|supply\s+chain|grew|built|history)\b|"
+            r"(?:库克时代|任期回顾|交班).{0,60}(?:留下|遗产|成绩|市值|创新引擎)|"
+            r"(?:(?<!\d)\d{1,2}(?!\d)|十[一二三四五六七八九]?|[一二三四五六七八九]十)\s*年"
+            r".{0,60}(?:回顾|复盘|变迁|市场|市值|股价|供应链|攻守|留下|成绩|遗产|种下|养大|对手)|"
+            r"(?:能否|是否).{0,32}(?:重启|重现|恢复).{0,24}(?:创新|乔布斯时代)",
+            lower,
+        )
+        and not re.search(
+            r"\b(?:announces?|appoints?|assumes?|steps?\s+down|signs?\s+off|"
+            r"farewell|final\s+day|last\s+day)\b|"
+            r"(?:宣布|任命|上任|就任|卸任|告别信|内部信|最后一天)",
+            lower,
+        )
+        and not quantified_apple_company_performance_subject(title, lead)
+    )
+    if leadership_retrospective:
+        return "analysis"
     attributed_strategy_commentary = bool(
         re.search(
             r"\b(?:needs? to|should|must|has to)\b.{0,70}"
@@ -2679,7 +2791,12 @@ def _content_form(title: str, lead: str = "") -> str:
         lower,
     ):
         return "analysis"
-    if re.search(r"\b(?:hands-on|hands on|first impressions?)\b|(?:公测版|测试版)?.{0,10}(?:上手|体验)", lower):
+    if re.search(
+        r"\b(?:hands-on|hands on|first impressions?)\b|"
+        r"(?:公测版|测试版).{0,10}(?:上手|体验)|"
+        r"(?:上手(?:体验)?|实测|体验评测|使用体验|深度体验)",
+        lower,
+    ):
         return "hands_on"
     return "news"
 
@@ -3149,6 +3266,10 @@ def is_third_party_app_action_on_apple_platform(title: str, lead: str) -> bool:
         re.search(
             r"\b(?:an?|another|major|new|third[- ]party)\s+"
             r"(?:[a-z0-9-]+\s+){0,3}(?:app|client|service|utility)\b|"
+            r"\b(?:two|three|four|five|several|multiple|\d+)\s+"
+            r"(?:[a-z0-9-]+\s+){0,4}(?:apps?|app\s+updates?|app\s+releases?)\b|"
+            r"\b(?:apps?|app\s+updates?|app\s+releases?)\b.{0,36}"
+            r"\b(?:roundup|collection|list)\b|"
             r"(?:一款|新的|第三方).{0,16}(?:应用|客户端|服务|工具)",
             title_text,
             re.I,
@@ -3176,6 +3297,17 @@ def is_third_party_app_action_on_apple_platform(title: str, lead: str) -> bool:
             lead_text,
             re.I,
         )
+        or re.search(
+            r"\b(?:first|second|third|another)\b.{0,80}"
+            r"\b(?:updated?|upgraded?|released?|launched?|added)\b.{0,55}\b(?:app|client)\b|"
+            r"\b(?:developers?|vendors?|publishers?)\b.{0,45}"
+            r"\b(?:updated?|released?|launched?)\b.{0,45}\b(?:apps?|clients?)\b"
+            r".{0,45}\b(?:ios|ipados|macos|watchos|tvos|visionos|carplay)\b|"
+            r"(?:首先|其次|此外|另一款).{0,60}(?:应用|客户端).{0,24}"
+            r"(?:更新|发布|推出|新增)",
+            lead_text,
+            re.I,
+        )
     )
     first_party_platform_change = bool(
         re.search(
@@ -3185,6 +3317,17 @@ def is_third_party_app_action_on_apple_platform(title: str, lead: str) -> bool:
             r"third[- ]party\s+app\s+support)\b|"
             r"(?:苹果|平台).{0,40}(?:宣布|开放|启用|引入|调整|扩展)"
             r".{0,50}(?:接口|框架|政策|平台能力|第三方应用支持)",
+            title_text,
+            re.I,
+        )
+    )
+    negated_first_party_change = bool(
+        re.search(
+            r"\b(?:apple|the\s+platform)\b.{0,45}\b(?:did\s+not|does\s+not|"
+            r"has\s+not|announced\s+no|without)\b.{0,45}"
+            r"\b(?:api|framework|policy|platform|capability|feature)\b|"
+            r"(?:苹果|平台).{0,30}(?:未|没有|并未|无).{0,30}"
+            r"(?:宣布|开放|接口|框架|政策|能力|功能)",
             f"{title_text}. {lead_text}",
             re.I,
         )
@@ -3193,7 +3336,7 @@ def is_third_party_app_action_on_apple_platform(title: str, lead: str) -> bool:
         apple_platform
         and generic_app_object
         and app_owned_action
-        and not first_party_platform_change
+        and not (first_party_platform_change and not negated_first_party_change)
     )
 
 
@@ -3332,6 +3475,67 @@ def is_direct_first_party_feature_change(title: str, lead: str) -> bool:
     return bool(first_party_feature or versioned_platform)
 
 
+def is_direct_first_party_named_object_change(title: str, lead: str) -> bool:
+    """Recognize a first-party app changing one named object or label.
+
+    Source headlines describe the same change as a rename, a replacement
+    label, or a search alias.  This structural predicate keeps those headline
+    angles in the first-party app domain without teaching the crawler any
+    particular place, label, or article URL.
+    """
+    title_text = _normalized(title)
+    lead_text = _normalized(lead)[:700]
+    if _title_scope(title, lead) != "apple-direct":
+        return False
+    first_party_app = bool(
+        _extract_patterns(title_text, PRODUCT_PATTERNS)
+        & {
+            "app-store",
+            "apple-books",
+            "apple-maps",
+            "apple-music",
+            "apple-sports",
+            "apple-tv",
+            "apple-wallet",
+            "icloud",
+            "safari",
+        }
+    )
+    if not first_party_app:
+        return False
+    owner_pattern = (
+        r"^(?:apple\s+(?:books|maps|music|sports|tv|wallet)|app\s+store|icloud|safari)"
+        r"(?=\s|[^a-z0-9]|$)|"
+        r"^(?:苹果(?:图书|地图|音乐|体育|电视|钱包|应用商店)|icloud|safari)"
+    )
+    if not (
+        re.search(owner_pattern, title_text, re.I)
+        or re.search(owner_pattern, lead_text, re.I)
+    ):
+        return False
+    scope = f"{title_text} {lead_text}"
+    explicit_change = bool(
+        re.search(
+            r"\b(?:rename|renames|renamed|renaming|relabel|relabels|relabeled|"
+            r"relabeling)\b|"
+            r"\b(?:use|uses|using|display|displays|show|shows|label|labels|mark|marks)\b"
+            r"[^.!?]{0,100}\binstead\s+of\b|"
+            r"\bbring(?:s|ing)?\s+up\b[^.!?]{0,100}\b(?:if|when)\b[^.!?]{0,50}"
+            r"\bsearch(?:es|ing)?\b|"
+            r"\bsearch(?:es|ing)?\b[^.!?]{0,100}\b(?:resolve|resolves|return|returns|"
+            r"bring|brings)\b|"
+            r"(?:改名|更名|重命名|改称|标注为|显示为)",
+            scope,
+            re.I,
+        )
+    )
+    # Search-alias headlines need two named labels to prove that this is an
+    # object mapping change rather than an ordinary search tip.
+    search_alias = bool(re.search(r"\bsearch\b|搜索", scope, re.I))
+    quoted_labels = re.findall(r"['\"“”]([^'\"“”]{2,80})['\"“”]", scope)
+    return explicit_change and (not search_alias or len(quoted_labels) >= 1)
+
+
 def is_authoritative_first_party_action(identity: EventIdentity) -> bool:
     """Return true for source-independent direct-action classes.
 
@@ -3363,6 +3567,202 @@ def is_authoritative_first_party_action(identity: EventIdentity) -> bool:
             }
         )
     )
+
+
+def quantified_apple_company_performance_subject(title: str, lead: str) -> str:
+    """Return the executive-tenure subject for a current quantified report.
+
+    A title-led percentage and an attributed report distinguish a newly
+    published company-performance result from a general leadership
+    retrospective.  The returned subject is deliberately about the measured
+    tenure, not the publisher's later opinion, so translations can reconcile
+    without merging ordinary succession commentary.
+    """
+    title_text = _normalized(title)
+    lead_text = _normalized(lead)[:900]
+    if not re.search(r"(?<!\d)\d{2,5}(?:\.\d+)?\s*%", title_text):
+        return ""
+    apple_stock_subject = bool(
+        re.search(
+            r"\baapl\b|\bapple(?:'s)?\s+(?:stock|shares?|share\s+price)\b|"
+            r"(?:苹果股价|苹果股票|苹果公司股价)",
+            title_text,
+        )
+    )
+    measured_move = bool(
+        re.search(
+            r"\b(?:gain(?:s|ed)?|grew|rose|return(?:s|ed)?|increas(?:e|es|ed))\b|"
+            r"(?:累计)?(?:涨了|上涨|增长|升幅|回报)",
+            title_text,
+        )
+    )
+    tenure_context = bool(
+        re.search(
+            r"\bunder\s+[a-z][a-z .'-]{1,40}\b|\b(?:tenure|years?\s+as\s+ceo)\b|"
+            r"(?:执掌|掌舵|任内|任期)",
+            f"{title_text} {lead_text[:300]}",
+        )
+    )
+    attributed_current_report = bool(
+        re.search(
+            r"\b(?:bloomberg|reuters|according\s+to|reports?|reported|data\s+shows?)\b|"
+            r"(?:据[^，。]{0,24}(?:报道|统计|数据)|报道称|报告显示|数据显示)",
+            lead_text,
+        )
+    )
+    if not (apple_stock_subject and measured_move and tenure_context and attributed_current_report):
+        return ""
+    if re.search(r"\b(?:tim\s+)?cook\b|库克", f"{title_text} {lead_text[:300]}"):
+        return "tim-cook-tenure"
+    if re.search(r"\bjohn\s+ternus\b|特努斯", f"{title_text} {lead_text[:300]}"):
+        return "john-ternus-tenure"
+    return "apple-executive-tenure"
+
+
+def is_material_apple_device_operational_deployment(title: str, lead: str) -> bool:
+    """Recognize a completed, institution-led deployment of an Apple device.
+
+    The three independent gates keep routine third-party app availability out:
+    a named operating institution, evidence that the device was actually used,
+    and either regulatory authorization or a first-of-kind milestone.
+    """
+    title_text = _normalized(title)
+    scope = f"{title_text} {_normalized(lead)[:1200]}"
+    apple_device = bool(
+        re.search(
+            r"\b(?:apple\s+vision\s+pro|vision\s+pro|apple\s+watch|iphone|ipad|macbook)\b|"
+            r"(?:苹果\s*)?(?:vision\s+pro|apple\s+watch|iphone|ipad|macbook)",
+            title_text,
+        )
+    )
+    institution = bool(
+        re.search(
+            r"\b(?:hospital|health(?:\s+system)?|medical\s+cent(?:er|re)|clinic|"
+            r"university|school|enterprise|organization|surgeon|surgical\s+team)\b|"
+            r"(?:医院|医疗中心|医疗机构|大学|学校|企业|机构|医生|外科团队)",
+            scope,
+        )
+    )
+    completed_use = bool(
+        re.search(
+            r"\b(?:performed|completed)\s+the\s+first\b|"
+            r"\bfirst\s+(?:surgery|procedure|deployment)\b.{0,100}"
+            r"\b(?:completed|performed|using|used)\b|"
+            r"\b(?:surgery|procedure)\b.{0,60}\bhas\s+been\s+(?:completed|performed)\b|"
+            r"\bused\s+(?:during|in)\s+(?:a\s+)?(?:surgery|procedure)\b|"
+            r"\bintraoperative\b|\bfirst[- ]ever\s+(?:surgery|procedure|deployment)\b|"
+            r"(?:完成全球首例|完成首例|实施首例|用于手术|术中使用|辅助.{0,16}手术)",
+            scope,
+        )
+    )
+    regulated_or_first = bool(
+        re.search(
+            r"\bfda[- ]authorized\b|\bde\s+novo\s+authorization\b|"
+            r"\bregulatory\s+authorization\b|\bworld(?:'s)?\s+first\b|"
+            r"\bfirst[- ]ever\b|(?:fda\s*(?:授权|de\s+novo)|监管授权|全球首例|全球首次)",
+            scope,
+        )
+    )
+    return apple_device and institution and completed_use and regulated_or_first
+
+
+def is_direct_apple_product_lifecycle_action(title: str, lead: str) -> bool:
+    """Recognize an official lifecycle-list or repair-support change.
+
+    Publishers often lead with an idiom instead of ``Apple`` and describe the
+    official list update in the opening sentence.  The decision therefore
+    requires all three structural signals: a first-party product, an official
+    lifecycle-list action, and a concrete service/repair consequence.
+    """
+    title_text = _normalized(title)
+    scope = f"{title_text} {_normalized(lead)[:1000]}"
+    apple_product = bool(
+        _extract_patterns(scope, PRODUCT_PATTERNS)
+        & {
+            "airpods",
+            "apple-watch",
+            "homepod",
+            "imac",
+            "ipad",
+            "ipad-air",
+            "ipad-mini",
+            "ipad-pro",
+            "iphone",
+            "mac",
+            "mac-mini",
+            "mac-pro",
+            "mac-studio",
+            "macbook",
+            "vision-pro",
+        }
+    )
+    first_party_owner = bool(
+        re.search(r"\bapple\b|苹果", scope)
+        and re.search(
+            r"\b(?:obsolete|vintage|legacy)\b.{0,40}\b(?:list|product|device|model)s?\b|"
+            r"\b(?:list(?:s|ed|ing)?|classif(?:y|ies|ied|ying))\b.{0,45}"
+            r"\b(?:obsolete|vintage)\b|"
+            r"(?:列入|进入|更新).{0,28}(?:过时|复古|停产)(?:产品)?(?:名单|列表)|"
+            r"(?:过时|复古|停产)(?:产品)?(?:名单|列表)",
+            scope,
+        )
+    )
+    service_consequence = bool(
+        re.search(
+            r"\b(?:repair|repairs|service|servicing|parts?|support)\b.{0,65}"
+            r"\b(?:end|ends|ended|stop|stops|stopped|terminate|terminates|unavailable|no\s+longer)\b|"
+            r"\bno\s+longer\b.{0,55}\b(?:repair|service|parts?|support)\b|"
+            r"(?:不再|停止|终止|无法).{0,24}(?:维修|服务|零部件|配件供应|支持)|"
+            r"(?:维修|服务|零部件|配件供应|支持).{0,24}(?:终止|停止|结束|不再提供)",
+            scope,
+        )
+    )
+    return apple_product and first_party_owner and service_consequence
+
+
+def _non_apple_group_price_action_with_apple_non_change(title: str) -> bool:
+    """Return true when Apple is only the unchanged price comparator.
+
+    A headline can mention a first-party product next to a price verb while
+    assigning the actual price action to a broader phone market or a group of
+    non-Apple vendors.  Treating that product mention as the action owner
+    promotes industry stories that explicitly say Apple did *not* change its
+    price.
+    """
+    text = _normalized(title)
+    group_price_action = bool(
+        re.search(
+            r"\b(?:multiple|several|other)\s+(?:phone|smartphone|device|vendor|brand|maker)s?\b"
+            r".{0,32}\b(?:raise|raised|raising|increase|increased|hike|hiked)\b"
+            r".{0,20}\b(?:price|prices|pricing)?\b|"
+            r"\b(?:phone|smartphone|device)\s+(?:makers?|brands?|vendors?)\b"
+            r".{0,32}\b(?:raise|raised|increase|increased|hike|hiked)\b|"
+            r"(?:多款|多家|多个|多种|一批|各大|其他).{0,18}"
+            r"(?:手机|设备|厂商|品牌).{0,18}(?:涨价|提价|调价|上调价格|上调售价)|"
+            r"(?:手机|设备|厂商|品牌).{0,10}(?:集体|普遍|纷纷).{0,12}"
+            r"(?:涨价|提价|调价|上调价格|上调售价)",
+            text,
+        )
+    )
+    if not group_price_action:
+        return False
+    apple_product = (
+        r"(?:(?<![a-z0-9])(?:apple|iphone|ipad|mac(?:book)?|airpods|apple watch)"
+        r"(?![a-z0-9])|苹果)"
+    )
+    unchanged_comparator = bool(
+        re.search(
+            rf"{apple_product}.{{0,28}}\b(?:did\s+not|does\s+not|has\s+not|"
+            rf"is\s+not|was\s+not|won['’]t|remains?\s+unchanged)\b.{{0,18}}"
+            rf"\b(?:raise|raised|increase|increased|hike|hiked|price|prices|pricing)\b|"
+            rf"\b(?:except|but\s+not)\s+{apple_product}.{{0,22}}"
+            rf"\b(?:price|prices|pricing|raise|increase|hike)\b|"
+            rf"{apple_product}.{{0,20}}(?:没|未|没有|尚未|并未|不会|不跟随)"
+            rf".{{0,8}}(?:涨价|提价|调价|上调价格|上调售价|跟涨|涨)",
+            text,
+        )
+    )
+    return unchanged_comparator
 
 
 def high_confidence_direct_apple_action(identity: EventIdentity) -> bool:
@@ -3437,6 +3837,12 @@ def build_event_identity(
     lead_lower = _normalized(lead)[:900]
     content_form = _content_form(title, lead)
     title_scope = _title_scope(title, lead)
+    company_performance_subject = quantified_apple_company_performance_subject(
+        title,
+        lead,
+    )
+    if company_performance_subject:
+        title_scope = "apple-direct"
     title_products = _collapse_product_hierarchy(_extract_patterns(title_lower, PRODUCT_PATTERNS))
     title_products = {
         product
@@ -3499,6 +3905,8 @@ def build_event_identity(
     if content_form != "roundup" and not (title_products & direct_service_products):
         products |= _extract_patterns(lead_lower[:260], PRODUCT_PATTERNS) & direct_service_products
     title_components = _extract_patterns(title_lower, COMPONENT_PATTERNS)
+    if company_performance_subject:
+        title_components.add(f"apple-company-performance:{company_performance_subject}")
     if (
         re.search(r"\bspotlight\b|聚焦(?:搜索)?", title_lower)
         and re.search(r"\bindex(?:ing|ed)?\b|索引", title_lower)
@@ -3972,6 +4380,10 @@ def build_event_identity(
     ):
         components.add("product-release-mix")
     title_actions = _extract_patterns(title_lower, ACTION_PATTERNS)
+    if is_direct_first_party_named_object_change(title, lead):
+        title_actions.add("feature-change")
+    if company_performance_subject:
+        title_actions.add("market-report")
     if "consumer-purchase-intent" in title_components:
         title_actions.add("market-report")
     if (
@@ -4055,6 +4467,12 @@ def build_event_identity(
         actions.add("feature-change")
     if content_form != "roundup":
         actions |= _extract_patterns(lead_lower[:500], ACTION_PATTERNS)
+    if _non_apple_group_price_action_with_apple_non_change(title):
+        title_actions.discard("price-change")
+        actions.discard("price-change")
+        title_scope = "third-party-context"
+        title_components.add("non-apple-group-price-with-apple-comparator")
+        components.add("non-apple-group-price-with-apple-comparator")
     availability_expansion_pattern = (
         r"\b(?:expand(?:s|ed|ing)?|extend(?:s|ed|ing)?|roll(?:s|ed|ing)?\s+out)\b"
         r".{0,48}\b(?:availability|coverage|sales|markets?|countries|regions?)\b|"
@@ -4157,7 +4575,9 @@ def build_event_identity(
     elif re.search(price_change_pattern, lead_lower[:220]):
         actions.add("price-change")
     primary_intent: str | None = None
-    if _is_analyst_target_action_title(title_lower):
+    if company_performance_subject:
+        primary_intent = "company-performance-report"
+    elif _is_analyst_target_action_title(title_lower):
         primary_intent = "analyst-target"
     elif not re.search(
         r"\b(?:recruits?|hires?|rehire[sd]?|brings?\s+back|adds?)\b|"
