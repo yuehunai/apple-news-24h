@@ -9894,10 +9894,16 @@ def is_relevant_candidate(
     semantic_identity = title_led_identity(candidate.title, candidate.summary)
     if high_confidence_direct_apple_action(semantic_identity):
         return True
-    if semantic_identity.scope == "apple-direct" and semantic_identity.content_form != "news":
-        # Discovery must retain reviewable direct-Apple weak items. Their final
-        # tier is decided after detail extraction, where they remain deferred
-        # instead of disappearing before the article page can be evaluated.
+    has_report_evidence = bool(
+        semantic_identity.actions
+        or ((candidate.summary.strip() or key_facts) and exclude_score == 0)
+    )
+    if semantic_identity.scope == "apple-direct" and (
+        has_report_evidence or semantic_identity.content_form != "news"
+    ):
+        # Admission preserves a directly reported Apple subject for detail
+        # verification. Relevance is decided downstream; legacy action words
+        # must not veto it or make a cleaned article depend on feed boilerplate.
         return True
     classification_facts = [candidate.context, *(key_facts or [])]
     candidate_event_kind = detect_event_kind(candidate.title, candidate.summary, classification_facts)
@@ -9914,18 +9920,21 @@ def is_relevant_candidate(
         # Preserve explicit Apple-platform third-party updates for deferred
         # review instead of narrowing discovery when their final tier is weak.
         return True
-    if candidate_tier == "strong" and candidate_event_kind in {
-        "app_store_trust",
-        "company_org",
-        "developer_tool",
-        "hardware_market",
-        "legal_antitrust",
-        "os_app",
-        "regional_regulation",
-        "retail_store",
-        "security_privacy",
-        "wallet_feature",
-    }:
+    if candidate_tier == "strong" and (
+        has_report_evidence
+        or candidate_event_kind in {
+            "app_store_trust",
+            "company_org",
+            "developer_tool",
+            "hardware_market",
+            "legal_antitrust",
+            "os_app",
+            "regional_regulation",
+            "retail_store",
+            "security_privacy",
+            "wallet_feature",
+        }
+    ):
         return True
     if is_apple_developer_tool_story(text):
         return True
@@ -10888,6 +10897,21 @@ def extract_key_facts(text: str, title: str, source_name: str) -> list[str]:
                 add_unique_text(facts, seen, candidate, min_chars=min_chars)
                 if len(facts) >= limit:
                     return facts
+    if not facts:
+        identity = title_led_identity(title, extract_summary(text, ""))
+        if (
+            identity.action_owner == "apple"
+            and identity.content_form == "news"
+            and "official-communication" in identity.title_actions
+        ):
+            # Official communications may convey important narrative facts
+            # without quantities. Use only cleaned substantive body units.
+            for tag, unit in extract_text_units(text):
+                cleaned = clean_fact_text(unit)
+                if tag in {"p", "blockquote"} and not fact_noise(cleaned):
+                    add_unique_text(facts, seen, cleaned)
+                    if len(facts) >= limit:
+                        break
     return facts
 
 

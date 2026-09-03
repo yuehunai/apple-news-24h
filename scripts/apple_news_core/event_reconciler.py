@@ -643,10 +643,64 @@ def _title_fact_signatures(title: str, lead: str) -> set[str]:
     return signatures
 
 
+def _quoted_subjects(value: str) -> list[str]:
+    """Read paired quotation marks, never possessive apostrophes."""
+    matches = re.finditer(
+        r'《([^》\n]{1,90})》|“([^”\n]{1,90})”|'
+        r'‘((?:[^’\n]|(?<=\w)’(?=\w)){1,90})’(?!\w)|'
+        r'"([^"\n]{1,90})"|(?<!\w)\'((?:[^\'\n]|(?<=\w)\'(?=\w)){1,90})\'(?!\w)',
+        value,
+    )
+    return [next(part for part in match.groups() if part).strip() for match in matches]
+
+
+def _headline_content_claim(title: str, lead: str) -> tuple[str, str] | None:
+    """Bind a trailer/review headline to its work, not a background release."""
+    title_text = _canonical_title(title)
+    action = (
+        "trailer" if re.search(r"\b(?:trailer|teaser)\b|预告片", title_text)
+        else "reviews" if re.search(r"\breviews?\b|影评|口碑", title_text)
+        else ""
+    )
+    if not action:
+        return None
+    # Preserve case for unquoted titles, and do not cross sentence boundaries.
+    primary_lead = re.split(r"[。！？]|(?<=[.!?])\s+", lead, maxsplit=2)
+    scopes = [title, *primary_lead[:2]]
+    name = r"[A-Z][A-Za-z0-9'’&-]*(?:[ \t]+[A-Za-z0-9'’&-]+){0,7}?"
+    patterns = (
+        rf"(?i:\b(?:contender|winner|title)\s*:\s*)(?P<name>{name})(?=[.,;!?]|$)",
+        rf"(?i:\bapple\s+tv\s+premieres?\s+)(?P<name>{name})"
+        r"(?i:(?=\s+(?:this|next|on|in)\b|[,.;!?]|$))",
+        rf"(?i:\b(?:film|movie|documentary|series)\s+(?:called\s+|titled\s+)?)"
+        rf"(?P<name>{name})(?=[,.;!?]|$)",
+    )
+    for scope in scopes:
+        # Work quotes must be attached to a content noun/action. Award names
+        # and review pull-quotes are not film identifiers.
+        for quoted in _quoted_subjects(scope):
+            prefix = scope[:scope.find(quoted)]
+            if re.search(
+                r"\b(?:film|movie|documentary|series|trailer\s+for|reviews?\s+(?:for|of))\s*[\"'“‘]$",
+                prefix, re.I,
+            ):
+                return re.sub(r"[^a-z0-9]+", "-", _normalized(quoted)).strip("-"), action
+        for pattern in patterns:
+            match = re.search(pattern, scope)
+            if match:
+                subject = re.sub(r"[^a-z0-9]+", "-", _normalized(match.group("name"))).strip("-")
+                if subject not in _GENERIC_SUBJECT_WORDS | {"apple-tv"}:
+                    return subject, action
+    return None
+
+
 def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
     """Return a title-led Apple TV work and action without using publisher data."""
     # Key-fact evidence follows the lead in callers. Keep enough bounded text
     # to reach a source-attributed production fact without scanning page chrome.
+    headline_claim = _headline_content_claim(title, lead)
+    if headline_claim:
+        return headline_claim
     raw = f"{title}. {lead[:2200]}"
     titled_schedule = re.search(
         r"《(?P<local>[^》]{1,80})》.{0,36}(?:定档|首播|上线|开播)",
@@ -1539,9 +1593,10 @@ def _structured_assertion_keys(
         separation.add("predicate:os-release-announcement")
 
     classic_catalog_addition = bool(
-        ("apple-tv" in identity.products or _contains(evidence_scope, "apple tv", "apple tv+"))
+        not content
+        and ("apple-tv" in identity.products or _contains(primary_scope, "apple tv", "apple tv+"))
         and _contains(
-            evidence_scope,
+            primary_scope,
             "classic movies",
             "classic films",
             "经典影片",
@@ -1549,7 +1604,7 @@ def _structured_assertion_keys(
             "经典片库",
         )
         and _contains(
-            evidence_scope,
+            primary_scope,
             "adds",
             "added",
             "gains",
@@ -2656,7 +2711,55 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     )
 
 
+def _versioned_shared_resource_operation(title: str, lead: str) -> tuple[str, str] | None:
+    """Bind a cross-device operation to its OS version and shared resource."""
+    title_text, primary_scope = _primary_assertion_scope(title, lead)
+    version = re.search(
+        r"(?<![a-z0-9])(ios|ipados|macos|watchos|tvos|visionos)\s*"
+        r"(\d+(?:\.\d+){0,2})(?![0-9.])", title_text,
+    )
+    if not version or not re.search(r"\b(?:new|adds?|introduces?)\b|新增|加入|全新", title_text):
+        return None
+    devices = sorted(set(re.findall(
+        r"(?<![a-z0-9])(iphone|ipad|mac|macbook|apple watch|vision pro)s?(?![a-z0-9])",
+        primary_scope,
+    )))
+    cross_device = re.search(
+        r"\b(?:two|multiple|both)\s+(?:\w+\s+)?(?:iphones|ipads|macs|macbooks|devices|watches)\b|"
+        r"\b(?:between|across)\b.{0,60}\bdevices\b|"
+        r"(?:两|多)(?:台|部|个)\s*(?:iphone|ipad|mac|设备|手机|电脑)", primary_scope,
+    )
+    resources = {
+        name for name, pattern in (
+            ("phone-number", r"(?:phone|telephone)\s+number|(?:esim|手机|电话)?号码"),
+            ("account", r"account|账户|账号"),
+            ("session", r"session|会话"),
+        )
+        if re.search(
+            rf"\bsame\s+(?:{pattern})|(?:共用|共享)?(?:同一个|同一|一个)\s*(?:{pattern})",
+            primary_scope,
+        )
+    }
+    switching = re.search(r"\bswitch(?:ing)?\b|切换", primary_scope)
+    negated = re.search(
+        r"\b(?:cannot|can't|does not|will not)\s+switch\b|(?:不能|无法|不支持).{0,8}切换",
+        primary_scope,
+    )
+    if devices and cross_device and len(resources) == 1 and switching and not negated:
+        device_subject = "+".join(device.replace(" ", "-") for device in devices)
+        return (
+            f"{version.group(1)}-{version.group(2)}:{device_subject}:{next(iter(resources))}",
+            "cross-device-switch",
+        )
+    return None
+
+
 def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
+    title, _, lead = text.partition(". ")
+    operation = _versioned_shared_resource_operation(title, lead)
+    if operation:
+        subject, predicate = operation
+        return f"apple-os-feature-scope:{subject}:{predicate}"
     if not _versioned_os_feature_report(text, identity):
         return ""
     text_parts = text.split(". ", 1)
@@ -2820,14 +2923,18 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
         identity.title_products
         - {"ios", "ipados", "macos", "watchos", "tvos", "visionos", "iphone", "ipad", "mac"}
     )
+    primary_names = identity.title_named_subjects or {
+        subject for subject in identity.named_subjects
+        if subject.replace("-", " ") in _primary_assertion_scope("", lead)[1]
+    }
     branded_named_subjects = {
         subject
-        for subject in identity.named_subjects
+        for subject in primary_names
         if subject.startswith("apple-")
     }
     named_subject_candidates = {
         subject.removeprefix("apple-")
-        for subject in (branded_named_subjects or identity.named_subjects)
+        for subject in (branded_named_subjects or primary_names)
         if subject
         not in {
             "airpods",
@@ -3725,9 +3832,16 @@ def _first_party_content_claim(
     evidence: str = "",
 ) -> tuple[str, str] | None:
     """Return a named first-party content subject and its concrete action."""
-    if "apple-tv" not in identity.title_products:
-        return None
     title_text = _canonical_title(title)
+    owned_film_title = bool(re.search(
+        r"\bapple's\s+(?:new\s+)?(?:film|movie|documentary|series)\b|"
+        r"苹果.{0,8}(?:电影|影片|纪录片|剧集)", title_text,
+    ))
+    if "apple-tv" not in identity.title_products and not owned_film_title:
+        return None
+    headline_claim = _headline_content_claim(title, lead)
+    if headline_claim:
+        return headline_claim
     rights_scope = f"{title}. {lead[:700]}"
     rights_action = bool(
         re.search(
@@ -3743,7 +3857,7 @@ def _first_party_content_claim(
     if rights_action:
         subject_candidates = [
             candidate.strip()
-            for candidate in re.findall(r"[《‘“\"']([^》’”\"']{2,90})[》’”\"']", rights_scope)
+            for candidate in _quoted_subjects(rights_scope)
             if candidate.strip().lower() not in {"apple tv", "apple tv+"}
         ]
         for pattern in (
@@ -3846,11 +3960,7 @@ def _first_party_content_claim(
             return None
         quoted_subjects = [
             candidate.strip()
-            for candidate in re.findall(
-                r"[‘’“”\"']([a-z0-9][a-z0-9 '&:.-]{1,80}?)[,;:]?[‘’“”\"']",
-                f"{lead} {evidence}",
-                re.I,
-            )
+            for candidate in _quoted_subjects(f"{lead} {evidence}")
             if candidate.strip().lower() not in {"apple tv", "apple tv+"}
         ]
         if not quoted_subjects:
@@ -5128,12 +5238,14 @@ def _repair_cost_estimate(
 def _unreleased_hardware_launch_roadmap(
     title: str,
     lead: str,
-    evidence: str,
     identity: EventIdentity,
 ) -> tuple[str, str] | None:
-    """Project a first-party product and future launch year without source wording."""
+    """Bind a launch and its year to one primary assertion, not body background."""
     title_scope = _normalized(title)
-    scope = f"{title_scope}. {_normalized(lead)[:700]} {_normalized(evidence)[:900]}"
+    lead_scope = _normalized(lead)[:700]
+    if lead_scope.startswith(title_scope):
+        lead_scope = lead_scope[len(title_scope):].lstrip(" .:-：")
+    lead_scope = re.split(r"[。！？]|(?<=[.!?])\s+", lead_scope, maxsplit=1)[0]
     products = identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
     named_apple_glasses = bool(re.search(
         r"(?:\bapple(?:'s)?\b|苹果).{0,28}(?:smart\s+glasses|ai\s+glasses|智能眼镜|ai\s*眼镜)",
@@ -5143,7 +5255,6 @@ def _unreleased_hardware_launch_roadmap(
         products = {"apple-glasses"}
     if len(products) != 1:
         return None
-    future_year = re.search(r"\b(20(?:2[6-9]|3\d))\b", scope)
     title_year = re.search(r"\b(20(?:2[6-9]|3\d))\b", title_scope)
     first_party_subject = bool(
         re.search(r"\bapple(?:'s)?\b|苹果", title_scope)
@@ -5154,8 +5265,12 @@ def _unreleased_hardware_launch_roadmap(
         r"debut(?:s|ed|ing)?|ship(?:s|ped|ping)?|release(?:s|d|ing)?)\b|"
         r"(?:发布|推出|亮相|揭晓|发售|上市|出货)"
     )
-    launch_action = bool(re.search(launch_pattern, scope))
     title_launch_action = bool(re.search(launch_pattern, title_scope))
+    future_year = next((
+        year for assertion in (title_scope, lead_scope)
+        if re.search(launch_pattern, assertion)
+        and (year := re.search(r"\b(20(?:2[6-9]|3\d))\b", assertion))
+    ), None)
     future_modality = bool(
         re.search(
             r"\b(?:will|plans?\s+to|expected\s+to|set\s+to|next\s+year|"
@@ -5171,11 +5286,56 @@ def _unreleased_hardware_launch_roadmap(
     if not (
         first_party_subject
         and future_year
-        and launch_action
         and future_title_action
     ):
         return None
     return next(iter(products)), future_year.group(1)
+
+
+def _finish_alternative_relations(title: str, lead: str, evidence: str, generation: str) -> set[str]:
+    """Identify the disputed finishes, never a shared lineup count alone."""
+    aliases = {
+        "black": r"\bblack\b|黑色",
+        "white": r"\bwhite\b|白色",
+        "silver": r"\bsilver\b|银色",
+        "gold": r"\bgold\b|金色",
+        "blue": r"\bblue\b|蓝色|天空蓝|天蓝",
+        "red": r"\bred\b|红色",
+        "green": r"\bgreen\b|绿色",
+        "pink": r"\bpink\b|粉色",
+        "purple": r"\bpurple\b|紫色",
+    }
+
+    def finishes(clause: str) -> tuple[set[str], set[str]]:
+        present, excluded = set(), set()
+        for name, pattern in aliases.items():
+            for match in re.finditer(pattern, clause):
+                prefix = clause[max(0, match.start() - 32):match.start()]
+                if re.search(r"\b(?:without|excluding|no|not)\s+$|(?:没有|不含|无含|取消|不提供)\s*$", prefix):
+                    excluded.add(name)
+                else:
+                    present.add(name)
+        return present, excluded
+
+    title_text, primary = _primary_assertion_scope(title, lead)
+    _, excluded = finishes(primary)
+    present = set()
+    clauses = re.split(r"[。！？]|(?<=[.!?])\s+", _normalized(f"{title}. {lead[:900]} {evidence[:1200]}"))
+    for clause in clauses:
+        models = set(re.findall(r"iphone\s*(\d{1,2})(?!\d)", clause))
+        if models - {generation} or re.search(r"\b(?:last year|previous|previously|back in)\b|去年|上一代|此前", clause):
+            continue
+        values, _ = finishes(clause)
+        present |= values
+    relations = {",".join(sorted((left, right))) for left in excluded for right in present - excluded}
+    # An indirect dispute can name mutually exclusive alternatives without
+    # endorsing either. That is the same attribute question as the part leak.
+    if re.search(r"\b(?:whether|battle|disagree|conflicting)\b|争议|分歧", title_text):
+        for left, right in combinations(aliases, 2):
+            a, b = aliases[left], aliases[right]
+            if re.search(rf"(?:{a})\s+(?:or|还是)\s+(?:{b})|(?:{b})\s+(?:or|还是)\s+(?:{a})", title_text):
+                relations.add(",".join(sorted((left, right))))
+    return relations
 
 
 def _primary_claim_projection(
@@ -5222,6 +5382,34 @@ def _primary_claim_projection(
         if category:
             category_hint = category
         trusted_direct_action = trusted_direct_action or trusted
+
+    shared_resource_operation = _versioned_shared_resource_operation(title, lead)
+    if shared_resource_operation:
+        subject, predicate = shared_resource_operation
+        add_claim(subject, predicate, category="software_systems")
+
+    # A disclosure must identify the disputed attribute values. Equal counts
+    # and generic component names are not evidence of the same report.
+    finish_topic = _primary_title_changed_object(full_title_text) == "finish-color" or (
+        not _primary_title_changed_object(full_title_text)
+        and re.search(r"\b(?:colors?|colours?|finishes?)\b", text)
+    )
+    finish_disclosure = bool(
+        finish_topic
+        and re.search(r"\b(?:leaks?|leaked|leakers?|rumou?rs?)\b|泄露|爆料|曝光", full_title_text)
+    )
+    finish_models = sorted(
+        c.removeprefix("iphone-family:")
+        for c in identity.title_components if c.startswith("iphone-family:")
+    )
+    if finish_disclosure and len(finish_models) == 1:
+        generation = finish_models[0].split("-", 1)[0]
+        for relation in _finish_alternative_relations(title, lead, evidence, generation):
+            add_claim(
+                f"iphone-{finish_models[0]}", "finish-lineup-disclosure",
+                qualifier=f"alternatives:{relation}", category="hardware_products",
+            )
+            separation.add(f"finish-alternatives:{relation}")
 
     direct_title_subject = bool(
         identity.scope == "apple-direct"
@@ -5450,11 +5638,11 @@ def _primary_claim_projection(
         )
 
     executive_social_account = bool(
-        re.search(r"\b(?:ceo|chief executive)\b|(?:首席执行官|新任\s*ceo)", title_text, re.I)
+        re.search(r"(?<![a-z])ceo(?![a-z])|\bchief executive\b|首席执行官", title_text, re.I)
         and re.search(
             r"\b(?:on|joins?|opens?|launches?|starts?)\s+(?:an?\s+)?(?:x|twitter|weibo)\b|"
             r"\bfirst\s+(?:post|message)\b|"
-            r"(?:入驻|开通|启用).{0,18}(?:微博|社交账号|社交平台|x\s*平台)|"
+            r"(?:入驻|开通|启用|开).{0,18}(?:微博|社交账号|社交平台|x\s*平台)|"
             r"(?:首条|第一条).{0,10}(?:博文|帖子|消息|动态)",
             title_text,
             re.I,
@@ -5467,6 +5655,14 @@ def _primary_claim_projection(
             category="software_systems",
             trusted=True,
         )
+
+    official_follow_change = bool(
+        re.search(r"(?:apple|苹果).{0,8}(?:官方|official).{0,16}(?:账号|社媒|account)", title_text)
+        and re.search(r"取关|唯一关注|取消关注|\bunfollows?\b|\bonly\s+follows?\b", title_text)
+        and re.search(r"ceo|首席执行官", title_text)
+    )
+    if official_follow_change:
+        add_claim("apple-corporate-social-account", "ceo-follow-change", category="software_systems")
 
     executive_compensation_signal = bool(
         re.search(
@@ -5637,7 +5833,7 @@ def _primary_claim_projection(
         _contains(claim_evidence, "mac", "mac app store", "mac 开发者")
         and _contains(title_text, "intel", "英特尔", "arm64")
         and re.search(
-            r"\b(?:drop|remove|end|stop|phase\s+out).{0,20}\bsupport\b|"
+            r"\b(?:drop|remove|end|stop|phase\s+out).{0,20}\bsupport(?:ing)?\b|"
             r"\barm64[- ]only\b|"
             r"(?:移除|停止|终止|放弃).{0,16}(?:支持|兼容)|仅支持\s*arm64",
             title_text,
@@ -5790,7 +5986,6 @@ def _primary_claim_projection(
         hardware_roadmap = _unreleased_hardware_launch_roadmap(
             title,
             lead,
-            evidence,
             identity,
         )
         if hardware_roadmap:
@@ -6369,6 +6564,7 @@ def _primary_claim_projection(
         or inbox_accessory_policy_denial
         or executive_profile_asset_update
         or executive_social_account
+        or official_follow_change
     ):
         event_keys.discard("primary-claim:apple-leadership:ceo-transition")
         separation.discard("primary-claim-predicate:ceo-transition")
@@ -7187,7 +7383,8 @@ def _primary_claim_projection(
             )
 
     if (
-        _contains(text, "app store", "应用商店")
+        not mac_intel_support_removal
+        and _contains(text, "app store", "应用商店")
         and _contains(
             title_text,
             "pulls",
@@ -10260,6 +10457,13 @@ def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile
     return False
 
 
+def _explicit_property_value_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
+    """Contradictory property values outrank an otherwise shared quantity."""
+    left_values = {key for key in left.separation_keys if key.startswith("finish-alternatives:")}
+    right_values = {key for key in right.separation_keys if key.startswith("finish-alternatives:")}
+    return bool(left_values and right_values and left_values.isdisjoint(right_values))
+
+
 def _weak_editorial_profile(profile: ReconciliationProfile) -> bool:
     identity = profile.identity
     return bool(
@@ -10341,6 +10545,14 @@ def _explicit_separation_conflict(
     right: ReconciliationProfile,
 ) -> bool:
     """Keep explicit product/action boundaries authoritative during reunion."""
+    for disclosure, other in ((left, right), (right, left)):
+        if (
+            "primary-claim-predicate:finish-lineup-disclosure" in disclosure.separation_keys
+            and "primary-claim-predicate:finish-lineup-disclosure" not in other.separation_keys
+            and other.identity is not None
+            and "product-launch" in other.identity.title_actions
+        ):
+            return True
     left_content_titles = {
         key.removeprefix("content-title:")
         for key in left.separation_keys
@@ -10434,6 +10646,7 @@ def _explicit_separation_conflict(
         "primary-claim-subject:",
         "primary-claim-predicate:",
         "changed-object:",
+        "finish-alternatives:",
         "product-family:",
         "product-model:",
         "legal-party:",
@@ -11110,6 +11323,7 @@ def _reunite_exact_relation_groups(
             )
             if any(
                 _profile_release_conflict(profiles[id(left)], profiles[id(right)])
+                or _explicit_property_value_conflict(profiles[id(left)], profiles[id(right)])
                 or (
                     not authoritative_action_relation
                     and (

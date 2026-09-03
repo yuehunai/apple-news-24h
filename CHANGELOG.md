@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.71.0 - 2026-09-03
+
+- Restored detail-page admission for substantive title-led Apple reports without requiring legacy action words or narrow event-kind lists, while keeping admission separate from final relevance and rejecting bare product navigation.
+- Improved article-form and action-owner recognition so focused technical disclosures, mixed-case feature names, and current attributed reports remain eligible, while old-rumor collections, editorial previews, historical comparisons, and retail visitor anecdotes remain deferred.
+- Improved cross-language reconciliation for named content works, versioned cross-device capabilities, and model-specific finish disclosures; kept trailer and review actions, corporate and executive account changes, and current distribution policy versus historical support timelines separate.
+- Tightened launch-roadmap evidence to bind the product launch and year to one primary assertion, preventing another vendor's adoption date or background Apple launch from falsely promoting competitor coverage.
+- Preserved substantive nonnumeric facts in newly issued official Apple communications when numeric and list extraction returns no facts, and updated fallback-policy guidance without changing the skill workflow, CLI, source list, or detail-page limit.
+- Added 57 focused regression tests, expanding the suite from 1,330 to 1,387 tests; concurrent live validation retained all 63 baseline source URLs and recovered six more in 92.4/92.5 seconds, while clean-agent validation required no manual regrouping or deferred promotion.
+
 ## 1.70.0 - 2026-09-02
 
 - Added title-and-lead event identities for multi-product catalog withdrawals and mockup disclosures, regulated Apple-device deployments, quantified Apple company performance, official product-lifecycle changes, and first-party named-object updates.

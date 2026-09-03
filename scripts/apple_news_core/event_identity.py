@@ -1435,7 +1435,8 @@ def _valid_quoted_subject(value: str) -> str | None:
     original = value.strip()
     if re.fullmatch(r"(?:M\d+\s+Extreme|[A-Z]{1,4}\d{3,5})", original, re.I):
         return subject
-    if re.fullmatch(r"[A-Z][A-Za-z0-9+.-]*(?:\s+[A-Z][A-Za-z0-9+.-]*)+", original):
+    branded_word = r"(?:[A-Z][A-Za-z0-9+.-]*|[a-z]+[A-Z][A-Za-z0-9+.-]*)"
+    if re.fullmatch(rf"{branded_word}(?:\s+{branded_word})+", original):
         return subject
     if re.fullmatch(r"[A-Z][A-Za-z0-9]*[A-Z][A-Za-z0-9+.-]*", original):
         return subject
@@ -1484,7 +1485,10 @@ def _named_subjects(title: str, lead: str, evidence: Iterable[str] = ()) -> set[
     subjects: set[str] = set()
     background_quoted_subjects: set[str] = set()
 
-    for match in re.finditer(r"[\"'“‘]([^\"'“”‘’\n]{2,48})[\"'”’]", scoped):
+    for match in re.finditer(
+        r"(?<![A-Za-z0-9])[\"'“‘]((?:[^\"'“”‘’\n]|(?<=\w)['’](?=\w)){2,48})[\"'”’](?![A-Za-z0-9])",
+        scoped,
+    ):
         trailing_context = scoped[match.end() : match.end() + 36].lstrip(" \t\"'“”‘’")
         if re.match(
             r"(?:(?:oscar|emmy|bafta|grammy|golden globe)\s+(?:winner|nominee)|"
@@ -2104,8 +2108,8 @@ def _content_form(title: str, lead: str = "") -> str:
     ):
         return "analysis"
     if re.search(
-        r"\brumou?rs?\s*:\s*[^:]{2,100}(?:,|/|\band\b)[^:]{2,100}$|"
-        r"(?:传闻|爆料)(?:汇总|盘点|一览)?\s*[：:].{2,100}(?:、|，|/|和).{2,100}$",
+        r"\brumou?rs\s*:\s*[^:]{2,100}(?:,|/|\band\b)[^:]{2,100}$|"
+        r"(?:传闻|爆料)(?:汇总|盘点|一览)\s*[：:].{2,100}(?:、|，|/|和).{2,100}$",
         lower,
     ):
         return "roundup"
@@ -2258,6 +2262,17 @@ def _content_form(title: str, lead: str = "") -> str:
     )
     if first_person_multi_product_preview:
         return "analysis"
+    historical_product_comparison = bool(
+        re.search(r"\b(?:tenure|era|history)\b|任期|任内|时代|历程", lower)
+        and re.search(r"\bfirst\b.{0,60}\b(?:last|latest)\b|第一.{0,40}最后", lower)
+        and re.search(r"\b(?:same|unchanged|still)\b|都是|仍然|依然|相同|一样", lower)
+        and not re.search(
+            r"\bapple\s+(?:announces?|unveils?|introduces?|changes?)\b|"
+            r"苹果(?:公司|官方)?(?:今日|今天|正式)?(?:宣布|推出|更改|调整)", lower,
+        )
+    )
+    if historical_product_comparison:
+        return "analysis"
     retrospective_without_new_action = bool(
         re.match(r"^how\s+(?:apple|iphone|ipad|mac|airpods)\b", lower)
         and re.search(
@@ -2376,6 +2391,27 @@ def _content_form(title: str, lead: str = "") -> str:
         )
     )
     if single_user_workaround:
+        return "user_anecdote"
+    retail_usage_anecdote = bool(
+        re.search(r"\bstores?\b|(?:体验店|零售店|门店|专卖店)", lower)
+        and re.search(
+            r"\b(?:customers?|students?|children|visitors?)\b.{0,60}"
+            r"\b(?:occupy|occupying|playing|linger)\b.{0,40}\b(?:demo|display)\b|"
+            r"(?:学生|孩子|顾客|游客).{0,36}(?:占用|围在).{0,18}(?:样机|展示机|展示设备)",
+            lead_lower,
+        )
+        and re.search(
+            r"\b(?:store|staff)\b.{0,40}\b(?:no authority|cannot remove)\b|"
+            r"(?:门店|店员|工作人员).{0,24}(?:无权|没有权利|没有权限)(?:劝阻|驱赶|赶走)?",
+            f"{lower} {lead_lower}",
+        )
+        and not re.search(
+            r"\bapple\b.{0,35}\b(?:announces?|changes?|introduces?|releases?)\b|"
+            r"苹果(?:公司|官方)?[^。！？]{0,12}(?:宣布|发布|调整|变更|制定)",
+            f"{lower} {lead_lower}",
+        )
+    )
+    if retail_usage_anecdote:
         return "user_anecdote"
     if (
         "poll" in lower
@@ -2501,7 +2537,8 @@ def _content_form(title: str, lead: str = "") -> str:
         return "third_party_spotlight"
     current_attributed_report = bool(
         re.search(
-            r"\b(?:today (?:outlined|reported)|today['’]s report|latest edition|new report|"
+            r"\b(?:today (?:outlined|reported)|today['’]s report|latest edition|"
+            r"new(?:\s+[a-z-]+){0,2}\s+report|"
             r"bloomberg reports|gurman reports|according to (?:bloomberg|mark gurman|gurman))\b|"
             r"(?:彭博社今日|古尔曼今日|据彭博社|古尔曼称|最新一期|最新报道|今日报告|今日透露)",
             lead_lower,
@@ -2551,7 +2588,9 @@ def _content_form(title: str, lead: str = "") -> str:
         return "roundup"
     if (not current_attributed_report) and re.search(
         r"\b(?:outlook|preview|roundup)\b.{0,24}\beverything\s+(?:expected|rumored|known)\b|"
-        r"(?:前瞻|展望|汇总).{0,20}(?:全部|所有|已知|预期|传闻)",
+        r"(?:前瞻|展望|汇总).{0,20}(?:全部|所有|已知|预期|传闻)|"
+        r"[一二三四五六七八九十\d]+\s*(?:大|款|种)(?:旗舰|新品|产品|设备)"
+        r".{0,16}(?:抢先看|提前看|一览)",
         lower,
     ):
         return "roundup"
@@ -2600,13 +2639,41 @@ def _content_form(title: str, lead: str = "") -> str:
     ):
         return "roundup"
     if (not current_attributed_report) and re.search(
-        r"^(?:iphone|ipad|mac(?:book)?|apple watch|airpods|vision pro)\b"
+        r"^(?:[am]\d{1,2}(?:\s+(?:pro|max|ultra))?\s+)?"
+        r"(?:iphone|ipad|mac(?:book)?|apple watch|airpods|vision pro)\b"
         r".{0,48}\b(?:two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+)\b"
         r"\s+(?:new\s+)?(?:features?|changes?|upgrades?)\b.{0,48}"
-        r"\b(?:coming|expected|rumored|to expect)\b",
+        r"\b(?:coming|launching|expected|rumored|to expect)\b",
         lower,
     ):
         return "roundup"
+    if not current_attributed_report and re.search(
+        r"\bhere['’]s\s+what\s+(?:the\s+)?rumou?rs?\s+say\b|"
+        r"\bhere\s+are\s+the\s+(?:existing|previously reported)\s+rumou?rs?\b",
+        lead_lower,
+    ):
+        return "roundup"
+    if not current_attributed_report and re.match(
+        r"^when\s+(?:is|are|will)\b[^?？]{0,100}"
+        r"\b(?:releas(?:e|es|ing)|launch(?:es|ing)?|arriv(?:e|es|ing))\b[^?？]*[?？]",
+        lower,
+    ):
+        return "analysis"
+    current_first_party_development = bool(
+        re.match(r"^(?:apple\b|苹果)", lead_lower)
+        and re.search(
+            r"\b(?:is|has been)\s+(?:testing|prototyping|developing)\b|"
+            r"苹果(?:公司|官方)?正在(?:测试|开发|试制)",
+            re.split(r"[。！？]|(?<=[.!?])\s+", lead_lower, maxsplit=1)[0],
+        )
+    )
+    if not (current_attributed_report or current_first_party_development) and re.search(
+        r"\bhere['’]s\s+why\s+(?:that|this|it)\s+(?:really\s+)?matters\b|"
+        r"\b(?:will|could|may|might)\s+(?:be|become|pose)\b.{0,32}"
+        r"\b(?:test|challenge|threat|risk)\s+(?:of|for|to)\b",
+        lower,
+    ) and not _extract_patterns(lower, ACTION_PATTERNS):
+        return "analysis"
     if re.search(
         r"\b(?:adds?|gets?|gains?|brings?)\s+(?:two|three|four|five|six|seven|eight|nine|ten|\d+)\s+"
         r"(?:new\s+)?(?:iphone\s+|ipad\s+|mac\s+)?(?:features?|changes?|upgrades?)\b|"
@@ -2801,6 +2868,11 @@ def _content_form(title: str, lead: str = "") -> str:
     return "news"
 
 
+def _headline_subject_clause(title: str) -> str:
+    """Remove evidence adjectives without changing the grammatical subject."""
+    return re.sub(r"^(?:leaked\s+|泄露的|曝光的)", "", _normalized(title))
+
+
 def _title_scope(title: str, lead: str) -> str:
     title_lower = _normalized(title)
     lead_lower = _normalized(lead)[:600]
@@ -2821,11 +2893,11 @@ def _title_scope(title: str, lead: str) -> str:
         re.match(
             r"^(?:(?:these|those|some|older|new)\s+)?(?:apple(?:'s)?|iphones?|ipads?|ios|ipados|macs?(?:book|os)?|watchos|tvos|visionos|airpods|icloud|safari|siri|shazam|beats\s+(?:lab|headphones|earbuds|pill|studio)|carplay|xcode|app store)\b|"
             r"^(?:苹果|传苹果|消息称苹果|报道称苹果)",
-            title_lower,
+            _headline_subject_clause(title),
         )
         or re.match(
             r"^(?:iphone|ipad|macbook|airpods|apple watch)(?=[^a-z0-9]|$)",
-            title_lower,
+            _headline_subject_clause(title),
         )
     ) or beats_first_party_technical
     versioned_first_party_os_release = bool(
@@ -3381,7 +3453,7 @@ def _primary_action_owner(
         r"^(?:mark\s+gurman|gurman|bloomberg|report|reports?|rumou?r|leak|"
         r"古尔曼|彭博社?|消息|报道称|报道|爆料)[^:：]{0,24}[：:]\s*",
         "",
-        title_text,
+        _headline_subject_clause(title),
     )
     owner_clause = re.sub(
         r"^(?:\d+(?:\.\d+)?\s*(?:元|美元|英镑|欧元)[，,、:]?\s*)",
