@@ -2974,7 +2974,7 @@ class EventIdentityArchitectureTests(unittest.TestCase):
 
         self.assertEqual(len(variants), 3, variants)
         for variant_title in variant_titles:
-            subjects = module.mac_roadmap_subjects(variant_title)
+            subjects = module.multi_product_hardware_subjects(variant_title)
             self.assertEqual(len(subjects), 1, (variant_title, subjects))
 
         articles = [

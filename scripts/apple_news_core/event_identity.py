@@ -209,6 +209,15 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("apple-pay", ("apple pay", "苹果支付")),
     ("apple-fitness", ("apple fitness+", "fitness+", "苹果 fitness+", "苹果fitness+")),
     ("apple-card", ("apple card", "苹果卡")),
+    (
+        "apple-gift-card",
+        (
+            "apple gift card",
+            "apple account gift card",
+            "苹果礼品卡",
+            "苹果账户礼品卡",
+        ),
+    ),
     ("xcode", ("xcode",)),
     ("carplay", ("carplay",)),
     ("homepod", ("homepod",)),
@@ -217,6 +226,22 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 
 COMPONENT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    (
+        "app-tracking-transparency",
+        (
+            "app tracking transparency",
+            "tracking transparency",
+            "att consent",
+            "att prompt",
+            "app tracking rules",
+            "应用追踪透明度",
+            "应用跟踪透明度",
+            "要求 app 不跟踪",
+            "要求app不跟踪",
+            "广告跟踪授权",
+        ),
+    ),
+    ("face-id", ("face id", "面容 id", "面容id")),
     (
         "first-party-accessibility-guidance",
         (
@@ -1746,6 +1771,12 @@ ANALYST_INSTITUTION_ALIASES: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 
 def _is_analyst_target_action_title(lower: str) -> bool:
+    if re.search(
+        r"\b(?:lawsuit|court|case|sues?|sued|patent|infringement)\b|"
+        r"(?:诉讼|法院|法庭|案件|起诉|专利|侵权)",
+        lower,
+    ):
+        return False
     return bool(
         re.search(
             r"\b(?:price\s+target|target\s+price|aapl\s+target)\b|"
@@ -1799,6 +1830,17 @@ def _analyst_institution_components(title: str, lead: str = "") -> set[str]:
 
 def _attribution_slug(value: str) -> str:
     value = _normalized(value)
+    sentence_fragments = [
+        fragment.strip()
+        for fragment in re.split(r"(?<=[a-z0-9])\.\s+(?=[a-z])", value)
+        if fragment.strip()
+    ]
+    if len(sentence_fragments) > 1:
+        # Adjacent title and lead sentences can both name the same publisher,
+        # e.g. "says Nikkei. Nikkei Asia reports". Keep the most specific
+        # sentence-local name instead of manufacturing one combined entity.
+        value = max(sentence_fragments, key=lambda fragment: (len(fragment.split()), len(fragment)))
+    value = re.sub(r"(?:['’]s|的)$", "", value).strip()
     value = re.sub(
         r"^(?:a\s+|the\s+|market\s+research\s+firm\s+|research\s+firm\s+|"
         r"市场研究机构|研究机构|分析机构|分析师|研究员)",
@@ -1842,9 +1884,16 @@ def _report_attribution_components(title: str, lead: str = "") -> set[str]:
         r"\b(?:[Aa]nalyst|[Rr]esearcher)\s+([A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){0,2})\b",
         r"\b[Aa]ccording\s+to\s+([A-Z][A-Za-z0-9&+.'-]+(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,3})\b",
         r"\b(?:[Nn]ote|[Rr]eport)\s+(?:from|by)\s+([A-Z][A-Za-z0-9&+.'-]+(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,3})\b",
+        r"\b(?:[Mm]arket\s+)?[Rr]esearch\s+(?:firm|company)\s+"
+        r"([A-Z][A-Za-z0-9&+.'-]+(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,3})\s+"
+        r"(?:(?:has|had|now)\s+)?(?:reports?|reported|says|said|estimates?|estimated|forecasts?|forecast|"
+        r"projects?|projected|predicts?|predicted|expects?|expected|outlines?|outlined)\b",
         r"\b([A-Z][A-Za-z0-9&+.'-]{2,30}(?:\s+[A-Z][A-Za-z0-9&+.'-]+){0,2})\s+"
-        r"(?:reports?|says|estimates?|forecasts?|projects?|data\s+shows)\b",
-        r"(?:根据|据)\s*([A-Za-z][A-Za-z0-9&+.'-]{2,30})(?:\s|的|，|,)",
+        r"(?:(?:has|had|now)\s+)?(?:reports?|reported|says|said|estimates?|estimated|forecasts?|forecast|"
+        r"projects?|projected|predicts?|predicted|expects?|expected|outlines?|outlined|"
+        r"adds?|added|believes?|data\s+shows)\b",
+        r"(?:根据|据|按照)\s*(?:市场研究机构|研究机构|分析机构)?\s*"
+        r"([A-Za-z][A-Za-z0-9&+.'-]{2,30})(?:\s|的|，|,)",
         r"(?:根据|据)\s*([\u4e00-\u9fff]{2,12})(?:社|媒体|机构)?"
         r"(?:的[^。；,，\n]{0,28})?(?:报道|消息|披露|称)",
         r"(?:根据|据)?(?:外媒|媒体|科技媒体)\s*"
@@ -1853,8 +1902,13 @@ def _report_attribution_components(title: str, lead: str = "") -> set[str]:
         r"(?:reports?|reported|contacted|reached\s+out)\b",
         r"(?:分析师|研究员)[^。；,，\n]{0,24}?[（(]\s*([A-Z][A-Za-z'.-]+(?:\s+[A-Z][A-Za-z'.-]+){0,2})\s*[）)]",
         r"(?:分析师|研究员)[^。；,，\n]{0,24}?([A-Z][A-Za-z'.-]+(?:\s*[A-Z][A-Za-z'.-]+)?)",
+        r"\b([A-Z][A-Za-z0-9&+.'-]{2,30})(?:\s*(?:总监|分析师|研究员)[^。；,，\n]{0,24})?"
+        r"\s*(?:表示|称|指出|预计|预测|分析认为|报告称|数据显示|研究显示)",
+        r"(?:市场研究机构|研究机构|分析机构|调研机构)\s*"
         r"([\u4e00-\u9fffA-Za-z][\u4e00-\u9fffA-Za-z0-9&+.'-]{1,23})"
-        r"(?:报告称|数据显示|研究显示|预测)",
+        r"(?:的)?(?:报告称|数据显示|研究显示|预测|预计|分析认为|指出|表示)",
+        r"([\u4e00-\u9fff]{2,16}(?:咨询|研究院|研究所|证券|银行|大学|实验室))"
+        r"(?:的)?(?:报告称|数据显示|研究显示|预测|预计|分析认为|指出|表示)",
     )
     rejected = {
         "apple",
@@ -1878,7 +1932,7 @@ def _report_attribution_components(title: str, lead: str = "") -> set[str]:
     }
     for pattern in patterns:
         for match in re.finditer(pattern, scope):
-            raw_value = re.sub(r"([a-z])([A-Z])", r"\1-\2", match.group(1))
+            raw_value = match.group(1)
             value = _attribution_slug(raw_value)
             if value and value not in rejected:
                 values.add(value)
@@ -1971,6 +2025,15 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
 def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
+    if re.search(
+        r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\s+"
+        r"(?:sleeps?|days?|weeks?)\s+(?:until|before)\b.{0,90}"
+        r"\b(?:here(?:'s| is)\s+what\s+we\s+know|everything\s+we\s+know|what\s+to\s+expect)\b|"
+        r"(?:还有|仅剩|倒计时)\s*[一二三四五六七八九十\d]+\s*(?:天|周)"
+        r".{0,80}(?:已知信息|信息汇总|看点汇总|前瞻)",
+        lower,
+    ):
+        return "roundup"
     named_platform_app_spotlight = bool(
         not re.match(
             r"^(?:apple(?:'s)?|苹果|ios\b|ipados\b|macos\b|watchos\b|tvos\b|visionos\b)",
@@ -1990,6 +2053,31 @@ def _content_form(title: str, lead: str = "") -> str:
     )
     if named_platform_app_spotlight:
         return "third_party_spotlight"
+    if re.search(
+        r"\brumou?rs?\s+(?:reality\s+check|roundup|ranking)\b.{0,80}"
+        r"\b(?:claims?|rumou?rs?)\s+ranked\s+by\s+(?:likelihood|probability|credibility)\b|"
+        r"(?:传闻|爆料).{0,24}(?:真实性|可信度|可能性).{0,20}(?:排名|排序|评级)",
+        lower,
+    ):
+        return "roundup"
+    if re.search(
+        r"\b(?:two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\b"
+        r".{0,40}\b(?:new\s+)?(?:apple\s+)?(?:products?|devices?)\b"
+        r".{0,60}\b(?:here(?:'s| is)\s+what(?:'s| is)\s+coming|what\s+to\s+expect)\b|"
+        r"(?:两|三|四|五|六|七|八|九|十|\d+)\s*款.{0,24}(?:苹果)?(?:新品|产品|设备)"
+        r".{0,30}(?:前瞻|看点|一览|都有哪些)",
+        lower,
+    ):
+        return "roundup"
+    if re.search(
+        r"\b(?:two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\b"
+        r".{0,28}\b(?:advantages?|reasons?|benefits?)\b.{0,55}"
+        r"\b(?:over|versus|vs\.?|compared\s+with)\b|"
+        r"(?:两|三|四|五|六|七|八|九|十|\d+)\s*(?:项|个)?(?:优势|理由|好处)"
+        r".{0,30}(?:对比|相比|胜过|优于)",
+        lower,
+    ):
+        return "analysis"
     leadership_scorecard = bool(
         re.search(
             r"\b(?:tim\s+cook|john\s+ternus|steve\s+jobs|apple\s+ceo)\b|"
@@ -2289,9 +2377,26 @@ def _content_form(title: str, lead: str = "") -> str:
     )
     if retrospective_without_new_action:
         return "analysis"
+    built_in_feature_tip = bool(
+        re.search(
+            r"^(?:apple|iphone|ipad|mac|airpods|苹果).{0,18}"
+            r"(?:没告诉你|不会主动告诉你|你可能不知道|隐藏着|自带).{0,70}"
+            r"(?:自带|内置|隐藏|不用|无需)|"
+            r"(?:不用|无需).{0,16}(?:额外)?(?:安装|装|下载).{0,12}(?:app|应用)",
+            lower,
+        )
+        and not re.search(
+            r"\b(?:announces?|launches?|releases?|rolls?\s+out|adds?|removes?|changes?)\b|"
+            r"(?:宣布|发布|推出|上线|新增|移除|调整)",
+            lower,
+        )
+    )
+    if built_in_feature_tip:
+        return "tutorial"
     if re.search(
-        r"\b(?:how\s+to|hidden\s+(?:tips?|tricks?)|things?\s+you\s+can\s+do)\b|"
-        r"(?:教程|使用技巧|隐藏玩法|冷知识|这些玩法|这样使用|赶快用起来)",
+        r"\b(?:how\s+to|getting\s+started\s+with|beginner(?:'s)?\s+guide\s+to|"
+        r"hidden\s+(?:tips?|tricks?)|things?\s+you\s+can\s+do)\b|"
+        r"(?:教程|入门指南|快速上手|使用技巧|隐藏玩法|冷知识|这些玩法|这样使用|赶快用起来)",
         lower,
     ) and not re.search(
         r"\b(?:announces?|launches?|releases?|rolls?\s+out|adds?|removes?|changes?)\b|"
@@ -2615,7 +2720,8 @@ def _content_form(title: str, lead: str = "") -> str:
         r"\d+\s+(?:new\s+)?(?:features?|changes?|upgrades?)\s+"
         r"(?:worth|to)\s+(?:test(?:ing)?|try(?:ing)?|know|use)|"
         r"\d+ new things .+ (?:can do|to try|to know)|"
-        r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+\d+\+?\s+"
+        r"(?:will|could|may|expected to)\s+(?:release|launch|unveil)\s+"
+        r"(?:two|three|four|five|six|seven|eight|nine|ten|\d+)\+?\s+"
         r"(?:new\s+)?(?:products?|devices?)|"
         r"\d+ rumored features|latest (?:apple )?rumors?|all (?:the )?(?:apple )?rumors?|"
         r"rumors? so far|best .+ to try)\b|传闻汇总|消息汇总|功能汇总|值得期待的\s*\d+",
@@ -2942,7 +3048,7 @@ def _title_scope(title: str, lead: str) -> str:
         re.search(
             r"(?:better than|versus|\bvs\.?\b|rival(?:s|ing)?|compared (?:with|to)|beats?|"
             r"overtakes?|surpasses?|dethrones?|exceeds?|leads?|ahead\s+of|挑战|对标|剑指|对决|抗衡|交锋|媲美|优于|胜过|超越|超过|领先|力压|"
-            r"接近|相当于|追平|向.{0,20}看齐|酷似|撞脸|类似(?:于)?)"
+            r"接近|相当于|追平|打平|并列|向.{0,20}看齐|酷似|撞脸|类似(?:于)?)"
             r".{0,50}(?:apple|iphone|ipad|mac|airpods|苹果)",
             title_lower,
         )
@@ -3004,6 +3110,28 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    subject_first_apple_device_add_on = bool(
+        title_products
+        and not first_party_prefix
+        and (
+            re.search(
+                r"^(?!apple\b|iphone\b|ipad\b|mac(?:book)?\b|airpods\b|苹果)"
+                r"[^:：]{1,42}(?:推出|发布|预热|上架|开发|打造).{0,65}"
+                r"(?:配件|外设|保护壳|手机壳|充电器|充电宝|底座|"
+                r"沉浸式体验|体验项目|应用|客户端|服务)",
+                title_lower,
+            )
+            or re.search(
+                r"^(?!apple\b|iphone\b|ipad\b|mac(?:book)?\b|airpods\b)"
+                r"[^:]{1,52}\b(?:launch(?:es|ed)?|release(?:s|d)?|previews?|"
+                r"unveils?|develops?|builds?)\b.{0,70}\b"
+                r"(?:accessor(?:y|ies)|case|charger|dock|immersive experience|"
+                r"experience|app|client|service)\b",
+                title_lower,
+            )
+        )
+        and not direct_relationship
+    )
     subject_first_owned_platform_update = bool(
         re.search(
             r"^(?!apple\b|iphone\b|ipad\b|ios\b|ipados\b|mac(?:book|os)?\b|watchos\b|"
@@ -3060,6 +3188,15 @@ def _title_scope(title: str, lead: str) -> str:
             r"compares?|competes?|rivals?|benchmarks?).{0,30}(?:than|against|with).{0,35}apple(?:'s)?\b|"
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b).{2,80}with apple(?:'s)?\b.{0,35}\blooming\b|"
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b).{2,90}(?:closest thing|alternative|answer).{0,24}(?:to|for).{0,28}(?:apple|iphone|ipad|mac|airpods)\b",
+            title_lower,
+        )
+    )
+    subject_first_named_competitor = bool(
+        re.match(
+            r"^(?!apple\b|iphone\b|ipad\b|mac(?:book)?\b|airpods\b|苹果)"
+            r"(?:[a-z0-9.+-]+(?:['’]s)?\s+){1,5}(?:new\s+)?"
+            r"(?:apple|iphone|ipad|macbook|airpods)(?:\s+[a-z0-9.+-]+){0,3}\s+"
+            r"(?:competitor|rival|alternative|answer)\b",
             title_lower,
         )
     )
@@ -3192,7 +3329,12 @@ def _title_scope(title: str, lead: str) -> str:
         )
     )
     if (
-        (subject_first_comparison or subject_first_metric_comparison)
+        (
+            subject_first_comparison
+            or subject_first_metric_comparison
+            or subject_first_named_competitor
+            or subject_first_apple_device_add_on
+        )
         and not first_party_prefix
         and not direct_relationship
     ):
@@ -3296,6 +3438,8 @@ def _title_scope(title: str, lead: str) -> str:
         or subject_first_apple_hypothetical
         or subject_first_service_integration
         or subject_first_comparison
+        or subject_first_named_competitor
+        or subject_first_apple_device_add_on
         or comparison_hook_then_non_apple_action
         or subject_first_apple_followup
         or subject_first_apple_response
@@ -4566,7 +4710,7 @@ def build_event_identity(
     elif re.search(integration_pattern, lead_lower[:500]):
         actions.add("platform-integration")
     first_party_data_pattern = (
-        r"(?<![a-z0-9])(?:apple\s+health|healthkit|apple\s+wallet|eventkit|homekit)(?![a-z0-9])|"
+        r"(?<![a-z0-9])(?:apple\s+health|healthkit|apple\s+wallet|eventkit)(?![a-z0-9])|"
         r"(?:苹果\s*health|苹果健康|苹果钱包|健康\s*(?:app|应用))"
     )
     if re.search(first_party_data_pattern, title_lower) and re.search(integration_pattern, title_lower):
@@ -4684,6 +4828,25 @@ def build_event_identity(
         title_lower,
     ):
         primary_intent = "compute-capacity-risk"
+    elif (
+        re.search(
+            r"\b(?:production|output|manufacturing|yield|capacity)\b|"
+            r"(?:量产|生产|产量|日产|良率|产能)",
+            title_lower,
+        )
+        or re.search(
+            r"\b(?:make|makes|made|manufacture[sd]?|produce[sd]?|builds?|built|assemble[sd]?)\b"
+            r".{0,36}\b(?:units?|devices?|phones?|few\s+hundred|thousand|million)\b|"
+            r"(?:制造|生产|组装).{0,24}(?:台|部|数百|几百|数千|几千|万|百万)",
+            title_lower,
+        )
+    ) and re.search(
+        r"\b(?:ramp(?:s|ed|ing)?|target|goal|volume|units?|daily|per\s+day|"
+        r"few\s+hundred|bottleneck|hurdle|hiccup|constraint|limited|low|only)\b|"
+        r"(?:爬坡|目标|规模|台|每天|每日|数百|几百|瓶颈|受限|不足|偏低|仅)",
+        title_lower,
+    ):
+        primary_intent = "product-production-status"
     elif re.search(r"(?:supply|availability|output|供货|供应|产量)", title_lower) and re.search(
         r"(?:shortage|constraint|tight|limited|紧张|短缺|受限|不足)", title_lower
     ):

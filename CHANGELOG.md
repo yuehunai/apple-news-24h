@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.72.0 - 2026-09-04
+
+- Added structured projection and reconciliation for multi-product Apple hardware reports, binding each event to its concrete product, action, chip generation or model code, launch/cancellation/retention state, and reporting period so distinct Mac roadmap actions stay separate while exact translated duplicates merge.
+- Improved title-and-lead action ownership and content-form handling so Apple-operated account, service, payment, and stored-value security incidents plus current first-party product and supply reports remain eligible, while tutorials, countdowns, rumor catalogs, third-party HomeKit/accessory/platform announcements, and competitor Apple-equivalence comparisons remain deferred.
+- Improved price, production, supplier, and hardware-configuration boundaries with named-report attribution and evidence-scoped fact ownership, preserving sparse cross-language sources without allowing report names, shared components, background products, or speculative clauses to bridge events.
+- Removed duplicate legacy Mac-roadmap and executive-strategy runtime paths, made structured reconciliation gate legacy recall seeds, and retained only the legacy seed behavior whose removal caused broad cross-language recall regressions.
+- Updated fallback-policy guidance for action ownership, third-party Apple-platform context, Apple-operated security incidents, multi-product projection, and structured conflict handling without changing the skill workflow, CLI, source list, or detail-page limit.
+- Added 34 focused regression tests, expanding the suite from 1,387 to 1,421 tests; concurrent live validation preserved identical discovery, detail-selection, article counts, and all 75 source URLs while improving runtime from 94.11 to 90.31 seconds, and clean-agent validation produced 21 main and 29 deferred events with zero merge warnings or manual regrouping and promotion.
+
 ## 1.71.0 - 2026-09-03
 
 - Restored detail-page admission for substantive title-led Apple reports without requiring legacy action words or narrow event-kind lists, while keeping admission separate from final relevance and rejecting bare product navigation.
