@@ -221,6 +221,13 @@ def project_multi_subject_apple_silicon_claims(
 def _content_subject(sentence: str, action_match: re.Match[str]) -> str:
     prefix = _LEADING_CHROME.sub("", sentence[: action_match.start()]).strip(" :：,-")
     prefix = re.sub(
+        r"^(?:today|now|currently|this\s+(?:week|month|year)|"
+        r"今日|今天|目前|本(?:周|月|年))\s*[,，:：-]?\s*",
+        "",
+        prefix,
+        flags=re.I,
+    )
+    prefix = re.sub(
         r"^(?:the\s+)?(?:original\s+)?(?:movie|film|series|show|documentary)\s+",
         "",
         prefix,
@@ -287,6 +294,18 @@ def project_first_party_content_claims(
         if action_match is None:
             continue
         subject = _content_subject(sentence, action_match)
+        possessive_installment = re.match(
+            r"\s+(?:its|the)\s+(season\s+\d+\s+(?:finale|premiere))\b",
+            sentence[action_match.end() :],
+            re.I,
+        )
+        if subject and possessive_installment:
+            subject = f"{subject} {possessive_installment.group(1)}"
+        subject = re.sub(
+            r"(?i)(\S+)[’']s\s+(season\s+\d+\s+(?:finale|premiere))$",
+            r"\1 \2",
+            subject,
+        )
         if not (2 <= len(subject) <= 90):
             continue
         # A date or generic service label is evidence, not a content subject.

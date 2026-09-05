@@ -62,6 +62,7 @@ from apple_news_core.event_reconciler import (  # noqa: E402
     build_reconciliation_profile,
     first_party_document_lifecycle_key,
     hardware_roadmap_primary_claim,
+    is_multi_year_apple_product_wave,
     reconcile_articles,
     reconciliation_seed_compatible,
     resolve_reconciliation_outcome,
@@ -1401,6 +1402,8 @@ class Article:
     relevance_tier: str = "strong"
     relevance_reason: str = ""
     regions: set[str] = field(default_factory=set)
+    projection_child_key: str = ""
+    projection_parent_keys: frozenset[str] = field(default_factory=frozenset)
 
 
 @dataclass
@@ -11619,6 +11622,26 @@ def iphone_report_subjects(value: str) -> set[str]:
     return subjects
 
 
+def foldable_iphone_generation_subject(value: str) -> str:
+    """Return an explicit foldable-iPhone generation owned by one claim."""
+    lower = value.lower()
+    if re.search(
+        r"\b(?:second|2nd)[ -]generation\b|\bsecond[ -]gen\b|"
+        r"(?:第二代|第\s*2\s*代)",
+        lower,
+        re.I,
+    ):
+        return "foldable-iphone-g2"
+    if re.search(
+        r"\b(?:third|3rd)[ -]generation\b|\bthird[ -]gen\b|"
+        r"(?:第三代|第\s*3\s*代)",
+        lower,
+        re.I,
+    ):
+        return "foldable-iphone-g3"
+    return "foldable-iphone"
+
+
 def multi_family_iphone_report_variants(
     title: str,
     summary: str,
@@ -11632,28 +11655,23 @@ def multi_family_iphone_report_variants(
     title_subjects = iphone_report_subjects(title)
     combined = " ".join([title, summary, *key_facts])
     combined_subjects = iphone_report_subjects(combined)
-    multi_subject_headline = len(title_subjects) >= 2 or (
-        len(combined_subjects) >= 2
-        and score_terms(
-            title_lower,
-                [
-                    "multiple",
-                    "several",
-                    "roadmap",
-                    "lineup",
-                    "product family",
-                    "models",
-                    "多重",
-                    "多项",
-                    "多款",
-                    "多机型",
-                    "产品线",
-                    "阵容",
-                    "路线图",
-                ],
-        )
-        > 0
-    )
+    aggregate_report_terms = [
+        "multiple",
+        "several",
+        "roadmap",
+        "lineup",
+        "product family",
+        "models",
+        "plans for",
+        "多重",
+        "多项",
+        "多款",
+        "多机型",
+        "产品线",
+        "阵容",
+        "路线图",
+        "规划",
+    ]
     current_report = score_terms(
         title_lower,
         [
@@ -11670,6 +11688,30 @@ def multi_family_iphone_report_variants(
             "进展",
         ],
     ) > 0
+    shared_headline_action = bool(
+        re.search(
+            r"\b(?:prices?|pricing|costs?|colors?|colou?rs?|finishes?|production|"
+            r"shipments?|orders?|preorders?|pre-orders?|availability|sales?)\b|"
+            r"(?:价格|售价|成本|配色|颜色|量产|生产|出货|订单|预购|供货|开售|销量)",
+            title_lower,
+            re.I,
+        )
+    )
+    # Multiple model names do not make a multi-action report when the headline
+    # owns one shared price, finish, production, availability, or sales action.
+    # A generic current-report headline naming several product families can be
+    # projected when its facts give each family an exclusive concrete claim.
+    multi_subject_headline = bool(
+        len(combined_subjects) >= 2
+        and (
+            score_terms(title_lower, aggregate_report_terms) > 0
+            or (
+                len(title_subjects) >= 2
+                and current_report
+                and not shared_headline_action
+            )
+        )
+    )
     if not multi_subject_headline or not current_report:
         return original
 
@@ -11698,7 +11740,18 @@ def multi_family_iphone_report_variants(
 
 
 MULTI_PRODUCT_HARDWARE_SUBJECTS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
-    ("apple-home-hub", "Home hub", ("home hub", "家庭中枢", "家庭配件 j490", "家庭配件 j491")),
+    (
+        "apple-home-hub",
+        "Home hub",
+        (
+            "home hub",
+            "家庭中枢",
+            "智能家居中枢",
+            "带屏智能家居中枢",
+            "家庭配件 j490",
+            "家庭配件 j491",
+        ),
+    ),
     ("camera-airpods", "camera-equipped AirPods", ("camera-equipped airpods", "camera airpods", "摄像头 airpods", "配备摄像头的 airpods", "图像流")),
     ("airpods-pro", "AirPods Pro", ("airpods pro", "airpodspro")),
     ("iphone", "iPhone", ("iphone", "iphones", "折叠屏手机", "折叠 iphone", "折叠iphone")),
@@ -11713,8 +11766,10 @@ MULTI_PRODUCT_HARDWARE_SUBJECTS: tuple[tuple[str, str, tuple[str, ...]], ...] = 
     ("mac-studio", "Mac Studio", ("mac studio",)),
     ("mac-pro", "Mac Pro", ("mac pro",)),
     ("imac", "iMac", ("imac", "imacs")),
+    ("ipad-air", "iPad Air", ("ipad air",)),
     ("ipad-mini", "iPad mini", ("ipad mini",)),
     ("ipad", "iPad", ("ipad", "ipads", "苹果平板")),
+    ("apple-pencil", "Apple Pencil", ("apple pencil", "苹果手写笔", "苹果触控笔")),
     ("apple-watch", "Apple Watch", ("apple watch", "apple watches", "苹果手表")),
     ("vision-pro", "Vision Pro", ("vision pro", "苹果头显")),
     ("homepod", "HomePod", ("homepod", "homepods", "苹果音箱")),
@@ -11740,9 +11795,39 @@ def multi_product_hardware_subjects(value: str) -> set[str]:
         subjects.discard("airpods")
     if "ipad-mini" in subjects:
         subjects.discard("ipad")
+    if "ipad-air" in subjects:
+        subjects.discard("ipad")
     if subjects & {"macbook-ultra", "macbook-neo", "macbook-pro", "macbook-air"}:
         subjects.discard("macbook")
     return subjects
+
+
+def heading_owned_multi_product_hardware_subject(value: str) -> str | None:
+    """Return the product named by a structured fact heading, if present."""
+    cleaned = clean_sentence(value).strip(" -\t")
+    heading = re.match(r"^([^：:\n]{2,80})[：:]", cleaned)
+    if heading:
+        heading_subjects = multi_product_hardware_subjects(heading.group(1))
+        if len(heading_subjects) == 1:
+            return next(iter(heading_subjects))
+    return None
+
+
+def owned_multi_product_hardware_subject(value: str) -> str | None:
+    """Return the product that grammatically owns one roadmap fact.
+
+    Structured multi-product reports commonly use a short product heading
+    followed by comparison or compatibility context.  The heading owns the
+    action; later product mentions must not suppress or redirect that fact.
+    """
+    heading_subject = heading_owned_multi_product_hardware_subject(value)
+    if heading_subject is not None:
+        return heading_subject
+    cleaned = clean_sentence(value).strip(" -\t")
+    subjects = multi_product_hardware_subjects(cleaned)
+    if len(subjects) == 1:
+        return next(iter(subjects))
+    return None
 
 
 def apple_silicon_generation_keys(value: str) -> set[str]:
@@ -11877,6 +11962,8 @@ def multi_product_hardware_roadmap_variants(
     title_subjects = multi_product_hardware_subjects(title)
     values: list[str] = []
     seen: set[str] = set()
+    value_owner_hints: dict[str, str] = {}
+    value_iphone_owner_hints: dict[str, str] = {}
     title_owned_clause_subjects: set[str] = set()
     if len(title_subjects) >= 2:
         for title_clause in re.split(r"[,，;；]", title):
@@ -11895,10 +11982,24 @@ def multi_product_hardware_roadmap_variants(
             add_unique_text(values, seen, cleaned_clause, min_chars=12)
             title_owned_clause_subjects.update(clause_subjects)
     for raw_value in [summary, *key_facts]:
+        current_owner: str | None = None
+        current_iphone_owner: str | None = None
         for sentence in re.split(
             r"(?<=[。！？])\s*|(?<=[.!?])\s+",
             raw_value,
         ):
+            sentence_owner = heading_owned_multi_product_hardware_subject(sentence)
+            if sentence_owner is not None:
+                current_owner = sentence_owner
+                heading = re.match(r"^([^：:\n]{2,80})[：:]", clean_sentence(sentence))
+                heading_iphone_subjects = (
+                    iphone_report_subjects(heading.group(1)) if heading else set()
+                )
+                current_iphone_owner = (
+                    next(iter(heading_iphone_subjects))
+                    if sentence_owner == "iphone" and len(heading_iphone_subjects) == 1
+                    else None
+                )
             # A report often states one owned product action before
             # "alongside" and then lists the rest of an event lineup. Split
             # that coordination boundary so the owned action can be projected;
@@ -11911,12 +12012,54 @@ def multi_product_hardware_roadmap_variants(
                 maxsplit=1,
                 flags=re.I,
             ):
-                add_unique_text(values, seen, clean_sentence(value), min_chars=12)
+                cleaned_value = clean_sentence(value)
+                add_unique_text(values, seen, cleaned_value, min_chars=12)
+                if current_owner is not None and len(cleaned_value) >= 12:
+                    owner_key = re.sub(
+                        r"[^0-9a-z\u4e00-\u9fff]+",
+                        " ",
+                        clean_fact_text(cleaned_value).lower(),
+                    ).strip()[:180]
+                    if owner_key:
+                        value_owner_hints[owner_key] = current_owner
+                        if current_iphone_owner is not None:
+                            value_iphone_owner_hints[owner_key] = current_iphone_owner
     grouped: dict[str, list[str]] = {}
     for value in values:
-        subjects = multi_product_hardware_subjects(value)
-        if len(subjects) == 1:
-            grouped.setdefault(next(iter(subjects)), []).append(value)
+        owner_key = re.sub(
+            r"[^0-9a-z\u4e00-\u9fff]+",
+            " ",
+            clean_fact_text(value).lower(),
+        ).strip()[:180]
+        subject = (
+            heading_owned_multi_product_hardware_subject(value)
+            or value_owner_hints.get(owner_key)
+            or owned_multi_product_hardware_subject(value)
+        )
+        if subject is not None:
+            grouped.setdefault(subject, []).append(value)
+    iphone_claim_groups: dict[str, dict[str, list[str]]] = {}
+    for subject, facts in grouped.items():
+        if subject != "iphone":
+            continue
+        for fact in facts:
+            owner_key = re.sub(
+                r"[^0-9a-z\u4e00-\u9fff]+",
+                " ",
+                clean_fact_text(fact).lower(),
+            ).strip()[:180]
+            iphone_subjects = iphone_report_subjects(fact)
+            if not iphone_subjects and owner_key in value_iphone_owner_hints:
+                iphone_subjects = {value_iphone_owner_hints[owner_key]}
+            if len(iphone_subjects) != 1:
+                continue
+            iphone_subject = next(iter(iphone_subjects))
+            if iphone_subject == "foldable-iphone":
+                iphone_subject = foldable_iphone_generation_subject(fact)
+            iphone_claim_groups.setdefault(subject, {}).setdefault(
+                iphone_subject,
+                [],
+            ).append(fact)
     headline_roadmap_claim = hardware_roadmap_primary_claim(title, summary)
     headline_roadmap_action = (
         headline_roadmap_claim[1] if headline_roadmap_claim is not None else ""
@@ -12007,9 +12150,24 @@ def multi_product_hardware_roadmap_variants(
     explicit_same_family_programs = (
         explicit_same_family_programs or coordinated_opening_programs
     )
-    structured_report_scope = f"{title} {summary[:1600]}"
+    structured_report_scope = f"{title} {opening_lead}"
+    structured_title_catalog_scope = bool(
+        len(title_subjects) >= 2
+        or re.search(
+            r"\b(?:two|three|four|five|six|several|multiple|more\s+than\s+\d+|\d{1,2})\b"
+            r".{0,45}\b(?:unreleased\s+)?(?:apple\s+)?(?:products?|devices?|hardware)\b|"
+            r"\b(?:apple\s+)?product\s+(?:identifier|codename|reference)\s+(?:leak|list|catalog)\b|"
+            r"(?:两|三|四|五|六|多|\d+)\s*(?:款|个|项).{0,24}"
+            r"(?:未发布|即将推出|新款)?(?:苹果)?(?:产品|设备|硬件|新品)|"
+            r"(?:大量|一批|多款).{0,24}(?:苹果)?(?:未发布)?(?:产品|设备|硬件|新品)"
+            r".{0,20}(?:代号|标识符?|清单)",
+            title_lower,
+            re.I,
+        )
+    )
     structured_multi_product_report = bool(
         len(grouped) >= 2
+        and structured_title_catalog_scope
         and re.search(
             r"\b(?:code|codes|identifier|identifiers|codename|codenames|reference|references)\b|"
             r"(?:代码|标识符|产品标识|代号|资源清单)",
@@ -12019,6 +12177,7 @@ def multi_product_hardware_roadmap_variants(
         and re.search(
             r"\b(?:unreleased|upcoming|new)\b.{0,36}\b(?:apple\s+)?(?:products?|devices?|hardware)\b|"
             r"\b(?:products?|devices?|hardware)\b.{0,36}\b(?:code|identifier|codename|reference)\b|"
+            r"\b(?:apple\s+)?product\s+(?:identifier|codename|reference)\s+(?:leak|list|catalog)\b|"
             r"(?:未发布|即将推出|多款|新款).{0,24}(?:苹果)?(?:产品|设备|硬件|新品)|"
             r"(?:产品|设备|硬件|新品).{0,24}(?:代码|标识符|产品标识|代号|资源清单)",
             structured_report_scope,
@@ -12098,6 +12257,13 @@ def multi_product_hardware_roadmap_variants(
         or broad_family_roadmap
         or explicit_multi_option_report
         or (explicit_same_family_programs and has_distinct_roadmap_claims)
+        or (
+            (
+                len(grouped) >= 2
+                or any(len(groups) >= 2 for groups in iphone_claim_groups.values())
+            )
+            and is_multi_year_apple_product_wave(title, summary)
+        )
     )
     if not explicit_multi_product:
         return original
@@ -12115,6 +12281,8 @@ def multi_product_hardware_roadmap_variants(
                 ).append(fact)
     has_distinct_generation_actions = any(
         len(groups) >= 2 for groups in generation_groups.values()
+    ) or any(
+        len(groups) >= 2 for groups in iphone_claim_groups.values()
     )
     if (
         len(grouped) < 2
@@ -12169,6 +12337,49 @@ def multi_product_hardware_roadmap_variants(
                 )
         return variants or original
     for subject, facts in grouped.items():
+        subject_iphone_claim_groups = iphone_claim_groups.get(subject, {})
+        if (
+            len(subject_iphone_claim_groups) >= 2
+            and (
+                broad_family_roadmap
+                or explicit_launch_report
+                or is_multi_year_apple_product_wave(title, summary)
+            )
+        ):
+            iphone_labels = {
+                "anniversary-iphone": "Apple anniversary iPhone design update",
+                "foldable-iphone": "Apple iPhone Ultra roadmap update",
+                "foldable-iphone-g2": "Apple second-generation foldable iPhone roadmap update",
+                "foldable-iphone-g3": "Apple third-generation foldable iPhone roadmap update",
+            }
+            for iphone_subject, iphone_facts in sorted(
+                subject_iphone_claim_groups.items()
+            ):
+                scoped_facts: list[str] = []
+                scoped_seen: set[str] = set()
+                for fact in iphone_facts:
+                    add_unique_text(
+                        scoped_facts,
+                        scoped_seen,
+                        fact,
+                        min_chars=12,
+                    )
+                variant_title = iphone_labels.get(
+                    iphone_subject,
+                    (
+                        f"Apple iPhone {iphone_subject.removeprefix('iphone-')} roadmap update"
+                        if iphone_subject.startswith("iphone-")
+                        else f"Apple {iphone_subject.replace('-', ' ').title()} roadmap update"
+                    ),
+                )
+                variants.append(
+                    (
+                        variant_title,
+                        " ".join(scoped_facts[:6]),
+                        scoped_facts[:MAX_KEY_FACTS],
+                    )
+                )
+            continue
         subject_generation_groups = generation_groups.get(subject, {})
         if len(subject_generation_groups) >= 2:
             for generation, generation_facts in sorted(subject_generation_groups.items()):
@@ -12187,7 +12398,7 @@ def multi_product_hardware_roadmap_variants(
         scoped_facts: list[str] = []
         scoped_seen: set[str] = set()
         for fact in facts:
-            add_unique_text(scoped_facts, scoped_seen, fact)
+            add_unique_text(scoped_facts, scoped_seen, fact, min_chars=12)
         # Short, identifier-dense facts can be below the normal summary-text
         # length threshold. They still carry the strongest evidence for a
         # structured child action, so use the raw group for identity checks.
@@ -12266,10 +12477,10 @@ def multi_product_hardware_roadmap_variants(
                 r"expected to launch|expects?\b.{0,64}\bto\s+(?:launch|release|ship)|"
                 r"reportedly|according to)\b|"
                 r"\b[a-z][a-z0-9]{0,20}\d{2,}(?:,\d+)?\b|"
-                r"(?:代码|标识符|产品标识|代号|型号|项目编号|原型机|测试中|开发中|筹备中|准备推出|"
+                r"(?:代码|标识符|产品标识|代号|型号|项目编号|原型机|测试中|开发中|筹备(?:中)?|准备推出|"
                 r"取消|延期|量产|资源清单|将推出|将发布|将出货|计划发布|预计发布|"
-                r"有望.{0,18}(?:推出|发布|亮相)|(?:将|预计|计划)(?:采用|搭载|配备|保留|改用|新增)|"
-                r"(?:采用|搭载|配备|保留|改用|新增|推出|发布|亮相)|消息称|据称|据报道)",
+                r"有望.{0,18}(?:推出|发布|亮相)|(?:将|预计|计划)(?:采用|搭载|配备|保留|改用|换用|新增)|"
+                r"(?:采用|搭载|配备|保留|改用|换用|新增|升级|更新|推出|发布|亮相)|消息称|据称|据报道)",
                 scoped_text,
                 re.I,
             )
@@ -31371,6 +31582,76 @@ def article_title_led_event_identity(article: Article):
     )
 
 
+def projection_child_key(value: str) -> str:
+    """Return a stable internal identity for one generated product child."""
+    return re.sub(
+        r"[^a-z0-9]+",
+        "-",
+        clean_sentence(value).lower(),
+    ).strip("-")
+
+
+def assign_projection_parent_keys(articles: list[Article]) -> None:
+    """Link matching projected children only after their parent scopes agree.
+
+    Two aggregate reports are treated as the same parent scope only when they
+    come from different publishers and independently project at least two of
+    the same child boundaries. This retains source-report identity after
+    projection without using a reporter name, publisher wording, or one-off
+    product keyword as a merge shortcut.
+    """
+    by_parent: dict[str, list[Article]] = {}
+    for article in articles:
+        if article.projection_child_key:
+            by_parent.setdefault(normalize_url(article.url), []).append(article)
+    parent_ids = sorted(by_parent)
+    parent_children = {
+        parent_id: {
+            article.projection_child_key
+            for article in by_parent[parent_id]
+            if article.projection_child_key
+        }
+        for parent_id in parent_ids
+    }
+    parent_sources = {
+        parent_id: {article.source for article in by_parent[parent_id]}
+        for parent_id in parent_ids
+    }
+    parent = {parent_id: parent_id for parent_id in parent_ids}
+
+    def root(parent_id: str) -> str:
+        while parent[parent_id] != parent_id:
+            parent[parent_id] = parent[parent[parent_id]]
+            parent_id = parent[parent_id]
+        return parent_id
+
+    for left_index, left_id in enumerate(parent_ids):
+        for right_id in parent_ids[left_index + 1 :]:
+            if not parent_sources[left_id].isdisjoint(parent_sources[right_id]):
+                continue
+            if len(parent_children[left_id] & parent_children[right_id]) < 2:
+                continue
+            left_root = root(left_id)
+            right_root = root(right_id)
+            if left_root != right_root:
+                parent[max(left_root, right_root)] = min(left_root, right_root)
+
+    cohorts: dict[str, list[str]] = {}
+    for parent_id in parent_ids:
+        cohorts.setdefault(root(parent_id), []).append(parent_id)
+    for cohort_parent_ids in cohorts.values():
+        if len(cohort_parent_ids) < 2:
+            continue
+        cohort_key = hashlib.sha1(
+            "\x1f".join(sorted(cohort_parent_ids)).encode("utf-8")
+        ).hexdigest()[:12]
+        for parent_id in cohort_parent_ids:
+            for article in by_parent[parent_id]:
+                article.projection_parent_keys = frozenset(
+                    {*article.projection_parent_keys, f"cohort:{cohort_key}"}
+                )
+
+
 def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
     identity = article_title_led_event_identity(article)
     exact_facets = effective_topic_facets(
@@ -31433,6 +31714,21 @@ def article_reconciliation_profile(article: Article) -> ReconciliationProfile:
         event_kind=article.event_kind,
         evidence=structured_evidence,
     )
+    if article.projection_child_key and article.projection_parent_keys:
+        lineage_keys = {
+            f"projection-lineage:{parent_key}:{article.projection_child_key}"
+            for parent_key in article.projection_parent_keys
+        }
+        profile = replace(
+            profile,
+            event_keys=frozenset({*profile.event_keys, *lineage_keys}),
+            separation_keys=frozenset(
+                {
+                    *profile.separation_keys,
+                    f"projection-child:{article.projection_child_key}",
+                }
+            ),
+        )
     if article.category in {
         "software_systems",
         "hardware_products",
@@ -34054,6 +34350,7 @@ def provisional_seed_groups(
 
 
 def cluster_articles(articles: list[Article]) -> list[Event]:
+    assign_projection_parent_keys(articles)
     profiles = {
         id(article): article_reconciliation_profile(article)
         for article in articles
@@ -34477,14 +34774,40 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         is_roundup = is_roundup_article_title(candidate.title)
         if not is_roundup and detail_summary_needs_discovery_enrichment(summary, key_facts):
             summary = safe_combine_detail_and_discovery_summary(title, summary, candidate.summary)
-        article_variants: list[tuple[str, str, list[str]]] = []
+        article_variants: list[tuple[str, str, list[str], str]] = []
         for base_title, base_summary, base_key_facts in roundup_article_variants(
             candidate.title, title, summary, key_facts
         ):
-            article_variants.extend(
-                compound_article_variants(base_title, base_summary, base_key_facts)
+            compound_variants = compound_article_variants(
+                base_title,
+                base_summary,
+                base_key_facts,
             )
-        for article_title, article_summary, article_key_facts in article_variants:
+            for article_title, article_summary, article_key_facts in compound_variants:
+                child_key = ""
+                if (
+                    article_title != base_title
+                    and re.fullmatch(
+                        r"Apple .+ roadmap update",
+                        clean_sentence(article_title),
+                        re.I,
+                    )
+                ):
+                    child_key = projection_child_key(article_title)
+                article_variants.append(
+                    (
+                        article_title,
+                        article_summary,
+                        article_key_facts,
+                        child_key,
+                    )
+                )
+        for (
+            article_title,
+            article_summary,
+            article_key_facts,
+            projected_child_key,
+        ) in article_variants:
             variant_context = safe_context_for_detail_article(
                 is_roundup,
                 article_title,
@@ -34537,6 +34860,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     relevance_tier=relevance_tier,
                     relevance_reason=relevance_reason,
                     regions=regions,
+                    projection_child_key=projected_child_key,
                 )
             )
             diagnostics["source_article_counts"][candidate.source] = (

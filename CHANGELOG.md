@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.73.0 - 2026-09-05
+
+- Added source-report lineage for projected multi-product hardware roadmaps, reconciling translated parent reports only after they independently overlap on multiple child boundaries and preserving product- and generation-specific claim ownership.
+- Tightened structured reconciliation between aggregate roadmaps and focused launch, production, price, cancellation, retention, and feature reports, preventing a shared product or isolated fact from bridging distinct actions while retaining true same-action cross-source coverage.
+- Improved title-and-lead ownership and same-family section parsing so continuation facts stay with their labelled model or generation, first-party hardware disclosed through OS code remains strong hardware news, and third-party apps or accessories remain deferred.
+- Fixed Apple Watch hardware roadmaps merging with watchOS feature removals, and restored Apple-developed game-controller disclosures as strong hardware events with complete cross-source attribution.
+- Updated fallback-policy guidance for projection lineage, first-party physical hardware, service-content boundaries, and third-party Apple-platform context without changing the skill workflow, CLI, source list, or detail-page limit.
+- Added 34 focused regression tests, expanding the suite from 1,421 to 1,455 tests; concurrent live validation ran in 98.56/99.62 seconds without primary-source discovery regression, same-input replay retained all 74 source URLs with zero merge warnings, and clean-agent validation produced 41 main and 22 deferred events with all 79 retained source links represented exactly once and no manual regrouping or promotion.
+
 ## 1.72.0 - 2026-09-04
 
 - Added structured projection and reconciliation for multi-product Apple hardware reports, binding each event to its concrete product, action, chip generation or model code, launch/cancellation/retention state, and reporting period so distinct Mac roadmap actions stay separate while exact translated duplicates merge.

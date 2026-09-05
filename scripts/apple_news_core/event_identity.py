@@ -134,6 +134,16 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("apple-watch", ("apple watch", "watchos", "苹果手表")),
     ("airpods", ("airpods",)),
     (
+        "game-controller",
+        (
+            "game controller",
+            "game controllers",
+            "gamecontroller",
+            "游戏手柄",
+            "游戏控制器",
+        ),
+    ),
+    (
         "apple-glasses",
         (
             "apple smart glasses",
@@ -186,6 +196,7 @@ PRODUCT_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
     (
         "beats",
         (
+            "apple beats",
             "apple-owned beats",
             "apple's beats",
             "apple’s beats",
@@ -1090,10 +1101,14 @@ ACTION_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
             "photos show",
             "code reveals",
             "code shows",
+            "code hints at",
+            "found in code",
             "泄露照片",
             "照片曝光",
             "代码显示",
             "代码揭示",
+            "代码曝光",
+            "代码发现",
         ),
     ),
 )
@@ -2025,6 +2040,30 @@ def _legal_case_topics(title: str, lead: str, facets: Iterable[str]) -> set[str]
 def _content_form(title: str, lead: str = "") -> str:
     lower = _normalized(title)
     lead_lower = _normalized(lead)[:700]
+    service_catalog_roundup = bool(
+        _contains_any(
+            lower,
+            (
+                "apple tv",
+                "apple music",
+                "apple arcade",
+                "apple books",
+                "苹果电视",
+                "苹果音乐",
+            ),
+        )
+        and re.search(
+            r"\b(?:here(?:'s| is)\s+)?(?:every|all)\b.{0,42}"
+            r"\b(?:shows?|movies?|films?|series|titles?|releases?)\b.{0,42}"
+            r"\b(?:coming|available|streaming|arriving|lineup)\b|"
+            r"\beverything\b.{0,30}\b(?:coming|available|streaming|arriving)\b|"
+            r"(?:全部|所有|完整).{0,24}(?:剧集|电影|节目|片单|内容).{0,24}"
+            r"(?:即将|上线|阵容|一览|汇总)",
+            lower,
+        )
+    )
+    if service_catalog_roundup:
+        return "roundup"
     if re.search(
         r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|\d{1,2})\s+"
         r"(?:sleeps?|days?|weeks?)\s+(?:until|before)\b.{0,90}"
@@ -2114,7 +2153,23 @@ def _content_form(title: str, lead: str = "") -> str:
             lower,
         )
     )
-    if leadership_scorecard or historical_media:
+    executive_biographical_profile = bool(
+        re.search(
+            r"\b(?:new\s+)?profile\s+(?:of|on)\b.{0,90}"
+            r"\b(?:ceo|chief\s+executive|executive|leader|leadership|"
+            r"life|career|reputation|personality|background)\b|"
+            r"\bprofile\b.{0,70}\b(?:insight|inside\s+look)\b.{0,45}"
+            r"\b(?:life|career|reputation|personality|background)\b",
+            lower,
+        )
+        and not re.search(
+            r"\b(?:appoint(?:s|ed)?|name(?:s|d)?|hire(?:s|d)?|resign(?:s|ed)?|"
+            r"step(?:s|ped)?\s+down|announce(?:s|d)?|launch(?:es|ed)?|"
+            r"release(?:s|d)?|acquire(?:s|d)?|file(?:s|d)?|sue(?:s|d)?)\b",
+            lower,
+        )
+    )
+    if leadership_scorecard or historical_media or executive_biographical_profile:
         return "analysis"
     multi_vendor_catalog = bool(
         _contains_any(lower, APPLE_TITLE_TERMS)
@@ -3470,6 +3525,22 @@ def is_third_party_app_action_on_apple_platform(title: str, lead: str) -> bool:
     """
     title_text = _normalized(title)
     lead_text = _normalized(lead)[:900]
+    if (
+        re.search(
+            r"\b(?:apple(?:-made)?|first[- ]party)\b.{0,42}"
+            r"\b(?:controllers?|devices?|accessories|peripherals?|hardware)\b|"
+            r"(?:苹果|自研|第一方).{0,28}(?:手柄|控制器|设备|配件|外设|硬件)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:unreleased|prototype|code|identifiers?|found|hint(?:s|ed)?)\b|"
+            r"(?:未发布|原型|代码|标识符|曝光|发现|暗示)",
+            title_text,
+            re.I,
+        )
+    ):
+        return False
     apple_platform = bool(
         re.search(
             r"\b(?:ios|ipados|macos|watchos|tvos|visionos|carplay|apple watch|"
@@ -3611,6 +3682,12 @@ def _primary_action_owner(
     )
     owner_clause = re.sub(
         r"^(?:new|updated|all-new|next-generation|新款|全新|新版)\s*",
+        "",
+        owner_clause,
+    )
+    owner_clause = re.sub(
+        r"^(?:(?:two|three|four|five|six|several|multiple|\d+)\s+)?"
+        r"(?:unreleased|upcoming|rumored|new)\s+",
         "",
         owner_clause,
     )
@@ -4596,6 +4673,14 @@ def build_event_identity(
     ):
         components.add("product-release-mix")
     title_actions = _extract_patterns(title_lower, ACTION_PATTERNS)
+    if re.search(
+        r"\b(?:found|seen|spotted|identified)\b.{0,24}\b(?:source\s+)?code\b|"
+        r"\b(?:source\s+)?code\b.{0,24}\b(?:hints?|reveals?|shows?)\b|"
+        r"(?:代码|源码).{0,20}(?:曝光|发现|暗示|显示|揭示)",
+        title_lower,
+        re.I,
+    ):
+        title_actions.add("product-disclosure")
     if is_direct_first_party_named_object_change(title, lead):
         title_actions.add("feature-change")
     if company_performance_subject:
@@ -4835,7 +4920,8 @@ def build_event_identity(
             title_lower,
         )
         or re.search(
-            r"\b(?:make|makes|made|manufacture[sd]?|produce[sd]?|builds?|built|assemble[sd]?)\b"
+            r"\b(?:make|makes|made|making|manufacture[sd]?|manufacturing|"
+            r"produce[sd]?|producing|builds?|built|building|assemble[sd]?|assembling)\b"
             r".{0,36}\b(?:units?|devices?|phones?|few\s+hundred|thousand|million)\b|"
             r"(?:制造|生产|组装).{0,24}(?:台|部|数百|几百|数千|几千|万|百万)",
             title_lower,

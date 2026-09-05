@@ -130,9 +130,14 @@ def _primary_assertion_scope(title: str, lead: str) -> tuple[str, str]:
     primary action and bridge otherwise independent events.
     """
     title_scope = _normalized(title)
+    normalized_lead = _normalized(lead)
+    if normalized_lead.startswith(title_scope):
+        remainder = normalized_lead[len(title_scope) :].lstrip(" .!?。！？:：-|")
+        if remainder:
+            normalized_lead = remainder
     lead_scope = re.split(
         r"(?:[。！？]|(?<=[.!?])\s+)",
-        _normalized(lead),
+        normalized_lead,
         maxsplit=1,
     )[0]
     return title_scope, f"{title_scope}. {lead_scope}".strip()
@@ -601,9 +606,7 @@ def _title_fact_signatures(title: str, lead: str) -> set[str]:
     operation.  This lets exact cross-source matches override seed boundaries
     without reopening fuzzy all-pairs clustering.
     """
-    title = _normalized(title)
-    lead = _normalized(lead)[:900]
-    text = f"{title}. {lead}"
+    title, text = _primary_assertion_scope(title, lead)
     signatures: set[str] = set()
 
     foldable_iphone = bool(
@@ -643,20 +646,30 @@ def _title_fact_signatures(title: str, lead: str) -> set[str]:
                 signatures.add(f"finish-set:foldable-iphone:{','.join(sorted(finishes))}")
                 break
 
-        generation_match = re.search(
-            r"\b(?:third|3rd)[ -]generation\b|\bthird[ -]gen\b|"
-            r"\b(?:iphone\s+(?:fold|ultra)\s*3)\b|(?:第三代|第\s*3\s*代)",
-            text,
-        )
         roadmap_context = bool(
             re.search(
-                r"\b(?:roadmap|planning|plans?|planned|generation|2028)\b|"
-                r"路线图|规划|计划|第三代|第\s*3\s*代",
+                r"\b(?:roadmap|planning|plans?|planned|generation|20\d{2})\b|"
+                r"路线图|规划|计划|第[二三23]代|第\s*[23]\s*代",
                 text,
             )
         )
-        if generation_match and roadmap_context:
-            signatures.add("future-generation-roadmap:foldable-iphone:g3")
+        if roadmap_context:
+            for generation, pattern in (
+                (
+                    "g2",
+                    r"\b(?:second|2nd)[ -]generation\b|\bsecond[ -]gen\b|"
+                    r"\b(?:iphone\s+(?:fold|ultra)\s*2)\b|(?:第二代|第\s*2\s*代)",
+                ),
+                (
+                    "g3",
+                    r"\b(?:third|3rd)[ -]generation\b|\bthird[ -]gen\b|"
+                    r"\b(?:iphone\s+(?:fold|ultra)\s*3)\b|(?:第三代|第\s*3\s*代)",
+                ),
+            ):
+                if re.search(pattern, text):
+                    signatures.add(
+                        f"future-generation-roadmap:foldable-iphone:{generation}"
+                    )
 
     apple_watch = bool(re.search(r"(?<![a-z0-9])apple\s*watch\b|苹果\s*watch", text))
     if apple_watch and re.search(r"\bceramic\b|陶瓷", text):
@@ -1345,6 +1358,32 @@ def _structured_assertion_keys(
         separation |= {
             f"assertion-subject:{service_subject}",
             "assertion-action:access-waitlist",
+        }
+
+    home_security_service_roadmap = bool(
+        identity.scope == "apple-direct"
+        and re.search(
+            r"\b(?:home\s+security|home\s+monitoring|security\s+and\s+monitoring)"
+            r".{0,36}\bservice\b|"
+            r"(?:家庭|家用)(?:安全|安防)(?:监控)?服务|家庭监控服务",
+            text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:plan(?:s|ned|ning)?|launch(?:es|ed|ing)?|develop(?:s|ed|ing)?|"
+            r"in\s+the\s+works|could\s+release|coming)\b|"
+            r"(?:计划|规划|研发|开发|筹备|推出|上线|有望)",
+            text,
+            re.I,
+        )
+    )
+    if home_security_service_roadmap:
+        key = "structured-assertion:apple-home-security:service-roadmap"
+        event_keys.add(key)
+        boundaries.add("structured-subject:apple-home-security-service")
+        separation |= {
+            "assertion-subject:apple-home-security-service",
+            "assertion-action:service-roadmap",
         }
 
     advertising_rollout = bool(
@@ -2314,8 +2353,30 @@ def _structured_assertion_keys(
             "assertion-action:app-impersonation-incident",
         }
 
-    foldable = "foldable-iphone" in identity.products
-    if foldable and _contains(text, "called", "named", "name", "称为", "名称", "命名"):
+    foldable = "foldable-iphone" in identity.products or bool(
+        _contains(text, "iphone")
+        and _contains(text, "foldable", "folding", "折叠")
+    )
+    product_naming_action = bool(
+        _contains(
+            text,
+            "called",
+            "named",
+            "naming",
+            "product name",
+            "称为",
+            "名称",
+            "命名",
+            "定名",
+        )
+        or re.search(
+            r"\b(?:referred\s+to\s+as|another\s+name|name\s+making\s+the\s+rounds)\b|"
+            r"(?:另一个|另一种).{0,12}(?:名称|命名)|(?:外界|内部).{0,12}(?:称作|称为)",
+            text,
+            re.I,
+        )
+    )
+    if foldable and product_naming_action:
         key = "structured-assertion:foldable-iphone:product-naming"
         event_keys.add(key)
         boundaries.add("structured-subject:foldable-iphone")
@@ -2546,11 +2607,13 @@ def _apple_first_party_home_camera_roadmap(title: str, text: str) -> bool:
     )
     apple_camera = bool(
         re.search(
-            r"(?:apple|苹果).{0,45}(?:home security camera|security camera|家用安防摄像头|安防摄像头)",
+            r"(?:apple|苹果).{0,45}(?:home security camera|home camera|security camera|"
+            r"家用安防摄像头|家庭安防摄像头|智能家居摄像头|家庭摄像头|安防摄像头)",
             text,
         )
         or re.search(
-            r"(?:home security camera|security camera|家用安防摄像头|安防摄像头).{0,45}(?:apple|苹果)",
+            r"(?:home security camera|home camera|security camera|家用安防摄像头|"
+            r"家庭安防摄像头|智能家居摄像头|家庭摄像头|安防摄像头).{0,45}(?:apple|苹果)",
             text,
         )
     )
@@ -2558,11 +2621,18 @@ def _apple_first_party_home_camera_roadmap(title: str, text: str) -> bool:
         text,
         "launch",
         "debut",
+        "plan",
+        "planning",
+        "develop",
+        "developing",
         "coming soon",
         "rumored",
         "roadmap",
         "推出",
         "登场",
+        "计划",
+        "开发",
+        "研发",
         "有望",
         "传闻",
         "路线图",
@@ -3682,6 +3752,16 @@ def _title_predicate_separation_keys(title: str) -> set[str]:
         r"\b(?:revealed|unveiled|leaked|lineup)\b|"
         r"(?:配色|颜色|外观色).{0,20}(?:揭晓|曝光|流出|阵容|新增)",
         title_text,
+    ):
+        keys.add("primary-claim-predicate:finish-lineup-disclosure")
+    if re.search(r"\b(?:colors?|colou?rs?|finishes?)\b|(?:配色|颜色|外观色)", title_text) and re.search(
+        r"\b(?:only|limited\s+to)\b.{0,24}\b(?:two|2)\b.{0,16}"
+        r"\b(?:launch\s+)?(?:colors?|colou?rs?|finishes?)\b|"
+        r"\b(?:two|2)\b.{0,16}\blaunch\s+(?:colors?|colou?rs?|finishes?)\b|"
+        r"(?:仅|只)(?:推|提供|有|供应|推出).{0,16}(?:两|2)\s*款?(?:首发)?(?:配色|颜色)|"
+        r"(?:首发|上市).{0,12}(?:仅|只).{0,12}(?:两|2)\s*款?(?:配色|颜色)",
+        title_text,
+        re.I,
     ):
         keys.add("primary-claim-predicate:finish-lineup-disclosure")
     if re.search(
@@ -5161,6 +5241,23 @@ def _third_party_platform_app_action(
 ) -> tuple[str, str, str] | None:
     """Identify a third-party software owner separately from its Apple target."""
     title_text = _normalized(title)
+    first_party_hardware_disclosure = bool(
+        re.search(
+            r"\b(?:apple(?:-made)?|first[- ]party)\b.{0,42}"
+            r"\b(?:controllers?|devices?|accessories|peripherals?|hardware)\b|"
+            r"(?:苹果|自研|第一方).{0,28}(?:手柄|控制器|设备|配件|外设|硬件)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:unreleased|prototype|code|identifier|found|hint(?:s|ed)?)\b|"
+            r"(?:未发布|原型|代码|标识符|曝光|发现|暗示)",
+            title_text,
+            re.I,
+        )
+    )
+    if first_party_hardware_disclosure:
+        return None
     if re.match(
         r"^(?:apple(?:'s)?|苹果|ios\b|ipados\b|macos\b|watchos\b|tvos\b|visionos\b)",
         title_text,
@@ -5222,45 +5319,14 @@ def _third_party_platform_app_action(
     )
     if not platform or not software_subject:
         return None
-    if not _contains(
+    if not re.search(
+        r"\b(?:add(?:s|ed|ing)?|gain(?:s|ed|ing)?|updat(?:e|es|ed|ing)|"
+        r"can(?:\s+now)?\s+(?:read|send|control)|control(?:s|led|ling)?|"
+        r"launch(?:es|ed|ing)?|release(?:s|d|ing)?|available|getting|"
+        r"comes?\s+to|arriv(?:e|es|ed|ing)|support(?:s|ed|ing)?)\b|"
+        r"(?:新增|更新|接入|集成|支持|控制|读取|发送|开放|推出|发布|上线|登陆|登录)",
         title_text,
-        "add",
-        "adds",
-        "added",
-        "gain",
-        "gains",
-        "update",
-        "updates",
-        "can read",
-        "can now read",
-        "can send",
-        "can now send",
-        "control",
-        "controls",
-        "can control",
-        "can now control",
-        "launch",
-        "release",
-        "available",
-        "getting",
-        "comes to",
-        "arrives",
-        "support",
-        "supports",
-        "新增",
-        "更新",
-        "接入",
-        "集成",
-        "支持",
-        "控制",
-        "读取",
-        "发送",
-        "开放",
-        "推出",
-        "发布",
-        "上线",
-        "登陆",
-        "登录",
+        re.I,
     ):
         return None
 
@@ -5354,6 +5420,27 @@ def _third_party_accessory_action(title: str, text: str) -> bool:
         )
     )
     if compatibility_only_launch:
+        return True
+    compatibility_target_launch = bool(
+        not re.match(r"^(?:apple(?:'s)?|苹果(?:官方)?)(?:\b|\s)", title_text)
+        and re.search(
+            r"\b(?:debuts?|launch(?:es|ed)?|introduc(?:es|ed)?|release(?:s|d)?|"
+            r"goes?\s+on\s+sale|debuts?\s+at|appears?\s+at)\b|"
+            r"(?:推出|发布|开售|上市|发售|亮相)",
+            title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:with|for|supports?|compatible\s+with|works\s+with|integrates?\s+with)\b"
+            r".{0,36}\b(?:apple\s+home|homekit|iphone|ipad|mac|apple\s+watch|homepod)\b|"
+            r"(?:支持|兼容|适配|接入|可接入|原生支持).{0,28}"
+            r"(?:apple\s+home|homekit|iphone|ipad|mac|apple\s+watch|homepod|"
+            r"苹果\s*home|苹果家庭|苹果智能家庭(?:生态)?)",
+            title_text,
+            re.I,
+        )
+    )
+    if compatibility_target_launch:
         return True
     accessory_subject = bool(
         re.search(
@@ -5635,6 +5722,52 @@ def _finish_alternative_relations(title: str, lead: str, evidence: str, generati
     return relations
 
 
+def is_multi_year_apple_product_wave(
+    title: str,
+    lead: str,
+    *,
+    identity: EventIdentity | None = None,
+) -> bool:
+    """Return whether the primary claim is one current multi-year Apple product wave.
+
+    Reconciliation and article projection share this predicate so a broad
+    report cannot remain aggregate in one language while product-scoped
+    translations of the same report are projected in another.
+    """
+    full_title_text = _canonical_title(title)
+    identity = identity or build_event_identity(title, lead)
+    scope = f"{full_title_text} {_normalized(lead)[:1500]}"
+    return bool(
+        (identity.scope == "apple-direct" or re.search(r"\bapple\b|苹果", full_title_text))
+        and re.search(
+            r"\b(?:largest|biggest|biggest-ever|multi[- ]year|five[- ]year)\b"
+            r".{0,55}\b(?:product|device|hardware)\s+(?:lineup|wave|roadmap|cycle|pipeline)\b|"
+            r"\b(?:product|device|hardware)\s+(?:lineup|wave|roadmap|cycle|pipeline)\b"
+            r".{0,55}\b(?:largest|biggest|multi[- ]year|five[- ]year)\b|"
+            r"(?:史上|历来|公司历史上).{0,20}(?:最大|最庞大).{0,24}(?:新品|产品|设备|硬件)"
+            r"(?:阵容|发布潮|发布周期|路线图|规划)|"
+            r"(?:未来|今后)\s*[五5]\s*年.{0,24}(?:产品|设备|硬件)?(?:路线图|规划|发布)",
+            full_title_text,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:launch|release)\s+(?:wave|cycle)|roadmap|lineup|pipeline\b|"
+            r"(?:发布潮|发布周期|产品阵容|新品阵容|路线图|产品规划|设备规划)",
+            scope,
+            re.I,
+        )
+        and (
+            len(set(re.findall(r"\b20(?:2[6-9]|3\d)\b", scope))) >= 2
+            or re.search(
+                r"\b(?:multi[- ]year|five[- ]year|and\s+beyond|or\s+later)\b|"
+                r"(?:未来|今后)\s*[五5]\s*年|(?:及|和|与)(?:以后|更远未来)|乃至更远",
+                scope,
+                re.I,
+            )
+        )
+    )
+
+
 def _primary_claim_projection(
     title: str,
     lead: str,
@@ -5679,6 +5812,48 @@ def _primary_claim_projection(
         if category:
             category_hint = category
         trusted_direct_action = trusted_direct_action or trusted
+
+    first_party_hardware_code_disclosure = bool(
+        "game-controller" in identity.title_products
+        and identity.scope == "apple-direct"
+        and (
+            "product-disclosure" in identity.title_actions
+            or (
+                re.search(
+                    r"\b(?:code|identifiers?|ios|ipados|macos|watchos|tvos|visionos)\b|"
+                    r"(?:代码|标识符)",
+                    title_text,
+                    re.I,
+                )
+                and re.search(
+                    r"\b(?:unreleased|prototype|found|hint(?:s|ed)?)\b|"
+                    r"(?:未发布|原型|曝光|发现|暗示)",
+                    title_text,
+                    re.I,
+                )
+            )
+        )
+    )
+    if first_party_hardware_code_disclosure:
+        add_claim(
+            "apple-game-controller",
+            "unreleased-code-disclosure",
+            category="hardware_products",
+            trusted=True,
+        )
+
+    multi_year_product_wave = is_multi_year_apple_product_wave(
+        full_title_text,
+        lead,
+        identity=identity,
+    )
+    if multi_year_product_wave:
+        add_claim(
+            "apple-product-roadmap",
+            "multi-year-launch-wave",
+            category="hardware_products",
+            trusted=True,
+        )
 
     executive_subject = ""
     for subject, pattern in (
@@ -5737,6 +5912,30 @@ def _primary_claim_projection(
                 qualifier=f"alternatives:{relation}", category="hardware_products",
             )
             separation.add(f"finish-alternatives:{relation}")
+    focused_foldable_finish_disclosure = bool(
+        "foldable-iphone" in identity.title_products
+        and "primary-claim-predicate:finish-lineup-disclosure"
+        in _title_predicate_separation_keys(full_title_text)
+    )
+    if focused_foldable_finish_disclosure:
+        add_claim(
+            "foldable-iphone",
+            "finish-lineup-disclosure",
+            category="hardware_products",
+        )
+    foldable_finish_sets = {
+        signature.removeprefix("finish-set:foldable-iphone:")
+        for signature in _title_fact_signatures(full_title_text, lead)
+        if signature.startswith("finish-set:foldable-iphone:")
+    }
+    for finish_set in sorted(foldable_finish_sets):
+        add_claim(
+            "foldable-iphone",
+            "finish-lineup-disclosure",
+            qualifier=f"set:{finish_set}",
+            category="hardware_products",
+        )
+        separation.add(f"finish-set:{finish_set}")
 
     direct_title_subject = bool(
         identity.scope == "apple-direct"
@@ -7099,6 +7298,32 @@ def _primary_claim_projection(
                 trusted=direct_title_subject,
             )
 
+    physical_mockup_disclosure = bool(
+        hardware_products
+        and identity.content_form == "news"
+        and re.search(
+            r"\b(?:mockups?|dummy\s+(?:models?|units?)|physical\s+(?:models?|units?)|"
+            r"case\s+manufacturers?)\b|(?:机模|模型机|实体模型|保护壳厂商)",
+            claim_evidence,
+            re.I,
+        )
+        and re.search(
+            r"\b(?:show(?:s|n|ed|ing)?|reveal(?:s|ed|ing)?|expos(?:e|es|ed|ing)?|"
+            r"look\s+like|dimensions?|layout|hinge|buttons?)\b|"
+            r"(?:展示|曝光|外形|尺寸|布局|铰链|按键)",
+            claim_evidence,
+            re.I,
+        )
+    )
+    if physical_mockup_disclosure:
+        for product in sorted(hardware_products):
+            add_claim(
+                product,
+                "technical-details-disclosure",
+                category="hardware_products",
+                trusted=direct_title_subject,
+            )
+
     retail_home_launch_preparation = bool(
         re.search(r"\b(?:apple\s+)?(?:retail\s+)?stores?\b|(?:苹果)?(?:零售店|门店)", title_text)
         and re.search(
@@ -7145,7 +7370,12 @@ def _primary_claim_projection(
             claim_evidence,
         )
     )
-    if beta_asset_disclosure:
+    specific_physical_code_disclosure = any(
+        key.startswith("primary-claim:apple-")
+        and key.endswith(":unreleased-code-disclosure")
+        for key in event_keys
+    )
+    if beta_asset_disclosure and not specific_physical_code_disclosure:
         add_claim(
             "apple-system-build",
             "unintended-product-asset-disclosure",
@@ -8567,6 +8797,7 @@ _HARDWARE_FIRST_PARTY_PRODUCTS = {
     "apple-watch",
     "beats",
     "foldable-iphone",
+    "game-controller",
     "homepod",
     "imac",
     "ipad",
@@ -8601,6 +8832,7 @@ _ACTION_EQUIVALENCE = {
 _SPECIFIC_FIRST_PARTY_PRODUCTS = {
     "apple-home-hub",
     "apple-power-adapter",
+    "game-controller",
     "magic-keyboard",
     "polishing-cloth",
 }
@@ -8609,6 +8841,7 @@ _PRECISE_HARDWARE_PRODUCT_LINES = {
     "apple-home-hub",
     "apple-power-adapter",
     "foldable-iphone",
+    "game-controller",
     "imac",
     "ipad-air",
     "ipad-mini",
@@ -9014,7 +9247,11 @@ def _structured_category_hint(
         and "first-party-accessibility-guidance" in identity.components
     ):
         return "software_systems"
-    direct_subjects = set(direct_subjects) or _structured_title_subjects(identity)
+    direct_subjects = (
+        set(direct_subjects)
+        or set(identity.title_named_subjects)
+        or _structured_title_subjects(identity)
+    )
     direct_action = bool(_structured_title_action_classes(identity))
     if identity.action_owner != "apple" and not (
         identity.scope == "apple-direct"
@@ -9035,6 +9272,17 @@ def _structured_category_hint(
     }:
         return "hardware_products"
     products = set(identity.title_products) | set(direct_subjects)
+    direct_hardware_subjects = set(direct_subjects) & _HARDWARE_FIRST_PARTY_PRODUCTS
+    direct_software_subjects = set(direct_subjects) & _SOFTWARE_FIRST_PARTY_PRODUCTS
+    if direct_hardware_subjects and not direct_software_subjects:
+        return "hardware_products"
+    if direct_software_subjects and not direct_hardware_subjects:
+        return "software_systems"
+    if products & _PRECISE_HARDWARE_PRODUCT_LINES:
+        # A concrete physical product named by the headline owns the category;
+        # an OS name can describe where its code evidence was found without
+        # turning the hardware disclosure into a software event.
+        return "hardware_products"
     if products & _SOFTWARE_FIRST_PARTY_PRODUCTS:
         return "software_systems"
     if products & _HARDWARE_FIRST_PARTY_PRODUCTS:
@@ -9337,7 +9585,15 @@ def build_reconciliation_profile(
     event_keys |= assertion_events
     boundary_keys |= assertion_boundaries
     separation_keys |= assertion_separation
-    if any(key.startswith("structured-assertion:apple-tv:") for key in assertion_events):
+    if any(
+        key.startswith(
+            (
+                "structured-assertion:apple-tv:",
+                "structured-assertion:apple-home-security:",
+            )
+        )
+        for key in assertion_events
+    ):
         category_hint = "software_systems"
     canonical_action_keys = _canonical_first_party_action_keys(identity)
     event_keys |= canonical_action_keys
@@ -9875,6 +10131,7 @@ def build_reconciliation_profile(
         category_hint = "software_systems"
     versioned_os_compatibility_action = bool(
         identity.scope == "apple-direct"
+        and not _hard_third_party_boundary(text, relevance_reason)
         and "os-compatibility" in identity.facets
         and identity.title_products
         & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
@@ -10789,6 +11046,18 @@ def build_reconciliation_profile(
         relevance_tier,
         structural_direct_action,
     )
+    observed_external_app_action = bool(
+        relevance_tier == "weak"
+        and relevance_reason.startswith(
+            "third-party app update on an Apple platform"
+        )
+        and "app-store-delisting-restoration" not in identity.facets
+    )
+    if observed_external_app_action and not defer_reason:
+        # The crawler's title/lead classifier has already established that the
+        # outside app or product owns the action.  Incidental OS versions and
+        # Apple device lists must not promote it during reconciliation.
+        defer_reason = relevance_reason
     if third_party_app_availability and not defer_reason:
         defer_reason = (
             "third-party app availability without an Apple platform change"
@@ -11137,19 +11406,72 @@ def _same_named_report_concrete_action(
     return bool(shared_products)
 
 
+def _projection_scope_conflict(
+    left: ReconciliationProfile,
+    right: ReconciliationProfile,
+) -> bool:
+    """Keep aggregate-report projections out of focused action events."""
+    left_projection = any(
+        key.startswith("projection-child:") for key in left.separation_keys
+    )
+    right_projection = any(
+        key.startswith("projection-child:") for key in right.separation_keys
+    )
+    return left_projection != right_projection
+
+
 def _explicit_separation_conflict(
     left: ReconciliationProfile,
     right: ReconciliationProfile,
 ) -> bool:
     """Keep explicit product/action boundaries authoritative during reunion."""
+    if _projection_scope_conflict(left, right):
+        # A child projected from an aggregate report keeps that report's broad
+        # action boundary. One overlapping product fact must not let a focused
+        # launch, production, price, or feature report bridge into the cohort.
+        return True
     if _same_named_report_concrete_action(left, right):
         return False
+    shared_projection_lineage = {
+        key
+        for key in left.event_keys & right.event_keys
+        if key.startswith("projection-lineage:")
+    }
+    if shared_projection_lineage:
+        # The aggregate-parent cohort and generated child boundary agree.
+        # Different changed objects are complementary facts from the same
+        # projected action, not evidence of separate events.
+        return False
+    shared_product_roadmaps = {
+        key
+        for key in left.event_keys & right.event_keys
+        if key.startswith("apple-roadmap:") and key.count(":") == 1
+    }
+    if shared_product_roadmaps:
+        return False
+    left_foldable_generations = {
+        key
+        for key in left.separation_keys
+        if key.startswith("title-fact:future-generation-roadmap:foldable-iphone:")
+    }
+    right_foldable_generations = {
+        key
+        for key in right.separation_keys
+        if key.startswith("title-fact:future-generation-roadmap:foldable-iphone:")
+    }
+    if left_foldable_generations != right_foldable_generations and (
+        left_foldable_generations or right_foldable_generations
+    ):
+        return True
     for disclosure, other in ((left, right), (right, left)):
         if (
             "primary-claim-predicate:finish-lineup-disclosure" in disclosure.separation_keys
             and "primary-claim-predicate:finish-lineup-disclosure" not in other.separation_keys
             and other.identity is not None
-            and "product-launch" in other.identity.title_actions
+            and (
+                "product-launch" in other.identity.title_actions
+                or "predicate:hardware-product-roadmap" in other.separation_keys
+            )
         ):
             return True
     left_content_titles = {
@@ -11245,6 +11567,7 @@ def _explicit_separation_conflict(
         "primary-claim-subject:",
         "primary-claim-predicate:",
         "primary-claim-qualifier:",
+        "projection-child:",
         "changed-object:",
         "finish-alternatives:",
         "product-family:",
@@ -11291,6 +11614,36 @@ def _explicit_separation_conflict(
         for key in right.separation_keys
         if key.startswith("predicate:")
     }
+    if (
+        "hardware-product-roadmap" in left_predicates
+        and "platform-feature-change" in right_predicates
+    ) or (
+        "hardware-product-roadmap" in right_predicates
+        and "platform-feature-change" in left_predicates
+    ):
+        # A shared device-family token is not an event identity. Physical
+        # product planning and a platform feature change remain separate unless
+        # an exact structured assertion already proved the same concrete action.
+        return True
+    for claim_status, generic_projection in ((left, right), (right, left)):
+        if (
+            "claim-status" in {
+                key.removeprefix("predicate:")
+                for key in claim_status.separation_keys
+                if key.startswith("predicate:")
+            }
+            and "claim-status" not in {
+                key.removeprefix("predicate:")
+                for key in generic_projection.separation_keys
+                if key.startswith("predicate:")
+            }
+            and generic_projection.identity is not None
+            and "roadmap-projection" in generic_projection.identity.title_components
+        ):
+            # A generated product child describes the parent's current roadmap
+            # facts.  It cannot absorb a separate report that explicitly says a
+            # project was cancelled, retained, or otherwise changed status.
+            return True
     lifecycle_action = "product-lifecycle-obsolete"
     if (
         lifecycle_action in left_assertion_actions
@@ -11911,12 +12264,14 @@ def _reunite_exact_relation_groups(
             )
             if key.startswith(
                 (
+                    "apple-roadmap:",
                     "structured-measure:",
                     "structured-component-measure:",
                     "structured-attributed-measure:",
                     "structured-market-result:",
                     "canonical-apple-action:",
                     "primary-claim:",
+                    "projection-lineage:",
                 )
             )
         }
@@ -11935,16 +12290,22 @@ def _reunite_exact_relation_groups(
             authoritative_action_relation = any(
                 key.startswith(
                     (
+                        "apple-roadmap:",
                         "structured-attributed-measure:",
                         "structured-market-result:",
                         "canonical-apple-action:",
                         "primary-claim:",
+                        "projection-lineage:",
                     )
                 )
                 for key in shared_relations
             )
             if any(
                 _profile_release_conflict(profiles[id(left)], profiles[id(right)])
+                or _projection_scope_conflict(
+                    profiles[id(left)],
+                    profiles[id(right)],
+                )
                 or _explicit_property_value_conflict(profiles[id(left)], profiles[id(right)])
                 or (
                     not authoritative_action_relation
@@ -12297,8 +12658,10 @@ def reconcile_articles(
                 (
                     "apple-event-campaign:",
                     "apple-event-occurrence:",
+                    "apple-roadmap:",
                     "canonical-apple-action:",
                     "primary-claim:",
+                    "projection-lineage:",
                 )
             )
             for key in join_keys
@@ -12350,6 +12713,8 @@ def reconcile_articles(
                     or attributed_report_action_join
                 )
                 if _profile_release_conflict(left_profile, right_profile):
+                    return False
+                if _projection_scope_conflict(left_profile, right_profile):
                     return False
                 if (
                     _profiles_conflict(left_profile, right_profile)
