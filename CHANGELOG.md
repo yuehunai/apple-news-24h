@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.74.0 - 2026-09-07
+
+- Improved title-led action reconciliation so a complete headline subject and predicate take precedence over background-derived merge keys, preserving same-action coverage without reopening unrelated event boundaries.
+- Fixed cross-language grouping for Apple service monetization reviews and named participants' event appearances or absences, keeping proposed business-model changes separate from enacted fees and feature updates, and participation reports separate from schedules or leadership appointments.
+- Improved operating-system compatibility identities by separating project names from release verbs and binding support to the target chip generation and release stage; kept component-driver milestones distinct and classified concrete Apple-platform enablement as software ecosystem news.
+- Kept third-party app-use recommendations deferred even when they mention Apple products or keynotes, preserved genuine first-party app actions, and prevented opinion or podcast framing and unrelated lead details from promoting or bridging news events.
+- Removed duplicate compatibility projection logic and updated fallback-policy guidance without changing the skill workflow, CLI, source discovery, detail-page coverage, or output schema.
+- Added 16 focused regression tests, expanding the suite from 1,455 to 1,471 tests; concurrent live validation retained identical per-source counts and all 19 source URLs in 73.58/68.34 seconds, while clean-agent validation produced six one-to-one brief items with all 12 retained source links and no manual regrouping or deferred promotion.
+
 ## 1.73.0 - 2026-09-05
 
 - Added source-report lineage for projected multi-product hardware roadmaps, reconciling translated parent reports only after they independently overlap on multiple child boundaries and preserving product- and generation-specific claim ownership.

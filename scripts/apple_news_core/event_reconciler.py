@@ -8,7 +8,7 @@ without relying on publication-specific title keywords.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date, timedelta
 from itertools import combinations
 import re
@@ -5489,11 +5489,13 @@ def _third_party_accessory_action(title: str, text: str) -> bool:
 
 def _leading_project_subject(title: str) -> str:
     """Extract a bounded project name that owns a compatibility milestone."""
+    title = re.split(r"[!！]", _canonical_title(title))[-1].strip()
     match = re.match(
         r"^([a-z][a-z0-9.+-]*(?:\s+[a-z][a-z0-9.+-]*){0,3}?)"
         r"(?=(?:\s+(?:near(?:s|ing)?|approach(?:es|ing)?|adds?|gets?|gains?|"
-        r"releases?|ships?|supports?|brings?))|(?:\s*(?:即将|将|已|接近|支持|适配)))",
-        _normalized(title),
+        r"releases?|ships?|supports?|brings?|rolls?\s+out|now\s+supports?))|"
+        r"(?:\s*(?:系统)?(?:官宣|宣布)?(?:正式)?(?:即将|将|已|接近|支持|适配)))",
+        title,
     )
     if not match:
         return ""
@@ -5522,10 +5524,18 @@ def _platform_compatibility_milestone(
     """Project a project/platform/version milestone across language variants."""
     scope = f"{_normalized(title)}. {_normalized(lead)[:700]} {_normalized(evidence)[:900]}"
     project = _leading_project_subject(title)
+    project_words = project.replace("-", " ")
+    platform_project = bool(
+        re.search(r"(?:linux|bsd|os)$", project)
+        or (project and re.search(
+            re.escape(project_words) + r"\s+(?:operating\s+system|kernel|操作系统|内核)",
+            scope,
+        ))
+    )
     generation_match = re.search(r"(?<![a-z0-9])m([1-9])(?:\s|$|[^a-z0-9])", _normalized(title))
     compatibility = bool(
         re.search(
-            r"\b(?:support|compatib(?:le|ility)|enablement|driver)\b|"
+            r"\b(?:supports?|compatib(?:le|ility)|enablement|driver)\b|"
             r"(?:支持|适配|兼容|驱动)",
             scope,
         )
@@ -5537,23 +5547,121 @@ def _platform_compatibility_milestone(
             for component in identity.components
         )
     )
-    if not (project and generation_match and compatibility and apple_platform):
+    if not (platform_project and generation_match and compatibility and apple_platform):
         return None
-    if re.search(
+    if re.search(r"\b(?:gpu|graphics|audio|usb|display|camera)\b|图形|音频|摄像头", _canonical_title(title).split(':')[0]):
+        # A component driver milestone is not whole-platform enablement.
+        return None
+    released_pattern = (
+        r"\b(?:released|shipped|now\s+(?:available|supports?)|rolls?\s+out)\b|"
+        r"(?:正式(?:发布|支持|适配)|现已可用|已经发布)"
+    )
+    imminent_pattern = (
         r"\b(?:near(?:s|ing)?|almost|close\s+to|coming\s+soon)\b.{0,48}"
         r"\b(?:release|ship|availability)\b|"
-        r"(?:即将|接近|几乎).{0,30}(?:发布|推出|可用)",
-        scope,
+        r"(?:即将|接近|几乎).{0,30}(?:发布|推出|可用)"
+    )
+    title_scope, claim_scope = _primary_assertion_scope(title, lead)
+    first_lead = claim_scope[len(title_scope) + 1:].strip()
+    # A limitation is not the subject of the release; bind the main clause
+    # to the same platform generation before borrowing its release stage.
+    lead_action = re.split(r"\b(?:without|although|but|except)\b|但是|但|不过|尚不|不含", first_lead, maxsplit=1)[0]
+    lead_generations = set(re.findall(r"(?<![a-z0-9])m([1-9])(?:\b|(?=[\u4e00-\u9fff]))", lead_action))
+    stage_scopes = [title_scope]
+    if (
+        first_lead.startswith((project_words, "the " + project_words))
+        and lead_generations == {generation_match.group(1)}
+        and not re.search(r"\b(?:gpu|graphics|audio|usb|display|camera)\b|图形|音频|摄像头", lead_action)
     ):
-        milestone = "release-imminent"
-    elif re.search(
-        r"\b(?:released|shipped|now\s+available)\b|(?:正式发布|现已可用|已经发布)",
-        scope,
-    ):
-        milestone = "released"
-    else:
-        milestone = "support-development"
+        stage_scopes.append(lead_action)
+    milestone = "support-development"
+    for stage_scope in stage_scopes:
+        if re.search(released_pattern, stage_scope):
+            milestone = "released"
+            break
+        if re.search(imminent_pattern, stage_scope):
+            milestone = "release-imminent"
+            break
     return project, f"apple-silicon-m{generation_match.group(1)}", milestone
+
+
+def _title_owned_action_profile(title: str, lead: str, evidence: str, identity: EventIdentity) -> ReconciliationProfile | None:
+    """Resolve explicit grammatical actions before background-derived keys.
+
+    These frames have a complete subject/predicate; allowing later heuristics
+    to invent alternative keys from their background would reopen the boundary.
+    """
+    headline = _canonical_title(title)
+    app_use_guidance = re.search(
+        r"\bwith\s+this\s+(?:app|application|tool|utility)\b|"
+        r"^(?:用|使用)这款(?:应用|工具)", headline,
+    )
+    first_party_action = identity.action_owner == "apple" and identity.title_actions
+    if app_use_guidance and not first_party_action:
+        return ReconciliationProfile(
+            event_keys=frozenset({f"structured-canonical-title:{headline}"}),
+            boundary_keys=frozenset(), identity=identity, relevance_tier="weak",
+            defer_reason="app-use recommendation without a new Apple action",
+            hard_boundary="third-party-app-use",
+        )
+    if identity.content_form != "news":
+        return None
+    milestone = _platform_compatibility_milestone(title, lead, evidence, identity)
+    subject, predicate, category, tier = "", "", "", "strong"
+    if milestone and identity.content_form == "news":
+        project, generation, predicate = milestone
+        subject = f"third-party-platform-{project}-{generation}"
+        category, tier = "software_systems", "ecosystem"
+        identity = replace(identity, title_products=frozenset(), products=frozenset(),
+                           title_components=frozenset({f"apple-silicon-generation:{generation.rsplit('-', 1)[-1]}"}),
+                           title_actions=frozenset(), title_named_subjects=frozenset())
+    elif re.search(r"\b(?:keynote|event)\b|发布会", headline) and re.search(r"apple|苹果", headline):
+        # Bind negation to the participant before looking at dates or successors.
+        participation_pattern = (
+            r"(?P<person>tim\s*cook|(?:john\s+)?ternus|库克|特努斯|[a-z]+\s+[a-z]+)"
+            r"(?P<action>(?:\s|或|将|可能|会|十几年来|首度|今年|不再|不会|在|苹果|秋季|发布会|视频|中){0,50}"
+            r"(?:缺席|出镜|出现)|\s+(?:will\s+|may\s+|might\s+)?(?:not\s+)?(?:appear|attend|skip|miss)\b)"
+        )
+        participant = re.search(participation_pattern, headline)
+        if participant is None:
+            _, claim_scope = _primary_assertion_scope(title, lead)
+            lead_participant = re.search(participation_pattern, claim_scope[len(_normalized(title)) + 1:])
+            if lead_participant and lead_participant.group('person') in headline:
+                participant = lead_participant
+        if participant:
+            person = participant.group('person').replace(' ', '-')
+            person = {'库克': 'tim-cook', '特努斯': 'john-ternus', 'ternus': 'john-ternus'}.get(person, person)
+            action = participant.group('action')
+            absent = bool(re.search(r"缺席|不再|不会|\b(?:not|skip|miss)\b", action))
+            period = 'wwdc' if re.search(r"wwdc|开发者大会", headline) else 'fall' if re.search(r"september|autumn|fall|秋季|9\s*月", headline) else ''
+            if period:
+                subject = f"apple-event-{period}:participant-{person}"
+                predicate = 'absence' if absent else 'appearance'
+                category = 'hardware_products'
+                identity = replace(identity, title_products=frozenset(), title_components=frozenset(),
+                                   title_actions=frozenset(), title_named_subjects=frozenset())
+    else:
+        services = identity.title_products & (FIRST_PARTY_SERVICE_PRODUCTS | {"app-store"})
+        _, claim_scope = _primary_assertion_scope(title, lead)
+        apple_owner = identity.action_owner == "apple" or re.match(r"^(?:apple\b|苹果)", headline)
+        if (
+            identity.content_form == "news" and apple_owner
+            and len(services) == 1
+            and re.search(r"\b(?:consider(?:s|ing)?|review(?:s|ing)?|might|may|could|plans?)\b|考虑|酝酿|计划", claim_scope)
+            and re.search(r"\b(?:margins?|monetiz\w*|business\s+model)\b|利润率|商业模式", headline)
+        ):
+            subject = next(iter(services))
+            predicate, category = 'monetization-review', 'software_systems'
+    if not subject:
+        return None
+    key = f"primary-claim:{subject}:{predicate}"
+    return ReconciliationProfile(
+        event_keys=frozenset({key}),
+        boundary_keys=frozenset({f"primary-claim-subject:{subject}"}),
+        separation_keys=frozenset({f"primary-claim-subject:{subject}", f"primary-claim-predicate:{predicate}"}),
+        category_hint=category, identity=identity, relevance_tier=tier,
+        trusted_direct_action=tier == 'strong',
+    )
 
 
 def _repair_cost_estimate(
@@ -6518,21 +6626,6 @@ def _primary_claim_projection(
         )
 
     if identity.content_form == "news":
-        compatibility_milestone = _platform_compatibility_milestone(
-            title,
-            lead,
-            evidence,
-            identity,
-        )
-        if compatibility_milestone:
-            project, platform_generation, milestone = compatibility_milestone
-            add_claim(
-                f"third-party-platform-{project}-{platform_generation}",
-                milestone,
-                category="software_systems",
-                trusted=False,
-            )
-
         repair_cost = _repair_cost_estimate(title, lead, evidence, identity)
         if repair_cost:
             repair_subject, repair_predicate, repair_amount = repair_cost
@@ -9310,6 +9403,9 @@ def build_reconciliation_profile(
     event_kind: str = "",
     evidence: str = "",
 ) -> ReconciliationProfile:
+    title_owned = _title_owned_action_profile(title, lead, evidence, identity)
+    if title_owned is not None:
+        return title_owned
     caller_trusted_direct_action = trusted_direct_action
     title_text = _normalized(title)
     text = f"{title_text}. {_normalized(lead)[:900]}"
@@ -9337,6 +9433,25 @@ def build_reconciliation_profile(
         trusted_direct_action = True
     separation_keys |= _predicate_separation_keys(identity)
     separation_keys |= _title_predicate_separation_keys(title)
+    service_subjects = identity.title_products & (FIRST_PARTY_SERVICE_PRODUCTS | {"app-store"})
+    if len(service_subjects) == 1 and identity.content_form == "news":
+        # These are separation predicates, not merge keys: a generic feature
+        # or fee change does not identify which feature or fee changed.
+        fee_change = re.search(
+            r"\b(?:raises?|increases?|lowers?|reduces?)\b.{0,65}\b(?:fees?|prices?|pricing)\b|"
+            r"(?:提高|上调|降低|下调).{0,30}(?:费用|收费|价格)|(?:费用|收费|价格).{0,20}(?:上涨|下调)",
+            title_text,
+        )
+        feature_change = bool(
+            "feature-change" in identity.title_actions
+            and re.search(r"\b(?:features?|interface)\b|功能|界面", title_text)
+        )
+        if fee_change or feature_change:
+            separation_keys.add(f"primary-claim-subject:{next(iter(service_subjects))}")
+            separation_keys.add(
+                "primary-claim-predicate:service-fee-change" if fee_change
+                else "primary-claim-predicate:service-feature-change"
+            )
     changed_object_keys = _changed_object_separation_keys(title, lead, identity)
     separation_keys |= changed_object_keys
     separation_keys |= _title_product_period_keys(title, identity)
@@ -12347,6 +12462,11 @@ def resolve_reconciliation_outcome(
 ) -> tuple[str, str, str]:
     """Resolve relevance and category once from the structured profile."""
     category = profile.category_hint or observed_category
+    if (
+        profile.relevance_tier == "ecosystem" and not profile.defer_reason
+        and any(key.startswith("primary-claim:third-party-platform-") for key in profile.event_keys)
+    ):
+        return "ecosystem", "concrete Apple platform compatibility milestone", category
     if profile.defer_reason and observed_tier not in {"weak", "ecosystem"}:
         return "weak", profile.defer_reason, category
     if (
