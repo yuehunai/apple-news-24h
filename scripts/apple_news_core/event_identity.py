@@ -10,9 +10,47 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
+import html
 import re
 import unicodedata
 from typing import Iterable
+
+
+def is_apple_led_developer_submission_story(title: str, text: str) -> bool:
+    """Recognize a current first-party call, not a partner or historical mention."""
+    def clean_submission_text(value: str) -> str:
+        value = re.sub(r"(?is)<script\b.*?</script>", " ", value)
+        value = re.sub(r"(?is)<style\b.*?</style>", " ", value)
+        value = re.sub(r"(?is)<[^>]+>", " ", value)
+        value = re.sub(r"\s+", " ", html.unescape(value)).strip()
+        return re.sub(r"\s+([,.;:!?])", r"\1", value)
+
+    cleaned_title = clean_submission_text(title)
+    headline = cleaned_title.lower()
+    if re.search(r"\b(?:history|historical|recap|looking back)\b|回顾|往年|历史", headline):
+        return False
+    owner = r"(?:apple(?:['’]s\s+webkit(?:\s+team)?)?|webkit(?:\s+team)?)"
+    current_call = re.match(
+        rf"^{owner}\s+(?:invites|is inviting)\s+developers\s+to\s+submit\b"
+        r"|^苹果(?:\s*webkit\s*团队)?(?:公开|正在)?(?:征集|邀请开发者提交)",
+        headline,
+    )
+    if not current_call:
+        return False
+    cleaned_text = clean_submission_text(text)
+    if cleaned_text.lower().startswith(headline):
+        cleaned_text = cleaned_text[len(cleaned_title) :].lstrip(" .:-")
+    scope = f"{cleaned_title} {cleaned_text[:700]}".strip().lower()
+    return bool(
+        re.search(r"\b(?:proposals?|ideas)\b|提案|建议|议题", scope)
+        and re.search(r"\bdevelopers?\b|开发者|(?:web|网页)\s*开发", scope)
+        and re.search(r"\b(?:webkit|browser|web standards)\b|浏览器|网页标准", scope)
+        and re.search(
+            r"\binteroperability\b|互操作|互通|"
+            r"(?:跨|不同)浏览器[^。！？.!?]{0,60}(?:兼容性|一致.{0,8}支持)",
+            scope,
+        )
+    )
 
 
 @dataclass(frozen=True)
@@ -1396,7 +1434,36 @@ def _component_supplier_sourcing_classes(title: str, lead: str) -> set[str]:
         )
     )
     if not direct_buyer_relation:
-        return set()
+        contract_classes: set[str] = set()
+        signing_action = (
+            r"(?:\b(?:sign(?:s|ed|ing)?|enter(?:s|ed|ing)?(?:\s+into)?|reach(?:es|ed|ing)?)\b|"
+            r"签(?:订|署)?|达成)"
+        )
+        # Keep the buyer, component and supply contract in the same assertion.
+        for claim in re.split(r"[。！？.!?\n]", text):
+            if not (
+                re.search(rf"{apple_subject}[^,，;；]{{0,50}}{signing_action}", claim)
+                or re.search(
+                    rf"{signing_action}[^,，;；]{{0,100}}\b(?:with|for|to)\s+{apple_subject}", claim,
+                )
+                or re.search(rf"与{apple_subject}[^,，;；]{{0,30}}{signing_action}", claim)
+            ):
+                continue
+            if re.search(r"\b(?:settlement|litigation|patent|subscription|software)\b|"
+                         r"(?:和解|诉讼|专利|订阅|软件)", claim):
+                continue
+            for component_class, aliases in _SUPPLIER_COMPONENT_CLASSES:
+                if not _contains_any(claim, aliases):
+                    continue
+                component_terms = "|".join(re.escape(alias) for alias in aliases)
+                if re.search(
+                    r"\b(?:supply|sourcing|procurement|purchase)\s+(?:agreement|contract)\b|"
+                    r"(?:供应|采购).{0,8}(?:协议|合约|合同)|"
+                    rf"(?:{component_terms})\s*(?:长期|多年|供应|采购)*\s*(?:协议|合约|合同)",
+                    claim,
+                ):
+                    contract_classes.add(component_class)
+        return contract_classes
     return {
         component_class
         for component_class, aliases in _SUPPLIER_COMPONENT_CLASSES
@@ -2907,10 +2974,13 @@ def _content_form(title: str, lead: str = "") -> str:
     if re.search(
         r"\b(?:should(?:n['’]t| not)? (?:buy|wait|upgrade)|should you (?:buy|wait|upgrade)|"
         r"buy now or wait|upgrade now or wait|why you should(?:n['’]t| not)? wait|"
-        r"reasons? to buy .+ instead of waiting|before you buy|buying advice|buying guide)\b|"
+        r"reasons?\s+(?:not\s+)?to\s+(?:buy|upgrade|wait)|before you buy|buying advice|buying guide|"
+        r"buyers?['’]?s?\s+guide|which\s+[^:;.!?]{1,35}\s+to\s+buy)\b|"
         r"(?:该不该|要不要|是否应该)(?:买|等|升级)|买还是等|购买建议|换机建议|"
         r"(?:升级|换到|换购).{0,18}(?:的|之)?(?:三|四|五|六|七|八|九|十|\d+)大理由",
         lower,
+    ) and not re.match(
+        r"^(?:apple|苹果)\s*(?:updates?|publishes?|releases?|更新|发布)\b", lower,
     ):
         return "buying_advice"
     if re.search(r"\b(?:indie app spotlight|app spotlight|app pick)\b|(?:应用|app)推荐", lower):
@@ -3008,6 +3078,25 @@ def _content_form(title: str, lead: str = "") -> str:
     )
     if speculative_editorial_framing:
         return "analysis"
+    announcement_with_attributed_judgment = bool(
+        re.match(
+            r"^apple\s+(?:announces?|releases?|introduces?|unveils?)\s+"
+            r"[^,;.!?]{1,100}[,;]\s*(?:and\s+)?(?:says?|states?|explains?)\b",
+            lower,
+        )
+    )
+    if re.search(
+        r"\b(?:is|would be)\s+(?:a\s+)?(?:bad|terrible|poor|good|great)\s+idea\b|"
+        r"\bonly\s+(?:one|some)\s+(?:of\s+them\s+)?(?:is|are)\s+(?:good|worthwhile)\b|"
+        r"\b(?:don['’]t|do not|doesn['’]t|does not)\s+know\s+(?:any\s+)?more\s+than\s+you\b",
+        lower,
+    ) and not announcement_with_attributed_judgment:
+        return "analysis"
+    if re.search(r"\b(?:drama|comedy|film|movie|series|documentary)\b", lower) and re.search(
+        r"\b(?:doesn['’]t|does not|fails? to)\s+(?:represent|capture|reflect|portray)\b",
+        lower,
+    ):
+        return "analysis"
     if re.search(
         r"^(?:analyst|analysis|opinion|commentary)\b|"
         r"^(?:分析师|机构观点|评论)[：:]|(?:分析师|评论人士).{0,24}(?:认为|称|表示)|"
@@ -3032,6 +3121,31 @@ def _content_form(title: str, lead: str = "") -> str:
 def _headline_subject_clause(title: str) -> str:
     """Remove evidence adjectives without changing the grammatical subject."""
     return re.sub(r"^(?:leaked\s+|泄露的|曝光的)", "", _normalized(title))
+
+
+def _lead_assigns_app_release_to_apple(app_name: str, lead: str) -> bool:
+    """Bind a positive Apple release predicate to the headline's application."""
+    claim = re.split(r"[。.!?]", lead, maxsplit=1)[0]
+    release = re.match(
+        r"^(?:apple\s+(?:(?:today|has|just|now)\s+)*"
+        r"(?:released?|launch(?:es|ed)?|introduc(?:es|ed)?|publish(?:es|ed)?)\s+|"
+        r"苹果(?:公司)?(?:今天|今日|刚刚|正式|现已|已经|已)*(?:发布|推出)(?:了)?)"
+        r"(?P<object>.+)$",
+        claim,
+    )
+    if release is None:
+        return False
+    app_object = release.group("object").strip()
+    if re.search(r"\bthird[- ]party\b|第三方", app_object):
+        return False
+    # Determiners precede the object; an ownership apposition can follow it.
+    app_object = re.sub(
+        r"^(?:(?:its|a|an|the|new|own|first-party)\s+)+|"
+        r"^(?:其|旗下|自研|自主研发|全新|新|的)+", "", app_object,
+    )
+    return bool(re.match(
+        rf"{re.escape(app_name.strip())}(?=\s|[,，]|$|应用|客户端)", app_object,
+    ))
 
 
 def _title_scope(title: str, lead: str) -> str:
@@ -3319,6 +3433,22 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    named_app_store_arrival = bool(
+        not first_party_prefix
+        and re.match(
+            r"^[^:：.!！?？]{1,60}?(?:\bapp\b|\bapplication\b|应用|客户端)\s*"
+            r"(?:(?:正式|现已|首次)\s*)?(?:登陆|登录|上架|上线)\s*(?:苹果\s*)?app\s*store\b|"
+            r"^[^:：.!！?？]{1,60}?\b(?:app|application)\s+"
+            r"(?:arrives?|launch(?:es|ed)?|debuts?)\s+on\s+(?:the\s+)?app\s+store\b",
+            title_lower,
+        )
+    )
+    if named_app_store_arrival:
+        app_name = re.match(
+            r"^([^:：.!！?？]{1,60}?)(?:\s+(?:app|application)\b|应用|客户端)", title_lower,
+        )
+        if app_name and _lead_assigns_app_release_to_apple(app_name.group(1), lead_lower):
+            named_app_store_arrival = False
     subject_first_apple_followup = bool(
         re.search(
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b).{2,90}"
@@ -3357,7 +3487,33 @@ def _title_scope(title: str, lead: str) -> str:
             title_lower,
         )
     )
+    # An evidence noun can disclose Apple hardware; a branded product cannot.
+    disclosure_subject = bool(
+        title_products
+        and re.match(
+            r"^(?:(?:a|the|new|latest|leaked)\s+)*"
+            r"(?:leak|code|firmware|patent(?:\s+filing)?|support\s+document|"
+            r"regulatory\s+filing)\s+(?:hints?|suggests?|signals?|shows?)\b",
+            title_lower,
+        )
+    )
+    competitor_brand = r"(?:华为|三星|小米|荣耀|谷歌|oppo|vivo|huawei|samsung|xiaomi|google)"
+    competitor_marketing = bool(
+        re.search(
+            rf"(?:建议|推荐).{{0,16}}(?:苹果|iphone).{{0,12}}用户.{{0,8}}"
+            rf"(?:购买|买|选购).{{0,6}}{competitor_brand}", title_lower,
+        )
+        or (
+            re.search(r"^(?:苹果|apple|iphone).{0,40}(?:也要|也将|也会|或将).{0,8}跟进", title_lower)
+            and re.search(
+                rf"[!！:：].{{1,24}}(?:称|表示|宣称){competitor_brand}(?:引领|首创|率先)",
+                title_lower,
+            )
+        )
+    )
     speculative_comparison = bool(
+        not disclosure_subject
+        and
         re.search(
             r"^(?!apple\b|iphone\b|ipad\b|mac\b|airpods\b|苹果).{2,110}"
             r"\b(?:hints?|suggests?|signals?|shows?)\b.{0,36}"
@@ -3395,9 +3551,11 @@ def _title_scope(title: str, lead: str) -> str:
     ):
         return "third-party-context"
     if (
-        comparison_hook_then_non_apple_action
+        competitor_marketing
+        or comparison_hook_then_non_apple_action
         or independent_user_tool_action
         or platform_edition_third_party_action
+        or named_app_store_arrival
     ):
         return "third-party-context"
     if direct_target or direct_relationship or first_party_evidence_signal:

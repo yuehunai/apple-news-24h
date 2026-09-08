@@ -16,12 +16,14 @@ import unicodedata
 from typing import Callable, Iterable, Sequence, TypeVar
 
 from .event_identity import (
+    ANALYST_INSTITUTION_ALIASES,
     EVIDENCE_BACKED_COMPONENTS,
     COMPONENT_PATTERNS,
     EventIdentity,
     LEAD_IDENTITY_COMPONENTS,
     PRODUCT_PATTERNS,
     build_event_identity,
+    is_apple_led_developer_submission_story,
     is_direct_apple_product_lifecycle_action,
     is_direct_first_party_named_object_change,
     is_material_apple_device_operational_deployment,
@@ -287,6 +289,15 @@ def _display_metrics(text: str) -> set[str]:
     return metrics
 
 
+def _calendar_years(scope: str) -> set[str]:
+    return {
+        match.group(1)
+        for match in re.finditer(r"(?<!\d)(20\d{2})(?!\d)", scope)
+        if not re.search(r"[$€£]\s*$", scope[max(0, match.start() - 5):match.start()])
+        and not re.match(r"\s*(?:美元|欧元|英镑|人民币|元|dollars?\b|euros?\b|usd\b|gb\b|mah\b|台|部)", scope[match.end():])
+    }
+
+
 def _evidence_measurements(title: str, lead: str) -> set[str]:
     """Normalize typed quantities from the headline and primary assertion.
 
@@ -305,7 +316,8 @@ def _evidence_measurements(title: str, lead: str) -> set[str]:
     for value in re.findall(r"(?<![\d.])(\d+(?:\.\d+)?)\s*%", scope):
         normalized = value.rstrip("0").rstrip(".") if "." in value else value
         values.add(f"percent:{normalized}")
-    for value in re.findall(r"(?<!\d)(20\d{2})(?!\d)", scope):
+    years = _calendar_years(scope)
+    for value in years:
         values.add(f"year:{value}")
     quarter_patterns = (
         r"(?<!\d)(20\d{2})\s*年?\s*[- ]?q([1-4])(?!\d)",
@@ -322,10 +334,6 @@ def _evidence_measurements(title: str, lead: str) -> set[str]:
                 year, quarter = first, second
             quarter = chinese_quarters.get(quarter, quarter)
             values.add(f"period:{year}-q{quarter}")
-    years = {
-        match.group(1)
-        for match in re.finditer(r"(?<!\d)(20\d{2})(?!\d)", scope)
-    }
     quarters = {
         chinese_quarters.get(
             match.group(1) or match.group(2),
@@ -378,6 +386,7 @@ def _evidence_measurements(title: str, lead: str) -> set[str]:
         ("usd", r"(?:us\s*)?\$\s*(\d[\d,]*(?:\.\d+)?)\s*(billion|million|bn|b|m)?\b"),
         ("usd", r"(\d+(?:\.\d+)?)\s*万\s*美元"),
         ("usd", r"(\d+(?:\.\d+)?)\s*亿\s*美元"),
+        ("usd", r"(?<![\d,])(\d[\d,]*(?:\.\d+)?)\s*美元"),
         ("eur", r"€\s*(\d[\d,]*(?:\.\d+)?)"),
         ("gbp", r"£\s*(\d[\d,]*(?:\.\d+)?)"),
     )
@@ -3926,7 +3935,7 @@ def _primary_title_changed_object_measure(title: str) -> tuple[str, str]:
 def _title_product_period_keys(title: str, identity: EventIdentity) -> set[str]:
     """Project a title-level product roadmap period without making it a merge key."""
     title_text = _normalized(title)
-    years = set(re.findall(r"(?<!\d)(20\d{2})(?!\d)", title_text))
+    years = _calendar_years(title_text)
     if len(years) != 1 or not identity.title_products:
         return set()
     year = next(iter(years))
@@ -5585,6 +5594,138 @@ def _platform_compatibility_milestone(
     return project, f"apple-silicon-m{generation_match.group(1)}", milestone
 
 
+_MEMORY_SUPPLIER_ALIASES = {
+    "cxmt": ("cxmt", "changxin", "长鑫"),
+    "ymtc": ("ymtc", "yangtze memory", "长江存储"),
+}
+
+
+def _forecast_periods(claim: str) -> list[str]:
+    quarters = {"first": "1", "second": "2", "third": "3", "fourth": "4", "一": "1", "二": "2", "三": "3", "四": "4"}
+    result = set()
+    for match in re.finditer(r"(20\d{2})\s*(?:年|财年)?\s*(?:q([1-4])|第([一二三四1-4])(?:财季|季度))", claim):
+        q = match.group(2) or quarters.get(match.group(3), match.group(3))
+        result.add(f"{match.group(1)}-q{q}")
+    for match in re.finditer(r"\bq([1-4])\s*(20\d{2})\b|\b(first|second|third|fourth)\s+quarter\s+(?:of\s+)?(?:fiscal\s+)?(20\d{2})\b", claim):
+        q = match.group(1) or quarters[match.group(3)]
+        year = match.group(2) or match.group(4)
+        result.add(f"{year}-q{q}")
+    return sorted(result)
+
+
+def _primary_report_claim(title: str, lead: str, identity: EventIdentity) -> tuple[str, str, str] | None:
+    """Bind headlined results to their owner, not incidental body subjects."""
+    headline = _canonical_title(title)
+    scope = f"{headline}. {_normalized(lead)[:900]}"
+    if identity.content_form != "news":
+        return None
+    if is_apple_led_developer_submission_story(title, lead):
+        project = re.search(r"(?:\bfor\s+|征集\s*|启动\s*)([a-z][a-z0-9-]+)\s+(20\d{2})\b", scope)
+        if project:
+            return f"webkit-{project.group(1)}-{project.group(2)}", "developer-proposal-call", "software_systems"
+    suppliers = [name for name, aliases in _MEMORY_SUPPLIER_ALIASES.items()
+                 if _contains(headline, *aliases)]
+    if len(suppliers) == 1 and _contains(headline, "apple", "苹果") and re.search(
+        r"\b(?:partnership|cooperation|collaboration)\b|合作", headline,
+    ) and re.search(
+        r"\brespond\w*\s+(?:to|about)\s+apple(?:'s)?\s+(?:partnership|cooperation|collaboration)\b|"
+        r"(?:回应|表态)[^,;。]{0,8}(?:与)?苹果(?:公司|供应链)?(?:的)?合作|"
+        r"释放[^,;。]{0,6}信号[^,;。]{0,8}与苹果(?:公司|供应链)?(?:的)?合作", headline,
+    ):
+        return f"apple-supplier-{suppliers[0]}", "partnership-response", "hardware_products"
+    report_scope = f"{headline}. {_normalized(lead)[:1700]}"
+    institutions = [name for name, aliases in ANALYST_INSTITUTION_ALIASES
+                    if _contains(report_scope[:450], *aliases)]
+    forecast = r"\b(?:forecast\w*|predict\w*|expect\w*|models?|will\s+build)\b|预估|预测|预计|将生产"
+    title_outlook = re.search(r"\b(?:forecasts?|predict\w*|expect\w*|warns?|could\s+(?:hurt|hit))\b|预估|预测|预计", headline)
+    if len(institutions) == 1 and "iphone" in headline and title_outlook and identity.scope == "apple-direct":
+        for claim in re.split(r"[。！？;；]|(?<=[.!?])\s+|[,，]\s*(?:and\s+|but\s+|而|但)", _normalized(lead)[:1700]):
+            if not re.search(forecast, claim):
+                continue
+            if not re.search(r"\bapple\b[^,;。]{0,45}\b(?:builds?|produc\w*)\b|\biphone[^,;。]{0,35}\bbuilds?\b|\bbuild[^,;。]{0,40}\biphones?\b|苹果[^,;。]{0,30}生产|生产[^,;。]{0,30}iphone", claim):
+                continue
+            volumes = re.finditer(
+                r"(?:\bbuilds?\b|\bproduc\w*\b|生产|产量)[^.!?。\d]{0,55}"
+                r"(\d+(?:\.\d+)?)\s*(million|万)\s*(?:部|units?|iphones?)", claim,
+            )
+            volume = next((item for item in volumes if not re.search(
+                r"\b(?:down|less|fewer|reduc\w*|declin\w*)\b|减少|下降|下滑|降低", item.group(0),
+            )), None)
+            periods = _forecast_periods(claim)
+            if not periods:
+                # Annual forecasts require a stated year in this same claim.
+                periods = sorted(set(re.findall(r"\b(?:in|for)\s+(20\d{2})\b|(20\d{2})\s*年", claim)))
+                periods = [next(v for v in pair if v) for pair in periods]
+            if volume and periods:
+                units = int(float(volume.group(1)) * (1000000 if volume.group(2) == "million" else 10000))
+                return f"{institutions[0]}-iphone-production-{'-'.join(periods)}", f"forecast-units-{units}", "hardware_products"
+    if "apple-tv" in identity.title_products or (
+        re.match(r"^(?:apple\b|苹果)", headline) and "apple-tv" in identity.products
+    ):
+        ceremonies = {
+            "emmy": r"\bemmys?\b|艾美",
+            "golden-globe": r"\bgolden\s+globes?\b|金球",
+            "bafta": r"\bbafta\b|英国电影学院",
+        }
+        ceremony = next((name for name, pattern in ceremonies.items()
+                         if re.search(pattern, headline)), "")
+        action = "nominations" if re.search(r"nominat\w*|提名", headline) else "wins" if re.search(
+            r"\b(?:wins?|won|earn\w*)\b|收获|获奖|斩获|摘得", headline,
+        ) else ""
+        count = re.search(
+            r"(?:\bapple(?:\s+tv)?\s+(?:has\s+)?(?:won|wins?|earns?|earned|received|receives|secured|secure)\s+(?:(?:a|record|total|of|another|combined)\s+)*|"
+            r"\bapple(?:\s+tv)?\s+(?:is\s+)?(?:leads?|leading)\b[^,;.!?。]{0,35}\bwith\s+(?:(?:a|record|total|of)\s+)*|"
+            r"苹果\s*(?:apple\s*tv\s*)?(?:共|总共)?(?:收获|斩获|拿下|获得)\s*)"
+            r"(\d+)\s*(?:(?:[a-z]+\s+){0,3})?(?:wins?|awards?|nominations?|项)", scope,
+        )
+        if ceremony and action and count:
+            return f"apple-tv-{ceremony}-result", f"{action}-{count.group(1)}", "software_systems"
+    # Same disclosed code bundle requires the version, primary component and
+    # discoverer. Shared platform names alone cannot join unrelated features.
+    code = re.search(r"\bcode\b|代码", scope)
+    origin = re.search(
+        r"(?:forum[s]?\s+(?:member|user)|user|网友)\s*[\"'“]?([a-z][a-z0-9_-]{2,})|"
+        r"\bby\s+([a-z][a-z0-9_-]{2,}),\s+a\s+(?:\w+\s+){0,3}forum",
+        scope,
+    )
+    feature_bundle = re.search(r"\b(?:features|tools|findings|fragments|surprises)\b|[多五四三二两\d]+\s*项|系列功能", scope)
+    if code and origin and feature_bundle and identity.scope == "apple-direct" and re.search(r"\b(?:leak\w*|found|discover\w*|spotted|references?|hints?|points?)\b|挖掘|发现|暗藏|线索|披露", scope):
+        author = origin.group(1) or origin.group(2)
+        component, platform = "", ""
+        if re.search(r"camera|photograph|相机|摄影", headline):
+            component, platform = "camera", "ios"
+        elif re.search(r"apple\s*watch|watchos|苹果手表", headline):
+            component, platform = "watch", "watchos"
+        version = re.search(rf"\b{platform}\s*(\d+(?:\.\d+)?)\b", scope) if platform else None
+        if component and version:
+            return f"{platform}-{version.group(1)}-{component}-code-{author}", "feature-disclosure", "software_systems"
+    return None
+
+
+def _cross_platform_device_interoperation(title: str, lead: str) -> tuple[str, str] | None:
+    headline = _canonical_title(title)
+    platforms = {"harmonyos": r"(?:huawei\s+|华为)?(?:harmonyos|鸿蒙)", "android": r"android|安卓", "windows": r"windows"}
+    platform = next((name for name, pattern in platforms.items() if re.match(rf"^(?:{pattern})", headline)), "")
+    if not platform or not re.search(r"互联|打通|interoperab\w*", headline):
+        return None
+    subject = re.split(r"\b(?:adds?|announc\w*|upgrad\w*|supports?)\b|升级|支持|宣布|官宣|打通", headline, maxsplit=1)[0]
+    if re.search(r"\b(?:app|application|utility|client)\b|应用|客户端", subject):
+        return None
+    if re.search(r"尚未|不支持|去年|回顾|\b(?:not|last\s+year|recap)\b", headline):
+        return None
+    if not re.search(r"升级|支持|宣布|官宣|\b(?:adds?|announc\w*|upgrad\w*|supports?)\b", headline):
+        return None
+    scope = f"{headline}. {_normalized(lead)[:750]}"
+    version = re.search(rf"(?:{platforms[platform]})\s*(\d+(?:\.\d+)?)", scope)
+    endpoints = [("apple-watch", r"apple\s*watch|苹果手表"), ("airpods", r"airpods"), ("iphone", r"iphone")]
+    endpoint = next((name for name, pattern in endpoints if re.search(pattern, headline)), "")
+    if version and endpoint and re.search(
+        r"消息|来电|电量|互传|\b(?:notifications?|calls?|battery|transfer\w*)\b", scope,
+    ):
+        return f"{platform}-{version.group(1)}", endpoint
+    return None
+
+
 def _title_owned_action_profile(title: str, lead: str, evidence: str, identity: EventIdentity) -> ReconciliationProfile | None:
     """Resolve explicit grammatical actions before background-derived keys.
 
@@ -5606,9 +5747,17 @@ def _title_owned_action_profile(title: str, lead: str, evidence: str, identity: 
         )
     if identity.content_form != "news":
         return None
+    report = _primary_report_claim(title, lead, identity)
     milestone = _platform_compatibility_milestone(title, lead, evidence, identity)
+    interoperation = _cross_platform_device_interoperation(title, lead)
     subject, predicate, category, tier = "", "", "", "strong"
-    if milestone and identity.content_form == "news":
+    if report:
+        subject, predicate, category = report
+    elif interoperation:
+        platform, endpoint = interoperation
+        subject = f"third-party-platform-{platform}-{endpoint}"
+        predicate, category, tier = "interoperability-update", "software_systems", "ecosystem"
+    elif milestone and identity.content_form == "news":
         project, generation, predicate = milestone
         subject = f"third-party-platform-{project}-{generation}"
         category, tier = "software_systems", "ecosystem"
@@ -5620,7 +5769,7 @@ def _title_owned_action_profile(title: str, lead: str, evidence: str, identity: 
         participation_pattern = (
             r"(?P<person>tim\s*cook|(?:john\s+)?ternus|库克|特努斯|[a-z]+\s+[a-z]+)"
             r"(?P<action>(?:\s|或|将|可能|会|十几年来|首度|今年|不再|不会|在|苹果|秋季|发布会|视频|中){0,50}"
-            r"(?:缺席|出镜|出现)|\s+(?:will\s+|may\s+|might\s+)?(?:not\s+)?(?:appear|attend|skip|miss)\b)"
+            r"(?:缺席|出镜|出现)|\s+(?:will\s+|may\s+|might\s+|won't\s+)?(?:not\s+)?(?:appear|attend|skip|miss)\b)"
         )
         participant = re.search(participation_pattern, headline)
         if participant is None:
@@ -5632,7 +5781,7 @@ def _title_owned_action_profile(title: str, lead: str, evidence: str, identity: 
             person = participant.group('person').replace(' ', '-')
             person = {'库克': 'tim-cook', '特努斯': 'john-ternus', 'ternus': 'john-ternus'}.get(person, person)
             action = participant.group('action')
-            absent = bool(re.search(r"缺席|不再|不会|\b(?:not|skip|miss)\b", action))
+            absent = bool(re.search(r"缺席|不再|不会|\b(?:not|won't|skip|miss)\b", action))
             period = 'wwdc' if re.search(r"wwdc|开发者大会", headline) else 'fall' if re.search(r"september|autumn|fall|秋季|9\s*月", headline) else ''
             if period:
                 subject = f"apple-event-{period}:participant-{person}"
@@ -5648,17 +5797,27 @@ def _title_owned_action_profile(title: str, lead: str, evidence: str, identity: 
             identity.content_form == "news" and apple_owner
             and len(services) == 1
             and re.search(r"\b(?:consider(?:s|ing)?|review(?:s|ing)?|might|may|could|plans?)\b|考虑|酝酿|计划", claim_scope)
-            and re.search(r"\b(?:margins?|monetiz\w*|business\s+model)\b|利润率|商业模式", headline)
+            and re.search(r"\b(?:margins?|monetiz\w*|business\s+model|revenue)\b|收入|利润率|商业模式", headline)
         ):
             subject = next(iter(services))
             predicate, category = 'monetization-review', 'software_systems'
     if not subject:
         return None
     key = f"primary-claim:{subject}:{predicate}"
+    qualifiers = set()
+    if predicate == "feature-disclosure" and "-code-" in subject:
+        platform = subject.split("-", 1)[0]
+        pattern = rf"\b{platform}\s*(\d+(?:\.\d+)?)\s*(?:developer\s+)?beta\s*(\d+)\b"
+        builds = list(re.finditer(pattern, _normalized(title)))
+        if not builds:
+            first_assertion = re.split(r"[。！？]|(?<=[.!?])\s+", _normalized(lead), maxsplit=1)[0]
+            builds = list(re.finditer(pattern, first_assertion))
+        for build in builds:
+            qualifiers.add(f"code-build:{platform}-{build.group(1)}-beta-{build.group(2)}")
     return ReconciliationProfile(
         event_keys=frozenset({key}),
         boundary_keys=frozenset({f"primary-claim-subject:{subject}"}),
-        separation_keys=frozenset({f"primary-claim-subject:{subject}", f"primary-claim-predicate:{predicate}"}),
+        separation_keys=frozenset({f"primary-claim-subject:{subject}", f"primary-claim-predicate:{predicate}", *qualifiers}),
         category_hint=category, identity=identity, relevance_tier=tier,
         trusted_direct_action=tier == 'strong',
     )
@@ -7564,6 +7723,12 @@ def _primary_claim_projection(
         ):
             sourcing_predicate = "component-order-allocation"
         elif re.search(
+            r"\b(?:long[- ]term|multiyear|multi-year)\b.{0,40}\b(?:agreement|contract)\b|"
+            r"(?:长期|多年).{0,10}(?:协议|合约|合同)",
+            title_text,
+        ):
+            sourcing_predicate = "component-long-term-supply-agreement"
+        elif re.search(
             r"\b(?:talks?|negotiat|bidding)\b|(?:洽谈|谈判|议价|压价)",
             title_text,
         ):
@@ -9334,12 +9499,22 @@ def _direct_title_action_conflict(
 def _structured_category_hint(
     identity: EventIdentity,
     direct_subjects: Iterable[str] = (),
+    title: str = "",
 ) -> str:
     if (
         identity.scope == "apple-direct"
         and "first-party-accessibility-guidance" in identity.components
     ):
         return "software_systems"
+    if (
+        identity.scope == "apple-direct" and identity.content_form == "news"
+        and identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+        and not identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS
+        and ("component-cost-analysis" in identity.components or any(
+            value.startswith("money:") for value in _evidence_measurements(title, "")
+        ))
+    ):
+        return "hardware_products"
     direct_subjects = (
         set(direct_subjects)
         or set(identity.title_named_subjects)
@@ -9470,7 +9645,7 @@ def build_reconciliation_profile(
         identity,
         primary_evidence_products or evidence_products,
     )
-    category_hint = _structured_category_hint(identity, structured_title_subjects)
+    category_hint = _structured_category_hint(identity, structured_title_subjects, title)
     if company_performance_subject:
         category_hint = "software_systems"
     if editorial_first_party_action and len(identity.title_products) == 1:
@@ -10601,10 +10776,7 @@ def build_reconciliation_profile(
 
     memory_suppliers = {
         supplier
-        for supplier, aliases in {
-            "cxmt": ("cxmt", "changxin", "长鑫"),
-            "ymtc": ("ymtc", "yangtze memory", "长江存储"),
-        }.items()
+        for supplier, aliases in _MEMORY_SUPPLIER_ALIASES.items()
         if _contains(text, *aliases)
     }
     title_memory_negotiation = bool(
@@ -10617,10 +10789,7 @@ def build_reconciliation_profile(
         or (
             title_has_apple_subject
             and
-            any(alias in title_text for aliases in {
-                "cxmt": ("cxmt", "changxin", "长鑫"),
-                "ymtc": ("ymtc", "yangtze memory", "长江存储"),
-            }.values() for alias in aliases)
+            any(alias in title_text for aliases in _MEMORY_SUPPLIER_ALIASES.values() for alias in aliases)
             and _contains(text, "talks", "negot", "procure", "source", "buy", "洽谈", "谈判", "采购", "议价")
         )
     ):
@@ -11320,7 +11489,15 @@ def build_reconciliation_profile(
     )
 
 
+def _disclosed_build_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
+    left_builds = {key for key in left.separation_keys if key.startswith("code-build:")}
+    right_builds = {key for key in right.separation_keys if key.startswith("code-build:")}
+    return bool(left_builds and right_builds and left_builds.isdisjoint(right_builds))
+
+
 def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
+    if _disclosed_build_conflict(left, right):
+        return True
     if any(
         key.startswith("primary-claim:")
         for key in left.event_keys & right.event_keys
@@ -11540,6 +11717,8 @@ def _explicit_separation_conflict(
     right: ReconciliationProfile,
 ) -> bool:
     """Keep explicit product/action boundaries authoritative during reunion."""
+    if _disclosed_build_conflict(left, right):
+        return True
     if _projection_scope_conflict(left, right):
         # A child projected from an aggregate report keeps that report's broad
         # action boundary. One overlapping product fact must not let a focused
@@ -11832,6 +12011,8 @@ def _profile_release_conflict(
     left: ReconciliationProfile,
     right: ReconciliationProfile,
 ) -> bool:
+    if _disclosed_build_conflict(left, right):
+        return True
     left_release = {
         key for key in left.event_keys if key.startswith("apple-os-release-wave:")
     }

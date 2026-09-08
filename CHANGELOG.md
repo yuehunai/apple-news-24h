@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.75.0 - 2026-09-08
+
+- Improved Apple-led developer-submission admission and relevance using one shared title-and-lead rule, restoring browser interoperability proposal coverage without allowing partner or competitor background to override the primary action.
+- Improved cross-language reconciliation for versioned OS code disclosures, platform award totals, supplier cooperation responses, long-term component contracts, and attributed production forecasts; bound identities to the actual subject, action, reporting period, and supporting evidence.
+- Kept explicit build conflicts authoritative during merging, distinguished currency amounts from calendar years, and preserved comma-separated prices so unrelated releases and price reports cannot create false event boundaries.
+- Improved action ownership for first-party app announcements and concrete cross-platform interoperability while keeping third-party app launches, shopping recommendations, competitor marketing, and unsupported commentary deferred.
+- Updated fallback-policy guidance and shared decision helpers without changing the skill workflow, CLI, source list, detail-page coverage, or output schema.
+- Added 58 focused regression tests, expanding the suite from 1,471 to 1,529 tests; concurrent live validation retained all 57 baseline source URLs and recovered one more in 80.21/79.33 seconds, while clean-agent validation produced 17 brief items with all 36 retained source links and no manual regrouping or deferred promotion.
+
 ## 1.74.0 - 2026-09-07
 
 - Improved title-led action reconciliation so a complete headline subject and predicate take precedence over background-derived merge keys, preserving same-action coverage without reopening unrelated event boundaries.

@@ -42,6 +42,7 @@ from apple_news_core.event_identity import (  # noqa: E402
     DIRECT_IDENTITY_FACETS,
     build_event_identity,
     high_confidence_direct_apple_action,
+    is_apple_led_developer_submission_story,
     is_authoritative_first_party_action,
     is_direct_apple_product_lifecycle_action,
     is_direct_first_party_named_object_change,
@@ -9832,6 +9833,7 @@ def is_relevant_candidate(
         or is_apple_strategic_transaction_story(candidate.title)
         or is_material_apple_stock_move_story(candidate.title, text)
         or is_direct_apple_first_party_developer_guidance_story(candidate.title, text)
+        or is_apple_led_developer_submission_story(candidate.title, candidate.summary)
         or is_official_apple_education_promotion_story(candidate.title, text)
         or is_applecare_plan_price_change_story(candidate.title, text)
         or is_first_party_applecare_plan_change_story(candidate.title, text)
@@ -27854,6 +27856,8 @@ def classify_relevance_tier(
     key_facts: list[str] | None = None,
     source_name: str = "",
 ) -> tuple[str, str]:
+    if is_apple_led_developer_submission_story(title, summary):
+        return "strong", "Apple-led developer call for browser interoperability proposals"
     # Relevance is title/lead led. Later facts remain available to summaries,
     # but related-product background must not overturn the primary event.
     facts = " ".join((key_facts or [])[:5])
