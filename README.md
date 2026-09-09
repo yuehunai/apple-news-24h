@@ -12,14 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.75.0 - 2026-09-08
+### 1.76.0 - 2026-09-09
 
-- Improved Apple-led developer-submission admission and relevance using one shared title-and-lead rule, restoring browser interoperability proposal coverage without allowing partner or competitor background to override the primary action.
-- Improved cross-language reconciliation for versioned OS code disclosures, platform award totals, supplier cooperation responses, long-term component contracts, and attributed production forecasts; bound identities to the actual subject, action, reporting period, and supporting evidence.
-- Kept explicit build conflicts authoritative during merging, distinguished currency amounts from calendar years, and preserved comma-separated prices so unrelated releases and price reports cannot create false event boundaries.
-- Improved action ownership for first-party app announcements and concrete cross-platform interoperability while keeping third-party app launches, shopping recommendations, competitor marketing, and unsupported commentary deferred.
-- Updated fallback-policy guidance and shared decision helpers without changing the skill workflow, CLI, source list, detail-page coverage, or output schema.
-- Added 58 focused regression tests, expanding the suite from 1,471 to 1,529 tests; concurrent live validation retained all 57 baseline source URLs and recovered one more in 80.21/79.33 seconds, while clean-agent validation produced 17 brief items with all 36 retained source links and no manual regrouping or deferred promotion.
+- Added `primary_action.py` to resolve complete actor/action/object assertions before background-based reconciliation, keeping category, relevance, and event boundaries tied to the reported action.
+- Improved cross-source grouping for named first-party apps, device firmware, acquisitions, code disclosures, and attributed production reports; kept app updates and firmware in software and preserved target-version facts without discarding other source details.
+- Tightened inventory, patent, product-naming, and launch-preview boundaries; kept unofficial third-party ports deferred while preserving Apple-led, commissioned, and newly enabled platform actions.
+- Improved direct regulatory, interoperability, and service-content coverage, and corrected physical retail and hardware-related legal classification without reducing discovery or detail-page coverage.
+- Updated bilingual architecture and fallback-policy guidance, and required full-source first-disclosure checks for overlapping app or feature reports so republished facts do not become separate new events.
+- Added 47 regression tests, expanding the suite from 1,529 to 1,576 tests; concurrent live validation retained all 106 source URLs in 100.71/99.74 seconds, and final clean-agent validation produced 24 brief items with 62 source links, including unified Readiness and Beats firmware coverage.
 
 ## What It Does
 
@@ -37,9 +37,10 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - `scripts/apple_news_24h.py` handles source discovery, page fetching, timestamp verification, article extraction, event orchestration, and Markdown/JSON rendering.
 - `scripts/apple_news_core/article_projector.py` projects a source page into independently reportable first-party content and product claims only when each child has a local named subject, concrete action, and supporting facts. It also splits compound Apple silicon announcements into subject-scoped chip claims without turning shared launch prose or background text into synthetic children.
 - `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
+- `scripts/apple_news_core/primary_action.py` resolves complete actor/action/object assertions before background-based reconciliation. Device firmware binds to its target version, named first-party apps remain software, and ownership evidence constrains category, relevance, and event boundaries.
 - `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
 - `scripts/apple_news_core/event_reconciler.py` treats legacy seed clusters as recall proposals, applies authoritative structured action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py` and the dated suites through `tests/test_20260908_review_boundaries.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, launch campaigns, first-party facilities, event interpretation, content-form boundaries, relevance tiers, product lifecycle, operational deployments, quantified company reports, detail-page admission, and official narrative facts; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `tests/test_event_identity_architecture.py` and the dated suites through `tests/test_20260909_live_action_boundaries.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, launch campaigns, first-party facilities, event interpretation, content-form boundaries, relevance tiers, product lifecycle, operational deployments, quantified company reports, detail-page admission, and official narrative facts; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 

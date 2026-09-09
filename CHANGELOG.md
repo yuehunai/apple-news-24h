@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented here.
 
+## 1.76.0 - 2026-09-09
+
+- Added `primary_action.py` to resolve complete actor/action/object assertions before background-based reconciliation, keeping category, relevance, and event boundaries tied to the reported action.
+- Improved cross-source grouping for named first-party apps, device firmware, acquisitions, code disclosures, and attributed production reports; kept app updates and firmware in software and preserved target-version facts without discarding other source details.
+- Tightened inventory, patent, product-naming, and launch-preview boundaries; kept unofficial third-party ports deferred while preserving Apple-led, commissioned, and newly enabled platform actions.
+- Improved direct regulatory, interoperability, and service-content coverage, and corrected physical retail and hardware-related legal classification without reducing discovery or detail-page coverage.
+- Updated bilingual architecture and fallback-policy guidance, and required full-source first-disclosure checks for overlapping app or feature reports so republished facts do not become separate new events.
+- Added 47 regression tests, expanding the suite from 1,529 to 1,576 tests; concurrent live validation retained all 106 source URLs in 100.71/99.74 seconds, and final clean-agent validation produced 24 brief items with 62 source links, including unified Readiness and Beats firmware coverage.
+
 ## 1.75.0 - 2026-09-08
 
 - Improved Apple-led developer-submission admission and relevance using one shared title-and-lead rule, restoring browser interoperability proposal coverage without allowing partner or competitor background to override the primary action.

@@ -32,6 +32,7 @@ from .event_identity import (
     quantified_apple_company_performance_subject,
 )
 from .event_matcher import FIRST_PARTY_SERVICE_PRODUCTS, identity_pair_decision
+from .primary_action import owned_primary_action, primary_action_domain
 
 
 ArticleT = TypeVar("ArticleT")
@@ -63,6 +64,10 @@ class ReconciliationProfile:
     relevance_tier: str = "strong"
     trusted_direct_action: bool = False
     promotion_reason: str = ""
+    primary_action_owned: bool = False
+    action_domain: str = ""
+    report_review_title: str = ""
+    report_relevance: str = ""
 
 
 _GENERIC_SUBJECT_WORDS = {
@@ -2385,11 +2390,13 @@ def _structured_assertion_keys(
             re.I,
         )
     )
-    if foldable and product_naming_action:
-        key = "structured-assertion:foldable-iphone:product-naming"
+    target = _product_naming_target(title_scope, short_lead) if foldable and product_naming_action else ""
+    if target:
+        key = f"structured-assertion:foldable-iphone:product-naming:{target}"
         event_keys.add(key)
         boundaries.add("structured-subject:foldable-iphone")
         separation |= {"assertion-subject:foldable-iphone", "assertion-action:product-naming"}
+        separation.add(f"naming-target:foldable-iphone:{target}")
 
     supplier_terms = ("memory", "dram", "nand", "ram", "内存", "存储", "闪存")
     capacity_terms = (
@@ -3410,6 +3417,31 @@ def _app_store_subjects(title: str, identity: EventIdentity) -> set[str]:
         if subject not in ignored
         and subject in identity.title_named_subjects
     }
+
+
+def _product_naming_target(title: str, lead: str) -> str:
+    sparse = re.fullmatch(r"iphone\s+([a-z][a-z0-9-]+)\s*[?？]", title)
+    if not sparse and not re.search(r"\b(?:called|named|naming|name)\b|名称|命名|定名|称.{0,12}为", title):
+        return ""
+    # Extract the predicate's complement, not words following every iPhone
+    # mention (which can include the verb itself or an earlier proposed name).
+    pattern = (
+        r"(?:\b(?:called|named)\s+(?:(?:it|the\s+(?:device|phone|model))\s+)?|"
+        r"\breferred\s+to\s+as\s+|\bname\s+making\s+the\s+rounds\s+is\s+|"
+        r"称[^。]{0,16}?为|(?:名称|命名|定名)(?:或)?(?:定为|为)?|就叫)"
+        r"\s*[:：]?\s*[\"'“‘]?(?:the\s+)?iphone\s+([a-z][a-z0-9-]+)\b"
+    )
+    title_targets = set(re.findall(pattern, title))
+    if len(title_targets) == 1:
+        return next(iter(title_targets))
+    if title_targets:
+        return ""
+    lead_targets = set(re.findall(pattern, lead))
+    if sparse and sparse.group(1) in lead_targets:
+        return sparse.group(1)
+    if not sparse and len(lead_targets) == 1:
+        return next(iter(lead_targets))
+    return ""
 
 
 def _reconciliation_content_form(title: str, identity: EventIdentity) -> str:
@@ -4897,6 +4929,52 @@ def _editorial_or_third_party_claim_reason(
     return ""
 
 
+def _independent_experimental_port(title: str, text: str) -> bool:
+    headline = _normalized(title)
+    opening = _normalized(text)
+    if opening.startswith(headline):
+        opening = opening[len(headline):].lstrip(" .")
+    sentences = re.split(r"[。!?！？]|\.(?:\s|$)", opening[:700], maxsplit=2)
+    assertion = sentences[0]
+    official_target = re.search(
+        r"^apple\s+(?:adds|announces|releases)\s+(?:new\s+)?official\b.{0,60}"
+        r"\bsupport\s+(?:to|for|in)\s+(metal|macos|ios|ipados)\b", headline,
+    )
+    if (
+        official_target
+        and re.search(rf"\bto\s+{re.escape(official_target.group(1))}\b", assertion)
+        and len(sentences) > 1
+        and re.match(
+            r"\s*apple\s+(?:(?:has|today)\s+)?(?:released|introduced|launched)\s+"
+            r"(?:a\s+)?new\s+official\s+apis?\s+(?:today\s+)?to\s+"
+            r"(?:enable|provide)\s+(?:this|that)\s+(?:support|capability)\b",
+            sentences[1],
+        )
+    ):
+        return False
+    developer = re.search(r"\b(?:developers?|hobbyists?)\b|开发者|爱好者", assertion)
+    if not developer or re.search(r"apple.{0,30}(?:commission|hir|contract)|苹果.{0,20}(?:委托|聘请)", assertion[:developer.start()]):
+        return False
+    if re.search(r"(?:apple(?:'s)?|苹果(?:公司)?的?)\s*$", assertion[:developer.start()]):
+        return False
+    action = assertion[developer.start():]
+    if re.match(r"developers?\s+(?:at|for)\s+apple\b", action):
+        return False
+    if re.search(
+        r"\b(?:commissioned|hired|contracted)\s+by\s+apple\b|受苹果委托|由苹果委托|"
+        r"\bapple\s+(?:(?:has|today)\s+)?(?:announced|released|added)\s+(?:new\s+)?official\s+(?:support|api|feature)\b|"
+        r"\busing\s+(?:the\s+)?new\s+official\s+api\s+apple\s+(?:released|launched)\s+today\b|"
+        r"苹果(?:今日|今天)?正式(?:发布|推出).{0,12}(?:平台功能|接口|支持)",
+        action,
+    ):
+        return False
+    return bool(
+        re.search(r"\bport(?:s|ed|ing)?\b|移植", action)
+        and re.search(r"\b(?:to|on|onto)\s+(?:apple|metal|macos|mac)\b|(?:到|至|在).{0,65}(?:苹果|metal|apple silicon|m\d+)", action)
+        and re.search(r"unofficial|experimental|third.party|非官方|实验|第三方|英伟达", action + ' ' + headline)
+    )
+
+
 def _unsupported_third_party_reason(
     title: str,
     text: str,
@@ -4905,6 +4983,8 @@ def _unsupported_third_party_reason(
     relevance_tier: str,
     trusted_direct_action: bool,
 ) -> str:
+    if _independent_experimental_port(title, text):
+        return "unsupported third-party experimental port without an Apple platform change"
     if _official_apple_store_transaction_option_action(title, text):
         return ""
     if "consumer-purchase-intent" in identity.title_components:
@@ -5733,6 +5813,19 @@ def _title_owned_action_profile(title: str, lead: str, evidence: str, identity: 
     to invent alternative keys from their background would reopen the boundary.
     """
     headline = _canonical_title(title)
+    owned = owned_primary_action(headline, _normalized(lead), _normalized(evidence))
+    if owned is not None:
+        key = f"primary-claim:{owned.subject}:{owned.predicate}"
+        return ReconciliationProfile(
+            event_keys=frozenset({key}),
+            boundary_keys=frozenset({f"primary-claim-subject:{owned.subject}"}),
+            separation_keys=frozenset({f"primary-claim-subject:{owned.subject}",
+                                       f"primary-claim-predicate:{owned.predicate}"}),
+            category_hint=owned.category, relevance_tier=owned.tier,
+            identity=identity, trusted_direct_action=owned.tier == "strong",
+            defer_reason="editorial guidance or review" if owned.tier == "weak" else "",
+            primary_action_owned=True,
+        )
     app_use_guidance = re.search(
         r"\bwith\s+this\s+(?:app|application|tool|utility)\b|"
         r"^(?:用|使用)这款(?:应用|工具)", headline,
@@ -9565,6 +9658,58 @@ def _structured_category_hint(
     return ""
 
 
+def _physical_action_category(title: str, lead: str, evidence: str, event_kind: str) -> str:
+    """Classify physical premises and litigated physical inventions, not law generally."""
+    headline = _normalized(title)
+    scope = f'{headline}. {_normalized(lead)[:2400]} {_normalized(evidence)[:1600]}'
+    if (re.match(r"^apple\b|^苹果", headline)
+            and re.search(r"\breopens?\b|重新开业|重新开放|改造.*开业", headline)
+            and not re.search(r"app\s*store|online\s+store|线上|在线商店", headline)
+            and re.search(r"\bretail\s+store\b|genius\s*bar|实体门店|零售店", scope)
+            and re.search(r"\b(?:building|redesign|renovat\w*|entrance|pickup)\b|建筑|改造|取货区", scope)):
+        return 'hardware_products'
+    if (event_kind == 'legal_antitrust' and re.search(r"\bpatent\w*\b|专利", headline)
+            and re.search(r"\b(?:optical|projected light|reflected light|skin detection|detecting skin|material properties|3d depth)\b|"
+                          r"光学|投射光|反射光|皮肤检测|材料属性", scope)
+            and re.search(r"\b(?:iphones?|ipads?|devices?|sensors?|hardware)\b|设备|传感器|硬件", scope)):
+        return 'hardware_products'
+    return ''
+
+
+def _reported_product_relevance(title: str, lead: str, identity: EventIdentity) -> str:
+    """Correct report admission only; never infer a claim or select source facts."""
+    headline = _normalized(title)
+    opening = _normalized(lead)[:1800]
+    if not identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS:
+        return ""
+    if not re.search(r"develop\w*|history|shaped|decade|passion project|pric\w*|cost|\$\s*\d|研发|历程|十年|定价|售价", headline):
+        return ""
+    if re.search(r"\bno\s+(?:new|further)\s+(?:facts|details|reporting)\b|没有(?:任何)?新增|无新增", opening):
+        return "weak"
+    current = re.search(r"\bnew\s+(?:report|details)\b|\bnow\s+according\s+to\b|最新报道|新披露", opening)
+    attribution = re.search(
+        r"\b(?:according\s+to|shared\s+by|reported\s+by)\b|"
+        r"\b(?!apple\b)[a-z][a-z -]{1,35}\s+(?:is\s+out\s+with|shares?|publishes?)\s+(?:a\s+)?new\s+(?:report|details)\b|"
+        r"知情人士|消息人士|据.{1,40}(?:报道|披露)", opening,
+    )
+    concrete = re.search(r"develop\w*|engineer\w*|prototyp\w*|pric\w*|cost\w*|研发|工程师|开发|定价|售价", opening)
+    if current and attribution and concrete and re.search(r"apple|iphone|ipad|macbook|苹果", opening):
+        return "strong"
+    return ""
+
+
+def _aggregate_hardware_preview(title: str, lead: str) -> bool:
+    headline = _normalized(title)
+    opening = _normalized(lead)[:900]
+    if re.search(r"\b(?:final|latest)\s+rumors?\b", headline) and re.search(r"\b(?:what|roundup|everything)\b", headline):
+        return True
+    return bool(
+        re.search(r"新机发布潮|新品.{0,12}(?:总览|前瞻|汇总)|(?:launch|event)\s+(?:preview|roundup)", headline)
+        and re.search(r"发布会|\b(?:event|keynote)\b", opening)
+        and re.search(r"多个|所有|全部|未来一年|\b(?:multiple|all|lineup)\b", opening)
+    )
+
+
 def build_reconciliation_profile(
     *,
     title: str,
@@ -9578,9 +9723,11 @@ def build_reconciliation_profile(
     event_kind: str = "",
     evidence: str = "",
 ) -> ReconciliationProfile:
+    report_relevance = _reported_product_relevance(title, lead, identity)
     title_owned = _title_owned_action_profile(title, lead, evidence, identity)
     if title_owned is not None:
-        return title_owned
+        return replace(title_owned, report_relevance=report_relevance,
+                       report_review_title=_canonical_title(title) if report_relevance else "")
     caller_trusted_direct_action = trusted_direct_action
     title_text = _normalized(title)
     text = f"{title_text}. {_normalized(lead)[:900]}"
@@ -11474,6 +11621,22 @@ def build_reconciliation_profile(
         )
     ):
         category_hint = "hardware_products"
+    physical_category = _physical_action_category(title, lead, evidence, event_kind)
+    if physical_category:
+        category_hint = physical_category
+    third_party_action_keys = {
+        key for key in event_keys if key.startswith("primary-claim:third-party-software-")
+    }
+    owns_third_party_action = bool(third_party_action_keys and hard_boundary == "independent-third-party-action")
+    if owns_third_party_action:
+        # An application's platform is not the owner of its release. Do not
+        # allow an incidental OS release-wave key to bypass the app boundary.
+        event_keys = third_party_action_keys
+    aggregate_preview = _aggregate_hardware_preview(title, lead)
+    if aggregate_preview:
+        # Source form is a merge boundary, not permission to discard the
+        # independently new facts that a roundup can also contain.
+        separation_keys.add("source-form:hardware-preview")
     return ReconciliationProfile(
         event_keys=frozenset(event_keys),
         boundary_keys=frozenset(boundary_keys),
@@ -11482,10 +11645,14 @@ def build_reconciliation_profile(
         defer_reason=defer_reason,
         category_hint=category_hint,
         hard_boundary=hard_boundary,
-        identity=identity,
+        identity=replace(identity, content_form="roundup") if aggregate_preview else identity,
         relevance_tier=resolved_relevance_tier,
         trusted_direct_action=structural_direct_action,
         promotion_reason=promotion_reason,
+        action_domain=primary_action_domain(title_text, _normalized(lead)),
+        primary_action_owned=owns_third_party_action,
+        report_relevance=report_relevance,
+        report_review_title=_canonical_title(title) if report_relevance else "",
     )
 
 
@@ -11495,7 +11662,29 @@ def _disclosed_build_conflict(left: ReconciliationProfile, right: Reconciliation
     return bool(left_builds and right_builds and left_builds.isdisjoint(right_builds))
 
 
+def _primary_action_boundary_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
+    preview = "source-form:hardware-preview"
+    if (preview in left.separation_keys) != (preview in right.separation_keys):
+        return True
+    left_names = {key for key in left.separation_keys if key.startswith("naming-target:")}
+    right_names = {key for key in right.separation_keys if key.startswith("naming-target:")}
+    if left_names and right_names and left_names.isdisjoint(right_names):
+        return True
+    if left.report_review_title or right.report_review_title:
+        if left.report_review_title != right.report_review_title:
+            return True
+    if left.action_domain and right.action_domain and left.action_domain != right.action_domain:
+        return True
+    if left.primary_action_owned or right.primary_action_owned:
+        left_keys = {key for key in left.event_keys if key.startswith("primary-claim:")}
+        right_keys = {key for key in right.event_keys if key.startswith("primary-claim:")}
+        return not bool(left_keys & right_keys)
+    return False
+
+
 def _profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
+    if _primary_action_boundary_conflict(left, right):
+        return True
     if _disclosed_build_conflict(left, right):
         return True
     if any(
@@ -11717,6 +11906,8 @@ def _explicit_separation_conflict(
     right: ReconciliationProfile,
 ) -> bool:
     """Keep explicit product/action boundaries authoritative during reunion."""
+    if _primary_action_boundary_conflict(left, right):
+        return True
     if _disclosed_build_conflict(left, right):
         return True
     if _projection_scope_conflict(left, right):
@@ -12036,6 +12227,10 @@ def _profile_release_conflict(
 
 def _seed_profiles_conflict(left: ReconciliationProfile, right: ReconciliationProfile) -> bool:
     """Return only conflicts strong enough to split an accepted seed event."""
+    if _primary_action_boundary_conflict(left, right):
+        return True
+    if left.primary_action_owned or right.primary_action_owned:
+        return _projection_scope_conflict(left, right)
     if _direct_title_subject_conflict(left, right):
         return True
     if _direct_title_action_conflict(left, right):
@@ -12597,7 +12792,8 @@ def _reunite_exact_relation_groups(
                 for key in shared_relations
             )
             if any(
-                _profile_release_conflict(profiles[id(left)], profiles[id(right)])
+                _primary_action_boundary_conflict(profiles[id(left)], profiles[id(right)])
+                or _profile_release_conflict(profiles[id(left)], profiles[id(right)])
                 or _projection_scope_conflict(
                     profiles[id(left)],
                     profiles[id(right)],
@@ -12643,6 +12839,15 @@ def resolve_reconciliation_outcome(
 ) -> tuple[str, str, str]:
     """Resolve relevance and category once from the structured profile."""
     category = profile.category_hint or observed_category
+    if profile.report_relevance:
+        reason = ("current attributed product report; original facts retained for source review"
+                  if profile.report_relevance == "strong"
+                  else "retrospective report explicitly provides no new facts")
+        return profile.report_relevance, reason, category
+    if profile.primary_action_owned:
+        return (profile.relevance_tier,
+                profile.defer_reason or "complete primary subject and action owns relevance",
+                category)
     if (
         profile.relevance_tier == "ecosystem" and not profile.defer_reason
         and any(key.startswith("primary-claim:third-party-platform-") for key in profile.event_keys)
@@ -12700,6 +12905,8 @@ def reconcile_articles(
         left_profile: ReconciliationProfile,
         right_profile: ReconciliationProfile,
     ) -> bool:
+        if left_profile.primary_action_owned or right_profile.primary_action_owned:
+            return _primary_action_boundary_conflict(left_profile, right_profile)
         left = left_profile.identity
         right = right_profile.identity
         if left is None or right is None:
@@ -12989,6 +13196,8 @@ def reconcile_articles(
             for right in right_group:
                 left_profile = profiles[id(left)]
                 right_profile = profiles[id(right)]
+                if _primary_action_boundary_conflict(left_profile, right_profile):
+                    return False
                 # Generic evidence keys (for example the same component and
                 # year) are corroboration, not ownership. Only a matching
                 # canonical action or concrete assertion may override legacy

@@ -69,6 +69,7 @@ from apple_news_core.event_reconciler import (  # noqa: E402
     resolve_reconciliation_outcome,
     supported_reconciliation_event_keys,
 )
+from apple_news_core.primary_action import is_primary_firmware_fact  # noqa: E402
 
 try:
     from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -11200,7 +11201,13 @@ def filter_key_facts_for_primary_topic(title: str, summary: str, key_facts: list
     primary_facets |= os_release_facets_from_text(primary_scope)
     title_actions = _key_fact_boundary_markers(title, KEY_FACT_BOUNDARY_ACTION_GROUPS)
     action_filtered: list[str] = []
+    primary_firmware_facts = {
+        fact for fact in key_facts if is_primary_firmware_fact(title, fact)
+    }
     for fact in key_facts:
+        if fact in primary_firmware_facts:
+            action_filtered.append(fact)
+            continue
         for action in title_actions & KEY_FACT_EXCLUSIVE_PRIMARY_ACTIONS:
             context_terms = KEY_FACT_EXCLUSIVE_CONTEXT_TERMS[action]
             fact = " ".join(
@@ -11225,6 +11232,9 @@ def filter_key_facts_for_primary_topic(title: str, summary: str, key_facts: list
         return action_filtered
     filtered: list[str] = []
     for fact in action_filtered:
+        if fact in primary_firmware_facts:
+            filtered.append(fact)
+            continue
         if not key_fact_requires_topic_boundary_analysis(title, primary_scope, fact):
             filtered.append(fact)
             continue
