@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented here.
 
+## 1.77.0 - 2026-09-13
+
+- Restored crawler behavior, skill instructions, fallback rules, and regression coverage to the `1.75.0` baseline, removing the `1.76.0` primary-action expansion without rewriting release history.
+- Moved the complete skill into `skills/`, including `SKILL.md`, `scripts/`, `references/`, and `agents/openai.yaml`; preserved explicit-only invocation.
+- Updated installation commands, existing documentation paths, CI checks, and test imports for the new layout; kept the global skill linked to the repository's `skills/` directory.
+- Verified all 1,529 baseline regression tests after relocation; kept the crawler's CLI, discovery rules, time window, output schema, and cache-cleanup behavior unchanged.
+
 ## 1.76.0 - 2026-09-09
 
 - Added `primary_action.py` to resolve complete actor/action/object assertions before background-based reconciliation, keeping category, relevance, and event boundaries tied to the reported action.

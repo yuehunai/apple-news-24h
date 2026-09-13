@@ -15,7 +15,7 @@ python3 -m unittest discover -s tests
 Run a syntax check:
 
 ```bash
-python3 -m py_compile scripts/apple_news_24h.py
+python3 -m py_compile skills/scripts/apple_news_24h.py
 ```
 
 ## Contribution Rules
@@ -31,7 +31,7 @@ python3 -m py_compile scripts/apple_news_24h.py
 
 When adding or changing a source:
 
-- Add the feed/page URL and default timezone to `references/news_policy.md`.
+- Add the feed/page URL and default timezone to `skills/references/news_policy.md`.
 - Prefer feed discovery first, then homepage/channel/date archive fallback.
 - Verify detail-page timestamp parsing.
 - Add a test fixture or focused unit test for the behavior being protected.
@@ -47,7 +47,7 @@ When changing filtering or grouping:
 Live tests depend on third-party websites and should not be required for every pull request. When doing a live smoke test, run:
 
 ```bash
-python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json --include-diagnostics
+python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json --include-diagnostics
 ```
 
 Review `latest.json`, then delete it before committing.

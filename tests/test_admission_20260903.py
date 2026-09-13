@@ -6,7 +6,7 @@ from datetime import datetime
 from unittest.mock import patch
 
 
-SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "apple_news_24h.py"
+SCRIPT = Path(__file__).resolve().parents[1] / "skills" / "scripts" / "apple_news_24h.py"
 
 
 class SemanticAdmissionTests(unittest.TestCase):

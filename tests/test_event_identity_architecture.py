@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
-SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "apple_news_24h.py"
+SCRIPT_PATH = Path(__file__).resolve().parents[1] / "skills" / "scripts" / "apple_news_24h.py"
 
 
 def load_module():

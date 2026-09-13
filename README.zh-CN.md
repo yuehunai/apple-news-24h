@@ -12,14 +12,12 @@
 
 ## 最新更新
 
-### 1.76.0 - 2026-09-09
+### 1.77.0 - 2026-09-13
 
-- 新增 `primary_action.py`，在基于背景的归并之前解析完整的施事、动作和对象断言，使分类、相关性和事件边界服从报道的实际动作。
-- 改进具名第一方应用、设备固件、收购、代码披露和具名机构产量报告的跨来源归并；将应用更新和固件保持在软件分类，完整保留目标版本事实，不丢弃其他来源细节。
-- 收紧库存、专利、产品命名与发布前瞻的事件边界；将非官方第三方移植保持在延后队列，同时保留 Apple 主导、委托及新平台能力带来的直接动作。
-- 改进直接监管、互操作和服务内容的覆盖，纠正实体零售及硬件相关法律报道的分类，保持来源发现和详情页覆盖不缩窄。
-- 更新双语架构说明与兜底规则，要求重叠应用或功能报道核对完整原文和首次披露时间，避免将重复转述的旧事实另列为新事件。
-- 新增 47 项回归测试，将测试总数由 1,529 项增加到 1,576 项；并发联网验证保留全部 106 个来源 URL，耗时为 100.71/99.74 秒；最终纯净子代理输出 24 条简报、62 个来源链接，正确归并 Readiness 与 Beats 固件报道。
+- 将抓取行为、skill 指令、兜底规则和回归测试恢复到 `1.75.0` 基线，移除 `1.76.0` 的主动作扩展，同时保留既有发布历史。
+- 将完整 skill 移入 `skills/`，包含 `SKILL.md`、`scripts/`、`references/` 和 `agents/openai.yaml`，保持仅显式调用。
+- 更新安装命令、现有文档路径、CI 检查和测试导入路径，将全局 skill 软链接指向仓库的 `skills/` 目录。
+- 验证迁移后的全部 1,529 项基线回归测试，保持爬虫 CLI、发现规则、时间窗口、输出结构及缓存清理行为不变。
 
 ## 它会做什么
 
@@ -34,13 +32,12 @@
 
 ## 架构
 
-- `scripts/apple_news_24h.py` 负责来源发现、页面抓取、时间核验、文章提取、事件编排及 Markdown/JSON 渲染。
-- `scripts/apple_news_core/article_projector.py` 仅在每个子事件都具有局部命名主体、具体动作和支持事实时，将一个来源页面投影为多个可独立报道的第一方内容或产品主张。它还会把复合 Apple 芯片公告拆成主体级芯片主张，避免将共享发布表述或背景文字生成虚假子事件。
-- `scripts/apple_news_core/event_identity.py` 将文章标题和导语转换为结构化事件身份，覆盖产品、组件、参与方、动作、地区、法律案件、内容形态和命名主体。正文只作为受约束的辅助证据，避免相关文章和背景段落重新定义事件。
-- `scripts/apple_news_core/primary_action.py` 在基于背景的归并之前解析完整的施事、动作和对象断言，将设备固件绑定目标版本、将具名第一方应用保持为软件，并以动作归属证据约束分类、相关性和事件边界。
-- `scripts/apple_news_core/event_matcher.py` 使用保守的产品、组件、动作、地区、法律案件和主体兼容性规则比较事件身份。将该决策层保持为纯函数，使同事件聚类可以独立测试，也更便于维护。
-- `scripts/apple_news_core/event_reconciler.py` 将旧种子聚类视为召回建议，应用具有最终裁决权的结构化动作边界，并通过精确跨来源事件签名归并报道，避免泛相似度或传递桥接重新打开已经确定的事件组。
-- `tests/test_event_identity_architecture.py` 及截至 `tests/test_20260909_live_action_boundaries.py` 的按日期命名测试，为身份提取、匹配、结构化断言归并、动作归属、主张投影、变更对象边界、发布会活动、第一方设施、活动解读、内容形态边界、相关性分层、产品生命周期、实际部署、量化公司报告、详情页准入和官方叙述事实提供聚焦回归覆盖；现有抓取器测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
+- `skills/scripts/apple_news_24h.py` 负责来源发现、页面抓取、时间核验、文章提取、事件编排及 Markdown/JSON 渲染。
+- `skills/scripts/apple_news_core/article_projector.py` 仅在每个子事件都具有局部命名主体、具体动作和支持事实时，将一个来源页面投影为多个可独立报道的第一方内容或产品主张。它还会把复合 Apple 芯片公告拆成主体级芯片主张，避免将共享发布表述或背景文字生成虚假子事件。
+- `skills/scripts/apple_news_core/event_identity.py` 将文章标题和导语转换为结构化事件身份，覆盖产品、组件、参与方、动作、地区、法律案件、内容形态和命名主体。正文只作为受约束的辅助证据，避免相关文章和背景段落重新定义事件。
+- `skills/scripts/apple_news_core/event_matcher.py` 使用保守的产品、组件、动作、地区、法律案件和主体兼容性规则比较事件身份。将该决策层保持为纯函数，使同事件聚类可以独立测试，也更便于维护。
+- `skills/scripts/apple_news_core/event_reconciler.py` 将旧种子聚类视为召回建议，应用具有最终裁决权的结构化动作边界，并通过精确跨来源事件签名归并报道，避免泛相似度或传递桥接重新打开已经确定的事件组。
+- `tests/test_event_identity_architecture.py` 及截至 `tests/test_20260908_review_boundaries.py` 的按日期命名测试，为身份提取、匹配、结构化断言归并、动作归属、主张投影、变更对象边界、发布会活动、第一方设施、活动解读、内容形态边界、相关性分层、产品生命周期、实际部署、量化公司报告、详情页准入和官方叙述事实提供聚焦回归覆盖；现有抓取器测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
 
 ## 它不会做什么
 
@@ -51,16 +48,20 @@
 
 ## 作为 Codex Skill 安装
 
-直接克隆到 Codex skills 目录：
+克隆仓库，并将其中的 `skills` 目录软链接到 Codex skills 目录：
 
 ```bash
-git clone https://github.com/yuehunai/apple-news-24h "$CODEX_HOME/skills/apple-news-24h"
+git clone https://github.com/yuehunai/apple-news-24h apple-news-24h
+mkdir -p "$CODEX_HOME/skills"
+ln -s "$PWD/apple-news-24h/skills" "$CODEX_HOME/skills/apple-news-24h"
 ```
 
 如果没有设置 `CODEX_HOME`，Codex 通常使用 `~/.codex`：
 
 ```bash
-git clone https://github.com/yuehunai/apple-news-24h ~/.codex/skills/apple-news-24h
+git clone https://github.com/yuehunai/apple-news-24h apple-news-24h
+mkdir -p ~/.codex/skills
+ln -s "$PWD/apple-news-24h/skills" ~/.codex/skills/apple-news-24h
 ```
 
 也可以把本仓库地址交给 Codex，让 Codex 自动安装：
@@ -75,7 +76,7 @@ https://github.com/yuehunai/apple-news-24h
 $apple-news-24h
 ```
 
-该 skill 在 `agents/openai.yaml` 中禁用了隐式触发，因此普通 Apple、科技或新闻对话不会自动调用它。
+该 skill 在 `skills/agents/openai.yaml` 中禁用了隐式触发，因此普通 Apple、科技或新闻对话不会自动调用它。
 
 ## CLI 使用
 
@@ -84,13 +85,13 @@ $apple-news-24h
 Markdown 输出：
 
 ```bash
-python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format markdown
+python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format markdown
 ```
 
 JSON 输出：
 
 ```bash
-python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json
+python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json
 ```
 
 JSON 会将进入简报的项目放在 `events` 中。第三方应用、竞品对比等未描述 Apple 直接动作的弱 Apple 关联候选，可能保留在 `deferred_events` 中供审查。事件对象可包含 `event_kind`、`relevance_tier`、`relevance_reason`、`regions` 和 `merge_warnings`。
@@ -100,7 +101,7 @@ JSON 输出还可能包含 `final_brief_queue`、`required_final_brief_titles`�
 调试来源失败时启用 diagnostics：
 
 ```bash
-python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json --include-diagnostics
+python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json --include-diagnostics
 ```
 
 常用参数：
@@ -122,7 +123,7 @@ python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --out
 
 主要来源包括 MacRumors、9to5Mac、AppleInsider、The Verge、Apple Newsroom、IT之家、爱范儿、快科技和 cnBeta。补充兜底来源包括新浪科技/财经、网易科技、36氪，以及必要时的其他主流中文科技页面。
 
-来源 URL、默认时区、纳入规则、排除规则、事件归并规则和兜底策略见 `references/news_policy.md`。
+来源 URL、默认时区、纳入规则、排除规则、事件归并规则和兜底策略见 `skills/references/news_policy.md`。
 
 ## 测试
 
@@ -135,7 +136,7 @@ python3 -m unittest discover -s tests
 运行语法检查：
 
 ```bash
-python3 -m py_compile scripts/apple_news_24h.py scripts/apple_news_core/event_identity.py scripts/apple_news_core/event_matcher.py scripts/apple_news_core/event_reconciler.py
+python3 -m py_compile skills/scripts/apple_news_24h.py skills/scripts/apple_news_core/event_identity.py skills/scripts/apple_news_core/event_matcher.py skills/scripts/apple_news_core/event_reconciler.py
 ```
 
 实时 smoke test 依赖网络和第三方站点可用性，因此不放入默认 CI。

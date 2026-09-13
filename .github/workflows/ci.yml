@@ -22,7 +22,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Compile crawler
-        run: python3 -m py_compile scripts/apple_news_24h.py
+        run: python3 -m py_compile skills/scripts/apple_news_24h.py
 
       - name: Run offline tests
         run: python3 -m unittest discover -s tests

@@ -8,7 +8,7 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "apple_news_24h.py"
+SCRIPT = ROOT / "skills" / "scripts" / "apple_news_24h.py"
 
 
 def load_module():

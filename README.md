@@ -12,14 +12,12 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 1.76.0 - 2026-09-09
+### 1.77.0 - 2026-09-13
 
-- Added `primary_action.py` to resolve complete actor/action/object assertions before background-based reconciliation, keeping category, relevance, and event boundaries tied to the reported action.
-- Improved cross-source grouping for named first-party apps, device firmware, acquisitions, code disclosures, and attributed production reports; kept app updates and firmware in software and preserved target-version facts without discarding other source details.
-- Tightened inventory, patent, product-naming, and launch-preview boundaries; kept unofficial third-party ports deferred while preserving Apple-led, commissioned, and newly enabled platform actions.
-- Improved direct regulatory, interoperability, and service-content coverage, and corrected physical retail and hardware-related legal classification without reducing discovery or detail-page coverage.
-- Updated bilingual architecture and fallback-policy guidance, and required full-source first-disclosure checks for overlapping app or feature reports so republished facts do not become separate new events.
-- Added 47 regression tests, expanding the suite from 1,529 to 1,576 tests; concurrent live validation retained all 106 source URLs in 100.71/99.74 seconds, and final clean-agent validation produced 24 brief items with 62 source links, including unified Readiness and Beats firmware coverage.
+- Restored crawler behavior, skill instructions, fallback rules, and regression coverage to the `1.75.0` baseline, removing the `1.76.0` primary-action expansion without rewriting release history.
+- Moved the complete skill into `skills/`, including `SKILL.md`, `scripts/`, `references/`, and `agents/openai.yaml`; preserved explicit-only invocation.
+- Updated installation commands, existing documentation paths, CI checks, and test imports for the new layout; kept the global skill linked to the repository's `skills/` directory.
+- Verified all 1,529 baseline regression tests after relocation; kept the crawler's CLI, discovery rules, time window, output schema, and cache-cleanup behavior unchanged.
 
 ## What It Does
 
@@ -34,13 +32,12 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Architecture
 
-- `scripts/apple_news_24h.py` handles source discovery, page fetching, timestamp verification, article extraction, event orchestration, and Markdown/JSON rendering.
-- `scripts/apple_news_core/article_projector.py` projects a source page into independently reportable first-party content and product claims only when each child has a local named subject, concrete action, and supporting facts. It also splits compound Apple silicon announcements into subject-scoped chip claims without turning shared launch prose or background text into synthetic children.
-- `scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
-- `scripts/apple_news_core/primary_action.py` resolves complete actor/action/object assertions before background-based reconciliation. Device firmware binds to its target version, named first-party apps remain software, and ownership evidence constrains category, relevance, and event boundaries.
-- `scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
-- `scripts/apple_news_core/event_reconciler.py` treats legacy seed clusters as recall proposals, applies authoritative structured action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
-- `tests/test_event_identity_architecture.py` and the dated suites through `tests/test_20260909_live_action_boundaries.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, launch campaigns, first-party facilities, event interpretation, content-form boundaries, relevance tiers, product lifecycle, operational deployments, quantified company reports, detail-page admission, and official narrative facts; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
+- `skills/scripts/apple_news_24h.py` handles source discovery, page fetching, timestamp verification, article extraction, event orchestration, and Markdown/JSON rendering.
+- `skills/scripts/apple_news_core/article_projector.py` projects a source page into independently reportable first-party content and product claims only when each child has a local named subject, concrete action, and supporting facts. It also splits compound Apple silicon announcements into subject-scoped chip claims without turning shared launch prose or background text into synthetic children.
+- `skills/scripts/apple_news_core/event_identity.py` converts article titles and leads into structured event identities covering products, components, actors, actions, regions, legal cases, content forms, and named subjects. Body text is used only as constrained supporting evidence so related links and background paragraphs cannot redefine the event.
+- `skills/scripts/apple_news_core/event_matcher.py` compares those identities with conservative product, component, action, region, legal-case, and subject compatibility rules. Keeping this decision layer pure makes same-event clustering independently testable and easier to maintain.
+- `skills/scripts/apple_news_core/event_reconciler.py` treats legacy seed clusters as recall proposals, applies authoritative structured action boundaries, and merges exact cross-source event signatures without allowing generic similarity or transitive bridges to reopen settled groups.
+- `tests/test_event_identity_architecture.py` and the dated suites through `tests/test_20260908_review_boundaries.py` provide focused regression coverage for identity extraction, matching, structured assertion reconciliation, action ownership, claim projection, changed-object boundaries, launch campaigns, first-party facilities, event interpretation, content-form boundaries, relevance tiers, product lifecycle, operational deployments, quantified company reports, detail-page admission, and official narrative facts; the existing crawler tests continue to verify discovery, parsing, clustering, rendering, and source cleanup end to end.
 
 ## What It Does Not Do
 
@@ -51,16 +48,20 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Installation As A Codex Skill
 
-Clone the repository directly into your Codex skills directory:
+Clone the repository and link its `skills` directory into your Codex skills directory:
 
 ```bash
-git clone https://github.com/yuehunai/apple-news-24h "$CODEX_HOME/skills/apple-news-24h"
+git clone https://github.com/yuehunai/apple-news-24h apple-news-24h
+mkdir -p "$CODEX_HOME/skills"
+ln -s "$PWD/apple-news-24h/skills" "$CODEX_HOME/skills/apple-news-24h"
 ```
 
 If `CODEX_HOME` is not set, Codex commonly uses `~/.codex`:
 
 ```bash
-git clone https://github.com/yuehunai/apple-news-24h ~/.codex/skills/apple-news-24h
+git clone https://github.com/yuehunai/apple-news-24h apple-news-24h
+mkdir -p ~/.codex/skills
+ln -s "$PWD/apple-news-24h/skills" ~/.codex/skills/apple-news-24h
 ```
 
 You can also give this repository URL to Codex and ask it to install the skill automatically:
@@ -75,7 +76,7 @@ Then invoke it explicitly, or call it directly from an automation:
 $apple-news-24h
 ```
 
-The skill intentionally disables implicit invocation in `agents/openai.yaml`, so ordinary Apple or technology conversations should not trigger it automatically.
+The skill intentionally disables implicit invocation in `skills/agents/openai.yaml`, so ordinary Apple or technology conversations should not trigger it automatically.
 
 ## CLI Usage
 
@@ -84,13 +85,13 @@ The crawler uses only the Python standard library.
 Markdown output:
 
 ```bash
-python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format markdown
+python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format markdown
 ```
 
 JSON output:
 
 ```bash
-python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json
+python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json
 ```
 
 JSON keeps included brief items in `events`. Weak Apple-adjacent candidates, such as third-party app stories or competitor comparisons that do not describe a direct Apple action, may be kept in `deferred_events` for review. Event objects can include `event_kind`, `relevance_tier`, `relevance_reason`, `regions`, and `merge_warnings`.
@@ -100,7 +101,7 @@ JSON output may also include `final_brief_queue`, `required_final_brief_titles`,
 Diagnostics for debugging source failures:
 
 ```bash
-python3 scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json --include-diagnostics
+python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json --include-diagnostics
 ```
 
 Useful options:
@@ -122,7 +123,7 @@ The crawler needs live network access to fetch feeds, channel pages, and article
 
 Primary sources include MacRumors, 9to5Mac, AppleInsider, The Verge, Apple Newsroom, IT之家, 爱范儿, 快科技, and cnBeta. Supplemental fallback sources include 新浪科技/财经, 网易科技, 36氪, and other mainstream Chinese technology pages when needed.
 
-See `references/news_policy.md` for source URLs, default timezones, inclusion rules, exclusion rules, event merge rules, and fallback handling.
+See `skills/references/news_policy.md` for source URLs, default timezones, inclusion rules, exclusion rules, event merge rules, and fallback handling.
 
 ## Tests
 
@@ -135,7 +136,7 @@ python3 -m unittest discover -s tests
 Run a syntax check:
 
 ```bash
-python3 -m py_compile scripts/apple_news_24h.py scripts/apple_news_core/event_identity.py scripts/apple_news_core/event_matcher.py scripts/apple_news_core/event_reconciler.py
+python3 -m py_compile skills/scripts/apple_news_24h.py skills/scripts/apple_news_core/event_identity.py skills/scripts/apple_news_core/event_matcher.py skills/scripts/apple_news_core/event_reconciler.py
 ```
 
 Live smoke tests are intentionally separate from CI because they depend on network access and third-party site availability.
