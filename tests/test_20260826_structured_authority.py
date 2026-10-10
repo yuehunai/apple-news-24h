@@ -1060,14 +1060,6 @@ class StructuredAuthorityTests(unittest.TestCase):
                 ],
                 "hardware_products",
             ),
-            (
-                [
-                    ("Apple Home hub roadmap update", "Apple's Home Hub remains planned for this year."),
-                    ("Apple Smart Home Display Still Coming This Year", "Apple still plans to release its smart home hub this year."),
-                    ("苹果 Home Hub 或将支持人脸识别自动切换个人资料", "苹果智能家居中枢将支持个人资料切换。"),
-                ],
-                "hardware_products",
-            ),
         ]
 
         for rows, expected_category in samples:
@@ -1079,6 +1071,26 @@ class StructuredAuthorityTests(unittest.TestCase):
                 events = self.module.cluster_articles(articles)
                 self.assertEqual(len(events), 1, [[item.title for item in event.articles] for event in events])
                 self.assertEqual(events[0].category, expected_category)
+
+    def test_home_hub_launch_roadmap_keeps_separate_profile_capability(self):
+        rows = [
+            ("Apple Home hub roadmap update", "Apple's Home Hub remains planned for this year."),
+            ("Apple Smart Home Display Still Coming This Year", "Apple still plans to release its smart home hub this year."),
+            ("苹果 Home Hub 或将支持人脸识别自动切换个人资料", "苹果智能家居中枢将支持个人资料切换。"),
+        ]
+        articles = [
+            article_for(self.module, title, summary, f"Source-{index}")
+            for index, (title, summary) in enumerate(rows)
+        ]
+
+        events = self.module.cluster_articles(articles)
+
+        self.assertCountEqual(
+            [tuple(sorted(article.source for article in event.articles)) for event in events],
+            [("Source-0", "Source-1"), ("Source-2",)],
+        )
+        roadmap = next(event for event in events if articles[0] in event.articles)
+        self.assertEqual(roadmap.category, "hardware_products")
 
     def test_same_named_apple_tv_project_merges_across_descriptive_titles(self):
         articles = [

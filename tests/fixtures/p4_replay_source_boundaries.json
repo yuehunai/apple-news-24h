@@ -1,0 +1,2378 @@
+{
+  "1be80f48fdcbca065ff53af6": {
+    "bound_claim": null,
+    "category": "",
+    "confidence": "detail",
+    "event_kind": "os_app",
+    "evidence": {
+      "article_id": "1be80f48fdcbca065ff53af6",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Leak Hints at Four New Features for Apple Watch Series 12 and Ultra 4",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T08:57:56-07:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T08:57:56-07:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Monday September 7, 2026 8:57 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 7, 2026 8:57 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "August 30, 2026 7:54 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "August 24, 2026 8:55 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 2, 2026 10:25 am PDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-07T08:57:56-07:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-07T15:57:56+00:00",
+      "raw_lead": "Ahead of the announcement of the Apple Watch Series 12 and Ultra 4 later this week, code in the watchOS 27 and iOS 27 betas points to a series of new features for the product line. The information comes from a new post from MacRumors forums member \"pdfu\". The findings include: New \"Readiness\" app: An all-new separate Watch app referred to in code as \"Readiness,\" distinct from the existing Vitals app.",
+      "source": "MacRumors",
+      "title": "Leak Hints at Four New Features for Apple Watch Series 12 and Ultra 4",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Leak Hints at Four New Features for Apple Watch Series 12 and Ultra 4",
+          "unit_id": "556781b19d7dbeffece47355"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Ahead of the announcement of the Apple Watch Series 12 and Ultra 4 later this week, code in the watchOS 27 and iOS 27 betas points to a series of new features for the product line.",
+          "unit_id": "3b69ea241f44d2cb57e9aefa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The information comes from a new post from MacRumors forums member \"pdfu.\" The findings include:",
+          "unit_id": "85dbb08087b4e9ad5a27b533"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "New \"Readiness\" app: An all-new separate Watch app referred to in code as \"Readiness,\" distinct from the existing Vitals app. The ‌watchOS 27‌ launcher apparently includes it in the default Home Screen layout immediately after the Workout app, and the Watch companion app on ‌iOS 27‌ references the same app in its logic for arranging apps on the ‌Home Screen‌. Its name and placement next to the Workout app suggest Apple is preparing a more substantial readiness or recovery experience for the Apple Watch.",
+          "unit_id": "22a664b14b02868aabcadcd7"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Richer strength workouts: Expanded health infrastructure to store individual sets, repetition counts, weight, equipment, body side, and duration.",
+          "unit_id": "131a39509fc69e7dcb22dbf7"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "New optical-sensing system: A new sensor family called \"Sunstone4p0\" with lower noise coefficients, and wrist- and orientation-based channel selection. This could point to revised heart-sensing hardware on an upcoming Apple Watch, featuring improved readings when the reflected pulse signal is weak and specialized sensing according to the watch's placement.",
+          "unit_id": "4cdb6236c367a1fcf3b0d585"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "128GB storage: A NAND storage profile tied to the T8320 chip for the Apple Watch Series 12 and Apple Watch Ultra 4 suggesting that they could offer 128GB of storage, up from 64GB on previous models.",
+          "unit_id": "d919e32f0ffe0914793f89b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Bloomberg's Mark Gurman previously reported that the Apple Watch Series 12 and Ultra 4 will tout new health and fitness features.",
+          "unit_id": "f6da0e3fa06ba9247ba515fd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "pdfu has emerged as an intriguing source of code discoveries in recent weeks. The forum member previously spotted references to two unreleased game controllers in the first macOS 26.7 release candidate, identified by the internal names T6502 and T1057, and separately found evidence in audioOS 27 beta 8 pointing to a four-speaker HomePod surround sound system and a new \"Party Mode\" feature.",
+          "unit_id": "f7d9a4660de8bdf6305970ab"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/07/leak-hints-at-four-new-apple-watch-features/"
+    },
+    "key_facts": [
+      "Ahead of the announcement of the Apple Watch Series 12 and Ultra 4 later this week, code in the watchOS 27 and iOS 27 betas points to a series of new features for the product line.",
+      "New \"Readiness\" app: An all-new separate Watch app referred to in code as \"Readiness,\" distinct from the existing Vitals app. The ‌watchOS 27‌ launcher apparently includes it in the default Home Screen layout immediately after the Workout app, and the Watch companion app on ‌iOS 27‌ references the same app in its logic for arranging apps on the ‌Home Screen‌. Its name and placement next to the Workout app suggest Apple is preparing a more substantial readiness or recovery experience for the Apple Watch.",
+      "Richer strength workouts: Expanded health infrastructure to store individual sets, repetition counts, weight, equipment, body side, and duration.",
+      "New optical-sensing system: A new sensor family called \"Sunstone4p0\" with lower noise coefficients, and wrist- and orientation-based channel selection. This could point to revised heart-sensing hardware on an upcoming Apple Watch, featuring improved readings when the reflected pulse signal is weak and specialized sensing according to the watch's placement.",
+      "128GB storage: A NAND storage profile tied to the T8320 chip for the Apple Watch Series 12 and Apple Watch Ultra 4 suggesting that they could offer 128GB of storage, up from 64GB on previous models.",
+      "Bloomberg's Mark Gurman previously reported that the Apple Watch Series 12 and Ultra 4 will tout new health and fitness features."
+    ],
+    "projected_fact_spans": null,
+    "projection_child_key": "",
+    "projection_parent_keys": [],
+    "projection_source_title": "Leak Hints at Four New Features for Apple Watch Series 12 and Ultra 4",
+    "published_raw": "2026-09-07T08:57:56-07:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-07T15:57:56+00:00",
+    "regions": [
+      "united-states"
+    ],
+    "relevance_reason": "",
+    "relevance_tier": "",
+    "source": "MacRumors",
+    "summary": "Ahead of the announcement of the Apple Watch Series 12 and Ultra 4 later this week, code in the watchOS 27 and iOS 27 betas points to a series of new features for the product line. The information comes from a new post from MacRumors forums member \"pdfu\". The findings include: New \"Readiness\" app: An all-new separate Watch app referred to in code as \"Readiness,\" distinct from the existing Vitals app. The information comes from a new post from MacRumors forums member \"pdfu.\" The findings include: Bloomberg 's Mark Gurman previously reported that the Apple Watch Series 12 and Ultra 4 will tout new health and fitness features. pdfu has emerged as an intriguing source of code discoveries in recent weeks. The forum member previously spotted references to two unreleased game controllers in the first macOS 26.7 release candidate, identified by the internal names T6502 and T1057, and separately found evidence in audioOS 27 beta 8 pointing to a four-speaker HomePod surround sound system and a new \"Party Mode\" feature.",
+    "title": "Leak Hints at Four New Features for Apple Watch Series 12 and Ultra 4",
+    "tokens": [
+      "12",
+      "128gb",
+      "26",
+      "26.7",
+      "27",
+      "64",
+      "64gb",
+      "according",
+      "ahead",
+      "all-new",
+      "and",
+      "announcement",
+      "app",
+      "apparently",
+      "apple-watch",
+      "apps",
+      "arranging",
+      "audioo",
+      "audioos",
+      "beta",
+      "betas",
+      "bloomberg",
+      "body",
+      "called",
+      "candidate",
+      "channel",
+      "chip",
+      "code",
+      "coefficient",
+      "coefficients",
+      "come",
+      "comes",
+      "companion",
+      "controller",
+      "controllers",
+      "count",
+      "counts",
+      "default",
+      "discoveries",
+      "discovery",
+      "distinct",
+      "duration",
+      "emerged",
+      "equipment",
+      "evidence",
+      "existing",
+      "expanded",
+      "experience",
+      "family",
+      "feature",
+      "features",
+      "featuring",
+      "finding",
+      "findings",
+      "first",
+      "fitnes",
+      "fitness",
+      "for",
+      "forum",
+      "forums",
+      "found",
+      "four",
+      "four-speaker",
+      "game",
+      "gurman",
+      "hardware",
+      "has",
+      "health",
+      "heart-sensing",
+      "hint",
+      "hints",
+      "home",
+      "homepod",
+      "identified",
+      "immediately",
+      "improved",
+      "include",
+      "includes",
+      "individual",
+      "information",
+      "infrastructure",
+      "internal",
+      "intriguing",
+      "ios",
+      "its",
+      "later",
+      "launcher",
+      "layout",
+      "leak",
+      "line",
+      "logic",
+      "lower",
+      "maco",
+      "macos",
+      "macrumor",
+      "macrumors",
+      "mark",
+      "member",
+      "mode",
+      "model",
+      "models",
+      "name",
+      "names",
+      "nand",
+      "new",
+      "next",
+      "noise",
+      "offer",
+      "optical-sensing",
+      "orientation-based",
+      "party",
+      "pdfu",
+      "placement",
+      "point",
+      "pointing",
+      "points",
+      "post",
+      "preparing",
+      "previou",
+      "previous",
+      "previously",
+      "product",
+      "profile",
+      "pulse",
+      "readines",
+      "readiness",
+      "reading",
+      "readings",
+      "recent",
+      "recovery",
+      "reference",
+      "references",
+      "referred",
+      "reflected",
+      "release",
+      "repetition",
+      "reported",
+      "revised",
+      "richer",
+      "same",
+      "screen",
+      "selection",
+      "sensing",
+      "sensor",
+      "separate",
+      "separately",
+      "series",
+      "sery",
+      "sets",
+      "side",
+      "signal",
+      "sound",
+      "source",
+      "specialized",
+      "spotted",
+      "storage",
+      "store",
+      "strength",
+      "substantial",
+      "suggest",
+      "suggesting",
+      "sunstone4p0",
+      "surround",
+      "system",
+      "t1057",
+      "t6502",
+      "t8320",
+      "the",
+      "they",
+      "tied",
+      "tout",
+      "two",
+      "ultra",
+      "unreleased",
+      "upcoming",
+      "vital",
+      "vitals",
+      "watch",
+      "watcho",
+      "watchos",
+      "weak",
+      "week",
+      "weeks",
+      "weight",
+      "when",
+      "workout",
+      "workouts",
+      "wrist"
+    ],
+    "url": "https://www.macrumors.com/2026/09/07/leak-hints-at-four-new-apple-watch-features/"
+  },
+  "a5900c2be5e67dd09b2eaea4": {
+    "bound_claim": null,
+    "category": "",
+    "confidence": "detail",
+    "event_kind": "os_app",
+    "evidence": {
+      "article_id": "a5900c2be5e67dd09b2eaea4",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple Watch Series 12 may not be much different, but watchOS 27 still has surprises",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T17:30:01+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T17:30:01+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon Sep 07 2026, 01:30 PM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-08T03:12:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 minutes ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-08T00:14:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T20:35:30+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T18:08:36+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "9 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T17:30:01+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "9 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T17:10:35+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T17:04:08+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-07T15:36:32+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "11 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 07 2026, 01:30 PM EDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-07T17:30:01+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-07T17:30:01+00:00",
+      "raw_lead": "When Apple unveils its Apple Watch Series 12, only minor improvements are expected. Newly discovered code suggests that the surprises will be in watchOS 27 instead of the hardware.",
+      "source": "AppleInsider",
+      "title": "Apple Watch Series 12 may not be much different, but watchOS 27 still has surprises",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "When Apple unveils its Apple Watch Series 12, only minor improvements are expected. Newly discovered code suggests that the surprises will be in watchOS 27 instead of the hardware.",
+          "unit_id": "52a14ad051e5ba323a7ab109"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple has been steadily releasing new betas since WWDC, and they have included over 50 improvements in watchOS 27. Now, however, it appears that the most significant updates have remained hidden.",
+          "unit_id": "002ccf6b1ef8d597ddbbabbd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "In hardware, there may be a ceramic Apple Watch Series 12, but otherwise a redesign is some years away. For now, though, according to user \"pdfu\" in the MacRumors forum, the code fragments found include references to:",
+          "unit_id": "710188b8cd112a11cff424fe"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "A \"Readiness\" health app",
+          "unit_id": "7db33340aa2ba1d5ecc2870d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Revised workouts with multiple sets and durations",
+          "unit_id": "77412ca0d2ad551e2e9c3820"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Potential new heart-sensing hardware",
+          "unit_id": "87d548001d181edab93e6d99"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Of those, the heart-sensing feature is the most interesting but it's also hardware dependent. There is no guarantee that it will launch with the Apple Watch Series 12.",
+          "unit_id": "67229e1839c68a587f68dff0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "User \"pdfu,\" though, says that the code shows Apple improving how it measures heart rate. In place of the previous measurement implementation called Sunstone3p75plus., watchOS 27 includes an optical-sensing family called Sunstone4p0.",
+          "unit_id": "04d50e757207aae5ab4a8eda"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Apple Watch measures heart rate optically, shining a light into the skin and detecting changes when that light is reflected back. The difference with Sunstone4p0 is reportedly in an improvement in how the Apple Watch's own hardware makes it harder to measure a weak pulse signal.",
+          "unit_id": "96bca3c94b902f4756917125"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Readiness and workout changes",
+          "unit_id": "941ff27188af8e9abb5ea1f3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Perhaps the most visible feature that may be announced at the September 9, 2026 launch is this new Readiness app. Previously code-named Cobalt, it's not clear what it does, except that it is health-related and separate from the existing Vitals app.",
+          "unit_id": "7285801cc8dfd536aa9d7ba2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "The Readiness app itself has not been included in the beta. Code references to it, though, suggest that it's related to the Workout app.",
+          "unit_id": "c9591ded8437cfc7076a9fe0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "That Workout app is itself getting an update. Specifically, strength workouts in watchOS 27 will now get more granularity, coping with more sets of exercises and storing data about them such as duration, repetition, and equipment used.",
+          "unit_id": "a05a79f25107e9c185c95bdf"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "More hardware clues",
+          "unit_id": "dae5ea05edc1b19c3da02741"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Just because a feature is found in code, it does not guarantee that Apple will include it in the next release. There is, though, one reference that concerns hardware and specifically the amount of storage space in the forthcoming Apple Watch Series 12 or perhaps Apple Watch Ultra 4.",
+          "unit_id": "e61da6361275a7bfed66c810"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Reportedly, the code suggests that the new watches will feature 128GB of storage. The Apple Watch Series 11 has 64GB storage.",
+          "unit_id": "77a8325658e5b51d25b0ff6d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Note that user \"pdfu\" has been tracking code references across all of Apple's betas since WWDC. Most recently, they reported that HomePods may get four-speaker surround sound.",
+          "unit_id": "c15dfba7a25aefeb01e49302"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/09/07/watchos-27-will-still-have-surprises-even-if-apple-watch-series-12-wont?utm_source=rss"
+    },
+    "key_facts": [
+      "When Apple unveils its Apple Watch Series 12, only minor improvements are expected. Newly discovered code suggests that the surprises will be in watchOS 27 instead of the hardware.",
+      "Apple has been steadily releasing new betas since WWDC, and they have included over 50 improvements in watchOS 27. Now, however, it appears that the most significant updates have remained hidden.",
+      "In hardware, there may be a ceramic Apple Watch Series 12, but otherwise a redesign is some years away. For now, though, according to user \"pdfu\" in the MacRumors forum, the code fragments found include references to:",
+      "Revised workouts with multiple sets and durations",
+      "Potential new heart-sensing hardware",
+      "Of those, the heart-sensing feature is the most interesting but it's also hardware dependent. There is no guarantee that it will launch with the Apple Watch Series 12.",
+      "User \"pdfu,\" though, says that the code shows Apple improving how it measures heart rate. In place of the previous measurement implementation called Sunstone3p75plus., watchOS 27 includes an optical-sensing family called Sunstone4p0.",
+      "Apple Watch measures heart rate optically, shining a light into the skin and detecting changes when that light is reflected back. The difference with Sunstone4p0 is reportedly in an improvement in how the Apple Watch's own hardware makes it harder to measure a weak pulse signal.",
+      "That Workout app is itself getting an update. Specifically, strength workouts in watchOS 27 will now get more granularity, coping with more sets of exercises and storing data about them such as duration, repetition, and equipment used.",
+      "Just because a feature is found in code, it does not guarantee that Apple will include it in the next release. There is, though, one reference that concerns hardware and specifically the amount of storage space in the forthcoming Apple Watch Series 12 or perhaps Apple Watch Ultra 4.",
+      "Reportedly, the code suggests that the new watches will feature 128GB of storage. The Apple Watch Series 11 has 64GB storage."
+    ],
+    "projected_fact_spans": null,
+    "projection_child_key": "",
+    "projection_parent_keys": [],
+    "projection_source_title": "Apple Watch Series 12 may not be much different, but watchOS 27 still has surprises",
+    "published_raw": "2026-09-07T17:30:01+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-07T17:30:01+00:00",
+    "regions": [
+      "united-states"
+    ],
+    "relevance_reason": "",
+    "relevance_tier": "",
+    "source": "AppleInsider",
+    "summary": "When Apple unveils its Apple Watch Series 12, only minor improvements are expected. Newly discovered code suggests that the surprises will be in watchOS 27 instead of the hardware. Apple has been steadily releasing new betas since WWDC , and they have included over 50 improvements in watchOS 27. Now, however, it appears that the most significant updates have remained hidden. In hardware, there may be a ceramic Apple Watch Series 12, but otherwise a redesign is some years away . For now, though, according to user \"pdfu\" in the MacRumors forum, the code fragments found include references to: Of those, the heart-sensing feature is the most interesting but it's also hardware dependent. There is no guarantee that it will launch with the Apple Watch Series 12. User \"pdfu,\" though, says that the code shows Apple improving how it measures heart rate. In place of the previous measurement implementation called Sunstone3p75plus., watchOS 27 includes an optical-sensing family called Sunstone4p0.",
+    "title": "Apple Watch Series 12 may not be much different, but watchOS 27 still has surprises",
+    "tokens": [
+      "12",
+      "27",
+      "50",
+      "75",
+      "according",
+      "and",
+      "appear",
+      "appears",
+      "apple-watch",
+      "are",
+      "away",
+      "beta",
+      "betas",
+      "but",
+      "called",
+      "ceramic",
+      "code",
+      "dependent",
+      "different",
+      "discovered",
+      "duration",
+      "durations",
+      "expected",
+      "family",
+      "feature",
+      "for",
+      "forum",
+      "found",
+      "fragment",
+      "fragments",
+      "guarantee",
+      "hardware",
+      "has",
+      "heart",
+      "heart-rate",
+      "heart-sensing",
+      "hidden",
+      "how",
+      "however",
+      "implementation",
+      "improvement",
+      "improvements",
+      "improving",
+      "include",
+      "included",
+      "includes",
+      "instead",
+      "interesting",
+      "its",
+      "launch",
+      "macrumor",
+      "macrumors",
+      "may",
+      "measure",
+      "measurement",
+      "measures",
+      "minor",
+      "much",
+      "multiple",
+      "new",
+      "newly",
+      "not",
+      "now",
+      "only",
+      "optical-sensing",
+      "otherwise",
+      "pdfu",
+      "place",
+      "potential",
+      "previou",
+      "previous",
+      "rate",
+      "redesign",
+      "reference",
+      "references",
+      "releasing",
+      "remained",
+      "revised",
+      "series",
+      "sery",
+      "sets",
+      "show",
+      "shows",
+      "significant",
+      "since",
+      "some",
+      "steadily",
+      "still",
+      "suggest",
+      "suggests",
+      "sunstone3p75plu",
+      "sunstone3p75plus",
+      "sunstone4p0",
+      "surprise",
+      "surprises",
+      "the",
+      "they",
+      "though",
+      "unveil",
+      "unveils",
+      "update",
+      "updates",
+      "user",
+      "watch",
+      "watcho",
+      "watchos",
+      "when",
+      "workout",
+      "workouts",
+      "wwdc",
+      "year",
+      "years"
+    ],
+    "url": "https://appleinsider.com/articles/26/09/07/watchos-27-will-still-have-surprises-even-if-apple-watch-series-12-wont?utm_source=rss"
+  },
+  "6bdd55f12291fc55388da530": {
+    "bound_claim": null,
+    "category": "",
+    "confidence": "detail",
+    "event_kind": "os_app",
+    "evidence": {
+      "article_id": "6bdd55f12291fc55388da530",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果 Apple Watch Series 12 爆料：升级 128GB 存储、拓展力量训练等",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/8 8:08:58",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/8 8:08:58",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-08T00:08:58+00:00",
+      "raw_lead": "网友 pdfu 昨日（9 月 7 日）在 MacRumors 论坛发帖，通过挖掘 watchOS 27 Beta 8 更新，发现了关于 Apple Watch Series 12 智能手表的更多线索，并预估苹果公司会带来 4 项升级。",
+      "source": "IT之家",
+      "title": "苹果 Apple Watch Series 12 爆料：升级 128GB 存储、拓展力量训练等",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 8 日消息，网友 pdfu 昨日（9 月 7 日）在 MacRumors 论坛发帖，通过挖掘 watchOS 27 Beta 8 更新，发现了关于 Apple Watch Series 12 智能手表的更多线索，并预估苹果公司会带来 4 项升级。",
+          "unit_id": "ef0e50590b6a0a358cfc2fe7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "硬件方面，基于 watchOS 27 Beta 8 代码信息，在关联 T8320 芯片的 NAND 存储配置文件中，显示 Apple Watch Series 12 和 Apple Watch Ultra 4 可能会提供 128GB 的存储空间。",
+          "unit_id": "54cf2e50092e3620a4e78187"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "IT之家附上历年 Apple Watch 存储空间如下：",
+          "unit_id": "ad9791458b566433778ef50a"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "型号 | 发布年份 | 存储容量 | 备注",
+          "unit_id": "7174dd43789998e0701f1281"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Apple Watch（初代） | 2015 | 8 GB | 所有版本统一 8 GB",
+          "unit_id": "71191aad7ca7cb55c5289970"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple Watch Series 1 | 2016 | 8 GB | 与初代相同",
+          "unit_id": "42ab1ceaa2589a037cc92a10"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple Watch Series 2 | 2016 | 8 GB | 所有版本统一 8 GB",
+          "unit_id": "99255245970c0d92adc5ccb9"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Apple Watch Series 3 | 2017 | 8 GB（GPS） 16 GB（GPS + 蜂窝） | 首次出现版本差异",
+          "unit_id": "23cfd4c9838cfc5884f14de9"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Apple Watch Series 4 | 2018 | 16 GB | 全系统一 16 GB",
+          "unit_id": "0f4ec2051a5c073f497607d6"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Apple Watch Series 5 | 2019 | 32 GB | 存储翻倍至 32 GB",
+          "unit_id": "d1b34967f79d02067d633225"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple Watch Series 6 | 2020 | 32 GB | 维持 32 GB",
+          "unit_id": "27c23a8dc26708b604e36f61"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Apple Watch SE（第 1 代） | 2020 | 32 GB | 与 Series 6 同代，32 GB",
+          "unit_id": "e25e9377481a28d51ec48002"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Apple Watch Series 7 | 2021 | 32 GB | 维持 32 GB",
+          "unit_id": "1bff2ce2aaaa0869801d1b14"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Apple Watch Series 8 | 2022 | 32 GB | 维持 32 GB",
+          "unit_id": "8aa3f0dbdab07e8fef2bf808"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Apple Watch SE（第 2 代） | 2022 | 32 GB | 与 Series 8 同代，32 GB",
+          "unit_id": "c68ba2b8a5262ab9ba52efa4"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Apple Watch Ultra（第 1 代） | 2022 | 32 GB | 官方技术规格标注 32 GB",
+          "unit_id": "af6f3922c057fb6e953e8a1b"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Apple Watch Series 9 | 2023 | 64 GB | 首次跃升至 64 GB",
+          "unit_id": "b460fcdff4ba1122f9791fab"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Apple Watch Ultra 2 | 2023 | 64 GB | 与 Series 9 同期升级至 64 GB",
+          "unit_id": "bac7413d721afde6dd0e575a"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "Apple Watch Series 10 | 2024 | 64 GB | 维持 64 GB",
+          "unit_id": "2669f62f378e926a8260e21c"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "Apple Watch SE（第 3 代） | 2025 | 64 GB | 入门款也升级至 64 GB",
+          "unit_id": "bdb2e8d89cff8068e8214cc3"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "Apple Watch Ultra 3 | 2025 | 64 GB | 旗舰款维持 64 GB",
+          "unit_id": "0989f2003e9f24dc974690fd"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "Apple Watch Series 11 | 2025 | 64 GB | 最新 Series 仍为 64 GB",
+          "unit_id": "9d34b610daddb16f5342f10d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "应用方面，基于曝光的细节，苹果计划推出名为 Readiness / Cobalt 的全新 Apple Watch 应用，在 Beta 5 更新中标识符为 com.apple.cobalt.watchapp；而在 Beta 6 更新后调整为 com.apple.readiness，在 Beta 8 中依然保留 cobalt 标识符。",
+          "unit_id": "8dec1b22801f77cb8d3e9f40"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "定位方面，该应用不同于现有 Vitals 应用（用户睡眠期间心率、呼吸频率、腕温等身体指标是否偏离常态？），预估是 Apple Watch 的“训练准备度／恢复状态”，集中呈现用户近期的身体状态与训练负荷，帮助判断当天更适合高强度运动、轻量训练，还是优先恢复。",
+          "unit_id": "1ffad0e378709032886f7103"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "该应用并非单纯记录一次运动，在实际场景下可能回答“今天身体是否适合练、该练多大强度”等。",
+          "unit_id": "c64843fa313e51990d156318"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "进一步拓展力量训练方面，新的实现方式可以描述每组训练，并存储每组的重复次数、重量、器械、训练部位和持续时间。",
+          "unit_id": "8f93c27bae544c12a39c78be"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "新的光学传感器线索方面，watchOS 27 新增名为 Sunstone4p0 的光学传感器系列，可能指向未来 Apple Watch 的心率感测硬件调整。Apple Watch 通过向手腕发光、分析反射光变化来测量心率；新系统更新了噪声建模与信号过滤方式。",
+          "unit_id": "17bf7d9c17c293ab34d861ed"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "对比 Sunstone3p75plus 传感器，Sunstone4p0 的热噪声系数低 10%—20%，多项 LED 相关噪声系数也更低。新系列同时提供典型值和上限值，而上一代仅采用一组数值。较低电子噪声理论上可能有助于改善反射脉搏信号较弱时的读数。",
+          "unit_id": "11d343002c35722548142962"
+        }
+      ],
+      "url": "https://www.ithome.com/0/999/513.htm"
+    },
+    "key_facts": [
+      "IT之家 9 月 8 日消息，网友 pdfu 昨日（9 月 7 日）在 MacRumors 论坛发帖，通过挖掘 watchOS 27 Beta 8 更新，发现了关于 Apple Watch Series 12 智能手表的更多线索，并预估苹果公司会带来 4 项升级。",
+      "硬件方面，基于 watchOS 27 Beta 8 代码信息，在关联 T8320 芯片的 NAND 存储配置文件中，显示 Apple Watch Series 12 和 Apple Watch Ultra 4 可能会提供 128GB 的存储空间。",
+      "Apple Watch（初代）20158 GB所有版本统一 8 GB",
+      "Apple Watch Series 120168 GB与初代相同",
+      "Apple Watch Series 220168 GB所有版本统一 8 GB",
+      "Apple Watch Series 320178 GB（GPS） 16 GB（GPS + 蜂窝）首次出现版本差异",
+      "Apple Watch Series 4201816 GB全系统一 16 GB",
+      "Apple Watch Series 5201932 GB存储翻倍至 32 GB",
+      "Apple Watch Series 6202032 GB维持 32 GB",
+      "Apple Watch SE（第 1 代）202032 GB与 Series 6 同代，32 GB",
+      "Apple Watch Series 7202132 GB维持 32 GB",
+      "Apple Watch Series 8202232 GB维持 32 GB",
+      "Apple Watch SE（第 2 代）202232 GB与 Series 8 同代，32 GB",
+      "Apple Watch Ultra（第 1 代）202232 GB官方技术规格标注 32 GB",
+      "Apple Watch Series 9202364 GB首次跃升至 64 GB",
+      "Apple Watch Ultra 2202364 GB与 Series 9 同期升级至 64 GB",
+      "Apple Watch Series 10202464 GB维持 64 GB",
+      "Apple Watch SE（第 3 代）202564 GB入门款也升级至 64 GB"
+    ],
+    "projected_fact_spans": null,
+    "projection_child_key": "",
+    "projection_parent_keys": [],
+    "projection_source_title": "苹果 Apple Watch Series 12 爆料：升级 128GB 存储、拓展力量训练等",
+    "published_raw": "2026/9/8 8:08:58",
+    "published_source": "body date pattern",
+    "published_utc": "2026-09-08T00:08:58+00:00",
+    "regions": [],
+    "relevance_reason": "",
+    "relevance_tier": "",
+    "source": "IT之家",
+    "summary": "网友 pdfu 昨日（9 月 7 日）在 MacRumors 论坛发帖，通过挖掘 watchOS 27 Beta 8 更新，发现了关于 Apple Watch Series 12 智能手表的更多线索，并预估苹果公司会带来 4 项升级。 IT之家 9 月 8 日消息，网友 pdfu 昨日（9 月 7 日）在 MacRumors 论坛发帖，通过挖掘 watchOS 27 Beta 8 更新，发现了关于 Apple Watch Series 12 智能手表的更多线索， 并预估苹果公司会带来 4 项升级。 硬件方面，基于 watchOS 27 Beta 8 代码信息，在关联 T8320 芯片的 NAND 存储配置文件中， 显示 Apple Watch Series 12 和 Apple Watch Ultra 4 可能会提供 128GB 的存储空间。 应用方面，基于曝光的细节，苹果计划推出名为 Readiness / Cobalt 的全新 Apple Watch 应用，在 Beta 5 更新中标识符为 com.apple.cobalt.watchapp ；而在 Beta 6 更新后调整为 com.apple.readiness ，在 Beta 8 中依然保留 cobalt 标识符。 定位方面，该应用不同于现有 Vitals 应用（用户睡眠期间心率、呼吸频率、腕温等身体指标是否偏离常态？），预估是 Apple Watch 的“训练准备度／恢复状态”，集中呈现用户近期的身体状态与训练负荷，帮助判断当天更适合高强度运动、轻量训练，还是优先恢复。",
+    "title": "苹果 Apple Watch Series 12 爆料：升级 128GB 存储、拓展力量训练等",
+    "tokens": [
+      "12",
+      "120168",
+      "128gb",
+      "20158",
+      "220168",
+      "27",
+      "apple",
+      "apple-watch",
+      "beta",
+      "chip",
+      "cobalt",
+      "com.apple.cobalt.watchapp",
+      "com.apple.readines",
+      "com.apple.readiness",
+      "heart-rate",
+      "macrumor",
+      "macrumors",
+      "nand",
+      "pdfu",
+      "readines",
+      "readiness",
+      "series",
+      "sery",
+      "storage",
+      "t8320",
+      "ultra",
+      "vital",
+      "vitals",
+      "watch",
+      "watcho",
+      "watchos",
+      "心率",
+      "恢复",
+      "推出",
+      "更新",
+      "硬件",
+      "芯片",
+      "苹果",
+      "苹果公司",
+      "调整"
+    ],
+    "url": "https://www.ithome.com/0/999/513.htm"
+  },
+  "c8168246a73576689587847d": {
+    "bound_claim": null,
+    "category": "",
+    "confidence": "detail",
+    "event_kind": "hardware_market",
+    "evidence": {
+      "article_id": "c8168246a73576689587847d",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果十余年来最重磅发布会：首款折叠iPhone即将亮相 - Apple 苹果 - cnBeta.COM",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "3 小时前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 小时前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "11 小时前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "14 小时前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "15 小时前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年09月09日 15:43",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026年09月09日 15:43",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-09T07:43:00+00:00",
+      "raw_lead": "北京时间周四（9月10日）凌晨1点，苹果年度iPhone新品发布会将在ApplePark举行，主题为“亮新篇，来耀眼”（Surpriseandshine）。作为全球科技圈一年一度的固定盛事，今年这场iPhone发布会，可以说是十多年来对苹果意义最为重大的一届。",
+      "source": "cnBeta",
+      "title": "苹果十余年来最重磅发布会：首款折叠iPhone即将亮相 - Apple 苹果 - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "北京时间周四（9月10日）凌晨1点，苹果年度iPhone新品发布会将在Apple Park举行，主题为“亮新篇，来耀眼”（Surprise and shine）。作为全球科技圈一年一度的固定盛事，今年这场iPhone发布会，可以说是十多年来对苹果意义最为重大的一届。",
+          "unit_id": "d75e572cfcd7f122b93f6d76"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "外界预计，苹果不仅会发布首款折叠屏iPhone，同时这也是苹果新任CEO约翰·特努斯（John Ternus）执掌苹果后的首场发布会，标志着苹果正式进入“后库克时代”。",
+          "unit_id": "97ee38a9c1553360b0c144a1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "本次发布会看点云集，以下为核心前瞻。",
+          "unit_id": "fc21bff49418aa5c0289fd1c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "全球首款折叠屏iPhone",
+          "unit_id": "0ada6ea8a4b7475a1c2b3efe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "首先，苹果的首款折叠屏iPhone无疑是这场发布会的绝对主角。",
+          "unit_id": "451a5e42c8033e3bbd65cd58"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "iPhone问世至今已近20年，但其整机设计在历史上只经历过两次重大革新：初代机型搭载实体Home键（2007年初代iPhone至2017年的iPhone 8，所有机型底部的宽大边框都配有Home按键）；2017年，苹果推出iPhone X，取消实体Home键，改用全面屏搭配面容ID。",
+          "unit_id": "e3f9d3d43e76f66c6fcae7f8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "本周，iPhone有望迎来第三次、也是改动幅度最大的一次设计革新，推出传闻中的折叠机iPhone Ultra，又称iPhone Fold。",
+          "unit_id": "d41822fdfcc274abb514c1d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "据爆料，iPhone Ultra 将采用 Touch ID 而非 Face ID，原因是其纤薄机身无法容纳 TrueDepth 相机系统。",
+          "unit_id": "5724cd84cb7cacfaf255c552"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "顾名思义，这款新品将一改iPhone一直以来的直板造型，变为折叠形态，而当下折叠设备市场热度正处于历史高位。",
+          "unit_id": "7b086ef719c68bde3612dfef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "但和安卓阵营常见的竖向小折叠、书本式大屏折叠手机不同，苹果首款折叠iPhone预计采用护照式折叠设计，即国内常说的“阔折叠屏”，闭合状态下屏幕长宽比约为4:3。",
+          "unit_id": "16185b01e7de5e6b382032d1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "鉴于苹果多年未曾推出爆款新品，因此这款折叠iPhone的消费者反响至关重要。如果市场反馈良好，iPhone产品线或将重新找回创新活力。",
+          "unit_id": "dab483375072254a79da6f2e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "iPhone 18系列：部分机型更新，基础款延后发布",
+          "unit_id": "f7c622c7c558ad0659e034a0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "虽然iPhone Ultra/折叠iPhone大概率会收获最多热度，但苹果预计还将发布新一代Pro机型：iPhone 18 Pro与iPhone 18 Pro Max。",
+          "unit_id": "0f8247ec87f1ddfb0142ace4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "不过这两款机型相比现有的iPhone 17 Pro系列，大概率只是迭代升级，并非颠覆性产品。其升级方向预计包括性能更强的A20芯片组、影像系统优化、尺寸更小的灵动岛以及新增配色。",
+          "unit_id": "176e93bcef245426450d365c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "但据报道，苹果将首次不再随iPhone 18 Pro系列同步推出标准版iPhone 18以及更新版iPhone Air。取而代之的是，苹果计划自2026年新品发布起，对iPhone产品线采用分批次上市策略：Pro系列秋季发布，基础款机型次年春季上市。这意味着，如果想要购买iPhone 18标准版或iPhone Air 2，消费者大概率需要等到明年3月。",
+          "unit_id": "21bbc96a4e7ccf71db40206f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "全新家居硬件产品",
+          "unit_id": "2600d1b71813ca57be6d2a07"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "除了iPhone，有传闻称，本次发布会的另一大创新重点，还会放在多年没有重大更新的家居产品线上。",
+          "unit_id": "b38f06585ea22325be50f015"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "据外媒爆料，苹果筹备已久的新款Apple TV机顶盒即将亮相，搭载性能更强的芯片组，可支持新版Siri人工智能，还有望运行更高规格的游戏。",
+          "unit_id": "7244501b61ec022a733b05db"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "此外，口碑出色的HomePod mini智能音箱预计将升级内置芯片，从而支持新版Siri人工智能。",
+          "unit_id": "164ceb26806bcaf9ae965fb9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "苹果可能还将推出一款全新“家庭中枢”设备。外界普遍形容它相当于一台加装了iPad屏幕的HomePod：也就是带多点触控屏的智能音箱，用户可通过小组件快速管控全屋智能家居设备和影音娱乐系统。",
+          "unit_id": "2497b24f846c66a065d5a358"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "这款被称作HomePad的产品传闻已有数年，而随着苹果全面押注人工智能，现在推出这款桌面智能设备也就顺理成章。",
+          "unit_id": "a3a5d0ec8d788dcf73da1615"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "可穿戴设备与操作系统更新",
+          "unit_id": "1aeedc44b8229e0ae85126ee"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "在发布会的收尾环节，苹果预计会带来AirPods系列小幅迭代更新，同时发布新一代Apple Watch（Series 12和Ultra 4）。",
+          "unit_id": "1bbb43f47265f5b9708f79ef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "据外媒爆料，Series 12 可能会重新推出高级陶瓷表壳选项，并将推出新的表带颜色和款式，但外观设计可能不会有太大变化。此外，新一代Apple Watch的芯片性能将得到提升，健身追踪功能也会增强。苹果可能为其可穿戴设备发布新的健康功能，例如全天候心率监测。",
+          "unit_id": "d80b4f5e9fb20af445759328"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "在硬件发布之外，苹果还会展示iOS 27、iPadOS 27、macOS 27、watchOS 27以及visionOS 27正式版系统，这些系统在今年夏天已经进行过预览。",
+          "unit_id": "7ebf261d67d5e11496a9de65"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "尽管软件层面预计不会重磅发布全新功能，但折叠iPhone专属的双屏版iOS 27值得期待，苹果此前从未对外展示过该系统。",
+          "unit_id": "a195ef86dff09365ee257a49"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "会涨价多少？",
+          "unit_id": "a50160c4db7dee916d8b1b5a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "对于苹果消费者来说，除了亮眼的新品，最关心的还莫过于新机定价。",
+          "unit_id": "3d515e4bf125c17e7b078fb9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "受人工智能催生的内存短缺影响，苹果和全球几乎所有消费硬件厂商一样，今年不得不上调产品售价。今年夏季，苹果已经上调iPad、Mac以及家居产品价格，但iPhone售价维持不变。",
+          "unit_id": "1a9ecfd19b3cd3ac0bfb2463"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 29,
+          "origin": "html",
+          "text": "今晚发布会，这一情况预计将会改变。几乎可以肯定，iPhone 18 Pro系列售价将显著高于iPhone 17 Pro系列。但所有人都在等待一个答案：究竟会涨多少？",
+          "unit_id": "780b5f52946070df25f67446"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 30,
+          "origin": "html",
+          "text": "不过，对于苹果投资者来说，苹果的新品定价策略可能无论如何都会是一个利空消息。",
+          "unit_id": "ea42417c24ea46e98cd25bf7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 31,
+          "origin": "html",
+          "text": "美国投行KeyBanc此前已经分析过，苹果有两种定价选择：一是全面提价以对冲毛利率压力，但此举可能冲击销量，并引发“价格冲击效应”；二是选择性小幅提价，不过这会让市场对利润率给予更高审视，同时埋下后续再度涨价的隐患。",
+          "unit_id": "6ed1813cfaa4ac603748b82e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 32,
+          "origin": "html",
+          "text": "鉴于此，KeyBanc认为本次发布会对苹果股价来说，可谓“伸头一刀，缩头也是一刀”。",
+          "unit_id": "ca25275b20cf59367b690ced"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 33,
+          "origin": "html",
+          "text": "约翰·特努斯的首秀",
+          "unit_id": "69b8b91685e4906d6bd48243"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 34,
+          "origin": "html",
+          "text": "当然，苹果发布会不只是新品亮相。本场发布会是苹果新任CEO约翰·特努斯自9月1日正式接任后的首秀。",
+          "unit_id": "8539396ba2ae6755876eaf35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 35,
+          "origin": "html",
+          "text": "尽管普通消费者或许并不在意由这场iPhone发布会的具体主讲人，但行业观察人士与苹果投资者们必然会仔细审视这位苹果新任掌门人的现场表现。",
+          "unit_id": "4bb83000cd011cae57416bd5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 36,
+          "origin": "html",
+          "text": "人们会仔细审视特努斯的演讲风格、表达逻辑，观察他作为苹果全新对外代言人的气质。市场也会留意，他会如何阐述苹果在人工智能、硬件创新、供应链策略上的长期思路。",
+          "unit_id": "2d5e0866c667b757f5274b14"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 37,
+          "origin": "html",
+          "text": "十五年前，在库克2011年接任乔布斯，首次登上苹果新品发布会舞台的时候，库克面对的考题是：“没有乔布斯，苹果能否继续伟大？”",
+          "unit_id": "6dcb42a8ed213a10949dbae3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 38,
+          "origin": "html",
+          "text": "十五年后，接力棒交到约翰・特努斯手中，但摆在他面前的考题已然完全不同。",
+          "unit_id": "e9d4dd6a10fb619fc58f4401"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 39,
+          "origin": "html",
+          "text": "库克时代，苹果已经完成了营收规模的持续扩张、全球供应链搭建与多硬件生态版图的打造；而特努斯登场后，需要回答的新命题是：在AI热潮席卷全球、硬件成本持续走高的时代，苹果如何持续拿出能打动市场的颠覆性产品，守住高端硬件护城河？",
+          "unit_id": "dafe6e7839e6e26fd0413795"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 40,
+          "origin": "html",
+          "text": "这场苹果新品发布会，将会是他上任后的首场大考。",
+          "unit_id": "ecccd096139ffcc86facce72"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1577120.htm"
+    },
+    "key_facts": [
+      "北京时间周四（9月10日）凌晨1点，苹果年度iPhone新品发布会将在Apple Park举行，主题为“亮新篇，来耀眼”（Surprise and shine）。作为全球科技圈一年一度的固定盛事，今年这场iPhone发布会，可以说是十多年来对苹果意义最为重大的一届。",
+      "iPhone问世至今已近20年，但其整机设计在历史上只经历过两次重大革新：初代机型搭载实体Home键（2007年初代iPhone至2017年的iPhone 8，所有机型底部的宽大边框都配有Home按键）；2017年，苹果推出iPhone X，取消实体Home键，改用全面屏搭配面容ID。",
+      "本周，iPhone有望迎来第三次、也是改动幅度最大的一次设计革新，推出传闻中的折叠机iPhone Ultra，又称iPhone Fold。",
+      "但和安卓阵营常见的竖向小折叠、书本式大屏折叠手机不同，苹果首款折叠iPhone预计采用护照式折叠设计，即国内常说的“阔折叠屏”，闭合状态下屏幕长宽比约为4:3。",
+      "鉴于苹果多年未曾推出爆款新品，因此这款折叠iPhone的消费者反响至关重要。如果市场反馈良好，iPhone产品线或将重新找回创新活力。",
+      "虽然iPhone Ultra/折叠iPhone大概率会收获最多热度，但苹果预计还将发布新一代Pro机型：iPhone 18 Pro与iPhone 18 Pro Max。",
+      "不过这两款机型相比现有的iPhone 17 Pro系列，大概率只是迭代升级，并非颠覆性产品。其升级方向预计包括性能更强的A20芯片组、影像系统优化、尺寸更小的灵动岛以及新增配色。",
+      "但据报道，苹果将首次不再随iPhone 18 Pro系列同步推出标准版iPhone 18以及更新版iPhone Air。取而代之的是，苹果计划自2026年新品发布起，对iPhone产品线采用分批次上市策略：Pro系列秋季发布，基础款机型次年春季上市。这意味着，如果想要购买iPhone 18标准版或iPhone Air 2，消费者大概率需要等到明年3月。",
+      "此外，口碑出色的HomePod mini智能音箱预计将升级内置芯片，从而支持新版Siri人工智能。",
+      "这款被称作HomePad的产品传闻已有数年，而随着苹果全面押注人工智能，现在推出这款桌面智能设备也就顺理成章。",
+      "在发布会的收尾环节，苹果预计会带来AirPods系列小幅迭代更新，同时发布新一代Apple Watch（Series 12和Ultra 4）。",
+      "尽管软件层面预计不会重磅发布全新功能，但折叠iPhone专属的双屏版iOS 27值得期待，苹果此前从未对外展示过该系统。",
+      "当然，苹果发布会不只是新品亮相。本场发布会是苹果新任CEO约翰·特努斯自9月1日正式接任后的首秀。",
+      "十五年前，在库克2011年接任乔布斯，首次登上苹果新品发布会舞台的时候，库克面对的考题是：“没有乔布斯，苹果能否继续伟大？”"
+    ],
+    "projected_fact_spans": null,
+    "projection_child_key": "",
+    "projection_parent_keys": [],
+    "projection_source_title": "苹果十余年来最重磅发布会：首款折叠iPhone即将亮相 - Apple 苹果 - cnBeta.COM",
+    "published_raw": "2026年09月09日 15:43",
+    "published_source": "body date pattern",
+    "published_utc": "2026-09-09T07:43:00+00:00",
+    "regions": [
+      "multi-region"
+    ],
+    "relevance_reason": "",
+    "relevance_tier": "",
+    "source": "cnBeta",
+    "summary": "北京时间周四（9月10日）凌晨1点，苹果年度iPhone新品发布会将在ApplePark举行，主题为“亮新篇，来耀眼”（Surpriseandshine）。作为全球科技圈一年一度的固定盛事，今年这场iPhone发布会，可以说是十多年来对苹果意义最为重大的一届。 北京时间周四（9月10日）凌晨1点，苹果年度iPhone新品发布会将在Apple Park举行，主题为“ 亮新篇，来耀眼 ”（Surprise and shine）。作为全球科技圈一年一度的固定盛事，今年这场iPhone发布会，可以说是十多年来对苹果意义最为重大的一届。 外界预计，苹果不仅会发布首款折叠屏iPhone，同时这也是苹果新任CEO约翰·特努斯（John Ternus）执掌苹果后的首场发布会，标志着苹果正式进入“后库克时代”。 iPhone问世至今已近20年，但其整机设计在历史上只经历过两次重大革新：初代机型搭载实体Home键（2007年初代iPhone至2017年的iPhone 8，所有机型底部的宽大边框都配有Home按键）；2017年，苹果推出iPhone X，取消实体Home键，改用全面屏搭配面容ID。 本周，iPhone有望迎来第三次、也是改动幅度最大的一次设计革新，推出传闻中的折叠机iPhone Ultra，又称iPhone Fold。",
+    "title": "苹果十余年来最重磅发布会：首款折叠iPhone即将亮相 - Apple 苹果 - cnBeta.COM",
+    "tokens": [
+      "10",
+      "20",
+      "2007",
+      "2017",
+      "and",
+      "apple",
+      "applepark",
+      "ceo",
+      "cnbeta.com",
+      "cook",
+      "fold",
+      "home",
+      "iphone",
+      "john",
+      "park",
+      "shine",
+      "surprise",
+      "surpriseandshine",
+      "ternu",
+      "ternus",
+      "ultra",
+      "发布",
+      "屏幕",
+      "库克",
+      "推出",
+      "苹果"
+    ],
+    "url": "https://www.cnbeta.com.tw/articles/tech/1577120.htm"
+  },
+  "66c4dbd9f008b748a57a2d95": {
+    "bound_claim": null,
+    "category": "",
+    "confidence": "detail",
+    "event_kind": "hardware_market",
+    "evidence": {
+      "article_id": "66c4dbd9f008b748a57a2d95",
+      "confidence": "detail",
+      "content_form": "hands_on",
+      "discovery_lead": "",
+      "discovery_title": "Hands-on with the new Apple Watch Series 12 and Apple Watch Ultra 4",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T18:53:48+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T18:53:48+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T18:53:48+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T18:53:48+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T18:53:48+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9, 2026, 6:53 PM UTC",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T23:48:42+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Two hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T23:00:04+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T22:37:51+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T21:52:43+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T21:42:19+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T20:44:43+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T20:42:51+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T19:45:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T19:30:12+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T18:38:40+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T19:26:36+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T18:24:59+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-09T14:41:07+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 9, 2026, 6:53 PM UTC",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-09T18:53:48+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-09T18:53:48+00:00",
+      "raw_lead": "﻿Apple’s latest watches come with some new Siri AI features and the return of ceramic cases.",
+      "source": "The Verge",
+      "title": "Hands-on with the new Apple Watch Series 12 and Apple Watch Ultra 4",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "jsonld:articleBody",
+          "text": "After Apple wrapped up its “Surprise and shine” event today, we were able to get a look at the new Apple Watch Series 12 and Ultra 4.",
+          "unit_id": "eb32e901f8f8dc8f46e6e036"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: Ceramic is back, baby. https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/series12ceramic2.jpg?quality=90&strip=all]",
+          "unit_id": "6b610932d0619b3f6423e933"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "jsonld:articleBody",
+          "text": "Both of the new watches launch September 18th, with preorders available starting today.",
+          "unit_id": "23a7322eda03fb6335d4e8b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "jsonld:articleBody",
+          "text": "The Apple Watch Series 12 once again starts at $399 for the aluminum case option in space gray, black, light gold, and dark bronze aluminum. The natural or radiant gold titanium version costs $699, and the night blue or pearl white ceramic costs $899. Apple says this year’s watch offers up to 24 hours of “everyday” battery life, and now offers up to 10 hours of battery during outdoor workouts and supports faster charging with up to 12 hours’ worth recharged in just 15 minutes.",
+          "unit_id": "65432c9aa99b9fd862f8b48a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "jsonld:articleBody",
+          "text": "The ceramic Series 12 sure does look and feel nice in person. The night blue version is very fetching, but the stark pearl white is also très chic on the wrist. The new dark bronze did look a lot darker in person, however. Like how the dark green Series 7 looked a bit less green and more blackish green, there’s a similar vibe with the bronze.",
+          "unit_id": "e062d72ea1fa13a6678e307d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: See what I mean about the bronze color? https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/darkbronze.jpg?quality=90&strip=all]",
+          "unit_id": "e7985b35a41b6e4177d41578"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "jsonld:articleBody",
+          "text": "The Series 12 runs on a new S11 chip that powers a few new Audio Intelligence Siri AI features, including Sound Recognition, Live Rewind, and Siri Recap. It also got some health upgrades, including new optical and electrical heart sensors with support for continuous background heart rate sensing that takes readings every five seconds. There’s also a new Health Age feature that compares your health metrics to your chronological age, and a Readiness feature that gives you a score for how to handle the day ahead based on your recent activity, training load, vitals, and sleep score. The Readiness feature will be limited to the Series 12 and Ultra 4, however, because it requires the new heart rate sensor array.",
+          "unit_id": "4b0549f2cc66f95a2400929f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: You can see the difference between the sensor array on the Ultra 4 and the Ultra 3 (right). https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/sensorultra4.jpg?quality=90&strip=all]",
+          "unit_id": "91a8296e544f42ab24521f3a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "jsonld:articleBody",
+          "text": "Speaking of the array, this is the first major update on this front in a while. You can definitely see the difference side by side. Notably, the Apple reps on hand pointed out that the new Series 12 and Ultra 4 have a “32-petal design,” whereas the older watches had a two-petal design. This refers to the spoke-like lines coming out of the electrode. It should theoretically enable much more accurate readings. You can also see that the optical sensors themselves are situated much closer together. This is to help minimize light leakage.",
+          "unit_id": "9d7e2e613d1e1a7fe7d20aea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "jsonld:articleBody",
+          "text": "The Apple Watch Ultra 4 also includes the new S11 chip and Audio Intelligence features. It starts at $799 and comes in natural and black titanium, along with a premium Apple Watch Hermès version. Apple says the Ultra 4 offers up to 50 hours of battery life.",
+          "unit_id": "45215de4f6be89a8c4679d82"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/series12-1.jpg?quality=90&strip=all]",
+          "unit_id": "4d08cba67b24c2b4376bfdf4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/series12ultra4.jpg?quality=90&strip=all]",
+          "unit_id": "ee1248c76c520a4ac8aeb426"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/ultra4_9e76a8.jpg?quality=90&strip=all]",
+          "unit_id": "1a1a12dc2abf837fd9775635"
+        },
+        {
+          "container_id": "caption",
+          "kind": "div",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Ceramic is back, baby.",
+          "unit_id": "883018a57b41e76e926f5505"
+        },
+        {
+          "container_id": "caption",
+          "kind": "div",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "See what I mean about the bronze color?",
+          "unit_id": "247551fdbfb876c53c7342df"
+        },
+        {
+          "container_id": "caption",
+          "kind": "div",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "You can see the difference between the sensor array on the Ultra 4 and the Ultra 3 (right).",
+          "unit_id": "89cdb050ef9f51ab543fedca"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "1/3The aluminum Series 12.",
+          "unit_id": "81b0718be0709a4e7f615ed0"
+        }
+      ],
+      "url": "https://www.theverge.com/tech/992568/apple-watch-hands-on-series-12-ultra-4"
+    },
+    "key_facts": [
+      "After Apple wrapped up its “Surprise and shine” event today, we were able to get a look at the new Apple Watch Series 12 and Ultra 4.",
+      "Both of the new watches launch September 18th, with preorders available starting today.",
+      "The Apple Watch Series 12 once again starts at $399 for the aluminum case option in space gray, black, light gold, and dark bronze aluminum.",
+      "The natural or radiant gold titanium version costs $699, and the night blue or pearl white ceramic costs $899.",
+      "Apple says this year’s watch offers up to 24 hours of “everyday” battery life, and now offers up to 10 hours of battery during outdoor workouts and supports faster charging with up to 12 hours’ worth recharged in just 15 minutes.",
+      "The Series 12 runs on a new S11 chip that powers a few new Audio Intelligence Siri AI features, including Sound Recognition, Live Rewind, and Siri Recap.",
+      "There’s also a new Health Age feature that compares your health metrics to your chronological age, and a Readiness feature that gives you a score for how to handle the day ahead based on your recent activity, training load, vitals, and sleep score.",
+      "The Readiness feature will be limited to the Series 12 and Ultra 4, however, because it requires the new heart rate sensor array.",
+      "You can see the difference between the sensor array on the Ultra 4 and the Ultra 3 (right).",
+      "Notably, the Apple reps on hand pointed out that the new Series 12 and Ultra 4 have a “32-petal design,” whereas the older watches had a two-petal design.",
+      "The Apple Watch Ultra 4 also includes the new S11 chip and Audio Intelligence features.",
+      "It starts at $799 and comes in natural and black titanium, along with a premium Apple Watch Hermès version.",
+      "Apple says the Ultra 4 offers up to 50 hours of battery life."
+    ],
+    "projected_fact_spans": null,
+    "projection_child_key": "",
+    "projection_parent_keys": [],
+    "projection_source_title": "Hands-on with the new Apple Watch Series 12 and Apple Watch Ultra 4",
+    "published_raw": "2026-09-09T18:53:48+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-09T18:53:48+00:00",
+    "regions": [],
+    "relevance_reason": "",
+    "relevance_tier": "",
+    "source": "The Verge",
+    "summary": "After Apple wrapped up its “Surprise and shine” event today, we were able to get a look at the new Apple Watch Series 12 and Ultra 4. Both of the new watches launch September 18th, with preorders available starting today. The Apple Watch Series 12 once again starts at $399 for the aluminum case option in space gray, black, light gold, and dark bronze aluminum. The natural or radiant gold titanium version costs $699, and the night blue or pearl white ceramic costs $899. Apple says this year’s watch offers up to 24 hours of “everyday” battery life, and now offers up to 10 hours of battery during outdoor workouts and supports faster charging with up to 12 hours’ worth recharged in just 15 minutes.",
+    "title": "Hands-on with the new Apple Watch Series 12 and Apple Watch Ultra 4",
+    "tokens": [
+      "10",
+      "12",
+      "15",
+      "18",
+      "18th",
+      "24",
+      "399",
+      "699",
+      "899",
+      "able",
+      "aluminum",
+      "and",
+      "apple-watch",
+      "battery",
+      "black",
+      "blue",
+      "both",
+      "bronze",
+      "case",
+      "ceramic",
+      "charging",
+      "cost",
+      "costs",
+      "dark",
+      "during",
+      "event",
+      "everyday",
+      "faster",
+      "for",
+      "get",
+      "gold",
+      "gray",
+      "hands-on",
+      "hour",
+      "hours",
+      "its",
+      "launch",
+      "life",
+      "light",
+      "look",
+      "minute",
+      "minutes",
+      "natural",
+      "new",
+      "night",
+      "now",
+      "offer",
+      "offers",
+      "once",
+      "option",
+      "outdoor",
+      "pearl",
+      "preorder",
+      "preorders",
+      "radiant",
+      "recharged",
+      "september",
+      "series",
+      "sery",
+      "shine",
+      "space",
+      "start",
+      "starting",
+      "starts",
+      "support",
+      "supports",
+      "surprise",
+      "the",
+      "titanium",
+      "today",
+      "ultra",
+      "version",
+      "watch",
+      "watche",
+      "watches",
+      "were",
+      "white",
+      "workout",
+      "workouts",
+      "worth",
+      "wrapped",
+      "year"
+    ],
+    "url": "https://www.theverge.com/tech/992568/apple-watch-hands-on-series-12-ultra-4"
+  },
+  "b3925fddbb5a5bb92a9cc32b": {
+    "bound_claim": null,
+    "category": "",
+    "confidence": "detail",
+    "event_kind": "general_company",
+    "evidence": {
+      "article_id": "b3925fddbb5a5bb92a9cc32b",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Craig Federighi admits iPhone Duo may replace iPads for some users",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T11:20:33+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T11:20:33+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon Sep 14 2026, 07:20 AM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T14:36:56+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T15:09:36+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T16:09:39+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "9 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T16:26:35+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "9 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T16:35:44+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-15T00:08:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 hour ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T21:02:14+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T21:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T20:45:46+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T20:35:54+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T20:09:17+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "5 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T19:32:18+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-14T18:54:22+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 14 2026, 07:20 AM EDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-14T11:20:33+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-14T11:20:33+00:00",
+      "raw_lead": "Apple usually does a careful job of separating its products so that they each have distinct use cases, but Craig Federighi has now acknowledged that the iPhone Duo does overlap with the iPad mini.",
+      "source": "AppleInsider",
+      "title": "Craig Federighi admits iPhone Duo may replace iPads for some users",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple usually does a careful job of separating its products so that they each have distinct use cases, but Craig Federighi has now acknowledged that the iPhone Duo does overlap with the iPad mini.",
+          "unit_id": "0241e746ccd7dcf27b6f8dab"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple's iPhone Duo, and especially its price tag, immediately raised the issue that users could get the same benefits by buying a regular iPhone and an iPad mini. Now Apple's senior vice president of software engineering, Craig Federighi, has talked about overlapping devices.",
+          "unit_id": "462a0e5f22a00705d61a4a90"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "\"I agree for someone who maybe had an iPad mini... this device can often fill that space for them,\" he told Marques Brownlee in a short YouTube interview.",
+          "unit_id": "0460df2978462ad75686ed4d"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Subscribe to AppleInsider on YouTube",
+          "unit_id": "46aa35d4293a9d454c7e1039"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Federighi stopped short of saying there was no longer any reason to buy an iPad, though. He said that this was another case where Apple's devices find their use cases.",
+          "unit_id": "4193ca9496a20368be626ff1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "\"I think we had the same question when people said, hey, well, I have an iPad and a Mac, like, when are you going to use one or the other?\" said Federighi. \"And I think we all fall into very natural patterns in our lives or the kinds of activities where we just naturally feel like, okay, the Mac's the right tool for the job, the iPad's the right tool for the job.\"",
+          "unit_id": "79cdf3336070105720b06ca0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "\"I think very naturally, it's going to play out that way with this device,\" he continued. \"So, I think people are gonna find their way.\"",
+          "unit_id": "3923288e696a1c7e2faf22dd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Federighi revealed that he's been using an iPhone Duo for months and it has indeed found a place for him. \"If I am starting on the iPhone... and I actually just want to go deeper into a piece of content,\" he explained, \"this device is extraordinary to open up, often open in portrait, actually, and page through some content.\"",
+          "unit_id": "d23416cf5c27c4af1d72f2bb"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Public response",
+          "unit_id": "690e07b5779c13f4913586f2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Federighi was also asked about the public reaction to the device and he had a similar response to senior vice president of worldwide marketing, Greg Joswiak's.",
+          "unit_id": "2f216a1b676865ba5afd5f8b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Joswiak was delighted at how much Apple had managed keep secret. Federighi says he liked how people were surprised by what Apple had done with the device.",
+          "unit_id": "877254a58e1c6ca3898d9523"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "\"This was exciting in that I think people didn't fully anticipate how much we were going to adapt the software experience to the form factor,\" he said. I hope, as people do spend time with it, that's what they take home is not hardware, our software apart, but how we brought them together.\"",
+          "unit_id": "ef618576784b491664d00284"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Considering that the iPhone Duo has been rumored for years, both men are right about how surprisingly good it still managed to be.",
+          "unit_id": "569f96f165f8026314204ea6"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/09/14/craig-federighi-admits-iphone-duo-may-replace-ipads-for-some-users?utm_source=rss"
+    },
+    "key_facts": [],
+    "projected_fact_spans": null,
+    "projection_child_key": "",
+    "projection_parent_keys": [],
+    "projection_source_title": "Craig Federighi admits iPhone Duo may replace iPads for some users",
+    "published_raw": "2026-09-14T11:20:33+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-14T11:20:33+00:00",
+    "regions": [],
+    "relevance_reason": "",
+    "relevance_tier": "",
+    "source": "AppleInsider",
+    "summary": "Apple usually does a careful job of separating its products so that they each have distinct use cases, but Craig Federighi has now acknowledged that the iPhone Duo does overlap with the iPad mini. Apple's iPhone Duo, and especially its price tag, immediately raised the issue that users could get the same benefits by buying a regular iPhone and an iPad mini . Now Apple's senior vice president of software engineering, Craig Federighi , has talked about overlapping devices. \"I agree for someone who maybe had an iPad mini... this device can often fill that space for them,\" he told Marques Brownlee in a short YouTube interview. \"I think we had the same question when people said, hey, well, I have an iPad and a Mac , like, when are you going to use one or the other?\" said Federighi. \"And I think we all fall into very natural patterns in our lives or the kinds of activities where we just naturally feel like, okay, the Mac's the right tool for the job, the iPad's the right tool for the job.\" \"I think very naturally, it's going to play out that way with this device,\" he continued. \"So, I think people are gonna find their way.\"",
+    "title": "Craig Federighi admits iPhone Duo may replace iPads for some users",
+    "tokens": [
+      "acknowledged",
+      "activities",
+      "activity",
+      "admit",
+      "admits",
+      "agree",
+      "all",
+      "and",
+      "are",
+      "benefit",
+      "benefits",
+      "brownlee",
+      "but",
+      "buying",
+      "can",
+      "careful",
+      "case",
+      "cases",
+      "continued",
+      "craig",
+      "device",
+      "devices",
+      "distinct",
+      "does",
+      "duo",
+      "each",
+      "engineering",
+      "especially",
+      "fall",
+      "federighi",
+      "feel",
+      "fill",
+      "find",
+      "for",
+      "get",
+      "going",
+      "gonna",
+      "had",
+      "has",
+      "hey",
+      "immediately",
+      "interview",
+      "ipad",
+      "ipads",
+      "iphone",
+      "issue",
+      "its",
+      "job",
+      "kind",
+      "kinds",
+      "live",
+      "lives",
+      "mac",
+      "marque",
+      "marques",
+      "may",
+      "maybe",
+      "mini",
+      "natural",
+      "naturally",
+      "now",
+      "often",
+      "okay",
+      "one",
+      "other",
+      "our",
+      "out",
+      "overlap",
+      "overlapping",
+      "pattern",
+      "patterns",
+      "people",
+      "play",
+      "president",
+      "price",
+      "product",
+      "products",
+      "question",
+      "raised",
+      "regular",
+      "replace",
+      "right",
+      "said",
+      "same",
+      "senior",
+      "separating",
+      "short",
+      "software",
+      "some",
+      "someone",
+      "space",
+      "tag",
+      "talked",
+      "the",
+      "them",
+      "they",
+      "think",
+      "told",
+      "tool",
+      "use",
+      "user",
+      "users",
+      "usually",
+      "very",
+      "vice",
+      "way",
+      "well",
+      "when",
+      "where",
+      "who",
+      "you",
+      "youtube"
+    ],
+    "url": "https://appleinsider.com/articles/26/09/14/craig-federighi-admits-iphone-duo-may-replace-ipads-for-some-users?utm_source=rss"
+  }
+}

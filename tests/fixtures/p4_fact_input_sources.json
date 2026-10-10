@@ -1,0 +1,1126 @@
+{
+  "e60d1321d9b6f10ed21d586f": {
+    "article_id": "e60d1321d9b6f10ed21d586f",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "Apple’s Mail app in iOS 27 includes the feature upgrade that’s been at the top of my wishlist for years: search that “just works.” more… Apple’s Mail app in iOS 27 includes the feature upgrade that’s been at the top of my wishlist for years:…",
+    "discovery_title": "iOS 27 gives Apple Mail my most wished for feature upgrade",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T13:10:17+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T13:10:18+00:00",
+        "source": "json-ld dateModified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T13:10:17+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T13:10:18+00:00",
+        "source": "meta modified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Wed, 23 Sep 2026 13:10:17 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-09-23T13:10:17+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-23T13:10:17+00:00",
+    "raw_lead": "Apple’s Mail app in iOS 27 includes the feature upgrade that’s been at the top of my wishlist for years: search that “just works.”",
+    "source": "9to5Mac",
+    "title": "iOS 27 gives Apple Mail my most wished for feature upgrade - 9to5Mac",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Apple’s Mail app in iOS 27 includes the feature upgrade that’s been at the top of my wishlist for years: search that “just works.”",
+        "unit_id": "3b9631b8a107ca0221e46ad6"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "iOS 27 overhauls search in Apple Mail to make it more relevant and accurate",
+        "unit_id": "f93f46505ebf6fcd9814c974"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "Apple’s Mail app has long been plagued by lackluster search.",
+        "unit_id": "50289434fd523eb9f9cb5aba"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "I suspect that statement won’t be controversial at all among years-long users of the app. In fact, some might say “lackluster” is too kind a word to use.",
+        "unit_id": "8a3cc4ef6bc7e7a29f98e819"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "But Apple says iOS 27 finally brings the Apple Mail search upgrade the app deserves.",
+        "unit_id": "071a34ef162db4ba1984f81f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "From Apple’s website detailing iOS 27’s new features:",
+        "unit_id": "1038d34c9a7d9b482f6bdb61"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "More relevant search in Mail. A new ranking system brings the most relevant results to the top to help you find what you need right away — even if it’s buried deep in your inbox.",
+        "unit_id": "4beb78cac00fb5ff93d083d7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Here’s how this new ranking system in Mail will benefit users.",
+        "unit_id": "59f55c8af609346138cc33e1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "When you first open search in iOS 27’s Mail app, there’s a banner at the top that highlights “Expanded Search Results.” It explains: “Mail can look for more results based on what you mean, not just the words you type.”",
+        "unit_id": "911a030e47653fc4b3061cf0"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Essentially, Apple is bringing search into the 21st century. Or you could say, it’s making search work the way it always should have.",
+        "unit_id": "11d1a3b867df45bf45c61d63"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "I’ve used iOS 27 in beta for several months, and in my experience it’s definitely an upgrade over the old system. There hasn’t been a single time that I’ve tried searching for something and couldn’t find it. But understandably, your mileage may vary.",
+        "unit_id": "5cf86d3b46386af39d52fd3f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "The improved search relies on proper indexing, so if your iPhone is still performing indexing (check the Settings app to see if it’s “Optimizing Search & Siri”), you may need to wait a bit before search works as well as it should.",
+        "unit_id": "7349d611c843a4adcf664d44"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "What’s your take on Apple Mail’s search capabilities today? Have you tried the iOS 27 version yet? Let us know in the comments.",
+        "unit_id": "b32f42a51a405b7f012b45d7"
+      }
+    ],
+    "url": "https://9to5mac.com/2026/09/23/ios-27-gives-apple-mail-my-most-wished-for-feature-upgrade/"
+  },
+  "f800cf2ad70e0e037926dc10": {
+    "article_id": "f800cf2ad70e0e037926dc10",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "苹果首款折叠屏iPhone Duo虽已发布，但在正式上市前仍面临不少棘手问题。博主定焦数码称，iPhone Duo的代工厂要求苹果在良率和产量之间做出二选一的选择。该博主暗示，iPhone Duo的良率偏低，代工厂虽然可以提升产能，但这将导致良品和不良品同时增多。如果是这样的话，苹果就必须承担不良品的损耗成本，而这显然是苹果不希望看到的。 阅读全文",
+    "discovery_title": "iPhone Duo难产 代工厂要求苹果良率产量二选一",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "5 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "5 天前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "5 天前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "6 天前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "7 天前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026年09月23日 19:39",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Wed, 23 Sep 2026 11:39:47 GMT",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026年09月23日 19:39",
+    "published_source": "body date pattern",
+    "published_utc": "2026-09-23T11:39:00+00:00",
+    "raw_lead": "苹果首款折叠屏iPhoneDuo虽已发布，但在正式上市前仍面临不少棘手问题。博主定焦数码称，iPhoneDuo的代工厂要求苹果在良率和产量之间做出二选一的选择。该博主暗示，iPhoneDuo的良率偏低，代工厂虽然可以提升产能，但这将导致良品和不良品同时增多。如果是这样的话，苹果就必须承担不良品的损耗成本，而这显然是苹果不希望看到的。",
+    "source": "cnBeta",
+    "title": "iPhone Duo难产 代工厂要求苹果良率产量二选一 - 警告! - cnBeta.COM",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "苹果首款折叠屏iPhone Duo虽已发布，但在正式上市前仍面临不少棘手问题。博主定焦数码称，iPhone Duo的代工厂要求苹果在良率和产量之间做出二选一的选择。该博主暗示，iPhone Duo的良率偏低，代工厂虽然可以提升产能，但这将导致良品和不良品同时增多。如果是这样的话，苹果就必须承担不良品的损耗成本，而这显然是苹果不希望看到的。",
+        "unit_id": "bfd923f7bba68fc85cc77e7f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "这也意味着，短期内iPhone Duo的良率很难会有大的提升，首批货源紧张的局面大概率会持续一段时间，想原价入手并不容易。分析师Jeff Pu指出，iPhone Duo的铰链生产遇到了瓶颈。",
+        "unit_id": "3c22364b6e9ed204cdbff063"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "据悉，iPhone Duo的铰链并非传统意义上的单一金属转轴，而是由多层复合结构组成。每一层的应力分布均通过AI算法进行仿真优化，制造环节则采用了3D打印技术，用于生产铰链中结构最复杂的钛合金部件。",
+        "unit_id": "a385cb26c4f2a40dbbb65076"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "与传统CNC切削相比，3D打印能够实现更复杂的内部镂空结构，在减轻重量的同时维持刚性。根据官方公布的计划，iPhone Duo将于10月16日开启预售，10月23日正式发售。",
+        "unit_id": "243ff3cbed6f69635444e963"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "产能紧张叠加市场热度，黄牛渠道溢价几乎已成定局。对于想抢首批的普通消费者而言，10月16日晚8点的预购窗口恐怕真要拼一拼手速了。",
+        "unit_id": "2cddc1913ce7f5fad0d94623"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "售价方面，iPhone Duo 256GB版本售价15999元，顶配2TB版本售价26499元。",
+        "unit_id": "0d4945d29578bf5565a4c944"
+      }
+    ],
+    "url": "https://www.cnbeta.com.tw/articles/tech/1579346.htm"
+  },
+  "e6449aec0188fa1a5929f38d": {
+    "article_id": "e6449aec0188fa1a5929f38d",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "iOS 27 introduced Dual Capture support for FaceTime, letting you show your front and rear camera views at the same time. And in iOS 27.2, that upgrade is expanding to now support Group FaceTime calls. more… iOS 27 introduced Dual Capture support for FaceTime, letting you show your front and rear camera views at the same…",
+    "discovery_title": "iOS 27.2 makes FaceTime’s best new feature even better",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T14:45:32+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T14:45:34+00:00",
+        "source": "json-ld dateModified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T14:45:32+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T14:45:34+00:00",
+        "source": "meta modified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Wed, 23 Sep 2026 14:45:32 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-09-23T14:45:32+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-23T14:45:32+00:00",
+    "raw_lead": "iOS 27 introduced Dual Capture support for FaceTime, and in iOS 27.2, that new feature is expanding to now support Group FaceTime calls.",
+    "source": "9to5Mac",
+    "title": "iOS 27.2 makes FaceTime’s best new feature even better - 9to5Mac",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "iOS 27 introduced Dual Capture support for FaceTime, letting you show your front and rear camera views at the same time. And in iOS 27.2, that upgrade is expanding to now support Group FaceTime calls.",
+        "unit_id": "e23ce8537cea1c48e93bdf92"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "Group FaceTime calls support Dual Capture in iOS 27.2 on compatible iPhones",
+        "unit_id": "128ec44b9e09c5ca0c905291"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "FaceTime is a popular iPhone feature that, at its core, hasn’t changed much since first coming on the scene many years ago.",
+        "unit_id": "f53bb459576881e909495871"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "But iOS 27 introduced the first substantial upgrade in a while: Dual Capture support.",
+        "unit_id": "5d8c5b9af0cd0ec9d5a6a1e2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "With Dual Capture, you can have your front and rear camera views active at the same time during your FaceTime call. Just hit the ‘Flip’ button on the viewfinder and whoever you’re talking to will see both of your camera views simultaneously.",
+        "unit_id": "7ab8c5f042aba9ce7b753314"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Note: Dual Capture requires an iPhone 17 or later, and participants in the call need to be running iOS 27, iPadOS 27, or macOS 27 to see the dual camera streams.",
+        "unit_id": "0e9758cf5219707d27ff2392"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "iOS 27.2 is currently in beta, but it comes with a great upgrade for Dual Capture: Group FaceTime calls are now supported too.",
+        "unit_id": "f80c90900dc293877637f93c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "In iOS 27.0, you can only use the feature in one-on-one calls. But if you join the iOS 27.2 beta, or just wait a few weeks for the public launch, you’ll get Dual Capture for all of your Group FaceTime calls as well.",
+        "unit_id": "d39a375f09d9c2684bdcfe28"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Have you used Dual Capture in FaceTime yet on iOS 27? How did it work for you? Let us know in the comments.",
+        "unit_id": "54da054c8d15f125fdb5a59c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "*Buy iPhone with 15% discount from Apple refurbished",
+        "unit_id": "9ab46816ef961184728e122c"
+      }
+    ],
+    "url": "https://9to5mac.com/2026/09/23/ios-27-2-makes-facetimes-best-new-feature-even-better/"
+  },
+  "4c3807ee198139ce58c1a24c": {
+    "article_id": "4c3807ee198139ce58c1a24c",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "Apple TV today released the trailer for the second season of “ Where’s Wanda?,” a German-language dark comedy returning to the service on October 21. Watch it below. more… Apple TV today released the trailer for the second season of “Where’s Wanda?,” a German-language dark comedy returning to the…",
+    "discovery_title": "Watch the trailer for Apple TV’s ‘Where’s Wanda?’ season 2",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T22:11:54+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T22:11:56+00:00",
+        "source": "json-ld dateModified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T22:11:54+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T22:11:56+00:00",
+        "source": "meta modified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Wed, 23 Sep 2026 22:11:54 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-09-23T22:11:54+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-23T22:11:54+00:00",
+    "raw_lead": "Apple TV today released the trailer for the second season of “Where’s Wanda?,” a German-language dark comedy returning to the service on October 21.",
+    "source": "9to5Mac",
+    "title": "Watch the trailer for Apple TV’s ‘Where’s Wanda?’ season 2 - 9to5Mac",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Apple TV today released the trailer for the second season of “Where’s Wanda?,” a German-language dark comedy returning to the service on October 21. Watch it below.",
+        "unit_id": "c6d638e142a063c5e002fe1b"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "’Where’s Wanda?’ returns October 21",
+        "unit_id": "e10526dc654702183db83326"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "Nearly two years ago, “Where’s Wanda?” debuted on Apple TV, following the Klatt family as they searched for their missing daughter, the titular Wanda.",
+        "unit_id": "5ef3a85992427e00975c3264"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "After growing frustrated with the police’s shortcomings in their attempt to locate her, the Klatts decide to take matters into their own hands, uncovering their neighbors’ dark secrets along the way.",
+        "unit_id": "3cc074cc71627b02b05ed7d6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "The debut season of “Where’s Wanda?” ran for eight episodes. The show returns on October 21 with another eight-episode run, with new episodes premiering every Wednesday through December 9.",
+        "unit_id": "b3de5e82cbcb0e51189d27c2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Here’s Apple TV on what to expect from the second season of “Where’s Wanda?”:",
+        "unit_id": "446a05847d64c4c1a6bebe07"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "In season two, the Klatts (Makatsch and Stein) are back! Just as they thought their lives were finally returning to normal, their daughter, Wanda (Drinda), is caught seemingly red-handed standing over a dead body. They will need to do everything in their power to prove her innocence and avoid losing her again, as their investigation to find the real murderer takes them into the criminal underbelly of their sleepy suburban town. But will their quest to protect their family get them all out of trouble, or ultimately lead them further astray? And can they find out the truth of what happened on that fateful day before it’s too late?",
+        "unit_id": "7563172b758362dbfbf5b3b8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Watch the trailer for “Where is Wanda?” season 2 below:",
+        "unit_id": "5ededc4f6c6eb004f32b47ef"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Watch “Where is Wanda?” on Apple TV",
+        "unit_id": "a1457a7157ddec85942f26bf"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Apple TV is available for $14.99 per month or as part of the Apple One bundle. It features hit TV shows and movies like Ted Lasso, Severance, The Studio, The Morning Show, Shrinking, and Silo.",
+        "unit_id": "39d473b3f675d0d1a98ecdb9"
+      }
+    ],
+    "url": "https://9to5mac.com/2026/09/23/watch-the-trailer-for-apple-tvs-wheres-wanda-season-2/"
+  },
+  "975f836e815e3c3b2b3b23ed": {
+    "article_id": "975f836e815e3c3b2b3b23ed",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "Apple in iOS 27 introduced iPhone Handoff, a new eSIM feature that allows you to use the same number on two iPhones and seamlessly swap between them. The number is only active on one iPhone at a time, so it's not like having two independently active lines. It's also different from Apple's existing Handoff feature for continuing an app task on another Apple device. Here's what you need to know about the new iPhone Handoff feature. What Moves Between the Two iPhones? When you switch phones with iPhone Handoff, your calls, voicemail, messages (including iMessage, RCS, SMS, and MMS) and Find My location move to the active iPhone. You'll see a \"Switched to this iPhone\" message on the screen to confirm the change. Other data synced with iCloud will automatically update across your devices, and third-party apps work across both devices, though some third-party apps may require a separate sign-in or take time to sync. Any banking apps you use may also ask you to approve access on the other device. What Do You Need for iPhone Handoff? Both iPhones must be running iOS 27 or later. They'll also need to be: Connected to Wi-Fi Sharing the same Apple Account Using Messages in iCloud for messages sync Signed into FaceTime and iMessage with the same Apple Account iPhone Handoff works with Dual SIM as long as both eSIMs are from carriers that support iPhone Handoff. Both eSIMs must be set up for iPhone Handoff separately, one at a time. Once set up, both eSIMs switch together simultaneously when you unlock your iPhone. Which Carriers Support iPhone Handoff? iPhone Handoff is available through T-Mobile in the United States and Telekom in Germany. Verizon (U.S.) and EE (U.K.) will support iPhone Handoff later this year. AT&T has so far not committed to supporting iPhone Handoff, with a company spokesperson recently pointing to the carrier's existing eSIM activation and transfer options instead. How Much Does iPhone Handoff Cost? T-Mobile is charging customers $5 per month to use iPhone Handoff. In Germany, Deutsche Telekom is charging €6.95 per month for iPhone Handoff, but only on plans that do not already include multi-SIM functionality. An added multi-SIM costs €6.95 per month (one is included with the current MagentaMobil L plan and two with XL). No other carriers have announced pricing yet. How Do You Set It Up? iPhone Handoff can be enabled when setting up a new iPhone. At the \"Set Up Cellular\" screen, choose \"Use Number on This iPhone and Another,\" then follow the prompts on both phones. If both iPhones are already set up, open Settings ➝ Cellular on the phone you want to add. Tap Set Up Cellular or Add eSIM , choose Use Number on This iPhone and Another , and follow the prompts. You then get to choose which device is your main iPhone (ideally, the one you use most often) and which is your secondary iPhone. After setup, unlock either phone to make your number active on it. What Should You Know Before Switching? If you have an Apple Watch, it won't switch its pairing to the other device when your phone number moves, so make sure you pair it with the iPhone you expect to use most. Also, some Wallet items, including certain transit passes and IDs, may only work on one device at a time. Carrier account management and some services like Call Forwarding and Caller ID will remain tied to your main iPhone. Can I Replace an iPhone That Uses iPhone Handoff? Yes, but you need to transfer the eSIM from either iPhone to the replacement device. The below steps should be followed while your new iPhone is placed next to your existing devices that use iPhone Handoff. On your new iPhone (replacement), open the Settings app. Tap Cellular and then tap Set up Cellular or Add eSIM . Select an iPhone and tap Continue . Tap Transfer . (If your carrier doesn't support eSIM transfer from a companion iPhone, you must enroll in iPhone Handoff again: On your iPhone that you are transferring the eSIM from, tap Continue , and follow the onscreen prompts.) Tap Continue . Follow the onscreen prompts on both devices. The eSIM will deactivate on the old iPhone you transferred from. What If I Want to Stop Using iPhone Handoff? If you want to stop using iPhone Handoff at any time, you need to contact your carrier. Simply deleting an eSIM from your iPhone may not stop the carrier from charging you for the service. Related Roundups: iOS 27 , iPadOS 27 Related Forum: iOS 27 This article, \" iPhone Handoff in iOS 27: How It Works, Pricing, and Carrier Support \" first appeared on MacRumors.com Discuss this article in our forums",
+    "discovery_title": "iPhone Handoff in iOS 27: How It Works, Pricing, and Carrier Support",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-24T06:25:00+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-24T06:25:00+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-24T06:20:53+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Wednesday September 23, 2026 11:20 PM PDT",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 23, 2026 11:20 PM PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 13, 2026 3:00 am PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 14, 2026 9:00 am PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 2, 2026 12:35 pm PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thu, 24 Sep 2026 06:25:03 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-09-24T06:25:00+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-24T06:25:00+00:00",
+    "raw_lead": "Apple in iOS 27 introduced iPhone Handoff, a new eSIM feature that allows you to use the same number on two iPhones and seamlessly swap between them. The number is only active on one iPhone at a time, so it's not like having two independently active lines. It's also different from Apple's existing Handoff feature for continuing an app task on another Apple device. Here's what you need to know about the new iPhone Handoff feature.",
+    "source": "MacRumors",
+    "title": "iPhone Handoff in iOS 27: How It Works, Pricing, and Carrier Support",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "h1",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "iPhone Handoff in iOS 27: How It Works, Pricing, and Carrier Support",
+        "unit_id": "0bc501076d66a9f0738a7292"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "Apple in iOS 27 introduced iPhone Handoff, a new eSIM feature that allows you to use the same number on two iPhones and seamlessly swap between them. The number is only active on one iPhone at a time, so it's not like having two independently active lines.",
+        "unit_id": "8b519df513eb1e7f03746e59"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "It's also different from Apple's existing Handoff feature for continuing an app task on another Apple device. Here's what you need to know about the new iPhone Handoff feature.",
+        "unit_id": "7d71c91aeaede98c396d7cc3"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "What Moves Between the Two iPhones?",
+        "unit_id": "84c67c47b74c0c0855a469d1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "When you switch phones with iPhone Handoff, your calls, voicemail, messages (including iMessage, RCS, SMS, and MMS) and Find My location move to the active iPhone. You'll see a \"Switched to this iPhone\" message on the screen to confirm the change.",
+        "unit_id": "24fbdf5a04a59ec0420afa68"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Other data synced with iCloud will automatically update across your devices, and third-party apps work across both devices, though some third-party apps may require a separate sign-in or take time to sync. Any banking apps you use may also ask you to approve access on the other device.",
+        "unit_id": "0102f05340b14f373b00fa83"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "What Do You Need for iPhone Handoff?",
+        "unit_id": "2d0e15c776a9fda7814e502b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Both iPhones must be running iOS 27 or later. They'll also need to be:",
+        "unit_id": "a9abe4bcd4750c811f69a6dc"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Connected to Wi-Fi",
+        "unit_id": "03a998151cb50ba814855cab"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Sharing the same Apple Account",
+        "unit_id": "aea637c3ef3da9315924a164"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Using Messages in iCloud for messages sync",
+        "unit_id": "9566cc630b85d24b0b18afaa"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "Signed into FaceTime and iMessage with the same Apple Account",
+        "unit_id": "34672673999a3c1e3de52fd7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "iPhone Handoff works with Dual SIM as long as both eSIMs are from carriers that support iPhone Handoff. Both eSIMs must be set up for iPhone Handoff separately, one at a time. Once set up, both eSIMs switch together simultaneously when you unlock your iPhone.",
+        "unit_id": "97e731bf7dc1f4392e350014"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Which Carriers Support iPhone Handoff?",
+        "unit_id": "a677154f8cc97ef40bc67a47"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "iPhone Handoff is available through T-Mobile in the United States and Telekom in Germany. Verizon (U.S.) and EE (U.K.) will support iPhone Handoff later this year.",
+        "unit_id": "e983bb78948dfaf388984526"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "AT&T; has so far not committed to supporting iPhone Handoff, with a company spokesperson recently pointing to the carrier's existing eSIM activation and transfer options instead.",
+        "unit_id": "2151ef98e37e6a357ade6531"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "How Much Does iPhone Handoff Cost?",
+        "unit_id": "4485df193373cc1c54e45f44"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "T-Mobile is charging customers $5 per month to use iPhone Handoff.",
+        "unit_id": "c8d1a2a4e463a381b0b38c05"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "In Germany, Deutsche Telekom is charging €6.95 per month for iPhone Handoff, but only on plans that do not already include multi-SIM functionality. An added multi-SIM costs €6.95 per month (one is included with the current MagentaMobil L plan and two with XL).",
+        "unit_id": "9cf41017879f7d3083b0fb67"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "No other carriers have announced pricing yet.",
+        "unit_id": "9493df4fe816cf547d5f14a2"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 20,
+        "origin": "html",
+        "text": "How Do You Set It Up?",
+        "unit_id": "40f1fd91c706f60170801ddb"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 21,
+        "origin": "html",
+        "text": "iPhone Handoff can be enabled when setting up a new iPhone. At the \"Set Up Cellular\" screen, choose \"Use Number on This iPhone and Another,\" then follow the prompts on both phones.",
+        "unit_id": "fa2c228c79609f91eaffe9ac"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 22,
+        "origin": "html",
+        "text": "If both iPhones are already set up, open Settings ➝ Cellular on the phone you want to add. Tap Set Up Cellular or Add eSIM, choose Use Number on This iPhone and Another, and follow the prompts. You then get to choose which device is your main iPhone (ideally, the one you use most often) and which is your secondary iPhone.",
+        "unit_id": "0a4312aa0fde4feaf879b370"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 23,
+        "origin": "html",
+        "text": "After setup, unlock either phone to make your number active on it.",
+        "unit_id": "8492b0742bfcc21527dcc3c8"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 24,
+        "origin": "html",
+        "text": "What Should You Know Before Switching?",
+        "unit_id": "73a6d3f24d5c2b05702060e3"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 25,
+        "origin": "html",
+        "text": "If you have an Apple Watch, it won't switch its pairing to the other device when your phone number moves, so make sure you pair it with the iPhone you expect to use most. Also, some Wallet items, including certain transit passes and IDs, may only work on one device at a time.",
+        "unit_id": "1ad20b3a1cb30525c6104a8a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 26,
+        "origin": "html",
+        "text": "Carrier account management and some services like Call Forwarding and Caller ID will remain tied to your main iPhone.",
+        "unit_id": "13545b30d7da2a21829bd190"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 27,
+        "origin": "html",
+        "text": "Can I Replace an iPhone That Uses iPhone Handoff?",
+        "unit_id": "410927594524c3850eedc72f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 28,
+        "origin": "html",
+        "text": "Yes, but you need to transfer the eSIM from either iPhone to the replacement device. The below steps should be followed while your new iPhone is placed next to your existing devices that use iPhone Handoff.",
+        "unit_id": "2d2663258bbe8dabfca0f6f3"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 29,
+        "origin": "html",
+        "text": "On your new iPhone (replacement), open the Settings app.",
+        "unit_id": "1ff7341273b1ac677a10cefd"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 30,
+        "origin": "html",
+        "text": "Tap Cellular and then tap Set up Cellular or Add eSIM.",
+        "unit_id": "a9395839a2987651b1d35ef1"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 31,
+        "origin": "html",
+        "text": "Select an iPhone and tap Continue.",
+        "unit_id": "98e6e4b0b87d7e42dafc2b1c"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 32,
+        "origin": "html",
+        "text": "Tap Transfer. (If your carrier doesn't support eSIM transfer from a companion iPhone, you must enroll in iPhone Handoff again: On your iPhone that you are transferring the eSIM from, tap Continue, and follow the onscreen prompts.)",
+        "unit_id": "3aee5dd92388e1869ba9c06f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 33,
+        "origin": "html",
+        "text": "Tap Continue.",
+        "unit_id": "894e806ab058a1144eee4ad8"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 34,
+        "origin": "html",
+        "text": "Follow the onscreen prompts on both devices.",
+        "unit_id": "4a718d3a5729ab9968c6f62f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 35,
+        "origin": "html",
+        "text": "The eSIM will deactivate on the old iPhone you transferred from.",
+        "unit_id": "edd7fdb75705d4904e409dec"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 36,
+        "origin": "html",
+        "text": "What If I Want to Stop Using iPhone Handoff?",
+        "unit_id": "627f60f4e9e03fd5ec6ecfa7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 37,
+        "origin": "html",
+        "text": "If you want to stop using iPhone Handoff at any time, you need to contact your carrier. Simply deleting an eSIM from your iPhone may not stop the carrier from charging you for the service.",
+        "unit_id": "247bdd8927efc857d1bbea38"
+      }
+    ],
+    "url": "https://www.macrumors.com/guide/iphone-handoff-how-it-works-carrier-support-cost/"
+  },
+  "b1095240a9dd23076cb9866e": {
+    "article_id": "b1095240a9dd23076cb9866e",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "iOS 27 is packed with new features for Apple Wallet, Messages, Notes, and other system apps—including Calendar. Here’s everything new for Apple’s Calendar app in iOS 27. more… Here’s everything new…",
+    "discovery_title": "Here’s everything new for Apple Calendar in iOS 27",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T18:57:08+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T18:57:11+00:00",
+        "source": "json-ld dateModified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T18:57:08+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-23T18:57:11+00:00",
+        "source": "meta modified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Wed, 23 Sep 2026 18:57:08 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-09-23T18:57:08+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-23T18:57:08+00:00",
+    "raw_lead": "iOS 27 is packed with new features in many system apps—including Calendar. Here’s everything new for Apple’s Calendar app in iOS 27.",
+    "source": "9to5Mac",
+    "title": "Here’s everything new for Apple Calendar in iOS 27 - 9to5Mac",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "iOS 27 is packed with new features for Apple Wallet, Messages, Notes, and other system apps—including Calendar. Here’s everything new for Apple’s Calendar app in iOS 27.",
+        "unit_id": "346a2900bdebe07aa89330d7"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "Natural language input for events and reminders",
+        "unit_id": "3124312aa0a8b00e45a4051e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "Calendar adds a feature in iOS 27 that’s been on my wishlist for years: natural language input.",
+        "unit_id": "d8e019094d2371b18138677b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "Apple calls this ‘Smart Event Details,’ and it’s powered by Apple Intelligence. Here’s how it’s described:",
+        "unit_id": "3d0e83fe44218e5bac6a4a3b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "Type events in your own words. Apple Intelligence fills in the title, time, location, and invitees as you go.",
+        "unit_id": "c4a177f9f737d714ed07e2ed"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "This works for both events and reminders. You can type in natural language when creating or editing an event, and watch the event details automatically fill in based on what you type.",
+        "unit_id": "c693deba0752a209a8726136"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "If you prefer the manual approach, you can toggle this off in Settings, but I’ve been very happy to have it.",
+        "unit_id": "3a8ca676be46951e20d16b54"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Design updates",
+        "unit_id": "231fe0680f16aa110ff5deeb"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Apple has updated Calendar’s design in iOS 27 in two main places:",
+        "unit_id": "84de5998c760452c897e13f4"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Event details view",
+        "unit_id": "507c70344504856430ad98d8"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Event creation and editing",
+        "unit_id": "16f7d8ffe02887795e868e60"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "When you tap an event, it now pops up in a card overlay with a fresh design. Event options have been reorganized and given icons to make them visually pop.",
+        "unit_id": "c566b49f1b19ae4c215b610d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "And for event creation and editing, iOS 27 has an updated look too. Like with event details, Apple has reorganized the various options and added icons for each category.",
+        "unit_id": "0d4322d4a47f4dee9bac6348"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Show as Busy/Free option for iCloud calendars",
+        "unit_id": "3e70a22902e10d376c433ee7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "With modern digital calendars, the ability to mark yourself as busy or free related to a given event is a pretty standard feature. But until iOS 27, that option never existed for iCloud calendars.",
+        "unit_id": "f8b29b3736c7bf928d738323"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "If you use a Google calendar inside Apple’s app, you’ll see the event option to show yourself as busy or free. But for iCloud calendars, that’s long been missing.",
+        "unit_id": "d446eb92dace1e3bd3f31885"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "iOS 27 finally remedies the oversight, offering a free/busy option for iCloud events like you would get for events from Google and other third-party calendar providers.",
+        "unit_id": "c18d07df29ad798743c5e172"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "Extra-large widgets",
+        "unit_id": "fd7ee010b2ad652e1bca9ace"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "iOS 27 lets you make Home Screen and Today widgets bigger than ever thanks to a new extra-large size. And Calendar supports two extra-large widgets.",
+        "unit_id": "2b6068b3e474870e9e79a493"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "You can set up ’List’ and ‘Up Next’ widgets in the extra-large size. Each is great for showing more events and reminders than ever, so if you have a packed calendar, the new widgets could prove useful.",
+        "unit_id": "d2ee97f9fa7a23f308c0300b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 20,
+        "origin": "html",
+        "text": "Extra-large widgets take up a lot of screen real estate, but they should prove especially handy on the iPhone Duo’s extra-large display.",
+        "unit_id": "e3a060ff2eff2e5ce56e54d0"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 21,
+        "origin": "html",
+        "text": "Siri AI upgrades",
+        "unit_id": "b1e56f6a90eebf16cbd66dd9"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 22,
+        "origin": "html",
+        "text": "It’s worth mentioning that Siri AI comes with plenty of upgrades relevant to the Calendar app.",
+        "unit_id": "02ecc15ebaad0f79eea8c6a8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 23,
+        "origin": "html",
+        "text": "Siri gains onscreen awareness, understands your personal context, and is overall more intelligent and capable than ever before. That means it’s a much better tool for managing your calendar. In my use of iOS 27, I’ve found myself relying much more on Siri for handling events and reminders.",
+        "unit_id": "b4d996f61dfc41cc460b2787"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 24,
+        "origin": "html",
+        "text": "There’s also a new visual intelligence button in the event creation screen that lets you scan an event flyer with the new Siri mode in the Camera app. Siri then creates a new event with the details.",
+        "unit_id": "3ad1adb757203b0f672cbc6a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 25,
+        "origin": "html",
+        "text": "Which new Apple Calendar features in iOS 27 are you most excited about? Let us know in the comments.",
+        "unit_id": "8f3a7d157bab85587dd2a564"
+      }
+    ],
+    "url": "https://9to5mac.com/2026/09/23/heres-everything-new-for-apple-calendar-in-ios-27/"
+  }
+}

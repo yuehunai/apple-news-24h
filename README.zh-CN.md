@@ -4,7 +4,7 @@
 
 一个 Codex skill 和独立 Python 抓取器，用于生成最近 24 小时 Apple 软硬件新闻简报。
 
-该 skill 会从指定中英文科技媒体发现候选文章，进入详情页核验发布时间，将时间统一转换到 UTC 后判断 24 小时窗口，并按事件级归并多源报道，最终输出中文双板块简报：`软件与系统` 和 `硬件与产品`。
+抓取器从指定中英文科技媒体发现候选文章，在可取得详情时核验发布时间，将时间统一转换到 UTC 后判断窗口，并按报道的具体动作归并多源内容。它输出结构化证据和覆盖检查脚手架；skill 根据这些结果撰写中文双板块简报：`软件与系统` 和 `硬件与产品`。
 
 ## 状态
 
@@ -12,12 +12,16 @@
 
 ## 最新更新
 
-### 1.77.0 - 2026-09-13
+### 2.0.0 - 2026-10-10
 
-- 将抓取行为、skill 指令、兜底规则和回归测试恢复到 `1.75.0` 基线，移除 `1.76.0` 的主动作扩展，同时保留既有发布历史。
-- 将完整 skill 移入 `skills/`，包含 `SKILL.md`、`scripts/`、`references/` 和 `agents/openai.yaml`，保持仅显式调用。
-- 更新安装命令、现有文档路径、CI 检查和测试导入路径，将全局 skill 软链接指向仓库的 `skills/` 目录。
-- 验证迁移后的全部 1,529 项基线回归测试，保持爬虫 CLI、发现规则、时间窗口、输出结构及缓存清理行为不变。
+- 重构 `1.77.0` 流水线，分离共享模型、采集与证据工具、绑定来源的主张投影，统一事件配对与协调裁决，移除输出装配中相互竞争的分组和相关性判断。
+- 改进按报道主体、具体动作和对象进行的跨语言归组，在混合文章及后续报道中保留版本、地区、阶段、方向和统计期间边界。
+- 新增 `source_evidence`、带来源归属的事实出处和可见的未处理片段去向，通过每源事实准备和事件事实计划保留重要数字、枚举、条件及归因；无法取得全文时，为仅有发现摘要的来源增加明确复核标记。
+- 改进简短报道、当前披露及 Apple 相关法律和公司动作的候选准入与来源发现，保留九个主来源、UTC 时间窗口校验和采集预算。
+- 改进现有第一方功能、平台互通和 Apple 设备实测的相关性及栏目判断，防止回顾、教程、第三方推荐和竞品背景覆盖实际报道动作。
+- 新增基于 POSIX 的缓存与输出资源互斥，保留受保护的启动清理；复用来源准备结果及有界正则编译缓存，在不减少来源和事实覆盖的前提下降低重复处理。
+- 更新 skill 的结构化结果消费、针对性证据复核和分批成稿流程，保留有依据的事实及来源链接，去除无必要的句末审稿总结。
+- 新增固定输入回放与同窗比较工具，离线测试由 1,529 项扩展至 2,317 项并通过；保持标准库运行、现有 CLI、双栏简报和 skill 仅显式调用。
 
 ## 它会做什么
 
@@ -27,17 +31,18 @@
 - 将文章时间统一转换到 UTC 后执行 24 小时窗口判断。
 - 将多家媒体报道的同一实质事件归并成一条。
 - 标注事件类型和相关性层级，保留宽抓取范围下的弱 Apple 关联候选，但避免它们污染最终简报。
-- 抽取关键数字、列表、功能名、国家/地区、条款、资格条件和上线限制，用于生成更完整的摘要。
+- 抽取关键数字、列表、功能名、国家/地区、条款、资格条件、上线限制，以及有来源位置的非数值机制与条件，用于生成更完整的摘要。
 - 支持 Markdown 和 JSON 输出。
 
 ## 架构
 
-- `skills/scripts/apple_news_24h.py` 负责来源发现、页面抓取、时间核验、文章提取、事件编排及 Markdown/JSON 渲染。
-- `skills/scripts/apple_news_core/article_projector.py` 仅在每个子事件都具有局部命名主体、具体动作和支持事实时，将一个来源页面投影为多个可独立报道的第一方内容或产品主张。它还会把复合 Apple 芯片公告拆成主体级芯片主张，避免将共享发布表述或背景文字生成虚假子事件。
-- `skills/scripts/apple_news_core/event_identity.py` 将文章标题和导语转换为结构化事件身份，覆盖产品、组件、参与方、动作、地区、法律案件、内容形态和命名主体。正文只作为受约束的辅助证据，避免相关文章和背景段落重新定义事件。
-- `skills/scripts/apple_news_core/event_matcher.py` 使用保守的产品、组件、动作、地区、法律案件和主体兼容性规则比较事件身份。将该决策层保持为纯函数，使同事件聚类可以独立测试，也更便于维护。
-- `skills/scripts/apple_news_core/event_reconciler.py` 将旧种子聚类视为召回建议，应用具有最终裁决权的结构化动作边界，并通过精确跨来源事件签名归并报道，避免泛相似度或传递桥接重新打开已经确定的事件组。
-- `tests/test_event_identity_architecture.py` 及截至 `tests/test_20260908_review_boundaries.py` 的按日期命名测试，为身份提取、匹配、结构化断言归并、动作归属、主张投影、变更对象边界、发布会活动、第一方设施、活动解读、内容形态边界、相关性分层、产品生命周期、实际部署、量化公司报告、详情页准入和官方叙述事实提供聚焦回归覆盖；现有抓取器测试则继续端到端验证发现、解析、聚类、渲染和来源清理。
+抓取器将采集、来源证据、事件判断和输出装配分开。一个来源可以支持多个独立动作；每个投影主张保留自己的局部证据，尚未分配的重要内容继续提供给复核流程。
+
+- `skills/scripts/apple_news_24h.py` 是 CLI 与流程协调入口，准备每个来源的事实，并根据已经裁决的事件和事实计划装配 JSON 与 Markdown。
+- `skills/scripts/apple_news_core/collection.py` 维护来源定义、HTTP/缓存工具、资源锁和候选准入辅助函数；`article_processing.py` 负责文章文本清洗与来源证据准备。
+- `models.py` 定义共享数据。`event_identity.py` 将具体主体和动作绑定到本源证据；`article_projector.py` 拆出有证据支持的主张，并保留未分配的来源内容。
+- `event_matcher.py` 提供统一配对裁决；`event_reconciler.py` 形成事件组，确定相关性、栏目与带来源归属的事实计划。输出装配消费这些结果，不再运行第二套分组或相关性规则。
+- `tests/` 覆盖发现、时间解析、缓存管理、事件边界、事实归属与输出。固定输入回放和实时采集验证分别解决不同问题；已保存页面不能证明当前发现范围或网络健康。
 
 ## 它不会做什么
 
@@ -80,7 +85,7 @@ $apple-news-24h
 
 ## CLI 使用
 
-抓取器只使用 Python 标准库。
+请在 macOS 或 Linux 上使用 Python 3.9 或更高版本运行抓取器。它只使用标准库；资源锁依赖 POSIX `fcntl`，目前不支持原生 Windows。CLI 输出简报所需的结构化材料，不会调用语言模型撰写最终中文段落。
 
 Markdown 输出：
 
@@ -96,7 +101,18 @@ python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format jso
 
 JSON 会将进入简报的项目放在 `events` 中。第三方应用、竞品对比等未描述 Apple 直接动作的弱 Apple 关联候选，可能保留在 `deferred_events` 中供审查。事件对象可包含 `event_kind`、`relevance_tier`、`relevance_reason`、`regions` 和 `merge_warnings`。
 
-JSON 输出还可能包含 `final_brief_queue`、`required_final_brief_titles`、`final_brief_markdown`，并在使用 `--output` 时写入相邻的 `*.brief.md` 文件。这些字段是给自动化 agent 使用的覆盖校验清单；最终简报仍应根据完整 `events` 摘要、`key_facts` 和来源链接撰写。
+JSON 还提供用于归属与覆盖核验的证据：
+
+| 字段 | 用途 |
+| --- | --- |
+| `source_evidence` | 捕获的来源单元与发表证据，通过 `evidence_id` 引用。 |
+| `fact_sources[].origins` | 事件事实的来源依据；可定位时包含具体单元区间。 |
+| `evidence_dispositions` | 已投影或未处理的来源内容去向。 |
+| `final_brief_queue` | 需要作出处置的事件候选和未处理片段。`capture_status: discovery-only` 标记未取得全文的来源，不会因此提升相关性。 |
+
+必审标记要求作出判断，并不代表自动纳入简报。`required_final_brief_titles`、`final_brief_markdown` 及相邻的 `*.brief.md` 是覆盖检查脚手架，并非最终成稿。正文应依据有来源支持的摘要与事实，核对独立动作、重要限定及每条新闻对应的来源链接。
+
+2.0.0 保持现有 CLI 和相关性层级，并向 JSON 增加证据字段。消费端应允许额外字段；归组规则修正可能改变事件成员、ID 和分类。
 
 调试来源失败时启用 diagnostics：
 
@@ -115,9 +131,13 @@ python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format jso
 
 默认缓存目录是 Python 平台临时目录下的 `apple-news-24h`。脚本每次启动时会清空该目录并写入 marker 文件和当前运行响应。旧缓存不能作为新闻时效判断的兜底来源。
 
+共用缓存或输出资源的运行遇到锁冲突会立即失败。独立运行应使用不同的 `--cache-dir` 和 `--output` 路径，需保留的证据应放在受管缓存之外。
+
 ## 网络权限
 
-抓取器需要实时网络访问 RSS、频道页和文章详情页。在沙盒化 agent 环境中，首次运行可能因 DNS 或网络权限被拦截。如果结果为空或异常稀疏，本 skill 会先用网络批准重跑同一命令。如果仍然失败，会查看 diagnostics 或走兜底发现流程。请确保您的沙盒网络设置至少为自动审查或更高权限。
+抓取器需要实时网络访问 RSS、频道页和文章详情页。在沙盒化 agent 环境中，首次运行可能因 DNS 或网络权限被拦截。如果结果为空或异常稀疏，skill 会在取得所需网络批准后重跑同一命令，必要时再检查 diagnostics 或执行已记录的兜底流程。
+
+网络权限不能阻止站点返回访问拦截或浏览器验证。标准库 HTTP 客户端不会执行验证页 JavaScript，因此部分来源可能只有发现摘要；应先核对捕获标记，再判断现有文本是否覆盖全文。
 
 ## 来源
 
@@ -130,16 +150,16 @@ python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format jso
 运行离线测试：
 
 ```bash
-python3 -m unittest discover -s tests
+PYTHONPYCACHEPREFIX="$(mktemp -d)" python3 -m unittest discover -s tests
 ```
 
 运行语法检查：
 
 ```bash
-python3 -m py_compile skills/scripts/apple_news_24h.py skills/scripts/apple_news_core/event_identity.py skills/scripts/apple_news_core/event_matcher.py skills/scripts/apple_news_core/event_reconciler.py
+PYTHONPYCACHEPREFIX="$(mktemp -d)" python3 -m compileall -q skills/scripts
 ```
 
-实时 smoke test 依赖网络和第三方站点可用性，因此不放入默认 CI。
+可写的字节码缓存目录可避免默认缓存不可写时重复编译。固定输入回放和同窗联网比较见 [tests/REPLAY.md](tests/REPLAY.md)。回放不能证明来源当前可用；实时验证依赖网络和第三方站点，因此与 CI 分开。
 
 ## 法律和归属
 

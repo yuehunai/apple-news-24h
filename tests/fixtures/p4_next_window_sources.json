@@ -1,0 +1,2913 @@
+{
+  "64f6c27cb86bf374c42122de": {
+    "evidence": {
+      "article_id": "64f6c27cb86bf374c42122de",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Listen to a recap of the top stories of the day from 9to5Mac. 9to5Mac Daily is available on iTunes and Apple’s Podcasts app, Stitcher, TuneIn, Google Play, or through our dedicated RSS feed for Overcast and other podcast players. Sponsored by Stuff:Stuff helps you get everything out of your head and into a simple, elegant system—closing open loops and reducing mental stress. A simple to-do list for iPhone, iPad, and Mac, with powerful tools that make organizing, tracking, and checking off your tasks a whole lot more satisfying. Get Stuff done. more… 9to5Mac Daily is available on iTunes and Apple’s Podcasts…",
+      "discovery_title": "9to5Mac Daily: September 24, 2026 – iPhone Handoff, iOS 27 updates",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:36:23+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:36:25+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:36:23+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:36:25+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 17:36:23 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T17:36:23+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T17:36:23+00:00",
+      "raw_lead": "Listen to a recap of the top stories of the day from 9to5Mac. 9to5Mac Daily is available on iTunes and Apple’s Podcasts...",
+      "source": "9to5Mac",
+      "title": "9to5Mac Daily: September 24, 2026 – iPhone Handoff, iOS 27 updates - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Listen to a recap of the top stories of the day from 9to5Mac. 9to5Mac Daily is available on iTunes and Apple’s Podcasts app, Stitcher, TuneIn, Google Play, or through our dedicated RSS feed for Overcast and other podcast players.",
+          "unit_id": "6f74c579620ec6d222ecc339"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Sponsored by Stuff:Stuff helps you get everything out of your head and into a simple, elegant system—closing open loops and reducing mental stress. A simple to-do list for iPhone, iPad, and Mac, with powerful tools that make organizing, tracking, and checking off your tasks a whole lot more satisfying. Get Stuff done.",
+          "unit_id": "ea80f402752c4989ded79ca3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "New episodes of 9to5Mac Daily are recorded every weekday. Subscribe to our podcast in Apple Podcast or your favorite podcast player to guarantee new episodes are delivered as soon as they’re available.",
+          "unit_id": "a7665fdf3ec351760b2e4b8d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Stories discussed in this episode:",
+          "unit_id": "f1ad7feb6fa4d665c88b1edf"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "AT&T seemingly has no plans to support Apple’s new iPhone Handoff feature",
+          "unit_id": "421329d1b76d0f808ef6fd08"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Disney+ and Hulu just increased prices, here’s how much",
+          "unit_id": "5a802feab24f75ee863a2f2c"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple says software update to fix iPhone 18 Pro rebooting bug is coming next week",
+          "unit_id": "a9965be1a383aca4e8b7453d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "iPhone 18 Pro Face ID bug causing system to crash and reboot for some users",
+          "unit_id": "bdb5b122d143c159bbd68dc2"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "iOS 27.0.1 update likely coming soon for iPhone",
+          "unit_id": "4ff56926e69f6077db94e4be"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Listen & Subscribe:",
+          "unit_id": "6dadde4f32c5714eaa4c90f7"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple Podcasts",
+          "unit_id": "8d0c101900ab158c31d9d532"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Overcast",
+          "unit_id": "d63c7e4d49f5298b063f1741"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "RSS",
+          "unit_id": "e170a667430180ba749f0ad1"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Spotify",
+          "unit_id": "2f6d7fd38fd48ceedf0813cf"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "TuneIn",
+          "unit_id": "be9cb96e1cc6e8635a9479c8"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Google Podcasts",
+          "unit_id": "438ba15ab9e81dd4f926c912"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Subscribe to support Chance directly with 9to5Mac Daily Plus and unlock:",
+          "unit_id": "4a8bed263a72502f87efc31e"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Ad-free versions of every episode",
+          "unit_id": "676619ec40db01b81b454067"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "Bonus content",
+          "unit_id": "99744441b292e65fae165918"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "Catch up on 9to5Mac Daily episodes!",
+          "unit_id": "3210fd4faa0d5f769596e27e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "Drop us a line at happyhour@9to5mac.com. You can also rate us in Apple Podcasts or recommend us in Overcast to help more people discover the show.",
+          "unit_id": "9521848ce7d46cbd8b40ba80"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/24/9to5mac-daily-september-24-2026-iphone-handoff-ios-27-updates/"
+    },
+    "recorded_extraction": [
+      "9to5Mac Daily: September 24, 2026 – iPhone Handoff, iOS 27 updates - 9to5Mac",
+      "Listen to a recap of the top stories of the day from 9to5Mac. 9to5Mac Daily is available on iTunes and Apple’s Podcasts... Listen to a recap of the top stories of the day from 9to5Mac . 9to5Mac Daily is available on iTunes and Apple’s Podcasts app , Stitcher , TuneIn , Google Play , or through our dedicated RSS feed for Overcast and other podcast players. Sponsored by Stuff :Stuff helps you get everything out of your head and into a simple, elegant system—closing open loops and reducing mental stress. A simple to-do list for iPhone, iPad, and Mac, with powerful tools that make organizing, tracking, and checking off your tasks a whole lot more satisfying. Get Stuff done. Drop us a line at happyhour@9to5mac.com . You can also rate us in Apple Podcasts or recommend us in Overcast to help more people discover the show.",
+      [
+        "Listen to a recap of the top stories of the day from 9to5Mac. 9to5Mac Daily is available on iTunes and Apple’s Podcasts app, Stitcher, TuneIn, Google Play, or through our dedicated RSS feed for Overcast and other podcast players.",
+        "New episodes of 9to5Mac Daily are recorded every weekday. Subscribe to our podcast in Apple Podcast or your favorite podcast player to guarantee new episodes are delivered as soon as they’re available.",
+        "AT&T seemingly has no plans to support Apple’s new iPhone Handoff feature",
+        "Disney+ and Hulu just increased prices, here’s how much",
+        "Apple says software update to fix iPhone 18 Pro rebooting bug is coming next week",
+        "iPhone 18 Pro Face ID bug causing system to crash and reboot for some users",
+        "Catch up on 9to5Mac Daily episodes!",
+        "Drop us a line at happyhour@9to5mac.com. You can also rate us in Apple Podcasts or recommend us in Overcast to help more people discover the show."
+      ]
+    ]
+  },
+  "602d05ed00dcb51064786cf6": {
+    "evidence": {
+      "article_id": "602d05ed00dcb51064786cf6",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple kicked off its recent wave of product announcements on August 25, when it introduced a new Mac mini with M6 and M5 Pro chips, a new Mac Studio with M5 Max and M5 Ultra chips, and an updated version of the Apple Polishing Cloth. As usual, September then arrived with many new Apple products. Already this month, the company has unveiled the iPhone 18 Pro, iPhone 18 Pro Max, iPhone Duo, Apple Watch Series 12, Apple Watch Ultra 4, AirPods 5, and Beats 360. Apple also debuted a new Wrist Strap accessory, along with an updated Apple Watch magnetic charging cable. In case you missed anything, here is our previous coverage of 12 new products and accessories announced by Apple over the past month: Apple Announces New Mac Mini With M6 and M5 Pro Chips Apple Unveils New Mac Studio With M5 Max and M5 Ultra Chips Apple Releases New Polishing Cloth Apple Announces iPhone 18 Pro and iPhone 18 Pro Max Apple Announces Foldable 'iPhone Duo' Apple Announces Apple Watch Series 12 With S11 Chip, Upgraded Health Sensors and Ceramic Models Apple Announces Apple Watch Ultra 4 With Two-Day Battery Life and Upgraded Health Tracking AirPods 5 Announced With Improved Noise Cancellation, Audio Quality, and More Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design Apple Debuts Wrist Strap and Other New Accessories for iPhone 18 Pro and AirPods Pro 3 Here's Why a New Apple Watch Charging Puck Was Just Released Apple has also released new iPhone cases , Apple Watch bands , and revised U.S. English versions of its Magic Keyboards for Macs with glyphs on select keys. This article, \" Apple Has Announced 12 New Products in the Past Month \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple Has Announced 12 New Products in the Past Month",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T16:51:59+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T16:51:59+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T16:51:59+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thursday September 24, 2026 9:51 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 24, 2026 9:51 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 22, 2026 9:19 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 22, 2026 8:40 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 23, 2026 1:06 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 16:52:01 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T16:51:59+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T16:51:59+00:00",
+      "raw_lead": "Apple kicked off its recent wave of product announcements on August 25, when it introduced a new Mac mini with M6 and M5 Pro chips, a new Mac Studio with M5 Max and M5 Ultra chips, and an updated version of the Apple Polishing Cloth. As usual, September then arrived with many new Apple products. Already this month, the company has unveiled the iPhone 18 Pro, iPhone 18 Pro Max, iPhone Duo, Apple Watch Series 12, Apple Watch Ultra 4, AirPods 5, and Beats 360.",
+      "source": "MacRumors",
+      "title": "Apple Has Announced 12 New Products in the Past Month",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Has Announced 12 New Products in the Past Month",
+          "unit_id": "5e61d462e93868a2d4239b35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple kicked off its recent wave of product announcements on August 25, when it introduced a new Mac mini with M6 and M5 Pro chips, a new Mac Studio with M5 Max and M5 Ultra chips, and an updated version of the Apple Polishing Cloth.",
+          "unit_id": "3c4fa3d4f0dec4a2ed8fcb9e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "As usual, September then arrived with many new Apple products. Already this month, the company has unveiled the iPhone 18 Pro, iPhone 18 Pro Max, iPhone Duo, Apple Watch Series 12, Apple Watch Ultra 4, AirPods 5, and Beats 360. Apple also debuted a new Wrist Strap accessory, along with an updated Apple Watch magnetic charging cable.",
+          "unit_id": "4787872d4c80ef1be86fc662"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "In case you missed anything, here is our previous coverage of 12 new products and accessories announced by Apple over the past month:",
+          "unit_id": "a71b8aff7aa1d7c4d55c8dcd"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Apple Announces New Mac Mini With M6 and M5 Pro Chips",
+          "unit_id": "1fdd7e80cf8c2c646676e4af"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple Unveils New Mac Studio With M5 Max and M5 Ultra Chips",
+          "unit_id": "4ef30befe5c6e8ed3ba7efc3"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple Releases New Polishing Cloth",
+          "unit_id": "f9b10d61a2f234d320263875"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Apple Announces iPhone 18 Pro and iPhone 18 Pro Max",
+          "unit_id": "21a1d7139990eccc50ecf08f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Apple Announces Foldable 'iPhone Duo'",
+          "unit_id": "79d2f6b6de63a6509d5a3c93"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Apple Announces Apple Watch Series 12 With S11 Chip, Upgraded Health Sensors and Ceramic Models",
+          "unit_id": "9eac6784fa09b5774314031e"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple Announces Apple Watch Ultra 4 With Two-Day Battery Life and Upgraded Health Tracking",
+          "unit_id": "0838c03b86c7c0ffe16f195f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "AirPods 5 Announced With Improved Noise Cancellation, Audio Quality, and More",
+          "unit_id": "fd8d8b80d49856fd69c2b14d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design",
+          "unit_id": "9be1e8ca2e64282f0cf1b9c6"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Apple Debuts Wrist Strap and Other New Accessories for iPhone 18 Pro and AirPods Pro 3",
+          "unit_id": "6ca200285b4ff213657fec0e"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Here's Why a New Apple Watch Charging Puck Was Just Released",
+          "unit_id": "f8481d5bb2a3f1944b5bd70d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Apple has also released new iPhone cases, Apple Watch bands, and revised U.S. English versions of its Magic Keyboards for Macs with glyphs on select keys.",
+          "unit_id": "a1d08184ecac224baeb4c0f3"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/24/apple-12-new-products-in-past-month/"
+    },
+    "recorded_extraction": [
+      "Apple Has Announced 12 New Products in the Past Month",
+      "Apple kicked off its recent wave of product announcements on August 25, when it introduced a new Mac mini with M6 and M5 Pro chips, a new Mac Studio with M5 Max and M5 Ultra chips, and an updated version of the Apple Polishing Cloth. As usual, September then arrived with many new Apple products. Already this month, the company has unveiled the iPhone 18 Pro, iPhone 18 Pro Max, iPhone Duo, Apple Watch Series 12, Apple Watch Ultra 4, AirPods 5, and Beats 360. As usual, September then arrived with many new Apple products. Already this month, the company has unveiled the iPhone 18 Pro, iPhone 18 Pro Max, iPhone Duo, Apple Watch Series 12, Apple Watch Ultra 4, AirPods 5, and Beats 360. Apple also debuted a new Wrist Strap accessory, along with an updated Apple Watch magnetic charging cable. In case you missed anything, here is our previous coverage of 12 new products and accessories announced by Apple over the past month: Apple has also released new iPhone cases , Apple Watch bands , and revised U.S. English versions of its Magic Keyboards for Macs with glyphs on select keys.",
+      [
+        "Apple kicked off its recent wave of product announcements on August 25, when it introduced a new Mac mini with M6 and M5 Pro chips, a new Mac Studio with M5 Max and M5 Ultra chips, and an updated version of the Apple Polishing Cloth.",
+        "In case you missed anything, here is our previous coverage of 12 new products and accessories announced by Apple over the past month:",
+        "Apple Announces New Mac Mini With M6 and M5 Pro Chips",
+        "Apple Unveils New Mac Studio With M5 Max and M5 Ultra Chips",
+        "Apple Announces iPhone 18 Pro and iPhone 18 Pro Max",
+        "Apple Announces Foldable 'iPhone Duo'",
+        "Apple Announces Apple Watch Series 12 With S11 Chip, Upgraded Health Sensors and Ceramic Models",
+        "Apple Announces Apple Watch Ultra 4 With Two-Day Battery Life and Upgraded Health Tracking",
+        "Beats 360 Deliver Customizability and a Revamped Over-Ear Headphone Design",
+        "Apple Debuts Wrist Strap and Other New Accessories for iPhone 18 Pro and AirPods Pro 3"
+      ]
+    ]
+  },
+  "1d809c26d570f866dae79a66": {
+    "evidence": {
+      "article_id": "1d809c26d570f866dae79a66",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple had a big September, but it’s set to keep momentum going in October with several rumored product unveilings soon that we’ve waited a long time for. more… Apple had a big September, but it’s set to keep momentum going in October with several rumored product unveilings soon…",
+      "discovery_title": "Apple has three products launching soon that we’ve waited a long time for",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T18:09:32+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T18:09:34+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T18:09:32+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T18:09:34+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 18:09:32 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T18:09:32+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T18:09:32+00:00",
+      "raw_lead": "Apple has had a big month, and is set to keep going strong in October with several product unveilings soon that we’ve waited a long time for.",
+      "source": "9to5Mac",
+      "title": "Apple has three products launching soon that we’ve waited a long time for - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple had a big September, but it’s set to keep momentum going in October with several rumored product unveilings soon that we’ve waited a long time for.",
+          "unit_id": "f1d2b06637430300901fab98"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "#1: MacBook Pro / Ultra redesign with touchscreen",
+          "unit_id": "3bb181035f973289f1f847c8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The Mac is a long-time touchscreen holdout, but that’s finally set to change with a new MacBook Pro (or MacBook Ultra) product expected to launch in October.",
+          "unit_id": "21a95deb4fb3d3e3705ef4f7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Apple’s next-gen MacBook Pro will introduce a brand new industrial design—the first such overhaul in five years. And in addition to touch support, it will boast an OLED display, Dynamic Island, and possibly a C2 cellular modem option.",
+          "unit_id": "467ab024014382c1a3d92d0f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "It’s been a long time since the MacBook Pro got a new look. But far longer since touchscreens became the norm, and Apple decided to forego them on the Mac. I’m excited to see how touch might enhance the experience of the Mac moving forward.",
+          "unit_id": "5b8cf1efd3e1c66dc74d6e22"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "#2: New Apple TV 4K",
+          "unit_id": "82366f54a80c979c7be1f4b3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "There’s never been a longer wait for new Apple TV hardware than the current drought of updates. Apple’s latest model, the third-gen Apple TV 4K, was introduced in 2022.",
+          "unit_id": "7635e8a85f5161dc065f3715"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Rumors indicate we’ll finally get a new Apple TV 4K in October, headlined by a powerful A19 or A19 Pro chip and Siri AI support.",
+          "unit_id": "c6d3ab1bfdcef5e853aea5c0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "This summer Apple raised prices on most of its products, including the Apple TV. That means the four-year-old Apple TV 4K now costs $199—far more than the $129 price it launched at. Here’s hoping the new Apple TV doesn’t go any higher.",
+          "unit_id": "4b8d88f7c6af6bcba2cd461f"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "#3: ‘HomePad’",
+          "unit_id": "511a804b7ed78755d3257104"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Rumors of a HomePod with a display have been around for nearly as long as the HomePod’s existence. But they ramped up in 2024 when Mark Gurman offered an in-depth report on what’s commonly called the ‘HomePad.’",
+          "unit_id": "38cad2f50fbce5c22919c77f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "HomePad is a smart display with built-in speaker that will reportedly spearhead Apple’s renewed push into home products. It will have a new OS that resembles parts of iOS, tvOS, and watchOS, including a StandBy-like mode.",
+          "unit_id": "83a3d0ed7506623400964625"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Siri AI is expected to be central to the product, which will also feature a camera, customizable widgets, and built-in Apple apps like Photos, Notes, Music, Calendar, and more.",
+          "unit_id": "49ae01fad117f0d4c4f3b7fe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Which new Apple products in October and beyond are you most excited for? Let us know in the comments.",
+          "unit_id": "d14600bac639981e77483d61"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "*Buy iPhone with 15% discount from Apple refurbished",
+          "unit_id": "fa673369a62f774dbbdf2006"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/24/apple-has-three-products-launching-soon-that-weve-waited-a-long-time-for/"
+    },
+    "recorded_extraction": [
+      "Apple has three products launching soon that we’ve waited a long time for - 9to5Mac",
+      "Apple has had a big month, and is set to keep going strong in October with several product unveilings soon that we’ve waited a long time for. Apple had a big September, but it’s set to keep momentum going in October with several rumored product unveilings soon that we’ve waited a long time for. The Mac is a long-time touchscreen holdout, but that’s finally set to change with a new MacBook Pro (or MacBook Ultra ) product expected to launch in October. Apple’s next-gen MacBook Pro will introduce a brand new industrial design—the first such overhaul in five years. And in addition to touch support, it will boast an OLED display, Dynamic Island, and possibly a C2 cellular modem option. It’s been a long time since the MacBook Pro got a new look. But far longer since touchscreens became the norm, and Apple decided to forego them on the Mac. I’m excited to see how touch might enhance the experience of the Mac moving forward.",
+      [
+        "Apple’s next-gen MacBook Pro will introduce a brand new industrial design—the first such overhaul in five years. And in addition to touch support, it will boast an OLED display, Dynamic Island, and possibly a C2 cellular modem option.",
+        "There’s never been a longer wait for new Apple TV hardware than the current drought of updates. Apple’s latest model, the third-gen Apple TV 4K, was introduced in 2022.",
+        "Rumors indicate we’ll finally get a new Apple TV 4K in October, headlined by a powerful A19 or A19 Pro chip and Siri AI support.",
+        "This summer Apple raised prices on most of its products, including the Apple TV. That means the four-year-old Apple TV 4K now costs $199—far more than the $129 price it launched at. Here’s hoping the new Apple TV doesn’t go any higher.",
+        "Rumors of a HomePod with a display have been around for nearly as long as the HomePod’s existence. But they ramped up in 2024 when Mark Gurman offered an in-depth report on what’s commonly called the ‘HomePad.’",
+        "HomePad is a smart display with built-in speaker that will reportedly spearhead Apple’s renewed push into home products. It will have a new OS that resembles parts of iOS, tvOS, and watchOS, including a StandBy-like mode.",
+        "Siri AI is expected to be central to the product, which will also feature a camera, customizable widgets, and built-in Apple apps like Photos, Notes, Music, Calendar, and more."
+      ]
+    ]
+  },
+  "d32211a2440d5be951e0019f": {
+    "evidence": {
+      "article_id": "d32211a2440d5be951e0019f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 2026 年 9 月 25 日特别调查，天下苦摇一摇广告久矣，就连苹果也出手了。 苹果在北京时间 9 月 23 日的 iOS 27.2 Beta 2 更新中针对中国区用户 新增了一项设置选项 （位于“ 设置-隐私与安全-运动与健身-Restrict Motion Data ”中）， 被加入名单的 App 将无法获取加速度计、陀螺仪等运动传感器数据的权限 ，这项功能或可用于限制 App 通过摇晃手机触发广告跳转等行为。 虽然苹果目前尚未公开说明该功能的具体用途，但不少读者已对该“效果”表示强烈支持。 为响应大家的沟通交流需求，IT之家读者老爷们可以在评论区中提供 App 名称，方便大家设置黑名单 [坏笑]。 苹果在北京时间 9 月 23 日的 iOS 27.2 Beta 2 更新中针对中国区用户新增了一项设置选项（位于“设置-隐私与安全-运动与健身-Restrict Motion Data”中），被加入名单的 App 将无法获取加速度计、陀螺仪等运动传感器数据的权限，这项功能或可用于限制 App 通过摇晃手机触发广告跳转等行为。",
+      "discovery_title": "【互动】苹果 iOS 27.2 绝杀摇一摇广告，你想拉黑谁？",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/25 9:31:00",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Fri, 25 Sep 2026 01:31:00 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/9/25 9:31:00",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-25T01:31:00+00:00",
+      "raw_lead": "苹果在北京时间 9 月 23 日的 iOS 27.2 Beta 2 更新中针对中国区用户新增了一项设置选项（位于“设置-隐私与安全-运动与健身-Restrict Motion Data”中），被加入名单的 App 将无法获取加速度计、陀螺仪等运动传感器数据的权限，这项功能或可用于限制 App 通过摇晃手机触发广告跳转等行为。",
+      "source": "IT之家",
+      "title": "【互动】苹果 iOS 27.2 绝杀摇一摇广告，你想拉黑谁？",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 2026 年 9 月 25 日特别调查，天下苦摇一摇广告久矣，就连苹果也出手了。",
+          "unit_id": "ca4a0b0dc27e0517ce65b4a1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "苹果在北京时间 9 月 23 日的 iOS 27.2 Beta 2 更新中针对中国区用户新增了一项设置选项（位于“设置-隐私与安全-运动与健身-Restrict Motion Data”中），被加入名单的 App 将无法获取加速度计、陀螺仪等运动传感器数据的权限，这项功能或可用于限制 App 通过摇晃手机触发广告跳转等行为。",
+          "unit_id": "967e31a7bd2daba87268ce17"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "虽然苹果目前尚未公开说明该功能的具体用途，但不少读者已对该“效果”表示强烈支持。",
+          "unit_id": "32b9a99e965f0b5e388f5634"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "为响应大家的沟通交流需求，IT之家读者老爷们可以在评论区中提供 App 名称，方便大家设置黑名单 。",
+          "unit_id": "c2ba8130fa8230bf190d17dc"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/079.htm"
+    },
+    "recorded_extraction": [
+      "【互动】苹果 iOS 27.2 绝杀摇一摇广告，你想拉黑谁？",
+      "苹果在北京时间 9 月 23 日的 iOS 27.2 Beta 2 更新中针对中国区用户新增了一项设置选项（位于“设置-隐私与安全-运动与健身-Restrict Motion Data”中），被加入名单的 App 将无法获取加速度计、陀螺仪等运动传感器数据的权限，这项功能或可用于限制 App 通过摇晃手机触发广告跳转等行为。 苹果在北京时间 9 月 23 日的 iOS 27.2 Beta 2 更新中针对中国区用户 新增了一项设置选项 （位于“ 设置-隐私与安全-运动与健身-Restrict Motion Data ”中）， 被加入名单的 App 将无法获取加速度计、陀螺仪等运动传感器数据的权限 ，这项功能或可用于限制 App 通过摇晃手机触发广告跳转等行为。",
+      [
+        "IT之家 2026 年 9 月 25 日特别调查，天下苦摇一摇广告久矣，就连苹果也出手了。",
+        "苹果在北京时间 9 月 23 日的 iOS 27.2 Beta 2 更新中针对中国区用户新增了一项设置选项（位于“设置-隐私与安全-运动与健身-Restrict Motion Data”中），被加入名单的 App 将无法获取加速度计、陀螺仪等运动传感器数据的权限，这项功能或可用于限制 App 通过摇晃手机触发广告跳转等行为。"
+      ]
+    ]
+  },
+  "9aef2f5f43481c0aeb28c453": {
+    "evidence": {
+      "article_id": "9aef2f5f43481c0aeb28c453",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "watchOS 27.2 could introduce a feature that lets Apple Watch screenshots be previewed with options to share or delete, similar to how screenshots work on the iPhone. Signs of the feature were found in watchOS 27.2 by code explorer pdfu . The option is hidden behind a feature flag that's not enabled, but it could be introduced in a later watchOS 27.2 beta. A new screenshot experience is coming to Apple Watch, inspired by iPhone. Hidden behind a feature flag in watchOS 27.2, it lets you preview, share, or delete a screenshot right after taking it. pic.twitter.com/MT5wmDjRnq — pdfu (@itspdfu) September 24, 2026 Right now, taking a screenshot on the Apple Watch sends it directly to the iPhone Photos app with no confirmation screen. It's easy to accidentally take a screenshot since it only requires pressing the Digital Crown and side button at the same time. On the iPhone, taking a screenshot shows either a full-screen preview or a thumbnail preview depending on your settings, but both options let you save, share, or delete the screenshot with a couple taps. Screenshots on Apple Watch are disabled by default but can be turned on through the Settings app on the watch or the Apple Watch app on iPhone. An option to save or delete screenshots would add more control than a simple on or off toggle. Related Roundups: watchOS 26 , watchOS 27 Related Forum: Apple Watch This article, \" watchOS 27.2 Code Hints at iPhone-Style Screenshot Previews \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "watchOS 27.2 Code Hints at iPhone-Style Screenshot Previews",
+      "embedded_references": [
+        {
+          "body_element_index": 15,
+          "html_tag": "<a href=\"https://x.com/itspdfu/status/2103169846364000344?ref_src=twsrc%5Etfw\">",
+          "object_id": "2103169846364000344",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/itspdfu/status/2103169846364000344?ref_src=twsrc%5Etfw"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:36:26+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:36:26+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:36:26+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thursday September 24, 2026 10:36 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 24, 2026 10:36 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 17, 2026 1:34 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 14, 2026 10:03 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 10, 2026 11:57 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 17:36:33 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T17:36:26+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T17:36:26+00:00",
+      "raw_lead": "watchOS 27.2 could introduce a feature that lets Apple Watch screenshots be previewed with options to share or delete, similar to how screenshots work on the iPhone. Signs of the feature were found in watchOS 27.2 by code explorer pdfu. The option is hidden behind a feature flag that's not enabled, but it could be introduced in a later watchOS 27.2 beta.",
+      "source": "MacRumors",
+      "title": "watchOS 27.2 Code Hints at iPhone-Style Screenshot Previews",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "watchOS 27.2 Code Hints at iPhone-Style Screenshot Previews",
+          "unit_id": "3f48ab43bee60ff8c34b8727"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "watchOS 27.2 could introduce a feature that lets Apple Watch screenshots be previewed with options to share or delete, similar to how screenshots work on the iPhone.",
+          "unit_id": "d4c9e657ea12df8e264d4a6b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Signs of the feature were found in watchOS 27.2 by code explorer pdfu. The option is hidden behind a feature flag that's not enabled, but it could be introduced in a later watchOS 27.2 beta.",
+          "unit_id": "8a043f212b832c627b8c283b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "A new screenshot experience is coming to Apple Watch, inspired by iPhone. Hidden behind a feature flag in watchOS 27.2, it lets you preview, share, or delete a screenshot right after taking it. pic.twitter.com/MT5wmDjRnq — pdfu (@itspdfu) September 24, 2026",
+          "unit_id": "7a3d15a36b1188789016db57"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Right now, taking a screenshot on the Apple Watch sends it directly to the iPhone Photos app with no confirmation screen. It's easy to accidentally take a screenshot since it only requires pressing the Digital Crown and side button at the same time.",
+          "unit_id": "43f568b22f5ddfb329397f2d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "On the iPhone, taking a screenshot shows either a full-screen preview or a thumbnail preview depending on your settings, but both options let you save, share, or delete the screenshot with a couple taps.",
+          "unit_id": "0511b3b883365b199a2b8aef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Screenshots on Apple Watch are disabled by default but can be turned on through the Settings app on the watch or the Apple Watch app on iPhone. An option to save or delete screenshots would add more control than a simple on or off toggle.",
+          "unit_id": "ff54ee1f194f73a211a9fcf4"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/24/watchos-27-2-screenshot-previews/"
+    },
+    "recorded_extraction": [
+      "watchOS 27.2 Code Hints at iPhone-Style Screenshot Previews",
+      "watchOS 27.2 could introduce a feature that lets Apple Watch screenshots be previewed with options to share or delete, similar to how screenshots work on the iPhone. Signs of the feature were found in watchOS 27.2 by code explorer pdfu. The option is hidden behind a feature flag that's not enabled, but it could be introduced in a later watchOS 27.2 beta. Signs of the feature were found in watchOS 27.2 by code explorer pdfu . The option is hidden behind a feature flag that's not enabled, but it could be introduced in a later watchOS 27.2 beta. A new screenshot experience is coming to Apple Watch, inspired by iPhone. Hidden behind a feature flag in watchOS 27.2, it lets you preview, share, or delete a screenshot right after taking it. pic.twitter.com/MT5wmDjRnq — pdfu (@itspdfu) September 24, 2026 Right now, taking a screenshot on the Apple Watch sends it directly to the iPhone Photos app with no confirmation screen. It's easy to accidentally take a screenshot since it only requires pressing the Digital Crown and side button at the same time. On the iPhone, taking a screenshot shows either a full-screen preview or a thumbnail preview depending on your settings, but both options let you save, share, or delete the screenshot with a couple taps. Screenshots on Apple Watch are disabled by default but can be turned on through the Settings app on the watch or the Apple Watch app on iPhone. An option to save or delete screenshots would add more control than a simple on or off toggle.",
+      [
+        "watchOS 27.2 could introduce a feature that lets Apple Watch screenshots be previewed with options to share or delete, similar to how screenshots work on the iPhone.",
+        "A new screenshot experience is coming to Apple Watch, inspired by iPhone. Hidden behind a feature flag in watchOS 27.2, it lets you preview, share, or delete a screenshot right after taking it. pic.twitter.com/MT5wmDjRnq — pdfu (@itspdfu) September 24, 2026 Right now, taking a screenshot on the Apple Watch sends it directly to the iPhone Photos app with no confirmation screen. It's easy to accidentally take a screenshot since it only requires pressing the Digital Crown and side button at the same time."
+      ]
+    ]
+  },
+  "591329ad30c10b8e4dac2f0c": {
+    "evidence": {
+      "article_id": "591329ad30c10b8e4dac2f0c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "消息源 @itspdfu 昨日（9 月 24 日）在 X 平台发布推文，指出在 watchOS 27.2 Beta 2 更新中，苹果公司引入了隐藏功能 Flag，支持用户截图后可执行预览、分享和删除操作。",
+      "discovery_title": "苹果 watchOS 27.2 隐藏功能：Apple Watch Series 12 等截图将支持即时预览与删除",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/25 7:31:06",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T07:31:06.0570000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/9/25 7:31:06",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-24T23:31:06+00:00",
+      "raw_lead": "消息源 @itspdfu 昨日（9 月 24 日）在 X 平台发布推文，指出在 watchOS 27.2 Beta 2 更新中，苹果公司引入了隐藏功能 Flag，支持用户截图后可执行预览、分享和删除操作。",
+      "source": "IT之家",
+      "title": "苹果 watchOS 27.2 隐藏功能：Apple Watch Series 12 等截图将支持即时预览与删除",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 25 日消息，消息源 @itspdfu 昨日（9 月 24 日）在 X 平台发布推文，指出在 watchOS 27.2 Beta 2 更新中，苹果公司引入了隐藏功能 Flag，支持用户截图后可执行预览、分享和删除操作。",
+          "unit_id": "97a7375a4ecfa483eee67edf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "目前 Apple Watch 截图默认关闭，开启后按下数码表冠与侧边按钮即触发截图，画面直接同步至配对 iPhone 的「照片」应用。",
+          "unit_id": "de2f2853829e84ef6e70349f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "界面上，watchOS 27.2 的截图界面模仿 iPhone 截图体验，用户截屏后会弹出预览窗口。预览界面集成分享与删除控件，用户可当场决定保留或丢弃截图，不过当前流程需依赖配对 iPhone 的照片应用管理截图。",
+          "unit_id": "2155e2076db32d27463849b7"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/054.htm"
+    },
+    "recorded_extraction": [
+      "苹果 watchOS 27.2 隐藏功能：Apple Watch Series 12 等截图将支持即时预览与删除",
+      "消息源 @itspdfu 昨日（9 月 24 日）在 X 平台发布推文，指出在 watchOS 27.2 Beta 2 更新中，苹果公司引入了隐藏功能 Flag，支持用户截图后可执行预览、分享和删除操作。 IT之家 9 月 25 日消息，消息源 @itspdfu 昨日（9 月 24 日）在 X 平台发布推文，指出在 watchOS 27.2 Beta 2 更新中 ，苹果公司引入了隐藏功能 Flag， 支持用户截图后可执行预览、分享和删除操作。 目前 Apple Watch 截图默认关闭，开启后按下数码表冠与侧边按钮即触发截图，画面直接同步至配对 iPhone 的「照片」应用。 界面上，watchOS 27.2 的截图界面模仿 iPhone 截图体验，用户截屏后会弹出预览窗口。预览界面集成分享与删除控件，用户可当场决定保留或丢弃截图，不过当前流程需依赖配对 iPhone 的照片应用管理截图。",
+      [
+        "IT之家 9 月 25 日消息，消息源 @itspdfu 昨日（9 月 24 日）在 X 平台发布推文，指出在 watchOS 27.2 Beta 2 更新中，苹果公司引入了隐藏功能 Flag，支持用户截图后可执行预览、分享和删除操作。",
+        "界面上，watchOS 27.2 的截图界面模仿 iPhone 截图体验，用户截屏后会弹出预览窗口。预览界面集成分享与删除控件，用户可当场决定保留或丢弃截图，不过当前流程需依赖配对 iPhone 的照片应用管理截图。"
+      ]
+    ]
+  },
+  "d384b1573faf1266d844dbe3": {
+    "evidence": {
+      "article_id": "d384b1573faf1266d844dbe3",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "watchOS 27.2 is coming next month with new Apple Watch features, and leaker pdfu just found a big change in the works for screenshots too. more… watchOS 27.2 is coming next month with new Apple Watch features, and leaker pdfu just found a big change in…",
+      "discovery_title": "watchOS 27.2 includes hidden overhaul for Apple Watch screenshots",
+      "embedded_references": [
+        {
+          "body_element_index": 19,
+          "html_tag": "<a href=\"https://x.com/itspdfu/status/2103169846364000344?ref_src=twsrc%5Etfw\">",
+          "object_id": "2103169846364000344",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/itspdfu/status/2103169846364000344?ref_src=twsrc%5Etfw"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:24:26+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:24:28+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:24:26+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:24:28+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 17:24:26 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T17:24:26+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T17:24:26+00:00",
+      "raw_lead": "watchOS 27.2 is coming next month with new Apple Watch features, and leaker pdfu just found a big change in the works for screenshots too.",
+      "source": "9to5Mac",
+      "title": "watchOS 27.2 includes hidden overhaul for Apple Watch screenshots - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "watchOS 27.2 is coming next month with new Apple Watch features, and leaker pdfu just found a big change in the works for screenshots too.",
+          "unit_id": "28835fb95f702cd412d36038"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "New screenshot experience in watchOS 27.2 code takes inspiration from iPhone",
+          "unit_id": "a3b80e0968ffaa7ae8deb93e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Leaker pdfu has recently started sharing a variety of tidbits found in Apple code. For example, he was the first to discover the Readiness app in watchOS 27, and just yesterday leaked the UI for Siri AI on HomePod.",
+          "unit_id": "f76ddc351c9cd65bcaa7ccf1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Today in a new post, pdfu reveals that the watchOS 27.2 beta includes code for a revamped screenshot experience on Apple Watch.",
+          "unit_id": "728458dad2efd01eef6c6a81"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "A new screenshot experience is coming to Apple Watch, inspired by iPhone. Hidden behind a feature flag in watchOS 27.2, it lets you preview, share, or delete a screenshot right after taking it. pic.twitter.com/MT5wmDjRnq",
+          "unit_id": "ed6e7d1ac0f5f1a82682f1ab"
+        },
+        {
+          "container_id": "",
+          "kind": "blockquote",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "— pdfu (@itspdfu) September 24, 2026",
+          "unit_id": "545236bbd12569db1bebef14"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Currently, taking an Apple Watch screenshot simply causes the screen to flash, then the screenshot is added to your Photos library.",
+          "unit_id": "692dd6d20c3acded3dadcfed"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The new screenshot flow imitates what’s available now on iPhone and iPad, letting you optionally share and/or delete the screenshot right away.",
+          "unit_id": "d3b8f0534cca1c45c6801905"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "It’s unclear if Apple plans to implement this change in a forthcoming watchOS 27.2 beta, or if it needs more time for development. But if it doesn’t make the cut in watchOS 27.2, we’re still likely to see it come to the Apple Watch in the near future.",
+          "unit_id": "96466577f0dd47e5a4b1943f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "What do you think of watchOS 27.2’s leaked screenshot experience? Let us know in the comments.",
+          "unit_id": "2825c451acdb590f61838ce8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "*Buy Apple Watch with 15% discount from Apple refurbished",
+          "unit_id": "4a5f2763777fa38cb7ba4bc8"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/24/watchos-27-2-includes-hidden-overhaul-for-apple-watch-screenshots/"
+    },
+    "recorded_extraction": [
+      "watchOS 27.2 includes hidden overhaul for Apple Watch screenshots - 9to5Mac",
+      "watchOS 27.2 is coming next month with new Apple Watch features, and leaker pdfu just found a big change in the works for screenshots too. Leaker pdfu has recently started sharing a variety of tidbits found in Apple code. For example, he was the first to discover the Readiness app in watchOS 27, and just yesterday leaked the UI for Siri AI on HomePod. Today in a new post , pdfu reveals that the watchOS 27.2 beta includes code for a revamped screenshot experience on Apple Watch. A new screenshot experience is coming to Apple Watch, inspired by iPhone. Hidden behind a feature flag in watchOS 27.2, it lets you preview, share, or delete a screenshot right after taking it. pic.twitter.com/MT5wmDjRnq Currently, taking an Apple Watch screenshot simply causes the screen to flash, then the screenshot is added to your Photos library.",
+      [
+        "watchOS 27.2 is coming next month with new Apple Watch features, and leaker pdfu just found a big change in the works for screenshots too.",
+        "New screenshot experience in watchOS 27.2 code takes inspiration from iPhone",
+        "Leaker pdfu has recently started sharing a variety of tidbits found in Apple code. For example, he was the first to discover the Readiness app in watchOS 27, and just yesterday leaked the UI for Siri AI on HomePod.",
+        "Currently, taking an Apple Watch screenshot simply causes the screen to flash, then the screenshot is added to your Photos library."
+      ]
+    ]
+  },
+  "f42f1a25f72a5e9f1554f4ac": {
+    "evidence": {
+      "article_id": "f42f1a25f72a5e9f1554f4ac",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple Music is teaming up with Goldenvoice to livestream the Head Trip music festival that's taking place in Indio, California, on October 10 and 11. Head Trip will feature Calvin Harris, Fisher with Chris Lake, Peggy Gou with Four Tet, Swedish House Mafia, Skrillex, Dom Dolla with Kettama, and more. Tickets to the in-person event started at $499 but have sold out, and only passes starting at $589 are available now. HEAD TRIP. LIVE FROM INDIO. OCTOBER 10 + 11. WATCH THE LIVESTREAM ON APPLE MUSIC. https://t.co/puQ6MSRbxA pic.twitter.com/1cAMs0xYHP — Apple Music (@AppleMusic) September 24, 2026 Music fans who don't want to pay that much or travel to the California desert can instead watch the livestream for free through ‌Apple Music‌. \"Head Trip brings together an extraordinary lineup of artists who are shaping dance and electronic music culture right now,\" says Stephen Campbell, Global Head of Dance, Electronic Music & DJ Mixes at Apple Music. \"Our goal at Apple Music has always been to bring fans closer to the artists, scenes, and dance floors driving this culture forward. Teaming up with Goldenvoice on Head Trip gives us an incredible opportunity to take the energy of this one-of-a-kind festival beyond Indio, giving fans around the world the chance to experience these performances on Apple Music.\" Sets from the main stage of the event will be livestreamed across both days of the festival, according to Digital Music News . More information about Head Trip can be found on the festival website . Tag: Apple Music This article, \" Apple Music to Host Free Head Trip Festival Livestream \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple Music to Host Free Head Trip Festival Livestream",
+      "embedded_references": [
+        {
+          "body_element_index": 17,
+          "html_tag": "<a href=\"https://x.com/AppleMusic/status/2103153915567153178?ref_src=twsrc%5Etfw\">",
+          "object_id": "2103153915567153178",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/AppleMusic/status/2103153915567153178?ref_src=twsrc%5Etfw"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T19:48:35+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T19:48:35+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T19:48:35+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thursday September 24, 2026 12:48 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 24, 2026 12:48 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 15, 2026 1:43 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 22, 2026 1:07 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 22, 2026 9:19 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 19:48:43 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T19:48:35+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T19:48:35+00:00",
+      "raw_lead": "Apple Music is teaming up with Goldenvoice to livestream the Head Trip music festival that's taking place in Indio, California, on October 10 and 11. Head Trip will feature Calvin Harris, Fisher with Chris Lake, Peggy Gou with Four Tet, Swedish House Mafia, Skrillex, Dom Dolla with Kettama, and more. Tickets to the in-person event started at $499 but have sold out, and only passes starting at $589 are available now. HEAD TRIP. LIVE FROM INDIO. OCTOBER 10 + 11.WATCH THE LIVESTREAM ON APPLE MUSIC.",
+      "source": "MacRumors",
+      "title": "Apple Music to Host Free Head Trip Festival Livestream",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Music to Host Free Head Trip Festival Livestream",
+          "unit_id": "f09706c484ec4b3fd5f5777d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple Music is teaming up with Goldenvoice to livestream the Head Trip music festival that's taking place in Indio, California, on October 10 and 11.",
+          "unit_id": "c618ae6a116616d0f15ddf65"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Head Trip will feature Calvin Harris, Fisher with Chris Lake, Peggy Gou with Four Tet, Swedish House Mafia, Skrillex, Dom Dolla with Kettama, and more. Tickets to the in-person event started at $499 but have sold out, and only passes starting at $589 are available now.",
+          "unit_id": "481aefdb318c3d8e2dd18165"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "HEAD TRIP. LIVE FROM INDIO. OCTOBER 10 + 11. WATCH THE LIVESTREAM ON APPLE MUSIC. https://t.co/puQ6MSRbxA pic.twitter.com/1cAMs0xYHP — Apple Music (@AppleMusic) September 24, 2026",
+          "unit_id": "9475548ea5806969d448c001"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Music fans who don't want to pay that much or travel to the California desert can instead watch the livestream for free through ‌Apple Music‌.",
+          "unit_id": "1da085df9386b27e12bddec7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "\"Head Trip brings together an extraordinary lineup of artists who are shaping dance and electronic music culture right now,\" says Stephen Campbell, Global Head of Dance, Electronic Music & DJ Mixes at Apple Music. \"Our goal at Apple Music has always been to bring fans closer to the artists, scenes, and dance floors driving this culture forward. Teaming up with Goldenvoice on Head Trip gives us an incredible opportunity to take the energy of this one-of-a-kind festival beyond Indio, giving fans around the world the chance to experience these performances on Apple Music.\"",
+          "unit_id": "59f62062a136d6924d6f6e8e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Sets from the main stage of the event will be livestreamed across both days of the festival, according to Digital Music News. More information about Head Trip can be found on the festival website.",
+          "unit_id": "ad8b284e648f239ce20d4fe3"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/24/apple-music-head-trip-livestream/"
+    },
+    "recorded_extraction": [
+      "Apple Music to Host Free Head Trip Festival Livestream",
+      "Apple Music is teaming up with Goldenvoice to livestream the Head Trip music festival that's taking place in Indio, California, on October 10 and 11. Head Trip will feature Calvin Harris, Fisher with Chris Lake, Peggy Gou with Four Tet, Swedish House Mafia, Skrillex, Dom Dolla with Kettama, and more. Tickets to the in-person event started at $499 but have sold out, and only passes starting at $589 are available now. HEAD TRIP. LIVE FROM INDIO. OCTOBER 10 + 11.WATCH THE LIVESTREAM ON APPLE MUSIC. Head Trip will feature Calvin Harris, Fisher with Chris Lake, Peggy Gou with Four Tet, Swedish House Mafia, Skrillex, Dom Dolla with Kettama, and more. Tickets to the in-person event started at $499 but have sold out, and only passes starting at $589 are available now. HEAD TRIP. LIVE FROM INDIO. OCTOBER 10 + 11. WATCH THE LIVESTREAM ON APPLE MUSIC. https://t.co/puQ6MSRbxA pic.twitter.com/1cAMs0xYHP — Apple Music (@AppleMusic) September 24, 2026 Music fans who don't want to pay that much or travel to the California desert can instead watch the livestream for free through ‌Apple Music‌. \"Head Trip brings together an extraordinary lineup of artists who are shaping dance and electronic music culture right now,\" says Stephen Campbell, Global Head of Dance, Electronic Music & DJ Mixes at Apple Music. \"Our goal at Apple Music has always been to bring fans closer to the artists, scenes, and dance floors driving this culture forward. Teaming up with Goldenvoice on Head Trip gives us an incredible opportunity to take the energy of this one-of-a-kind festival beyond Indio, giving fans around the world the chance to experience these performances on Apple Music.\" Sets from the main stage of the event will be livestreamed across both days of the festival, according to Digital Music News . More information about Head Trip can be found on the festival website .",
+      [
+        "Apple Music is teaming up with Goldenvoice to livestream the Head Trip music festival that's taking place in Indio, California, on October 10 and 11.",
+        "HEAD TRIP. LIVE FROM INDIO. OCTOBER 10 + 11. WATCH THE LIVESTREAM ON APPLE MUSIC. https://t.co/puQ6MSRbxA pic.twitter.com/1cAMs0xYHP — Apple Music (@AppleMusic) September 24, 2026 Music fans who don't want to pay that much or travel to the California desert can instead watch the livestream for free through ‌Apple Music‌."
+      ]
+    ]
+  },
+  "351831c853785c565e11677c": {
+    "evidence": {
+      "article_id": "351831c853785c565e11677c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果 Apple Music 宣布和 Goldenvoice 合作，直播 10 月 10 日和 11 日在美国加利福尼亚州印第奥举行的 Head Trip 音乐节。",
+      "discovery_title": "苹果 Apple Music 宣布免费直播 Head Trip 音乐节",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/25 7:40:48",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T07:40:48.5870000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/9/25 7:40:48",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-24T23:40:48+00:00",
+      "raw_lead": "科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果 Apple Music 宣布和 Goldenvoice 合作，直播 10 月 10 日和 11 日在美国加利福尼亚州印第奥举行的 Head Trip 音乐节。",
+      "source": "IT之家",
+      "title": "苹果 Apple Music 宣布免费直播 Head Trip 音乐节",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果 Apple Music 宣布和 Goldenvoice 合作，直播 10 月 10 日和 11 日在美国加利福尼亚州印第奥举行的 Head Trip 音乐节。",
+          "unit_id": "f02791fbebb53b513de6f0b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家查询公开资料，Head Trip 音乐节由 Goldenvoice 主办，该团队此前还打造了全球知名 Coachella 和 Stagecoach 音乐节。",
+          "unit_id": "566b13c4a76a26e60681da74"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "本次音乐节在 Coachella 的举办地举行，其阵容包括 Swedish House Mafia、Calvin Harris 和 Skrillex 等电子音乐界的“神级”人物。",
+          "unit_id": "9e05d92f8aa614bb7ee4045b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "除了头部大牌，还有 Peggy Gou、Four Tet、FISHER 等涵盖 House、Techno、Bass 等多风格的顶尖 DJ，吸引了广泛的电音受众。",
+          "unit_id": "0178fb341ca63ca0e14bc1c3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "门票方面，本次音乐节现场门票起价 $499（已售罄），现在只剩 $589 起的票，对于无法到现场用户而言，可以通过苹果 Apple Music 免费直播观看。",
+          "unit_id": "29d4b65f772ec89e62b80e9b"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/055.htm"
+    },
+    "recorded_extraction": [
+      "苹果 Apple Music 宣布免费直播 Head Trip 音乐节",
+      "科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果 Apple Music 宣布和 Goldenvoice 合作，直播 10 月 10 日和 11 日在美国加利福尼亚州印第奥举行的 Head Trip 音乐节。 IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果 Apple Music 宣布和 Goldenvoice 合作， 直播 10 月 10 日和 11 日在美国加利福尼亚州印第奥举行的 Head Trip 音乐节。 IT之家查询公开资料，Head Trip 音乐节由 Goldenvoice 主办，该团队此前还打造了全球知名 Coachella 和 Stagecoach 音乐节。 本次音乐节在 Coachella 的举办地举行，其阵容包括 Swedish House Mafia、Calvin Harris 和 Skrillex 等电子音乐界的“神级”人物。 除了头部大牌，还有 Peggy Gou、Four Tet、FISHER 等涵盖 House、Techno、Bass 等多风格的顶尖 DJ，吸引了广泛的电音受众。",
+      [
+        "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果 Apple Music 宣布和 Goldenvoice 合作，直播 10 月 10 日和 11 日在美国加利福尼亚州印第奥举行的 Head Trip 音乐节。",
+        "门票方面，本次音乐节现场门票起价 $499（已售罄），现在只剩 $589 起的票，对于无法到现场用户而言，可以通过苹果 Apple Music 免费直播观看。"
+      ]
+    ]
+  },
+  "57915fbdf9ace90fe7d5379d": {
+    "evidence": {
+      "article_id": "57915fbdf9ace90fe7d5379d",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple’s YouTube channel shared a video today showcasing how parents can manage the new and existing features of Apple’s Child Accounts. Watch it below. more…",
+      "discovery_title": "Apple shares video highlighting new child safety features across its devices",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:17:50+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:17:52+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:17:50+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:17:52+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Fri, 25 Sep 2026 01:17:50 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-25T01:17:50+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-25T01:17:50+00:00",
+      "raw_lead": "Apple’s YouTube channel shared a video today showcasing how parents can manage the new and existing features of Apple’s Child Accounts.",
+      "source": "9to5Mac",
+      "title": "Apple shares video highlighting new child safety features - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple’s YouTube channel shared a video today showcasing how parents can manage the new and existing features of Apple’s Child Accounts. Watch it below.",
+          "unit_id": "02d7f107a6ce59cb1f28b607"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "‘Scrolling and who knows what else’",
+          "unit_id": "08ed803e840af8f692374ba4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "A few days ago, we covered the many features Apple added to its parental controls suite across its devices with the release of iOS 27, iPadOS 27, and macOS 27.",
+          "unit_id": "1128fd1632ef3f2e9a1e3af1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Today, Apple released a fun new animated video that highlights several of these new possibilities, while also touching on existing features that help parents keep “kids even more safe on iPhone, iPad, and Mac,” as Apple puts it.",
+          "unit_id": "309885d4cdb9f5ef94124bdb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "As Apple explains, everything starts with setting up a child account, which enables parents to choose age-appropriate safeguards for their personal devices.",
+          "unit_id": "b5283302a2fb10cdbb3bd669"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "With that in place, Apple explains how parents can control which types of apps their kids can access, approve new apps and games through Ask to Buy, and use the new Ask to Browse feature to approve or deny access to websites in Safari.",
+          "unit_id": "d3d3c2ed4baef8ff6c66185d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "The video also highlights controls for approving new contacts, the expanded Communication Safety feature, the new Time Allowances and Schedules features, and more.",
+          "unit_id": "d17c52377ad4812cb513879e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "As a side note, although the graphic style is very different, the video is somewhat reminiscent of Apple’s “Intention” video that opened WWDC 2013, with both using simple shapes and playful motion to help convey the meanin and the feelings of what they’re talking about.",
+          "unit_id": "56453f1f4dfbc8d8c9459d28"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "You can watch the 2013 video here, and you can watch Apple’s new video below:",
+          "unit_id": "654ca2310ceca6e0fcf67618"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Do you use Apple’s child safety features? Let us know in the comments.",
+          "unit_id": "4e335869e9edef1fd4bf2178"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/24/apple-shares-video-highlighting-new-child-safety-features-across-its-devices/"
+    },
+    "recorded_extraction": [
+      "Apple shares video highlighting new child safety features - 9to5Mac",
+      "Apple’s YouTube channel shared a video today showcasing how parents can manage the new and existing features of Apple’s Child Accounts. A few days ago, we covered the many features Apple added to its parental controls suite across its devices with the release of iOS 27, iPadOS 27, and macOS 27. Today, Apple released a fun new animated video that highlights several of these new possibilities, while also touching on existing features that help parents keep “kids even more safe on iPhone, iPad, and Mac,” as Apple puts it. As Apple explains, everything starts with setting up a child account, which enables parents to choose age-appropriate safeguards for their personal devices. With that in place, Apple explains how parents can control which types of apps their kids can access, approve new apps and games through Ask to Buy, and use the new Ask to Browse feature to approve or deny access to websites in Safari.",
+      [
+        "A few days ago, we covered the many features Apple added to its parental controls suite across its devices with the release of iOS 27, iPadOS 27, and macOS 27.",
+        "Today, Apple released a fun new animated video that highlights several of these new possibilities, while also touching on existing features that help parents keep “kids even more safe on iPhone, iPad, and Mac,” as Apple puts it.",
+        "With that in place, Apple explains how parents can control which types of apps their kids can access, approve new apps and games through Ask to Buy, and use the new Ask to Browse feature to approve or deny access to websites in Safari.",
+        "As a side note, although the graphic style is very different, the video is somewhat reminiscent of Apple’s “Intention” video that opened WWDC 2013, with both using simple shapes and playful motion to help convey the meanin and the feelings of what they’re talking about.",
+        "You can watch the 2013 video here, and you can watch Apple’s new video below:"
+      ]
+    ]
+  },
+  "72b2edb13547f8dbd59f1203": {
+    "evidence": {
+      "article_id": "72b2edb13547f8dbd59f1203",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple today shared a video promoting the new parental control features it added in iOS 27 . Apple says Child Accounts are easier to set up in ‌iOS 27‌ and more intuitive to use. Improved controls allow parents to choose the types of apps children have access to, while Ask to Buy lets kids request new apps and games. Ask to Browse gives parents a way to block or allow the websites children visit in Safari, plus parents can decide who kids can call and message. Communication Safety in Messages and FaceTime detects and blocks both violence and nudity in images and videos. Time Allowances and Schedules let parents customize what children can access by the day, hour, and activity, with options to limit apps during school hours. There are one-tap controls to pause access entirely during family events like dinnertime or allow unlimited screen time. Apple's updated parental controls come as the company deals with regulatory pressure over child safety in countries like the UK, U.S., and Australia. The UK has called for device-level controls that keep kids from viewing and sharing inappropriate images, while the U.S. Kids Internet and Digital Safety Act is now in the Senate. Australia has already prohibited children under 16 from creating accounts on certain social media apps. Apple's new child safety features became available on September 14 with the launch of ‌iOS 27‌, iPadOS 27 , and macOS Golden Gate . Every device in a Family Sharing group needs to be running the latest software for the Screen Time update to work. Related Roundups: iOS 27 , iPadOS 27 Related Forum: iOS 27 This article, \" Apple Shares New Video Promoting iOS 27 Parental Controls \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple Shares New Video Promoting iOS 27 Parental Controls",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T16:58:17+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T16:58:17+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T16:58:17+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thursday September 24, 2026 9:58 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 24, 2026 9:58 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 13, 2026 3:00 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 14, 2026 9:00 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 2, 2026 12:35 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 16:58:26 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T16:58:17+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T16:58:17+00:00",
+      "raw_lead": "Apple today shared a video promoting the new parental control features it added in iOS 27. Apple says Child Accounts are easier to set up in iOS 27 and more intuitive to use. Improved controls allow parents to choose the types of apps children have access to, while Ask to Buy lets kids request new apps and games. Ask to Browse gives parents a way to block or allow the websites children visit in Safari, plus parents can decide who kids can call and message.",
+      "source": "MacRumors",
+      "title": "Apple Shares New Video Promoting iOS 27 Parental Controls",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Shares New Video Promoting iOS 27 Parental Controls",
+          "unit_id": "b4de37dd2bee5df554b6f708"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple today shared a video promoting the new parental control features it added in iOS 27.",
+          "unit_id": "09b42e693e05638ecfe3000b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple says Child Accounts are easier to set up in ‌iOS 27‌ and more intuitive to use. Improved controls allow parents to choose the types of apps children have access to, while Ask to Buy lets kids request new apps and games.",
+          "unit_id": "0982340e66c3101933add219"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Ask to Browse gives parents a way to block or allow the websites children visit in Safari, plus parents can decide who kids can call and message. Communication Safety in Messages and FaceTime detects and blocks both violence and nudity in images and videos.",
+          "unit_id": "2462afb6b6eae52dc978afb6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Time Allowances and Schedules let parents customize what children can access by the day, hour, and activity, with options to limit apps during school hours. There are one-tap controls to pause access entirely during family events like dinnertime or allow unlimited screen time.",
+          "unit_id": "75956e3900509848314b6482"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple's updated parental controls come as the company deals with regulatory pressure over child safety in countries like the UK, U.S., and Australia. The UK has called for device-level controls that keep kids from viewing and sharing inappropriate images, while the U.S. Kids Internet and Digital Safety Act is now in the Senate. Australia has already prohibited children under 16 from creating accounts on certain social media apps.",
+          "unit_id": "f6315971d6a66f0d2429b6ce"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple's new child safety features became available on September 14 with the launch of ‌iOS 27‌, iPadOS 27, and macOS Golden Gate. Every device in a Family Sharing group needs to be running the latest software for the Screen Time update to work.",
+          "unit_id": "13618f7636321c681533333b"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/24/ios-27-parental-controls-video/"
+    },
+    "recorded_extraction": [
+      "Apple Shares New Video Promoting iOS 27 Parental Controls",
+      "Apple today shared a video promoting the new parental control features it added in iOS 27. Apple says Child Accounts are easier to set up in iOS 27 and more intuitive to use. Improved controls allow parents to choose the types of apps children have access to, while Ask to Buy lets kids request new apps and games. Ask to Browse gives parents a way to block or allow the websites children visit in Safari, plus parents can decide who kids can call and message. Apple today shared a video promoting the new parental control features it added in iOS 27 . Apple says Child Accounts are easier to set up in ‌iOS 27‌ and more intuitive to use. Improved controls allow parents to choose the types of apps children have access to, while Ask to Buy lets kids request new apps and games. Ask to Browse gives parents a way to block or allow the websites children visit in Safari, plus parents can decide who kids can call and message. Communication Safety in Messages and FaceTime detects and blocks both violence and nudity in images and videos. Time Allowances and Schedules let parents customize what children can access by the day, hour, and activity, with options to limit apps during school hours. There are one-tap controls to pause access entirely during family events like dinnertime or allow unlimited screen time.",
+      [
+        "Apple today shared a video promoting the new parental control features it added in iOS 27.",
+        "Apple's updated parental controls come as the company deals with regulatory pressure over child safety in countries like the UK, U.S., and Australia. The UK has called for device-level controls that keep kids from viewing and sharing inappropriate images, while the U.S. Kids Internet and Digital Safety Act is now in the Senate. Australia has already prohibited children under 16 from creating accounts on certain social media apps.",
+        "Apple's new child safety features became available on September 14 with the launch of ‌iOS 27‌, iPadOS 27, and macOS Golden Gate. Every device in a Family Sharing group needs to be running the latest software for the Screen Time update to work."
+      ]
+    ]
+  },
+  "f49eb4b8d19a29ba690eae6a": {
+    "evidence": {
+      "article_id": "f49eb4b8d19a29ba690eae6a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果公司发布新宣传视频， 重点介绍 iOS 27 系统的儿童账户与家长控制功能。 在儿童安全功能方面，iOS 27 更新重点覆盖儿童账户、应用访问、网站浏览、联系人管理和屏幕使用时间等场景，家长可选择儿童能够访问的应用类型。苹果称，儿童账户的设置流程更加便捷，界面也更易理解。IT之家附上相关图片如下： 在操作方面，儿童申请下载新应用或游戏时，可通过“购买前询问”功能提交请求。家长确认后，儿童才能继续获取相关内容，该功能同时适用于购买流程。 网页浏览管理方面，Safari 新增“浏览前询问”选项。家长可允许或阻止儿童访问特定网站，也能决定儿童可以拨打电话和发送信息的联系人，相关设置由家庭共享中的家长账户统一管理。 “信息”和 FaceTime 加入更新后的“通信安全”功能。系统可检测图片和视频中的暴力、裸露内容，并阻止相关内容显示。 屏幕使用时间新增时间限制和日程安排。家长可按日期、小时和活动设置访问规则，也可限制儿童在上学时段使用应用。晚餐等家庭活动期间，家长能够一键暂停设备访问。 科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果公司发布新宣传视频，重点介绍 iOS 27 系统的儿童账户与家长控制功能。",
+      "discovery_title": "苹果 iOS 27 升级家长控制：筛选应用类型、优化设置流程等",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/25 8:07:03",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Fri, 25 Sep 2026 00:07:03 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/9/25 8:07:03",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-25T00:07:03+00:00",
+      "raw_lead": "科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果公司发布新宣传视频，重点介绍 iOS 27 系统的儿童账户与家长控制功能。",
+      "source": "IT之家",
+      "title": "苹果 iOS 27 升级家长控制：筛选应用类型、优化设置流程等",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果公司发布新宣传视频，重点介绍 iOS 27 系统的儿童账户与家长控制功能。",
+          "unit_id": "d01d33f6b4c06575ba6a2e47"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "在儿童安全功能方面，iOS 27 更新重点覆盖儿童账户、应用访问、网站浏览、联系人管理和屏幕使用时间等场景，家长可选择儿童能够访问的应用类型。苹果称，儿童账户的设置流程更加便捷，界面也更易理解。IT之家附上相关图片如下：",
+          "unit_id": "815a7dd56aa33a551ae30588"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在操作方面，儿童申请下载新应用或游戏时，可通过“购买前询问”功能提交请求。家长确认后，儿童才能继续获取相关内容，该功能同时适用于购买流程。",
+          "unit_id": "c8e3d3de5a54726c15cfc13f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "网页浏览管理方面，Safari 新增“浏览前询问”选项。家长可允许或阻止儿童访问特定网站，也能决定儿童可以拨打电话和发送信息的联系人，相关设置由家庭共享中的家长账户统一管理。",
+          "unit_id": "2dde0b10fdba00b197f75114"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "“信息”和 FaceTime 加入更新后的“通信安全”功能。系统可检测图片和视频中的暴力、裸露内容，并阻止相关内容显示。",
+          "unit_id": "01de876031b034a8a67d704b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "屏幕使用时间新增时间限制和日程安排。家长可按日期、小时和活动设置访问规则，也可限制儿童在上学时段使用应用。晚餐等家庭活动期间，家长能够一键暂停设备访问。",
+          "unit_id": "22117615f03a46d16ff33cd4"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/062.htm"
+    },
+    "recorded_extraction": [
+      "苹果 iOS 27 升级家长控制：筛选应用类型、优化设置流程等",
+      "科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果公司发布新宣传视频，重点介绍 iOS 27 系统的儿童账户与家长控制功能。 IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果公司发布新宣传视频， 重点介绍 iOS 27 系统的儿童账户与家长控制功能。 在儿童安全功能方面，iOS 27 更新重点覆盖儿童账户、应用访问、网站浏览、联系人管理和屏幕使用时间等场景，家长可选择儿童能够访问的应用类型。苹果称，儿童账户的设置流程更加便捷，界面也更易理解。IT之家附上相关图片如下： 在操作方面，儿童申请下载新应用或游戏时，可通过“购买前询问”功能提交请求。家长确认后，儿童才能继续获取相关内容，该功能同时适用于购买流程。 网页浏览管理方面，Safari 新增“浏览前询问”选项。家长可允许或阻止儿童访问特定网站，也能决定儿童可以拨打电话和发送信息的联系人，相关设置由家庭共享中的家长账户统一管理。",
+      [
+        "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，报道称苹果公司发布新宣传视频，重点介绍 iOS 27 系统的儿童账户与家长控制功能。",
+        "在儿童安全功能方面，iOS 27 更新重点覆盖儿童账户、应用访问、网站浏览、联系人管理和屏幕使用时间等场景，家长可选择儿童能够访问的应用类型。苹果称，儿童账户的设置流程更加便捷，界面也更易理解。IT之家附上相关图片如下：",
+        "在操作方面，儿童申请下载新应用或游戏时，可通过“购买前询问”功能提交请求。家长确认后，儿童才能继续获取相关内容，该功能同时适用于购买流程。",
+        "网页浏览管理方面，Safari 新增“浏览前询问”选项。家长可允许或阻止儿童访问特定网站，也能决定儿童可以拨打电话和发送信息的联系人，相关设置由家庭共享中的家长账户统一管理。",
+        "“信息”和 FaceTime 加入更新后的“通信安全”功能。系统可检测图片和视频中的暴力、裸露内容，并阻止相关内容显示。",
+        "屏幕使用时间新增时间限制和日程安排。家长可按日期、小时和活动设置访问规则，也可限制儿童在上学时段使用应用。晚餐等家庭活动期间，家长能够一键暂停设备访问。"
+      ]
+    ]
+  },
+  "c6fc956dfb1af4f411593c4c": {
+    "evidence": {
+      "article_id": "c6fc956dfb1af4f411593c4c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple Watch Ultra includes a few more ways to customize your watch face than Series models. These include Ultra-only faces, colors and fonts, and a bezel-type complication. Apple Watch Ultra 4 goes even further, adding a new option in the bezel configuration category. more… These include Ultra-only faces,…",
+      "discovery_title": "Apple Watch Ultra 4 includes a new watch face bezel option",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:29:05+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T18:47:26+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T17:29:05+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T18:47:26+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 17:29:05 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T17:29:05+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T17:29:05+00:00",
+      "raw_lead": "Apple Watch Ultra includes a few more ways to customize your watch face than Series models. These include Ultra-only faces,...",
+      "source": "9to5Mac",
+      "title": "Apple Watch Ultra 4 includes a new watch face bezel option - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Watch Ultra includes a few more ways to customize your watch face than Series models. These include Ultra-only faces, colors and fonts, and a bezel-type complication. Apple Watch Ultra 4 goes even further, adding a new option in the bezel configuration category.",
+          "unit_id": "efab9c6e9ba03f49dc0428a1"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Readiness is a new bezel option on Apple Watch Ultra 4",
+          "unit_id": "fef2cd51bbf255c924804caa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Both Apple Watch Series 12 and Apple Watch Ultra 4 introduce the new Readiness app. This uses data like fitness activity, vitals, and sleep score to present you with a Readiness score.",
+          "unit_id": "364daf58ca60ca8f25c61efb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Overnight vitals include heart rate, respiratory rate, wrist temperature, and recovery HRV. Daytime vitals include heart rate and recovery HRV.",
+          "unit_id": "336911e5596fc6a1267267c1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Apple Watch Ultra 4 faces that support displaying bezel information add Readiness as a new watch face configuration. Bezel options now include:",
+          "unit_id": "2392cca03be4906d82fdf4ba"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "None",
+          "unit_id": "6bbe80f19aac6b43e41af809"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Seconds",
+          "unit_id": "c5f8eec264c38b72c3bfa8ae"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Depth",
+          "unit_id": "35f9e21c2425ebab80523c4a"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Elevation",
+          "unit_id": "75becebb0c812773c4871bd7"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Training",
+          "unit_id": "8d76a8b38d61be515468d929"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Readiness",
+          "unit_id": "a99f844cb270365c666ad1e2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "The Readiness bezel option puts your numerical score and description at the bottom of the watch face.",
+          "unit_id": "7b059ee7e54ceaa48cf34aed"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Four bars wrap the edge of the watch face, showing the different readiness score categories, while a dot indicates where your score fits within that category.",
+          "unit_id": "a4a299092146272d5aaeb696"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Watch faces like Modular Ultra and the new Siri Modular face support displaying the bezel configuration.",
+          "unit_id": "106fff1c2051811c00a82f94"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "If you’re looking for a way to focus on your readiness score, the new bezel configuration is a great way to keep track of the number.",
+          "unit_id": "9d560193cfaa57ccf0389b84"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Since readiness can change throughout the day, it may be worth having front-and-center for a lot of users.",
+          "unit_id": "b5c467165766d736f4c3facd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Apple Watch Series 12 and Ultra 4 are both available now.",
+          "unit_id": "3c222f24c934f41eb8eb8ff1"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/24/apple-watch-ultra-4-includes-a-new-watch-face-bezel-option/"
+    },
+    "recorded_extraction": [
+      "Apple Watch Ultra 4 includes a new watch face bezel option - 9to5Mac",
+      "Apple Watch Ultra includes a few more ways to customize your watch face than Series models. These include Ultra-only faces,... Both Apple Watch Series 12 and Apple Watch Ultra 4 introduce the new Readiness app . This uses data like fitness activity, vitals, and sleep score to present you with a Readiness score. Overnight vitals include heart rate, respiratory rate, wrist temperature, and recovery HRV. Daytime vitals include heart rate and recovery HRV. Apple Watch Ultra 4 faces that support displaying bezel information add Readiness as a new watch face configuration. Bezel options now include: The Readiness bezel option puts your numerical score and description at the bottom of the watch face.",
+      [
+        "Apple Watch Ultra includes a few more ways to customize your watch face than Series models. These include Ultra-only faces, colors and fonts, and a bezel-type complication. Apple Watch Ultra 4 goes even further, adding a new option in the bezel configuration category.",
+        "Readiness is a new bezel option on Apple Watch Ultra 4",
+        "Both Apple Watch Series 12 and Apple Watch Ultra 4 introduce the new Readiness app. This uses data like fitness activity, vitals, and sleep score to present you with a Readiness score.",
+        "Apple Watch Ultra 4 faces that support displaying bezel information add Readiness as a new watch face configuration. Bezel options now include:",
+        "Apple Watch Series 12 and Ultra 4 are both available now."
+      ]
+    ]
+  },
+  "e627e27d94afb8738e2862ca": {
+    "evidence": {
+      "article_id": "e627e27d94afb8738e2862ca",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 9 月 25 日消息，科技媒体 9to5Mac 昨日（9 月 24 日）发布博文，报道称苹果公司面向 Apple Watch Ultra 4 智能手表， 推送全新的“身体状态准备指数”（Readiness）表圈选项。 苹果公司面向 Apple Watch Series 12 和 Apple Watch Ultra 4 两款智能手表，新增“身体状态准备指数”（Readiness）应用。该应用会利用健身活动、生命体征和睡眠评分等数据，为用户提供“身体状态准备指数”评分。 IT之家援引博文介绍，在 Apple Watch Ultra 4 上，Modular Ultra 和新款 Siri Modular 两款支持显示表圈配置的表盘新增“身体状态准备指数”评分，目前用户可以选择设置： None（无） Seconds（秒） Depth（深度） Elevation（海拔） Training（训练） Readiness（准备状态） 科技媒体 9to5Mac 昨日（9 月 24 日）发布博文，报道称苹果公司面向 Apple Watch Ultra 4 智能手表，推送全新的“身体状态准备指数”（Readiness）表圈选项。",
+      "discovery_title": "苹果 Apple Watch Ultra 4 部分表盘现支持“身体状态准备指数”评分",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/25 8:16:33",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Fri, 25 Sep 2026 00:16:33 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/9/25 8:16:33",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-25T00:16:33+00:00",
+      "raw_lead": "科技媒体 9to5Mac 昨日（9 月 24 日）发布博文，报道称苹果公司面向 Apple Watch Ultra 4 智能手表，推送全新的“身体状态准备指数”（Readiness）表圈选项。",
+      "source": "IT之家",
+      "title": "苹果 Apple Watch Ultra 4 部分表盘现支持“身体状态准备指数”评分",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 25 日消息，科技媒体 9to5Mac 昨日（9 月 24 日）发布博文，报道称苹果公司面向 Apple Watch Ultra 4 智能手表，推送全新的“身体状态准备指数”（Readiness）表圈选项。",
+          "unit_id": "1b842cd8431b0e76a86f3bce"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "苹果公司面向 Apple Watch Series 12 和 Apple Watch Ultra 4 两款智能手表，新增“身体状态准备指数”（Readiness）应用。该应用会利用健身活动、生命体征和睡眠评分等数据，为用户提供“身体状态准备指数”评分。",
+          "unit_id": "2be25fd436b935b4ac8f4d64"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "IT之家援引博文介绍，在 Apple Watch Ultra 4 上，Modular Ultra 和新款 Siri Modular 两款支持显示表圈配置的表盘新增“身体状态准备指数”评分，目前用户可以选择设置：",
+          "unit_id": "c51057e4287c1ef02743cf96"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "None（无）",
+          "unit_id": "c3afd52f2cbc8c1b8b855a18"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Seconds（秒）",
+          "unit_id": "0fe0bb3f666670dc721afa18"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Depth（深度）",
+          "unit_id": "cc066a3a10f6366041fa2295"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Elevation（海拔）",
+          "unit_id": "85a9413f47631c9d352da3f8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Training（训练）",
+          "unit_id": "c3e51011cb5034cb54b76ad7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Readiness（准备状态）",
+          "unit_id": "070333979e12f2fd1f5ec97c"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/065.htm"
+    },
+    "recorded_extraction": [
+      "苹果 Apple Watch Ultra 4 部分表盘现支持“身体状态准备指数”评分",
+      "科技媒体 9to5Mac 昨日（9 月 24 日）发布博文，报道称苹果公司面向 Apple Watch Ultra 4 智能手表，推送全新的“身体状态准备指数”（Readiness）表圈选项。 IT之家 9 月 25 日消息，科技媒体 9to5Mac 昨日（9 月 24 日）发布博文，报道称苹果公司面向 Apple Watch Ultra 4 智能手表， 推送全新的“身体状态准备指数”（Readiness）表圈选项。 苹果公司面向 Apple Watch Series 12 和 Apple Watch Ultra 4 两款智能手表，新增“身体状态准备指数”（Readiness）应用。该应用会利用健身活动、生命体征和睡眠评分等数据，为用户提供“身体状态准备指数”评分。 IT之家援引博文介绍，在 Apple Watch Ultra 4 上，Modular Ultra 和新款 Siri Modular 两款支持显示表圈配置的表盘新增“身体状态准备指数”评分，目前用户可以选择设置：",
+      [
+        "IT之家 9 月 25 日消息，科技媒体 9to5Mac 昨日（9 月 24 日）发布博文，报道称苹果公司面向 Apple Watch Ultra 4 智能手表，推送全新的“身体状态准备指数”（Readiness）表圈选项。",
+        "苹果公司面向 Apple Watch Series 12 和 Apple Watch Ultra 4 两款智能手表，新增“身体状态准备指数”（Readiness）应用。该应用会利用健身活动、生命体征和睡眠评分等数据，为用户提供“身体状态准备指数”评分。",
+        "IT之家援引博文介绍，在 Apple Watch Ultra 4 上，Modular Ultra 和新款 Siri Modular 两款支持显示表圈配置的表盘新增“身体状态准备指数”评分，目前用户可以选择设置："
+      ]
+    ]
+  },
+  "ad8facf06ae36e3e680e18d9": {
+    "evidence": {
+      "article_id": "ad8facf06ae36e3e680e18d9",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "With macOS Golden Gate , Apple phased out several legacy features and services, cutting support for older devices and accessories. More cuts are coming in macOS 28 as Apple continues to root out lingering Intel features. Here's everything that's been dropped. Support for Intel Macs - ‌macOS Golden Gate‌ is the first version of macOS that runs only on Apple silicon Macs. Intel Macs can't run it and are limited to macOS Tahoe . Apple still plans to offer security updates through fall 2028. Boot Camp Assistant - Since ‌macOS Golden Gate‌ doesn't run on Intel Macs, it doesn't support Boot Camp. Apple silicon Macs require virtualization software like Parallels or VMware Fusion to run Windows. Rosetta 2 (Temporarily) - Upgrading to ‌macOS Golden Gate‌ removes Rosetta, but if you have an app installed that requires it, you can reinstall it. ‌macOS Golden Gate‌ is the last version of macOS that will have full Rosetta support. Apple Filing Protocol - Apple deprecated AFP back in macOS Sequoia 15.5, and there is no AFP client at all in ‌macOS Golden Gate‌. Time Capsule Backups - With no support for AFP, Time Capsule no longer works with Macs running ‌macOS Golden Gate‌. Time Capsule requires AFP or SMBv1, but Time Machine backups now use the SMBv2 or SMBv3 protocol. AirPort Utility - AirPort Utility is no longer included when you install ‌macOS Golden Gate‌. If you had the app before updating, you can still use it, but Apple makes no guarantee that it still works. AirPort Utility lets users manage AirPort base stations like the AirPort Extreme and AirPort Express. macOS 28, which is expected in fall 2027, will largely drop support for Rosetta 2. Most apps that rely on Rosetta will not open on Macs running macOS 28, though Apple is making an exception for some legacy games that are unmaintained. In ‌macOS Golden Gate‌, you'll see a warning when using any app that relies on Rosetta, so you're aware that the app won't continue to work in the future without a developer update. You can also see which apps are affected by going to Settings > General > About > Intel-Based Apps and then clicking on Details. Related Roundup: macOS Golden Gate Related Forum: macOS Golden Gate This article, \" What's Gone in macOS Golden Gate and What's Next in macOS 28 \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "What's Gone in macOS Golden Gate and What's Next in macOS 28",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T23:06:44+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T23:06:44+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-24T23:06:44+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thursday September 24, 2026 4:06 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 24, 2026 4:06 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 13, 2026 3:00 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 14, 2026 4:37 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 10, 2026 12:15 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Thu, 24 Sep 2026 23:06:55 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-24T23:06:44+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-24T23:06:44+00:00",
+      "raw_lead": "With macOS Golden Gate, Apple phased out several legacy features and services, cutting support for older devices and accessories. More cuts are coming in macOS 28 as Apple continues to root out lingering Intel features. Here's everything that's been dropped. Support for Intel Macs - macOS Golden Gate is the first version of macOS that runs only on Apple silicon Macs. Intel Macs can't run it and are limited to macOS Tahoe. Apple still plans to offer security updates through fall 2028.",
+      "source": "MacRumors",
+      "title": "What's Gone in macOS Golden Gate and What's Next in macOS 28",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "What's Gone in macOS Golden Gate and What's Next in macOS 28",
+          "unit_id": "568f245e7b4c6a5295b1c524"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "With macOS Golden Gate, Apple phased out several legacy features and services, cutting support for older devices and accessories. More cuts are coming in macOS 28 as Apple continues to root out lingering Intel features.",
+          "unit_id": "e442b28839a46c750e59dd41"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Here's everything that's been dropped.",
+          "unit_id": "d9de09bfc53e34f2d991c6c6"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Support for Intel Macs - ‌macOS Golden Gate‌ is the first version of macOS that runs only on Apple silicon Macs. Intel Macs can't run it and are limited to macOS Tahoe. Apple still plans to offer security updates through fall 2028.",
+          "unit_id": "53474af5e3d665481bdade7a"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Boot Camp Assistant - Since ‌macOS Golden Gate‌ doesn't run on Intel Macs, it doesn't support Boot Camp. Apple silicon Macs require virtualization software like Parallels or VMware Fusion to run Windows.",
+          "unit_id": "fe131e34a598d72e68e8dc99"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Rosetta 2 (Temporarily) - Upgrading to ‌macOS Golden Gate‌ removes Rosetta, but if you have an app installed that requires it, you can reinstall it. ‌macOS Golden Gate‌ is the last version of macOS that will have full Rosetta support.",
+          "unit_id": "24a4cb60ff693937b23b244f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple Filing Protocol - Apple deprecated AFP back in macOS Sequoia 15.5, and there is no AFP client at all in ‌macOS Golden Gate‌.",
+          "unit_id": "497d7cab9659f501cb913207"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Time Capsule Backups - With no support for AFP, Time Capsule no longer works with Macs running ‌macOS Golden Gate‌. Time Capsule requires AFP or SMBv1, but Time Machine backups now use the SMBv2 or SMBv3 protocol.",
+          "unit_id": "c70f66f911e409393fc4ea26"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "AirPort Utility - AirPort Utility is no longer included when you install ‌macOS Golden Gate‌. If you had the app before updating, you can still use it, but Apple makes no guarantee that it still works. AirPort Utility lets users manage AirPort base stations like the AirPort Extreme and AirPort Express.",
+          "unit_id": "f45b705ff2f8a5c54d2a9bd2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "macOS 28, which is expected in fall 2027, will largely drop support for Rosetta 2. Most apps that rely on Rosetta will not open on Macs running macOS 28, though Apple is making an exception for some legacy games that are unmaintained.",
+          "unit_id": "35118289308ed88258ab9ebe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "In ‌macOS Golden Gate‌, you'll see a warning when using any app that relies on Rosetta, so you're aware that the app won't continue to work in the future without a developer update. You can also see which apps are affected by going to Settings > General > About > Intel-Based Apps and then clicking on Details.",
+          "unit_id": "a52b4c8c1d5a116f04847f01"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/24/macos-golden-gate-features-removed/"
+    },
+    "recorded_extraction": [
+      "What's Gone in macOS Golden Gate and What's Next in macOS 28",
+      "With macOS Golden Gate, Apple phased out several legacy features and services, cutting support for older devices and accessories. More cuts are coming in macOS 28 as Apple continues to root out lingering Intel features. Here's everything that's been dropped. Support for Intel Macs - macOS Golden Gate is the first version of macOS that runs only on Apple silicon Macs. Intel Macs can't run it and are limited to macOS Tahoe. Apple still plans to offer security updates through fall 2028. With macOS Golden Gate , Apple phased out several legacy features and services, cutting support for older devices and accessories. More cuts are coming in macOS 28 as Apple continues to root out lingering Intel features. macOS 28, which is expected in fall 2027, will largely drop support for Rosetta 2. Most apps that rely on Rosetta will not open on Macs running macOS 28, though Apple is making an exception for some legacy games that are unmaintained. In ‌macOS Golden Gate‌, you'll see a warning when using any app that relies on Rosetta, so you're aware that the app won't continue to work in the future without a developer update. You can also see which apps are affected by going to Settings > General > About > Intel-Based Apps and then clicking on Details.",
+      [
+        "With macOS Golden Gate, Apple phased out several legacy features and services, cutting support for older devices and accessories. More cuts are coming in macOS 28 as Apple continues to root out lingering Intel features.",
+        "Support for Intel Macs - ‌macOS Golden Gate‌ is the first version of macOS that runs only on Apple silicon Macs. Intel Macs can't run it and are limited to macOS Tahoe. Apple still plans to offer security updates through fall 2028.",
+        "Boot Camp Assistant - Since ‌macOS Golden Gate‌ doesn't run on Intel Macs, it doesn't support Boot Camp. Apple silicon Macs require virtualization software like Parallels or VMware Fusion to run Windows.",
+        "Rosetta 2 (Temporarily) - Upgrading to ‌macOS Golden Gate‌ removes Rosetta, but if you have an app installed that requires it, you can reinstall it. ‌macOS Golden Gate‌ is the last version of macOS that will have full Rosetta support.",
+        "Apple Filing Protocol - Apple deprecated AFP back in macOS Sequoia 15.5, and there is no AFP client at all in ‌macOS Golden Gate‌.",
+        "Time Capsule Backups - With no support for AFP, Time Capsule no longer works with Macs running ‌macOS Golden Gate‌. Time Capsule requires AFP or SMBv1, but Time Machine backups now use the SMBv2 or SMBv3 protocol.",
+        "AirPort Utility - AirPort Utility is no longer included when you install ‌macOS Golden Gate‌. If you had the app before updating, you can still use it, but Apple makes no guarantee that it still works. AirPort Utility lets users manage AirPort base stations like the AirPort Extreme and AirPort Express.",
+        "macOS 28, which is expected in fall 2027, will largely drop support for Rosetta 2. Most apps that rely on Rosetta will not open on Macs running macOS 28, though Apple is making an exception for some legacy games that are unmaintained."
+      ]
+    ]
+  },
+  "4a7586f82090d938510a5093": {
+    "evidence": {
+      "article_id": "4a7586f82090d938510a5093",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，梳理了在 macOS 27 Golden Gate 系统中，苹果公司移除的相关功能，包括正式终结 Intel Mac 支持等。 一、结束对 Intel Mac 的支持 macOS Golden Gate 是首个仅可在 Apple 芯片 Mac 上运行的 macOS 版本。IT之家援引博文介绍，Intel Mac 无法运行此版本，最高只能停留在 macOS 26 Tahoe 系统。 不过苹果承诺为其提供安全更新至 2028 年秋季。 二、Boot Camp 助理 Boot Camp 助理同步移除，意味着 M 系列 Mac 目前不能像 Intel Mac 那样通过 Boot Camp 安装成真正的原生双系统。 使用 Apple Silicon 芯片的 Mac 需要 Parallels 或 VMware Fusion 等虚拟化软件才能运行 Windows 11 系统。 三、Rosetta 2（暂时停用） Rosetta 2 是苹果开发的指令集转译层，允许为 Intel Mac 编译的应用在 Apple Silicon Mac 上运行。用户无需修改应用即可使用旧软件，但性能略有损失，苹果正推动开发者原生适配 ARM 架构。 如果用户安装了需要 Rosetta 的应用，可以重新安装。不过 macOS 27 Golden Gate 是最后一个完全支持 Rosetta 的 macOS 版本。 在 macOS 27 Golden Gate 中，用户使用任何依赖 Rosetta 的应用时会出现警告提示。用户可通过“设置”>“通用”>“关于本机”>“基于 Intel 的应用”查看受影响应用列表。 macOS Golden Gate（macOS 27）成为首个仅支持 Apple Silicon 芯片的 macOS 版本，正式终结 Intel Mac 支持，并移除 Boot Camp、Rosetta 2（暂时）、AFP 协议等 6 项遗留功能。",
+      "discovery_title": "苹果 macOS 27 移除 Boot Camp 等 6 项功能，Intel Mac 时代落幕",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/25 9:09:48",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Fri, 25 Sep 2026 01:09:48 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/9/25 9:09:48",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-25T01:09:48+00:00",
+      "raw_lead": "macOS Golden Gate（macOS 27）成为首个仅支持 Apple Silicon 芯片的 macOS 版本，正式终结 Intel Mac 支持，并移除 Boot Camp、Rosetta 2（暂时）、AFP 协议等 6 项遗留功能。",
+      "source": "IT之家",
+      "title": "苹果 macOS 27 移除 Boot Camp 等 6 项功能，Intel Mac 时代落幕",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，梳理了在 macOS 27 Golden Gate 系统中，苹果公司移除的相关功能，包括正式终结 Intel Mac 支持等。",
+          "unit_id": "76224630f956419a0fe36073"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "一、结束对 Intel Mac 的支持",
+          "unit_id": "564ddcb586f487f8ef1cbe76"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "macOS Golden Gate 是首个仅可在 Apple 芯片 Mac 上运行的 macOS 版本。IT之家援引博文介绍，Intel Mac 无法运行此版本，最高只能停留在 macOS 26 Tahoe 系统。不过苹果承诺为其提供安全更新至 2028 年秋季。",
+          "unit_id": "0f7e70490619332e228bf133"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "二、Boot Camp 助理",
+          "unit_id": "9a6e82b0d9eee3a3622e13d5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Boot Camp 助理同步移除，意味着 M 系列 Mac 目前不能像 Intel Mac 那样通过 Boot Camp 安装成真正的原生双系统。",
+          "unit_id": "e12827b0185921dd6c36c40a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "使用 Apple Silicon 芯片的 Mac 需要 Parallels 或 VMware Fusion 等虚拟化软件才能运行 Windows 11 系统。",
+          "unit_id": "ee1510dfc747a0491a9e0725"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "三、Rosetta 2（暂时停用）",
+          "unit_id": "953f4d3462feeede487063dd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Rosetta 2 是苹果开发的指令集转译层，允许为 Intel Mac 编译的应用在 Apple Silicon Mac 上运行。用户无需修改应用即可使用旧软件，但性能略有损失，苹果正推动开发者原生适配 ARM 架构。",
+          "unit_id": "f36c110523cdc1d10fd053aa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "如果用户安装了需要 Rosetta 的应用，可以重新安装。不过 macOS 27 Golden Gate 是最后一个完全支持 Rosetta 的 macOS 版本。",
+          "unit_id": "b10b436fbbdacee75b2d2cff"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "在 macOS 27 Golden Gate 中，用户使用任何依赖 Rosetta 的应用时会出现警告提示。用户可通过“设置”>“通用”>“关于本机”>“基于 Intel 的应用”查看受影响应用列表。",
+          "unit_id": "ec95c9f2dce6145dbb39a667"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "macOS 28 预计 2027 年秋季发布，将基本停止 Rosetta 2 支持，多数依赖转译层的应用无法运行。",
+          "unit_id": "a436d45599885e759099e3e7"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "四、苹果文件协议（AFP）",
+          "unit_id": "7bbf7fe9cf2212ac014db9b1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "AFP 是苹果开发的文件共享协议，用于 Mac 之间或 Mac 与服务器之间的文件传输。因安全性与兼容性问题，苹果已用 SMB 协议替代，Golden Gate 中彻底移除 AFP 客户端。",
+          "unit_id": "85c94603373e9bff83459827"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "五、Time Capsule 备份",
+          "unit_id": "af858e2fc515e24d23936f3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Time Capsule 是苹果已停产的无线路由器，内置硬盘支持 Time Machine 无线备份。因依赖 AFP 或 SMBv1 协议，在 macOS 27 Golden Gate 及后续系统中无法继续使用。Time Machine 备份现统一采用 SMBv2 或 SMBv3 协议。",
+          "unit_id": "8edbb93856214512e90d4534"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "六、AirPort 实用工具",
+          "unit_id": "3d4dd4423822123034c4bef0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "AirPort 实用工具不再随系统预装，旧用户可继续使用已安装版本，但苹果不保证功能正常。该工具用于管理 AirPort Extreme、AirPort Express 等基站设备。",
+          "unit_id": "f30f5b1c10b0f4d09ee363b5"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/074.htm"
+    },
+    "recorded_extraction": [
+      "苹果 macOS 27 移除 Boot Camp 等 6 项功能，Intel Mac 时代落幕",
+      "macOS Golden Gate（macOS 27）成为首个仅支持 Apple Silicon 芯片的 macOS 版本，正式终结 Intel Mac 支持，并移除 Boot Camp、Rosetta 2（暂时）、AFP 协议等 6 项遗留功能。 IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，梳理了在 macOS 27 Golden Gate 系统中，苹果公司移除的相关功能，包括正式终结 Intel Mac 支持等。 macOS Golden Gate 是首个仅可在 Apple 芯片 Mac 上运行的 macOS 版本。IT之家援引博文介绍，Intel Mac 无法运行此版本，最高只能停留在 macOS 26 Tahoe 系统。 不过苹果承诺为其提供安全更新至 2028 年秋季。 Boot Camp 助理同步移除，意味着 M 系列 Mac 目前不能像 Intel Mac 那样通过 Boot Camp 安装成真正的原生双系统。 使用 Apple Silicon 芯片的 Mac 需要 Parallels 或 VMware Fusion 等虚拟化软件才能运行 Windows 11 系统。",
+      [
+        "IT之家 9 月 25 日消息，科技媒体 MacRumors 今天（9 月 25 日）发布博文，梳理了在 macOS 27 Golden Gate 系统中，苹果公司移除的相关功能，包括正式终结 Intel Mac 支持等。",
+        "macOS Golden Gate 是首个仅可在 Apple 芯片 Mac 上运行的 macOS 版本。IT之家援引博文介绍，Intel Mac 无法运行此版本，最高只能停留在 macOS 26 Tahoe 系统。不过苹果承诺为其提供安全更新至 2028 年秋季。",
+        "使用 Apple Silicon 芯片的 Mac 需要 Parallels 或 VMware Fusion 等虚拟化软件才能运行 Windows 11 系统。",
+        "Rosetta 2 是苹果开发的指令集转译层，允许为 Intel Mac 编译的应用在 Apple Silicon Mac 上运行。用户无需修改应用即可使用旧软件，但性能略有损失，苹果正推动开发者原生适配 ARM 架构。",
+        "如果用户安装了需要 Rosetta 的应用，可以重新安装。不过 macOS 27 Golden Gate 是最后一个完全支持 Rosetta 的 macOS 版本。",
+        "在 macOS 27 Golden Gate 中，用户使用任何依赖 Rosetta 的应用时会出现警告提示。用户可通过“设置”>“通用”>“关于本机”>“基于 Intel 的应用”查看受影响应用列表。",
+        "macOS 28 预计 2027 年秋季发布，将基本停止 Rosetta 2 支持，多数依赖转译层的应用无法运行。",
+        "Time Capsule 是苹果已停产的无线路由器，内置硬盘支持 Time Machine 无线备份。因依赖 AFP 或 SMBv1 协议，在 macOS 27 Golden Gate 及后续系统中无法继续使用。Time Machine 备份现统一采用 SMBv2 或 SMBv3 协议。",
+        "AirPort 实用工具不再随系统预装，旧用户可继续使用已安装版本，但苹果不保证功能正常。该工具用于管理 AirPort Extreme、AirPort Express 等基站设备。"
+      ]
+    ]
+  },
+  "f1fa46511cdbfe802763a87f": {
+    "evidence": {
+      "article_id": "f1fa46511cdbfe802763a87f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "“ Knife Edge: Chasing Michelin Stars,” Apple TV’s docuseries about the pursuit of the culinary world’s highest honors, is back. Here are the details. more… “Knife Edge: Chasing Michelin Stars,” Apple TV’s docuseries about the pursuit of the culinary world’s highest honors, is back. Here…",
+      "discovery_title": "‘Knife Edge: Chasing Michelin Stars’ season 2 premieres on Apple TV",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:00:44+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:00:46+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:00:44+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T01:00:46+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Fri, 25 Sep 2026 01:00:44 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-25T01:00:44+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-25T01:00:44+00:00",
+      "raw_lead": "“Knife Edge: Chasing Michelin Stars,” Apple TV’s docuseries about the pursuit of the culinary world’s highest honors, is back.",
+      "source": "9to5Mac",
+      "title": "‘Knife Edge: Chasing Michelin Stars’ returns on Apple TV - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "“Knife Edge: Chasing Michelin Stars,” Apple TV’s docuseries about the pursuit of the culinary world’s highest honors, is back. Here are the details.",
+          "unit_id": "8984863bc454e19a001038b6"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "‘Knife Edge: Chasing Michelin Stars’ is back",
+          "unit_id": "deb2be0aff8720f06cc788e0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Less than one year after the premiere of the first season of “Knife Edge: Chasing Michelin Stars,” the show is back for a new eight-episode run telling the stories of restaurants around the world as they try to earn, keep, or add to their Michelin stars.",
+          "unit_id": "731dc9c28bdc2113a3481d29"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The show, which is hosted by food and travel expert Jesse Burgess and executive-produced by Gordon Ramsay and Studio Ramsay Global, chronicles restaurants, chefs, and their teams, as well as the relentless work that goes into earning and maintaining the culinary world’s highest recognition.",
+          "unit_id": "0708210093378b922355ce8e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "As Apple announced a few days ago, the new season features 16 restaurants across Europe, the US, and Brazil, each at a different point in their pursuit.",
+          "unit_id": "bb13a0bd4d87b1fb78d685fc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Following today’s two-episode premiere, new episodes will drop every Friday through November 6.",
+          "unit_id": "3d02991412723f6bf8ef3e35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Here’s Apple TV on what to expect from the second season of “Knife Edge: Chasing Michelin Stars”:",
+          "unit_id": "4194821cae4301b818fdbb77"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Across season two, “Knife Edge: Chasing Michelin Stars” follows 16 restaurants at pivotal moments in their journeys: A chef and his family risk everything to put a tiny island on Michelin’s map. Two generations of a legendary culinary family pursue recognition on their own terms. Two chefs voluntarily give up their Star when they open a new restaurant and have just 52 days to win it back. One sandwich shop transforms into a fine dining restaurant each night, while a young couple seeks to put Filipino cuisine at the center of one of America’s most competitive dining scenes. Their circumstances could hardly be more different, yet each faces the same uncertainty: When Michelin makes its decision, will everything they have strived for be enough?",
+          "unit_id": "41aa7c9f6dcaba716c3e7fbb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Watch the trailer for the second season of “Knife Edge: Chasing Michelin Stars” below:",
+          "unit_id": "f9760b09ff3884421e6375ad"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Watch “Knife Edge: Chasing Michelin Stars” on Apple TV",
+          "unit_id": "e02e80baeab0f1f2a140f039"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple TV is available for $14.99 per month or as part of the Apple One bundle. It features hit TV shows and movies like Ted Lasso, Severance, The Studio, The Morning Show, Shrinking, and Silo.",
+          "unit_id": "7a966b3125642180ab5dbc49"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/24/knife-edge-chasing-michelin-stars-season-2-premieres-on-apple-tv/"
+    },
+    "recorded_extraction": [
+      "‘Knife Edge: Chasing Michelin Stars’ returns on Apple TV - 9to5Mac",
+      "“Knife Edge: Chasing Michelin Stars,” Apple TV’s docuseries about the pursuit of the culinary world’s highest honors, is back. “ Knife Edge: Chasing Michelin Stars ,” Apple TV’s docuseries about the pursuit of the culinary world’s highest honors, is back. Here are the details. Less than one year after the premiere of the first season of “ Knife Edge: Chasing Michelin Stars ,” the show is back for a new eight-episode run telling the stories of restaurants around the world as they try to earn, keep, or add to their Michelin stars. The show, which is hosted by food and travel expert Jesse Burgess and executive-produced by Gordon Ramsay and Studio Ramsay Global, chronicles restaurants, chefs, and their teams, as well as the relentless work that goes into earning and maintaining the culinary world’s highest recognition. As Apple announced a few days ago, the new season features 16 restaurants across Europe, the US, and Brazil, each at a different point in their pursuit.",
+      [
+        "As Apple announced a few days ago, the new season features 16 restaurants across Europe, the US, and Brazil, each at a different point in their pursuit.",
+        "Following today’s two-episode premiere, new episodes will drop every Friday through November 6.",
+        "Two chefs voluntarily give up their Star when they open a new restaurant and have just 52 days to win it back."
+      ]
+    ]
+  },
+  "c1a610770f434bed77944a92": {
+    "evidence": {
+      "article_id": "c1a610770f434bed77944a92",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "五年前双十一，是我和摇一摇广告交手的第 99 次。 那天我只是想查个快递。点开 App 的一瞬间，我立刻进入战斗状态，双手握紧手机，手肘抵住桌面，呼吸放慢，稳得像一台三脚架。 不巧，窗外驶过一辆渣土车，桌面传来轻微的震动。我闭上了眼睛。 再睁开时，我已经在某宝了。 谁曾想这一幕竟成了我这几年打开 App 的标准流程，每一次都像在拆弹，却从来没拆成功。 但这两天，我打开 App 后抓起手机使劲地摇，从头摇到尾，App 愣是没跳广告，老老实实进了主页。 那一刻我感觉到了攻守易形，5 年来的委屈如释重负。这是我第一次摇手机，摇出了尊严。 点进文章的所有 iPhone 用户，请全体起立，打开那些有摇一摇广告的 App，尽情地摇！ 因为你很快，就要彻底告别摇一摇了。 这两天苹果推送了 iOS 27.2 Beta 2（开发者版），在「设置-隐私与安全-运动与健身」里出现了一个新入口：Restrict Motion Data，限制运动数据。 你只要把 App 拉进这个名单，App 就拿不到加速度计、陀螺仪这些运动传感器的数据了。 一旦没有这些数据，就算你把手机摇出残影，App 的摇一摇广告也不知道。 一开始我们还怀疑，是不是苹果顺手做了个管权限的功能，没打算针对谁？ 但当我把 App Store 切成了美区之后，这个权限入口消失了。。。也就是说： 这是继「调休闹钟」之后，又一个果子哥专门给咱做的本土化功能。 太好了，我们又是唯一！我们过得真棒！ 说实话，这次赢得有点彻底，又有点突然，以至于我有点想不通，过去五年我们到底输在哪了。 咱先说说友军。 安卓那边早就战胜了摇一摇广告，比如小米 2023 年初就在开发版里加了「加速度传感器权限」，能直接把 App 的传感器掐掉；后来华为、vivo、OPPO 也都能在权限设置里把传感器关掉，vivo 还专门做了个「仅开屏禁止」。更早还有专门帮你跳广告的李跳跳。 而 iPhone 这边，用户只能各显神通。 有人打开关怀模式碰运气；有人写了自动化，一检测到跳转就自动跳回来，you jump I jump。还有人在开屏时使劲摇，让 App 知道自己看过了，结果免费给人看了 30 次广告，广告还在。 我们去年甚至专门做了个 App，叫「摇了么」，想让全国人民都能把自己练成人形云台，稳如泰山。 当然我们也盼过苹果出手，还真盼来过一两次。。额，狼来了。 像 App Store 审核指南第 4.10 条就写着「不得通过硬件或操作系统提供的内置功能（例如，推送通知、摄像头或陀螺仪）获利」；开发者协议里也写着，运动数据不能拿去投广告。 但是规矩存在好几年，开发者们也摇了好几年，双方相安无事，像是饭馆墙上的「禁止吸烟」。 2023 年 11 月，一条消息冲上了热搜：有大厂内部人士透露，苹果已经通知国内多家头部 App 移除陀螺仪权限，摇一摇跳转广告被禁止了。传着传着，还有知情人士补了一句：这回是强制的。 当时我们也跟着乐开了花，还转发了新闻，评论区有人说“苹果此举配享太庙”，有人说凭这个下部手机买苹果。（兄弟，这不是你买苹果的理由） 结果第二天，有媒体挨个去问淘天、京东、拼多多、抖音、快手，没有一家明确说收到过苹果的通知，苹果也没给回复； 那是 iPhone 用户离胜利最近的一次。但换个角度想，我们毕竟赢过，赢了一整个晚上。 苹果指望不上了，那监管这边呢？ 早在2022年，电信终端产业协会发布了《App用户权益保护测评规范》，具体设定了「摇一摇」广告的触发门槛；2023 年工信部发通知，点名不许用高灵敏度摇一摇诱导用户； 今年 618 前，工信部又专门开会，督促互联网平台和手机厂商，严禁违规呈现信息窗口。 虽然 6 月有一段时间，一堆 App 悄悄撤了开屏广告，「开屏广告没了」还上了热搜。 可是没多久风头一过，不少 App 的摇一摇又回来了。 看到这，你就能感受到这次 iPhone 做的权限开关，有多让人兴奋了。 既然靠厂商自觉没用，那就别怪果子哥不讲道理了。喜欢调灵敏度是吧？来，随你调，我直接拔网线，数据一口都不给你。 舒服！ 当然了，这场翻身仗赢得也有点粗糙。 比如 vivo 的「仅开屏禁止」，是只在开屏广告那几秒把传感器收走，广告一过就还回去。苹果这个是拉进去就是进了黑名单，一点不给看。 这个强效药猛是猛，但也许会带来副作用，比如靠手机传感器的运动 App 如果没有权限了会怎么办呢？ 世超不怎么运动，我给大家测了一个 Keep。 好消息是，把 Keep 拉进名单后，配速、步频也都正常显示（猜测通过距离和时长来计算的），同时摇一摇广告也被整治了。 最后给大家算下时间哦。 每年双十一和 618，都是摇一摇一年里最猖獗、最灵敏的时候，所以 iOS27.2 正式版能赶在这次双十一之前出吗？ 我翻了下苹果的发版记录， 连续五年，每一个 .2 版本都准时出现在双十二前后，所以 iOS 27.2 正式版大概率赶不上双十一，只能双十二。 不过今年也有点特殊。 往年 .2 的测试版 10 月底才开始，今年 9 月中旬就来了，还直接跳过了 27.1 的测试版。因为 iPhone Duo 10 月 23 日发售，苹果官宣它出厂就装 27.1；外媒分析，要是提前放出 27.1 测试版，代码里藏的新机细节可能就漏了，所以干脆让开发者跳级测 27.2。 尽管 iOS 27.2 测试版早了一个多月，但正式版大概率要等在 10 月 23 日的 iPhone Duo 发售之后，这么一算感觉今年双十一还是有点难顶。 但好在它们的好日子也到头了，双十一就当是它们的告别巡演吧。 五年前那辆渣土车，我到现在都记得。如果有一天，它要是再从窗外开过，我打算打开一个 App，把手机放在方向盘上，泡杯茶，看着它开过去。 然后说一句憋了五年的话： 摇一摇广告，死得好！",
+      "discovery_title": "iPhone用户全体起立！摇一摇广告终于被苹果干了",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25 00:15:36",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25 00:15:36",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-09-25 00:15:36",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-24T16:15:36+00:00",
+      "raw_lead": "五年前双十一，是我和摇一摇广告交手的第 99 次。那天我只是想查个快递。点开 App 的一瞬间，我立刻进入战斗状态，双手握紧手机，手肘抵住桌面，呼吸放慢，稳得像一台三脚架。不巧，窗外驶过一",
+      "source": "快科技",
+      "title": "iPhone用户全体起立！摇一摇广告终于被苹果干了",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "五年前双十一，是我和摇一摇广告交手的第 99 次。",
+          "unit_id": "c18cf71cdaf036d5ce5c1bfc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "那天我只是想查个快递。点开 App 的一瞬间，我立刻进入战斗状态，双手握紧手机，手肘抵住桌面，呼吸放慢，稳得像一台三脚架。",
+          "unit_id": "efda0b676780bb639f6629dc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "不巧，窗外驶过一辆渣土车，桌面传来轻微的震动。我闭上了眼睛。",
+          "unit_id": "e012b54ed738062d18286019"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "再睁开时，我已经在某宝了。",
+          "unit_id": "2ed6e64b470683988c71eb05"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "谁曾想这一幕竟成了我这几年打开 App 的标准流程，每一次都像在拆弹，却从来没拆成功。",
+          "unit_id": "d5f7e44d232341548b54868f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "但这两天，我打开 App 后抓起手机使劲地摇，从头摇到尾，App 愣是没跳广告，老老实实进了主页。",
+          "unit_id": "d25bb6a64b5359f485fe41cc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "那一刻我感觉到了攻守易形，5 年来的委屈如释重负。这是我第一次摇手机，摇出了尊严。",
+          "unit_id": "654aa3b01d3c4f26ae55f926"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "点进文章的所有 iPhone 用户，请全体起立，打开那些有摇一摇广告的 App，尽情地摇！",
+          "unit_id": "b32473a988d30577e196156c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "因为你很快，就要彻底告别摇一摇了。",
+          "unit_id": "ebe9a2432af64d8240748606"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "这两天苹果推送了 iOS 27.2 Beta 2（开发者版），在「设置-隐私与安全-运动与健身」里出现了一个新入口：Restrict Motion Data，限制运动数据。",
+          "unit_id": "48911bcb16eac760bc6d131d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "你只要把 App 拉进这个名单，App 就拿不到加速度计、陀螺仪这些运动传感器的数据了。",
+          "unit_id": "017142ec39cef4c20796b36f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "一旦没有这些数据，就算你把手机摇出残影，App 的摇一摇广告也不知道。",
+          "unit_id": "62e66ed62904c495638f102d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "一开始我们还怀疑，是不是苹果顺手做了个管权限的功能，没打算针对谁？",
+          "unit_id": "26229a17e78b45905803fddc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "但当我把 App Store 切成了美区之后，这个权限入口消失了。。。也就是说：这是继「调休闹钟」之后，又一个果子哥专门给咱做的本土化功能。",
+          "unit_id": "580664b5ccfc0f311656ccd8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "太好了，我们又是唯一！我们过得真棒！",
+          "unit_id": "21b5ea871ba84cfb55671c7c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "说实话，这次赢得有点彻底，又有点突然，以至于我有点想不通，过去五年我们到底输在哪了。",
+          "unit_id": "6f190e8be33bbb1254123c78"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "咱先说说友军。",
+          "unit_id": "0cdbbdc9fa034873363b9b74"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "安卓那边早就战胜了摇一摇广告，比如小米 2023 年初就在开发版里加了「加速度传感器权限」，能直接把 App 的传感器掐掉；后来华为、vivo、OPPO 也都能在权限设置里把传感器关掉，vivo 还专门做了个「仅开屏禁止」。更早还有专门帮你跳广告的李跳跳。",
+          "unit_id": "6e7ba1988a14b0be22a7f2dc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "而 iPhone 这边，用户只能各显神通。",
+          "unit_id": "dd61f7ad1fdcbc6ae65d6920"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "有人打开关怀模式碰运气；有人写了自动化，一检测到跳转就自动跳回来，you jump I jump。还有人在开屏时使劲摇，让 App 知道自己看过了，结果免费给人看了 30 次广告，广告还在。",
+          "unit_id": "96d30bd022babd64524ef6a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "我们去年甚至专门做了个 App，叫「摇了么」，想让全国人民都能把自己练成人形云台，稳如泰山。",
+          "unit_id": "ac39d31c081d1bf9a466c5d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "当然我们也盼过苹果出手，还真盼来过一两次。。额，狼来了。",
+          "unit_id": "93c9c89744b3d9f865056ed9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "像 App Store 审核指南第 4.10 条就写着「不得通过硬件或操作系统提供的内置功能（例如，推送通知、摄像头或陀螺仪）获利」；开发者协议里也写着，运动数据不能拿去投广告。",
+          "unit_id": "becd841aff1b2b3237b13a97"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "但是规矩存在好几年，开发者们也摇了好几年，双方相安无事，像是饭馆墙上的「禁止吸烟」。",
+          "unit_id": "72d1fe14b4f2304a0bc82d0c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "2023 年 11 月，一条消息冲上了热搜：有大厂内部人士透露，苹果已经通知国内多家头部 App 移除陀螺仪权限，摇一摇跳转广告被禁止了。传着传着，还有知情人士补了一句：这回是强制的。",
+          "unit_id": "adf58fa3268c838149d7aa6d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "当时我们也跟着乐开了花，还转发了新闻，评论区有人说“苹果此举配享太庙”，有人说凭这个下部手机买苹果。（兄弟，这不是你买苹果的理由）",
+          "unit_id": "ea41be05a7c1963a0ad22384"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "结果第二天，有媒体挨个去问淘天、京东、拼多多、抖音、快手，没有一家明确说收到过苹果的通知，苹果也没给回复；",
+          "unit_id": "e974519e91f1a93ceb5a4d9e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "那是 iPhone 用户离胜利最近的一次。但换个角度想，我们毕竟赢过，赢了一整个晚上。",
+          "unit_id": "4a09e4a9f4eaea021ec0012a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "苹果指望不上了，那监管这边呢？",
+          "unit_id": "86c075e6a17ad1b6b420e22d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 29,
+          "origin": "html",
+          "text": "早在2022年，电信终端产业协会发布了《App用户权益保护测评规范》，具体设定了「摇一摇」广告的触发门槛；2023 年工信部发通知，点名不许用高灵敏度摇一摇诱导用户；",
+          "unit_id": "ad64a6f08d3c8bb703df42c1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 30,
+          "origin": "html",
+          "text": "今年 618 前，工信部又专门开会，督促互联网平台和手机厂商，严禁违规呈现信息窗口。",
+          "unit_id": "74b4fb3f936b22cde1954885"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 31,
+          "origin": "html",
+          "text": "虽然 6 月有一段时间，一堆 App 悄悄撤了开屏广告，「开屏广告没了」还上了热搜。",
+          "unit_id": "bc4007eaacab12afadd6adf5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 32,
+          "origin": "html",
+          "text": "可是没多久风头一过，不少 App 的摇一摇又回来了。",
+          "unit_id": "2b0187354ff7c9ec1a68ac51"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 33,
+          "origin": "html",
+          "text": "看到这，你就能感受到这次 iPhone 做的权限开关，有多让人兴奋了。",
+          "unit_id": "78226345ce07bf3b922e8bc6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 34,
+          "origin": "html",
+          "text": "既然靠厂商自觉没用，那就别怪果子哥不讲道理了。喜欢调灵敏度是吧？来，随你调，我直接拔网线，数据一口都不给你。",
+          "unit_id": "2ab71d6d8e9e5f1a70cc7ca6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 35,
+          "origin": "html",
+          "text": "舒服！",
+          "unit_id": "da49452aa0963039673f9de0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 36,
+          "origin": "html",
+          "text": "当然了，这场翻身仗赢得也有点粗糙。",
+          "unit_id": "a5e68cbf666786bffe5aafdc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 37,
+          "origin": "html",
+          "text": "比如 vivo 的「仅开屏禁止」，是只在开屏广告那几秒把传感器收走，广告一过就还回去。苹果这个是拉进去就是进了黑名单，一点不给看。",
+          "unit_id": "dac7517888a87573afc10d2b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 38,
+          "origin": "html",
+          "text": "这个强效药猛是猛，但也许会带来副作用，比如靠手机传感器的运动 App 如果没有权限了会怎么办呢？",
+          "unit_id": "52cfefa0ce3e19e7c20943e6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 39,
+          "origin": "html",
+          "text": "世超不怎么运动，我给大家测了一个 Keep。",
+          "unit_id": "0ab8ea5123bb8d6ab8e6d96b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 40,
+          "origin": "html",
+          "text": "好消息是，把 Keep 拉进名单后，配速、步频也都正常显示（猜测通过距离和时长来计算的），同时摇一摇广告也被整治了。",
+          "unit_id": "0ffee9d593569e9963b83451"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 41,
+          "origin": "html",
+          "text": "最后给大家算下时间哦。",
+          "unit_id": "72d4d1be2f537353ae758e14"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 42,
+          "origin": "html",
+          "text": "每年双十一和 618，都是摇一摇一年里最猖獗、最灵敏的时候，所以 iOS27.2 正式版能赶在这次双十一之前出吗？",
+          "unit_id": "7c5b7955aa3e27bd3a425fff"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 43,
+          "origin": "html",
+          "text": "我翻了下苹果的发版记录，连续五年，每一个 .2 版本都准时出现在双十二前后，所以 iOS 27.2 正式版大概率赶不上双十一，只能双十二。",
+          "unit_id": "fd26f30cc72e4ca74453a30c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 44,
+          "origin": "html",
+          "text": "不过今年也有点特殊。",
+          "unit_id": "d2174e47e85d20a5b3843c40"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 45,
+          "origin": "html",
+          "text": "往年 .2 的测试版 10 月底才开始，今年 9 月中旬就来了，还直接跳过了 27.1 的测试版。因为 iPhone Duo 10 月 23 日发售，苹果官宣它出厂就装 27.1；外媒分析，要是提前放出 27.1 测试版，代码里藏的新机细节可能就漏了，所以干脆让开发者跳级测 27.2。",
+          "unit_id": "2b6cd2e700344e3a6a13f9df"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 46,
+          "origin": "html",
+          "text": "尽管 iOS 27.2 测试版早了一个多月，但正式版大概率要等在 10 月 23 日的 iPhone Duo 发售之后，这么一算感觉今年双十一还是有点难顶。",
+          "unit_id": "cf616717f4ca807e73dd1d21"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 47,
+          "origin": "html",
+          "text": "但好在它们的好日子也到头了，双十一就当是它们的告别巡演吧。",
+          "unit_id": "76310ba1cbfce3463eb7fb61"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 48,
+          "origin": "html",
+          "text": "五年前那辆渣土车，我到现在都记得。如果有一天，它要是再从窗外开过，我打算打开一个 App，把手机放在方向盘上，泡杯茶，看着它开过去。",
+          "unit_id": "bed59a2a616eeb2f9ee3d5dc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 49,
+          "origin": "html",
+          "text": "然后说一句憋了五年的话：",
+          "unit_id": "f86131e4aa5fe7d3686f61c4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 50,
+          "origin": "html",
+          "text": "摇一摇广告，死得好！",
+          "unit_id": "26c2726ea02e37824675348a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 51,
+          "origin": "html",
+          "text": "责任编辑：落木",
+          "unit_id": "aa774f5153889d2a098da5e8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 52,
+          "origin": "html",
+          "text": "文章内容举报",
+          "unit_id": "bc100d11025f634d06ad5670"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1153/1153888.htm"
+    },
+    "recorded_extraction": [
+      "iPhone用户全体起立！摇一摇广告终于被苹果干了",
+      "五年前双十一，是我和摇一摇广告交手的第 99 次。那天我只是想查个快递。点开 App 的一瞬间，我立刻进入战斗状态，双手握紧手机，手肘抵住桌面，呼吸放慢，稳得像一台三脚架。不巧，窗外驶过一 那天我只是想查个快递。点开 App 的一瞬间，我立刻进入战斗状态，双手握紧手机，手肘抵住桌面，呼吸放慢，稳得像一台三脚架。 这两天苹果推送了 iOS 27.2 Beta 2（开发者版），在「设置-隐私与安全-运动与健身」里出现了一个新入口：Restrict Motion Data，限制运动数据。 但当我把 App Store 切成了美区之后，这个权限入口消失了。。。也就是说： 这是继「调休闹钟」之后，又一个果子哥专门给咱做的本土化功能。 安卓那边早就战胜了摇一摇广告，比如小米 2023 年初就在开发版里加了「加速度传感器权限」，能直接把 App 的传感器掐掉；后来华为、vivo、OPPO 也都能在权限设置里把传感器关掉，vivo 还专门做了个「仅开屏禁止」。更早还有专门帮你跳广告的李跳跳。",
+      [
+        "那一刻我感觉到了攻守易形，5 年来的委屈如释重负。这是我第一次摇手机，摇出了尊严。",
+        "这两天苹果推送了 iOS 27.2 Beta 2（开发者版），在「设置-隐私与安全-运动与健身」里出现了一个新入口：Restrict Motion Data，限制运动数据。",
+        "但当我把 App Store 切成了美区之后，这个权限入口消失了。。。也就是说：这是继「调休闹钟」之后，又一个果子哥专门给咱做的本土化功能。",
+        "安卓那边早就战胜了摇一摇广告，比如小米 2023 年初就在开发版里加了「加速度传感器权限」，能直接把 App 的传感器掐掉；后来华为、vivo、OPPO 也都能在权限设置里把传感器关掉，vivo 还专门做了个「仅开屏禁止」。更早还有专门帮你跳广告的李跳跳。",
+        "有人打开关怀模式碰运气；有人写了自动化，一检测到跳转就自动跳回来，you jump I jump。还有人在开屏时使劲摇，让 App 知道自己看过了，结果免费给人看了 30 次广告，广告还在。",
+        "像 App Store 审核指南第 4.10 条就写着「不得通过硬件或操作系统提供的内置功能（例如，推送通知、摄像头或陀螺仪）获利」；开发者协议里也写着，运动数据不能拿去投广告。",
+        "2023 年 11 月，一条消息冲上了热搜：有大厂内部人士透露，苹果已经通知国内多家头部 App 移除陀螺仪权限，摇一摇跳转广告被禁止了。传着传着，还有知情人士补了一句：这回是强制的。",
+        "早在2022年，电信终端产业协会发布了《App用户权益保护测评规范》，具体设定了「摇一摇」广告的触发门槛；2023 年工信部发通知，点名不许用高灵敏度摇一摇诱导用户；",
+        "今年 618 前，工信部又专门开会，督促互联网平台和手机厂商，严禁违规呈现信息窗口。",
+        "虽然 6 月有一段时间，一堆 App 悄悄撤了开屏广告，「开屏广告没了」还上了热搜。",
+        "每年双十一和 618，都是摇一摇一年里最猖獗、最灵敏的时候，所以 iOS27.2 正式版能赶在这次双十一之前出吗？",
+        "我翻了下苹果的发版记录，连续五年，每一个.2 版本都准时出现在双十二前后，所以 iOS 27.2 正式版大概率赶不上双十一，只能双十二。",
+        "往年.2 的测试版 10 月底才开始，今年 9 月中旬就来了，还直接跳过了 27.1 的测试版。因为 iPhone Duo 10 月 23 日发售，苹果官宣它出厂就装 27.1；外媒分析，要是提前放出 27.1 测试版，代码里藏的新机细节可能就漏了，所以干脆让开发者跳级测 27.2。",
+        "尽管 iOS 27.2 测试版早了一个多月，但正式版大概率要等在 10 月 23 日的 iPhone Duo 发售之后，这么一算感觉今年双十一还是有点难顶。"
+      ]
+    ]
+  }
+}

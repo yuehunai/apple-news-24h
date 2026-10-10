@@ -145,9 +145,13 @@ class AugustSixthRelevanceBoundaryTests(unittest.TestCase):
 
         events = module.cluster_articles([preparation, format_report])
 
-        self.assertEqual(len(events), 1)
-        self.assertEqual(events[0].relevance_tier, "strong")
-        self.assertEqual({article.source for article in events[0].articles}, {"AppleInsider", "9to5Mac"})
+        self.assertEqual(len(events), 2)
+        self.assertEqual({event.relevance_tier for event in events}, {"strong"})
+        self.assertEqual(
+            {frozenset((article.source, article.url) for article in event.articles) for event in events},
+            {frozenset({(preparation.source, preparation.url)}),
+             frozenset({(format_report.source, format_report.url)})},
+        )
 
     def test_event_date_history_remains_weak_and_separate(self):
         module = load_module()

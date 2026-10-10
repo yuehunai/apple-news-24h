@@ -1,0 +1,836 @@
+{
+  "description": "Complete public synthetic source articles for live source semantics regressions.",
+  "cases": [
+    {
+      "id": "gpu-dinner",
+      "source": "IT之家",
+      "url": "https://example.invalid/review/gpu-dinner",
+      "title": "确认参加！黄仁勋将赴中美领导人国宴，英伟达 GPU 出口再受关注",
+      "summary": "据报道，英伟达 CEO 黄仁勋确认参加 9 月 26 日举行的中美领导人国宴。外界关注这次行程能否为公司的 GPU 出口提供新的沟通机会。 多位科技企业负责人同样获邀，其中包括 OpenAI CEO、微软 CEO，以及苹果执行主席蒂姆·库克、特斯拉和 Alphabet 的负责人。相关名单显示此次国宴有广泛的科技界参与。 英伟达在中国的业务受到美国出口管制影响。此前商务部门批准八家企业购买指定 GPU，每家的额度为六万颗，但审批并不意味着芯片已经实际交付。 报道称，获批设备截至今年上半年仍没有完成交付。中国买方对采购节奏的安排，以及本土产业的投资方向，都是谈判中的背景因素。 黄仁勋曾批评限制出口会推动客户寻找替代产品，随后也表示最先进的 GPU 不应面向受管制市场出售。其发言涉及英伟达的市场策略与美国监管要求。 目前没有公布新的出口许可。这次出席可能带来交流机会，最终的销售安排仍取决于两国政策和后续商业协商。",
+      "key_facts": [
+        "据报道，英伟达 CEO 黄仁勋确认参加 9 月 26 日举行的中美领导人国宴。外界关注这次行程能否为公司的 GPU 出口提供新的沟通机会。",
+        "多位科技企业负责人同样获邀，其中包括 OpenAI CEO、微软 CEO，以及苹果执行主席蒂姆·库克、特斯拉和 Alphabet 的负责人。相关名单显示此次国宴有广泛的科技界参与。",
+        "英伟达在中国的业务受到美国出口管制影响。此前商务部门批准八家企业购买指定 GPU，每家的额度为六万颗，但审批并不意味着芯片已经实际交付。",
+        "报道称，获批设备截至今年上半年仍没有完成交付。中国买方对采购节奏的安排，以及本土产业的投资方向，都是谈判中的背景因素。",
+        "黄仁勋曾批评限制出口会推动客户寻找替代产品，随后也表示最先进的 GPU 不应面向受管制市场出售。其发言涉及英伟达的市场策略与美国监管要求。",
+        "目前没有公布新的出口许可。这次出席可能带来交流机会，最终的销售安排仍取决于两国政策和后续商业协商。"
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "据报道，英伟达 CEO 黄仁勋确认参加 9 月 26 日举行的中美领导人国宴。外界关注这次行程能否为公司的 GPU 出口提供新的沟通机会。"
+        },
+        {
+          "kind": "p",
+          "text": "多位科技企业负责人同样获邀，其中包括 OpenAI CEO、微软 CEO，以及苹果执行主席蒂姆·库克、特斯拉和 Alphabet 的负责人。相关名单显示此次国宴有广泛的科技界参与。"
+        },
+        {
+          "kind": "p",
+          "text": "英伟达在中国的业务受到美国出口管制影响。此前商务部门批准八家企业购买指定 GPU，每家的额度为六万颗，但审批并不意味着芯片已经实际交付。"
+        },
+        {
+          "kind": "p",
+          "text": "报道称，获批设备截至今年上半年仍没有完成交付。中国买方对采购节奏的安排，以及本土产业的投资方向，都是谈判中的背景因素。"
+        },
+        {
+          "kind": "p",
+          "text": "黄仁勋曾批评限制出口会推动客户寻找替代产品，随后也表示最先进的 GPU 不应面向受管制市场出售。其发言涉及英伟达的市场策略与美国监管要求。"
+        },
+        {
+          "kind": "p",
+          "text": "目前没有公布新的出口许可。这次出席可能带来交流机会，最终的销售安排仍取决于两国政策和后续商业协商。"
+        }
+      ],
+      "expected": {
+        "tier": "weak"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "retail-memoir",
+      "source": "AppleInsider",
+      "url": "https://example.invalid/review/retail-memoir",
+      "title": "Former Apple retail chief’s new ‘Shop Forward’ book is available today",
+      "summary": "Daniel Reed, Apple’s former senior vice president of retail operations, has a new book out today titled Shop Forward: How Retail Uncovered Apple’s Genius. The book recounts Reed’s work alongside Steve Jobs while planning Apple’s first stores. Its publisher describes an insider narrative about service and customer experience, rather than a conventional management manual. Here is part of the publisher’s description: When Steve Jobs hired Reed in 1999 to create the Apple Store, many observers thought online shopping would replace physical shops. By the time he left Apple in 2012, his team had built a highly profitable retail network. Reed explains how the team developed demonstrations, trained staff and organised in-store support. The account then considers what independent retailers can learn from those early choices. Reed discussed the book on a technology podcast last week. Readers can watch that interview online or listen through Apple Podcasts and other podcast services. Shop Forward is available through Amazon and independent bookstores. The hardcover costs $31, and an audio edition is also on sale.",
+      "key_facts": [
+        "Daniel Reed, Apple’s former senior vice president of retail operations, has a new book out today titled Shop Forward: How Retail Uncovered Apple’s Genius.",
+        "The book recounts Reed’s work alongside Steve Jobs while planning Apple’s first stores. Its publisher describes an insider narrative about service and customer experience, rather than a conventional management manual.",
+        "Here is part of the publisher’s description:",
+        "When Steve Jobs hired Reed in 1999 to create the Apple Store, many observers thought online shopping would replace physical shops. By the time he left Apple in 2012, his team had built a highly profitable retail network.",
+        "Reed explains how the team developed demonstrations, trained staff and organised in-store support. The account then considers what independent retailers can learn from those early choices.",
+        "Reed discussed the book on a technology podcast last week. Readers can watch that interview online or listen through Apple Podcasts and other podcast services.",
+        "Shop Forward is available through Amazon and independent bookstores. The hardcover costs $31, and an audio edition is also on sale."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Daniel Reed, Apple’s former senior vice president of retail operations, has a new book out today titled Shop Forward: How Retail Uncovered Apple’s Genius."
+        },
+        {
+          "kind": "p",
+          "text": "The book recounts Reed’s work alongside Steve Jobs while planning Apple’s first stores. Its publisher describes an insider narrative about service and customer experience, rather than a conventional management manual."
+        },
+        {
+          "kind": "p",
+          "text": "Here is part of the publisher’s description:"
+        },
+        {
+          "kind": "p",
+          "text": "When Steve Jobs hired Reed in 1999 to create the Apple Store, many observers thought online shopping would replace physical shops. By the time he left Apple in 2012, his team had built a highly profitable retail network."
+        },
+        {
+          "kind": "p",
+          "text": "Reed explains how the team developed demonstrations, trained staff and organised in-store support. The account then considers what independent retailers can learn from those early choices."
+        },
+        {
+          "kind": "p",
+          "text": "Reed discussed the book on a technology podcast last week. Readers can watch that interview online or listen through Apple Podcasts and other podcast services."
+        },
+        {
+          "kind": "p",
+          "text": "Shop Forward is available through Amazon and independent bookstores. The hardcover costs $31, and an audio edition is also on sale."
+        }
+      ],
+      "expected": {
+        "tier": "weak"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "mac-arrival",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/mac-arrival",
+      "title": "Apple Released Two New Macs Today, With Pickup Now Available",
+      "summary": "Apple’s new Mac mini and Mac Studio are arriving with customers today, and Apple Stores have begun offering same-day pickup. The machines were introduced at the company’s event earlier this month. The refreshed Mac mini uses an M7 chip, while the Mac Studio has an M6 Max configuration. Orders opened immediately after the announcement, but today is the first date for deliveries and retail collection. Apple’s online store currently shows pickup slots at multiple locations. Availability varies with the selected memory and storage configuration, and customers can check their local store before visiting. For context, Apple’s previous desktop refresh took place last year. The newly delivered models keep the compact cases and support the same external displays as detailed in the launch specifications.",
+      "key_facts": [
+        "Apple’s new Mac mini and Mac Studio are arriving with customers today, and Apple Stores have begun offering same-day pickup. The machines were introduced at the company’s event earlier this month.",
+        "The refreshed Mac mini uses an M7 chip, while the Mac Studio has an M6 Max configuration. Orders opened immediately after the announcement, but today is the first date for deliveries and retail collection.",
+        "Apple’s online store currently shows pickup slots at multiple locations. Availability varies with the selected memory and storage configuration, and customers can check their local store before visiting.",
+        "For context, Apple’s previous desktop refresh took place last year. The newly delivered models keep the compact cases and support the same external displays as detailed in the launch specifications."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple’s new Mac mini and Mac Studio are arriving with customers today, and Apple Stores have begun offering same-day pickup. The machines were introduced at the company’s event earlier this month."
+        },
+        {
+          "kind": "p",
+          "text": "The refreshed Mac mini uses an M7 chip, while the Mac Studio has an M6 Max configuration. Orders opened immediately after the announcement, but today is the first date for deliveries and retail collection."
+        },
+        {
+          "kind": "p",
+          "text": "Apple’s online store currently shows pickup slots at multiple locations. Availability varies with the selected memory and storage configuration, and customers can check their local store before visiting."
+        },
+        {
+          "kind": "p",
+          "text": "For context, Apple’s previous desktop refresh took place last year. The newly delivered models keep the compact cases and support the same external displays as detailed in the launch specifications."
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "official-cushions",
+      "source": "AppleInsider",
+      "url": "https://example.invalid/review/official-cushions",
+      "title": "Beats 450 Ear Cushion Kits Only $12.99 Until Mid-November",
+      "summary": "Apple today unveiled Beats 450 over-ear headphones and introduced launch pricing for extra ear cushion kits. Until November 14, matching ear cushions and headbands in several colours are available from Apple’s online store in the U.S. for $12.99 per kit. Orders are limited to two kits while stock remains. Selected other countries also receive the introductory offer. The normal $54.99 price will take effect on November 15. The kits are sold through Apple’s own accessory page alongside the newly introduced headphones.",
+      "key_facts": [
+        "Apple today unveiled Beats 450 over-ear headphones and introduced launch pricing for extra ear cushion kits.",
+        "Until November 14, matching ear cushions and headbands in several colours are available from Apple’s online store in the U.S. for $12.99 per kit. Orders are limited to two kits while stock remains. Selected other countries also receive the introductory offer.",
+        "The normal $54.99 price will take effect on November 15. The kits are sold through Apple’s own accessory page alongside the newly introduced headphones."
+      ],
+      "units": [
+        {
+          "kind": "h1",
+          "text": "Beats 450 Ear Cushion Kits Only $12.99 Until Mid-November"
+        },
+        {
+          "kind": "p",
+          "text": "Apple today unveiled Beats 450 over-ear headphones and introduced launch pricing for extra ear cushion kits."
+        },
+        {
+          "kind": "p",
+          "text": "Until November 14, matching ear cushions and headbands in several colours are available from Apple’s online store in the U.S. for $12.99 per kit. Orders are limited to two kits while stock remains. Selected other countries also receive the introductory offer."
+        },
+        {
+          "kind": "p",
+          "text": "The normal $54.99 price will take effect on November 15. The kits are sold through Apple’s own accessory page alongside the newly introduced headphones."
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "retailer-cushions",
+      "source": "9to5Mac",
+      "url": "https://example.invalid/review/retailer-cushions",
+      "title": "Weekend deal: independent retailer cuts Beats Orbit cushion prices",
+      "summary": "Independent retailer Sound Depot has reduced its own replacement cushion bundle to $12.99 for the weekend. The promotion is offered by that shop and does not change Apple’s retail price. The shop lists several colours and says its discount applies while supplies last. Shipping charges and the return policy are set by Sound Depot. Beats Orbit launched earlier this month, and the article compares the retailer’s price with other existing listings. There is no new accessory release or Apple announcement today. Readers who already own the headphones may compare the available offers before purchasing. The article earns an affiliate commission on qualifying orders.",
+      "key_facts": [
+        "Independent retailer Sound Depot has reduced its own replacement cushion bundle to $12.99 for the weekend. The promotion is offered by that shop and does not change Apple’s retail price.",
+        "The shop lists several colours and says its discount applies while supplies last. Shipping charges and the return policy are set by Sound Depot.",
+        "Beats Orbit launched earlier this month, and the article compares the retailer’s price with other existing listings. There is no new accessory release or Apple announcement today.",
+        "Readers who already own the headphones may compare the available offers before purchasing. The article earns an affiliate commission on qualifying orders."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Independent retailer Sound Depot has reduced its own replacement cushion bundle to $12.99 for the weekend. The promotion is offered by that shop and does not change Apple’s retail price."
+        },
+        {
+          "kind": "p",
+          "text": "The shop lists several colours and says its discount applies while supplies last. Shipping charges and the return policy are set by Sound Depot."
+        },
+        {
+          "kind": "p",
+          "text": "Beats Orbit launched earlier this month, and the article compares the retailer’s price with other existing listings. There is no new accessory release or Apple announcement today."
+        },
+        {
+          "kind": "p",
+          "text": "Readers who already own the headphones may compare the available offers before purchasing. The article earns an affiliate commission on qualifying orders."
+        }
+      ],
+      "expected": {
+        "tier": "weak"
+      },
+      "projection": false,
+      "review_role": "protection-or-observation-see-readme"
+    },
+    {
+      "id": "market-background",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/market-background",
+      "title": "Apple’s Smart Glasses to Enter a Fast-Growing Market",
+      "summary": "Apple’s first smart glasses could enter a quickly expanding market, with worldwide AI glasses shipments rising 247% year over year in the first half of 2027, according to Counterpoint Research. The figures matter to Apple because products without displays account for 93% of shipments. Apple’s rumoured first glasses are also expected to omit a display, concentrating on cameras, audio and connectivity with the iPhone. Bloomberg’s Mark Gurman previously reported that Apple was aiming for a late 2028 launch. The market report does not give new information about that plan and does not include sales of an Apple glasses product. Meta represents 91% of global AI glasses shipments. Models with displays account for the remaining 7% of the market, while several smaller vendors compete for the rest of the display-less segment.",
+      "key_facts": [
+        "Apple’s first smart glasses could enter a quickly expanding market, with worldwide AI glasses shipments rising 247% year over year in the first half of 2027, according to Counterpoint Research.",
+        "The figures matter to Apple because products without displays account for 93% of shipments. Apple’s rumoured first glasses are also expected to omit a display, concentrating on cameras, audio and connectivity with the iPhone.",
+        "Bloomberg’s Mark Gurman previously reported that Apple was aiming for a late 2028 launch. The market report does not give new information about that plan and does not include sales of an Apple glasses product.",
+        "Meta represents 91% of global AI glasses shipments. Models with displays account for the remaining 7% of the market, while several smaller vendors compete for the rest of the display-less segment."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple’s first smart glasses could enter a quickly expanding market, with worldwide AI glasses shipments rising 247% year over year in the first half of 2027, according to Counterpoint Research."
+        },
+        {
+          "kind": "p",
+          "text": "The figures matter to Apple because products without displays account for 93% of shipments. Apple’s rumoured first glasses are also expected to omit a display, concentrating on cameras, audio and connectivity with the iPhone."
+        },
+        {
+          "kind": "p",
+          "text": "Bloomberg’s Mark Gurman previously reported that Apple was aiming for a late 2028 launch. The market report does not give new information about that plan and does not include sales of an Apple glasses product."
+        },
+        {
+          "kind": "p",
+          "text": "Meta represents 91% of global AI glasses shipments. Models with displays account for the remaining 7% of the market, while several smaller vendors compete for the rest of the display-less segment."
+        }
+      ],
+      "expected": {
+        "forbidden_event_key": "apple-share-current:93",
+        "tier": "weak"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "shazam-update",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/shazam-update",
+      "title": "Shazam App for iPhone Receives a New Icon and iMessage Sticker Pack",
+      "summary": "Apple today updated Shazam for iOS with a more translucent icon and an additional pack of iMessage stickers. To use the stickers on an iPhone, open a conversation in Messages, press the plus button, choose Stickers, and select the Shazam icon. Pick a sticker to place it in the conversation. The same sticker collection can also be used during FaceTime calls and in applications that provide access to the emoji keyboard.",
+      "key_facts": [
+        "Apple today updated Shazam for iOS with a more translucent icon and an additional pack of iMessage stickers.",
+        "To use the stickers on an iPhone, open a conversation in Messages, press the plus button, choose Stickers, and select the Shazam icon. Pick a sticker to place it in the conversation.",
+        "The same sticker collection can also be used during FaceTime calls and in applications that provide access to the emoji keyboard."
+      ],
+      "units": [
+        {
+          "kind": "h1",
+          "text": "Shazam App for iPhone Receives a New Icon and iMessage Sticker Pack"
+        },
+        {
+          "kind": "p",
+          "text": "Apple today updated Shazam for iOS with a more translucent icon and an additional pack of iMessage stickers."
+        },
+        {
+          "kind": "p",
+          "text": "To use the stickers on an iPhone, open a conversation in Messages, press the plus button, choose Stickers, and select the Shazam icon. Pick a sticker to place it in the conversation."
+        },
+        {
+          "kind": "p",
+          "text": "The same sticker collection can also be used during FaceTime calls and in applications that provide access to the emoji keyboard."
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "software_systems"
+      },
+      "projection": false,
+      "review_role": "protection-or-observation-see-readme"
+    },
+    {
+      "id": "thirdparty-stickers",
+      "source": "9to5Mac",
+      "url": "https://example.invalid/review/thirdparty-stickers",
+      "title": "TuneTag App for iPhone Receives an iMessage Sticker Pack",
+      "summary": "Independent developer North Audio has updated TuneTag with a sticker collection for iMessage. The app is available for iPhone through the App Store. To use the collection, open Messages and select Stickers from the plus menu, then choose TuneTag. Tapping a design adds it to the current conversation. The developer says the same designs can be used in supported video calls. TuneTag continues to identify songs and offer links to streaming services. The sticker collection is included with the app’s existing purchase. North Audio has posted instructions on its own support website.",
+      "key_facts": [
+        "Independent developer North Audio has updated TuneTag with a sticker collection for iMessage. The app is available for iPhone through the App Store.",
+        "To use the collection, open Messages and select Stickers from the plus menu, then choose TuneTag. Tapping a design adds it to the current conversation.",
+        "The developer says the same designs can be used in supported video calls. TuneTag continues to identify songs and offer links to streaming services.",
+        "The sticker collection is included with the app’s existing purchase. North Audio has posted instructions on its own support website."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Independent developer North Audio has updated TuneTag with a sticker collection for iMessage. The app is available for iPhone through the App Store."
+        },
+        {
+          "kind": "p",
+          "text": "To use the collection, open Messages and select Stickers from the plus menu, then choose TuneTag. Tapping a design adds it to the current conversation."
+        },
+        {
+          "kind": "p",
+          "text": "The developer says the same designs can be used in supported video calls. TuneTag continues to identify songs and offer links to streaming services."
+        },
+        {
+          "kind": "p",
+          "text": "The sticker collection is included with the app’s existing purchase. North Audio has posted instructions on its own support website."
+        }
+      ],
+      "expected": {
+        "tier": "weak"
+      },
+      "projection": false,
+      "review_role": "protection-or-observation-see-readme"
+    },
+    {
+      "id": "band-en",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/band-en",
+      "title": "Apple Tests Prototypes of a Whoop-Like Fitness Band Without a Screen",
+      "summary": "Apple is developing a screen-free activity tracker, Bloomberg reports. Its design resembles Whoop’s bands, which collect fitness readings throughout the day without a display. The company has explored the category for several months and built prototypes, but has not decided whether to take the project further. Senior executives are interested in simpler wearable interfaces, including approaches used by Whoop and the Oura Ring. The prototypes use a fabric strap attached to a computing module on the wrist. Sensors record heart rate and other health measurements, in a similar role to Apple Watch. Recent Apple Watch models already offer some metrics comparable with competing trackers. A revised Health app is also being tested in iOS 28.3, with a reorganised interface intended to make its information easier to understand. If the project proceeds, a commercial release would not be expected before 2029. Apple is thought to be preparing smart glasses and camera-equipped AirPods before then.",
+      "key_facts": [
+        "Apple is developing a screen-free activity tracker, Bloomberg reports. Its design resembles Whoop’s bands, which collect fitness readings throughout the day without a display.",
+        "The company has explored the category for several months and built prototypes, but has not decided whether to take the project further. Senior executives are interested in simpler wearable interfaces, including approaches used by Whoop and the Oura Ring.",
+        "The prototypes use a fabric strap attached to a computing module on the wrist. Sensors record heart rate and other health measurements, in a similar role to Apple Watch.",
+        "Recent Apple Watch models already offer some metrics comparable with competing trackers. A revised Health app is also being tested in iOS 28.3, with a reorganised interface intended to make its information easier to understand.",
+        "If the project proceeds, a commercial release would not be expected before 2029. Apple is thought to be preparing smart glasses and camera-equipped AirPods before then."
+      ],
+      "units": [
+        {
+          "kind": "h1",
+          "text": "Apple Tests Prototypes of a Whoop-Like Fitness Band Without a Screen"
+        },
+        {
+          "kind": "p",
+          "text": "Apple is developing a screen-free activity tracker, Bloomberg reports. Its design resembles Whoop’s bands, which collect fitness readings throughout the day without a display."
+        },
+        {
+          "kind": "p",
+          "text": "The company has explored the category for several months and built prototypes, but has not decided whether to take the project further. Senior executives are interested in simpler wearable interfaces, including approaches used by Whoop and the Oura Ring."
+        },
+        {
+          "kind": "p",
+          "text": "The prototypes use a fabric strap attached to a computing module on the wrist. Sensors record heart rate and other health measurements, in a similar role to Apple Watch."
+        },
+        {
+          "kind": "p",
+          "text": "Recent Apple Watch models already offer some metrics comparable with competing trackers. A revised Health app is also being tested in iOS 28.3, with a reorganised interface intended to make its information easier to understand."
+        },
+        {
+          "kind": "p",
+          "text": "If the project proceeds, a commercial release would not be expected before 2029. Apple is thought to be preparing smart glasses and camera-equipped AirPods before then."
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      },
+      "projection": false,
+      "review_role": "protection-or-observation-see-readme"
+    },
+    {
+      "id": "band-zh",
+      "source": "IT之家",
+      "url": "https://example.invalid/review/band-zh",
+      "title": "曝苹果已测试无屏健身腕带原型，可监测心率和心电图",
+      "summary": "彭博社今天披露，苹果在内部测试过一款没有屏幕的健身腕带原型。该设备采用织物表带，定位为全天候健康数据采集设备，尚未获准上市。 知情人士称，原型搭载心率与心电图传感器，数据可在 iPhone 上查看。它没有 Apple Watch 的屏幕和应用界面，报道未给出量产时间。 这种设计类似 Whoop 无屏腕带。苹果希望研究轻量化形态是否适合连续佩戴，而非在此次报道中宣布推出新的 Apple Watch。 苹果未对这份报道置评。彭博社的消息描述已进行的内部试验，并不代表产品必然会出售。",
+      "key_facts": [
+        "彭博社今天披露，苹果在内部测试过一款没有屏幕的健身腕带原型。该设备采用织物表带，定位为全天候健康数据采集设备，尚未获准上市。",
+        "知情人士称，原型搭载心率与心电图传感器，数据可在 iPhone 上查看。它没有 Apple Watch 的屏幕和应用界面，报道未给出量产时间。",
+        "这种设计类似 Whoop 无屏腕带。苹果希望研究轻量化形态是否适合连续佩戴，而非在此次报道中宣布推出新的 Apple Watch。",
+        "苹果未对这份报道置评。彭博社的消息描述已进行的内部试验，并不代表产品必然会出售。"
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "彭博社今天披露，苹果在内部测试过一款没有屏幕的健身腕带原型。该设备采用织物表带，定位为全天候健康数据采集设备，尚未获准上市。"
+        },
+        {
+          "kind": "p",
+          "text": "知情人士称，原型搭载心率与心电图传感器，数据可在 iPhone 上查看。它没有 Apple Watch 的屏幕和应用界面，报道未给出量产时间。"
+        },
+        {
+          "kind": "p",
+          "text": "这种设计类似 Whoop 无屏腕带。苹果希望研究轻量化形态是否适合连续佩戴，而非在此次报道中宣布推出新的 Apple Watch。"
+        },
+        {
+          "kind": "p",
+          "text": "苹果未对这份报道置评。彭博社的消息描述已进行的内部试验，并不代表产品必然会出售。"
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      },
+      "projection": false,
+      "review_role": "protection-or-observation-see-readme"
+    },
+    {
+      "id": "pin-en",
+      "source": "9to5Mac",
+      "url": "https://example.invalid/review/pin-en",
+      "title": "Apple’s AI pendant project remains on hold despite its Siri plans",
+      "summary": "Apple’s rumoured AI pendant faces a longer wait after the project was postponed, according to Bloomberg. The device was intended to bring visual information to Siri without requiring a phone camera. The arrival of Siri AI was expected to support a range of new hardware, including a home hub. Bloomberg’s latest story about fitness trackers says work on the separate pendant has now been put on hold, without identifying a reason. Earlier reports described a wearable pin with a camera that could capture the wearer’s surroundings. Its images would be processed by Siri so users could ask questions about nearby objects. Apple is also reported to be working on camera-equipped AirPods. Those devices could eventually provide similar visual input, although they are a different product from the pendant. The latest Apple Watch offers conversation-summary features through Siri Recap. That existing capability and the possible future AirPods explain why some observers think Apple can take more time with the pendant. The project could resume if Apple’s other devices establish demand. The report does not set a new launch date for the postponed product.",
+      "key_facts": [
+        "Apple’s rumoured AI pendant faces a longer wait after the project was postponed, according to Bloomberg. The device was intended to bring visual information to Siri without requiring a phone camera.",
+        "The arrival of Siri AI was expected to support a range of new hardware, including a home hub. Bloomberg’s latest story about fitness trackers says work on the separate pendant has now been put on hold, without identifying a reason.",
+        "Earlier reports described a wearable pin with a camera that could capture the wearer’s surroundings. Its images would be processed by Siri so users could ask questions about nearby objects.",
+        "Apple is also reported to be working on camera-equipped AirPods. Those devices could eventually provide similar visual input, although they are a different product from the pendant.",
+        "The latest Apple Watch offers conversation-summary features through Siri Recap. That existing capability and the possible future AirPods explain why some observers think Apple can take more time with the pendant.",
+        "The project could resume if Apple’s other devices establish demand. The report does not set a new launch date for the postponed product."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple’s rumoured AI pendant faces a longer wait after the project was postponed, according to Bloomberg. The device was intended to bring visual information to Siri without requiring a phone camera."
+        },
+        {
+          "kind": "p",
+          "text": "The arrival of Siri AI was expected to support a range of new hardware, including a home hub. Bloomberg’s latest story about fitness trackers says work on the separate pendant has now been put on hold, without identifying a reason."
+        },
+        {
+          "kind": "p",
+          "text": "Earlier reports described a wearable pin with a camera that could capture the wearer’s surroundings. Its images would be processed by Siri so users could ask questions about nearby objects."
+        },
+        {
+          "kind": "p",
+          "text": "Apple is also reported to be working on camera-equipped AirPods. Those devices could eventually provide similar visual input, although they are a different product from the pendant."
+        },
+        {
+          "kind": "p",
+          "text": "The latest Apple Watch offers conversation-summary features through Siri Recap. That existing capability and the possible future AirPods explain why some observers think Apple can take more time with the pendant."
+        },
+        {
+          "kind": "p",
+          "text": "The project could resume if Apple’s other devices establish demand. The report does not set a new launch date for the postponed product."
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      },
+      "projection": false,
+      "review_role": "protection-or-observation-see-readme"
+    },
+    {
+      "id": "pin-zh",
+      "source": "cnBeta",
+      "url": "https://example.invalid/review/pin-zh",
+      "title": "消息称苹果搁置 AI 吊坠研发，原计划通过摄像头扩展 Siri 感知",
+      "summary": "彭博社马克·古尔曼本周披露，苹果曾开发一款带摄像头的 AI 可穿戴设备，形态类似吊坠，可戴在颈部或夹在衣服上。该项目目前已推迟，后续上市安排尚未公布。 按照早期设想，这款设备将作为持续在线的视觉终端，帮助用户在免手操作时识别、记录周围的信息。 摄像头采集的数据原计划交给苹果新一代 Siri 助手处理。另有早期消息提到麦克风，可用于接收语音指令。 古尔曼表示，苹果已搁置相关工作，但报道没有说明原因，也不确定未来是否恢复开发。 如果项目重新启动，持续采集图像和声音将带来隐私问题，包括旁人被拍摄、敏感环境记录，以及数据保存方式。",
+      "key_facts": [
+        "彭博社马克·古尔曼本周披露，苹果曾开发一款带摄像头的 AI 可穿戴设备，形态类似吊坠，可戴在颈部或夹在衣服上。该项目目前已推迟，后续上市安排尚未公布。",
+        "按照早期设想，这款设备将作为持续在线的视觉终端，帮助用户在免手操作时识别、记录周围的信息。",
+        "摄像头采集的数据原计划交给苹果新一代 Siri 助手处理。另有早期消息提到麦克风，可用于接收语音指令。",
+        "古尔曼表示，苹果已搁置相关工作，但报道没有说明原因，也不确定未来是否恢复开发。",
+        "如果项目重新启动，持续采集图像和声音将带来隐私问题，包括旁人被拍摄、敏感环境记录，以及数据保存方式。"
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "彭博社马克·古尔曼本周披露，苹果曾开发一款带摄像头的 AI 可穿戴设备，形态类似吊坠，可戴在颈部或夹在衣服上。该项目目前已推迟，后续上市安排尚未公布。"
+        },
+        {
+          "kind": "p",
+          "text": "按照早期设想，这款设备将作为持续在线的视觉终端，帮助用户在免手操作时识别、记录周围的信息。"
+        },
+        {
+          "kind": "p",
+          "text": "摄像头采集的数据原计划交给苹果新一代 Siri 助手处理。另有早期消息提到麦克风，可用于接收语音指令。"
+        },
+        {
+          "kind": "p",
+          "text": "古尔曼表示，苹果已搁置相关工作，但报道没有说明原因，也不确定未来是否恢复开发。"
+        },
+        {
+          "kind": "p",
+          "text": "如果项目重新启动，持续采集图像和声音将带来隐私问题，包括旁人被拍摄、敏感环境记录，以及数据保存方式。"
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "tap-zh",
+      "source": "IT之家",
+      "url": "https://example.invalid/review/tap-zh",
+      "title": "苹果 iPhone 轻点收款服务再拓六国",
+      "summary": "苹果今天宣布，Tap to Pay on iPhone 轻点收款服务新增塞浦路斯、马耳他、拉脱维亚、立陶宛、爱沙尼亚和冰岛六个市场。当地商家现可使用兼容 iPhone 接受非接触式付款。 商家需要使用受支持的支付应用，可收取银行卡、Apple Pay 及其他非接触式钱包的款项，不必另购读卡器。合作支付平台将从今天开始启用这一能力。 苹果表示，新市场沿用现有加密保护，商家无需保存顾客卡片数据。交易的处理方式与此前已开通地区相同。 这次更新扩展的是苹果支付服务的地区覆盖，并未发布新款 iPhone 或改变第三方银行的发卡业务。",
+      "key_facts": [
+        "苹果今天宣布，Tap to Pay on iPhone 轻点收款服务新增塞浦路斯、马耳他、拉脱维亚、立陶宛、爱沙尼亚和冰岛六个市场。当地商家现可使用兼容 iPhone 接受非接触式付款。",
+        "商家需要使用受支持的支付应用，可收取银行卡、Apple Pay 及其他非接触式钱包的款项，不必另购读卡器。合作支付平台将从今天开始启用这一能力。",
+        "苹果表示，新市场沿用现有加密保护，商家无需保存顾客卡片数据。交易的处理方式与此前已开通地区相同。",
+        "这次更新扩展的是苹果支付服务的地区覆盖，并未发布新款 iPhone 或改变第三方银行的发卡业务。"
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "苹果今天宣布，Tap to Pay on iPhone 轻点收款服务新增塞浦路斯、马耳他、拉脱维亚、立陶宛、爱沙尼亚和冰岛六个市场。当地商家现可使用兼容 iPhone 接受非接触式付款。"
+        },
+        {
+          "kind": "p",
+          "text": "商家需要使用受支持的支付应用，可收取银行卡、Apple Pay 及其他非接触式钱包的款项，不必另购读卡器。合作支付平台将从今天开始启用这一能力。"
+        },
+        {
+          "kind": "p",
+          "text": "苹果表示，新市场沿用现有加密保护，商家无需保存顾客卡片数据。交易的处理方式与此前已开通地区相同。"
+        },
+        {
+          "kind": "p",
+          "text": "这次更新扩展的是苹果支付服务的地区覆盖，并未发布新款 iPhone 或改变第三方银行的发卡业务。"
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "software_systems"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "raw-zh",
+      "source": "IT之家",
+      "url": "https://example.invalid/review/raw-zh",
+      "title": "苹果为 iPhone、iPad、Mac 扩展 RAW 支持，兼容相机总数增至 574 款",
+      "summary": "苹果更新官方支持文档，为 iPhone、iPad、Mac 和 Vision Pro 新增九款数码相机的 RAW 格式支持，兼容总数达到 574 款。这里的 RAW 指相机传感器原始数据文件。 新增机型来自富士、奥之心（OM SYSTEM）、松下和飞思（Phase One），包括 FinePix F700EXR、FinePix HS30EXR、XF2、OM SYSTEM PEN X、LUMIX DMC-FZ55、IQ170、IQ270、IQ4 150MP 和 iXG 150MP。 上述兼容能力覆盖 iOS、iPadOS、macOS 和 visionOS 版本 28。苹果操作系统提供系统级 RAW 图像读取支持，兼容应用可调整曝光、色彩等参数。 与 JPEG 相比，RAW 文件保留更多原始传感器信息，留给后期处理的空间更大。这份列表列出的是第三方相机与苹果操作系统的兼容情况。",
+      "key_facts": [
+        "苹果更新官方支持文档，为 iPhone、iPad、Mac 和 Vision Pro 新增九款数码相机的 RAW 格式支持，兼容总数达到 574 款。这里的 RAW 指相机传感器原始数据文件。",
+        "新增机型来自富士、奥之心（OM SYSTEM）、松下和飞思（Phase One），包括 FinePix F700EXR、FinePix HS30EXR、XF2、OM SYSTEM PEN X、LUMIX DMC-FZ55、IQ170、IQ270、IQ4 150MP 和 iXG 150MP。",
+        "上述兼容能力覆盖 iOS、iPadOS、macOS 和 visionOS 版本 28。苹果操作系统提供系统级 RAW 图像读取支持，兼容应用可调整曝光、色彩等参数。",
+        "与 JPEG 相比，RAW 文件保留更多原始传感器信息，留给后期处理的空间更大。这份列表列出的是第三方相机与苹果操作系统的兼容情况。"
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "苹果更新官方支持文档，为 iPhone、iPad、Mac 和 Vision Pro 新增九款数码相机的 RAW 格式支持，兼容总数达到 574 款。这里的 RAW 指相机传感器原始数据文件。"
+        },
+        {
+          "kind": "p",
+          "text": "新增机型来自富士、奥之心（OM SYSTEM）、松下和飞思（Phase One），包括 FinePix F700EXR、FinePix HS30EXR、XF2、OM SYSTEM PEN X、LUMIX DMC-FZ55、IQ170、IQ270、IQ4 150MP 和 iXG 150MP。"
+        },
+        {
+          "kind": "p",
+          "text": "上述兼容能力覆盖 iOS、iPadOS、macOS 和 visionOS 版本 28。苹果操作系统提供系统级 RAW 图像读取支持，兼容应用可调整曝光、色彩等参数。"
+        },
+        {
+          "kind": "p",
+          "text": "与 JPEG 相比，RAW 文件保留更多原始传感器信息，留给后期处理的空间更大。这份列表列出的是第三方相机与苹果操作系统的兼容情况。"
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "software_systems"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "texture-en",
+      "source": "The Verge",
+      "url": "https://example.invalid/review/texture-en",
+      "title": "Apple clarifies that Texture and Grain controls require iPhone 19 Pro or Duo",
+      "summary": "Apple has revised a support page to clarify that the Texture and Grain controls are available only on iPhone 19 Pro and iPhone Duo. Earlier wording suggested that older phones would receive the controls too. The corrected page concerns software editing options introduced with the current camera app. Apple has not announced new lenses or image sensors as part of the clarification. Users with older iPhone models can continue using their existing photographic styles, but the two named controls are excluded from the newly clarified support list. The change follows questions about the original wording. It establishes the supported model boundary for these controls and does not mean that every camera feature is restricted to those two devices.",
+      "key_facts": [
+        "Apple has revised a support page to clarify that the Texture and Grain controls are available only on iPhone 19 Pro and iPhone Duo. Earlier wording suggested that older phones would receive the controls too.",
+        "The corrected page concerns software editing options introduced with the current camera app. Apple has not announced new lenses or image sensors as part of the clarification.",
+        "Users with older iPhone models can continue using their existing photographic styles, but the two named controls are excluded from the newly clarified support list.",
+        "The change follows questions about the original wording. It establishes the supported model boundary for these controls and does not mean that every camera feature is restricted to those two devices."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple has revised a support page to clarify that the Texture and Grain controls are available only on iPhone 19 Pro and iPhone Duo. Earlier wording suggested that older phones would receive the controls too."
+        },
+        {
+          "kind": "p",
+          "text": "The corrected page concerns software editing options introduced with the current camera app. Apple has not announced new lenses or image sensors as part of the clarification."
+        },
+        {
+          "kind": "p",
+          "text": "Users with older iPhone models can continue using their existing photographic styles, but the two named controls are excluded from the newly clarified support list."
+        },
+        {
+          "kind": "p",
+          "text": "The change follows questions about the original wording. It establishes the supported model boundary for these controls and does not mean that every camera feature is restricted to those two devices."
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "software_systems"
+      },
+      "projection": false,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "texture-zh",
+      "source": "IT之家",
+      "url": "https://example.invalid/review/texture-zh",
+      "title": "苹果修订支持文档：Texture 与 Grain 控件仅限 iPhone 19 Pro 和 Duo",
+      "summary": "苹果更新支持文档，明确 Texture 和 Grain 两项编辑控件仅支持 iPhone 19 Pro 与 iPhone Duo，纠正此前可能让用户以为旧机型也可使用的表述。 这两项控件属于当前相机应用的软件编辑能力。本次文档修订没有公布新的镜头、传感器或硬件配置。 旧款 iPhone 仍可使用原有摄影风格功能，只是不在这两项新增控件的支持范围中。苹果的更正针对明确列出的机型兼容边界。 用户此前曾就原始措辞提出疑问。报道记录的是此次支持范围澄清，不应将它理解为所有相机功能都不再支持旧机型。",
+      "key_facts": [
+        "苹果更新支持文档，明确 Texture 和 Grain 两项编辑控件仅支持 iPhone 19 Pro 与 iPhone Duo，纠正此前可能让用户以为旧机型也可使用的表述。",
+        "这两项控件属于当前相机应用的软件编辑能力。本次文档修订没有公布新的镜头、传感器或硬件配置。",
+        "旧款 iPhone 仍可使用原有摄影风格功能，只是不在这两项新增控件的支持范围中。苹果的更正针对明确列出的机型兼容边界。",
+        "用户此前曾就原始措辞提出疑问。报道记录的是此次支持范围澄清，不应将它理解为所有相机功能都不再支持旧机型。"
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "苹果更新支持文档，明确 Texture 和 Grain 两项编辑控件仅支持 iPhone 19 Pro 与 iPhone Duo，纠正此前可能让用户以为旧机型也可使用的表述。"
+        },
+        {
+          "kind": "p",
+          "text": "这两项控件属于当前相机应用的软件编辑能力。本次文档修订没有公布新的镜头、传感器或硬件配置。"
+        },
+        {
+          "kind": "p",
+          "text": "旧款 iPhone 仍可使用原有摄影风格功能，只是不在这两项新增控件的支持范围中。苹果的更正针对明确列出的机型兼容边界。"
+        },
+        {
+          "kind": "p",
+          "text": "用户此前曾就原始措辞提出疑问。报道记录的是此次支持范围澄清，不应将它理解为所有相机功能都不再支持旧机型。"
+        }
+      ],
+      "expected": {
+        "tier": "strong",
+        "category": "software_systems"
+      },
+      "projection": false,
+      "review_role": "protection-or-observation-see-readme"
+    },
+    {
+      "id": "recap-parent",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/recap-parent",
+      "title": "Apple Event in November? Six Products Expected Next Month",
+      "summary": "Apple has not announced a November event. Below we recap previously reported expectations for the coming month, using earlier rumours and past release schedules rather than a new disclosure. 2025 — Press Release: Thursday, November 6 — iPad mini with A18 Pro chip. Home Hub: Earlier reports describe a smart home hub with a 7-inch display, an A19 chip, FaceTime and a speaker base. The old reports also mention a wall-mounted option. iPad mini: The existing rumour list includes an A20 Pro or A21 Pro chip, an OLED display, a sealed speaker design and improved water resistance.",
+      "key_facts": [
+        "Apple has not announced a November event. Below we recap previously reported expectations for the coming month, using earlier rumours and past release schedules rather than a new disclosure.",
+        "2025 — Press Release: Thursday, November 6 — iPad mini with A18 Pro chip.",
+        "Home Hub: Earlier reports describe a smart home hub with a 7-inch display, an A19 chip, FaceTime and a speaker base. The old reports also mention a wall-mounted option.",
+        "iPad mini: The existing rumour list includes an A20 Pro or A21 Pro chip, an OLED display, a sealed speaker design and improved water resistance.",
+        "Apple TV and HomePod mini have also appeared in earlier forecasts. None of the products in this list has a newly confirmed announcement date, and the company has not issued invitations.",
+        "The past five years show that Apple sometimes uses press releases instead of an event. That historical pattern is why readers are watching next month, not evidence of a newly announced product."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple has not announced a November event. Below we recap previously reported expectations for the coming month, using earlier rumours and past release schedules rather than a new disclosure."
+        },
+        {
+          "kind": "li",
+          "text": "2025 — Press Release: Thursday, November 6 — iPad mini with A18 Pro chip."
+        },
+        {
+          "kind": "li",
+          "text": "Home Hub: Earlier reports describe a smart home hub with a 7-inch display, an A19 chip, FaceTime and a speaker base. The old reports also mention a wall-mounted option."
+        },
+        {
+          "kind": "li",
+          "text": "iPad mini: The existing rumour list includes an A20 Pro or A21 Pro chip, an OLED display, a sealed speaker design and improved water resistance."
+        },
+        {
+          "kind": "p",
+          "text": "Apple TV and HomePod mini have also appeared in earlier forecasts. None of the products in this list has a newly confirmed announcement date, and the company has not issued invitations."
+        },
+        {
+          "kind": "p",
+          "text": "The past five years show that Apple sometimes uses press releases instead of an event. That historical pattern is why readers are watching next month, not evidence of a newly announced product."
+        }
+      ],
+      "expected": {
+        "projected_children_must_not_gain_new_reporting": true
+      },
+      "projection": true,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "mixed-claim",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/mixed-claim",
+      "title": "Apple releases the first iOS 28.3 public beta",
+      "summary": "Apple today released the first iOS 28.3 public beta, following the second developer beta. Registered testers can install it through Software Update. In the Apple TV app, users get new profile controls, and Siri AI is now available in three more languages: French, Japanese and Spanish. The release also changes the layout of the Health summary screen. Apple has not announced a date for the final version of iOS 28.3. Beta software may contain bugs, so testers should keep backups before installation. They can return to the public release by following Apple’s recovery instructions.",
+      "key_facts": [
+        "Apple today released the first iOS 28.3 public beta, following the second developer beta. Registered testers can install it through Software Update.",
+        "In the Apple TV app, users get new profile controls, and Siri AI is now available in three more languages: French, Japanese and Spanish.",
+        "The release also changes the layout of the Health summary screen. Apple has not announced a date for the final version of iOS 28.3.",
+        "Beta software may contain bugs, so testers should keep backups before installation. They can return to the public release by following Apple’s recovery instructions."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple today released the first iOS 28.3 public beta, following the second developer beta. Registered testers can install it through Software Update."
+        },
+        {
+          "kind": "p",
+          "text": "In the Apple TV app, users get new profile controls, and Siri AI is now available in three more languages: French, Japanese and Spanish."
+        },
+        {
+          "kind": "p",
+          "text": "The release also changes the layout of the Health summary screen. Apple has not announced a date for the final version of iOS 28.3."
+        },
+        {
+          "kind": "p",
+          "text": "Beta software may contain bugs, so testers should keep backups before installation. They can return to the public release by following Apple’s recovery instructions."
+        }
+      ],
+      "expected": {
+        "siri_claim_must_not_own_tv_profile_clause": true
+      },
+      "projection": true,
+      "review_role": "same-first-path-red"
+    },
+    {
+      "id": "recap-parent-grammar",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/recap-parent-grammar",
+      "title": "Apple Event in November? Six Products Expected Next Month",
+      "summary": "Apple’s autumn product season may continue into November, with several products expected to follow the devices introduced earlier in the year. Below, we have recapped what readers might expect next month from the rumours published over the past few months. 2025 — Press Release: Thursday, November 6 — iPad mini with A18 Pro chip. Home Hub: Earlier reports describe a smart home hub with a 7-inch display, an A19 chip, FaceTime and a speaker base. The old reports also mention a wall-mounted option. iPad mini: The existing rumour list includes an A20 Pro or A21 Pro chip, an OLED display, a sealed speaker design and improved water resistance.",
+      "key_facts": [
+        "Apple’s autumn product season may continue into November, with several products expected to follow the devices introduced earlier in the year. Below, we have recapped what readers might expect next month from the rumours published over the past few months.",
+        "2025 — Press Release: Thursday, November 6 — iPad mini with A18 Pro chip.",
+        "Home Hub: Earlier reports describe a smart home hub with a 7-inch display, an A19 chip, FaceTime and a speaker base. The old reports also mention a wall-mounted option.",
+        "iPad mini: The existing rumour list includes an A20 Pro or A21 Pro chip, an OLED display, a sealed speaker design and improved water resistance.",
+        "Apple TV and HomePod mini have also appeared in earlier forecasts. Some products could be introduced at an event, while others might arrive through individual press releases.",
+        "The past five years show that Apple sometimes uses press releases instead of an event. That historical pattern helps explain why readers are watching the November calendar."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple’s autumn product season may continue into November, with several products expected to follow the devices introduced earlier in the year. Below, we have recapped what readers might expect next month from the rumours published over the past few months."
+        },
+        {
+          "kind": "li",
+          "text": "2025 — Press Release: Thursday, November 6 — iPad mini with A18 Pro chip."
+        },
+        {
+          "kind": "li",
+          "text": "Home Hub: Earlier reports describe a smart home hub with a 7-inch display, an A19 chip, FaceTime and a speaker base. The old reports also mention a wall-mounted option."
+        },
+        {
+          "kind": "li",
+          "text": "iPad mini: The existing rumour list includes an A20 Pro or A21 Pro chip, an OLED display, a sealed speaker design and improved water resistance."
+        },
+        {
+          "kind": "p",
+          "text": "Apple TV and HomePod mini have also appeared in earlier forecasts. Some products could be introduced at an event, while others might arrive through individual press releases."
+        },
+        {
+          "kind": "p",
+          "text": "The past five years show that Apple sometimes uses press releases instead of an event. That historical pattern helps explain why readers are watching the November calendar."
+        }
+      ],
+      "expected": {
+        "projected_children_must_not_gain_new_reporting": true
+      },
+      "projection": true,
+      "review_role": "bounded-natural-grammar-regression"
+    },
+    {
+      "id": "mixed-claim-grammar",
+      "source": "MacRumors",
+      "url": "https://example.invalid/review/mixed-claim-grammar",
+      "title": "Apple releases the first iOS 28.3 public beta",
+      "summary": "Apple today released the first iOS 28.3 public beta, following the second developer beta. Registered testers can install it through Software Update. In the Apple TV app, there are new profile settings, and Siri AI is now available in three more languages: French, Japanese and Spanish. The release also changes the layout of the Health summary screen. Apple has not announced a date for the final version of iOS 28.3. Beta software may contain bugs, so testers should keep backups before installation. They can return to the public release by following Apple’s recovery instructions.",
+      "key_facts": [
+        "Apple today released the first iOS 28.3 public beta, following the second developer beta. Registered testers can install it through Software Update.",
+        "In the Apple TV app, there are new profile settings, and Siri AI is now available in three more languages: French, Japanese and Spanish.",
+        "The release also changes the layout of the Health summary screen. Apple has not announced a date for the final version of iOS 28.3.",
+        "Beta software may contain bugs, so testers should keep backups before installation. They can return to the public release by following Apple’s recovery instructions."
+      ],
+      "units": [
+        {
+          "kind": "p",
+          "text": "Apple today released the first iOS 28.3 public beta, following the second developer beta. Registered testers can install it through Software Update."
+        },
+        {
+          "kind": "p",
+          "text": "In the Apple TV app, there are new profile settings, and Siri AI is now available in three more languages: French, Japanese and Spanish."
+        },
+        {
+          "kind": "p",
+          "text": "The release also changes the layout of the Health summary screen. Apple has not announced a date for the final version of iOS 28.3."
+        },
+        {
+          "kind": "p",
+          "text": "Beta software may contain bugs, so testers should keep backups before installation. They can return to the public release by following Apple’s recovery instructions."
+        }
+      ],
+      "expected": {
+        "siri_claim_must_not_own_tv_profile_clause": true
+      },
+      "projection": true,
+      "review_role": "bounded-natural-grammar-regression"
+    }
+  ],
+  "pairs": [
+    [
+      "band-en",
+      "band-zh",
+      "match"
+    ],
+    [
+      "pin-en",
+      "pin-zh",
+      "match"
+    ],
+    [
+      "texture-en",
+      "texture-zh",
+      "match"
+    ],
+    [
+      "pin-en",
+      "band-en",
+      "not-match"
+    ],
+    [
+      "shazam-update",
+      "thirdparty-stickers",
+      "not-match"
+    ],
+    [
+      "official-cushions",
+      "retailer-cushions",
+      "not-match"
+    ]
+  ]
+}

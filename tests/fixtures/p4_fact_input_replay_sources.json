@@ -1,0 +1,2055 @@
+{
+  "1ed292a7c9da70fddad2ac18": {
+    "article_id": "1ed292a7c9da70fddad2ac18",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "",
+    "discovery_title": "苹果iOS允许用户将默认Siri替换为ChatGPT或Claude等第三方AI助手 - Apple iPhone - cnBeta.COM",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "5 分钟前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "4 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "6 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "6 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "6 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026年09月14日 19:52",
+        "source": "body date pattern"
+      }
+    ],
+    "published_raw": "2026年09月14日 19:52",
+    "published_source": "body date pattern",
+    "published_utc": "2026-09-14T11:52:00+00:00",
+    "raw_lead": "苹果公司在最新的系统软件迭代中迎来了一项里程碑式的开放举措。在最新的iOS系统中，用户已能够将长久以来的系统级默认语音助手Siri，自由替换为OpenAI的ChatGPT、Anthropic的Claude以及GoogleGemini等第三方人工智能模型，标志着苹果在移动端AI生态的开放度与模块化层面迈出了突破性一步。",
+    "source": "cnBeta",
+    "title": "苹果iOS允许用户将默认Siri替换为ChatGPT或Claude等第三方AI助手 - Apple iPhone - cnBeta.COM",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "苹果公司在最新的系统软件迭代中迎来了一项里程碑式的开放举措。在最新的iOS系统中，用户已能够将长久以来的系统级默认语音助手Siri，自由替换为OpenAI的ChatGPT、Anthropic的Claude以及Google Gemini等第三方人工智能模型，标志着苹果在移动端AI生态的开放度与模块化层面迈出了突破性一步。",
+        "unit_id": "056da90bcc080b0d62298e06"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "根据系统设置与功能实测，这一全新的替代机制深度整合在“Apple智能与Siri”或系统默认应用管理菜单中。用户不仅可以自主挑选首选的第三方AI引擎作为全局默认助手，还能直接将机身物理操作——如长按电源键（侧边按钮）或操作iPhone上的“操作按钮”（Action Button）——重新映射为一键唤起ChatGPT或Claude。这意味着用户无需再经历“先唤醒Siri、再由Siri向第三方模型请求中继许可”的繁琐中转流程，即可直接通过原生硬件交互触发第三方大语言模型展开上下文多轮对话。",
+        "unit_id": "76452fd7a2afd2c4b5cd886a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "除了底层的硬件唤醒重定向，新机制还支持第三方模型接入更深层次的系统级情境感知。在获得用户明确授权的前提下，接入的第三方助手能够识别屏幕当前显示的内容摘要、直接接收剪贴板中的多模态输入，并与系统备忘录、提醒事项等原生应用实现无缝协同。此前，苹果在最初引入外部AI能力时主要以ChatGPT作为可选的云端拓展，且每次触发均需弹出独立隐私确认弹窗；而此次全面支持第三方助手直接替换Siri默认行为，赋予了用户对设备核心智能引擎的前所未有的自主决定权。",
+        "unit_id": "8ff0ad28fcaf412d525735fb"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "业内分析人士指出，苹果此举既是应对全球多地反垄断与数字市场监管压力的主动调整，也是顺应生成式大模型多元化竞争格局的务实策略。特别是在欧盟《数字市场法案》（DMA）等反垄断法规对科技巨头设立“选择屏幕”（Choice Screen）与开放核心平台服务施加严格限制的大背景下，允许用户自由设定默认数字助理，有助于苹果有效规避涉嫌偏袒自家第一方服务的法律风险；与此同时，通过将底层计算平台与顶层前沿模型解耦，iPhone正从单纯承载Siri的封闭终端，逐步蜕变成为能够灵活调度全球主流尖端AI服务的综合硬件底座。",
+        "unit_id": "d616cb7e239aed9028adbe56"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "对于全球数以亿计的iPhone用户而言，这项重大调整彻底改变了日常移动生产力与人机交互逻辑。无论是以复杂编码和逻辑推理见长的Claude，还是以多模态通用创作著称的ChatGPT，均可直接取代传统语音助手入驻系统核心交互层，用户可根据个人的专业工作流与订阅习惯随心定制最适合自己的AI交互中枢，也为苹果生态与第三方前沿AI巨头之间的深度共生开辟了全新可能。",
+        "unit_id": "b05a48cfa00d6b99746110b7"
+      }
+    ],
+    "url": "https://www.cnbeta.com.tw/articles/tech/1577900.htm"
+  },
+  "23b006e10aefe5daec40a03d": {
+    "article_id": "23b006e10aefe5daec40a03d",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "",
+    "discovery_title": "苹果发了首款折叠屏iPhone Duo！却让人更怀念乔布斯了",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-10 08:18:29",
+        "source": "body date pattern"
+      }
+    ],
+    "published_raw": "2026-09-10 08:18:29",
+    "published_source": "body date pattern",
+    "published_utc": "2026-09-10T00:18:29+00:00",
+    "raw_lead": "北京时间9月10日凌晨1点，苹果秋季产品发布会开始了。苹果园区现场，灯光亮起，约翰·特努斯（John Ternus）站在舞台中央。他穿了件工装风格深色休闲夹克，不是乔布斯的黑高领，也不是库",
+    "source": "快科技",
+    "title": "苹果发了首款折叠屏iPhone Duo！却让人更怀念乔布斯了",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "北京时间9月10日凌晨1点，苹果秋季产品发布会开始了。",
+        "unit_id": "3553524919dadb80ee754c94"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "苹果园区现场，灯光亮起，约翰·特努斯（John Ternus）站在舞台中央。他穿了件工装风格深色休闲夹克，不是乔布斯的黑高领，也不是库克的商务衬衫。一个做了二十多年硬件的工程师，延续了他一贯的工程师与务实风格，穿回了做硬件的衣服。",
+        "unit_id": "30072aa8529c556b6c89cac1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "和现场观众不同，网上的观众看到了另一种开场。一段影片结尾，一辆汽车驶入了苹果公司，库克从黑暗中现身，他说“不，不，不是我”，然后引出特努斯出场。",
+        "unit_id": "010fed328e25ac3e54da520b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "特努斯没有沿用库克的“早上好”作为开场，首先感谢了团队，提了一嘴“制造世界上最好的产品”那个老使命。然后话锋一转，开始讲一个“智能个人中心”的概念。“世界上没有比iPhone更适合成为你智能个人中心的产品”，他用了大概七分钟，没讲任何参数，没展示任何硬件，只是重新定义iPhone在这个AI时代的位置。",
+        "unit_id": "c40636296c6d5d56121a67c5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "整场发布会随一句“现在，它来了”开始。在随后的产品介绍环节，视频中的特努斯换了另一套衣服，深紫红色修身款的长袖圆领针织衫，下身穿着深色牛仔长裤。肢体语言比库克有弹性，身体微微前倾，像是在跟你面对面聊天。",
+        "unit_id": "a51dcfaacd583b5f97f9e1ca"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "发布会由他开场，随后各个业务的负责人轮番登场介绍不同的板块。这些负责人出现在不同的场景，有的通过动画demo展示，有的站在场景里介绍时身旁白色字母突出关键词，有的甚至直接在身边穿插了小剧场的表演。iPhone 18发布会，苹果到底有没有讲好AI故事？",
+        "unit_id": "597055cdea85d9313a299ff3"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "苹果正在把“讲故事”的权力，交给业务各自的负责人。这样的转变不是个人审美问题。在这个舞台上，衣服扣子解到第几颗、PPT上放什么图，本质上都在悄悄告诉资本市场，苹果现在是一家什么样的公司，它正在面对什么样的时代。",
+        "unit_id": "049a0c4ab3644773024aa8f1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "然而，发布会开始后，苹果股价几乎在过山车，尤其是在宣布首款折叠屏手机 iPhone Duo的售价和销售日期后，苹果股价迎来当日低点，跌幅一度接近2%。但在发布会后不到一个小时又涨到当日最高价319.15美元，随后回落。收盘时，苹果股价为315.34美元，当日跌幅最终锁定在0.28%。",
+        "unit_id": "8e47117392237d2efcb53abe"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "聚光灯下的帝国更迭：从黑毛衣到工装夹克",
+        "unit_id": "b551119e068ba1c82478a3cb"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "每一个关心科技的人，都没法拒绝苹果秋季发布会的开场。",
+        "unit_id": "597264fda598b88f2e37a55b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "乔布斯在台上的十三年，更像“布道”。那件三宅一生黑色高领毛衣、磨损的牛仔裤、新百伦运动鞋，是科技史上最反叛的一身行头。他喜欢把双手在胸前抱成个圈，像托着一个看不见的球。",
+        "unit_id": "83fce2509e6c7f4d7e5ef070"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "他的PPT每页一件事。一张巨大的产品图，或者一个关键词，刺眼但简洁。对于产品介绍，他更像是在变魔术，突然间把电脑从牛皮纸袋里抽出来，告诉你世界要变了。",
+        "unit_id": "ad7a8e4122da939cdae9d03f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "库克接棒之后，舞台上的疯劲退了，变成“开业绩会”。他一向不是那种靠穿搭吸引目光的人，深色牛仔裤、修身衬衫或者Polo衫，偶尔加个毛衣，毫无记忆点。他最爱做的动作是双手合十，语调温和、内敛。他很少亲自讲技术细节，更多是当主持，然后把时间分给各个业务副总裁。",
+        "unit_id": "c57207dffff551d9a3c6f068"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "只不过，库克时代，苹果的市值从3000多亿美元涨到4.6万亿美元。他从来没有在台上说过一句“改变了世界”，但他说的是“我们非常自豪”。",
+        "unit_id": "49e183bd6ee7cd4260fd9614"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "现在，特努斯是第三幕，“硬核匠人”登场。但所有人的目光并不在那件工装夹克上，都期待他能开启新的产品周期，优化组合抬升ASP。就在发布会前几周，苹果刚刚交出了季度营收创了历史新高的业绩报告，营收突破千亿美元，还有16%的增长，但股价却暴跌，财报发布后两天市值蒸发约4300亿美元。",
+        "unit_id": "7aebfd5c8e2ab472f36f52fe"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "一家公司业绩涨、股价崩，是因为市场从来不看过去，看的是未来。苹果给出的下一季度营收增速指引低于华尔街。供应链在恶化，内存价格暴涨，库克在告别电话会上把当前的内存市场形容为“百年一遇的洪水”。",
+        "unit_id": "0508d1b56c8ce057aa1a94fe"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "这就是特努斯接手的局面。账面上一切完美，但市场已经提前在问，AI的故事在哪里？供应链的坑怎么填？你能拿出什么新东西？苹果目前的市盈率是36.25倍，标普500的平均水平连它的一半都不到。投资者愿意付这么贵的门票，并不是为了一台手机，而是期望特努斯能把苹果带到一个新维度。",
+        "unit_id": "45a1568f98d458e41d39c900"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "用资本市场的话说，苹果现在是一个“将来时”的故事。发布会前，苹果已经开始下跌，“预期差”的戏码，已随着发布会同时开场。",
+        "unit_id": "647b10a16f426462902bad4c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "截至北京时间9月10日6点，发布会结束后四个小时，苹果盘后交易微涨至317.06美元，涨幅为0.55%。",
+        "unit_id": "73522b570af2b8e5821160af"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "产品：硬核匠人的拆解现场",
+        "unit_id": "960fae2b7125e423f1fa6507"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 20,
+        "origin": "html",
+        "text": "这场发布会，特努斯带着苹果的高管们花了一个多小时在台上拆产品。这是他的老本行，自2001年加入苹果后就先后负责过多款PC、iPad和AirPods产品的硬件工程。不过，与以往他负责讲解技术本身不同，这一次他更多的是承担串场的角色。",
+        "unit_id": "635337f85176e55cc9d7a455"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 21,
+        "origin": "html",
+        "text": "iPhone 18 Pro系列是第一个登场的。全系搭载A20 Pro芯片，采用台积电2nm制程工艺。副总裁Sribalan Santhanam在介绍时，展示了一张芯片剖面图，关键位置被重点标注了。苹果这次专门为端侧AI大模型重新设计了这块区域，目的就是让大模型在手机本地跑起来。",
+        "unit_id": "88b189460dc602a12f506560"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 22,
+        "origin": "html",
+        "text": "图片来源：发布会直播截图",
+        "unit_id": "c56d4d0f8e3b2860198b4141"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 23,
+        "origin": "html",
+        "text": "A20 Pro的CPU比A19 Pro快了20%，GPU快了40%，算力翻倍。内存带宽多了50%。散热也跟着改了，采用了新的封装方式，均热板的表面积也提升了，并加入了新的材料。电池的续航时长也进一步增大。这些堆在一起，就是苹果为AI准备得最充分的新产品。",
+        "unit_id": "e383663d12770008091a9db1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 24,
+        "origin": "html",
+        "text": "但对发布会后就想买到新品的消费者来说，价格上涨是一个坏消息。Pro起售价是9999元，Pro Max起售价为10999元人民币，起售价比上一代上涨了1000元。1TB和2TB存储版本价格上涨得更多，整体涨幅也比美元价格更高。",
+        "unit_id": "e9ba1aff69e8dc25c43fdcc5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 25,
+        "origin": "html",
+        "text": "本场发布会的亮点是折叠屏手机，不过在其亮相前，苹果还发布了新款的智能手表和耳机。与手机不同，Apple Watch Series 12和Ultra 4的价格并没有变动，AirPods 5标准版甚至在增加了主动降噪功能后仍保持了原价，无线充电盒的版本甚至降价了。",
+        "unit_id": "25be3e31559bb92db7711778"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 26,
+        "origin": "html",
+        "text": "折叠屏的出场相当隆重。视频中，特努斯站在剧场场景下，在一句经典的“One more thing”之后，一系列线稿演示的动画勾勒了折叠屏手机的设计。在介绍产品时，苹果两个高管同时出场，这是正常发布会仅有的一幕。",
+        "unit_id": "69296da107a8bd82f993eb12"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 27,
+        "origin": "html",
+        "text": "苹果并没有选择传闻中的Fold或者Ultra来命名折叠屏，最终被定为了iPhone Duo，当然这个名字也有KOL在社交媒体上爆料过。",
+        "unit_id": "8c0f5b813c73307cad74da6e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 28,
+        "origin": "html",
+        "text": "起售价为15999元人民币，256GB起步，最高2TB。7.6英寸内屏，展开像一本小书；5.4英寸外屏，合上就是一部小手机，相当于iPhone 18 Pro 90%的屏幕显示面积。不过，价格并没有此前传言那么夸张，尺寸也要更小一些。",
+        "unit_id": "8e7c14a4f77b33b881362f8c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 29,
+        "origin": "html",
+        "text": "苹果两位核心高管，全球市场高级副总裁Greg “Joz” Joswia和软件工程高级副总裁Craig Federighi直到这一产品才出现参与讲解，他们展示了一系列产品特性和使用场景。",
+        "unit_id": "c4869cda3547746d40b0179f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 30,
+        "origin": "html",
+        "text": "从演示来看，通过不同折叠方式，可以满足用户自拍需求，视频观看方式也随着屏幕变化，甚至你可以只把他当作一个简单的日历或者闹钟，这和国内厂商对折叠屏的演示有很大不同。",
+        "unit_id": "b5ad0fcb434d29ee79c44a9b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 31,
+        "origin": "html",
+        "text": "图片来源：发布会直播截图",
+        "unit_id": "b68e7af5da2d1bc48e92dfdc"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 32,
+        "origin": "html",
+        "text": "IDC全球及中国副总裁王吉平告诉虎嗅，定价体现了苹果的策略，也就是用相对“温和”的起售价吸引眼球， 再通过高配版本拉升利润。",
+        "unit_id": "09f6b541023a1afda0f69322"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 33,
+        "origin": "html",
+        "text": "从具体价格来看，Duo的起售价高于小米“中折叠”的常规顶配版，同时最Duo顶配版低于华为新款“三折叠”的顶配。",
+        "unit_id": "cc14c62bc16203df75063fd2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 34,
+        "origin": "html",
+        "text": "王吉平表示，它既用起售价压制了小米的高配用户，又用顶配去抢华为次顶配的市场，在高价位区间的覆盖非常严密。不过，由于国行采用eSIM，这可能导致部分用户流向本土折叠屏。",
+        "unit_id": "227ce54f612a0b911ef41896"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 35,
+        "origin": "html",
+        "text": "此外，苹果也在这个产品做了一系列取舍。它又将触控ID引入了这个产品，无论开合都能便捷、安全和统一的方式进行身份验证。同时，苹果官宣支持Apple Pencil。在摄像头上，Duo只保留了两颗，使用了与18 Pro同款的4800万像素主摄和4800万像素超广角。",
+        "unit_id": "40dd9dbb6367dd22abdfeed5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 36,
+        "origin": "html",
+        "text": "摄像头的妥协可能会让刚看完iPhone 18系列各种酷炫镜头拍摄样片的观众感到有些遗憾。不过，因双屏可折叠的设计，苹果称其解锁了其他iPhone无法实现的拍摄体验，比如自拍时可以在外屏预览拍摄效果，或者播放吸引被拍摄者注意的内容。",
+        "unit_id": "913f615fe1655b06fb24ce0f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 37,
+        "origin": "html",
+        "text": "图片来源：发布会直播截图",
+        "unit_id": "0278b27aeb6d2fb721797a04"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 38,
+        "origin": "html",
+        "text": "相比18 Pro和Pro Max马上就可以预订不同，Duo要到10月16日才可以预订，并且要到10月23日才能发货，晚了一个多月，并且对Apple Pencil的支持也要更晚一些才可以。",
+        "unit_id": "09a19fd5d0f8354da77d0151"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 39,
+        "origin": "html",
+        "text": "然而，台下资本市场的反应，跟台上这种热乎劲儿完全是两码事。",
+        "unit_id": "d7950dbf8f52ba64b68491d1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 40,
+        "origin": "html",
+        "text": "逃不掉的“发布会魔咒”",
+        "unit_id": "d896451956c42bb3302cc3ae"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 41,
+        "origin": "html",
+        "text": "特努斯在台上笑得温暖，那些手握资金的投资者，脑子里全是分时图的线条。",
+        "unit_id": "0808c2e32218f1fe1aa4da88"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 42,
+        "origin": "html",
+        "text": "资本市场对特努斯的这场处女秀，再次上演了一场教科书级别的冷酷对峙。其实就在特努斯正式接过CEO权杖的当天，资本市场曾给过他一份短暂却豪华的“见面礼”。上任首日，苹果股价应声上涨近3%。",
+        "unit_id": "b6868f74eca631432cb940d8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 43,
+        "origin": "html",
+        "text": "然而，随着发布会的尘埃落定，苹果股价再次陷入了经典的“发布会焦虑症”。收盘时，苹果股价最终以315.34美元收盘，微跌0.28%。",
+        "unit_id": "9a17092f4abcc105a1fd98d9"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 44,
+        "origin": "html",
+        "text": "事实上，发布会开始前，就已经有券商开始评估新品的价值和风险，猜测股价的走势了。一位二级市场分析师给虎嗅了一份资料显示，从Pro价格的实际变化、折叠机的发售安排和量化表态，到特努斯演讲的叙事重心是什么，这些问题都在考察清单内。",
+        "unit_id": "b56650044e2ea47f4b42d80e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 45,
+        "origin": "html",
+        "text": "“买入预期，卖出事实”，这个规律在苹果身上反复应验。只能说，这不是特努斯的问题，是这个公司的发布会已经变成了一种固定的市场行为模式。有分析师总结称，发布会前股价上涨，发布会后往往小幅“利好出尽”回调，30到60天内收复失地。",
+        "unit_id": "f8674bda88dcf4165bb8e48b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 46,
+        "origin": "html",
+        "text": "翻翻旧账就知道了。",
+        "unit_id": "1b60b924e8162c8cf9cccb7d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 47,
+        "origin": "html",
+        "text": "2010年iPhone 4发布，那是乔布斯最后一次站在台上推出一款真正的“革命性”产品。视网膜屏幕、玻璃机身、陀螺仪，任何一个单项拿出来都能让同行失眠一整年。发布会结束后，紧接着“天线门”爆发了。用左手握手机，信号就会掉格，苹果却回应用户拿法不对。惹了众怒，股价跌了好几周。",
+        "unit_id": "474d23d0bc8e21cd85e4ea3e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 48,
+        "origin": "html",
+        "text": "2014年，库克掏出iPhone 6和初代Apple Watch。以长周期的视角来看，iPhone 6后来成了苹果历史上最赚钱的单品，在“超级换机潮”推动下，发布会后首个财务季度收获惊人的180亿美元净利润，Counterpoint数据显示，这一代产品全球累计销量达2.22亿台。这是因为大屏幕踩中了所有安卓用户换阵营的节点。",
+        "unit_id": "207d9835549b5d5e243d8377"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 49,
+        "origin": "html",
+        "text": "但那场发布会结束的当天晚上，资本市场只关注一件事，当听到备受期待的Apple Watch无法在圣诞黄金购物季上市、必须推迟到2015年初发货时，失望的避险资金在尾盘疯狂出逃，直接把股价砸到了三周新低。",
+        "unit_id": "f400b5d332eef331b1950563"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 50,
+        "origin": "html",
+        "text": "现在回头看，那个失望只持续了一个季度，而且第二代出来五年后，苹果把整个瑞士钟表行业干翻了。然而交易大盘上的实时数字，从来不会替资本预支五年的耐心。",
+        "unit_id": "790486a1ae0f3fb43f3c3325"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 51,
+        "origin": "html",
+        "text": "2017年iPhone X发布，开启全面屏时代，人脸识别替代了指纹，OLED屏幕第一次出现在iPhone上，苹果第一次把旗舰机做到接近1000美元。发布会还没结束，股价一度上涨将近3%，但尾盘阶段，有消息传出来Face ID的产能爬坡遇到困难，初期备货可能只有不到300万台。资本市场的反应快得吓人，从涨3%到跌1.5%，只用了不到半小时。",
+        "unit_id": "a987aa4e2237db1d910ad331"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 52,
+        "origin": "html",
+        "text": "这些事说明一个道理，华尔街从来不为当下的精彩鼓掌，他们只为预期的差额买单。苹果的发布会之所以每次都变成“股价打折现场”，是因为它的预期管理能力太强了。强到发布会之前，所有人都已经把产品猜了个七七八八。等到真东西拿出来，没有任何“意外”，那“预期差”就是负的。",
+        "unit_id": "324519229060b81eaf2ddc3f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 53,
+        "origin": "html",
+        "text": "这次更甚，发布会前券商分析师、数码KOL这群人已经把要发布的内容猜得七七八八，甚至有深圳华强北供应链已经生产出相关配件。发布会盘前下跌，市场在用脚告诉大众，“我们准备好了，但我们要看看你拿出来的是不是跟传说的一样”。",
+        "unit_id": "2d64a001bdfeb11c41ad8ebd"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 54,
+        "origin": "html",
+        "text": "发布会结束后发现，魔咒并没有解除。至于后续股价是否会回涨，仍有待观察特努斯是否能帮助苹果解决一系列困境。",
+        "unit_id": "902a8313385cebcca2e80e08"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 55,
+        "origin": "html",
+        "text": "灯光熄灭后的四道硬坎",
+        "unit_id": "45c357601ce4d5cf941bc31c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 56,
+        "origin": "html",
+        "text": "发布会结束，灯光暗下来。特努斯走下舞台，回到后台。那个地方没有闪光灯，没有掌声，只有一堆等他作出决策的文件、一堆等他回复的邮件，以及四个绕不开的问题。",
+        "unit_id": "01444eb8fe52dc079f3f5c69"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 57,
+        "origin": "html",
+        "text": "首当其冲的考验，是苹果必须补齐在生成式AI浪潮中的短板。受限于各地严苛的监管政策，苹果引以为傲的全新Siri和AI功能无法全球同步落地。",
+        "unit_id": "8a307074183a1ddeda151d2b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 58,
+        "origin": "html",
+        "text": "欧洲市场，苹果全新AI功能因为隐私法规没法同步上线。在中国市场情况更复杂，本土大模型已经跑得飞快，每个月都有新版本发布，苹果智能虽然已在网信办备案，但目前进展尚未有更新消息。",
+        "unit_id": "bac44cb846fe231ae4c732a1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 59,
+        "origin": "html",
+        "text": "这些问题库克任内就在谈，但特努斯接手的时候，项目尚未落定。华尔街资深苹果分析师、深水资产管理公司分析师Gene Munster就曾在他的社交媒体上称，这两个市场（欧洲和中国）贡献了苹果近一半的营收，这意味着Siri AI营收的增长将呈错峰态势。",
+        "unit_id": "ea1ca1c26bbeb0cfb3ee1135"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 60,
+        "origin": "html",
+        "text": "与此同时，苹果正遭遇着严重的供应链成本危机。全球内存芯片及核心零部件价格最近半年大幅度暴涨，这严重挤压了苹果的硬件利润空间。为了维持40%以上的毛利率，苹果不得不全面提高部分高配硬件的售价。",
+        "unit_id": "3a588043e37a14a6b6182cfd"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 61,
+        "origin": "html",
+        "text": "在全球宏观经济放缓的背景下，硬件涨价的直接后果，就是消费者换机周期的进一步拉长。特努斯如何在“保利润”和“冲销量”之间踩准平衡木，是摆在这位硬件工程师面前的第一道财务难题。",
+        "unit_id": "2bc90847ba7b8db7c3556e51"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 62,
+        "origin": "html",
+        "text": "此外，库克留下了一个4.7万亿美元市值的庞然大物，但也留下了一个饱受诟病的“挤牙膏式创新”传统。分析师们都很清楚，渐进式的优秀已经不够了。特努斯需要证明自己不仅是一个合格的硬件总设计师，更是一个能引领下一次产业变革的掌舵人。他需要用真正的硬核技术，找回乔布斯时代那种让人惊叹的“技术惊喜感”。",
+        "unit_id": "4e8cbc02fd701acf2e928744"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 63,
+        "origin": "html",
+        "text": "图片来源：发布会直播截图",
+        "unit_id": "3809ba10dcb5f9c17656058d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 64,
+        "origin": "html",
+        "text": "折叠屏就是那个试探。一位显示屏行业分析师告诉虎嗅，苹果等了八年才做，不只是为了等技术成熟，更是怕它吃掉iPad。",
+        "unit_id": "1e89ab47645e81dea71475a5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 65,
+        "origin": "html",
+        "text": "一块展开七八寸的屏，正好卡在手机和平板中间，定位上是天然的兄弟相争。苹果最后想通了一件事，高端市场已经被折叠屏拿下了一大块，如果苹果没有产品去卡住这个位置，中高端用户会慢慢转向华为和三星。折叠屏对苹果来说不是增量，是一场防御战。",
+        "unit_id": "f030734d9795c9e56556f6c4"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 66,
+        "origin": "html",
+        "text": "更长远的隐忧则在于地缘政治与监管。库克时代最赚钱的服务业务正遭到全球反垄断监管的合围，随着老将的隐退，欧盟和美国法院正在强行介入，服务业务增速放缓让外界感到担忧。政治经验尚浅的特努斯，面对日益复杂的多边地缘博弈和关税壁垒，需要快速补课。",
+        "unit_id": "947d868d4265c4e4985e887c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 67,
+        "origin": "html",
+        "text": "不过，库克已经在为这件事打补丁了。六个月前，苹果管理层组织架构变动，从Meta挖来的Jennifer Newstead已走马上任苹果总法律顾问，她有足够应对法律诉讼的经验，还擅长处理公司和国家层级冲突。",
+        "unit_id": "9c7e8119483b65a2d1d17a74"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 68,
+        "origin": "html",
+        "text": "这四件事，每一件单独拎出来都够一个CEO忙活一整个任期，特努斯上任不到十天，四个全堆在他桌上。",
+        "unit_id": "81f6f763f7cb9857a5825548"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 69,
+        "origin": "html",
+        "text": "发布会是他擅长的，首秀已经结束，利落的工装和温暖的微笑确实为他赢得了掌声。发布会之外的那些事，AI的追赶、成本的危机、创新的瓶颈、地缘的摩擦才是真正考验他的地方。",
+        "unit_id": "607063560e30e9aaeba1cb5b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 70,
+        "origin": "html",
+        "text": "乔布斯用疯狂的个性把苹果拉了回来，库克用严谨的理性和数字为苹果修筑了坚固的护城河，而如今接棒的特努斯，必须在这些危机中，为苹果找到一条重塑未来的关键之路。",
+        "unit_id": "f348e27e50d027056cbcfb60"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 71,
+        "origin": "html",
+        "text": "灯光暗示，他转身，往后台走。有人低下头看了一眼手机，屏幕留下跳动的股价。苹果的每一次交接，资本市场都只认一种语言，不是掌声，是股价。",
+        "unit_id": "1ec1b46654af27e45f4e82e0"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 72,
+        "origin": "html",
+        "text": "责任编辑：落木",
+        "unit_id": "a58ca7a64653446399c79c4b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 73,
+        "origin": "html",
+        "text": "文章内容举报",
+        "unit_id": "69b66d487939c6fac50fc66c"
+      }
+    ],
+    "url": "https://news.mydrivers.com/1/1150/1150011.htm"
+  },
+  "80416cfdd640a69ddbfa051a": {
+    "article_id": "80416cfdd640a69ddbfa051a",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "",
+    "discovery_title": "Apps will look terrible unless they are updated for the iPhone Duo",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T20:01:36+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T20:01:36+00:00",
+        "source": "json-ld dateModified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Wed Sep 09 2026, 04:01 PM EDT",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-10T02:05:59+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "21 minutes ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-10T00:52:54+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "1 hour ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T23:58:23+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T22:41:25+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "3 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T22:27:00+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "4 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T21:30:16+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "4 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T21:23:43+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "5 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T20:33:47+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "5 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-09T20:28:44+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "5 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Sep 09 2026, 04:01 PM EDT",
+        "source": "body date pattern"
+      }
+    ],
+    "published_raw": "2026-09-09T20:01:36+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-09T20:01:36+00:00",
+    "raw_lead": "Apple has produced a series of videos for developers showing how their apps will look on the iPhone Duo, and without modification, they could look really ugly.",
+    "source": "AppleInsider",
+    "title": "Apps will look terrible unless they are updated for the iPhone Duo",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Apple has produced a series of videos for developers showing how their apps will look on the iPhone Duo, and without modification, they could look really ugly.",
+        "unit_id": "39186120fdbf7cb931bae553"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "As it always has, Apple has encouraged developers to use its latest Xcode development tools without quite telling them why things were changing. Consequently, it now says that if developers have worked to the current Xcode 27, their apps will need little work to look good on the iPhone Duo.",
+        "unit_id": "86ccae815f551efe6fea347b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "Really they won't absolutely need any work, as the existing builds will be displayed full screen on the front, and almost full screen inside. In the first of a short series of videos, Apple shows that apps will be ranged left so that they take up most of the display, but avoid the camera section.",
+        "unit_id": "d9918bf353e3740694b78256"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "When developers rebuild their apps using the new Xcode 27.1, they get finer controls. Their apps can use the entire width of the inner screen, just as every app shown in the launch video did.",
+        "unit_id": "68e6ca2f0acfc800dff44850"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "That new Xcode 27.1 is now available. It includes an updated preview module that lets developers see how their apps will look in all four layouts:",
+        "unit_id": "7b27f044b97c766cd1118ecc"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Closed portrait",
+        "unit_id": "d677a63996a67be78e75ae27"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "Closed landscape",
+        "unit_id": "ac115d548cab52e71cf877ab"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Open horizontal in landscape",
+        "unit_id": "20305fc2b491c0ba51453e7f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Open vertical in portrait",
+        "unit_id": "00687d413f26b4d31c763a85"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Shaming old apps",
+        "unit_id": "4c814710c55f764b04da9773"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Where apps will not look good at all is when they are old, or developers have chosen not to follow Apple's guidelines. It's always a trade-off with development because often Apple's new guides initially don't have any obvious benefit.",
+        "unit_id": "b1ea7e9e906c7f9176af62c2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "It's only when Apple then introduces, for instance, larger screens, that it proves to have been worth the effort. In this case, it's going to be strikingly obvious when an app needs updating.",
+        "unit_id": "27c20e437f01e78081438e37"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "While they will display reasonably on the outer screen, on the opened-up inner one, they will look poor. They'll retain the same size and aspect ration they always had, but this means the app will sit in the center of the screen with huge black bars left and right.",
+        "unit_id": "6fe3d6f773e9f756d9659ab5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Back when the iPad first came out, Apple included an option to automatically scale up iPhone apps for the larger screen. It didn't work that well, it always looked particularly poor, and Apple has not done anything like that again.",
+        "unit_id": "b14526d08fdca6cbf4c0c211"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "Apps will be updated",
+        "unit_id": "919bb54f1754b042e27549a5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "During the launch, John Ternus criticized previous foldables as being like \"two phones awkwardly stuck together.\" He said that \"movies are boxed in by oversized black bars, making a large screen feel much smaller.\"",
+        "unit_id": "18e1eaa21f4310dbb2c2f028"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "All the layouts and orientations that apps will now need to support on the iPhone Duo - image credit: Apple.",
+        "unit_id": "eb3d011a5a43bfd81624c788"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "That's what app developers, and so users, will get unless they have updated their apps already. Or unless they go further and update them further with Xcode 27.1.",
+        "unit_id": "d1bedd005aade05402bfd382"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "At first, though, there are going to be many apps that do not take advantage of the new screen size. Based on previous experience, Microsoft may take years to update some apps, too.",
+        "unit_id": "ff04c53d9a94a320ba396186"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "But the majority of apps that are currently being actively developed will surely rush to take better advantage of the new iPhone Duo. Because it is going to be so plain to users when they have not.",
+        "unit_id": "c8d9930f02e67f061bb59a4f"
+      }
+    ],
+    "url": "https://appleinsider.com/articles/26/09/09/apps-will-look-terrible-unless-they-are-updated-for-the-iphone-duo?utm_source=rss"
+  },
+  "942845e03ef12ad9056b4018": {
+    "article_id": "942845e03ef12ad9056b4018",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "",
+    "discovery_title": "Set a Custom EQ for Your AirPods in iOS 27",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T19:59:01+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Monday September 14, 2026 12:59 PM PDT",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 14, 2026 12:59 PM PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 2, 2026 12:35 pm PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 9, 2026 9:10 am PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 13, 2026 3:00 am PDT",
+        "source": "body date pattern"
+      }
+    ],
+    "published_raw": "2026-09-14T19:59:01+00:00",
+    "published_source": "time datetime",
+    "published_utc": "2026-09-14T19:59:01+00:00",
+    "raw_lead": "Sony, Bose, and Sennheiser owners have been able to adjust the audio frequency spectrum of their headphones for years, whereas AirPods owners have had to make do with Apple's default tuning. That's no longer the case in iOS 27, which adds a three-band equalizer to the AirPods settings screen. You can download the new update in the Settings app via General ➝ Software Update.",
+    "source": "MacRumors",
+    "title": "Set a Custom EQ for Your AirPods in iOS 27",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Sony, Bose, and Sennheiser owners have been able to adjust the audio frequency spectrum of their headphones for years, whereas AirPods owners have had to make do with Apple's default tuning. That's no longer the case in iOS 27, which adds a three-band equalizer to the AirPods settings screen. You can download the new update in the Settings app via General ➝ Software Update.",
+        "unit_id": "6b00ba011641a8fff74efe1f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "It's worth noting that iOS has had an EQ setting for years – it's buried in Settings ➝ Apps ➝ Music, but it applies only to Apple Music playback, and works on any pair of headphones. In iOS 27, the new EQ is specifically tied to your AirPods, so it applies to everything you listen to. Your custom EQ profile also carries over to iPad and Mac when you pair your AirPods with them.",
+        "unit_id": "855c86150fa343e29aa56254"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "What You Need",
+        "unit_id": "29023639399d5b982204afce"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "Custom EQ requires Apple's H2 chip, so it supports AirPods Pro 2, AirPods Pro 3, AirPods 4, and AirPods Max 2. Earlier models, including the original AirPods Max, aren't compatible with the feature.",
+        "unit_id": "cd0787759a7aa5f3349cf284"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "You'll also need current AirPods beta firmware. If the Equalizer option described below doesn't appear, pair your AirPods with your iPhone, tap your AirPods in Settings, then tap AirPods Beta Updates and toggle on the beta updates option. Afterwards, put your AirPods in the case, connect the case to power, and leave it near your unlocked iPhone to let the latest beta firmware install quietly in the background. It shouldn't take more than half an hour.",
+        "unit_id": "88b92956f74246b0778d122a"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "How to Adjust Your AirPods EQ",
+        "unit_id": "f0fd31d3db4083c133e8263d"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "With your AirPods connected, open Settings on your iPhone.",
+        "unit_id": "bf32b458c544238c2a5f1d92"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Tap your AirPods at the top of the screen.",
+        "unit_id": "f9420c5f1a2f398d72988d3e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Tap Audio & Routing.",
+        "unit_id": "4e68e65a00bd810624f8d7a1"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Tap Equalizer.",
+        "unit_id": "145e563241736f2560353ac5"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Tap Custom, then drag the low, mid, and high points up or down.",
+        "unit_id": "4a9b5fca3ed5209ef70746e3"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "You should see a media playback control above the EQ showing the last thing you listened to, allowing you to hear how your adjustments sound in real time. Lows cover bass weight, mids carry vocals and most instruments, and highs handle treble detail and sibilance.",
+        "unit_id": "170f1bfecef2b40e922189d5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "To undo your changes, simply tap Reset, or choose Recommended at the top to restore Apple's default profile. You'll find all the same options in iPadOS 27, as well as in macOS 27 Golden Gate (in System Settings).",
+        "unit_id": "29d164a3eff96a5f6632924a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Apple released iOS 27 on September 14, 2026.",
+        "unit_id": "8cd681b4707961802f7f50b9"
+      }
+    ],
+    "url": "https://www.macrumors.com/how-to/set-custom-eq-airpods-ios/"
+  },
+  "9ff16c1e9962f77409b33777": {
+    "article_id": "9ff16c1e9962f77409b33777",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "",
+    "discovery_title": "iOS 27 AI Camera Summaries Cost $9.99 for One Camera, $59.99 for Five",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T21:46:30+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T21:46:30+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Monday September 14, 2026 2:46 pm PDT",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 14, 2026 2:46 pm PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 2, 2026 12:35 pm PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 13, 2026 3:00 am PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "September 9, 2026 10:46 am PDT",
+        "source": "body date pattern"
+      }
+    ],
+    "published_raw": "2026-09-14T21:46:30+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-14T21:46:30+00:00",
+    "raw_lead": "Apple is requiring a $9.99 iCloud+ plan to use the iOS 27 Apple Intelligence Home app features with a single HomeKit camera, and iPhone users aren't happy about it. iOS 27 includes text-based descriptions for motion alerts, a feature that uses Apple Intelligence. It recognizes people, animals, vehicles, packages, and general motion, and summarizes what's happening.",
+    "source": "MacRumors",
+    "title": "iOS 27 AI Camera Summaries Cost $9.99 for One Camera, $59.99 for Five",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "h1",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "iOS 27 AI Camera Summaries Cost $9.99 for One Camera, $59.99 for Five",
+        "unit_id": "c92ce36b833f36329c204f50"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "Apple is requiring a $9.99 iCloud+ plan to use the iOS 27 Apple Intelligence Home app features with a single HomeKit camera, and iPhone users aren't happy about it.",
+        "unit_id": "1bbd377f44e886835da74a5c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "‌iOS 27‌ includes text-based descriptions for motion alerts, a feature that uses ‌Apple Intelligence‌. It recognizes people, animals, vehicles, packages, and general motion, and summarizes what's happening.",
+        "unit_id": "6aef3dfd085dcd4ff8b10646"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "During the beta, we learned that a 2TB iCloud+ plan or higher would be needed to use video summaries, but at the time, Apple didn't say how many cameras would be supported.",
+        "unit_id": "f2ca57f7aaa9edaad16d34d7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "Last week, Apple shared new details on ‌Apple Intelligence‌ limits, and it turns out the 2TB ‌iCloud‌+ plan priced at $9.99 per month will only add AI summaries to a single camera. You'll need the $29.99 per month 6TB plan to get AI summaries for two cameras, or the $59.99 per month 12TB plan if you want to add up to five cameras. Apple One Premier subscribers are limited to a single camera since the bundle includes 2TB of ‌iCloud‌+ storage.",
+        "unit_id": "24185dd62543750728ee93e5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Apple isn't offering an ‌iCloud‌+ plan that lets users receive AI summaries for an unlimited number of cameras.",
+        "unit_id": "b6d85011793bba79b7ce6b86"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "Using HomeKit Secure Video cameras has always required a paid ‌iCloud‌+ plan, but the recording limits are at odds with the ‌Apple Intelligence‌ limits. You can use a single ‌HomeKit Secure Video‌ camera with a $0.99 per month 50GB ‌iCloud‌+ plan, five cameras with the $2.99 per month 200GB plan, and unlimited cameras with the 2TB plan priced at $9.99 per month.",
+        "unit_id": "138542cbbe9f5a357ea8519c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Someone who has a 2TB ‌iCloud‌+ plan and has invested in multiple ‌HomeKit Secure Video‌ cameras will only be able to use the new ‌Apple Intelligence‌ feature with one of those cameras.",
+        "unit_id": "f6b306c1260b62f7b76f0bcb"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "There are dozens of complaints about the subscription requirements on Reddit and on the MacRumors forums.",
+        "unit_id": "9e8ae9220896e8e2f34c4768"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Apple warns that supported camera counts and other ‌iCloud‌+ plan features could change over time. There will also be usage limits on Siri AI, photo editing tools, and Image Playground, with paid options to increase access. Apple hasn't announced pricing for features other than the ‌Apple Intelligence‌ Home app options.",
+        "unit_id": "6d9fbc21450428ff5c1c4276"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Rumors suggest Apple will launch its own home security cameras as soon as next year, with the company also working on a home security and monitoring service. Apple's own home security cameras could require the ‌iCloud‌+ subscription for advanced AI features.",
+        "unit_id": "facde78775dc5bbe5ee25fd8"
+      }
+    ],
+    "url": "https://www.macrumors.com/2026/09/14/ios-27-ai-camera-summaries/"
+  },
+  "aa1a109377e5c8f1772f54d5": {
+    "article_id": "aa1a109377e5c8f1772f54d5",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "",
+    "discovery_title": "iOS 27 is available to download to your iPhone right now",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T17:06:00+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T17:22:36+00:00",
+        "source": "json-ld dateModified"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T17:22:36+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Mon Sep 14 2026, 01:06 PM EDT",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T18:06:14+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "7 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T23:31:19+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T22:28:17+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "3 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T19:35:28+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "5 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T19:12:14+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "6 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-15T00:08:00+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "1 hour ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T21:02:14+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "4 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T21:00:00+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "4 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T20:45:46+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "4 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T20:35:54+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "4 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T20:09:17+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "5 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T19:32:18+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "6 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-09-14T18:54:22+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "6 hours ago",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Sep 14 2026, 01:06 PM EDT",
+        "source": "body date pattern"
+      }
+    ],
+    "published_raw": "2026-09-14T17:06:00+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-09-14T17:06:00+00:00",
+    "raw_lead": "Apple has released iOS 27 to the public, bringing with it the long-awaited overhaul of Siri among other AI-based changes to your iPhone.",
+    "source": "AppleInsider",
+    "title": "iOS 27 is available to download to your iPhone right now",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Apple has released iOS 27 to the public, bringing with it the long-awaited overhaul of Siri among other AI-based changes to your iPhone.",
+        "unit_id": "45e32dbe64b529f47f84daaf"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "Introduced back in June at WWDC 2026, Apple's update to iOS 27 has undergone many developer beta and public beta passes. But now, with the release of the iPhone 18 Pro and Pro Max on the horizon, it's made it available to all iPhone users.",
+        "unit_id": "0c8fb2df00a4630162413fb8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "Apple is continuing with its current numbering strategy of referring to the year that the operating system will be used the most in. That would be a small part of 2026 but nine months of 2027.",
+        "unit_id": "a46986c6ccfd3288a80f2c3b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "As usual, users can expect some changes from the operating system update. One of them is a very long-awaited change.",
+        "unit_id": "bcdab18be22b75865202aeed"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "iOS 27: Siri AI and Apple Intelligence",
+        "unit_id": "0fa361868f6620b25c7dc196"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "The big news this time is that Apple has finally implemented its Siri overhaul. The change announced during WWDC 2024 and delayed in early 2025 has become a reality.",
+        "unit_id": "b65b5fa6b79946e9dc2a5055"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "Using the Apple Foundation Model trained by Google Gemini, Siri in iOS 27 is being supercharged, as is all of Apple Intelligence in general.",
+        "unit_id": "8f2d56eccfbfc221881e22fa"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "As well as the new model, there's now a System Orchestrator that combines all of the elements that make up Apple Intelligence into a cohesive whole.",
+        "unit_id": "f76a23dedea2e1c715db8679"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "That means you're tapping the same systems if you're dealing with images, text, or anything else.",
+        "unit_id": "f15429e6ab1a8dcc3188ea30"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Siri AI now uses contextual awareness and your data more. Image Credit: Apple",
+        "unit_id": "d0b0a8d3e9b7fb9a1c9569f1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "The primary way that everyone will experience this will be through Siri, now dubbed Siri AI. With a new Liquid Glass appearance that consumes the Dynamic Island, it works much like old Siri with verbal prompts, but there's also text entry and a new Siri AI app.",
+        "unit_id": "70929cd65423a34fbe3d390e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "The app is your destination for checking over previous conversations you've had with Siri. Those discussions are also more conversational, with follow-up questions and prompts.",
+        "unit_id": "54a478b531dc8cf0788ac225"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "It brings Siri and Apple Intelligence more in line with other AI chatbot services. However, the new contextual awareness will make it seem more impressive.",
+        "unit_id": "38fdb67764f2e5b1f79f911f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Siri can now take advantage of your data, your contacts, and messaging history, in answering queries. For example, if you ask where you went on your last vacation, Siri could bring up shots from your trip, referencing comments in your messages planning the event, and tourist spots you passed through.",
+        "unit_id": "2c6074eeaf6f52da476cf5b7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "However, while any device with Apple Intelligence support can use Siri AI, only some will benefit from using Apple's new \"most advanced on-device model ever.\" That means the iPhone Air and iPhone 17 Pro and later will be able to use those new LLMs.",
+        "unit_id": "5302df5b5b45a588c082334a"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "iOS 27: Images and Photos",
+        "unit_id": "527b8d7d8aabc3520f408885"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "The changes aren't just about Siri, but they also apply to other areas.",
+        "unit_id": "46309b7b910e4a0995f00310"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "For example, Visual Intelligence is now much easier to access in the Camera app thanks to a new Siri mode. Taking a shot, you can then use what's visible in the image as part of a Siri query.",
+        "unit_id": "7990cfb7b5760a74c8831568"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "You're not limited to the camera either. You can even take a screenshot and make a Siri query from that.",
+        "unit_id": "258c9ae92bf1854540131941"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "Siri mode in the Camera app",
+        "unit_id": "9bc1e0960facc358a62b9ede"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 20,
+        "origin": "html",
+        "text": "In the Photos app, there are now new editing options driven by AI. That includes Extend, which can generate more of an image for you beyond what the camera saw.",
+        "unit_id": "c50f395c6a2978bd77c63d9c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 21,
+        "origin": "html",
+        "text": "There's also Spatial Reframe, which lets you change the camera angle after you took the shot. It's advised not to push it too far, though.",
+        "unit_id": "1d9b7d24e753da81063cbf2c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 22,
+        "origin": "html",
+        "text": "Spatial reframing of a portrait of a kitten works well. Original on the left.",
+        "unit_id": "8edbe37061cc30c5d765263d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 23,
+        "origin": "html",
+        "text": "Image Playground, Apple's image generation feature, has been enhanced since iOS 26 with ChatGPT integration. That means being able to create images in more styles, including photorealistic graphics.",
+        "unit_id": "8b3a53afcd8d87a074755fc5"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 24,
+        "origin": "html",
+        "text": "iOS 27: Child Safety",
+        "unit_id": "3ca8f24396da1449827d86c5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 25,
+        "origin": "html",
+        "text": "Parental controls have been a continual area of complaint from groups concerned about the safety of their children. Once again, Apple is trying to appease them with a new set of features.",
+        "unit_id": "10f5c735120e29363b5d3e99"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 26,
+        "origin": "html",
+        "text": "The parental controls have been revamped in iOS 27, including making it a lot easier for a parent to set up a new child Apple Account. Parents will also be guided on how to modify a child's access to apps on a device.",
+        "unit_id": "fb0ccb0b3a88353ed8b9c266"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 27,
+        "origin": "html",
+        "text": "While children could ask for access to an app before, the iOS 27 update expands these requests to include websites.",
+        "unit_id": "dbca640aba2eb036b82de2e6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 28,
+        "origin": "html",
+        "text": "The Time Allowances feature of Screen Time now makes it easier to manage app usage. APIs also allow developers to hook into that system.",
+        "unit_id": "7203d1cbc2b58f4ecc8b9037"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 29,
+        "origin": "html",
+        "text": "There's also an update to Communication Safety. Before, it would block nudity from view, but now it will also hide gore.",
+        "unit_id": "9b6f53788cf3ad3488ccf2c8"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 30,
+        "origin": "html",
+        "text": "iOS 27: Smaller changes",
+        "unit_id": "909e4769f888259c3eab2618"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 31,
+        "origin": "html",
+        "text": "These are the main things to look out for in iOS 27, but there are many other much smaller changes too.",
+        "unit_id": "7ce9ef91d0e347fc648251f3"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 32,
+        "origin": "html",
+        "text": "The controversial Liquid Glass aesthetic has been given some tweaks to make it more readable. Better contrast, sharper icons, and a customization slider are available in this release.",
+        "unit_id": "53e443440ccba9a1ddd5d37d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 33,
+        "origin": "html",
+        "text": "On the health side, GymKit on iPhone now means you can connect it to compatible cardio equipment at a gym. If you have AirPods Pro 3, you can also use it to track your heart rate with those workouts.",
+        "unit_id": "5df4d1aef3421f8b28d50909"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 34,
+        "origin": "html",
+        "text": "Perimenopause and Menopause support in Health's Cycle Tracking will now notify users if logged cycle patterns are suggestive of perimenopause.",
+        "unit_id": "50b2787bb4522aa5017e94f6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 35,
+        "origin": "html",
+        "text": "Old Apple Maps and new iOS 27 Apple Maps. Note the changes in how the trees are rendered.",
+        "unit_id": "1b51291d33f68d3ee108e319"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 36,
+        "origin": "html",
+        "text": "Apple Maps now has better Flyover imagery, enhanced with Visual Intelligence. Local Lists will automate lists of restaurants and other topics based on the interactions of other users.",
+        "unit_id": "6368e8a60e20075ab5c02795"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 37,
+        "origin": "html",
+        "text": "There are also enhancements to the Home app with Apple Intelligence. Notifications can be combined, HomeKit Secure Video footage can be described to you before you watch it, and AI can now help you search for specific clips.",
+        "unit_id": "ccf62f016bf62570c0269640"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 38,
+        "origin": "html",
+        "text": "HomeKit Secure Video also now streams and records in 4K.",
+        "unit_id": "72490c7b815fb3882245379e"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 39,
+        "origin": "html",
+        "text": "iOS 27: Compatibility and Installation",
+        "unit_id": "471be44b7c0c146d2fb9f853"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 40,
+        "origin": "html",
+        "text": "IOS 27 will be compatible with the iPhone 11 and later models, as well as the second-generation iPhone SE and later. This is the same compatibility list as iOS 26, meaning no models have been dropped off the roster.",
+        "unit_id": "e23b58d9ac889745f26ed8f3"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 41,
+        "origin": "html",
+        "text": "The full list of compatible models that can update to iOS 27 follows.",
+        "unit_id": "21f084e422cde0c44f0bbd7e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 42,
+        "origin": "html",
+        "text": "iPhone 17 Pro",
+        "unit_id": "f70c60ae0b8e0579dcd6c2a8"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 43,
+        "origin": "html",
+        "text": "iPhone 17 Pro Max",
+        "unit_id": "f3b4e54102ac466fe2e3208f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 44,
+        "origin": "html",
+        "text": "iPhone 16e",
+        "unit_id": "d77d0a36bfd81a0876ae2c9c"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 45,
+        "origin": "html",
+        "text": "iPhone 16",
+        "unit_id": "3ca206724509453cb1db8c50"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 46,
+        "origin": "html",
+        "text": "iPhone 16 Plus",
+        "unit_id": "00cf5b04575d9f7fa2915aab"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 47,
+        "origin": "html",
+        "text": "iPhone 16 Pro",
+        "unit_id": "66230270dbfa528e1af27f0e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 48,
+        "origin": "html",
+        "text": "iPhone 16 Pro Max",
+        "unit_id": "7e3b2d5990b711836c31e51c"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 49,
+        "origin": "html",
+        "text": "iPhone 15",
+        "unit_id": "dcc24ff15631e2da79e3a149"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 50,
+        "origin": "html",
+        "text": "iPhone 15 Plus",
+        "unit_id": "87a277d49081b76ffb399b70"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 51,
+        "origin": "html",
+        "text": "iPhone 15 Pro",
+        "unit_id": "e95229cfb52b698037522e48"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 52,
+        "origin": "html",
+        "text": "iPhone 15 Pro Max",
+        "unit_id": "b6e0693dd1bf46ea34228366"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 53,
+        "origin": "html",
+        "text": "iPhone 14",
+        "unit_id": "12b8ec455f51241eca256bde"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 54,
+        "origin": "html",
+        "text": "iPhone 14 Plus",
+        "unit_id": "fb21aeab9b8684f3a9a503d5"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 55,
+        "origin": "html",
+        "text": "iPhone 14 Pro",
+        "unit_id": "31e820a294bb06ff5e7b0033"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 56,
+        "origin": "html",
+        "text": "iPhone 14 Pro Max",
+        "unit_id": "1fd5469c3117b6defa5f513d"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 57,
+        "origin": "html",
+        "text": "iPhone 13",
+        "unit_id": "06d50eb0ae1a17b5c46d62e2"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 58,
+        "origin": "html",
+        "text": "iPhone 13 mini",
+        "unit_id": "021d417ace44c38aefcf366b"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 59,
+        "origin": "html",
+        "text": "iPhone 13 Pro",
+        "unit_id": "220efe4f9a3c7bbb23679f10"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 60,
+        "origin": "html",
+        "text": "iPhone 13 Pro Max",
+        "unit_id": "6e1441de35aded71c2e42669"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 61,
+        "origin": "html",
+        "text": "iPhone 12",
+        "unit_id": "c35283ac826f0d1b2a3fec7d"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 62,
+        "origin": "html",
+        "text": "iPhone 12 mini",
+        "unit_id": "7fd12edd2df5ddccc5384c0f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 63,
+        "origin": "html",
+        "text": "iPhone 12 Pro",
+        "unit_id": "8343d9f2f080af9cf309d4ca"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 64,
+        "origin": "html",
+        "text": "iPhone 12 Pro Max",
+        "unit_id": "feebdb195b7d28a2903e0a33"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 65,
+        "origin": "html",
+        "text": "iPhone 11",
+        "unit_id": "b42d014e0a1d359208002e48"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 66,
+        "origin": "html",
+        "text": "iPhone 11 Pro",
+        "unit_id": "aaeed11433c7984dc4874069"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 67,
+        "origin": "html",
+        "text": "iPhone 11 Pro Max",
+        "unit_id": "107caf3f9ee7eabd6287781b"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 68,
+        "origin": "html",
+        "text": "iPhone SE (2nd generation or later)",
+        "unit_id": "64ad337feecf433fba329009"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 69,
+        "origin": "html",
+        "text": "To install iOS 27 onto an iPhone, open the Settings app, tap General, then Software Update. Tap the iOS 27 update and follow the instructions.",
+        "unit_id": "eec9d69fe7152902540ab5ad"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 70,
+        "origin": "html",
+        "text": "For participants in the developer and public beta programs, the update may appear automatically with the final version. In some cases, you may have to tap Beta Updates and set it to Off.",
+        "unit_id": "3b8815bab86b56f47d891837"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 71,
+        "origin": "html",
+        "text": "New owners of the iPhone 18 Pro will not need to install the update, as it will be preinstalled on their hardware.",
+        "unit_id": "42d4b79be25f48e2d4260b98"
+      }
+    ],
+    "url": "https://appleinsider.com/articles/26/09/14/ios-27-is-now-available-with-big-changes-to-photos-and-siri?utm_source=rss"
+  }
+}

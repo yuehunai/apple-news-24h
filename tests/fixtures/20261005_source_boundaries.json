@@ -1,0 +1,2904 @@
+{
+  "645ec274c79ee1453f6bc89a": {
+    "evidence": {
+      "article_id": "645ec274c79ee1453f6bc89a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Last week, Bloomberg 's Mark Gurman reported that Apple plans to unveil an all-new smart home hub, a new HomePod mini, and a new Apple TV 4K on Tuesday, October 13 . In his Power On newsletter today , Gurman specified that \"Apple is planning to hold an event\" that day. Tags: Apple Event , Mark Gurman This article, \" Apple Event Reportedly Planned for October 13 \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple Event Reportedly Planned for October 13",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05T00:07:38+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05T00:07:38+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05T00:07:38+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sunday October 4, 2026 5:07 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 4, 2026 5:07 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 8, 2026 10:24 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 30, 2026 4:36 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 22, 2026 8:40 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon, 05 Oct 2026 00:07:38 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-05T00:07:38+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-05T00:07:38+00:00",
+      "raw_lead": "Last week, Bloomberg's Mark Gurman reported that Apple plans to unveil an all-new smart home hub, a new HomePod mini, and a new Apple TV 4K on Tuesday, October 13. Last week, Bloomberg's Mark Gurman reported that Apple plans to unveil an all-new smart home hub, a new HomePod mini, and a new Apple TV 4K on Tuesday, October 13.",
+      "source": "MacRumors",
+      "title": "Apple Event Reportedly Planned for October 13",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Event Reportedly Planned for October 13",
+          "unit_id": "4a245cca6a47ed424d0de830"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Last week, Bloomberg's Mark Gurman reported that Apple plans to unveil an all-new smart home hub, a new HomePod mini, and a new Apple TV 4K on Tuesday, October 13.",
+          "unit_id": "07751e14b0831c7bcd9c833f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "In his Power On newsletter today, Gurman specified that \"Apple is planning to hold an event\" that day.",
+          "unit_id": "f3e09b5ee2052817857cf432"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/04/apple-event-reportedly-planned-for-october-13/"
+    },
+    "recorded_extraction": [
+      "Apple Event Reportedly Planned for October 13",
+      "Last week, Bloomberg's Mark Gurman reported that Apple plans to unveil an all-new smart home hub, a new HomePod mini, and a new Apple TV 4K on Tuesday, October 13. Last week, Bloomberg's Mark Gurman reported that Apple plans to unveil an all-new smart home hub, a new HomePod mini, and a new Apple TV 4K on Tuesday, October 13. Last week, Bloomberg 's Mark Gurman reported that Apple plans to unveil an all-new smart home hub, a new HomePod mini, and a new Apple TV 4K on Tuesday, October 13 .",
+      []
+    ]
+  },
+  "8567d943c5c05de0582798eb": {
+    "evidence": {
+      "article_id": "8567d943c5c05de0582798eb",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "We are touching down to let folks know the Amazon fall Prime Day sale is getting a head start today – AirPods Pro 3 have now dropped down to one of the lowest prices to date at $179 shipped. more… We are touching down to let folks know the Amazon fall Prime Day sale is getting a head start today…",
+      "discovery_title": "AirPods Pro 3 hit low $179 price just weeks after adding new features",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T10:24:01+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T10:26:12+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T10:24:01+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T10:26:12+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 10:24:01 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T10:24:01+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T10:24:01+00:00",
+      "raw_lead": "We are touching down to let folks know the Amazon fall Prime Day sale is getting a head start today...",
+      "source": "9to5Mac",
+      "title": "AirPods Pro 3 hit low $179 price just weeks after adding new features - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "We are touching down to let folks know the Amazon fall Prime Day sale is getting a head start today – AirPods Pro 3 have now dropped down to one of the lowest prices to date at $179 shipped.",
+          "unit_id": "571ebebbeb41e601bd600ce1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "While the fall Prime Big Deal Days is roughly 48 hours away, Amazon is getting things started well ahead of time and is now offering Apple’s flagship AirPods Pro 3 down at $179 shipped.",
+          "unit_id": "6cb8862bd16cc5ff94ddba54"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "AirPods Pro 3 $179 (Reg. $249) – one of the best deals ever",
+          "unit_id": "e896989012e8dc96c6fe5e67"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The current-gen Pro carry a $249 list and while we have caught them down at $199 a few times this summer, they have now dropped even lower to deliver a seriously notable discount at $70 off.",
+          "unit_id": "0cb293c61734064c97eb627f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Apple did very much just unleash its all-new AirPods 5 in two flavors: the base set with ANC at $129 and the upgraded set with the Wireless Charging Case. ANC on Apple’s just-released new set at $129 delivers some serious value if you ask me, but it will run you $149 if you want the model with the Wireless Charging Case and you can now score the even AirPods Pro 3 for just $30 more.",
+          "unit_id": "6f27d8003eb5b4e95f086879"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Pro 3 deliver 3x better active noise cancellation, longer battery life, far more advanced health features like the onboard heart rate sensing capabilities, the Hearing Aid features, and more. You’ll certainly want to check out our recent showdown feature for more details – AirPods Pro 3 vs AirPods 5.",
+          "unit_id": "3bfcf487d8fbbb56627a2083"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "AirPods Pro 3 vs AirPods 5: Three reasons to go Pro",
+          "unit_id": "58d1ddcfcaa16db6ef7ec1b6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The base AirPods 5 at $129 are a solid buy, but the far more advanced AirPods Pro 3 at $179 is a seriously notable discount and one we have only tracked once previous to today.",
+          "unit_id": "389748672c5c4e6a20fdc52a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "The discount comes just a few weeks after Apple rolled out a bunch of new features to AirPods Pro 3 alongside iOS 27. The update included the long-requested Custom EQ features:",
+          "unit_id": "0f1b1fe3568bd6fa36931d27"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "“AirPods are designed and engineered by Apple to faithfully represent music, TV shows and movies, and calls…If you prefer a different sound profile, you can customize how AirPods represent any audio played.”",
+          "unit_id": "8c87880b26d08d61e7dbfc4b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Other new features include new ways to control Adaptive Audio, better Find My integration, and more.",
+          "unit_id": "c2872e694d3db5d1de7c5dea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Almost all M5 MacBook Air models just hit the best price in months at $200 off in early fall Prime Day sale",
+          "unit_id": "f42e87236284ec0b2d16d54e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "First deals hit official Apple iPhone 18 Pro/Max cases from under $42: TechWoven, Silicone, more",
+          "unit_id": "e9b61722517a623c10ea35ee"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/04/airpods-pro-3-prime-day-deal/"
+    },
+    "recorded_extraction": [
+      "AirPods Pro 3 hit low $179 price just weeks after adding new features - 9to5Mac",
+      "We are touching down to let folks know the Amazon fall Prime Day sale is getting a head start today... We are touching down to let folks know the Amazon fall Prime Day sale is getting a head start today – AirPods Pro 3 have now dropped down to one of the lowest prices to date at $179 shipped . The current-gen Pro carry a $249 list and while we have caught them down at $199 a few times this summer, they have now dropped even lower to deliver a seriously notable discount at $70 off. Apple did very much just unleash its all-new AirPods 5 in two flavors: the base set with ANC at $129 and the upgraded set with the Wireless Charging Case. ANC on Apple’s just-released new set at $129 delivers some serious value if you ask me, but it will run you $149 if you want the model with the Wireless Charging Case and you can now score the even AirPods Pro 3 for just $30 more. Pro 3 deliver 3x better active noise cancellation, longer battery life, far more advanced health features like the onboard heart rate sensing capabilities, the Hearing Aid features, and more. You’ll certainly want to check out our recent showdown feature for more details – AirPods Pro 3 vs AirPods 5 .",
+      [
+        "We are touching down to let folks know the Amazon fall Prime Day sale is getting a head start today – AirPods Pro 3 have now dropped down to one of the lowest prices to date at $179 shipped.",
+        "AirPods Pro 3 $179 (Reg. $249) – one of the best deals ever",
+        "The current-gen Pro carry a $249 list and while we have caught them down at $199 a few times this summer, they have now dropped even lower to deliver a seriously notable discount at $70 off.",
+        "Apple did very much just unleash its all-new AirPods 5 in two flavors: the base set with ANC at $129 and the upgraded set with the Wireless Charging Case. ANC on Apple’s just-released new set at $129 delivers some serious value if you ask me, but it will run you $149 if you want the model with the Wireless Charging Case and you can now score the even AirPods Pro 3 for just $30 more.",
+        "Pro 3 deliver 3x better active noise cancellation, longer battery life, far more advanced health features like the onboard heart rate sensing capabilities, the Hearing Aid features, and more.",
+        "The base AirPods 5 at $129 are a solid buy, but the far more advanced AirPods Pro 3 at $179 is a seriously notable discount and one we have only tracked once previous to today.",
+        "The discount comes just a few weeks after Apple rolled out a bunch of new features to AirPods Pro 3 alongside iOS 27. The update included the long-requested Custom EQ features:",
+        "Almost all M5 MacBook Air models just hit the best price in months at $200 off in early fall Prime Day sale"
+      ]
+    ]
+  },
+  "f4183dc555f34f7759fbbfe0": {
+    "evidence": {
+      "article_id": "f4183dc555f34f7759fbbfe0",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Amazon’s October Prime Day has effectively chopped off Apple’s June price increases. Usually $1,299, the 13-inch MacBook Air with the M5 chip and 512GB of storage is on sale for $1,099 at Amazon. That’s a more palatable price for a machine that’s significantly faster than Apple’s $699 MacBook Neo. The 15-inch version, also with 512GB […]",
+      "discovery_title": "The MacBook Air M5 is $200 off for the first time in months",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:34:01+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:34:01+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:34:01+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:34:01+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:34:01+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4, 2026, 12:34 PM UTC",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T17:18:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T13:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:31:50+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T12:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 3",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T12:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T20:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T15:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 3",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T12:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 3",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 4, 2026, 12:34 PM UTC",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T08:34:01-04:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T12:34:01+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T12:34:01+00:00",
+      "raw_lead": "Save some cash on Apple’s midrange laptop.",
+      "source": "The Verge",
+      "title": "The MacBook Air M5 is $200 off for the first time in months",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "jsonld:articleBody",
+          "text": "Amazon’s October Prime Day has effectively chopped off Apple’s June price increases. Usually $1,299, the 13-inch MacBook Air with the M5 chip and 512GB of storage is on sale for $1,099 at Amazon. That’s a more palatable price for a machine that’s significantly faster than Apple’s $699 MacBook Neo.",
+          "unit_id": "1a90a44db66526b7cc1ef73b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "jsonld:articleBody",
+          "text": "The 15-inch version, also with 512GB of storage, is $1,299 at Amazon (was $1,499). In addition to the larger screen, it has two additional speakers, for a total of six, and two additional GPU cores for better overall graphical performance.",
+          "unit_id": "02794b25cca9c220fa325b72"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "jsonld:articleBody",
+          "text": "[Product: Apple MacBook Air (M5) | https://www.amazon.com/dp/B0GR1JTFP8/ref=fs_a_mbt2_us4?th=1&tag=theverge02-20, https://www.amazon.com/Apple-2026-MacBook-15-inch-Laptop/dp/B0GR114BV7?th=1&tag=theverge02-20]",
+          "unit_id": "d66207ed100e4306bb5aceab"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "jsonld:articleBody",
+          "text": "The latest update to Apple’s midrange laptop includes a noticeable improvement to the speed of both the processor and storage. Even without flashy new features compared to the last-gen model, it’s still one of our favorite laptops, thanks to its long battery life, bright screen, and excellent speakers.",
+          "unit_id": "f16fddf75b6f3f202f8e8812"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "jsonld:articleBody",
+          "text": "Read our Apple MacBook Air (2026, M5) review.",
+          "unit_id": "153b2075c0ac852ff630cefc"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple MacBook Air (M5)",
+          "unit_id": "98adc5f209667f89b4db0590"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "$1099$129915% off",
+          "unit_id": "4c9aaf874c3a4d9a43d62709"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "$1099",
+          "unit_id": "76dd97ffe708945a7c9b858a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple’s 2026 MacBook Air has an M5 chip and starts with 512GB of storage that’s significantly faster than previous generations. It’s still as excellent as ever despite a higher base price. Read our review.",
+          "unit_id": "4a5010e76dfbbb61eb8ad8b3"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "$1099 at Amazon (13-inch, 512GB)$1299 at Amazon (15-inch, 512GB)",
+          "unit_id": "0394754cd8ba11c264f30464"
+        }
+      ],
+      "url": "https://www.theverge.com/gadgets/1000832/macbook-air-m5-amazon-prime-big-deal-sale"
+    },
+    "recorded_extraction": [
+      "The MacBook Air M5 is $200 off for the first time in months",
+      "Amazon’s October Prime Day has effectively chopped off Apple’s June price increases. Usually $1,299, the 13-inch MacBook Air with the M5 chip and 512GB of storage is on sale for $1,099 at Amazon. That’s a more palatable price for a machine that’s significantly faster than Apple’s $699 MacBook Neo. The 15-inch version, also with 512GB of storage, is $1,299 at Amazon (was $1,499). In addition to the larger screen, it has two additional speakers, for a total of six, and two additional GPU cores for better overall graphical performance.",
+      [
+        "Usually $1,299, the 13-inch MacBook Air with the M5 chip and 512GB of storage is on sale for $1,099 at Amazon.",
+        "That’s a more palatable price for a machine that’s significantly faster than Apple’s $699 MacBook Neo.",
+        "The 15-inch version, also with 512GB of storage, is $1,299 at Amazon (was $1,499).",
+        "[Product: Apple MacBook Air (M5) | https://www.amazon.com/dp/B0GR1JTFP8/ref=fs_a_mbt2_us4?th=1&tag=theverge02-20, https://www.amazon.com/Apple-2026-MacBook-15-inch-Laptop/dp/B0GR114BV7?th=1&tag=theverge02-20] The latest update to Apple’s midrange laptop includes a noticeable improvement to the speed of both the processor and storage.",
+        "Even without flashy new features compared to the last-gen model, it’s still one of our favorite laptops, thanks to its long battery life, bright screen, and excellent speakers.",
+        "Read our Apple MacBook Air (2026, M5) review."
+      ]
+    ]
+  },
+  "494b768576831e93dc7420ab": {
+    "evidence": {
+      "article_id": "494b768576831e93dc7420ab",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "AirPods are one of Apple’s most interesting products. The demand for them was largely invented by the fact that the company removed the headphone jack 10 years ago, and now most of us carry this almost magical pair of earbuds that do so much more than just play audio. AirPods offer best-in-class noise cancellation, and also serve as a hearing aid. They get better and better almost every year. Despite everything that AirPods do so well, I have one annoyance with them, and it’s particularly annoying because it could be such an easy software fix. more… The demand for them was largely invented by the fact that the…",
+      "discovery_title": "This is my biggest AirPods complaint, and it’s not necessarily about the hardware",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T19:09:34+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T19:09:36+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T19:09:34+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T19:09:36+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 19:09:34 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T19:09:34+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T19:09:34+00:00",
+      "raw_lead": "AirPods are one of Apple’s most interesting products. The demand for them was largely invented by the fact that the...",
+      "source": "9to5Mac",
+      "title": "This is my biggest AirPods complaint, and it's not necessarily about the hardware - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "AirPods are one of Apple’s most interesting products. The demand for them was largely invented by the fact that the company removed the headphone jack 10 years ago, and now most of us carry this almost magical pair of earbuds that do so much more than just play audio. AirPods offer best-in-class noise cancellation, and also serve as a hearing aid. They get better and better almost every year.",
+          "unit_id": "c256dc678ff857ae9efa218f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Despite everything that AirPods do so well, I have one annoyance with them, and it’s particularly annoying because it could be such an easy software fix.",
+          "unit_id": "c0e0f5f50c1b8aad20a2fc7c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Right now, if your AirPods need to charge and you plug your iPhone in, you’ll get a notification to also charge your AirPods. This is because Apple figures that it’d probably be no hassle to charge your AirPods while you’re charging your iPhone, and that reminder has saved me from unknowingly having dead AirPods many times.",
+          "unit_id": "c6e9957916c585b0de99869f"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "AirPods often end up dead in the case",
+          "unit_id": "5f5ec1b62331528cc7fd8adb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "If you’ve owned AirPods for a while, you might be quite familiar with this problem: something got in between the pins of your charging case and one of your AirPods, and you pull them out of the case with one of them dead. This can often ruin your walk, commute, or so on.",
+          "unit_id": "a6b84e8ff429a9ebe6562181"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "At least to me, it seems obvious to add a notification to tell users that one of their AirPods isn’t charging. If one of the AirPods is in the case, and the other isn’t detected in-ear, it’s likely safe to assume it’s in the case but not charging, and Apple could then alert the user to adjust the AirPod or make sure theres no obstruction in the case.",
+          "unit_id": "5814a40fb6d12d9817a1d190"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "View all comments",
+          "unit_id": "7e627d1b367bbf6ac6cb2365"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "It’d be such a simple fix to such a major annoyance, and it’d be yet another instance of Apple magic letting you know that one of your AirPods isn’t charging, before it’s too late.",
+          "unit_id": "bdc7b1b299c004759d53f6c3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Hopefully, Apple can implement such a feature in a later iOS update. Right now, the latest-generation AirPods Pro 3 are on sale for $179, in case you don’t own a pair.",
+          "unit_id": "0395ded3b36beeee84531796"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/04/this-is-my-biggest-airpods-complaint/"
+    },
+    "recorded_extraction": [
+      "This is my biggest AirPods complaint, and it's not necessarily about the hardware - 9to5Mac",
+      "AirPods are one of Apple’s most interesting products. The demand for them was largely invented by the fact that the... AirPods are one of Apple’s most interesting products. The demand for them was largely invented by the fact that the company removed the headphone jack 10 years ago, and now most of us carry this almost magical pair of earbuds that do so much more than just play audio. AirPods offer best-in-class noise cancellation, and also serve as a hearing aid. They get better and better almost every year. Despite everything that AirPods do so well, I have one annoyance with them, and it’s particularly annoying because it could be such an easy software fix. Right now, if your AirPods need to charge and you plug your iPhone in, you’ll get a notification to also charge your AirPods . This is because Apple figures that it’d probably be no hassle to charge your AirPods while you’re charging your iPhone, and that reminder has saved me from unknowingly having dead AirPods many times. If you’ve owned AirPods for a while, you might be quite familiar with this problem: something got in between the pins of your charging case and one of your AirPods , and you pull them out of the case with one of them dead. This can often ruin your walk, commute, or so on.",
+      [
+        "AirPods are one of Apple’s most interesting products. The demand for them was largely invented by the fact that the company removed the headphone jack 10 years ago, and now most of us carry this almost magical pair of earbuds that do so much more than just play audio. AirPods offer best-in-class noise cancellation, and also serve as a hearing aid. They get better and better almost every year.",
+        "At least to me, it seems obvious to add a notification to tell users that one of their AirPods isn’t charging. If one of the AirPods is in the case, and the other isn’t detected in-ear, it’s likely safe to assume it’s in the case but not charging, and Apple could then alert the user to adjust the AirPod or make sure theres no obstruction in the case.",
+        "Hopefully, Apple can implement such a feature in a later iOS update. Right now, the latest-generation AirPods Pro 3 are on sale for $179, in case you don’t own a pair."
+      ]
+    ]
+  },
+  "760e2ed2f6e08ef5290eea9b": {
+    "evidence": {
+      "article_id": "760e2ed2f6e08ef5290eea9b",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "In this week's Sunday Reboot, the expansion of Apple Pay and Apple Music to some countries has taken a decade longer than they really should. They also demonstrate how delays can happen for many different reasons. Apple Pay in action. Sunday Reboot is a weekly column covering some of the lighter stories within the Apple reality distortion field from the past seven days. All to get next week underway with a good first step. Continue Reading on AppleInsider | Discuss on our Forums",
+      "discovery_title": "Sunday Reboot: Waiting a decade for Apple Pay and Apple Music",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T20:07:57+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T20:07:57+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun Oct 04 2026, 04:07 PM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T20:07:57+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "5 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:05:05+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:35:20+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:22:35+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "11 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T11:21:31+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "14 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:38:54+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "17 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:16:57+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "18 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:05:29+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "18 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 04 2026, 04:07 PM EDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 20:07:57 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T20:07:57+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T20:07:57+00:00",
+      "raw_lead": "In this week's Sunday Reboot, the expansion of Apple Pay and Apple Music to some countries has taken a decade longer than they really should. They also demonstrate how delays can happen for many different reasons.",
+      "source": "AppleInsider",
+      "title": "Sunday Reboot: Waiting a decade for Apple Pay and Apple Music",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "In this week's Sunday Reboot, the expansion of Apple Pay and Apple Music to some countries has taken a decade longer than they really should. They also demonstrate how delays can happen for many different reasons.",
+          "unit_id": "fe45554d188bb54f42e3ffef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Sunday Reboot is a weekly column covering some of the lighter stories within the Apple reality distortion field from the past seven days. All to get next week underway with a good first step.",
+          "unit_id": "25e49973f78f7b61c4c0e072"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple Music adds to its territory list",
+          "unit_id": "ceb373eaf75a788a1dd3197b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "It may be a surprise to some readers, but I'm not in the United States. I'm one of the few members of the editorial team based in the United Kingdom, but trained to write in the American way, and forget about the letter U in some words.",
+          "unit_id": "4200ccf981b9bf24859e7e55"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "This does lead to some issues when it comes to trying out Apple's new services. It's a problem when your whole job is to talk about them.",
+          "unit_id": "18846a4803aea90b75f8bc92"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Thankfully, the UK does have access to almost all of Apple's services, but there are blind spots and differences.",
+          "unit_id": "e2a91a1d29532865c4bbeab9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "For example, while I have access to Apple Pay, I cannot use services like Apple Card because they are US-only for the moment. Except that I have to change region sometimes for reporting, and now I annoyingly have an Apple Cash card permanently visible in the Wallet app that I cannot use at all.",
+          "unit_id": "562d61c705d4f9bf83085c45"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "A little less pressing is the lack of puzzles in News+ over here. Though I can understand the financial problems in setting up Apple Card in the UK, it seems there would be fewer obstacles in adding brainteasers to Apple News, just as U.S. users enjoy.",
+          "unit_id": "28c89bdb0c1b69186cf9adea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "That said, I am still quite glad to be in the UK where Apple products and services come into play. Partly because we don't suffer from the EU blackout of some upcoming features.",
+          "unit_id": "ca0db982a7464dae06da27cd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "We at least get the updates fairly quickly. Unlike some service updates that happened this week.",
+          "unit_id": "3cf1bfd25444675447f46620"
+        },
+        {
+          "container_id": "caption",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple Music has expanded into four new countries, including Albania.",
+          "unit_id": "35123cf78d673e8f58d429c2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "On Wednesday, an update to Apple Music finally rolled it out into four countries: Albania, Brunei, Burkina Faso, and Pakistan.",
+          "unit_id": "78798a9330821b22660384f6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "This sounds fairly OK, until you remember that Apple Music was unveiled in June 2015 in over 100 countries. It's taken over 11 years for Apple Music to be available in those four countries.",
+          "unit_id": "df012f8227fce31ae1ef1bac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "There's no real explanation for the lack of support in those countries, nor why it took so long.",
+          "unit_id": "18ee4517f5315f91e0173789"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "The more time-consuming problems would revolve around licensing negotiations. However, both Apple and record labels like money, and so you'd expect negotiations to happen at a fairly quick pace.",
+          "unit_id": "68bcd810641772a0332254d9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Then again, it could easily be because Apple has bigger problems at hand than adding support to some countries it's seemingly forgotten about for over a decade.",
+          "unit_id": "9778f726d36a84bc6100a424"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Regardless, it's a good thing that Apple Music is now available in four more territories that endured a very long wait.",
+          "unit_id": "a50539b9be641344bacfbab0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "It also reminds me that I'm lucky to live where I do. While there are always going to be differences between US and UK availability for things, I'm not realistically going to be waiting for a decade for anything.",
+          "unit_id": "84034f8775953d3435ee0f24"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "Wait, Apple Pay wasn't in India already?",
+          "unit_id": "455b4e14c8c54c12310a51ae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "Slightly less puzzling is the Apple Pay update on the same day. After launching in 2014, Apple finally brought Apple Pay live in India.",
+          "unit_id": "bc90b6a30014883a3e3c48a4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "It certainly makes sense for Apple to do so, because it is a massive market, and an emerging one at that.",
+          "unit_id": "d73d1bac20bf3543a872aee8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "The problem here is that Apple said back in 2017 that it was trying to bring Apple Pay to India. That's a nine-year wait.",
+          "unit_id": "fe9e07a644f48614d6427fbe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "As for why it took so long, we could certainly blame regulations for that. In June 2022, more financial laws were introduced, which got in the way.",
+          "unit_id": "2450582bf27af55ea49ffc3f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "While in the rest of the world you could use Face ID for a transaction, India instead wanted everyone to use its Aadhaar ID system instead. The laws also covered subscriptions, requiring banks to notify users 24 hours in advance of any recurring transactions, and allowing them to cancel.",
+          "unit_id": "a037475a5f1a34b50b853a39"
+        },
+        {
+          "container_id": "caption",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "Apple Pay is finally available in India.",
+          "unit_id": "817f1b3c4cb7e6c4e39d1500"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "There's also the matter of a card tokenization framework, which required the use of encrypted tokens issued by local banks in India. This would've required Apple to make changes to how Apple Pay's security and authentication ultimately functioned.",
+          "unit_id": "7e17435653c8656f07b28ab1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "Support for the country's Unified Payments Interface also caused problems.",
+          "unit_id": "681158654b072d890aed557a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "It was so bad that, in 2022, Apple gave up on credit and debit cards completely in the country.",
+          "unit_id": "89601e149906d3057c9b553e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "During this time, both Google Play and Samsung Wallet opted to comply with the law instead of ceasing card payments. It was clearly a case of Apple seeing a massive amount of work and rules that it would have to comply with, and the belief that it could work around or negotiate the hurdles away.",
+          "unit_id": "39524e3a98d30895c8c826f5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 29,
+          "origin": "html",
+          "text": "After negotiating with banks to get around the problematic elements, Apple eventually tested card payments in India in July 2026, months before Apple Pay's rollout.",
+          "unit_id": "00209c6f56f386761ad78bf3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 30,
+          "origin": "html",
+          "text": "The final introduction of Apple Pay in India is certainly a good thing for Apple, especially in such an important market.",
+          "unit_id": "7333d5e66dcebba9d505a3ea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 31,
+          "origin": "html",
+          "text": "It will be interesting to see how much change Apple Pay will make to iPhone sales in India. It's main rivals have a very large head start because of Apple's unwillingness to abide by the new laws, so it has a lot of catching up to do.",
+          "unit_id": "62de69e86cb92482d61daefd"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 32,
+          "origin": "html",
+          "text": "Finally, eventually",
+          "unit_id": "2e320a7f539811708e11887f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 33,
+          "origin": "html",
+          "text": "Apple's decision to expand the reach of two of its services at the same time demonstrates that there can be a variety of reasons for a delay of a service rolling out in a country.",
+          "unit_id": "fedbfc869c9de91d079ba6c0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 34,
+          "origin": "html",
+          "text": "For Apple Pay in India, as well as the various features EU users cannot access, it's a regulatory problem. When you have to deal with legal issues affecting over a hundred countries simultaneously, you have to prioritize and pick your battles.",
+          "unit_id": "5891a9050c041042acb8b5ee"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 35,
+          "origin": "html",
+          "text": "Even if it's something that can take years to fully resolve.",
+          "unit_id": "b387d14c17573b1bf6e865e0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 36,
+          "origin": "html",
+          "text": "For others, like bringing Apple Music to Albania, it seems to be less about legal issues and sticking to the letter of the law. It could just as easily be Apple making it a very low priority for it to work on because there's not enough value to work harder at it.",
+          "unit_id": "351880963168ab151ca812ac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 37,
+          "origin": "html",
+          "text": "With Apple Pay in India, there's enough of a carrot for Apple to work to fix it. Even if it does take close to a decade to resolve.",
+          "unit_id": "f7761d8533daae748c463719"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 38,
+          "origin": "html",
+          "text": "Last week's Sunday Reboot discussed Apple's fitness changes, Apple Watch nagging, and how the Whoop-like device could be a very beneficial wearable.",
+          "unit_id": "abb416cc8527937b88a99a83"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/10/04/sunday-reboot-waiting-a-decade-for-apple-pay-and-apple-music?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "Sunday Reboot: Waiting a decade for Apple Pay and Apple Music",
+      "In this week's Sunday Reboot, the expansion of Apple Pay and Apple Music to some countries has taken a decade longer than they really should. They also demonstrate how delays can happen for many different reasons. Sunday Reboot is a weekly column covering some of the lighter stories within the Apple reality distortion field from the past seven days. All to get next week underway with a good first step. It may be a surprise to some readers, but I'm not in the United States. I'm one of the few members of the editorial team based in the United Kingdom, but trained to write in the American way, and forget about the letter U in some words. This does lead to some issues when it comes to trying out Apple's new services. It's a problem when your whole job is to talk about them. Thankfully, the UK does have access to almost all of Apple's services, but there are blind spots and differences.",
+      [
+        "This sounds fairly OK, until you remember that Apple Music was unveiled in June 2015 in over 100 countries. It's taken over 11 years for Apple Music to be available in those four countries.",
+        "Slightly less puzzling is the Apple Pay update on the same day. After launching in 2014, Apple finally brought Apple Pay live in India.",
+        "The problem here is that Apple said back in 2017 that it was trying to bring Apple Pay to India. That's a nine-year wait.",
+        "As for why it took so long, we could certainly blame regulations for that. In June 2022, more financial laws were introduced, which got in the way.",
+        "While in the rest of the world you could use Face ID for a transaction, India instead wanted everyone to use its Aadhaar ID system instead. The laws also covered subscriptions, requiring banks to notify users 24 hours in advance of any recurring transactions, and allowing them to cancel.",
+        "It was so bad that, in 2022, Apple gave up on credit and debit cards completely in the country.",
+        "After negotiating with banks to get around the problematic elements, Apple eventually tested card payments in India in July 2026, months before Apple Pay's rollout.",
+        "For Apple Pay in India, as well as the various features EU users cannot access, it's a regulatory problem. When you have to deal with legal issues affecting over a hundred countries simultaneously, you have to prioritize and pick your battles."
+      ]
+    ]
+  },
+  "3f1744badde165e8b93c1cfe": {
+    "evidence": {
+      "article_id": "3f1744badde165e8b93c1cfe",
+      "confidence": "detail",
+      "content_form": "hands_on",
+      "discovery_lead": "Since Jony Ive’s departure from Apple in 2019, the company hasn’t had much of a true design lead. For a while, former COO Jeff Williams was in charge of design, until his departure last year. Since then, CEO John Ternus has taken a significant interest in both of Apple’s design teams: industrial design and human interface, according to Bloomberg’s Mark Gurman. more… For a…",
+      "discovery_title": "John Ternus is taking a more ‘hands-on’ role in Apple’s design teams as CEO: report",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:15:15+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:21:55+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:15:15+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:21:55+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 15:15:15 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T15:15:15+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T15:15:15+00:00",
+      "raw_lead": "Since Jony Ive’s departure from Apple in 2019, the company hasn’t had much of a true design lead. For a...",
+      "source": "9to5Mac",
+      "title": "John Ternus is taking a more 'hands-on' role in Apple's design teams as CEO: report - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Since Jony Ive’s departure from Apple in 2019, the company hasn’t had much of a true design lead. For a while, former COO Jeff Williams was in charge of design, until his departure last year. Since then, CEO John Ternus has taken a significant interest in both of Apple’s design teams: industrial design and human interface, according to Bloomberg’s Mark Gurman.",
+          "unit_id": "b038c75ecd48bca14f41047a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "This story actually begins prior to John Ternus becoming CEO, which only took place about a month ago. It started with Jeff Williams’ departure as COO. At the time, the company announced that these teams would be reporting to former CEO Tim Cook, but instead, it was reportedly John Ternus. This was one of his key responsibilities while transitioning into CEO.",
+          "unit_id": "be81a47e9ae55064d47246fe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Of course, it’s no surprise that Ternus is interested in design, seeing as he was formerly in charge of hardware engineering. However, Gurman describes Ternus’ involvement as being “immersed” in the work, and that he often stops by to work with the teams:",
+          "unit_id": "d3a25a5e439ea14ff478e11f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Since becoming CEO, however, he has immersed himself in the industrial design and human interface teams. Several people familiar with the department say he works hands-on in the studio several times a week, sometimes visiting multiple times in a single day.",
+          "unit_id": "c7c586fc6a73b483a8332d8e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "This is in stark contrast to former CEO Tim Cook, who only visited the studio about once a month, per Bloomberg.",
+          "unit_id": "2e4a868c7b911a299015a11a"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Ternus is ‘immersed’ with Apple’s design teams",
+          "unit_id": "95fdb8a97d38b6be78fc66eb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Ternus as also devoted much attention to refilling the design team’s roles, as the company has lost much talent to outside companies poaching talent. Most notably, Alan Dye left to join Meta, and OpenAI has poached many Apple employees. To rejuvenate the team, Apple has promoted many junior designers and hired new talent from the outside.",
+          "unit_id": "e9b5d2b276a9778ed5afeb41"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "View all comments",
+          "unit_id": "40d6f0ccd488de31b8ea5ad1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Throughout all of this, the company still hasn’t sought out a true Jony Ive replacement to serve as a Chief Design Officer of sorts. According to Bloomberg, no search is underway. Instead, the company has highlighted Molly Anderson and Steve Lemay as respective design leads for industrial design and human interface, with Ternus himself serving as the overarching decision maker for design.",
+          "unit_id": "191fee93ba3e3afa618a2125"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "While Ternus lacks a traditional design background, his dedication to it means one thing: design will remain a key cornerstone at the top of Apple.",
+          "unit_id": "fc89804f890093bc1f4b8792"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/04/john-ternus-is-taking-a-more-hands-on-role-in-apples-design-teams-as-ceo-report/"
+    },
+    "recorded_extraction": [
+      "John Ternus is taking a more 'hands-on' role in Apple's design teams as CEO: report - 9to5Mac",
+      "Since Jony Ive’s departure from Apple in 2019, the company hasn’t had much of a true design lead. For a... Since Jony Ive’s departure from Apple in 2019, the company hasn’t had much of a true design lead. For a while, former COO Jeff Williams was in charge of design , until his departure last year. Since then, CEO John Ternus has taken a significant interest in both of Apple’s design teams: industrial design and human interface, according to Bloomberg’s Mark Gurman . This story actually begins prior to John Ternus becoming CEO, which only took place about a month ago. It started with Jeff Williams’ departure as COO. At the time, the company announced that these teams would be reporting to former CEO Tim Cook, but instead, it was reportedly John Ternus. This was one of his key responsibilities while transitioning into CEO. Of course, it’s no surprise that Ternus is interested in design, seeing as he was formerly in charge of hardware engineering. However, Gurman describes Ternus’ involvement as being “immersed” in the work, and that he often stops by to work with the teams: Since becoming CEO, however, he has immersed himself in the industrial design and human interface teams. Several people familiar with the department say he works hands-on in the studio several times a week, sometimes visiting multiple times in a single day.",
+      [
+        "Since Jony Ive’s departure from Apple in 2019, the company hasn’t had much of a true design lead. For a while, former COO Jeff Williams was in charge of design, until his departure last year. Since then, CEO John Ternus has taken a significant interest in both of Apple’s design teams: industrial design and human interface, according to Bloomberg’s Mark Gurman.",
+        "Ternus as also devoted much attention to refilling the design team’s roles, as the company has lost much talent to outside companies poaching talent. Most notably, Alan Dye left to join Meta, and OpenAI has poached many Apple employees. To rejuvenate the team, Apple has promoted many junior designers and hired new talent from the outside."
+      ]
+    ]
+  },
+  "8ea9232507d0baab531b97e7": {
+    "evidence": {
+      "article_id": "8ea9232507d0baab531b97e7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "John Ternus is putting his stamp on Apple by focusing on the company's design work, with the CEO taking an almost Jobsian approach to make design great again. Apple CEO John Ternus - Image Credit: Apple The era of Tim Cook as Apple CEO was one of growth, with sales and manufacturing the core of his tenure at the top. Under the rule of Ternus, design is becoming a top priority once more for the company, as Ternus aims to add more to the company by strengthening its weaker areas. Writing in Sunday's \"Power On\" newsletter for Bloomberg , Mark Gurman writes about a conversation between Ternus and Cook, and how Ternus needed to be himself as CEO instead of emulating Cook. To Ternus, it was an apparent turning point. Continue Reading on AppleInsider | Discuss on our Forums",
+      "discovery_title": "Design is a Jobsian-level focus for John Ternus",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:05:05+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:05:05+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun Oct 04 2026, 11:05 AM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:26:06+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T20:07:57+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "5 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:05:05+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:35:20+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:22:35+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "11 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T11:21:31+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "14 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:38:54+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "17 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:16:57+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "18 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:05:29+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "18 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 04 2026, 11:05 AM EDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 15:05:05 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T15:05:05+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T15:05:05+00:00",
+      "raw_lead": "John Ternus is putting his stamp on Apple by focusing on the company's design work, with the CEO taking an almost Jobsian approach to make design great again.",
+      "source": "AppleInsider",
+      "title": "Design is a Jobsian-level focus for John Ternus",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "John Ternus is putting his stamp on Apple by focusing on the company's design work, with the CEO taking an almost Jobsian approach to make design great again.",
+          "unit_id": "5bd36d6cd4caec05774c2e0f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "The era of Tim Cook as Apple CEO was one of growth, with sales and manufacturing the core of his tenure at the top. Under the rule of Ternus, design is becoming a top priority once more for the company, as Ternus aims to add more to the company by strengthening its weaker areas.",
+          "unit_id": "c4892114422448d0df39ca3c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Writing in Sunday's \"Power On\" newsletter for Bloomberg, Mark Gurman writes about a conversation between Ternus and Cook, and how Ternus needed to be himself as CEO instead of emulating Cook. To Ternus, it was an apparent turning point.",
+          "unit_id": "09a29181ce79d576367445ef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Cook had spent his tenure as CEO working on where he could generate \"the most value for Apple,\" Ternus told employees. Therefore, Ternus believed he had to do the same, while still being himself.",
+          "unit_id": "375cfb88bca2b6321c0e79ed"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "The result is that areas Cook focused on, such as financial strategy and the supply chain, are being handled by CFO Kevan Parekh and COO Sabih Khan. Ternus, who is very much an engineer, is instead working closely with chief hardware officer Johny Srouji and hardware engineering leader Tom Marieb.",
+          "unit_id": "a713958d1020557021b0c099"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "At the same time, he's also taking a lot more time to look at design, which has fallen behind since the departure of Jony Ive in 2019. There were leaders working for the industrial design and human interface design groups, but they were separate rather than a single executive covering both areas.",
+          "unit_id": "8de2a0b14fbd498ade163c2c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Those leaders also reported to former COO Jeff Williams, who had a background in manufacturing but not design. When Williams retired in 2025, those teams were said to be reporting directly to Cook instead.",
+          "unit_id": "9312d96b5915b76eaddbfc35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "That wasn't for long, as Cook handed the responsibility for design to Ternus ahead of the CEO transition. During the transition itself, the design chiefs were effectively the only direct reports Ternus had before taking the top spot at the company.",
+          "unit_id": "3ed779f58f74cbee12da3050"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "A Jobsian change",
+          "unit_id": "af276c0baff9216136a48f52"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Ternus has previous experience working with the design studio, in his role as head of hardware engineering. After becoming CEO, he has become even closer to the design teams, and has reportedly worked hands-on in the studio numerous times a week.",
+          "unit_id": "2568d28f1131fb40586aa512"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "This is a stark contrast to Cook, who very much focused on the other areas of the company that he knew best. Cook only visited the studio for about an hour once a month, the report said.",
+          "unit_id": "a81d69843da64ad8bc22bfda"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Cook's arms-reach approach to design was also a big departure from his predecessor, Steve Jobs. Jobs was famous for being deeply involved with design, which Ternus seems to be emulating.",
+          "unit_id": "9b4b3d9b0396bd69c46e35da"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Raising the profile of design at Apple is a tough task, especially following the departure of Ive. Part of this is actually from Ive's design studio, LoveFrom, taking some of the design team out of the company.",
+          "unit_id": "e64f7e59a9d0361ea987d4b0"
+        },
+        {
+          "container_id": "caption",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Apple's design leads Steve Lemay (left) and Molly Anderson, during the iPhone Duo launch - image credit: Apple.",
+          "unit_id": "552e560df949facd8eee542f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "There have also been losses to OpenAI's hardware team and other tech firms, thinning the studio's ranks. Then there's the departures of software design leader Alan Dye and industrial design chief Evans Hankey exiting to OpenAI.",
+          "unit_id": "0c7277fd395408c7da5edbd8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "The current VP of Industrial Design, Molly Anderson, didn't have a high profile, and also hadn't managed a team as large as Apple's before taking the role. But even so, Gurman says that there's no search happening for an external chief design officer.",
+          "unit_id": "0809208e8ab7c73b6123c77b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Instead, there has been an effort by Apple to shore up what it already has and to rebuild. That has included bringing Anderson and Dye successor Steve Lemay to the fore with the launch of the iPhone Duo, as well as hiring more designers for its team.",
+          "unit_id": "fafad2a8fcadec7caf17e4d8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Apple may not be searching for someone to take control over the design teams right now. Considering the amount of attention for design he has at the moment, Ternus may believe he can do it himself.",
+          "unit_id": "d2893c9401805b10d4553f18"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/10/04/design-is-a-jobsian-level-focus-for-john-ternus?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "Design is a Jobsian-level focus for John Ternus",
+      "John Ternus is putting his stamp on Apple by focusing on the company's design work, with the CEO taking an almost Jobsian approach to make design great again. The era of Tim Cook as Apple CEO was one of growth, with sales and manufacturing the core of his tenure at the top. Under the rule of Ternus, design is becoming a top priority once more for the company, as Ternus aims to add more to the company by strengthening its weaker areas. Cook had spent his tenure as CEO working on where he could generate \"the most value for Apple,\" Ternus told employees. Therefore, Ternus believed he had to do the same, while still being himself. The result is that areas Cook focused on, such as financial strategy and the supply chain, are being handled by CFO Kevan Parekh and COO Sabih Khan . Ternus, who is very much an engineer, is instead working closely with chief hardware officer Johny Srouji and hardware engineering leader Tom Marieb. At the same time, he's also taking a lot more time to look at design, which has fallen behind since the departure of Jony Ive in 2019 . There were leaders working for the industrial design and human interface design groups, but they were separate rather than a single executive covering both areas.",
+      [
+        "The era of Tim Cook as Apple CEO was one of growth, with sales and manufacturing the core of his tenure at the top. Under the rule of Ternus, design is becoming a top priority once more for the company, as Ternus aims to add more to the company by strengthening its weaker areas.",
+        "At the same time, he's also taking a lot more time to look at design, which has fallen behind since the departure of Jony Ive in 2019. There were leaders working for the industrial design and human interface design groups, but they were separate rather than a single executive covering both areas.",
+        "Those leaders also reported to former COO Jeff Williams, who had a background in manufacturing but not design. When Williams retired in 2025, those teams were said to be reporting directly to Cook instead."
+      ]
+    ]
+  },
+  "e804588eba9651c21bc34974": {
+    "evidence": {
+      "article_id": "e804588eba9651c21bc34974",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 5 日消息，自乔纳森 · 伊夫（Jony Ive）2019 年离开苹果之后，这家公司就一直没有一位真正的首席设计负责人。此前一段时间，由前首席运营官杰夫 · 威廉姆斯（Jeff Williams）接管设计业务，直至他去年离职。彭博社的马克 · 古尔曼（Mark Gurman）称，自杰夫 · 威廉姆斯离开之后，首席执行官约翰 · 特努斯（John Ternus）对苹果的两支设计团队 —— 工业设计团队与人机交互设计团队，都投入了大量精力。 IT之家注意到，这件事其实在特努斯大约一个月之前正式出任首席执行官之前就已经开始，起因是杰夫 · 威廉姆斯辞去首席运营官一职。当时苹果对外宣布，上述两支设计团队将向时任首席执行官蒂姆 · 库克（Tim Cook）汇报。但实际情况是，接手的是约翰 · 特努斯。这也是他在过渡到首席执行官岗位期间承担的一项核心工作职责。 当然，特努斯愿意深度介入设计事务并不令人意外，他此前原本就主管硬件工程业务。不过古尔曼表示，特努斯已经是“深度投入”设计相关工作，还会经常到工作室和团队一同开展工作。 而在正式就任首席执行官之后，他更是全身心投入到工业设计以及人机交互两支团队的工作当中。多名熟悉该部门情况的人士透露， 他每周都会数次亲临设计工作室上手参与工作，部分日子一天之内甚至会到访多次。 彭博社称，这和前首席执行官蒂姆 · 库克形成鲜明对比， 库克过去大约每个月才会到访一次设计工作室 。 特努斯深度参与苹果设计团队的工作 与此同时，特努斯花了不少精力为设计团队补齐人员岗位。已有不少设计人才遭到外部企业挖角，人员流失情况比较严重。其中最受关注的就是艾伦 · 戴伊（Alan Dye）跳槽加入 Meta，此外 OpenAI 也从苹果挖走了多名员工。为重振这支团队，苹果提拔了不少资历较浅的设计师，同时从外部吸纳新的人才。 即便做了上述这些人事调整，苹果至今仍没有寻找可以接替乔纳森 · 伊夫的人选，也就是相当于首席设计官的角色。彭博社表示，公司目前并没有启动相关的人员搜寻工作。取而代之的安排是，莫莉 · 安德森（Molly Anderson）与史蒂夫 · 勒梅（Steve Lemay）分别担任工业设计与人机交互板块的负责人；而设计层面所有的最终决策权，掌握在特努斯本人手里。 尽管特努斯并没有正统的设计专业背景，但他本人对设计工作的高度投入已经说明一件事：设计依旧会是苹果高层层面的一块核心基石。 自杰夫 · 威廉姆斯离职后，特努斯接手工业设计与人机交互两支团队，正式就任 CEO 后更是每周数次亲临设计工作室，部分日子一天到访多次。面对艾伦 · 戴伊跳槽 Meta、OpenAI 挖角等人才流失，苹果提拔资历较浅设计师并从外部吸纳新人，但始终未寻找乔纳森 · 伊夫的继任者，设计最终决策权掌握在特努斯手中。#苹果设计# #特努斯#",
+      "discovery_title": "古尔曼：苹果 CEO 特努斯深度介入设计业务，每周多次亲临设计工作室",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/5 8:56:52",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon, 05 Oct 2026 00:56:52 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/5 8:56:52",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-05T00:56:52+00:00",
+      "raw_lead": "自杰夫 · 威廉姆斯离职后，特努斯接手工业设计与人机交互两支团队，正式就任 CEO 后更是每周数次亲临设计工作室，部分日子一天到访多次。面对艾伦 · 戴伊跳槽 Meta、OpenAI 挖角等人才流失，苹果提拔资历较浅设计师并从外部吸纳新人，但始终未寻找乔纳森 · 伊夫的继任者，设计最终决策权掌握在特努斯手中。#苹果设计# #特努斯#",
+      "source": "IT之家",
+      "title": "古尔曼：苹果 CEO 特努斯深度介入设计业务，每周多次亲临设计工作室",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 5 日消息，自乔纳森 · 伊夫（Jony Ive）2019 年离开苹果之后，这家公司就一直没有一位真正的首席设计负责人。此前一段时间，由前首席运营官杰夫 · 威廉姆斯（Jeff Williams）接管设计业务，直至他去年离职。彭博社的马克 · 古尔曼（Mark Gurman）称，自杰夫 · 威廉姆斯离开之后，首席执行官约翰 · 特努斯（John Ternus）对苹果的两支设计团队 —— 工业设计团队与人机交互设计团队，都投入了大量精力。",
+          "unit_id": "83a74caa28a2c5f16b1ae485"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家注意到，这件事其实在特努斯大约一个月之前正式出任首席执行官之前就已经开始，起因是杰夫 · 威廉姆斯辞去首席运营官一职。当时苹果对外宣布，上述两支设计团队将向时任首席执行官蒂姆 · 库克（Tim Cook）汇报。但实际情况是，接手的是约翰 · 特努斯。这也是他在过渡到首席执行官岗位期间承担的一项核心工作职责。",
+          "unit_id": "eee95b62e437b3b8e81d8414"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "当然，特努斯愿意深度介入设计事务并不令人意外，他此前原本就主管硬件工程业务。不过古尔曼表示，特努斯已经是“深度投入”设计相关工作，还会经常到工作室和团队一同开展工作。",
+          "unit_id": "c79fc9965432d6f3ea4a3b58"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "而在正式就任首席执行官之后，他更是全身心投入到工业设计以及人机交互两支团队的工作当中。多名熟悉该部门情况的人士透露，他每周都会数次亲临设计工作室上手参与工作，部分日子一天之内甚至会到访多次。",
+          "unit_id": "0ea7be26dd1ec03db3258ca0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "彭博社称，这和前首席执行官蒂姆 · 库克形成鲜明对比，库克过去大约每个月才会到访一次设计工作室。",
+          "unit_id": "80a21f76e188b686800d6cbb"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "特努斯深度参与苹果设计团队的工作",
+          "unit_id": "c1cdde4f2502c338da1e7117"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "与此同时，特努斯花了不少精力为设计团队补齐人员岗位。已有不少设计人才遭到外部企业挖角，人员流失情况比较严重。其中最受关注的就是艾伦 · 戴伊（Alan Dye）跳槽加入 Meta，此外 OpenAI 也从苹果挖走了多名员工。为重振这支团队，苹果提拔了不少资历较浅的设计师，同时从外部吸纳新的人才。",
+          "unit_id": "b7291341202c67537f4d1d97"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "即便做了上述这些人事调整，苹果至今仍没有寻找可以接替乔纳森 · 伊夫的人选，也就是相当于首席设计官的角色。彭博社表示，公司目前并没有启动相关的人员搜寻工作。取而代之的安排是，莫莉 · 安德森（Molly Anderson）与史蒂夫 · 勒梅（Steve Lemay）分别担任工业设计与人机交互板块的负责人；而设计层面所有的最终决策权，掌握在特努斯本人手里。",
+          "unit_id": "329ba9524202ccf56e4bb828"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "尽管特努斯并没有正统的设计专业背景，但他本人对设计工作的高度投入已经说明一件事：设计依旧会是苹果高层层面的一块核心基石。",
+          "unit_id": "7ba56520a56fdc334baa4134"
+        }
+      ],
+      "url": "https://www.ithome.com/1/009/752.htm"
+    },
+    "recorded_extraction": [
+      "古尔曼：苹果 CEO 特努斯深度介入设计业务，每周多次亲临设计工作室",
+      "自杰夫 · 威廉姆斯离职后，特努斯接手工业设计与人机交互两支团队，正式就任 CEO 后更是每周数次亲临设计工作室，部分日子一天到访多次。面对艾伦 · 戴伊跳槽 Meta、OpenAI 挖角等人才流失，苹果提拔资历较浅设计师并从外部吸纳新人，但始终未寻找乔纳森 · 伊夫的继任者，设计最终决策权掌握在特努斯手中。#苹果设计# #特努斯# IT之家 10 月 5 日消息，自乔纳森 · 伊夫（Jony Ive）2019 年离开苹果之后，这家公司就一直没有一位真正的首席设计负责人。此前一段时间，由前首席运营官杰夫 · 威廉姆斯（Jeff Williams）接管设计业务，直至他去年离职。彭博社的马克 · 古尔曼（Mark Gurman）称，自杰夫 · 威廉姆斯离开之后，首席执行官约翰 · 特努斯（John Ternus）对苹果的两支设计团队 —— 工业设计团队与人机交互设计团队，都投入了大量精力。 IT之家注意到，这件事其实在特努斯大约一个月之前正式出任首席执行官之前就已经开始，起因是杰夫 · 威廉姆斯辞去首席运营官一职。当时苹果对外宣布，上述两支设计团队将向时任首席执行官蒂姆 · 库克（Tim Cook）汇报。但实际情况是，接手的是约翰 · 特努斯。这也是他在过渡到首席执行官岗位期间承担的一项核心工作职责。 当然，特努斯愿意深度介入设计事务并不令人意外，他此前原本就主管硬件工程业务。不过古尔曼表示，特努斯已经是“深度投入”设计相关工作，还会经常到工作室和团队一同开展工作。 而在正式就任首席执行官之后，他更是全身心投入到工业设计以及人机交互两支团队的工作当中。多名熟悉该部门情况的人士透露， 他每周都会数次亲临设计工作室上手参与工作，部分日子一天之内甚至会到访多次。",
+      [
+        "IT之家 10 月 5 日消息，自乔纳森 · 伊夫（Jony Ive）2019 年离开苹果之后，这家公司就一直没有一位真正的首席设计负责人。此前一段时间，由前首席运营官杰夫 · 威廉姆斯（Jeff Williams）接管设计业务，直至他去年离职。彭博社的马克 · 古尔曼（Mark Gurman）称，自杰夫 · 威廉姆斯离开之后，首席执行官约翰 · 特努斯（John Ternus）对苹果的两支设计团队 —— 工业设计团队与人机交互设计团队，都投入了大量精力。"
+      ]
+    ]
+  },
+  "10c1a64ac6c0bfe5f39f724a": {
+    "evidence": {
+      "article_id": "10c1a64ac6c0bfe5f39f724a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "苹果新任首席执行官John Ternus上任头几周将设计列为优先事项。此外，除了触摸屏和转向OLED技术外，苹果改版后的MacBook Pro还有另一项重大变化。最后，该公司即将发布新的智能家居中枢、HomePod mini和搭载Siri AI的Apple TV。 阅读全文",
+      "discovery_title": "苹果新任CEO特努斯上任即亲掌设计 10月密集推新品对冲服务业务放缓",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "4 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "5 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "5 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月05日 04:13",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 20:13:49 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月05日 04:13",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-04T20:13:00+00:00",
+      "raw_lead": "苹果新任首席执行官JohnTernus上任头几周将设计列为优先事项。此外，除了触摸屏和转向OLED技术外，苹果改版后的MacBookPro还有另一项重大变化。最后，该公司即将发布新的智能家居中枢、HomePodmini和搭载SiriAI的AppleTV。",
+      "source": "cnBeta",
+      "title": "苹果新任CEO特努斯上任即亲掌设计 10月密集推新品对冲服务业务放缓 - Apple 苹果 - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "苹果新任首席执行官John Ternus上任头几周将设计列为优先事项。此外，除了触摸屏和转向OLED技术外，苹果改版后的MacBook Pro还有另一项重大变化。最后，该公司即将发布新的智能家居中枢、HomePod mini和搭载Siri AI的Apple TV。",
+          "unit_id": "99974485d2772ea1e69c248e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "苹果首席执行官John Ternus将大量时间用于监督公司的硬件和软件设计工作。在早期讨论由John Ternus接替Tim Cook出任苹果首席执行官时，这位较年轻的高管曾质疑自己是否能胜任这一挑战。“我不像你，”Ternus对Cook说。“你做了那么多了不起的事。”Cook以他一贯不动声色的语气回答：“我知道你不像我。”他的意思是，Ternus需要做他自己。Ternus在向员工讲述这段经历时，将其描述为一个转折点。Ternus说，Cook的话“确实引起了我的共鸣，并让我铭记在心”，即他在担任首席执行官期间，把时间花在能为苹果“创造最大价值”的地方。“而我需要把时间花在能为苹果创造最大价值的地方。”他说，这一理念让Ternus得以以不同方式对待这一角色。“我们在时间分配上会有差异，但使命和目标是相同的。”",
+          "unit_id": "e0a5346148479c0eb8e180c8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在担任首席执行官期间，Cook将大部分时间花在运营、销售、财务战略和苹果供应链上。他还经常处理公共政策、隐私问题，以及公司与白宫和世界各国政府的关系。Ternus则是从硬件工程师一路晋升，他正在设定明显不同的优先事项。他基本上将公司的财务运营交给首席财务官Kevan Parekh，将供应链交给首席运营官Sabih Khan。相反，Ternus花大量时间与首席硬件官Johny Srouji和硬件工程负责人Tom Marieb在一起，深入参与产品工程。但我获悉，他还将大量精力投入到另一个长期缺乏单一最高负责人的领域：设计。",
+          "unit_id": "7c9bb56515faaa4ad0022a63"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "自Jony Ive于2019年离职以来，苹果一直缺乏一位统一负责工业设计——即硬件的外观和质感——以及人机界面设计——即塑造公司软件的设计——的设计主管。在随后的几年里，工业设计和人机界面设计各有负责人，而不是由一位高管统一管理这两个团队。他们最终向时任首席运营官Jeff Williams汇报。Williams是一位没有设计背景的制造专家，他之所以被选中负责该部门，很大程度上是因为他与Cook关系密切。当Williams去年退休时，这一安排发生了变化。尽管Cook在新闻稿中宣布，Williams离职后设计团队将直接向他汇报——表面上的确如此——但实际上他们开始向Ternus汇报。作为最终过渡到首席执行官的一部分，Cook将设计职责交给了他。在4月至9月的首席执行官过渡期间，苹果的设计负责人实际上是Ternus在Cook卸任前唯一的直接下属。",
+          "unit_id": "47da8fd23ad50d92f6f387c1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "作为苹果硬件工程负责人，Ternus已经在一定程度上参与了设计工作室的工作，因为这两个职能需要密切协调。然而，自担任首席执行官以来，他已深入参与工业设计和人机界面团队。几位熟悉该部门的人士称，他每周都会多次亲临工作室，有时一天会去好几次。当然，Steve Jobs在与Ive合作期间也以类似方式直接参与设计。但Ternus的参与标志着与Cook时代的重大转变。设计师们称，Cook通常每月最多去工作室一次，每次约一小时。",
+          "unit_id": "c39d7cb3227462a6b972fb33"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Ternus的首要任务之一是恢复设计工作室在公司内部的地位。该团队曾有大量员工流失，去了Ive的公司LoveFrom，以及OpenAI的硬件团队和其他公司。这导致其在苹果内部的影响力和可信度下降。人员流失迫使公司提拔初级设计师，并从外部大量招聘以补充团队。苹果长期负责软件设计的Alan Dye跳槽去了Meta Platforms Inc．。Ive的工业设计主管继任者Evans Hankey也离开了，最终加入了OpenAI。Hankey后来由Molly Anderson接替，Anderson在更广泛的设计界知名度较低，在2024年成为工业设计副总裁之前，从未在苹果管理过如此规模的团队。到那时，该团队许多最资深的成员已经离开，缩小了苹果内部候选人的范围，使Anderson成为唯一现实的内部人选。",
+          "unit_id": "e78ae4a5c127380147316895"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "鉴于设计在苹果产品开发以及为未来设备构思创意中的核心作用，公司内部和接近公司许多人士认为，苹果应该从外部招聘一位首席设计官来统管整个组织。但我获悉，目前并没有进行这样的搜寻。相反，苹果在iPhone Duo发布期间做出了重大努力，将Anderson和Dye的继任者Steve Lemay塑造为其设计负责人。Ternus与Anderson以及新手机合影，而Anderson和Lemay在一段联合视频中帮助介绍了该设备。该公司还在继续重建其工业设计团队，上周聘用了比利时家具设计师Julien Renault。但这一切都没有消除由一位领导者统一管理工业设计和软件设计的需要，就像苹果在Ive时代那样。随着Ternus将设计列为重大优先事项并在该部门发挥如此积极的作用，他似乎已经选定了苹果新的设计领导者和最终决策者：他自己。放弃从设计界外部招聘是否是正确选择，仍有待观察。Ternus出身工程领域，而非传统设计背景，但首席执行官的密切参与至少确保设计再次在苹果高管层中拥有有意义的一席之地——并在公司最重要的产品决策中拥有强有力的发言权。",
+          "unit_id": "91aae30a0de15ea20fdb9c9c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "苹果的触摸屏和OLED MacBook Pro还有一项新变化。今年苹果还有更多我们已经知道的产品即将推出。iPhone Duo于10月23日发货，而带显示屏的新智能家居中枢、更新的Apple TV机顶盒和新款HomePod mini——均旨在展示Siri AI——距离发布不到两周。但还有两款产品将紧随其后：一次重大的MacBook Pro改版，首次将OLED和触摸屏技术引入Mac；以及首款OLED iPad mini。新款iPad mini预计在10月底至11月间的某个时候发布，是一次重大但直接的升级：更好的屏幕、更快的芯片，以及横向放置的FaceTime摄像头，使其与苹果其他iPad保持一致。更高端的MacBook Pro则是更大的看点。转向触摸屏意义重大，采用OLED——即有机发光二极管——同样如此，OLED可提供更锐利的对比度。macOS Golden Gate也有支持触摸输入和灵动岛的变化。但我获悉，还有另一项重大差异：新款MacBook Pro更轻——明显更轻。苹果重新设计了机器内部结构，将部件小型化并重新排列组件，使电脑更便于携带。目前的16英寸MacBook Pro重达4.8磅，而15英寸MacBook Air为3.3磅，因此任何有意义的减重都会立即被察觉。我预计这些目前正在用macOS 27.2测试的机器将在下个月前上市。",
+          "unit_id": "f27c386f58815cd741b6484f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "苹果新的智能家居中枢将与亚马逊的Echo Show竞争。苹果计划于10月13日举行活动，发布其期待已久的带屏幕智能家居中枢、新款HomePod mini和更新的Apple TV。这三款设备都将以Siri AI为核心。首席执行官John Ternus正寻求加快产品开发、削减成本、抵消服务业务放缓的影响，力求让这家iPhone制造商更快、更精简。",
+          "unit_id": "11124f75f2eb4f25f36d40c0"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1580696.htm"
+    },
+    "recorded_extraction": [
+      "苹果新任CEO特努斯上任即亲掌设计 10月密集推新品对冲服务业务放缓 - Apple 苹果 - cnBeta.COM",
+      "苹果新任首席执行官JohnTernus上任头几周将设计列为优先事项。此外，除了触摸屏和转向OLED技术外，苹果改版后的MacBookPro还有另一项重大变化。最后，该公司即将发布新的智能家居中枢、HomePodmini和搭载SiriAI的AppleTV。 苹果新任首席执行官John Ternus上任头几周将设计列为优先事项。此外，除了触摸屏和转向OLED技术外，苹果改版后的MacBook Pro还有另一项重大变化。最后，该公司即将发布新的智能家居中枢、HomePod mini和搭载Siri AI的Apple TV。 苹果首席执行官John Ternus将大量时间用于监督公司的硬件和软件设计工作。在早期讨论由John Ternus接替Tim Cook出任苹果首席执行官时，这位较年轻的高管曾质疑自己是否能胜任这一挑战。“我不像你，”Ternus对Cook说。“你做了那么多了不起的事。”Cook以他一贯不动声色的语气回答：“我知道你不像我。”他的意思是，Ternus需要做他自己。Ternus在向员工讲述这段经历时，将其描述为一个转折点。Ternus说，Cook的话“确实引起了我的共鸣，并让我铭记在心”，即他在担任首席执行官期间，把时间花在能为苹果“创造最大价值”的地方。“而我需要把时间花在能为苹果创造最大价值的地方。”他说，这一理念让Ternus得以以不同方式对待这一角色。“我们在时间分配上会有差异，但使命和目标是相同的。” 在担任首席执行官期间，Cook将大部分时间花在运营、销售、财务战略和苹果供应链上。他还经常处理公共政策、隐私问题，以及公司与白宫和世界各国政府的关系。Ternus则是从硬件工程师一路晋升，他正在设定明显不同的优先事项。他基本上将公司的财务运营交给首席财务官Kevan Parekh，将供应链交给首席运营官Sabih Khan。相反，Ternus花大量时间与首席硬件官Johny Srouji和硬件工程负责人Tom Marieb在一起，深入参与产品工程。但我获悉，他还将大量精力投入到另一个长期缺乏单一最高负责人的领域：设计。 自Jony Ive于2019年离职以来，苹果一直缺乏一位统一负责工业设计——即硬件的外观和质感——以及人机界面设计——即塑造公司软件的设计——的设计主管。在随后的几年里，工业设计和人机界面设计各有负责人，而不是由一位高管统一管理这两个团队。他们最终向时任首席运营官Jeff Williams汇报。Williams是一位没有设计背景的制造专家，他之所以被选中负责该部门，很大程度上是因为他与Cook关系密切。当Williams去年退休时，这一安排发生了变化。尽管Cook在新闻稿中宣布，Williams离职后设计团队将直接向他汇报——表面上的确如此——但实际上他们开始向Ternus汇报。作为最终过渡到首席执行官的一部分，Cook将设计职责交给了他。在4月至9月的首席执行官过渡期间，苹果的设计负责人实际上是Ternus在Cook卸任前唯一的直接下属。",
+      [
+        "自Jony Ive于2019年离职以来，苹果一直缺乏一位统一负责工业设计——即硬件的外观和质感——以及人机界面设计——即塑造公司软件的设计——的设计主管。在随后的几年里，工业设计和人机界面设计各有负责人，而不是由一位高管统一管理这两个团队。他们最终向时任首席运营官Jeff Williams汇报。Williams是一位没有设计背景的制造专家，他之所以被选中负责该部门，很大程度上是因为他与Cook关系密切。当Williams去年退休时，这一安排发生了变化。尽管Cook在新闻稿中宣布，Williams离职后设计团队将直接向他汇报——表面上的确如此——但实际上他们开始向Ternus汇报。作为最终过渡到首席执行官的一部分，Cook将设计职责交给了他。在4月至9月的首席执行官过渡期间，苹果的设计负责人实际上是Ternus在Cook卸任前唯一的直接下属。",
+        "Ternus的首要任务之一是恢复设计工作室在公司内部的地位。该团队曾有大量员工流失，去了Ive的公司LoveFrom，以及OpenAI的硬件团队和其他公司。这导致其在苹果内部的影响力和可信度下降。人员流失迫使公司提拔初级设计师，并从外部大量招聘以补充团队。苹果长期负责软件设计的Alan Dye跳槽去了Meta Platforms Inc．。Ive的工业设计主管继任者Evans Hankey也离开了，最终加入了OpenAI。Hankey后来由Molly Anderson接替，Anderson在更广泛的设计界知名度较低，在2024年成为工业设计副总裁之前，从未在苹果管理过如此规模的团队。到那时，该团队许多最资深的成员已经离开，缩小了苹果内部候选人的范围，使Anderson成为唯一现实的内部人选。",
+        "苹果的触摸屏和OLED MacBook Pro还有一项新变化。今年苹果还有更多我们已经知道的产品即将推出。iPhone Duo于10月23日发货，而带显示屏的新智能家居中枢、更新的Apple TV机顶盒和新款HomePod mini——均旨在展示Siri AI——距离发布不到两周。但还有两款产品将紧随其后：一次重大的MacBook Pro改版，首次将OLED和触摸屏技术引入Mac；以及首款OLED iPad mini。新款iPad mini预计在10月底至11月间的某个时候发布，是一次重大但直接的升级：更好的屏幕、更快的芯片，以及横向放置的FaceTime摄像头，使其与苹果其他iPad保持一致。更高端的MacBook Pro则是更大的看点。转向触摸屏意义重大，采用OLED——即有机发光二极管——同样如此，OLED可提供更锐利的对比度。macOS Golden Gate也有支持触摸输入和灵动岛的变化。但我获悉，还有另一项重大差异：新款MacBook Pro更轻——明显更轻。苹果重新设计了机器内部结构，将部件小型化并重新排列组件，使电脑更便于携带。目前的16英寸MacBook Pro重达4.8磅，而15英寸MacBook Air为3.3磅，因此任何有意义的减重都会立即被察觉。我预计这些目前正在用macOS 27.2测试的机器将在下个月前上市。",
+        "苹果新的智能家居中枢将与亚马逊的Echo Show竞争。苹果计划于10月13日举行活动，发布其期待已久的带屏幕智能家居中枢、新款HomePod mini和更新的Apple TV。这三款设备都将以Siri AI为核心。首席执行官John Ternus正寻求加快产品开发、削减成本、抵消服务业务放缓的影响，力求让这家iPhone制造商更快、更精简。"
+      ]
+    ]
+  },
+  "97a89c7f9b564a3794d8ec23": {
+    "evidence": {
+      "article_id": "97a89c7f9b564a3794d8ec23",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "W40 预估累计销量将超 250 万台，两款机型均已完成单品激活 100 万台。该机搭载 A20 Pro 芯片，首次引入可变光圈技术，续航充电也迎来升级。#苹果 iPhone18 Pro#",
+      "discovery_title": "消息称苹果 iPhone 18 Pro 系列 W39 国内累计销量 176 万台",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/4 15:56:58",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:56:58.2930000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/4 15:56:58",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-04T07:56:58+00:00",
+      "raw_lead": "W40 预估累计销量将超 250 万台，两款机型均已完成单品激活 100 万台。该机搭载 A20 Pro 芯片，首次引入可变光圈技术，续航充电也迎来升级。#苹果 iPhone18 Pro#",
+      "source": "IT之家",
+      "title": "消息称苹果 iPhone 18 Pro 系列 W39 国内累计销量 176 万台",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 4 日消息，博主 @数码闲聊站 今日爆料，苹果 iPhone 18 Pro 系列 W39 周累计销量 176 万台（预计指国内），根据国庆期间的走势，W40 预估累计销量超 250 万台，两款机型均轻松完成单品激活 100 万台。",
+          "unit_id": "0570e3220d4070408b81324a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家注意到，W39 指的是 2026 年的第 39 个自然周，也就是 9 月 21 日到 9 月 27 日这一周。手机行业习惯用“W+ 周数”来标记周次，方便对比每周的销量和市场份额变化。",
+          "unit_id": "ed694a166406066a2fa48d70"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "苹果 iPhone 18 Pro 与 iPhone 18 Pro Max 两款机型于 9 月 18 日正式开售，国行起售价为 9999 元，均为 256GB 存储起步。",
+          "unit_id": "b01eb0f4478dceaae3995d44"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "两款机型均搭载全新 A20 Pro 芯片，采用台积电 2nm 制程工艺，其 CPU 与 GPU 性能较上一代显著提升，端侧 AI 性能进一步增强。同时，iPhone 18 Pro 系列配备新一代均热板散热方案，苹果官方称其带来“iPhone 历来最出色持续效能表现”。",
+          "unit_id": "a08ccbede45f8fe463a51177"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "影像系统是此次升级的核心。iPhone 18 Pro 系列配备 4800 万像素融合式主摄，首次引入可变光圈技术，内部采用六片激光切割叶片，支持 f/1.48、f/1.8、f/2.8 和 f/4.0 四档光圈调节。用户可在相机应用中手动调整光圈设置，开发者也可通过 API 在第三方应用中调用光圈控制功能。",
+          "unit_id": "357e898caf9b9e17ac7b50a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "iPhone 18 Pro Max 的电池续航提升幅度为 iPhone 历代之最，官网标称可提供最长 29~43 小时的续航时间。同时，iPhone 18 Pro Max 的充电速度也实现了大幅跃升，在搭配 60W 及以上 AVS 电源适配器（另售）的情况下可以在约 15 分钟时间内充至最大 50% 电量，实测峰值功率达 52W。",
+          "unit_id": "3185d803d7960f807a164b8d"
+        }
+      ],
+      "url": "https://www.ithome.com/1/009/662.htm"
+    },
+    "recorded_extraction": [
+      "消息称苹果 iPhone 18 Pro 系列 W39 国内累计销量 176 万台",
+      "W40 预估累计销量将超 250 万台，两款机型均已完成单品激活 100 万台。该机搭载 A20 Pro 芯片，首次引入可变光圈技术，续航充电也迎来升级。#苹果 iPhone18 Pro# IT之家 10 月 4 日消息，博主 @数码闲聊站 今日爆料，苹果 iPhone 18 Pro 系列 W39 周累计销量 176 万台（预计指国内），根据国庆期间的走势，W40 预估累计销量超 250 万台，两款机型均轻松完成单品激活 100 万台。 IT之家注意到，W39 指的是 2026 年的 第 39 个自然周 ，也就是 9 月 21 日到 9 月 27 日这一周。手机行业习惯用“W+ 周数”来标记周次，方便对比每周的销量和市场份额变化。 苹果 iPhone 18 Pro 与 iPhone 18 Pro Max 两款机型于 9 月 18 日正式开售， 国行起售价为 9999 元 ，均为 256GB 存储起步。 两款机型均搭载全新 A20 Pro 芯片， 采用台积电 2nm 制程工艺 ，其 CPU 与 GPU 性能较上一代显著提升，端侧 AI 性能进一步增强。同时， iPhone 18 Pro 系列配备新一代均热板散热方案，苹果官方称其带来“ iPhone 历来最出色持续效能表现”。",
+      [
+        "IT之家 10 月 4 日消息，博主 @数码闲聊站 今日爆料，苹果 iPhone 18 Pro 系列 W39 周累计销量 176 万台（预计指国内），根据国庆期间的走势，W40 预估累计销量超 250 万台，两款机型均轻松完成单品激活 100 万台。",
+        "IT之家注意到，W39 指的是 2026 年的第 39 个自然周，也就是 9 月 21 日到 9 月 27 日这一周。手机行业习惯用“W+ 周数”来标记周次，方便对比每周的销量和市场份额变化。",
+        "苹果 iPhone 18 Pro 与 iPhone 18 Pro Max 两款机型于 9 月 18 日正式开售，国行起售价为 9999 元，均为 256GB 存储起步。",
+        "两款机型均搭载全新 A20 Pro 芯片，采用台积电 2nm 制程工艺，其 CPU 与 GPU 性能较上一代显著提升，端侧 AI 性能进一步增强。同时，iPhone 18 Pro 系列配备新一代均热板散热方案，苹果官方称其带来“iPhone 历来最出色持续效能表现”。",
+        "影像系统是此次升级的核心。iPhone 18 Pro 系列配备 4800 万像素融合式主摄，首次引入可变光圈技术，内部采用六片激光切割叶片，支持 f/1.48、f/1.8、f/2.8 和 f/4.0 四档光圈调节。用户可在相机应用中手动调整光圈设置，开发者也可通过 API 在第三方应用中调用光圈控制功能。",
+        "iPhone 18 Pro Max 的电池续航提升幅度为 iPhone 历代之最，官网标称可提供最长 29~43 小时的续航时间。同时，iPhone 18 Pro Max 的充电速度也实现了大幅跃升，在搭配 60W 及以上 AVS 电源适配器（另售）的情况下可以在约 15 分钟时间内充至最大 50% 电量，实测峰值功率达 52W。"
+      ]
+    ]
+  },
+  "733872b6c8555da2bc1d8995": {
+    "evidence": {
+      "article_id": "733872b6c8555da2bc1d8995",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月5日消息，虽然不少数码爱好者和普通用户都在吐槽iPhone 18 Pro系列相比上一代机型的外观、功能改动幅度不算太大，但终端市场的实际销量表现，已经给出了最有说服力的答案。 有行业调研博主公布的第三方零售端统计数据显示， iPhone 18 Pro系列W39累计销量176W，根据国庆期间的走势，W40预估累计销量250W+，两款机型均轻松完成单品激活100W +。 iPhone 18 Pro、iPhone 18 Pro Max两款机型于9月18日正式面向全球市场发售，国内版本的起售价分别为9999元和10999元。 面对国内市场新机的热销态势，苹果CEO库克之前曾公开发文做出回应。 随着iPhone 18 Pro、苹果手表Watch 12、Ultra 4、AirPods 5多款新品在国内同步启动开售，库克特意发布微博晒出了国内苹果线下门店排队购机的人潮画面。 首批货源的市场热度远超预期，苹果官网甚至一度因为访问人数太多出现拥挤卡顿，足以看出国内苹果用户今年的换新热情十分高涨。 不少数码行业分析师也表示，这一代iPhone 18 Pro系列即便没有颠覆性的外观大改，依然能创下近三年同期新品的销量新高，核心原因是过去两年卡在iPhone 14、15代的老用户已经积累了足够长的换新周期，新增的端侧AI功能、运行内存翻倍升级的实用点也刚好戳中了不少用户的实际刚需，哪怕外观辨识度不高，也完全挡不住存量用户集中换机的热潮。",
+      "discovery_title": "iPhone 18 Pro系列销量很快破250万台！库克直言看到中国市场大卖倍感振奋",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05 00:10:00",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05 00:10:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-05 00:10:00",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-04T16:10:00+00:00",
+      "raw_lead": "快科技10月5日消息，虽然不少数码爱好者和普通用户都在吐槽iPhone 18 Pro系列相比上一代机型的外观、功能改动幅度不算太大，但终端市场的实际销量表现，已经给出了最有说服力的答案。有行业",
+      "source": "快科技",
+      "title": "iPhone 18 Pro系列销量很快破250万台！库克直言看到中国市场大卖倍感振奋",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月5日消息，虽然不少数码爱好者和普通用户都在吐槽iPhone 18 Pro系列相比上一代机型的外观、功能改动幅度不算太大，但终端市场的实际销量表现，已经给出了最有说服力的答案。",
+          "unit_id": "6cd2cf53ab75fb3311baea18"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "有行业调研博主公布的第三方零售端统计数据显示，iPhone 18 Pro系列W39累计销量176W，根据国庆期间的走势，W40预估累计销量250W+，两款机型均轻松完成单品激活100W+。",
+          "unit_id": "3ced48b713c6b721952c9496"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "iPhone 18 Pro、iPhone 18 Pro Max两款机型于9月18日正式面向全球市场发售，国内版本的起售价分别为9999元和10999元。",
+          "unit_id": "d9b62721887bb089b7192a11"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "面对国内市场新机的热销态势，苹果CEO库克之前曾公开发文做出回应。",
+          "unit_id": "651e27bc618d6e62962ad32e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "随着iPhone 18 Pro、苹果手表Watch 12、Ultra 4、AirPods 5多款新品在国内同步启动开售，库克特意发布微博晒出了国内苹果线下门店排队购机的人潮画面。",
+          "unit_id": "29d4e494d50c8e9e9b398209"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "首批货源的市场热度远超预期，苹果官网甚至一度因为访问人数太多出现拥挤卡顿，足以看出国内苹果用户今年的换新热情十分高涨。",
+          "unit_id": "8439c7e79fd0a3d582dbd2a7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "不少数码行业分析师也表示，这一代iPhone 18 Pro系列即便没有颠覆性的外观大改，依然能创下近三年同期新品的销量新高，核心原因是过去两年卡在iPhone 14、15代的老用户已经积累了足够长的换新周期，新增的端侧AI功能、运行内存翻倍升级的实用点也刚好戳中了不少用户的实际刚需，哪怕外观辨识度不高，也完全挡不住存量用户集中换机的热潮。",
+          "unit_id": "123b1827d2933a2a507f7745"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1155/1155386.htm"
+    },
+    "recorded_extraction": [
+      "iPhone 18 Pro系列销量很快破250万台！库克直言看到中国市场大卖倍感振奋",
+      "快科技10月5日消息，虽然不少数码爱好者和普通用户都在吐槽iPhone 18 Pro系列相比上一代机型的外观、功能改动幅度不算太大，但终端市场的实际销量表现，已经给出了最有说服力的答案。有行业 快科技10月5日消息，虽然不少数码爱好者和普通用户都在吐槽iPhone 18 Pro系列相比上一代机型的外观、功能改动幅度不算太大，但终端市场的实际销量表现，已经给出了最有说服力的答案。 有行业调研博主公布的第三方零售端统计数据显示， iPhone 18 Pro系列W39累计销量176W，根据国庆期间的走势，W40预估累计销量250W+，两款机型均轻松完成单品激活100W +。 iPhone 18 Pro、iPhone 18 Pro Max两款机型于9月18日正式面向全球市场发售，国内版本的起售价分别为9999元和10999元。 随着iPhone 18 Pro、苹果手表Watch 12、Ultra 4、AirPods 5多款新品在国内同步启动开售，库克特意发布微博晒出了国内苹果线下门店排队购机的人潮画面。",
+      [
+        "快科技10月5日消息，虽然不少数码爱好者和普通用户都在吐槽iPhone 18 Pro系列相比上一代机型的外观、功能改动幅度不算太大，但终端市场的实际销量表现，已经给出了最有说服力的答案。",
+        "有行业调研博主公布的第三方零售端统计数据显示，iPhone 18 Pro系列W39累计销量176W，根据国庆期间的走势，W40预估累计销量250W+，两款机型均轻松完成单品激活100W+。",
+        "iPhone 18 Pro、iPhone 18 Pro Max两款机型于9月18日正式面向全球市场发售，国内版本的起售价分别为9999元和10999元。",
+        "随着iPhone 18 Pro、苹果手表Watch 12、Ultra 4、AirPods 5多款新品在国内同步启动开售，库克特意发布微博晒出了国内苹果线下门店排队购机的人潮画面。",
+        "不少数码行业分析师也表示，这一代iPhone 18 Pro系列即便没有颠覆性的外观大改，依然能创下近三年同期新品的销量新高，核心原因是过去两年卡在iPhone 14、15代的老用户已经积累了足够长的换新周期，新增的端侧AI功能、运行内存翻倍升级的实用点也刚好戳中了不少用户的实际刚需，哪怕外观辨识度不高，也完全挡不住存量用户集中换机的热潮。"
+      ]
+    ]
+  },
+  "42d366661407fd08e06512c8": {
+    "evidence": {
+      "article_id": "42d366661407fd08e06512c8",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月4日消息，尽管iPhone 18 Pro系列正式发布之后，网上针对外观、细节配置的各类吐槽声一直没有断过，但是它在国内市场的实际销售表现依旧相当喜人。 有数码博主近期晒出的行业统计数据显示，iPhone 18 Pro系列正式开售还不到半个月，国内市场的累计总销量已经突破200万台，增长速度远超上两代同价位的Pro系列机型。 iPhone 18 Pro、iPhone 18 Pro Max两款机型在9月18日面向全球市场同步首发，国行版本的起售价分别为9999元和10999元，依旧维持了往年Pro系列的高定价策略。 也难怪不少网友调侃这代iPhone是典型的口嫌体正直，发布会上全网集体吐槽外观设计没新意不够亮眼，正式开售后各个渠道反而出现争相下单抢购的情况，部分热门配色甚至连续好几天处在缺货状态，不少线下门店还要等几天才能调货交付。 值得一提的是，另外一位博主则表示，iPhone 18 Pro系列W39累计销量176W，根据国庆期间的走势，W40预估累计销量250W+，两款机型均轻松完成单品激活100W+。 有手机行业内部人士表示，这一代iPhone 18 Pro系列即便没有做出颠覆性的外观大改，依然能创下近三年苹果秋季新品同期的销量新高，核心原因是过去两年一直使用iPhone 14、15代的老用户已经积累了足够长的换新周期，大批存量用户刚好到了计划换手机的节点。 这代产品新增的全功能端侧AI支持、运行内存直接翻倍升级的实用更新点，也刚好戳中了很多老用户不想手机用两三年就卡顿的实际刚需，哪怕整机的外观辨识度不算高，也完全挡不住这批存量用户集中换机的热潮。 不少数码行业分析师都提到，这轮苹果旗舰的热销本质上是叠加了两年的换机需求集中释放，后续随着双十一平台补贴活动上线，iPhone 18 Pro系列的销量还会迎来新一轮的冲高，最终全生命周期的国内销量大概率会超越上一代iPhone 15 Pro系列。",
+      "discovery_title": "苹果让友商怎么活！iPhone 18 Pro系列国内开售不到半月最新销量出炉：很快破250万台",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04 17:13:31",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04 17:13:31",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04 17:13:31",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-04T09:13:31+00:00",
+      "raw_lead": "快科技10月4日消息，尽管iPhone 18 Pro系列正式发布之后，网上针对外观、细节配置的各类吐槽声一直没有断过，但是它在国内市场的实际销售表现依旧相当喜人。有数码博主近期晒出的行业统计数据",
+      "source": "快科技",
+      "title": "苹果让友商怎么活！iPhone 18 Pro系列国内开售不到半月最新销量出炉：很快破250万台",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月4日消息，尽管iPhone 18 Pro系列正式发布之后，网上针对外观、细节配置的各类吐槽声一直没有断过，但是它在国内市场的实际销售表现依旧相当喜人。",
+          "unit_id": "f92a7a02aba4642ae4d099e1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "有数码博主近期晒出的行业统计数据显示，iPhone 18 Pro系列正式开售还不到半个月，国内市场的累计总销量已经突破200万台，增长速度远超上两代同价位的Pro系列机型。",
+          "unit_id": "abb31b4c9871920deb64547e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "iPhone 18 Pro、iPhone 18 Pro Max两款机型在9月18日面向全球市场同步首发，国行版本的起售价分别为9999元和10999元，依旧维持了往年Pro系列的高定价策略。",
+          "unit_id": "735063eb8b3829659b2caa9f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "也难怪不少网友调侃这代iPhone是典型的口嫌体正直，发布会上全网集体吐槽外观设计没新意不够亮眼，正式开售后各个渠道反而出现争相下单抢购的情况，部分热门配色甚至连续好几天处在缺货状态，不少线下门店还要等几天才能调货交付。",
+          "unit_id": "4b77636f3764dcaf94afdfe5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "值得一提的是，另外一位博主则表示，iPhone 18 Pro系列W39累计销量176W，根据国庆期间的走势，W40预估累计销量250W+，两款机型均轻松完成单品激活100W+。",
+          "unit_id": "efdeb670b62480449d24f186"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "有手机行业内部人士表示，这一代iPhone 18 Pro系列即便没有做出颠覆性的外观大改，依然能创下近三年苹果秋季新品同期的销量新高，核心原因是过去两年一直使用iPhone 14、15代的老用户已经积累了足够长的换新周期，大批存量用户刚好到了计划换手机的节点。",
+          "unit_id": "a3f359507923382942c43510"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "这代产品新增的全功能端侧AI支持、运行内存直接翻倍升级的实用更新点，也刚好戳中了很多老用户不想手机用两三年就卡顿的实际刚需，哪怕整机的外观辨识度不算高，也完全挡不住这批存量用户集中换机的热潮。",
+          "unit_id": "a3ff3e79524add432c3f71a3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "不少数码行业分析师都提到，这轮苹果旗舰的热销本质上是叠加了两年的换机需求集中释放，后续随着双十一平台补贴活动上线，iPhone 18 Pro系列的销量还会迎来新一轮的冲高，最终全生命周期的国内销量大概率会超越上一代iPhone 15 Pro系列。",
+          "unit_id": "96bfcfec63236a44a136d14c"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1155/1155361.htm"
+    },
+    "recorded_extraction": [
+      "苹果让友商怎么活！iPhone 18 Pro系列国内开售不到半月最新销量出炉：很快破250万台",
+      "快科技10月4日消息，尽管iPhone 18 Pro系列正式发布之后，网上针对外观、细节配置的各类吐槽声一直没有断过，但是它在国内市场的实际销售表现依旧相当喜人。有数码博主近期晒出的行业统计数据 快科技10月4日消息，尽管iPhone 18 Pro系列正式发布之后，网上针对外观、细节配置的各类吐槽声一直没有断过，但是它在国内市场的实际销售表现依旧相当喜人。 有数码博主近期晒出的行业统计数据显示，iPhone 18 Pro系列正式开售还不到半个月，国内市场的累计总销量已经突破200万台，增长速度远超上两代同价位的Pro系列机型。 iPhone 18 Pro、iPhone 18 Pro Max两款机型在9月18日面向全球市场同步首发，国行版本的起售价分别为9999元和10999元，依旧维持了往年Pro系列的高定价策略。 也难怪不少网友调侃这代iPhone是典型的口嫌体正直，发布会上全网集体吐槽外观设计没新意不够亮眼，正式开售后各个渠道反而出现争相下单抢购的情况，部分热门配色甚至连续好几天处在缺货状态，不少线下门店还要等几天才能调货交付。",
+      [
+        "快科技10月4日消息，尽管iPhone 18 Pro系列正式发布之后，网上针对外观、细节配置的各类吐槽声一直没有断过，但是它在国内市场的实际销售表现依旧相当喜人。",
+        "有数码博主近期晒出的行业统计数据显示，iPhone 18 Pro系列正式开售还不到半个月，国内市场的累计总销量已经突破200万台，增长速度远超上两代同价位的Pro系列机型。",
+        "iPhone 18 Pro、iPhone 18 Pro Max两款机型在9月18日面向全球市场同步首发，国行版本的起售价分别为9999元和10999元，依旧维持了往年Pro系列的高定价策略。",
+        "值得一提的是，另外一位博主则表示，iPhone 18 Pro系列W39累计销量176W，根据国庆期间的走势，W40预估累计销量250W+，两款机型均轻松完成单品激活100W+。",
+        "有手机行业内部人士表示，这一代iPhone 18 Pro系列即便没有做出颠覆性的外观大改，依然能创下近三年苹果秋季新品同期的销量新高，核心原因是过去两年一直使用iPhone 14、15代的老用户已经积累了足够长的换新周期，大批存量用户刚好到了计划换手机的节点。",
+        "这代产品新增的全功能端侧AI支持、运行内存直接翻倍升级的实用更新点，也刚好戳中了很多老用户不想手机用两三年就卡顿的实际刚需，哪怕整机的外观辨识度不算高，也完全挡不住这批存量用户集中换机的热潮。",
+        "不少数码行业分析师都提到，这轮苹果旗舰的热销本质上是叠加了两年的换机需求集中释放，后续随着双十一平台补贴活动上线，iPhone 18 Pro系列的销量还会迎来新一轮的冲高，最终全生命周期的国内销量大概率会超越上一代iPhone 15 Pro系列。"
+      ]
+    ]
+  },
+  "592ba95115fa40fb6efa1897": {
+    "evidence": {
+      "article_id": "592ba95115fa40fb6efa1897",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Bloomberg 's Mark Gurman today said the new MacBook Pro models with OLED displays will be \"significantly lighter\" than the existing MacBook Pro models. \"Apple has reengineered the machine's interior, miniaturizing parts and rearranging components to make the computer much easier to carry,\" he said, in his Power On newsletter . Currently, the MacBook Pro weighs up to 4.7 pounds, while the MacBook Air weighs up to 3.3 pounds and the MacBook Neo weighs 2.7 pounds. With this newly-reported detail, the new models are now rumored to have six new features: OLED display Touch-screen capabilities Dynamic Island instead of a notch M5 Pro and M5 Max chips Thinner design \"Significantly lighter\" design Thinner and lighter go hand in hand. Apple plans to release the MacBook Pro models with OLED displays in October or November this year, according to Gurman. In his newsletter, he reiterated that Apple is testing the laptops with macOS 27.2, which is currently in beta . The OLED models are expected to be higher-end, higher-priced models that sit above the existing MacBook Pro models in Apple's lineup. Related Roundup: MacBook Pro Tags: Mark Gurman , OLED Buyer's Guide: MacBook Pro (Caution) Related Forum: MacBook Pro This article, \" MacBook Pro With OLED Display Rumored to Be 'Significantly Lighter' \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "MacBook Pro With OLED Display Rumored to Be 'Significantly Lighter'",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05T01:21:54+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05T01:21:54+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05T01:21:54+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sunday October 4, 2026 6:21 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 4, 2026 6:21 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 30, 2026 4:36 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 30, 2026 4:04 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 14, 2026 2:04 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon, 05 Oct 2026 01:22:06 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-05T01:21:54+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-05T01:21:54+00:00",
+      "raw_lead": "Bloomberg's Mark Gurman today said the new MacBook Pro models with OLED displays will be \"significantly lighter\" than the existing MacBook Pro models. \"Apple has reengineered the machine's interior, miniaturizing parts and rearranging components to make the computer much easier to carry,\" he said, in his Power On newsletter. Currently, the MacBook Pro weighs up to 4.7 pounds, while the MacBook Air weighs up to 3.3 pounds and the MacBook Neo weighs 2.7 pounds.",
+      "source": "MacRumors",
+      "title": "MacBook Pro With OLED Display Rumored to Be 'Significantly Lighter'",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "MacBook Pro With OLED Display Rumored to Be 'Significantly Lighter'",
+          "unit_id": "62b19629e3dd722599c3fad5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Bloomberg's Mark Gurman today said the new MacBook Pro models with OLED displays will be \"significantly lighter\" than the existing MacBook Pro models.",
+          "unit_id": "4e29bda12b9349d3786e4dad"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "\"Apple has reengineered the machine's interior, miniaturizing parts and rearranging components to make the computer much easier to carry,\" he said, in his Power On newsletter. Currently, the MacBook Pro weighs up to 4.7 pounds, while the MacBook Air weighs up to 3.3 pounds and the MacBook Neo weighs 2.7 pounds.",
+          "unit_id": "67a6d72965845d753fa11a64"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "With this newly-reported detail, the new models are now rumored to have six new features:",
+          "unit_id": "470ccd60eb4442223096dd65"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "OLED display",
+          "unit_id": "45b2c33aef824222c723c134"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Touch-screen capabilities",
+          "unit_id": "c6a5769f0577980be8c58705"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Dynamic Island instead of a notch",
+          "unit_id": "4d5e1925434740ad1f77266f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "M5 Pro and M5 Max chips",
+          "unit_id": "607a35007cd028bab1c9a533"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Thinner design",
+          "unit_id": "6fd4eeaeddc393d967fb2217"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "\"Significantly lighter\" design",
+          "unit_id": "dbb67fbede823631e80fd2b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Thinner and lighter go hand in hand.",
+          "unit_id": "38a940019406445f15a0ccec"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Apple plans to release the MacBook Pro models with OLED displays in October or November this year, according to Gurman. In his newsletter, he reiterated that Apple is testing the laptops with macOS 27.2, which is currently in beta.",
+          "unit_id": "7c2ade19e7f6906b14e3fe84"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "The OLED models are expected to be higher-end, higher-priced models that sit above the existing MacBook Pro models in Apple's lineup.",
+          "unit_id": "bac4fff0457023097f6f8feb"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/04/oled-macbook-pro-significantly-lighter-rumor/"
+    },
+    "recorded_extraction": [
+      "MacBook Pro With OLED Display Rumored to Be 'Significantly Lighter'",
+      "Bloomberg's Mark Gurman today said the new MacBook Pro models with OLED displays will be \"significantly lighter\" than the existing MacBook Pro models. \"Apple has reengineered the machine's interior, miniaturizing parts and rearranging components to make the computer much easier to carry,\" he said, in his Power On newsletter. Currently, the MacBook Pro weighs up to 4.7 pounds, while the MacBook Air weighs up to 3.3 pounds and the MacBook Neo weighs 2.7 pounds. Bloomberg 's Mark Gurman today said the new MacBook Pro models with OLED displays will be \"significantly lighter\" than the existing MacBook Pro models. \"Apple has reengineered the machine's interior, miniaturizing parts and rearranging components to make the computer much easier to carry,\" he said, in his Power On newsletter . Currently, the MacBook Pro weighs up to 4.7 pounds, while the MacBook Air weighs up to 3.3 pounds and the MacBook Neo weighs 2.7 pounds. With this newly-reported detail, the new models are now rumored to have six new features: Apple plans to release the MacBook Pro models with OLED displays in October or November this year, according to Gurman. In his newsletter, he reiterated that Apple is testing the laptops with macOS 27.2, which is currently in beta .",
+      [
+        "OLED display Touch-screen capabilities Dynamic Island instead of a notch M5 Pro and M5 Max chips Thinner design \"Significantly lighter\" design"
+      ]
+    ]
+  },
+  "72ce293d4dfccfe3bba24e11": {
+    "evidence": {
+      "article_id": "72ce293d4dfccfe3bba24e11",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple’s major MacBook Pro overhaul is just around the corner, and should debut within a month or so. It’ll be the first touchscreen MacBook, as well as the first with Tandem OLED. Beyond that, though, the new MacBooks should be ‘significantly’ lighter than their predecessors, according to the latest issue of the Power On newsletter. more… It’ll be…",
+      "discovery_title": "Redesigned MacBook Pro with OLED to feature ‘significantly lighter’ design: report",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:11:01+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:12:34+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:11:01+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:12:34+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 14:11:01 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T14:11:01+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T14:11:01+00:00",
+      "raw_lead": "Apple’s major MacBook Pro overhaul is just around the corner, and should debut within a month or so. It’ll be...",
+      "source": "9to5Mac",
+      "title": "Redesigned MacBook Pro with OLED to feature 'significantly lighter' design: report - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple’s major MacBook Pro overhaul is just around the corner, and should debut within a month or so. It’ll be the first touchscreen MacBook, as well as the first with Tandem OLED. Beyond that, though, the new MacBooks should be ‘significantly’ lighter than their predecessors, according to the latest issue of the Power On newsletter.",
+          "unit_id": "b51b85b484374ea629bb9899"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "The newsletter reiterates that the new MacBook Pro should debut ‘by next month,’ so we should see these new machines before the end of November. These machines should offer the current M5 Pro and M5 Max chips, as Apple has opted to skip the higher-end part of the M6 family in favor of accelerating the M7 launch.",
+          "unit_id": "0e3cc5b637e4be4744688b45"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "New MacBook Pro to be much lighter",
+          "unit_id": "fef157223ece8604cbc61ddd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Despite the fact that these MacBooks have been rumored for quite some time, we haven’t really known too much about them besides specs on paper: OLED, touch, Dynamic Island, and so on. In the past, reports have described the computer as thinner, but we haven’t really had much of a visual. We still don’t, but we do have one major new detail on what this machine will feel like:",
+          "unit_id": "0fea72afec86cf995c35dcdf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "The new MacBook Pros are lighter — significantly lighter. Apple has reengineered the machine’s interior miniaturizing parts and rearranging components to make the computer much easier to carry. The current 16-inch MacBook Pro weighs as much as 4.8 pounds, compared with 3.3 pounds for the 15-inch MacBook Air, so any meaningful reduction would be immediately noticeable.",
+          "unit_id": "21128543b777c53eae4e8bf4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Bloomberg’s Mark Gurman doesn’t specify exactly how much lighter it will be, but if you’re someone who uses a current-generation MacBook Pro, especially the 16-inch, you might find that it’s heavier than you’d like it to be. Apple is reportedly working to improve on that.",
+          "unit_id": "8a84fc2b5eadc5ad5f2fa537"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "View all comments",
+          "unit_id": "ed1365a41a8f36e4f19cd1d6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Beyond that, Gurman also mentions that there will be some changes in macOS Golden Gate to support touch and the Dynamic Island, alongside the debut of macOS 27.2.",
+          "unit_id": "2d052f54f996ede129a66695"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Are you excited for the launch of these new MacBook Pros? Will you be buying one? Let us know in the comments.",
+          "unit_id": "f88f7d253c2114a0b827ff59"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/04/apple-macbook-pro-redesign-to-be-much-lighter-report/"
+    },
+    "recorded_extraction": [
+      "Redesigned MacBook Pro with OLED to feature 'significantly lighter' design: report - 9to5Mac",
+      "Apple’s major MacBook Pro overhaul is just around the corner, and should debut within a month or so. It’ll be... Apple’s major MacBook Pro overhaul is just around the corner, and should debut within a month or so. It’ll be the first touchscreen MacBook, as well as the first with Tandem OLED. Beyond that, though, the new MacBooks should be ‘significantly’ lighter than their predecessors, according to the latest issue of the Power On newsletter . The newsletter reiterates that the new MacBook Pro should debut ‘by next month,’ so we should see these new machines before the end of November. These machines should offer the current M5 Pro and M5 Max chips, as Apple has opted to skip the higher-end part of the M6 family in favor of accelerating the M7 launch. Despite the fact that these MacBooks have been rumored for quite some time, we haven’t really known too much about them besides specs on paper: OLED, touch, Dynamic Island, and so on. In the past, reports have described the computer as thinner, but we haven’t really had much of a visual. We still don’t, but we do have one major new detail on what this machine will feel like: The new MacBook Pros are lighter — significantly lighter. Apple has reengineered the machine’s interior miniaturizing parts and rearranging components to make the computer much easier to carry. The current 16-inch MacBook Pro weighs as much as 4.8 pounds, compared with 3.3 pounds for the 15-inch MacBook Air, so any meaningful reduction would be immediately noticeable.",
+      [
+        "Apple’s major MacBook Pro overhaul is just around the corner, and should debut within a month or so. It’ll be the first touchscreen MacBook, as well as the first with Tandem OLED. Beyond that, though, the new MacBooks should be ‘significantly’ lighter than their predecessors, according to the latest issue of the Power On newsletter.",
+        "The new MacBook Pros are lighter — significantly lighter. Apple has reengineered the machine’s interior miniaturizing parts and rearranging components to make the computer much easier to carry. The current 16-inch MacBook Pro weighs as much as 4.8 pounds, compared with 3.3 pounds for the 15-inch MacBook Air, so any meaningful reduction would be immediately noticeable.",
+        "Bloomberg’s Mark Gurman doesn’t specify exactly how much lighter it will be, but if you’re someone who uses a current-generation MacBook Pro, especially the 16-inch, you might find that it’s heavier than you’d like it to be. Apple is reportedly working to improve on that.",
+        "Beyond that, Gurman also mentions that there will be some changes in macOS Golden Gate to support touch and the Dynamic Island, alongside the debut of macOS 27.2."
+      ]
+    ]
+  },
+  "ef57ce8a87dfe67310c6bcca": {
+    "evidence": {
+      "article_id": "ef57ce8a87dfe67310c6bcca",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "The forthcoming new MacBook Pro is expected to bring an OLED touch-screen, but it's also now predicted to be at least a little closer to the MacBook Air's lower weight. Apple's MacBook Pro. Every detail of the expected MacBook Pro refresh has been rumored, sometimes for years, as Apple hasn't made even a minor design change since 2022. That includes the expectation that the new MacBook Pro will be lighter, which was first reported back in 2024 . However, Bloomberg now claims that the weight difference will be significant. Reportedly, Apple has redesigned components, making them smaller and so lighter. Continue Reading on AppleInsider | Discuss on our Forums",
+      "discovery_title": "Touch-screen MacBook Pro will be significantly lighter",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:35:20+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:35:20+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun Oct 04 2026, 10:35 AM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T22:13:28+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05T01:02:08+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 hour ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T20:07:57+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T15:05:05+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "11 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:35:20+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "12 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T14:22:35+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "12 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T11:21:31+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "15 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:38:54+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "19 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:16:57+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "19 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04T07:05:29+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "19 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 04 2026, 10:35 AM EDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 14:35:20 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04T14:35:20+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-04T14:35:20+00:00",
+      "raw_lead": "The forthcoming new MacBook Pro is expected to bring an OLED touch-screen, but it's also now predicted to be at least a little closer to the MacBook Air's lower weight.",
+      "source": "AppleInsider",
+      "title": "Touch-screen MacBook Pro will be significantly lighter",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "The forthcoming new MacBook Pro is expected to bring an OLED touch-screen, but it's also now predicted to be at least a little closer to the MacBook Air's lower weight.",
+          "unit_id": "6bd9a10d8d5af8c2019844a4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Every detail of the expected MacBook Pro refresh has been rumored, sometimes for years, as Apple hasn't made even a minor design change since 2022. That includes the expectation that the new MacBook Pro will be lighter, which was first reported back in 2024.",
+          "unit_id": "af04e04b3bf51e3082ac2d9c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "However, Bloomberg now claims that the weight difference will be significant. Reportedly, Apple has redesigned components, making them smaller and so lighter.",
+          "unit_id": "557565787a99db476cd319dc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "It's also claimed that the positioning of some components have been rearranged to make the MacBook Pro easier to carry. That's harder to imagine as the MacBook Pro is already built so that its weight is evenly distributed.",
+          "unit_id": "3d4b8dd0ed30b224f50a877c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Nonetheless, any significant reduction in weight is going to be a selling point. It's not as if Apple will talk up the lightness before it does a hard sell on the OLED touchscreen, but it is important.",
+          "unit_id": "97d665c21fe8175b5148dd83"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "That won't be the case for people who chiefly leave their MacBook Pro on a desk. But if you've ever switched between a MacBook Pro and a MacBook Air, you have noticed the substantial weight difference.",
+          "unit_id": "53a9bf7f41243ae1c277e3c6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "The current 16-inch MacBook Pro weighs 4.7 pounds while the nearest equivalent, the 15-inch MacBook Air, is 3.3 pounds.",
+          "unit_id": "8570d5f688e53c567b871a9b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Apple is now expected to launch the revised MacBook Pro in either late October 2026 or November 2026. That will make it just in time to still be in the MacBook Pro's 20th anniversary year.",
+          "unit_id": "df119c4f378d956e29733223"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/10/04/touch-screen-macbook-pro-will-be-significantly-lighter?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "Touch-screen MacBook Pro will be significantly lighter",
+      "The forthcoming new MacBook Pro is expected to bring an OLED touch-screen, but it's also now predicted to be at least a little closer to the MacBook Air's lower weight. Every detail of the expected MacBook Pro refresh has been rumored, sometimes for years, as Apple hasn't made even a minor design change since 2022. That includes the expectation that the new MacBook Pro will be lighter, which was first reported back in 2024 . However, Bloomberg now claims that the weight difference will be significant. Reportedly, Apple has redesigned components, making them smaller and so lighter. It's also claimed that the positioning of some components have been rearranged to make the MacBook Pro easier to carry. That's harder to imagine as the MacBook Pro is already built so that its weight is evenly distributed. Nonetheless, any significant reduction in weight is going to be a selling point. It's not as if Apple will talk up the lightness before it does a hard sell on the OLED touchscreen, but it is important.",
+      [
+        "Every detail of the expected MacBook Pro refresh has been rumored, sometimes for years, as Apple hasn't made even a minor design change since 2022. That includes the expectation that the new MacBook Pro will be lighter, which was first reported back in 2024.",
+        "The current 16-inch MacBook Pro weighs 4.7 pounds while the nearest equivalent, the 15-inch MacBook Air, is 3.3 pounds.",
+        "Apple is now expected to launch the revised MacBook Pro in either late October 2026 or November 2026. That will make it just in time to still be in the MacBook Pro's 20th anniversary year."
+      ]
+    ]
+  },
+  "bd58b6386fbc220c7d56ccc5": {
+    "evidence": {
+      "article_id": "bd58b6386fbc220c7d56ccc5",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 5 日消息，苹果即将对 MacBook Pro 进行一次重大重塑，新机大约会在一个月之内正式亮相。这将是首款支持触控屏的 MacBook，同时也是首次采用叠层 OLED（Tandem OLED）屏幕的机型。除此之外，据彭博社的马克 · 古尔曼（Mark Gurman）在最新一期《Power On》中透露，新款 MacBook 相比上一代机型， 重量还将会出现“显著”下降。 古尔曼再次提到，新款 MacBook Pro 预计“在下个月之前”发布，也就是说新机有望在 11 月底之前正式和大家见面。新机依旧搭载现有的 M5 Pro 以及 M5 Max 芯片；苹果选择跳过 M6 系列的高端版本，以此加快 M7 芯片的推出进度。 尽管关于这批 MacBook 的传闻已经流传许久，但此前外界大多只了解纸面规格信息：OLED 屏幕、触控功能、灵动岛等等。过去的报道只是说机身会做得更薄，并没有太多关于实际手感的消息。现在依旧没有实物外观的相关信息，但多了一项非常关键的新细节，也就是新机的手感： 新款 MacBook Pro 重量变得更轻， 而且是轻了不少 。苹果重新设计了机器的内部结构，把零部件小型化，重新排布内部元器件，让整机的便携性得到明显改善。当前 16 英寸 MacBook Pro 重量可达 4.8 磅 （IT之家注：约 2.2 千克） ，而 15 英寸 MacBook Air 仅重 3.3 磅 （约 1.5 千克） ；因此只要减重幅度足够可观，使用者马上就能察觉到差别。 古尔曼没有给出具体的减重数值。不过对于正在使用现款 MacBook Pro，尤其是 16 英寸版本的用户而言，很多人都会觉得机子偏重。据传苹果正在着手改善这一痛点。 除此之外，古尔曼还提到，随着 macOS 27.2 版本正式发布，macOS Golden Gate 系统当中会加入部分改动，用来适配触控操作以及灵动岛功能。 据彭博社古尔曼透露，新机有望在 11 月底前发布，搭载 M5 Pro/M5 Max 芯片，跳过 M6 高端版本加速 M7 推出。苹果重新设计内部结构，减重幅度足以让用户感知。#MacBookPro# #苹果# #OLED触控屏#",
+      "discovery_title": "古尔曼：配备 OLED 触控屏的全新苹果 MacBook Pro 将大幅减重",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/5 8:39:58",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon, 05 Oct 2026 00:39:58 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/5 8:39:58",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-05T00:39:58+00:00",
+      "raw_lead": "据彭博社古尔曼透露，新机有望在 11 月底前发布，搭载 M5 Pro/M5 Max 芯片，跳过 M6 高端版本加速 M7 推出。苹果重新设计内部结构，减重幅度足以让用户感知。#MacBookPro# #苹果# #OLED触控屏#",
+      "source": "IT之家",
+      "title": "古尔曼：配备 OLED 触控屏的全新苹果 MacBook Pro 将大幅减重",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 5 日消息，苹果即将对 MacBook Pro 进行一次重大重塑，新机大约会在一个月之内正式亮相。这将是首款支持触控屏的 MacBook，同时也是首次采用叠层 OLED（Tandem OLED）屏幕的机型。除此之外，据彭博社的马克 · 古尔曼（Mark Gurman）在最新一期《Power On》中透露，新款 MacBook 相比上一代机型，重量还将会出现“显著”下降。",
+          "unit_id": "118ca4309a463afa43d6a69e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "古尔曼再次提到，新款 MacBook Pro 预计“在下个月之前”发布，也就是说新机有望在 11 月底之前正式和大家见面。新机依旧搭载现有的 M5 Pro 以及 M5 Max 芯片；苹果选择跳过 M6 系列的高端版本，以此加快 M7 芯片的推出进度。",
+          "unit_id": "98bd7b59498363789e7de393"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "尽管关于这批 MacBook 的传闻已经流传许久，但此前外界大多只了解纸面规格信息：OLED 屏幕、触控功能、灵动岛等等。过去的报道只是说机身会做得更薄，并没有太多关于实际手感的消息。现在依旧没有实物外观的相关信息，但多了一项非常关键的新细节，也就是新机的手感：",
+          "unit_id": "abedccee2da130b4db5195bf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "新款 MacBook Pro 重量变得更轻，而且是轻了不少。苹果重新设计了机器的内部结构，把零部件小型化，重新排布内部元器件，让整机的便携性得到明显改善。当前 16 英寸 MacBook Pro 重量可达 4.8 磅（IT之家注：约 2.2 千克），而 15 英寸 MacBook Air 仅重 3.3 磅（约 1.5 千克）；因此只要减重幅度足够可观，使用者马上就能察觉到差别。",
+          "unit_id": "ece5909b7d0493e4c7367efd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "古尔曼没有给出具体的减重数值。不过对于正在使用现款 MacBook Pro，尤其是 16 英寸版本的用户而言，很多人都会觉得机子偏重。据传苹果正在着手改善这一痛点。",
+          "unit_id": "7e65ff1c15c8aa2b3c8e34a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "除此之外，古尔曼还提到，随着 macOS 27.2 版本正式发布，macOS Golden Gate 系统当中会加入部分改动，用来适配触控操作以及灵动岛功能。",
+          "unit_id": "79e839ff61ef8faa97074bd9"
+        }
+      ],
+      "url": "https://www.ithome.com/1/009/750.htm"
+    },
+    "recorded_extraction": [
+      "古尔曼：配备 OLED 触控屏的全新苹果 MacBook Pro 将大幅减重",
+      "据彭博社古尔曼透露，新机有望在 11 月底前发布，搭载 M5 Pro/M5 Max 芯片，跳过 M6 高端版本加速 M7 推出。苹果重新设计内部结构，减重幅度足以让用户感知。#MacBookPro# #苹果# #OLED触控屏# IT之家 10 月 5 日消息，苹果即将对 MacBook Pro 进行一次重大重塑，新机大约会在一个月之内正式亮相。这将是首款支持触控屏的 MacBook，同时也是首次采用叠层 OLED（Tandem OLED）屏幕的机型。除此之外，据彭博社的马克 · 古尔曼（Mark Gurman）在最新一期《Power On》中透露，新款 MacBook 相比上一代机型， 重量还将会出现“显著”下降。 古尔曼再次提到，新款 MacBook Pro 预计“在下个月之前”发布，也就是说新机有望在 11 月底之前正式和大家见面。新机依旧搭载现有的 M5 Pro 以及 M5 Max 芯片；苹果选择跳过 M6 系列的高端版本，以此加快 M7 芯片的推出进度。 尽管关于这批 MacBook 的传闻已经流传许久，但此前外界大多只了解纸面规格信息：OLED 屏幕、触控功能、灵动岛等等。过去的报道只是说机身会做得更薄，并没有太多关于实际手感的消息。现在依旧没有实物外观的相关信息，但多了一项非常关键的新细节，也就是新机的手感： 新款 MacBook Pro 重量变得更轻， 而且是轻了不少 。苹果重新设计了机器的内部结构，把零部件小型化，重新排布内部元器件，让整机的便携性得到明显改善。当前 16 英寸 MacBook Pro 重量可达 4.8 磅 （IT之家注：约 2.2 千克） ，而 15 英寸 MacBook Air 仅重 3.3 磅 （约 1.5 千克） ；因此只要减重幅度足够可观，使用者马上就能察觉到差别。",
+      [
+        "IT之家 10 月 5 日消息，苹果即将对 MacBook Pro 进行一次重大重塑，新机大约会在一个月之内正式亮相。这将是首款支持触控屏的 MacBook，同时也是首次采用叠层 OLED（Tandem OLED）屏幕的机型。除此之外，据彭博社的马克 · 古尔曼（Mark Gurman）在最新一期《Power On》中透露，新款 MacBook 相比上一代机型，重量还将会出现“显著”下降。",
+        "古尔曼再次提到，新款 MacBook Pro 预计“在下个月之前”发布，也就是说新机有望在 11 月底之前正式和大家见面。新机依旧搭载现有的 M5 Pro 以及 M5 Max 芯片；苹果选择跳过 M6 系列的高端版本，以此加快 M7 芯片的推出进度。",
+        "尽管关于这批 MacBook 的传闻已经流传许久，但此前外界大多只了解纸面规格信息：OLED 屏幕、触控功能、灵动岛等等。过去的报道只是说机身会做得更薄，并没有太多关于实际手感的消息。现在依旧没有实物外观的相关信息，但多了一项非常关键的新细节，也就是新机的手感：",
+        "新款 MacBook Pro 重量变得更轻，而且是轻了不少。苹果重新设计了机器的内部结构，把零部件小型化，重新排布内部元器件，让整机的便携性得到明显改善。当前 16 英寸 MacBook Pro 重量可达 4.8 磅（IT之家注：约 2.2 千克），而 15 英寸 MacBook Air 仅重 3.3 磅（约 1.5 千克）；因此只要减重幅度足够可观，使用者马上就能察觉到差别。",
+        "古尔曼没有给出具体的减重数值。不过对于正在使用现款 MacBook Pro，尤其是 16 英寸版本的用户而言，很多人都会觉得机子偏重。据传苹果正在着手改善这一痛点。",
+        "除此之外，古尔曼还提到，随着 macOS 27.2 版本正式发布，macOS Golden Gate 系统当中会加入部分改动，用来适配触控操作以及灵动岛功能。"
+      ]
+    ]
+  },
+  "ddf5c63dbac2d39a26ae1892": {
+    "evidence": {
+      "article_id": "ddf5c63dbac2d39a26ae1892",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "彭博社记者马克·古尔曼称，苹果正在重新设计下一代MacBook Pro的内部结构，通过缩小部分组件并调整组件布局，使新机“明显更轻”，携带起来也更方便。不过，报道没有给出具体减重幅度，也未说明14英寸和16英寸机型是否会采用相同方案。苹果尚未公布这款产品，相关信息仍属媒体报道和传闻。 阅读全文",
+      "discovery_title": "传苹果触控屏MacBook Pro内部组件重新布局 将明显减重",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "4 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-9-22 23:50",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-9-16 13:22",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-9-16 02:35",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-9-15 06:25",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月05日 00:01",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 16:01:35 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月05日 00:01",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-04T16:01:00+00:00",
+      "raw_lead": "彭博社记者马克·古尔曼称，苹果正在重新设计下一代MacBookPro的内部结构，通过缩小部分组件并调整组件布局，使新机“明显更轻”，携带起来也更方便。不过，报道没有给出具体减重幅度，也未说明14英寸和16英寸机型是否会采用相同方案。苹果尚未公布这款产品，相关信息仍属媒体报道和传闻。",
+      "source": "cnBeta",
+      "title": "传苹果触控屏MacBook Pro内部组件重新布局 将明显减重 - Apple Mac - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "彭博社记者马克·古尔曼称，苹果正在重新设计下一代MacBook Pro的内部结构，通过缩小部分组件并调整组件布局，使新机“明显更轻”，携带起来也更方便。不过，报道没有给出具体减重幅度，也未说明14英寸和16英寸机型是否会采用相同方案。苹果尚未公布这款产品，相关信息仍属媒体报道和传闻。",
+          "unit_id": "cb64df9537d64ae0b3b56988"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这款重新设计的MacBook Pro预计将配备OLED触控屏。此前有关产品的报道还提及更薄机身，以及可能以灵动岛取代现款屏幕刘海；彭博社称新机或于今年10月或11月推出。上述设计和发布时间均未获苹果官方确认，苹果也未说明触控屏型号的最终产品名称、处理器配置或重量。",
+          "unit_id": "f864ecda28a54badeaebf3b9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "减重对大尺寸机型尤其有意义。苹果现售16英寸MacBook Pro搭载M5 Pro或M5 Max芯片，机重约2.14至2.15公斤；作为参照，15英寸MacBook Air约重1.5公斤。古尔曼没有披露新机最终重量，因此目前无法判断它能缩小多少与MacBook Air之间的差距。AppleInsider指出，MacBook Pro自2022年以来没有进行明显的外观改款，轻量化传闻此前已出现，但这次关于“显著减重”的说法来自古尔曼最新报道。",
+          "unit_id": "bf031a57d4b3d4029e374d84"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "如果传闻属实，这将是苹果首次推出触控屏MacBook Pro，并在增加触控功能的同时降低整机重量。不过目前仍没有具体尺寸、厚度、屏幕参数、重量或价格等官方数据，实际改动幅度仍有待苹果发布时确认。",
+          "unit_id": "752c00d3ad3b3bffb1c651c4"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1580688.htm"
+    },
+    "recorded_extraction": [
+      "传苹果触控屏MacBook Pro内部组件重新布局 将明显减重 - Apple Mac - cnBeta.COM",
+      "彭博社记者马克·古尔曼称，苹果正在重新设计下一代MacBookPro的内部结构，通过缩小部分组件并调整组件布局，使新机“明显更轻”，携带起来也更方便。不过，报道没有给出具体减重幅度，也未说明14英寸和16英寸机型是否会采用相同方案。苹果尚未公布这款产品，相关信息仍属媒体报道和传闻。 彭博社记者马克·古尔曼称，苹果正在重新设计下一代MacBook Pro的内部结构，通过缩小部分组件并调整组件布局，使新机“明显更轻”，携带起来也更方便。不过，报道没有给出具体减重幅度，也未说明14英寸和16英寸机型是否会采用相同方案。苹果尚未公布这款产品，相关信息仍属媒体报道和传闻。 这款重新设计的MacBook Pro预计将配备OLED触控屏。此前有关产品的报道还提及更薄机身，以及可能以灵动岛取代现款屏幕刘海；彭博社称新机或于今年10月或11月推出。上述设计和发布时间均未获苹果官方确认，苹果也未说明触控屏型号的最终产品名称、处理器配置或重量。 减重对大尺寸机型尤其有意义。苹果现售16英寸MacBook Pro搭载M5 Pro或M5 Max芯片，机重约2.14至2.15公斤；作为参照，15英寸MacBook Air约重1.5公斤。古尔曼没有披露新机最终重量，因此目前无法判断它能缩小多少与MacBook Air之间的差距。AppleInsider指出，MacBook Pro自2022年以来没有进行明显的外观改款，轻量化传闻此前已出现，但这次关于“显著减重”的说法来自古尔曼最新报道。 如果传闻属实，这将是苹果首次推出触控屏MacBook Pro，并在增加触控功能的同时降低整机重量。不过目前仍没有具体尺寸、厚度、屏幕参数、重量或价格等官方数据，实际改动幅度仍有待苹果发布时确认。",
+      [
+        "彭博社记者马克·古尔曼称，苹果正在重新设计下一代MacBook Pro的内部结构，通过缩小部分组件并调整组件布局，使新机“明显更轻”，携带起来也更方便。不过，报道没有给出具体减重幅度，也未说明14英寸和16英寸机型是否会采用相同方案。苹果尚未公布这款产品，相关信息仍属媒体报道和传闻。",
+        "这款重新设计的MacBook Pro预计将配备OLED触控屏。此前有关产品的报道还提及更薄机身，以及可能以灵动岛取代现款屏幕刘海；彭博社称新机或于今年10月或11月推出。上述设计和发布时间均未获苹果官方确认，苹果也未说明触控屏型号的最终产品名称、处理器配置或重量。",
+        "减重对大尺寸机型尤其有意义。苹果现售16英寸MacBook Pro搭载M5 Pro或M5 Max芯片，机重约2.14至2.15公斤；作为参照，15英寸MacBook Air约重1.5公斤。古尔曼没有披露新机最终重量，因此目前无法判断它能缩小多少与MacBook Air之间的差距。AppleInsider指出，MacBook Pro自2022年以来没有进行明显的外观改款，轻量化传闻此前已出现，但这次关于“显著减重”的说法来自古尔曼最新报道。",
+        "如果传闻属实，这将是苹果首次推出触控屏MacBook Pro，并在增加触控功能的同时降低整机重量。不过目前仍没有具体尺寸、厚度、屏幕参数、重量或价格等官方数据，实际改动幅度仍有待苹果发布时确认。"
+      ]
+    ]
+  },
+  "a72ff1a76e0c7edf8750e314": {
+    "evidence": {
+      "article_id": "a72ff1a76e0c7edf8750e314",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "等等党赢麻！苹果MacBook Pro大改款：首款触屏+大幅减减重",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-05 09:42:51",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-10-05 09:42:51",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-05T01:42:51+00:00",
+      "raw_lead": "快科技10月5日消息，据报道，苹果将会在11月底之前推出经过深度重新设计的MacBook Pro，这一代机型将迎来多项历史性的变化，不管是屏幕交互还是机身便携性，都有不小升级。这是Mac系列历史上第",
+      "source": "快科技",
+      "title": "等等党赢麻！苹果MacBook Pro下月大改款：首款触屏+大幅减重",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月5日消息，据报道，苹果将会在11月底之前推出经过深度重新设计的MacBook Pro，这一代机型将迎来多项历史性的变化，不管是屏幕交互还是机身便携性，都有不小升级。",
+          "unit_id": "aa0babf5f4302e6d7fbea735"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这是Mac系列历史上第一款支持触控操作的MacBook，同时首次用上叠层OLED屏幕，屏幕区域还会搭载灵动岛设计。",
+          "unit_id": "c8505484f01912554d648225"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "长久以来，Mac电脑一直没有触屏功能，这次更新补齐了这一大短板，打通了和iPad之间的交互体验壁垒。",
+          "unit_id": "d03435984c325f747800a40d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "硬件核心方面，新款机型沿用M5 Pro与M5 Max芯片，苹果选择跳过M6系列高端版本，以此加速后续M7芯片的研发落地。",
+          "unit_id": "35e1a9a28e84919e4b9302e6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "除屏幕之外，本次更新的一大惊喜是机身重量的明显下降。苹果对内部架构进行重新规划，把零部件小型化，调整元器件排布，实现了显著减重。",
+          "unit_id": "b61c29bece7dcc143fc7e8d7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "目前16英寸MacBook Pro重量约2.2千克，不少用户反馈日常外出携带负担较重，虽然爆料没有公布确切减重数字，但表示上手就可以感受到重量差异，大幅改善Pro机型的便携短板。",
+          "unit_id": "6df8e4620dccbee0fc879f95"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "软件层面，macOS 27.2正式版会配套上线，针对触控操作、灵动岛完成系统适配，为新硬件提供完整的软件支持。",
+          "unit_id": "74be23c6d372f0444774456f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "目前还没有真机外观的实拍信息，但是综合多方消息，这款新机属于近几年MacBook Pro改动幅度最大的一代产品。",
+          "unit_id": "61f9ccc0961cd96564142744"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1155/1155402.htm"
+    },
+    "recorded_extraction": [
+      "等等党赢麻！苹果MacBook Pro下月大改款：首款触屏+大幅减重",
+      "快科技10月5日消息，据报道，苹果将会在11月底之前推出经过深度重新设计的MacBook Pro，这一代机型将迎来多项历史性的变化，不管是屏幕交互还是机身便携性，都有不小升级。这是Mac系列历史上第 快科技10月5日消息，据报道，苹果将会在11月底之前推出经过深度重新设计的MacBook Pro，这一代机型将迎来多项历史性的变化，不管是屏幕交互还是机身便携性，都有不小升级。 硬件核心方面，新款机型沿用M5 Pro与M5 Max芯片，苹果选择跳过M6系列高端版本，以此加速后续M7芯片的研发落地。 除屏幕之外，本次更新的一大惊喜是机身重量的明显下降。苹果对内部架构进行重新规划，把零部件小型化，调整元器件排布，实现了显著减重。 目前16英寸MacBook Pro重量约2.2千克，不少用户反馈日常外出携带负担较重，虽然爆料没有公布确切减重数字，但表示上手就可以感受到重量差异，大幅改善Pro机型的便携短板。",
+      [
+        "快科技10月5日消息，据报道，苹果将会在11月底之前推出经过深度重新设计的MacBook Pro，这一代机型将迎来多项历史性的变化，不管是屏幕交互还是机身便携性，都有不小升级。",
+        "这是Mac系列历史上第一款支持触控操作的MacBook，同时首次用上叠层OLED屏幕，屏幕区域还会搭载灵动岛设计。",
+        "长久以来，Mac电脑一直没有触屏功能，这次更新补齐了这一大短板，打通了和iPad之间的交互体验壁垒。",
+        "硬件核心方面，新款机型沿用M5 Pro与M5 Max芯片，苹果选择跳过M6系列高端版本，以此加速后续M7芯片的研发落地。",
+        "目前16英寸MacBook Pro重量约2.2千克，不少用户反馈日常外出携带负担较重，虽然爆料没有公布确切减重数字，但表示上手就可以感受到重量差异，大幅改善Pro机型的便携短板。",
+        "软件层面，macOS 27.2正式版会配套上线，针对触控操作、灵动岛完成系统适配，为新硬件提供完整的软件支持。"
+      ]
+    ]
+  }
+}

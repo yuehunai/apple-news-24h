@@ -699,7 +699,7 @@ class RelevanceRuleTests(unittest.TestCase):
             module,
             "苹果发布《神经漫游者》首支预告片",
             (
-                "苹果发布《神经漫游者》预告片，该剧定于明年 1 月 22 日在 Apple TV "
+                "苹果发布《神经漫游者》（Neuromancer）预告片，该剧定于明年 1 月 22 日在 Apple TV "
                 "平台首播，首季共 10 集。"
             ),
             "快科技",
@@ -4536,7 +4536,7 @@ class RelevanceRuleTests(unittest.TestCase):
             regions=set(chinese_article.regions),
         )
 
-        self.assertFalse(module.should_merge(english_article, chinese_event))
+        self.assertTrue(module.should_merge(english_article, chinese_event))
         self.assertTrue(module.events_should_merge(english_event, chinese_event))
 
     def test_apple_product_price_increase_reports_merge_across_languages(self):

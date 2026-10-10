@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.0.0 - 2026-10-10
+
+- Refactored the `1.77.0` pipeline into shared models, collection and evidence utilities, source-bound claim projection, and unified event matching and reconciliation; removed competing grouping and relevance decisions from output assembly.
+- Improved cross-language grouping around the reported actor, action and object, preserving version, region, stage, direction and measurement-period boundaries across mixed articles and follow-up reports.
+- Added `source_evidence`, source-linked fact origins and visible unresolved-fragment dispositions; carried material numbers, lists, conditions and attribution through per-source fact preparation and event fact plans. Discovery-only captures now carry explicit review markers when full article text is unavailable.
+- Improved candidate admission and source discovery for thin reports, current disclosures and Apple-related legal or company actions, while preserving nine primary sources, UTC window checks and collection budgets.
+- Refined relevance and section assignment for current first-party capabilities, platform interoperability and Apple-device measurements; kept recaps, tutorials, third-party recommendations and competitor background from overriding the reported action.
+- Added POSIX cache/output resource locking and retained guarded startup cleanup; reused source preparation and bounded compiled-rule caches to reduce repeated processing without reducing source or fact coverage.
+- Updated the skill to consume crawler decisions, review specific evidence gaps and draft in small checked batches, preserving supported facts and source links without editorial wrap-up sentences.
+- Added fixed-input replay and same-window comparison tooling and expanded offline coverage from 1,529 to 2,317 passing tests. Kept the standard-library runtime, existing CLI, two brief sections and explicit-only skill invocation.
+
 ## 1.77.0 - 2026-09-13
 
 - Restored crawler behavior, skill instructions, fallback rules, and regression coverage to the `1.75.0` baseline, removing the `1.76.0` primary-action expansion without rewriting release history.

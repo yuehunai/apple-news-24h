@@ -4,18 +4,18 @@ Contributions are welcome, especially fixes for source parsing, timestamp handli
 
 ## Development Setup
 
-This project currently uses only the Python standard library.
+Use Python 3.9 or later on macOS or Linux; resource locking requires POSIX `fcntl`. The runtime and test tools use only the standard library. See the [architecture overview](README.md#architecture) for module responsibilities.
 
 Run tests:
 
 ```bash
-python3 -m unittest discover -s tests
+PYTHONPYCACHEPREFIX="$(mktemp -d)" python3 -m unittest discover -s tests
 ```
 
 Run a syntax check:
 
 ```bash
-python3 -m py_compile skills/scripts/apple_news_24h.py
+PYTHONPYCACHEPREFIX="$(mktemp -d)" python3 -m compileall -q skills/scripts
 ```
 
 ## Contribution Rules
@@ -26,6 +26,7 @@ python3 -m py_compile skills/scripts/apple_news_24h.py
 - Do not commit live cache files, raw article pages, generated `latest.json`, logs, or local environment files.
 - Do not add third-party dependencies unless the benefit clearly outweighs the automation setup cost.
 - Preserve source attribution in final summaries.
+- Update `skills/references/news_policy.md` when source or decision rules change. Update `skills/SKILL.md` when the calling agent's workflow changes; keep repository maintenance instructions out of the skill entry point.
 
 ## Source And Rule Changes
 
@@ -41,6 +42,11 @@ When changing filtering or grouping:
 - Include positive and negative tests.
 - Avoid broad terms that turn tutorials, deals, podcasts, or opinion posts into news.
 - Keep cross-language grouping tokens conservative enough to avoid unrelated event merges.
+- Change the responsible module rather than adding another decision in output assembly. A shared product name, publisher or URL is not sufficient evidence of the same action.
+- Preserve each claim's source and material qualifiers; check that unassigned fragments remain visible in `final_brief_queue`. A linked URL alone does not prove fact coverage.
+- Keep existing regression protection. Explain any corrected expectation with source evidence; use minimal relevant fixtures instead of full cached pages.
+
+For reproducible comparisons, use [tests/REPLAY.md](tests/REPLAY.md). Fixed-input replay, unit tests and live collection establish different properties; reuse valid results for unchanged code instead of repeating the whole suite for documentation edits.
 
 ## Live Smoke Testing
 
@@ -50,4 +56,4 @@ Live tests depend on third-party websites and should not be required for every p
 python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format json --output latest.json --include-diagnostics
 ```
 
-Review `latest.json`, then delete it before committing.
+Review `latest.json` and its source evidence, not just event counts or titles. Treat `*.brief.md` as a coverage scaffold. Use separate cache and output paths for independent runs, and keep all generated files outside the commit.

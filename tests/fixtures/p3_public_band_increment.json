@@ -1,0 +1,917 @@
+{
+  "source_profiles": [
+    {
+      "id": "b01",
+      "article": {
+        "bound_claim": null,
+        "category": "hardware_products",
+        "confidence": "detail",
+        "event_kind": "hardware_market",
+        "evidence": {
+          "article_id": "04edfb65834eb0dfe12b2f75",
+          "confidence": "detail",
+          "content_form": "news",
+          "discovery_lead": "Apple is developing a screenless health and fitness tracker to compete with Whoop, according to a new report from Bloomberg. The company is reportedly “developing prototypes,” but has yet to decide whether to ultimately release the product. more…",
+          "discovery_title": "Apple working on Whoop-style screenless fitness tracker, per report",
+          "embedded_references": [],
+          "extraction_path": "detail",
+          "publication_candidates": [
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T16:46:27+00:00",
+              "source": "json-ld datePublished"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T16:49:19+00:00",
+              "source": "json-ld dateModified"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T16:46:27+00:00",
+              "source": "meta published"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T16:49:19+00:00",
+              "source": "meta modified"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "Tue, 22 Sep 2028 16:46:28 +0000",
+              "source": "discovery feed"
+            }
+          ],
+          "published_raw": "2028-09-22T16:46:27+00:00",
+          "published_source": "json-ld datePublished",
+          "published_utc": "2028-09-22T16:46:27+00:00",
+          "raw_lead": "Apple is reportedly developing a Whoop-style screenless health and fitness tracker, with prototypes currently being tested.",
+          "source": "9to5Mac",
+          "title": "Apple working on Whoop-style screenless fitness tracker, per report - 9to5Mac",
+          "units": [
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 0,
+              "origin": "html",
+              "text": "Apple is developing a screenless health and fitness tracker to compete with Whoop, according to a new report from Bloomberg. The company is reportedly “developing prototypes,” but has yet to decide whether to ultimately release the product.",
+              "unit_id": "65e37ea7bb7f317e78529923"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 1,
+              "origin": "html",
+              "text": "The prototypes being developed inside Apple reportedly have a “thin fabric band with a sensor-equipped computing module.” The project is currently in the “technology investigation” phase, and Bloomberg says the product won’t be released before 2030 — if Apple decides to release it at all.",
+              "unit_id": "9a273071f2c55bb4531e1676"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 2,
+              "origin": "html",
+              "text": "The project is said to have support from top Apple executives, including Eddy Cue and Tim Cook. Cue took charge of Apple’s health team last October, following the departure of Jeff Williams.",
+              "unit_id": "aedce5caa6e0ca4316f9cec5"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 3,
+              "origin": "html",
+              "text": "Cue has pushed Apple’s health team to adopt features from the newer rivals, whose products offer simpler interfaces focused squarely on fitness and health tracking. The Apple Watch serves a broader range of purposes.",
+              "unit_id": "34367e11d0160ce4126f75fb"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 4,
+              "origin": "html",
+              "text": "Products like Whoop and Oura Ring are popular among people who want to track their health and fitness without wearing a smartwatch. As Reuters reports, Oura is prepping for an IPO and recently revealed that it sold 3.6 million Oura Rings in the 12 months ending June 30. Revenue grew 74% to $1.21 billion for the nine months ending June 30.",
+              "unit_id": "08b7b4cd4a7d79fea3309e2e"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 5,
+              "origin": "html",
+              "text": "Apple is still the dominant player in the smartwatch market specifically, though. The Apple Watch also offers a far wider array of features than health and fitness-focused wearables like Oura and Whoop.",
+              "unit_id": "0c7cde99f5f2df36aa224519"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 6,
+              "origin": "html",
+              "text": "Bloomberg also reiterates that next year will be a big year for the Apple Watch:",
+              "unit_id": "cffbe3ff49547c5b64653c61"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 7,
+              "origin": "html",
+              "text": "The company is also working on a major update to its smartwatch lineup for release as early as late 2029. This redesign would follow years of more incremental changes. Apple made its main watch thinner with the Series 10 two years ago, but the larger Ultra model has retained the same look since its debut four years ago.",
+              "unit_id": "aba3d89711b3dad4b86416e2"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 8,
+              "origin": "html",
+              "text": "Do you think Apple should make a screenless fitness tracker to coexist with the Apple Watch? Let us know down in the comments.",
+              "unit_id": "8bad07c91345d2cd34f5daea"
+            }
+          ],
+          "url": "https://example.invalid/article/4a58c52535e8ab67"
+        },
+        "key_facts": [
+          "Apple is developing a screenless health and fitness tracker to compete with Whoop, according to a new report from Bloomberg. The company is reportedly “developing prototypes,” but has yet to decide whether to ultimately release the product.",
+          "The prototypes being developed inside Apple reportedly have a “thin fabric band with a sensor-equipped computing module.” The project is currently in the “technology investigation” phase, and Bloomberg says the product won’t be released before 2030 — if Apple decides to release it at all.",
+          "The project is said to have support from top Apple executives, including Eddy Cue and Tim Cook. Cue took charge of Apple’s health team last October, following the departure of Jeff Williams.",
+          "Products like Whoop and Oura Ring are popular among people who want to track their health and fitness without wearing a smartwatch. As Reuters reports, Oura is prepping for an IPO and recently revealed that it sold 3.6 million Oura Rings in the 12 months ending June 30. Revenue grew 74% to $1.21 billion for the nine months ending June 30.",
+          "The company is also working on a major update to its smartwatch lineup for release as early as late 2029. This redesign would follow years of more incremental changes. Apple made its main watch thinner with the Series 10 two years ago, but the larger Ultra model has retained the same look since its debut four years ago."
+        ],
+        "projected_fact_spans": null,
+        "projection_child_key": "",
+        "projection_parent_keys": [],
+        "projection_source_title": "Apple working on Whoop-style screenless fitness tracker, per report",
+        "published_raw": "2028-09-22T16:46:27+00:00",
+        "published_source": "json-ld datePublished",
+        "published_utc": "2028-09-22T16:46:27+00:00",
+        "regions": [],
+        "relevance_reason": "title-led direct Apple action confirmed by structured identity",
+        "relevance_tier": "strong",
+        "source": "9to5Mac",
+        "summary": "Apple is reportedly developing a Whoop-style screenless health and fitness tracker, with prototypes currently being tested. Apple is developing a screenless health and fitness tracker to compete with Whoop , according to a new report from Bloomberg . The company is reportedly “developing prototypes,” but has yet to decide whether to ultimately release the product. The prototypes being developed inside Apple reportedly have a “thin fabric band with a sensor-equipped computing module.” The project is currently in the “technology investigation” phase, and Bloomberg says the product won’t be released before 2030 — if Apple decides to release it at all. The project is said to have support from top Apple executives, including Eddy Cue and Tim Cook. Cue took charge of Apple’s health team last October, following the departure of Jeff Williams. Cue has pushed Apple’s health team to adopt features from the newer rivals, whose products offer simpler interfaces focused squarely on fitness and health tracking. The Apple Watch serves a broader range of purposes.",
+        "title": "Apple working on Whoop-style screenless fitness tracker, per report - 9to5Mac",
+        "tokens": [
+          "1.21",
+          "10",
+          "12",
+          "2029",
+          "2030",
+          "21",
+          "3.6",
+          "30",
+          "74",
+          "9to5mac",
+          "according",
+          "adopt",
+          "ago",
+          "all",
+          "among",
+          "and",
+          "apple-watch",
+          "are",
+          "band",
+          "before",
+          "billion",
+          "bloomberg",
+          "broader",
+          "but",
+          "change",
+          "changes",
+          "charge",
+          "company",
+          "compete",
+          "computing",
+          "cook",
+          "cue",
+          "currently",
+          "debut",
+          "decide",
+          "decides",
+          "departure",
+          "developed",
+          "developing",
+          "early",
+          "eddy",
+          "ending",
+          "executive",
+          "executives",
+          "fabric",
+          "feature",
+          "features",
+          "fitnes",
+          "fitness",
+          "focused",
+          "follow",
+          "following",
+          "for",
+          "four",
+          "grew",
+          "has",
+          "health",
+          "including",
+          "incremental",
+          "inside",
+          "interface",
+          "interfaces",
+          "investigation",
+          "ipo",
+          "its",
+          "jeff",
+          "june",
+          "larger",
+          "last",
+          "late",
+          "lineup",
+          "look",
+          "made",
+          "main",
+          "major",
+          "million",
+          "model",
+          "module",
+          "month",
+          "months",
+          "new",
+          "newer",
+          "nine",
+          "october",
+          "offer",
+          "oura",
+          "people",
+          "per",
+          "phase",
+          "popular",
+          "prepping",
+          "product",
+          "products",
+          "project",
+          "prototype",
+          "prototypes",
+          "purpose",
+          "purposes",
+          "pushed",
+          "range",
+          "recently",
+          "redesign",
+          "release",
+          "released",
+          "report",
+          "reports",
+          "retained",
+          "reuter",
+          "reuters",
+          "revealed",
+          "revenue",
+          "ring",
+          "rings",
+          "rival",
+          "rivals",
+          "said",
+          "same",
+          "screenles",
+          "screenless",
+          "sensor-equipped",
+          "series",
+          "serve",
+          "serves",
+          "sery",
+          "simpler",
+          "since",
+          "smartwatch",
+          "sold",
+          "squarely",
+          "support",
+          "team",
+          "technology",
+          "tested",
+          "the",
+          "thin",
+          "thinner",
+          "tim",
+          "took",
+          "top",
+          "track",
+          "tracker",
+          "tracking",
+          "two",
+          "ultimately",
+          "ultra",
+          "want",
+          "watch",
+          "wearing",
+          "whether",
+          "who",
+          "whoop",
+          "whoop-style",
+          "whose",
+          "william",
+          "williams",
+          "won",
+          "working",
+          "would",
+          "year",
+          "years",
+          "yet"
+        ],
+        "url": "https://example.invalid/article/4a58c52535e8ab67"
+      },
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      }
+    },
+    {
+      "id": "b02",
+      "article": {
+        "bound_claim": null,
+        "category": "hardware_products",
+        "confidence": "detail",
+        "event_kind": "hardware_market",
+        "evidence": {
+          "article_id": "5e53a2859d1dfa09e967203d",
+          "confidence": "detail",
+          "content_form": "news",
+          "discovery_lead": "Apple is reportedly at the prototype stage for a new fitness and health tracker that looks less like an Apple Watch , and more like Whoop's device. Apple wants to compete with Whoop - image credit: Whoop When Apple published its heart study intended to demonstrate that the Apple Watch Series 12 was the most accurate health wearable, it also showed how good some rivals are. That included the Whoop 5 fitness tracker, and now according to Bloomberg , Apple is aiming to compete more directly with that. Reportedly, some months of research have already taken place and Apple is developing prototype hardware. It's in a phase that Apple is said to refer to as a technology investigation, meaning that it continues to be a research topic. Rumor Score: 🤔 Possible Continue Reading on AppleInsider | Discuss on our Forums",
+          "discovery_title": "Future Apple Watch could be screen-less Whoop competitor, says rumor",
+          "embedded_references": [],
+          "extraction_path": "detail",
+          "publication_candidates": [
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T16:55:00+00:00",
+              "source": "json-ld datePublished"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T17:10:37+00:00",
+              "source": "json-ld dateModified"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T17:10:37+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "Tue Sep 22 2028, 12:55 PM EDT",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T22:18:05+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T22:19:23+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T20:52:08+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "4 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T18:48:48+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "6 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T18:34:26+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "6 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T18:18:32+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "6 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T18:15:44+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "7 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T16:55:00+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "8 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028-09-22T16:21:00+00:00",
+              "source": "time datetime"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "8 hours ago",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "Sep 22 2028, 12:55 PM EDT",
+              "source": "body date pattern"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "Tue, 22 Sep 2028 17:10:37 +0000",
+              "source": "discovery feed"
+            }
+          ],
+          "published_raw": "2028-09-22T16:55:00+00:00",
+          "published_source": "json-ld datePublished",
+          "published_utc": "2028-09-22T16:55:00+00:00",
+          "raw_lead": "Apple is reportedly at the prototype stage for a new fitness and health tracker that looks less like an Apple Watch, and more like Whoop's device.",
+          "source": "AppleInsider",
+          "title": "Future Apple Watch could be screen-less Whoop competitor, says rumor",
+          "units": [
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 0,
+              "origin": "html",
+              "text": "Apple is reportedly at the prototype stage for a new fitness and health tracker that looks less like an Apple Watch, and more like Whoop's device.",
+              "unit_id": "84f38bdfec66ac67e1e16319"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 1,
+              "origin": "html",
+              "text": "When Apple published its heart study intended to demonstrate that the Apple Watch Series 12 was the most accurate health wearable, it also showed how good some rivals are. That included the Whoop 5 fitness tracker, and now according to Bloomberg, Apple is aiming to compete more directly with that.",
+              "unit_id": "1b451832ed74ca800f406f9f"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 2,
+              "origin": "html",
+              "text": "Reportedly, some months of research have already taken place and Apple is developing prototype hardware. It's in a phase that Apple is said to refer to as a technology investigation, meaning that it continues to be a research topic.",
+              "unit_id": "f93396f54eab61ed055150fa"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 3,
+              "origin": "html",
+              "text": "That's as opposed to one that Apple has committed to shipping. Despite support from the likes of Tim Cook and Eddy Cue, the company has yet to decide whether to pursue the new device to market.",
+              "unit_id": "d7e3814b1069b07f11f707c1"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 4,
+              "origin": "html",
+              "text": "For now, the prototype versions are said to be a thin band of fabric, with sensors in a computing module. There won't be a screen, so that this does not compete with Apple Watch, but the controls are also said to be simplified.",
+              "unit_id": "d38e379718162040ec0448df"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 5,
+              "origin": "html",
+              "text": "If the device does get to market, it is reportedly not expected before 2030 at the earliest.",
+              "unit_id": "cd5a69354a1ef576a56eeb37"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 6,
+              "origin": "html",
+              "text": "The news of the new product under consideration comes after smartwatches like the Apple Watch have faced increased competition from simpler and less costly health wearables.",
+              "unit_id": "96f7cc0f1a8dc10ce3b7b63f"
+            }
+          ],
+          "url": "https://example.invalid/article/24387c2e8a7fe838"
+        },
+        "key_facts": [
+          "When Apple published its heart study intended to demonstrate that the Apple Watch Series 12 was the most accurate health wearable, it also showed how good some rivals are. That included the Whoop 5 fitness tracker, and now according to Bloomberg, Apple is aiming to compete more directly with that.",
+          "If the device does get to market, it is reportedly not expected before 2030 at the earliest."
+        ],
+        "projected_fact_spans": null,
+        "projection_child_key": "",
+        "projection_parent_keys": [],
+        "projection_source_title": "Future Apple Watch could be screen-less Whoop competitor, says rumor",
+        "published_raw": "2028-09-22T16:55:00+00:00",
+        "published_source": "json-ld datePublished",
+        "published_utc": "2028-09-22T16:55:00+00:00",
+        "regions": [],
+        "relevance_reason": "title-led direct Apple action confirmed by structured identity",
+        "relevance_tier": "strong",
+        "source": "AppleInsider",
+        "summary": "Apple is reportedly at the prototype stage for a new fitness and health tracker that looks less like an Apple Watch, and more like Whoop's device. Apple is reportedly at the prototype stage for a new fitness and health tracker that looks less like an Apple Watch , and more like Whoop's device. When Apple published its heart study intended to demonstrate that the Apple Watch Series 12 was the most accurate health wearable, it also showed how good some rivals are. That included the Whoop 5 fitness tracker, and now according to Bloomberg , Apple is aiming to compete more directly with that. Reportedly, some months of research have already taken place and Apple is developing prototype hardware. It's in a phase that Apple is said to refer to as a technology investigation, meaning that it continues to be a research topic. That's as opposed to one that Apple has committed to shipping. Despite support from the likes of Tim Cook and Eddy Cue , the company has yet to decide whether to pursue the new device to market.",
+        "title": "Future Apple Watch could be screen-less Whoop competitor, says rumor",
+        "tokens": [
+          "12",
+          "2030",
+          "according",
+          "accurate",
+          "aiming",
+          "already",
+          "and",
+          "apple-watch",
+          "are",
+          "before",
+          "bloomberg",
+          "committed",
+          "company",
+          "compete",
+          "competitor",
+          "continue",
+          "continues",
+          "cook",
+          "cue",
+          "decide",
+          "demonstrate",
+          "despite",
+          "developing",
+          "device",
+          "directly",
+          "does",
+          "earliest",
+          "eddy",
+          "expected",
+          "fitnes",
+          "fitness",
+          "for",
+          "future",
+          "get",
+          "good",
+          "hardware",
+          "has",
+          "health",
+          "heart",
+          "how",
+          "included",
+          "intended",
+          "investigation",
+          "its",
+          "less",
+          "like",
+          "likes",
+          "look",
+          "looks",
+          "market",
+          "meaning",
+          "month",
+          "months",
+          "new",
+          "not",
+          "now",
+          "one",
+          "opposed",
+          "phase",
+          "place",
+          "prototype",
+          "published",
+          "pursue",
+          "refer",
+          "research",
+          "rival",
+          "rivals",
+          "rumor",
+          "said",
+          "screen-les",
+          "screen-less",
+          "series",
+          "sery",
+          "shipping",
+          "showed",
+          "some",
+          "stage",
+          "study",
+          "support",
+          "taken",
+          "technology",
+          "the",
+          "tim",
+          "topic",
+          "tracker",
+          "was",
+          "watch",
+          "wearable",
+          "when",
+          "whether",
+          "whoop",
+          "yet"
+        ],
+        "url": "https://example.invalid/article/24387c2e8a7fe838"
+      },
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      }
+    },
+    {
+      "id": "b03",
+      "article": {
+        "bound_claim": null,
+        "category": "hardware_products",
+        "confidence": "detail",
+        "event_kind": "hardware_market",
+        "evidence": {
+          "article_id": "e1e2d87f32ce4bfed9eefdda",
+          "confidence": "detail",
+          "content_form": "news",
+          "discovery_lead": "苹果正在开发一款类似Whoop腕戴设备的无屏健康和健身追踪器。知情人士称，苹果已经探索这一产品类别数月，目前正在开发原型。该项目得到公司高层支持，但苹果尚未决定是否正式推出。 阅读全文",
+          "discovery_title": "苹果开发无屏版健康追踪器 瞄准Whoop等竞争对手",
+          "embedded_references": [],
+          "extraction_path": "detail",
+          "publication_candidates": [
+            {
+              "allows_date_only": false,
+              "raw": "2 小时前",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "昨天 20:32",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "昨天 17:37",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "昨天 04:51",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "前天 20:06",
+              "source": "time text"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "2028年09月23日 02:33",
+              "source": "body date pattern"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "Tue, 22 Sep 2028 18:33:39 GMT",
+              "source": "discovery feed"
+            }
+          ],
+          "published_raw": "2028年09月23日 02:33",
+          "published_source": "body date pattern",
+          "published_utc": "2028-09-22T18:33:00+00:00",
+          "raw_lead": "苹果正在开发一款类似Whoop腕戴设备的无屏健康和健身追踪器。知情人士称，苹果已经探索这一产品类别数月，目前正在开发原型。该项目得到公司高层支持，但苹果尚未决定是否正式推出。",
+          "source": "cnBeta",
+          "title": "苹果开发无屏版健康追踪器 瞄准Whoop等竞争对手 - Apple 苹果 - cnBeta.COM",
+          "units": [
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 0,
+              "origin": "html",
+              "text": "苹果正在开发一款类似Whoop腕戴设备的无屏健康和健身追踪器。知情人士称，苹果已经探索这一产品类别数月，目前正在开发原型。该项目得到公司高层支持，但苹果尚未决定是否正式推出。",
+              "unit_id": "3778758e1a20b3db80fedabd"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 1,
+              "origin": "html",
+              "text": "该项目目前仍处于早期阶段，公司内部称之为“技术调查”。即使苹果最终决定推出，这款设备也可能要到2030年才会面世。苹果发言人拒绝置评。",
+              "unit_id": "0d558e19ab9b2fcde901e716"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 2,
+              "origin": "html",
+              "text": "目前，无屏幕健身手环的市场参与者包括Garmin、Whoop和谷歌。",
+              "unit_id": "d7b9801a67cb2745a1f045db"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 3,
+              "origin": "html",
+              "text": "这些原型机采用纤薄的织物表带，内置传感器计算模块。与以显示屏为核心，并集成健身追踪、应用程序、通知和其他功能的Apple Watch相比，这款设备没有屏幕。",
+              "unit_id": "d7d517fd4a5863a308b41ef6"
+            }
+          ],
+          "url": "https://example.invalid/article/9f2f3f1fc0d0a97f"
+        },
+        "key_facts": [
+          "苹果正在开发一款类似Whoop腕戴设备的无屏健康和健身追踪器。知情人士称，苹果已经探索这一产品类别数月，目前正在开发原型。该项目得到公司高层支持，但苹果尚未决定是否正式推出。",
+          "该项目目前仍处于早期阶段，公司内部称之为“技术调查”。即使苹果最终决定推出，这款设备也可能要到2030年才会面世。苹果发言人拒绝置评。",
+          "这些原型机采用纤薄的织物表带，内置传感器计算模块。与以显示屏为核心，并集成健身追踪、应用程序、通知和其他功能的Apple Watch相比，这款设备没有屏幕。"
+        ],
+        "projected_fact_spans": null,
+        "projection_child_key": "",
+        "projection_parent_keys": [],
+        "projection_source_title": "苹果开发无屏版健康追踪器 瞄准Whoop等竞争对手",
+        "published_raw": "2028年09月23日 02:33",
+        "published_source": "body date pattern",
+        "published_utc": "2028-09-22T18:33:00+00:00",
+        "regions": [],
+        "relevance_reason": "title-led direct Apple action confirmed by structured identity",
+        "relevance_tier": "strong",
+        "source": "cnBeta",
+        "summary": "苹果正在开发一款类似Whoop腕戴设备的无屏健康和健身追踪器。知情人士称，苹果已经探索这一产品类别数月，目前正在开发原型。该项目得到公司高层支持，但苹果尚未决定是否正式推出。 该项目目前仍处于早期阶段，公司内部称之为“技术调查”。即使苹果最终决定推出，这款设备也可能要到2030年才会面世。苹果发言人拒绝置评。 这些原型机采用纤薄的织物表带，内置传感器计算模块。与以显示屏为核心，并集成健身追踪、应用程序、通知和其他功能的Apple Watch相比，这款设备没有屏幕。",
+        "title": "苹果开发无屏版健康追踪器 瞄准Whoop等竞争对手 - Apple 苹果 - cnBeta.COM",
+        "tokens": [
+          "2030",
+          "apple",
+          "apple-watch",
+          "band",
+          "cnbeta.com",
+          "investigation",
+          "sensor",
+          "watch",
+          "whoop",
+          "健康",
+          "屏幕",
+          "推出",
+          "支持",
+          "苹果",
+          "调查"
+        ],
+        "url": "https://example.invalid/article/9f2f3f1fc0d0a97f"
+      },
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      }
+    },
+    {
+      "id": "b04",
+      "article": {
+        "bound_claim": null,
+        "category": "hardware_products",
+        "confidence": "detail",
+        "event_kind": "hardware_market",
+        "evidence": {
+          "article_id": "9acaef8a35d5b3df54f5cc51",
+          "confidence": "detail",
+          "content_form": "news",
+          "discovery_lead": "IT之家 9 月 23 日消息，彭博社的马克 · 古尔曼（Mark Gurman）今天（9 月 23 日）发布博文， 报道称苹果公司正在开发一款无屏幕健康与健身追踪器，产品形态接近 Whoop 的腕戴设备。 定位方面，消息称该产品没有屏幕，主要追踪运动恢复和身体数据，在上市后预估将会和 Whoop 产品竞争。古尔曼认为该产品若推出，意味着苹果将进入以轻量化腕戴设备为主的健康追踪品类。 苹果现有穿戴产品以 Apple Watch 为核心，覆盖心率监测、运动记录、睡眠追踪等健康功能。IT之家曾于 8 月报道， 苹果正在重新思考 Apple Watch 的未来 ，甚至可能从头改造延续多年的产品形态。 为此，苹果已经研究多种可能性，包括采用圆形屏幕的 Apple Watch，以及彻底取消屏幕的健身配件等。 Apple Watch 自诞生以来始终围绕相近的外形和使用方式迭代，一旦上述构想成为现实， 将意味着产品线迎来迄今最重大的方向转变。 相关阅读： 《 彻底颠覆以往产品形态，古尔曼称苹果正研究圆屏 Apple Watch 或无屏手环 》 《 问卷调查显示华为正在评估无屏幕健康手环产品 》 彭博社的马克 · 古尔曼（Mark Gurman）今天（9 月 23 日）发布博文，报道称苹果公司正在开发一款无屏幕健康与健身追踪器，产品形态接近 Whoop 的腕戴设备。",
+          "discovery_title": "拓展 Apple Watch 新版图：消息称苹果正酝酿无屏健康追踪手环",
+          "embedded_references": [],
+          "extraction_path": "detail",
+          "publication_candidates": [
+            {
+              "allows_date_only": false,
+              "raw": "2028/9/23 6:30:38",
+              "source": "body date pattern"
+            },
+            {
+              "allows_date_only": false,
+              "raw": "Tue, 22 Sep 2028 22:30:38 GMT",
+              "source": "discovery feed"
+            }
+          ],
+          "published_raw": "2028/9/23 6:30:38",
+          "published_source": "body date pattern",
+          "published_utc": "2028-09-22T22:30:38+00:00",
+          "raw_lead": "彭博社的马克 · 古尔曼（Mark Gurman）今天（9 月 23 日）发布博文，报道称苹果公司正在开发一款无屏幕健康与健身追踪器，产品形态接近 Whoop 的腕戴设备。",
+          "source": "IT之家",
+          "title": "拓展 Apple Watch 新版图：消息称苹果正酝酿无屏健康追踪手环",
+          "units": [
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 0,
+              "origin": "html",
+              "text": "IT之家 9 月 23 日消息，彭博社的马克 · 古尔曼（Mark Gurman）今天（9 月 23 日）发布博文，报道称苹果公司正在开发一款无屏幕健康与健身追踪器，产品形态接近 Whoop 的腕戴设备。",
+              "unit_id": "6e8256540ec126e6f09edc55"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 1,
+              "origin": "html",
+              "text": "定位方面，消息称该产品没有屏幕，主要追踪运动恢复和身体数据，在上市后预估将会和 Whoop 产品竞争。古尔曼认为该产品若推出，意味着苹果将进入以轻量化腕戴设备为主的健康追踪品类。",
+              "unit_id": "fcfb628cb5b8e315e4a72855"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 2,
+              "origin": "html",
+              "text": "苹果现有穿戴产品以 Apple Watch 为核心，覆盖心率监测、运动记录、睡眠追踪等健康功能。IT之家曾于 8 月报道，苹果正在重新思考 Apple Watch 的未来，甚至可能从头改造延续多年的产品形态。",
+              "unit_id": "3624097705436b4bd05fe0c2"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 3,
+              "origin": "html",
+              "text": "为此，苹果已经研究多种可能性，包括采用圆形屏幕的 Apple Watch，以及彻底取消屏幕的健身配件等。",
+              "unit_id": "1abebb557c36891392fd2e2c"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 4,
+              "origin": "html",
+              "text": "Apple Watch 自诞生以来始终围绕相近的外形和使用方式迭代，一旦上述构想成为现实，将意味着产品线迎来迄今最重大的方向转变。",
+              "unit_id": "2cd0160f1a67bd570d0ae24b"
+            }
+          ],
+          "url": "https://example.invalid/article/163e496e251772e0"
+        },
+        "key_facts": [
+          "IT之家 9 月 23 日消息，彭博社的马克 · 古尔曼（Mark Gurman）今天（9 月 23 日）发布博文，报道称苹果公司正在开发一款无屏幕健康与健身追踪器，产品形态接近 Whoop 的腕戴设备。",
+          "定位方面，消息称该产品没有屏幕，主要追踪运动恢复和身体数据，在上市后预估将会和 Whoop 产品竞争。古尔曼认为该产品若推出，意味着苹果将进入以轻量化腕戴设备为主的健康追踪品类。",
+          "苹果现有穿戴产品以 Apple Watch 为核心，覆盖心率监测、运动记录、睡眠追踪等健康功能。IT之家曾于 8 月报道，苹果正在重新思考 Apple Watch 的未来，甚至可能从头改造延续多年的产品形态。",
+          "为此，苹果已经研究多种可能性，包括采用圆形屏幕的 Apple Watch，以及彻底取消屏幕的健身配件等。"
+        ],
+        "projected_fact_spans": null,
+        "projection_child_key": "",
+        "projection_parent_keys": [],
+        "projection_source_title": "拓展 Apple Watch 新版图：消息称苹果正酝酿无屏健康追踪手环",
+        "published_raw": "2028/9/23 6:30:38",
+        "published_source": "body date pattern",
+        "published_utc": "2028-09-22T22:30:38+00:00",
+        "regions": [],
+        "relevance_reason": "title-owned Apple news action",
+        "relevance_tier": "strong",
+        "source": "IT之家",
+        "summary": "彭博社的马克 · 古尔曼（Mark Gurman）今天（9 月 23 日）发布博文，报道称苹果公司正在开发一款无屏幕健康与健身追踪器，产品形态接近 Whoop 的腕戴设备。 IT之家 9 月 23 日消息，彭博社的马克 · 古尔曼（Mark Gurman）今天（9 月 23 日）发布博文， 报道称苹果公司正在开发一款无屏幕健康与健身追踪器，产品形态接近 Whoop 的腕戴设备。 定位方面，消息称该产品没有屏幕，主要追踪运动恢复和身体数据，在上市后预估将会和 Whoop 产品竞争。古尔曼认为该产品若推出，意味着苹果将进入以轻量化腕戴设备为主的健康追踪品类。 苹果现有穿戴产品以 Apple Watch 为核心，覆盖心率监测、运动记录、睡眠追踪等健康功能。IT之家曾于 8 月报道， 苹果正在重新思考 Apple Watch 的未来 ，甚至可能从头改造延续多年的产品形态。 Apple Watch 自诞生以来始终围绕相近的外形和使用方式迭代，一旦上述构想成为现实， 将意味着产品线迎来迄今最重大的方向转变。",
+        "title": "拓展 Apple Watch 新版图：消息称苹果正酝酿无屏健康追踪手环",
+        "tokens": [
+          "23",
+          "apple",
+          "apple-watch",
+          "gurman",
+          "heart-rate",
+          "mark",
+          "research",
+          "watch",
+          "whoop",
+          "健康",
+          "发布",
+          "屏幕",
+          "心率",
+          "恢复",
+          "推出",
+          "研究",
+          "苹果",
+          "苹果公司"
+        ],
+        "url": "https://example.invalid/article/163e496e251772e0"
+      },
+      "expected": {
+        "tier": "strong",
+        "category": "hardware_products"
+      }
+    }
+  ],
+  "pairs": [
+    {
+      "left": "b01",
+      "right": "b02",
+      "expected": "match"
+    },
+    {
+      "left": "b01",
+      "right": "b03",
+      "expected": "match"
+    },
+    {
+      "left": "b01",
+      "right": "b04",
+      "expected": "match"
+    }
+  ],
+  "negative_pairs": [],
+  "parent_projection_inputs": []
+}

@@ -1,0 +1,2851 @@
+{
+  "bc3ecb1299beab2673c0aebb": {
+    "evidence": {
+      "article_id": "bc3ecb1299beab2673c0aebb",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "watchOS 27: 12 New Things To Check Out on Your Apple Watch",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T07:29:55+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T07:29:55+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T07:29:55+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday September 26, 2026 12:29 AM PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 26, 2026 12:29 AM PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 9, 2026 9:10 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "August 30, 2026 7:54 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 8, 2026 10:24 am PDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26T07:29:55+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-26T07:29:55+00:00",
+      "raw_lead": "Apple released watchOS 27 on September 14. The features and changes aren't limited to owners of new Apple Watch Series 12 and Apple Watch Ultra 4 models. If you have an Apple Watch model that supports the latest update, here are 12 features and changes to check out after installation. To do so, open the Watch app on your iPhone, then tap General ➝ Software Update, strap your watch into a charger, and follow the onscreen prompts.",
+      "source": "MacRumors",
+      "title": "watchOS 27: 12 New Things To Check Out on Your Apple Watch",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "watchOS 27: 12 New Things To Check Out on Your Apple Watch",
+          "unit_id": "01f92202db2fe287af13e9c1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple released watchOS 27 on September 14. The features and changes aren't limited to owners of new Apple Watch Series 12 and Apple Watch Ultra 4 models. If you have an Apple Watch model that supports the latest update, here are 12 features and changes to check out after installation.",
+          "unit_id": "f6f6c6aa0ec7fd88148d3d36"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "To do so, open the Watch app on your iPhone, then tap General ➝ Software Update, strap your watch into a charger, and follow the onscreen prompts.",
+          "unit_id": "ba48f497379a2ac2c732b731"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Check Out the Dedicated Siri App",
+          "unit_id": "591b36a2ce680daa0e0150f2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Siri has finally caught up with the AI revolution, and apart from having contextual awareness, it now has an app of its own that collects every conversation in a single view and syncs them privately across your devices over iCloud. Just ask something on your iPhone and you can pick the thread up again on your Apple Watch, as well as pin conversations worth keeping, or even start a new chat directly from your wrist.",
+          "unit_id": "de6335aca68e4053e324e09e"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Try Siri Modular Watch Face",
+          "unit_id": "f25a9e2c6542677004fd0b52"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "The new Siri watch face is a genuinely useful one. Its rectangular complication shows you whatever sits at the top of your Smart Stack, and it automatically updates through the day based on time, location, and other factors.",
+          "unit_id": "e8d1c6de1fd37d63e671baa3"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The Dynamic App Grid",
+          "unit_id": "df1463266e8c4b815905d9b8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Pressing the Digital Crown no longer produces the honeycomb app view by default. Now, watchOS 27 shows a dynamic grid made up of suggested apps, your most-used apps, and your most recently used ones. The Siri app sits in the middle, but the alphabetical list remains available – simply turn the Digital Crown to navigate through all of your apps.",
+          "unit_id": "bb01de56406a116449db1550"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "New Tap Gesture",
+          "unit_id": "b736085604784dfc9d74e072"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple has added a third gesture to Double Tap and Wrist Flick. The new one is simply called Tap. A single tap of your index finger and thumb opens the highlighted widget in the Smart Stack. You can still navigate the Smart Stack with Double Tap and dismiss notifications with Wrist Flick.",
+          "unit_id": "d5d6d10697f3e62b8d5fd8c0"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Walkie-Talkie Has Been Deleted",
+          "unit_id": "a51a55aecd335d95e1218306"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Walkie-Talkie is gone, and not merely hidden. The app is unavailable after updating to watchOS 27 and cannot be reinstalled from the App Store. You can keep the app by staying on watchOS 26, but you won't be able to start a conversation with a contact who has updated.",
+          "unit_id": "04cfa2fda46313d8aa19bcd2"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Live Rewind (Not Yet)",
+          "unit_id": "02384808399cbb0da9e62fce"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "This is the change most likely to catch people out. In watchOS 26 and earlier, a double press of the Digital Crown opens the App Switcher, where you can jump back to the previous app, scroll through recent ones, and swipe to force-quit anything misbehaving.",
+          "unit_id": "eb5ecc2a9cdebeca54ce7c0e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "That's changed in watchOS 27, in which a double press shows the new dynamic app grid instead. The gesture has been reserved for Live Rewind, an upcoming feature (exclusive to Apple Watch Series 12 and Ultra 4) that produces a transcript of the last fifteen seconds of speech in your environment.",
+          "unit_id": "bcd2d96f821866967ee12f1e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Fortunately, the App Switcher will still be available when watchOS 27.2 is released later this year, but it will open with a different gesture. If you're already on the latest beta, simply long press on the bottom of the app that you're in, and that should open the App Switcher.",
+          "unit_id": "2b84789d6195095ad757969e"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Find My is Now One App",
+          "unit_id": "8d0308527f33d91f830c0c7d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "Find Devices, Find Items, and Find People have been folded into a single Find My app with a map-centric layout, which also includes shortcuts for directions and for items nearby.",
+          "unit_id": "9a0ec6b1dd494ccfc80c2d9c"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "Workout Buddy No Longer Needs Your iPhone",
+          "unit_id": "8f07ce8119570a9cdf8b947f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "Introduced in watchOS 26, Workout Buddy previously required your iPhone within range. In watchOS 27, your Apple Watch can run it if Wi-Fi or cellular is available. It also draws new insights from your training history, tracking gradual gains in pace, distance and workout duration, and it now speaks Spanish as well as English.",
+          "unit_id": "f5e426886d2a766ebc26af05"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "New Cycle Tracking Features",
+          "unit_id": "80df0303d995370d5d4ca52e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "Cycle Tracking in the Health app can now notify you if your logged patterns are suggestive of perimenopause, alongside symptom tracking and educational material. The notifications only draw on your logged cycle history and apply to users aged 40 and over. Apple says the feature is not a method of birth control and is not a diagnosis.",
+          "unit_id": "ffaafcae410053f980890435"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "Treadmill Distance Is More Accurate",
+          "unit_id": "0f6fa65c24599c2e11e73da5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "In watchOS 27, new machine learning motion algorithms measure distance more precisely for indoor runs and walks, and Apple says the improvement starts from the first step, as opposed to settling after a few minutes. Fitness route maps are more accurate too, and step counts finally stay in sync between the Fitness and Health apps.",
+          "unit_id": "dc0d9d35f1a2ad3533837819"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "The Smart Stack Gets More to Say",
+          "unit_id": "b4db4f924ad40bc856e58b1c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "The Smart Stack's contextual suggestions are now a lot smarter. A few examples provided by Apple include new widgets surfacing your parked car's location, a close contact's birthday, a change in your transit card balance, the Noise app immediately after a loud-noise alert, a reminder that Theater Mode is still on, pinned messages, celebrations, and identity cards.",
+          "unit_id": "065c9ff0c80b548e8372786f"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "New Models Get a Steps Counter",
+          "unit_id": "c186c006b266b4073df0019d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "On Apple Watch Series 12 and Apple Watch Ultra 4, the redesigned pedometer model and S11 chip allow watchOS 27 to provide more accurate step counts. There's also a new Steps complication on the latest models to track your steps in real time, right from your watch face. Will we see the feature come to older devices? Your guess is as good as ours.",
+          "unit_id": "430c2b18dc8abc13ae34400a"
+        }
+      ],
+      "url": "https://www.macrumors.com/guide/watchos-27-new-things-apple-watch/"
+    },
+    "recorded_extraction": [
+      "watchOS 27: 12 New Things To Check Out on Your Apple Watch",
+      "Apple released watchOS 27 on September 14. The features and changes aren't limited to owners of new Apple Watch Series 12 and Apple Watch Ultra 4 models. If you have an Apple Watch model that supports the latest update, here are 12 features and changes to check out after installation. To do so, open the Watch app on your iPhone, then tap General ➝ Software Update, strap your watch into a charger, and follow the onscreen prompts. To do so, open the Watch app on your iPhone, then tap General ➝ Software Update, strap your watch into a charger, and follow the onscreen prompts. Siri has finally caught up with the AI revolution, and apart from having contextual awareness, it now has an app of its own that collects every conversation in a single view and syncs them privately across your devices over iCloud. Just ask something on your iPhone and you can pick the thread up again on your Apple Watch, as well as pin conversations worth keeping, or even start a new chat directly from your wrist. The new Siri watch face is a genuinely useful one. Its rectangular complication shows you whatever sits at the top of your Smart Stack, and it automatically updates through the day based on time, location, and other factors. Pressing the Digital Crown no longer produces the honeycomb app view by default. Now, watchOS 27 shows a dynamic grid made up of suggested apps, your most-used apps, and your most recently used ones. The Siri app sits in the middle, but the alphabetical list remains available – simply turn the Digital Crown to navigate through all of your apps.",
+      [
+        "Apple released watchOS 27 on September 14. The features and changes aren't limited to owners of new Apple Watch Series 12 and Apple Watch Ultra 4 models. If you have an Apple Watch model that supports the latest update, here are 12 features and changes to check out after installation.",
+        "That's changed in watchOS 27, in which a double press shows the new dynamic app grid instead. The gesture has been reserved for Live Rewind, an upcoming feature (exclusive to Apple Watch Series 12 and Ultra 4) that produces a transcript of the last fifteen seconds of speech in your environment."
+      ]
+    ]
+  },
+  "9e320893f894857dfb4d3601": {
+    "evidence": {
+      "article_id": "9e320893f894857dfb4d3601",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "When Apple unveiled the Apple Watch Series 12, two features stood out: the new Siri Recap feature, as well as the much improved heart rate monitor.",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:59:27+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:59:29+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:59:27+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:59:29+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-26T16:59:27+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-26T16:59:27+00:00",
+      "raw_lead": "When Apple unveiled the Apple Watch Series 12, two features stood out: the new Siri Recap feature, as well as...",
+      "source": "9to5Mac",
+      "title": "Apple Watch Series 12 one week later: There's so much more than meets the eye - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "When Apple unveiled the Apple Watch Series 12, two features stood out: the new Siri Recap feature, as well as the much improved heart rate monitor. While those two features were part of the reason I was compelled to buy the new Apple Watch, I’ve found myself delighted by much more than just those two things.",
+          "unit_id": "4d048f2f7697343e45aa0bee"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Battery and charging",
+          "unit_id": "3470272548ab192dbf1cae22"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "While Apple’s website doesn’t quote any additional battery life for Apple Watch Series 12 compared to Series 11, the battery certainly feels like it lasts longer. As I’ve written in the past, I was someone who used the WHOOP prior to the Apple Watch Series 12, and even though I kept my Apple Watch, I never used it for sleep tracking.",
+          "unit_id": "3237affe67ee0d096e97382e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "After the keynote, I decided to give Apple Watch sleep tracking a shot. That said, on my Series 11, juggling sleep tracking and charging was a bit of a pain. After using the watch throughout the day, I’d have to charge it a little bit before going to sleep, then when I wake up, I’d have to charge it again.",
+          "unit_id": "939c9a8c859264987e581d7d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "On Series 12, that isn’t the case. It has enough battery to last through a day and overnight, and now I just charge it when I wake up. Apple Watch Series 12 also charges significantly faster, which makes that part less of a pain. 15 minutes of charging gets you up to 12 hours of use, per Apple.",
+          "unit_id": "5973d3d445328fab9d470c59"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "I imagine the new S11 chip, derived from the A20 Pro’s 2nm design, is a large part of the reason why battery life feels so much longer. Regardless of the why, it feels amazing to not have charging anxiety around sleep tracking on the Apple Watch Series 12. Another big upside to the S11 chip? Apple Watch Series 12 feels so much faster, especially with Siri.",
+          "unit_id": "a6dc2137797ce62f6ddded34"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Software exclusives",
+          "unit_id": "0a29121053d50ca5aeb178d9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "On Series 12, Apple finally includes a proper step counter as a complication, which I like checking on in my smart stack. Could this come to older Apple Watches? Probably. It’s not like Apple didn’t count steps before. Apple Watch Series 12 certainly counts them more accurately, but given the fact that the data is there, I think Apple should just add the complication. Either way, it’s nice to have on Series 12.",
+          "unit_id": "3d3f2e5c9a65822badfd4719"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Another neat new feature is the entire Readiness app, which gives you an idea of how okay you’re doing today based on last night’s sleep, your previous day’s activity, and your vitals. This is similar to a recovery score on WHOOP, and I was certainly happy to see Apple add this to the Apple Watch? It’s a bit of a bummer it’s exclusive to the Series 12, but I could understand why Apple isn’t willing to calculate it with less accurate data.",
+          "unit_id": "9be8cc1d2d290cbacb0c6b1a"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Wrap up",
+          "unit_id": "a5a8e35bdd4fa850fcbb9924"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "All in all, the Apple Watch Series 12 is a rather nice upgrade. It’s a total S year, but if you care about your Apple Watch actually doing more rather than just looking different, I’d say this might be one of the most substantial year over year upgrades since Apple Watch Series 4.",
+          "unit_id": "2fc7dd67b8558fb025ec5137"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "The bezels certainly got a slight bit thicker compared to Series 10 and 11. As someone who uses a watch face with a black background, I can’t say I’ve noticed this much – though I hope Apple improves on this in the next iteration.",
+          "unit_id": "b120d9bc1203bbce0371cfb9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "One last thing of note: Apple Watch Series 12 offers Ceramic Shield 2 on the aluminum models, making it hold up to scratches much better than older Apple Watch models. I haven’t owned mine long enough to truly test this, though so far my Apple Watch still looks perfect.",
+          "unit_id": "650ebeec0a308ddbe30a8771"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/26/apple-watch-series-12-one-week-later/"
+    },
+    "recorded_extraction": [
+      "Apple Watch Series 12 one week later: There's so much more than meets the eye - 9to5Mac",
+      "When Apple unveiled the Apple Watch Series 12, two features stood out: the new Siri Recap feature, as well as... When Apple unveiled the Apple Watch Series 12 , two features stood out: the new Siri Recap feature, as well as the much improved heart rate monitor. While those two features were part of the reason I was compelled to buy the new Apple Watch, I’ve found myself delighted by much more than just those two things. While Apple’s website doesn’t quote any additional battery life for Apple Watch Series 12 compared to Series 11, the battery certainly feels like it lasts longer. As I’ve written in the past , I was someone who used the WHOOP prior to the Apple Watch Series 12 , and even though I kept my Apple Watch, I never used it for sleep tracking. After the keynote, I decided to give Apple Watch sleep tracking a shot. That said, on my Series 11, juggling sleep tracking and charging was a bit of a pain. After using the watch throughout the day, I’d have to charge it a little bit before going to sleep, then when I wake up, I’d have to charge it again. On Series 12, that isn’t the case. It has enough battery to last through a day and overnight, and now I just charge it when I wake up. Apple Watch Series 12 also charges significantly faster, which makes that part less of a pain. 15 minutes of charging gets you up to 12 hours of use, per Apple.",
+      [
+        "When Apple unveiled the Apple Watch Series 12, two features stood out: the new Siri Recap feature, as well as the much improved heart rate monitor. While those two features were part of the reason I was compelled to buy the new Apple Watch, I’ve found myself delighted by much more than just those two things.",
+        "While Apple’s website doesn’t quote any additional battery life for Apple Watch Series 12 compared to Series 11, the battery certainly feels like it lasts longer. As I’ve written in the past, I was someone who used the WHOOP prior to the Apple Watch Series 12, and even though I kept my Apple Watch, I never used it for sleep tracking.",
+        "After the keynote, I decided to give Apple Watch sleep tracking a shot. That said, on my Series 11, juggling sleep tracking and charging was a bit of a pain. After using the watch throughout the day, I’d have to charge it a little bit before going to sleep, then when I wake up, I’d have to charge it again.",
+        "On Series 12, that isn’t the case. It has enough battery to last through a day and overnight, and now I just charge it when I wake up. Apple Watch Series 12 also charges significantly faster, which makes that part less of a pain. 15 minutes of charging gets you up to 12 hours of use, per Apple.",
+        "I imagine the new S11 chip, derived from the A20 Pro’s 2nm design, is a large part of the reason why battery life feels so much longer. Regardless of the why, it feels amazing to not have charging anxiety around sleep tracking on the Apple Watch Series 12. Another big upside to the S11 chip? Apple Watch Series 12 feels so much faster, especially with Siri.",
+        "On Series 12, Apple finally includes a proper step counter as a complication, which I like checking on in my smart stack. Could this come to older Apple Watches? Probably. It’s not like Apple didn’t count steps before. Apple Watch Series 12 certainly counts them more accurately, but given the fact that the data is there, I think Apple should just add the complication. Either way, it’s nice to have on Series 12.",
+        "Another neat new feature is the entire Readiness app, which gives you an idea of how okay you’re doing today based on last night’s sleep, your previous day’s activity, and your vitals. This is similar to a recovery score on WHOOP, and I was certainly happy to see Apple add this to the Apple Watch? It’s a bit of a bummer it’s exclusive to the Series 12, but I could understand why Apple isn’t willing to calculate it with less accurate data.",
+        "All in all, the Apple Watch Series 12 is a rather nice upgrade. It’s a total S year, but if you care about your Apple Watch actually doing more rather than just looking different, I’d say this might be one of the most substantial year over year upgrades since Apple Watch Series 4.",
+        "The bezels certainly got a slight bit thicker compared to Series 10 and 11. As someone who uses a watch face with a black background, I can’t say I’ve noticed this much – though I hope Apple improves on this in the next iteration.",
+        "One last thing of note: Apple Watch Series 12 offers Ceramic Shield 2 on the aluminum models, making it hold up to scratches much better than older Apple Watch models. I haven’t owned mine long enough to truly test this, though so far my Apple Watch still looks perfect."
+      ]
+    ]
+  },
+  "c34fc43b518eaaae776e3b93": {
+    "evidence": {
+      "article_id": "c34fc43b518eaaae776e3b93",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple owes Taction $5.7B after losing haptic feedback IP trial",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T15:15:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T17:01:01+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T17:01:01+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat Sep 26 2026, 11:15 AM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T15:27:56+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:18:17+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "9 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:41:49+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:59:23+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T17:01:02+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T17:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T15:15:47+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T18:15:26+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T17:56:32+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T15:59:16+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T15:54:28+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T15:49:58+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T15:36:15+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26 2026, 11:15 AM EDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26T15:15:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-26T15:15:00+00:00",
+      "raw_lead": "An intellectual property lawsuit over the Apple Watch's Taptic Engine has resulted in a loss for Apple, as a jury ruled that it owes Taction more than $5.7 billion for infringing patents.",
+      "source": "AppleInsider",
+      "title": "Apple owes Taction $5.7B after losing haptic feedback IP trial",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "An intellectual property lawsuit over the Apple Watch's Taptic Engine has resulted in a loss for Apple, as a jury ruled that it owes Taction more than $5.7 billion for infringing patents.",
+          "unit_id": "dbd89edfa1b11100a9684159"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple and many other device manufacturers rely on haptic feedback to alert users that they have pressed a button successfully, as well as for alerts and message notifications. However, Apple's implementation of the concept has resulted in a very hefty legal bill.",
+          "unit_id": "725aa3e3bfe93eb3e0e71cd5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "In April 2021, Taction Technology sued Apple for allegedly infringing on a pair of Taction patents, which were supposedly used in the Taptic Engine. Over five years later, Reuters reports that a jury has sided against Apple on the matter.",
+          "unit_id": "a03f095949354a663901b8ab"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The verdict form reveals that Taction has managed to prove to the jury that Apple had infringed on two claims in one patent, and one in the other. However, on the second question, asking if Taction had proved Apple willfully infringed, the jury said it had not.",
+          "unit_id": "e6a565b47a68d48569620a63"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "In effect, the jury says that Taction has proven Apple has infringed, but not that Apple did so knowingly. It wasn't necessarily an intentional infringement by Apple.",
+          "unit_id": "699466fbc47d81b053e0c21f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "The third page of the form asks if Apple had proved that the three argued claims were invalid. Apple failed on all three parts.",
+          "unit_id": "985dc9a795a21e748ed1c925"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "The fourth part of the form, where the jury determines the damages it believes Taction is owed from Apple, advises that Apple owes $5,721,961,750.",
+          "unit_id": "184673e0b898f2b11c90f70f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Following the result, Taction attorney Lance Yang said that the company was happy the jury found in its favor and vindicated its patent rights.",
+          "unit_id": "351dc0cb29300bb3558c3560"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Apple, meanwhile, insists it doesn't infringe on Taction's technology. Furthermore, it maintains that Taction isn't entitled to any damages, and what was awarded wasn't based on any evidence in the court's record.",
+          "unit_id": "8fde501b00b70a69464549c8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Apple has also said it disagrees with the verdict and will appeal.",
+          "unit_id": "dab2bc693b07ec1a3b58ccf8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple's statement, shared with AppleInsider, states:",
+          "unit_id": "f60020904c7de0d504c493cb"
+        },
+        {
+          "container_id": "",
+          "kind": "blockquote",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "While we thank the jury for their consideration, we strongly disagree with today's verdict and the damages awarded, which are entirely unsupported by the facts. Apple's Taptic Engine is fundamentally different from Taction's technology, which Taction's own testing of Apple's products confirmed during trial. Apple does not use Taction's technology, and we will appeal.",
+          "unit_id": "d8a6922d51443115989802be"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "A brief legal history",
+          "unit_id": "1cc34a2057cfc9a4e1a5c4e1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Apple introduced the Taptic Engine with the Apple Watch in 2014, as a new kind of haptic feedback system that used a linear resonant actuator instead of vibratory motors. The change meant that there was a lot of control over the moving mass, allowing for tactile experiences ranging from buzzing and tapping to simulating a heartbeat.",
+          "unit_id": "22bd3055271f6eb2d0a80b91"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "It was so much of a success that the concept was incorporated into other products, including the iPhone.",
+          "unit_id": "c0f3ff05d54c4a386037022f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "In 2021, Taction sued Apple, saying Apple initially used coil springs to provide controlled resistance to Taptic's moving mass, complete with a central locating rod. Newer designs use flexures with ferrofluid to locate the mass and provide controlled resistance.",
+          "unit_id": "3467b42706f539a9b5f39509"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Apple was accused of buying and reverse-engineering two Kannon headsets that used the technology.",
+          "unit_id": "459a2aa1ae5177a0a84fb0ae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "A San Diego federal judge ruled in 2023 that Apple did not infringe the patents. However the U.S. Court of Appeals for the Federal Circuit revived the case in 2025.",
+          "unit_id": "b81c271342703e8759e61054"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "Updated on September 26, 2026 at 1PM ET: Added Apple's statement.",
+          "unit_id": "6f794105b74f4581957120a0"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/09/26/apple-owes-taction-57b-after-losing-haptic-feedback-ip-trial?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "Apple owes Taction $5.7B after losing haptic feedback IP trial",
+      "An intellectual property lawsuit over the Apple Watch's Taptic Engine has resulted in a loss for Apple, as a jury ruled that it owes Taction more than $5.7 billion for infringing patents. Apple and many other device manufacturers rely on haptic feedback to alert users that they have pressed a button successfully, as well as for alerts and message notifications. However, Apple's implementation of the concept has resulted in a very hefty legal bill. In April 2021, Taction Technology sued Apple for allegedly infringing on a pair of Taction patents, which were supposedly used in the Taptic Engine. Over five years later, Reuters reports that a jury has sided against Apple on the matter. The verdict form reveals that Taction has managed to prove to the jury that Apple had infringed on two claims in one patent, and one in the other. However, on the second question, asking if Taction had proved Apple willfully infringed, the jury said it had not. In effect, the jury says that Taction has proven Apple has infringed, but not that Apple did so knowingly. It wasn't necessarily an intentional infringement by Apple.",
+      [
+        "An intellectual property lawsuit over the Apple Watch's Taptic Engine has resulted in a loss for Apple, as a jury ruled that it owes Taction more than $5.7 billion for infringing patents.",
+        "In April 2021, Taction Technology sued Apple for allegedly infringing on a pair of Taction patents, which were supposedly used in the Taptic Engine. Over five years later, Reuters reports that a jury has sided against Apple on the matter.",
+        "The fourth part of the form, where the jury determines the damages it believes Taction is owed from Apple, advises that Apple owes $5,721,961,750.",
+        "Apple introduced the Taptic Engine with the Apple Watch in 2014, as a new kind of haptic feedback system that used a linear resonant actuator instead of vibratory motors. The change meant that there was a lot of control over the moving mass, allowing for tactile experiences ranging from buzzing and tapping to simulating a heartbeat.",
+        "In 2021, Taction sued Apple, saying Apple initially used coil springs to provide controlled resistance to Taptic's moving mass, complete with a central locating rod. Newer designs use flexures with ferrofluid to locate the mass and provide controlled resistance.",
+        "A San Diego federal judge ruled in 2023 that Apple did not infringe the patents. However the U.S. Court of Appeals for the Federal Circuit revived the case in 2025.",
+        "Updated on September 26, 2026 at 1PM ET: Added Apple's statement."
+      ]
+    ]
+  },
+  "7bd358322e25ad7b741e516e": {
+    "evidence": {
+      "article_id": "7bd358322e25ad7b741e516e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple hit with $5.7 billion in damages over haptic patents",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T21:30:01+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T21:30:01+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T21:30:01+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T21:30:01+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T21:30:01+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26, 2026, 9:30 PM UTC",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T16:34:59+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T14:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T07:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T17:23:30+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 25",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T17:01:36+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 25",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T16:49:53+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 25",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T07:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T13:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T13:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 25",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-25T15:39:48+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 25",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T19:30:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 26, 2026, 9:30 PM UTC",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26T21:30:01+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-26T21:30:01+00:00",
+      "raw_lead": "Apple’s Taptic Engine was found to infringe on two of Taction’s patents.",
+      "source": "The Verge",
+      "title": "Apple hit with $5.7 billion in damages over haptic patents",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "jsonld:articleBody",
+          "text": "Haptics tech company Taction sued Apple in 2021, alleging it infringed two of its patents. Now a federal jury in San Diego has awarded Taction over $5.7 billion in damages. According to CNBC, “The lawsuit centered around U.S. Patent Nos. 10,659,885 and 10,820,117, which both involve vibration-based, tactile transducer technology that helps users feel a device responding to their input.”",
+          "unit_id": "cdc00d3ed61c82a7c820292b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "jsonld:articleBody",
+          "text": "Taction argued that Apple’s Taptic Engine in its Apple Watches and iPhones used technology that it had developed without a proper license, and the jury agreed. It found that Apple had infringed on two claims in one patent and one in the other. However, the jury did not find that Apple willfully infringed. Taction had accused Apple of reverse-engineering the tech from two Kannon gaming headsets.",
+          "unit_id": "6824e73b9cf3ad16a8669677"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "jsonld:articleBody",
+          "text": "Apple has said that it intends to appeal the decision. We’ve reached out for additional comment and will update the story if and when we hear back.",
+          "unit_id": "5c9d362a1f2aa2c44bdb8b5a"
+        }
+      ],
+      "url": "https://www.theverge.com/tech/1001118/apple-hit-with-5-7-billion-in-damages-over-haptic-patents"
+    },
+    "recorded_extraction": [
+      "Apple hit with $5.7 billion in damages over haptic patents",
+      "Haptics tech company Taction sued Apple in 2021, alleging it infringed two of its patents. Now a federal jury in San Diego has awarded Taction over $5.7 billion in damages. 10,659,885 and 10,820,117, which both involve vibration-based, tactile transducer technology that helps users feel a device responding to their input.” Taction argued that Apple’s Taptic Engine in its Apple Watches and iPhones used technology that it had developed without a proper license, and the jury agreed. It found that Apple had infringed on two claims in one patent and one in the other. However, the jury did not find that Apple willfully infringed.",
+      [
+        "Haptics tech company Taction sued Apple in 2021, alleging it infringed two of its patents.",
+        "10,659,885 and 10,820,117, which both involve vibration-based, tactile transducer technology that helps users feel a device responding to their input.” Taction argued that Apple’s Taptic Engine in its Apple Watches and iPhones used technology that it had developed without a proper license, and the jury agreed."
+      ]
+    ]
+  },
+  "aa7b9899ca5226f806a5039e": {
+    "evidence": {
+      "article_id": "aa7b9899ca5226f806a5039e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果 watchOS 27 扩充 Modular 表盘配色库，新增 iPhone 18 Pro 主打酒红色等 13 种颜色",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/26 9:47:17",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/26 9:47:17",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T01:47:17+00:00",
+      "raw_lead": "科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，报道称在 watchOS 27 系统中，苹果为 Apple Watch 热门“模块化”（Modular）表盘新增 13 种配色。",
+      "source": "IT之家",
+      "title": "苹果 watchOS 27 扩充 Modular 表盘配色库，新增 iPhone 18 Pro 主打酒红色等 13 种颜色",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 26 日消息，科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，报道称在 watchOS 27 系统中，苹果为 Apple Watch 热门“模块化”（Modular）表盘新增 13 种配色。",
+          "unit_id": "c5cba4de6b4ee6d3cccb203c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家查询公开资料，Modular 是苹果 Apple Watch 颇具代表性的可定制表盘之一，以高度灵活的布局与丰富的信息模块著称。",
+          "unit_id": "15712831befe8c9c641c6c4f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Modular 表盘采用网格化模块设计，用户可自由添加、调整多个信息区块（complications），包括天气、日历、运动数据、电池电量等。",
+          "unit_id": "a6c753aceecc6bcd017e35b5"
+        },
+        {
+          "container_id": "caption",
+          "kind": "text",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "勃艮第酒红色版 iPhone 18 Pro",
+          "unit_id": "5747847f0541c1d47f732c1e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "在 watchOS 27 系统中，苹果为 Modular 表盘新增了 13 种配色选项：",
+          "unit_id": "0054ce21f005b74ce68c7089"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Olive（橄榄）",
+          "unit_id": "69fbd995809cbdd6c3724170"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Burgundy（勃艮第酒红色），苹果 iPhone 18 Pro 和 iPhone 18 Pro Max 主打色",
+          "unit_id": "d88f7056dab8e5fe158c779e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Sand（沙色）",
+          "unit_id": "fc0c16f0e2ddf15273f1058b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Magenta（品红）",
+          "unit_id": "fc9944bd1486232e4b3e3df1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Pale Succulent（淡多肉色）",
+          "unit_id": "bb54698afc22562f8b013962"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Wildflower Blue（野花蓝）",
+          "unit_id": "4a635c5e1a6ded5befbf1073"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Navy Blue（海军蓝）",
+          "unit_id": "bf17062943cdfa15d5fc7abd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Light Umber（浅褐）",
+          "unit_id": "2b8882919599cd408db06adb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Chambray Blue（牛仔蓝）",
+          "unit_id": "85a5fe4ee0fcc233cd9dc846"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Limestone（石灰白）",
+          "unit_id": "7e47a6e5536763941d058e3f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Camel（驼色）",
+          "unit_id": "5026f214ba2ecc09d43d7e9e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Sage（鼠尾草绿）",
+          "unit_id": "c1cdda78f507af097e20b170"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Mulberry（桑葚紫）",
+          "unit_id": "e8cb9a75988b9c1568d17c7c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "用户在自定义模块化表盘时，可进入“颜色”界面直接选用新配色，旧有颜色仍可通过底部“+”按钮添加。",
+          "unit_id": "53783e2a4925285265c603e8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "除配色外，模块化表盘同步支持最新信息区块（complications），涵盖每日步数（Daily Steps）、心率（Heart Rate）与准备状态（Readiness）等健康指标，且提供多种尺寸适配。",
+          "unit_id": "d2eb6c76ff99b935c9b6db4c"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/295.htm"
+    },
+    "recorded_extraction": [
+      "苹果 watchOS 27 扩充 Modular 表盘配色库，新增 iPhone 18 Pro 主打酒红色等 13 种颜色",
+      "科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，报道称在 watchOS 27 系统中，苹果为 Apple Watch 热门“模块化”（Modular）表盘新增 13 种配色。 IT之家 9 月 26 日消息，科技媒体 9to5Mac 昨日（9 月 25 日）发布博文， 报道称在 watchOS 27 系统中，苹果为 Apple Watch 热门“模块化”（Modular）表盘新增 13 种配色。 IT之家查询公开资料，Modular 是苹果 Apple Watch 颇具代表性的可定制表盘之一，以高度灵活的布局与丰富的信息模块著称。 Modular 表盘采用网格化模块设计，用户可自由添加、调整多个信息区块（complications），包括天气、日历、运动数据、电池电量等。 除配色外，模块化表盘同步支持最新信息区块（complications），涵盖每日步数（Daily Steps）、心率（Heart Rate）与准备状态（Readiness）等健康指标，且提供多种尺寸适配。",
+      [
+        "IT之家 9 月 26 日消息，科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，报道称在 watchOS 27 系统中，苹果为 Apple Watch 热门“模块化”（Modular）表盘新增 13 种配色。",
+        "Modular 表盘采用网格化模块设计，用户可自由添加、调整多个信息区块（complications），包括天气、日历、运动数据、电池电量等。",
+        "在 watchOS 27 系统中，苹果为 Modular 表盘新增了 13 种配色选项：",
+        "Burgundy（勃艮第酒红色），苹果 iPhone 18 Pro 和 iPhone 18 Pro Max 主打色",
+        "除配色外，模块化表盘同步支持最新信息区块（complications），涵盖每日步数（Daily Steps）、心率（Heart Rate）与准备状态（Readiness）等健康指标，且提供多种尺寸适配。"
+      ]
+    ]
+  },
+  "b7aa781499fa069f5ab79a5d": {
+    "evidence": {
+      "article_id": "b7aa781499fa069f5ab79a5d",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果零售总设计师：那些吐槽贵等问题 iPhone Duo希望亲手摸、现场试才知道好",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26 15:29:42",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26 15:29:42",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T07:29:42+00:00",
+      "raw_lead": "快科技9月26日消息，苹果前零售总设计师罗恩约翰逊近期对外公开表达了自己的观点，一款真正的好产品，如果消费者完全没有亲自上手体验过就随便指指点点下判断，这种行为本身显然是十分不负责任的",
+      "source": "快科技",
+      "title": "苹果零售总设计师：那些吐槽贵等问题 iPhone Duo希望亲手摸、现场试才知道好",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月26日消息，苹果前零售总设计师罗恩约翰逊近期对外公开表达了自己的观点，一款真正的好产品，如果消费者完全没有亲自上手体验过就随便指指点点下判断，这种行为本身显然是十分不负责任的。",
+          "unit_id": "0c318896dea87d9182e18bdf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "主导初代Apple Store整体设计落地的罗恩约翰逊始终认为，苹果需要把最直观的产品体验直接送到消费者面前，用完全属于品牌自己的线下空间讲述苹果的研发故事，实景演示产品各项功能，同时配套提供针对性服务，比如后来大家熟知的Genius Bar天才吧，才能把线上的普通关注真正转化为用户的实际购买决策。",
+          "unit_id": "74c8d1149bc2f70ded37ec65"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在他的判断里，苹果运营了这么多年的Apple Store零售店至今完全没有过时，这是让普通消费者最直观地了解苹果品牌、深度感知全系列产品优势的核心渠道，至今没有任何线上渠道可以完全替代它的作用。",
+          "unit_id": "ba4d8f2d57359e0318101f25"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "就算现在苹果新品发布会的全球线上观看量动辄突破千万级，像最新推出的iPhone Duo这类形态特殊的创新产品，用户依然必须亲手摸一摸、在现场实际操作试用，才能真正感知到它和传统直板手机之间的核心体验差异，光靠看线上演示视频根本get不到产品的全部价值。",
+          "unit_id": "0e7dfa5be1e65f9e609be017"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "约翰逊特意强调，当下很多行业声音唱衰线下实体店，认为线上电商完全可以取代线下门店，这种判断明显脱离实际，线下实体店在新产品体验向消费转化的链路里，至今仍有不可替代的核心作用。",
+          "unit_id": "cd5af344ea0da86ba8d1c5b3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "他直接喊话近期吐槽iPhone Duo售价过高等各类问题的网友，希望大家都能到线下店认真上手体验完产品之后，再来给出更负责任的评价，他相信绝大多数人实际体验过之后，原本的刻板印象都会发生明显改变，而不是只是在键盘上谈论。",
+          "unit_id": "1d592df4be130e9171a54b98"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "不少消费行业分析师也认同罗恩约翰逊的观点，近几年越来越多形态创新的数码产品，光靠参数页的文字描述根本传递不出体验优势，线下门店提供的无压力试用环境，恰恰是品牌破圈打消用户顾虑的最优路径，线下体验和线上购买的深度融合，早已成了消费电子行业不可逆转的主流趋势。",
+          "unit_id": "50194300ce6f8de152c51bc4"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154037.htm"
+    },
+    "recorded_extraction": [
+      "苹果零售总设计师：那些吐槽贵等问题 iPhone Duo希望亲手摸、现场试才知道好",
+      "快科技9月26日消息，苹果前零售总设计师罗恩约翰逊近期对外公开表达了自己的观点，一款真正的好产品，如果消费者完全没有亲自上手体验过就随便指指点点下判断，这种行为本身显然是十分不负责任的 快科技9月26日消息，苹果前零售总设计师罗恩约翰逊近期对外公开表达了自己的观点，一款真正的好产品，如果消费者完全没有亲自上手体验过就随便指指点点下判断，这种行为本身显然是十分不负责任的。 主导初代Apple Store整体设计落地的罗恩约翰逊始终认为，苹果需要把最直观的产品体验直接送到消费者面前，用完全属于品牌自己的线下空间讲述苹果的研发故事，实景演示产品各项功能，同时配套提供针对性服务，比如后来大家熟知的Genius Bar天才吧，才能把线上的普通关注真正转化为用户的实际购买决策。 在他的判断里，苹果运营了这么多年的Apple Store零售店至今完全没有过时，这是让普通消费者最直观地了解苹果品牌、深度感知全系列产品优势的核心渠道，至今没有任何线上渠道可以完全替代它的作用。 就算现在苹果新品发布会的全球线上观看量动辄突破千万级，像最新推出的iPhone Duo这类形态特殊的创新产品，用户依然必须亲手摸一摸、在现场实际操作试用，才能真正感知到它和传统直板手机之间的核心体验差异，光靠看线上演示视频根本get不到产品的全部价值。",
+      [
+        "快科技9月26日消息，苹果前零售总设计师罗恩约翰逊近期对外公开表达了自己的观点，一款真正的好产品，如果消费者完全没有亲自上手体验过就随便指指点点下判断，这种行为本身显然是十分不负责任的。",
+        "主导初代Apple Store整体设计落地的罗恩约翰逊始终认为，苹果需要把最直观的产品体验直接送到消费者面前，用完全属于品牌自己的线下空间讲述苹果的研发故事，实景演示产品各项功能，同时配套提供针对性服务，比如后来大家熟知的Genius Bar天才吧，才能把线上的普通关注真正转化为用户的实际购买决策。",
+        "就算现在苹果新品发布会的全球线上观看量动辄突破千万级，像最新推出的iPhone Duo这类形态特殊的创新产品，用户依然必须亲手摸一摸、在现场实际操作试用，才能真正感知到它和传统直板手机之间的核心体验差异，光靠看线上演示视频根本get不到产品的全部价值。"
+      ]
+    ]
+  },
+  "456ed7e8ee4a8aeb60dfba52": {
+    "evidence": {
+      "article_id": "456ed7e8ee4a8aeb60dfba52",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果因侵犯触觉反馈专利 被判需支付57亿美元赔偿金 - Apple 苹果 - cnBeta.COM",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "昨天 23:36",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 20:00",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 19:40",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 12:55",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年09月26日 14:41",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026年09月26日 14:41",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T06:41:00+00:00",
+      "raw_lead": "圣地亚哥联邦陪审团周五裁定，苹果公司侵犯塔克申技术公司专利，需赔付超过57亿美元。涉案专利是iPhone与苹果手表产品使用的振动相关技术。美国加利福尼亚州南区联邦地区法院陪审团经过两天部分时段的审理后认定，苹果侵犯了塔克申两项触觉反馈专利（专利号：美国专利10659885号与10820117号）的权利要求，但侵权并非故意行为。",
+      "source": "cnBeta",
+      "title": "苹果因侵犯触觉反馈专利 被判需支付57亿美元赔偿金 - Apple 苹果 - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "圣地亚哥联邦陪审团周五裁定，苹果公司侵犯塔克申技术公司专利，需赔付超过57亿美元。涉案专利是iPhone与苹果手表产品使用的振动相关技术。美国加利福尼亚州南区联邦地区法院陪审团经过两天部分时段的审理后认定，苹果侵犯了塔克申两项触觉反馈专利（专利号：美国专利10659885号与10820117号）的权利要求，但侵权并非故意行为。",
+          "unit_id": "7577f0d929220911c6033825"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "案件证据开示阶段披露，塔克申的本案诉讼资金来自格罗诺斯塔伊投资有限责任公司（Gronostaj Investments LLC）与基诺沙投资有限合伙（Kenosha Investments LP），在另一起诉讼中，后者被认定为伯福德资本有限公司（Burford Capital）的间接子公司。",
+          "unit_id": "bb11608f7a14e157c84a3476"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "本次诉讼对抗激烈，苹果曾试图曝光塔克申与这家大型诉讼融资机构之间的关联。",
+          "unit_id": "a0ffada688747de93985f9fd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "塔克申在2021年起诉苹果侵犯其专利，两项专利均描述“可产生低频振动、可被触觉感知的触觉换能器”。",
+          "unit_id": "d42acccbd6df49f55f77f3d4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "2023年，苹果曾成功说服法官驳回该案。但美国联邦巡回上诉法院去年恢复了这起诉讼，裁定当初驳回案件所依据的一项不成文要求，不当剥夺了塔克申使用部分专家证言的权利。",
+          "unit_id": "b20e759f710c74114aef2e8c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "昆恩·伊曼纽尔律所担任塔克申的代理律师。苹果的代理律所包括菲什·理查森律所、奥睿律所、沃克·史蒂文斯·坎农律所，以及高盛·伊斯梅尔·托马塞利·布伦南·鲍姆律所。基诺沙与格罗诺斯塔伊由辛格·卡什曼律所代理。",
+          "unit_id": "f3904bccefb7a88f4762e71e"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1579686.htm"
+    },
+    "recorded_extraction": [
+      "苹果因侵犯触觉反馈专利 被判需支付57亿美元赔偿金 - Apple 苹果 - cnBeta.COM",
+      "圣地亚哥联邦陪审团周五裁定，苹果公司侵犯塔克申技术公司专利，需赔付超过57亿美元。涉案专利是iPhone与苹果手表产品使用的振动相关技术。美国加利福尼亚州南区联邦地区法院陪审团经过两天部分时段的审理后认定，苹果侵犯了塔克申两项触觉反馈专利（专利号：美国专利10659885号与10820117号）的权利要求，但侵权并非故意行为。 案件证据开示阶段披露，塔克申的本案诉讼资金来自格罗诺斯塔伊投资有限责任公司（Gronostaj Investments LLC）与基诺沙投资有限合伙（Kenosha Investments LP），在另一起诉讼中，后者被认定为伯福德资本有限公司（Burford Capital）的间接子公司。 2023年，苹果曾成功说服法官驳回该案。但美国联邦巡回上诉法院去年恢复了这起诉讼，裁定当初驳回案件所依据的一项不成文要求，不当剥夺了塔克申使用部分专家证言的权利。 昆恩·伊曼纽尔律所担任塔克申的代理律师。苹果的代理律所包括菲什·理查森律所、奥睿律所、沃克·史蒂文斯·坎农律所，以及高盛·伊斯梅尔·托马塞利·布伦南·鲍姆律所。基诺沙与格罗诺斯塔伊由辛格·卡什曼律所代理。",
+      [
+        "圣地亚哥联邦陪审团周五裁定，苹果公司侵犯塔克申技术公司专利，需赔付超过57亿美元。涉案专利是iPhone与苹果手表产品使用的振动相关技术。美国加利福尼亚州南区联邦地区法院陪审团经过两天部分时段的审理后认定，苹果侵犯了塔克申两项触觉反馈专利（专利号：美国专利10659885号与10820117号）的权利要求，但侵权并非故意行为。",
+        "塔克申在2021年起诉苹果侵犯其专利，两项专利均描述“可产生低频振动、可被触觉感知的触觉换能器”。",
+        "2023年，苹果曾成功说服法官驳回该案。但美国联邦巡回上诉法院去年恢复了这起诉讼，裁定当初驳回案件所依据的一项不成文要求，不当剥夺了塔克申使用部分专家证言的权利。",
+        "昆恩·伊曼纽尔律所担任塔克申的代理律师。苹果的代理律所包括菲什·理查森律所、奥睿律所、沃克·史蒂文斯·坎农律所，以及高盛·伊斯梅尔·托马塞利·布伦南·鲍姆律所。基诺沙与格罗诺斯塔伊由辛格·卡什曼律所代理。"
+      ]
+    ]
+  },
+  "124c3b2a94722ebfb2ff328d": {
+    "evidence": {
+      "article_id": "124c3b2a94722ebfb2ff328d",
+      "confidence": "detail",
+      "content_form": "third_party_spotlight",
+      "discovery_lead": "",
+      "discovery_title": "Indie App Spotlight: 'QuillCue' levels up your Siri AI experience with stored prompts - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T19:30:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T19:30:00+00:00",
+          "source": "meta published"
+        }
+      ],
+      "published_raw": "2026-09-26T19:30:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-26T19:30:00+00:00",
+      "raw_lead": "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app...",
+      "source": "9to5Mac",
+      "title": "Indie App Spotlight: 'QuillCue' levels up your Siri AI experience with stored prompts - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app world. If you’re a developer and would like your app featured, get in contact.",
+          "unit_id": "cbbdb7ca8eec9a7e43639390"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "iOS 27 debuted to the public almost two weeks ago, with the flagship feature being Siri AI. While Siri AI was revolutionary compared to what existed prior, it still has some shortcomings. QuillCue aims to close one of the gaps with Siri AI by providing a custom keyboard that lets you save prompts for later.",
+          "unit_id": "7d814768ec2e83dcf3cd60b7"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Highlights",
+          "unit_id": "0ba09933e0d381a8a35708ba"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "QuillCue is a rather great concept. Using custom keyboards on iOS, it allows you to insert fully prewritten prompts into Siri AI. Just swipe down from the top of your screen, switch over to the custom keyboard, select your prompt, and press enter.",
+          "unit_id": "ccd2e4586fb6c85faf51b8b9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "It saves a lot of time if you have Siri questions you end up asking regularly, but don’t want to always type the same thing over and over again. One of the default prompts is finding nearby coffee shops that allow laptops for remote work. Since this is dependent on location, it’s always great to fetch new results that you might’ve not known about.",
+          "unit_id": "d3cf9476a99cca5929da5bc5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Of course, you can pre-write any prompt that Siri AI can handle. QuillCue just saves you the hassle of having to respeak or retype it every single time, making Siri AI a lot easier to use.",
+          "unit_id": "5a77c1e1d5dbe79dfe8412e3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "If you end up writing a rather lengthy prompt full of different steps, QuillCue can save you a lot of time – since Siri AI doesn’t currently have a concept of ‘skills’ or learning from your usage. The possibilities are really endless. The app also offers folders for sorting your different prompts.",
+          "unit_id": "f973d18026d81c4dd525698a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Lastly, it also offers the ability to import and export prompt libraries, so if you’d like to share prompts with friends or transfer them between devices, you can do so easily.",
+          "unit_id": "6a3d0cad586684b4905eef5a"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Download the app",
+          "unit_id": "98a34a497da21d605600ef3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "QuillCue is available for free on the App Store, with no ads or in app purchases. You can follow the developer Parker Ortolani on X for updates.",
+          "unit_id": "9625265092742971b5bd7f10"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "It requires an iPhone running iOS 27.0 or later, and is currently limited to users in the United States.",
+          "unit_id": "cbc673ddd56d3bb7db3c250b"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/26/indie-app-spotlight-quillcue-siri-ai-prompts/"
+    },
+    "recorded_extraction": [
+      "Indie App Spotlight: 'QuillCue' levels up your Siri AI experience with stored prompts - 9to5Mac",
+      "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app... Welcome to Indie App Spotlight . This is a weekly 9to5Mac series where we showcase the latest apps in the indie app world. If you’re a developer and would like your app featured, get in contact . iOS 27 debuted to the public almost two weeks ago , with the flagship feature being Siri AI. While Siri AI was revolutionary compared to what existed prior, it still has some shortcomings. QuillCue aims to close one of the gaps with Siri AI by providing a custom keyboard that lets you save prompts for later. QuillCue is a rather great concept. Using custom keyboards on iOS, it allows you to insert fully prewritten prompts into Siri AI. Just swipe down from the top of your screen, switch over to the custom keyboard, select your prompt, and press enter. It saves a lot of time if you have Siri questions you end up asking regularly, but don’t want to always type the same thing over and over again. One of the default prompts is finding nearby coffee shops that allow laptops for remote work. Since this is dependent on location, it’s always great to fetch new results that you might’ve not known about.",
+      [
+        "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app world. If you’re a developer and would like your app featured, get in contact.",
+        "iOS 27 debuted to the public almost two weeks ago, with the flagship feature being Siri AI. While Siri AI was revolutionary compared to what existed prior, it still has some shortcomings. QuillCue aims to close one of the gaps with Siri AI by providing a custom keyboard that lets you save prompts for later.",
+        "It saves a lot of time if you have Siri questions you end up asking regularly, but don’t want to always type the same thing over and over again. One of the default prompts is finding nearby coffee shops that allow laptops for remote work. Since this is dependent on location, it’s always great to fetch new results that you might’ve not known about.",
+        "It requires an iPhone running iOS 27.0 or later, and is currently limited to users in the United States."
+      ]
+    ]
+  },
+  "043b683155b458bffb7d2607": {
+    "evidence": {
+      "article_id": "043b683155b458bffb7d2607",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "涉 iPhone / Apple Watch 触觉技术：苹果回应被判赔 57 亿美元，判决“无事实依据”将上诉",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/26 11:46:46",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/26 11:46:46",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T03:46:46+00:00",
+      "raw_lead": "彭博社今天（9 月 26 日）发布博文，报道称美国加州南区联邦陪审团裁定，苹果侵犯 Taction 公司两项触觉技术专利，需向后者赔偿超过 57 亿美元（IT之家注：现汇率约合 383.3 亿元人民币）。",
+      "source": "IT之家",
+      "title": "涉 iPhone / Apple Watch 触觉技术：苹果回应被判赔 57 亿美元，判决“无事实依据”将上诉",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 26 日消息，彭博社今天（9 月 26 日）发布博文，报道称美国加州南区联邦陪审团裁定，苹果侵犯 Taction 公司两项触觉技术专利，需向后者赔偿超过 57 亿美元（IT之家注：现汇率约合 383.3 亿元人民币）。",
+          "unit_id": "c646abc6e9e679ff9d14bdec"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家援引博文介绍，本次双方纠纷的专利编号为 US 10,659,885 与 US 10,820,117，涉及“可触摸感知的低频振动触觉换能器”。陪审团认定侵权成立，但非故意侵权。",
+          "unit_id": "e522adf66c123bd68a9cbb82"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在落地产品方面，双方围绕着苹果 Taptic Engine 展开，该功能已装备在 iPhone、Apple Watch 等产品中，用于模拟点击等触觉反馈。IT之家查询相关资料，目前公开信息并未提及相关产品型号，尚不清楚是否会影响相关产品在美国地区发售。",
+          "unit_id": "a1519e1df75de30a23a34305"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Taction 公司于 2021 年起诉苹果侵权，苹果 2023 年曾说服法官驳回案件。美国联邦巡回上诉法院去年推翻驳回裁定，认为原审不当限制 Taction 使用部分专家证词，案件得以重启。",
+          "unit_id": "e1a2515fda142b8df5545035"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "判决公布后，Taction 律师称“陪审团维护了其专利权”，案件等待五年半才开庭。苹果声明感谢陪审团，但强烈反对判决与赔偿金额，称“完全缺乏事实支持”。苹果明确表态未使用 Taction 技术，将提起上诉。",
+          "unit_id": "392e1ced80e040335b0e7d0e"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/320.htm"
+    },
+    "recorded_extraction": [
+      "涉 iPhone / Apple Watch 触觉技术：苹果回应被判赔 57 亿美元，判决“无事实依据”将上诉",
+      "彭博社今天（9 月 26 日）发布博文，报道称美国加州南区联邦陪审团裁定，苹果侵犯 Taction 公司两项触觉技术专利，需向后者赔偿超过 57 亿美元（IT之家注：现汇率约合 383.3 亿元人民币）。 IT之家 9 月 26 日消息，彭博社今天（9 月 26 日）发布博文，报道称美国加州南区联邦陪审团裁定，苹果侵犯 Taction 公司两项触觉技术专利， 需向后者赔偿超过 57 亿美元（IT之家注：现汇率约合 383.3 亿元人民币）。 IT之家援引博文介绍，本次双方纠纷的专利编号为 US 10,659,885 与 US 10,820,117，涉及“可触摸感知的低频振动触觉换能器”。陪审团认定侵权成立，但非故意侵权。 在落地产品方面，双方围绕着苹果 Taptic Engine 展开，该功能已装备在 iPhone 、Apple Watch 等产品中，用于模拟点击等触觉反馈。IT之家查询相关资料，目前公开信息并未提及相关产品型号，尚不清楚是否会影响相关产品在美国地区发售。 Taction 公司于 2021 年起诉苹果侵权，苹果 2023 年曾说服法官驳回案件。美国联邦巡回上诉法院去年推翻驳回裁定，认为原审不当限制 Taction 使用部分专家证词，案件得以重启。",
+      [
+        "IT之家 9 月 26 日消息，彭博社今天（9 月 26 日）发布博文，报道称美国加州南区联邦陪审团裁定，苹果侵犯 Taction 公司两项触觉技术专利，需向后者赔偿超过 57 亿美元（IT之家注：现汇率约合 383.3 亿元人民币）。",
+        "IT之家援引博文介绍，本次双方纠纷的专利编号为 US 10,659,885 与 US 10,820,117，涉及“可触摸感知的低频振动触觉换能器”。陪审团认定侵权成立，但非故意侵权。",
+        "在落地产品方面，双方围绕着苹果 Taptic Engine 展开，该功能已装备在 iPhone、Apple Watch 等产品中，用于模拟点击等触觉反馈。IT之家查询相关资料，目前公开信息并未提及相关产品型号，尚不清楚是否会影响相关产品在美国地区发售。",
+        "Taction 公司于 2021 年起诉苹果侵权，苹果 2023 年曾说服法官驳回案件。美国联邦巡回上诉法院去年推翻驳回裁定，认为原审不当限制 Taction 使用部分专家证词，案件得以重启。",
+        "判决公布后，Taction 律师称“陪审团维护了其专利权”，案件等待五年半才开庭。苹果声明感谢陪审团，但强烈反对判决与赔偿金额，称“完全缺乏事实支持”。苹果明确表态未使用 Taction 技术，将提起上诉。"
+      ]
+    ]
+  },
+  "ac2662763efe525ef9d1fb7f": {
+    "evidence": {
+      "article_id": "ac2662763efe525ef9d1fb7f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果侵犯专利一波三折：被判赔付57亿美元",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26 10:16:12",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26 10:16:12",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T02:16:12+00:00",
+      "raw_lead": "快科技9月26日消息，据财联社消息，美国圣地亚哥联邦陪审团近日裁定，苹果公司因侵犯Taction科技公司的振动技术相关专利，需支付超57亿美元的赔偿，该专利技术被应用于多款iPhone和Apple Watch产",
+      "source": "快科技",
+      "title": "苹果侵犯专利一波三折：被判赔付57亿美元",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月26日消息，据财联社消息，美国圣地亚哥联邦陪审团近日裁定，苹果公司因侵犯Taction科技公司的振动技术相关专利，需支付超57亿美元的赔偿，该专利技术被应用于多款iPhone和Apple Watch产品中。",
+          "unit_id": "ef361a822ad0498dd4448f03"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "陪审团认定苹果侵犯了Taction的两项触觉反馈专利，但裁定该侵权行为不构成蓄意侵权。Taction于2021年就该专利对苹果提起诉讼，涉案专利描述的是“可通过触觉感知的低频振动触觉换能器”技术。",
+          "unit_id": "b7d1580df81813d08cb4f02d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "据公开报道梳理，这起案件的审理过程一波三折。",
+          "unit_id": "192ffc6ffd6c1624d27e7227"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "2021年，Taction正式递交诉状，直指苹果Taptic Engine触觉引擎，也就是 iPhone、Apple Watch 上广泛使用的振动模块，落入其两项专利保护范围，主张苹果直接侵权、同时诱导侵权，要求苹果承担相应赔偿责任。",
+          "unit_id": "7da70e57eddd1e516e9e1ebc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "苹果随后进行应诉，不仅否认侵权，还提起反诉，同时向美国专利商标局提交四份多方复审申请，请求宣告Taction涉案专利全部权利要求无效，试图从根源废掉对方专利基础。",
+          "unit_id": "2f6cd22ebe663e784388cfb2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "2023年，苹果曾成功说服法官驳回该案。Taction就此向美国联邦巡回上诉法院提起上诉。",
+          "unit_id": "51141b8064451f45e2f9bb8a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "2025年，联邦巡回上诉法院作出裁决，裁定当初驳回案件所依据的一项不成文要求，不当剥夺了Taction使用部分专家证言的权利，推翻下级法院的简易判决，将案件发回圣地亚哥地方法院重审。",
+          "unit_id": "432a5e9ad0374f72af505b0e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "值得注意的是，公开报道还披露，Taction这家企业本身并不消费电子硬件产品，本次诉讼背后有第三方诉讼融资机构提供资金支持，苹果在庭审前期就曾试图挖掘、披露Taction与诉讼资本之间的关联，双方对抗强度很高。",
+          "unit_id": "2a8abb8951d59ff60cede052"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "案件发回重审之后，本案进入陪审团庭审阶段。经过两天的陪审团评议，最终给出57亿美元的赔偿裁决。",
+          "unit_id": "2bb9e54f9c772f521a7e7c5e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "陪审团同时明确，苹果不属于蓄意侵权，按照美国专利法，该结论意味着 Taction无法申请三倍惩罚性赔偿，本次57亿美元为基础侵权赔偿额度。",
+          "unit_id": "75f9c9674119c9a5f6e99489"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "最新消息显示，苹果公司在声明中表示，强烈反对“今天的裁决及所判定的赔偿金额，这些完全缺乏事实依据”。“苹果并未使用Taction的技术，我们将提起上诉，”公司在声明中称。",
+          "unit_id": "02955b43085daad0ab7aaa1c"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154010.htm"
+    },
+    "recorded_extraction": [
+      "苹果侵犯专利一波三折：被判赔付57亿美元",
+      "快科技9月26日消息，据财联社消息，美国圣地亚哥联邦陪审团近日裁定，苹果公司因侵犯Taction科技公司的振动技术相关专利，需支付超57亿美元的赔偿，该专利技术被应用于多款iPhone和Apple Watch产 快科技9月26日消息， 据财联社消息，美国圣地亚哥联邦陪审团近日裁定，苹果公司因侵犯Taction科技公司的振动技术相关专利，需支付超57亿美元的赔偿，该专利技术被应用于多款iPhone和Apple Watch产品中。 陪审团认定苹果侵犯了Taction的两项触觉反馈专利，但裁定该侵权行为不构成蓄意侵权。Taction于2021年就该专利对苹果提起诉讼，涉案专利描述的是“可通过触觉感知的低频振动触觉换能器”技术。 2021年，Taction正式递交诉状，直指苹果Taptic Engine触觉引擎，也就是 iPhone、Apple Watch 上广泛使用的振动模块，落入其两项专利保护范围，主张苹果直接侵权、同时诱导侵权，要求苹果承担相应赔偿责任。 苹果随后进行应诉，不仅否认侵权，还提起反诉，同时向美国专利商标局提交四份多方复审申请，请求宣告Taction涉案专利全部权利要求无效，试图从根源废掉对方专利基础。",
+      [
+        "快科技9月26日消息，据财联社消息，美国圣地亚哥联邦陪审团近日裁定，苹果公司因侵犯Taction科技公司的振动技术相关专利，需支付超57亿美元的赔偿，该专利技术被应用于多款iPhone和Apple Watch产品中。",
+        "陪审团认定苹果侵犯了Taction的两项触觉反馈专利，但裁定该侵权行为不构成蓄意侵权。Taction于2021年就该专利对苹果提起诉讼，涉案专利描述的是“可通过触觉感知的低频振动触觉换能器”技术。",
+        "2021年，Taction正式递交诉状，直指苹果Taptic Engine触觉引擎，也就是 iPhone、Apple Watch 上广泛使用的振动模块，落入其两项专利保护范围，主张苹果直接侵权、同时诱导侵权，要求苹果承担相应赔偿责任。",
+        "2023年，苹果曾成功说服法官驳回该案。Taction就此向美国联邦巡回上诉法院提起上诉。",
+        "2025年，联邦巡回上诉法院作出裁决，裁定当初驳回案件所依据的一项不成文要求，不当剥夺了Taction使用部分专家证言的权利，推翻下级法院的简易判决，将案件发回圣地亚哥地方法院重审。",
+        "值得注意的是，公开报道还披露，Taction这家企业本身并不消费电子硬件产品，本次诉讼背后有第三方诉讼融资机构提供资金支持，苹果在庭审前期就曾试图挖掘、披露Taction与诉讼资本之间的关联，双方对抗强度很高。",
+        "案件发回重审之后，本案进入陪审团庭审阶段。经过两天的陪审团评议，最终给出57亿美元的赔偿裁决。",
+        "陪审团同时明确，苹果不属于蓄意侵权，按照美国专利法，该结论意味着 Taction无法申请三倍惩罚性赔偿，本次57亿美元为基础侵权赔偿额度。"
+      ]
+    ]
+  },
+  "663ba47537bef7d1c11674ae": {
+    "evidence": {
+      "article_id": "663ba47537bef7d1c11674ae",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple @ Work: The enterprise needs to kill the SSO tax, and it's an opportunity for Apple - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T13:00:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T13:23:50+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T13:00:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26T13:23:50+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-26T13:00:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-26T13:00:00+00:00",
+      "raw_lead": "The SSO tax leaves a third of corporate apps outside single sign-on. Apple could kill it by buying Clever and taking its model beyond K-12.",
+      "source": "9to5Mac",
+      "title": "Apple @ Work: The enterprise needs to kill the SSO tax, and it's an opportunity for Apple - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "The SSO tax might be the most backward pricing model in enterprise software. Single sign-on should be required for sign-up, yet SaaS vendors routinely lock it behind their most expensive tiers. It should be the opposite. You should have to pay more not to have SSO. The result is entirely predictable: companies skip it, weak passwords fill the gap, and hackers thank everyone involved. I think there’s a real opportunity here for Apple, and it starts with an acquisition.",
+          "unit_id": "f8826ce3a3821a27c639ad5f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "About Apple @ Work: Bradley Chambers has been an Apple IT admin since 2009. Through his experience deploying and managing firewalls, switches, a mobile device management system, enterprise grade WiFi, 1000s of Macs, and 1000s of iPads, Bradley will highlight ways in which Apple IT managers deploy Apple devices, build networks to support them, train users, share stories from the trenches of IT management, and ways Apple could improve its products for IT departments.",
+          "unit_id": "67216b9c0d954d8ddcf08393"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The SSO tax is a security problem with a pricing name",
+          "unit_id": "e91a675b97244815a33ecd83"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "I covered this in my recent article on Dashlane’s Vault Enforcement: on average, 37% of enterprise SaaS apps are not managed via SSO, leaving a critical security gap, especially given that adoption of password management is still low, all things considered. That’s a third of the average company’s app surface protected by nothing more than a username and password. Some of that is legacy passwords and setup complexity, but a meaningful chunk is vendors charging a premium for the login method that actually keeps organizations safe. When SSO costs 2x or 3x as much as the base plan, SMB will often skip it",
+          "unit_id": "83b7c8fe9ff9da55ccac7bb8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Everyone in the industry agrees this is broken. Nobody with enough leverage has been motivated to break it. Identity providers charge per user, SaaS vendors charge for integration, and the customer pays more for something that should be required. Imagine if MFA costs extra?",
+          "unit_id": "98731569a287e9bc6698a2ca"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Clever already solved this for K-12",
+          "unit_id": "3d955bc957d949c6333dbe59"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Here’s the thing: this problem has already been solved once, just not in the enterprise. Clever is the SSO and rostering platform used by a vast majority of K-12 schools. I’ve been a Clever admin multiple times in my career, and I absolutely love the service. Side note: Their support is among the best in the industry. I recently called them, and it felt like I was talking to someone up the road from me who knew exactly what my problem was and how to solve it. Seriously, shout-out to the Clever support team and to Clever leadership, who invest in it.",
+          "unit_id": "733c6e6093c261dcf8aa180b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The model is the interesting part. Clever is free for schools and districts. Application vendors pay to be on the platform because the Clever app gallery is how they reach customers. That flips the SSO tax completely. Instead of the customer paying extra for secure login, the vendor pays for access to the customer, and secure login is simply how the platform works. Districts came to demand Clever support as part of any purchase, and vendors fell in line because losing deals was more expensive than integrating with Clever. I will not purchase a K-12 tool that doesn’t support Clever.",
+          "unit_id": "b210a41c4ad3223231b216b4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Clever was acquired by Kahoot in 2021 and has continued to operate as its own platform since.",
+          "unit_id": "d6416b8bed94447bc0c83be8"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Why Apple should buy it",
+          "unit_id": "f401b6d86903236914c7fd55"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Apple already has the pieces around the edges. Managed Apple Accounts, Apple Business, Apple School Manager, Platform SSO in macOS, and Sign in with Apple all exist today. What Apple doesn’t have is the connective service: a true identity layer that sits between organizations and the thousands of SaaS apps they use, with an economic model that makes SSO free for the customer.",
+          "unit_id": "44d301897edfe0eb0e86d0c2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Buying Clever gets Apple three things at once. First, a proven platform and team that has already executed this exact playbook at a massive scale in K-12. Second, an instant dominant position in K-12 identity, a market where Apple continues fighting for device share against Chromebooks, and where owning the login layer would make Apple hardware even stickier (Google owns this today with Google Workspace). Third, and most interesting to me, a model it can extend upmarket: Apple-backed SSO that’s free for businesses, funded by vendor-side participation, and deeply integrated into macOS and iOS",
+          "unit_id": "22d20baa990cd6f943d4af76"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Imagine “works with Apple SSO” becoming a requirement in enterprise buying models, the way Clever support became one in district purchasing. Customers demand it in the deal, vendors integrate because they have to for a deal, and the SSO tax is then rendered dead. You can take this even further with deep integration on the procurement side with direct ordering through Apple.",
+          "unit_id": "448933587224374fdc409d6d"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Wrap up",
+          "unit_id": "46edbfb759c262eb425ae2b6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "The SSO tax persists because no one with leverage has been motivated to kill it. Apple has the cash. Apple is in a dominant spot in the enterprise at the moment, and killing the SSO tax would be a clear way to drive enterprise services revenue, but not from the customer directly.",
+          "unit_id": "2e99a7e060ecefc93a3a1b11"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/26/apple-work-the-enterprise-needs-to-kill-the-sso-tax-and-its-an-opportunity-for-apple/"
+    },
+    "recorded_extraction": [
+      "Apple @ Work: The enterprise needs to kill the SSO tax, and it's an opportunity for Apple - 9to5Mac",
+      "The SSO tax leaves a third of corporate apps outside single sign-on. Apple could kill it by buying Clever and taking its model beyond K-12. The SSO tax might be the most backward pricing model in enterprise software. Single sign-on should be required for sign-up, yet SaaS vendors routinely lock it behind their most expensive tiers. It should be the opposite. You should have to pay more not to have SSO. The result is entirely predictable: companies skip it, weak passwords fill the gap, and hackers thank everyone involved. I think there’s a real opportunity here for Apple, and it starts with an acquisition. I covered this in my recent article on Dashlane’s Vault Enforcement: on average, 37% of enterprise SaaS apps are not managed via SSO, leaving a critical security gap, especially given that adoption of password management is still low, all things considered. That’s a third of the average company’s app surface protected by nothing more than a username and password. Some of that is legacy passwords and setup complexity, but a meaningful chunk is vendors charging a premium for the login method that actually keeps organizations safe. When SSO costs 2x or 3x as much as the base plan, SMB will often skip it Everyone in the industry agrees this is broken. Nobody with enough leverage has been motivated to break it. Identity providers charge per user, SaaS vendors charge for integration, and the customer pays more for something that should be required. Imagine if MFA costs extra? Here’s the thing: this problem has already been solved once, just not in the enterprise. Clever is the SSO and rostering platform used by a vast majority of K-12 schools. I’ve been a Clever admin multiple times in my career, and I absolutely love the service. Side note: Their support is among the best in the industry. I recently called them, and it felt like I was talking to someone up the road from me who knew exactly what my problem was and how to solve it. Seriously, shout-out to the Clever support team and to Clever leadership, who invest in it.",
+      [
+        "I covered this in my recent article on Dashlane’s Vault Enforcement: on average, 37% of enterprise SaaS apps are not managed via SSO, leaving a critical security gap, especially given that adoption of password management is still low, all things considered. That’s a third of the average company’s app surface protected by nothing more than a username and password. Some of that is legacy passwords and setup complexity, but a meaningful chunk is vendors charging a premium for the login method that actually keeps organizations safe. When SSO costs 2x or 3x as much as the base plan, SMB will often skip it",
+        "Here’s the thing: this problem has already been solved once, just not in the enterprise. Clever is the SSO and rostering platform used by a vast majority of K-12 schools. I’ve been a Clever admin multiple times in my career, and I absolutely love the service. Side note: Their support is among the best in the industry. I recently called them, and it felt like I was talking to someone up the road from me who knew exactly what my problem was and how to solve it. Seriously, shout-out to the Clever support team and to Clever leadership, who invest in it.",
+        "The model is the interesting part. Clever is free for schools and districts. Application vendors pay to be on the platform because the Clever app gallery is how they reach customers. That flips the SSO tax completely. Instead of the customer paying extra for secure login, the vendor pays for access to the customer, and secure login is simply how the platform works. Districts came to demand Clever support as part of any purchase, and vendors fell in line because losing deals was more expensive than integrating with Clever. I will not purchase a K-12 tool that doesn’t support Clever.",
+        "Buying Clever gets Apple three things at once. First, a proven platform and team that has already executed this exact playbook at a massive scale in K-12. Second, an instant dominant position in K-12 identity, a market where Apple continues fighting for device share against Chromebooks, and where owning the login layer would make Apple hardware even stickier (Google owns this today with Google Workspace). Third, and most interesting to me, a model it can extend upmarket: Apple-backed SSO that’s free for businesses, funded by vendor-side participation, and deeply integrated into macOS and iOS",
+        "Imagine “works with Apple SSO” becoming a requirement in enterprise buying models, the way Clever support became one in district purchasing. Customers demand it in the deal, vendors integrate because they have to for a deal, and the SSO tax is then rendered dead. You can take this even further with deep integration on the procurement side with direct ordering through Apple."
+      ]
+    ]
+  },
+  "4d1be6b54a4f5f40b9f863cc": {
+    "evidence": {
+      "article_id": "4d1be6b54a4f5f40b9f863cc",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "安卓 / Linux / macOS / Windows 四大主流系统曝隐私风险：靠文件变化侧推监控用户",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/26 15:44:29",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/26 15:44:29",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T07:44:29+00:00",
+      "raw_lead": "奥地利格拉茨工业大学研究人员发现，在 Windows、Linux、macOS 和安卓等几乎所有主流系统中，其自带的文件变更通知子系统存在被滥用风险，攻击者可借此构建用户画像。",
+      "source": "IT之家",
+      "title": "安卓 / Linux / macOS / Windows 四大主流系统曝隐私风险：靠文件变化侧推监控用户",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 26 日消息，奥地利格拉茨工业大学研究人员发现，在安卓、Linux、macOS、Windows（按字母排序）等几乎所有主流系统中，其自带的文件变更通知子系统存在被滥用风险，攻击者可借此构建用户画像。",
+          "unit_id": "ef4be9c2684f8bf4d143ca43"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "该研究由博士生 Sudheendra Raghav Neela 和教授 Daniel Gruss 领衔，相关论文计划于今年 11 月在荷兰海牙举行的 ACM CCS 2026 会议上发表。",
+          "unit_id": "90b59455cb493848dd18670e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "对于普通用户而言，该攻击方式在实际落地存在较多限制，需要在用户设备上运行恶意软件，且需要获得本地访问能力，研究也指出目前没有证据表明已经有黑客利用该漏洞发起攻击。",
+          "unit_id": "84ff050be1829f454ef1c7eb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "工作原理上，研究人员指出在现有主流系统均配备文件变更通知子系统，在创建、修改或删除文件后，支持应用程序订阅相关通知。IT之家援引博文介绍，文本编辑器、杀毒软件和文件同步客户端等工具都依赖这一机制：",
+          "unit_id": "968bec0a2552d078e7b1dd7b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "在 Linux 上，该子系统称为 inotify（自 2005 年起引入）",
+          "unit_id": "f42cfa9fb71607a9001c435e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在 Android 上称为 FileObserver（2008 年）",
+          "unit_id": "b31ea5cd7b915446974cfc3f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "在 Windows 上称为 ReadDirectoryChangesW（2000 年）",
+          "unit_id": "b8b852db4998ffda56575fc1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "在 macOS 上称为 FSEvents（2007 年）",
+          "unit_id": "8902b77d419deee40aeed07c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "研究人员表示某些应用即使看不到文件内容，也可能通过文件名和文件变化时间，推测你的操作、浏览行为和通信活动。研究显示通过这种“行为侧写”方式，攻击者能监测用户何时敲击了键盘、何时接收 / 删除了文件，以及网站访问及应用活动。",
+          "unit_id": "53a8eb976b4d599ae2a8ff46"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "在 Linux 上，通过监听可读的 /dev/ input 目录，即可精确捕捉每次按键的时刻。在七名测试用户中，该攻击的按键检测准确率介于 93.1% 至 100% 之间。Linux 内核针对 CVE-2025-68788 进行了部分加固，防止 inotify 对特殊文件生成某些访问和修改事件。",
+          "unit_id": "948a7d0ff02a13c7fcc9a5cb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "在 Windows 上，只需在 C:\\ 盘根目录放置一个监听器，操作系统便会上报机器上每个文件变更的完整路径。在安卓系统上，在谷歌 Pixel 和三星 Galaxy 手机上测试，一个无需申请任何权限的应用可以监测 WhatsApp 的媒体事件，从而掌握照片、视频和文件的发送或接收时机。",
+          "unit_id": "90daffea94fd426071195cb8"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/378.htm"
+    },
+    "recorded_extraction": [
+      "安卓 / Linux / macOS / Windows 四大主流系统曝隐私风险：靠文件变化侧推监控用户",
+      "奥地利格拉茨工业大学研究人员发现，在 Windows、Linux、macOS 和安卓等几乎所有主流系统中，其自带的文件变更通知子系统存在被滥用风险，攻击者可借此构建用户画像。 IT之家 9 月 26 日消息，奥地利格拉茨工业大学研究人员发现，在 安卓 、Linux、macOS、Windows（按字母排序）等几乎所有主流系统中， 其自带的文件变更通知子系统存在被滥用风险，攻击者可借此构建用户画像。 该研究由博士生 Sudheendra Raghav Neela 和教授 Daniel Gruss 领衔，相关论文计划于今年 11 月在荷兰海牙举行的 ACM CCS 2026 会议上发表。 对于普通用户而言，该攻击方式在实际落地存在较多限制，需要在用户设备上运行恶意软件，且需要获得本地访问能力，研究也指出目前没有证据表明已经有黑客利用该漏洞发起攻击。 工作原理上，研究人员指出在现有主流系统均配备文件变更通知子系统，在创建、修改或删除文件后，支持应用程序订阅相关通知。IT之家援引博文介绍，文本编辑器、杀毒软件和文件同步客户端等工具都依赖这一机制：",
+      [
+        "IT之家 9 月 26 日消息，奥地利格拉茨工业大学研究人员发现，在安卓、Linux、macOS、Windows（按字母排序）等几乎所有主流系统中，其自带的文件变更通知子系统存在被滥用风险，攻击者可借此构建用户画像。",
+        "该研究由博士生 Sudheendra Raghav Neela 和教授 Daniel Gruss 领衔，相关论文计划于今年 11 月在荷兰海牙举行的 ACM CCS 2026 会议上发表。",
+        "工作原理上，研究人员指出在现有主流系统均配备文件变更通知子系统，在创建、修改或删除文件后，支持应用程序订阅相关通知。IT之家援引博文介绍，文本编辑器、杀毒软件和文件同步客户端等工具都依赖这一机制：",
+        "在 Linux 上，该子系统称为 inotify（自 2005 年起引入）",
+        "在 Windows 上称为 ReadDirectoryChangesW（2000 年）",
+        "在 macOS 上称为 FSEvents（2007 年）",
+        "在 Linux 上，通过监听可读的 /dev/ input 目录，即可精确捕捉每次按键的时刻。在七名测试用户中，该攻击的按键检测准确率介于 93.1% 至 100% 之间。Linux 内核针对 CVE-2025-68788 进行了部分加固，防止 inotify 对特殊文件生成某些访问和修改事件。"
+      ]
+    ]
+  },
+  "b622d9698038a685459d2a45": {
+    "evidence": {
+      "article_id": "b622d9698038a685459d2a45",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "M3 Mac终于能好好跑Linux了！NVMe驱动补丁发布：M3 Ultra暗藏特殊设计",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26 15:51:38",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26 15:51:38",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T07:51:38+00:00",
+      "raw_lead": "快科技9月26日消息，据报道，开发者Janne Grunau近日向Linux内核邮件列表提交了由七个补丁组成的系列，为所有基于Apple M3的SoC（系统级芯片）启用NVMe固态硬盘支持。此次补丁覆盖M3、M3 Pro、",
+      "source": "快科技",
+      "title": "M3 Mac终于能好好跑Linux了！NVMe驱动补丁发布：M3 Ultra暗藏特殊设计",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月26日消息，据报道，开发者Janne Grunau近日向Linux内核邮件列表提交了由七个补丁组成的系列，为所有基于Apple M3的SoC（系统级芯片）启用NVMe固态硬盘支持。",
+          "unit_id": "b74af6048befe7123cbe4e20"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "此次补丁覆盖M3、M3 Pro、M3 Max及M3 Ultra全系设备。M3系列的NVMe控制器工作方式与此前的M2 Pro/Max/Ultra设备相同，但需要额外约140行YAML和Device Tree新增内容才能完成适配。",
+          "unit_id": "4766a86cf2897958321a6c39"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "补丁揭示了M3 Ultra的一项特殊设计。由于M3 Ultra的NAND闪存芯片连接在其第二颗芯片裸片上，其NVMe设备节点需要使用专门的t6031-nvme.dtsi文件进行描述。",
+          "unit_id": "093062c610f0e77e7f70f2e7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "此次适配还涉及NVMe主控制器所需的IOMMU、邮箱以及ANS协处理器等组件的设备节点配置。",
+          "unit_id": "4f9a5e6ff0a0c0a2cde1c500"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "考虑到时间安排，这组补丁仍有望赶上10月的Linux 7.4合并窗口。目前补丁已在Linux内核邮件列表开放评审。",
+          "unit_id": "f16d7a61f77eea231f2ebad6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "对于希望现在就在M3 Mac上运行Linux的用户，建议使用最新的下游Asahi Linux版本以提前获得支持。Asahi Linux此前已于9月初宣布正式支持M3系列芯片，基础NVMe读写功能可用，但GPU加速仍需等待。",
+          "unit_id": "3bf15379a8c86d11c794b95b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "这组补丁是Apple Silicon Linux生态上游化工作的最新进展，为M3 Mac用户最终在主线内核中获得完整NVMe支持铺平了道路。",
+          "unit_id": "6e04d628c6d599dce1e52fbd"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154040.htm"
+    },
+    "recorded_extraction": [
+      "M3 Mac终于能好好跑Linux了！NVMe驱动补丁发布：M3 Ultra暗藏特殊设计",
+      "快科技9月26日消息，据报道，开发者Janne Grunau近日向Linux内核邮件列表提交了由七个补丁组成的系列，为所有基于Apple M3的SoC（系统级芯片）启用NVMe固态硬盘支持。此次补丁覆盖M3、M3 Pro、 快科技9月26日消息，据报道， 开发者Janne Grunau近日向Linux内核邮件列表提交了由七个补丁组成的系列，为所有基于Apple M3的SoC（系统级芯片）启用NVMe固态硬盘支持。 此次补丁覆盖M3、M3 Pro、M3 Max及M3 Ultra全系设备。M3系列的NVMe控制器工作方式与此前的M2 Pro/Max/Ultra设备相同，但需要额外约140行YAML和Device Tree新增内容才能完成适配。 补丁揭示了M3 Ultra的一项特殊设计。由于M3 Ultra的NAND闪存芯片连接在其第二颗芯片裸片上，其NVMe设备节点需要使用专门的t6031-nvme.dtsi文件进行描述。 对于希望现在就在M3 Mac上运行Linux的用户，建议使用最新的下游Asahi Linux版本以提前获得支持。 Asahi Linux此前已于9月初宣布正式支持M3系列芯片，基础NVMe读写功能可用，但GPU加速仍需等待。",
+      [
+        "快科技9月26日消息，据报道，开发者Janne Grunau近日向Linux内核邮件列表提交了由七个补丁组成的系列，为所有基于Apple M3的SoC（系统级芯片）启用NVMe固态硬盘支持。",
+        "此次补丁覆盖M3、M3 Pro、M3 Max及M3 Ultra全系设备。M3系列的NVMe控制器工作方式与此前的M2 Pro/Max/Ultra设备相同，但需要额外约140行YAML和Device Tree新增内容才能完成适配。",
+        "补丁揭示了M3 Ultra的一项特殊设计。由于M3 Ultra的NAND闪存芯片连接在其第二颗芯片裸片上，其NVMe设备节点需要使用专门的t6031-nvme.dtsi文件进行描述。",
+        "考虑到时间安排，这组补丁仍有望赶上10月的Linux 7.4合并窗口。目前补丁已在Linux内核邮件列表开放评审。",
+        "对于希望现在就在M3 Mac上运行Linux的用户，建议使用最新的下游Asahi Linux版本以提前获得支持。Asahi Linux此前已于9月初宣布正式支持M3系列芯片，基础NVMe读写功能可用，但GPU加速仍需等待。",
+        "这组补丁是Apple Silicon Linux生态上游化工作的最新进展，为M3 Mac用户最终在主线内核中获得完整NVMe支持铺平了道路。"
+      ]
+    ]
+  },
+  "7dc63ad7d33792857ffee041": {
+    "evidence": {
+      "article_id": "7dc63ad7d33792857ffee041",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果 tvOS 27 隐藏音频选项曝光，Apple TV 史努比屏保要“发声”了",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/26 9:57:01",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/26 9:57:01",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T01:57:01+00:00",
+      "raw_lead": "消息源 @itspdfu 今天（9 月 26 日）在 X 平台发布推文，通过挖掘 tvOS 27 系统代码，发现苹果公司正在为 Apple TV 的史努比屏幕保护程序准备音效。",
+      "source": "IT之家",
+      "title": "苹果 tvOS 27 隐藏音频选项曝光，Apple TV 史努比屏保要“发声”了",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 26 日消息，消息源 @itspdfu 今天（9 月 26 日）在 X 平台发布推文，通过挖掘 tvOS 27 系统代码，发现苹果公司正在为 Apple TV 的史努比屏幕保护程序准备音效。",
+          "unit_id": "2e10595d5126429ee5c88bc2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "在音效设置方面，消息源称苹果 tvOS 27 已预设开启、关闭、降低三个音频控制，用户可在设置中自主调节，避免音效干扰观影或休息。不过现阶段暂未发现音频文件。",
+          "unit_id": "1457e515c05b5975c9288622"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "该功能预计随 10 月苹果硬件发布会同步推出，届时可能伴随新款 Apple TV 4K 机型发布。IT之家附上相关截图如下：",
+          "unit_id": "c7d71150ac6ad1c92445be71"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/299.htm"
+    },
+    "recorded_extraction": [
+      "苹果 tvOS 27 隐藏音频选项曝光，Apple TV 史努比屏保要“发声”了",
+      "消息源 @itspdfu 今天（9 月 26 日）在 X 平台发布推文，通过挖掘 tvOS 27 系统代码，发现苹果公司正在为 Apple TV 的史努比屏幕保护程序准备音效。 IT之家 9 月 26 日消息，消息源 @itspdfu 今天（9 月 26 日）在 X 平台发布推文， 通过挖掘 tvOS 27 系统代码，发现苹果公司正在为 Apple TV 的史努比屏幕保护程序准备音效。 在音效设置方面，消息源称苹果 tvOS 27 已预设开启、关闭、降低三个音频控制，用户可在设置中自主调节，避免音效干扰观影或休息。不过现阶段暂未发现音频文件。 该功能预计随 10 月苹果硬件发布会同步推出，届时可能伴随新款 Apple TV 4K 机型发布。IT之家附上相关截图如下：",
+      [
+        "IT之家 9 月 26 日消息，消息源 @itspdfu 今天（9 月 26 日）在 X 平台发布推文，通过挖掘 tvOS 27 系统代码，发现苹果公司正在为 Apple TV 的史努比屏幕保护程序准备音效。",
+        "在音效设置方面，消息源称苹果 tvOS 27 已预设开启、关闭、降低三个音频控制，用户可在设置中自主调节，避免音效干扰观影或休息。不过现阶段暂未发现音频文件。",
+        "该功能预计随 10 月苹果硬件发布会同步推出，届时可能伴随新款 Apple TV 4K 机型发布。IT之家附上相关截图如下："
+      ]
+    ]
+  },
+  "8aad52c76a42a6f14056ca74": {
+    "evidence": {
+      "article_id": "8aad52c76a42a6f14056ca74",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果公开iPhone 18 Pro、AirPods 5等产品设计图：不怕第三方仿造！",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26 23:57:00",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26 23:57:00",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T15:57:00+00:00",
+      "raw_lead": "快科技9月26日消息，苹果近期悄悄更新了官方公开页面，专门新增展示了iPhone 18 Pro、iPhone 18 Pro Max、AirPods 5、Apple Watch Series 12、Apple Watch Ultra 4多款新品的立体尺寸图纸，所有",
+      "source": "快科技",
+      "title": "苹果公开iPhone 18 Pro、AirPods 5等产品设计图：不怕第三方仿造！",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月26日消息，苹果近期悄悄更新了官方公开页面，专门新增展示了iPhone 18 Pro、iPhone 18 Pro Max、AirPods 5、Apple Watch Series 12、Apple Watch Ultra 4多款新品的立体尺寸图纸，所有参数标注得十分清晰。",
+          "unit_id": "94c3b0ccf83aa80152d49f5b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这份面向全行业开放的3D尺寸资源库，最核心的服务对象是全球各类苹果第三方配件制造商，方便他们提前适配对应新品的保护壳、贴膜等周边产品，同时也吸引了不少对消费电子硬件、工业设计感兴趣的普通爱好者自行下载研究。",
+          "unit_id": "a461a2b3577422478ea03c3c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "其实早于iPhone 18 Pro系列正式发布的阶段，位于印度的苹果代工厂就已经意外泄漏了新品几乎全部的外观设计图纸，但哪怕手握全球配套效率最高的中国手机全产业链资源，整个行业所有人都心知肚明，根本不可能赶在苹果官方正式发售之前造出体验能和正版对标的复刻真机。",
+          "unit_id": "596013646f308ba8e7a1c8cc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "深耕消费电子行业多年的资深从业者直接点出，想要1比1复刻出体验层面能媲美正版的iPhone 18 Pro，横亘在所有山寨厂商面前的是两道至今无人可以逾越的硬核技术壁垒，没有任何取巧的空间。",
+          "unit_id": "ccd8e36cd42183a59ac6e532"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "第一道无法突破的壁垒是苹果完全自研的A系列芯片，它的核心架构设计、专属配套驱动逻辑，再加上当前最顶尖的2nm先进生产工艺全链路都对外严格封锁，不管是公开流通市场还是灰色产业链，都没有任何渠道能获取到完整的、可落地量产的成熟方案。",
+          "unit_id": "364d4bef6af15a167dd6840f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "第二道几乎不可能绕开的壁垒是完全闭环的iOS操作系统，系统底层设置了多层级的加密校验机制，和每台设备独有的硬件序列号深度绑定，这套已经成熟运行了十几年的安全体系，至今没有出现过能完全绕过全部校验的公开破解方案。",
+          "unit_id": "6f6d53f711198691703239a0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "目前华强北的山寨厂商靠着提前流出的泄露资料，最多只能产出外观高度还原的山寨机，这类设备大多搭载了深度修改UI界面的定制版安卓系统，实际性能、系统流畅度以及和苹果全生态联动的使用体验，和正版iPhone存在天壤之别。这类仿造产品完全无法接入苹果官方服务体系，自然也不可能享受任何官方的售后保修权益。",
+          "unit_id": "a36dd5adb6877f6ee1d2211e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "哪怕外界把外观层面的所有参数全部吃透，也没有办法快速做出体验对标的仿造旗舰，这类深耕多年积累下来的技术壁垒，恰恰是苹果产品能长期拉开差异化优势的核心竞争力，靠堆砌普通供应链资源是根本抄不走的。",
+          "unit_id": "1d982e13a9f9c521be6742f6"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154089.htm"
+    },
+    "recorded_extraction": [
+      "苹果公开iPhone 18 Pro、AirPods 5等产品设计图：不怕第三方仿造！",
+      "快科技9月26日消息，苹果近期悄悄更新了官方公开页面，专门新增展示了iPhone 18 Pro、iPhone 18 Pro Max、AirPods 5、Apple Watch Series 12、Apple Watch Ultra 4多款新品的立体尺寸图纸，所有 快科技9月26日消息，苹果近期悄悄更新了官方公开 页面 ，专门新增展示了iPhone 18 Pro、iPhone 18 Pro Max、AirPods 5、Apple Watch Series 12、Apple Watch Ultra 4多款新品的立体尺寸图纸，所有参数标注得十分清晰。 这份面向全行业开放的3D尺寸资源库，最核心的服务对象是全球各类苹果第三方配件制造商，方便他们提前适配对应新品的保护壳、贴膜等周边产品，同时也吸引了不少对消费电子硬件、工业设计感兴趣的普通爱好者自行下载研究。 其实早于iPhone 18 Pro系列正式发布的阶段，位于印度的苹果代工厂就已经意外泄漏了新品几乎全部的外观设计图纸，但哪怕手握全球配套效率最高的中国手机全产业链资源，整个行业所有人都心知肚明，根本不可能赶在苹果官方正式发售之前造出体验能和正版对标的复刻真机。 深耕消费电子行业多年的资深从业者直接点出，想要1比1复刻出体验层面能媲美正版的iPhone 18 Pro，横亘在所有山寨厂商面前的是两道至今无人可以逾越的硬核技术壁垒，没有任何取巧的空间。",
+      [
+        "快科技9月26日消息，苹果近期悄悄更新了官方公开页面，专门新增展示了iPhone 18 Pro、iPhone 18 Pro Max、AirPods 5、Apple Watch Series 12、Apple Watch Ultra 4多款新品的立体尺寸图纸，所有参数标注得十分清晰。",
+        "这份面向全行业开放的3D尺寸资源库，最核心的服务对象是全球各类苹果第三方配件制造商，方便他们提前适配对应新品的保护壳、贴膜等周边产品，同时也吸引了不少对消费电子硬件、工业设计感兴趣的普通爱好者自行下载研究。",
+        "其实早于iPhone 18 Pro系列正式发布的阶段，位于印度的苹果代工厂就已经意外泄漏了新品几乎全部的外观设计图纸，但哪怕手握全球配套效率最高的中国手机全产业链资源，整个行业所有人都心知肚明，根本不可能赶在苹果官方正式发售之前造出体验能和正版对标的复刻真机。",
+        "深耕消费电子行业多年的资深从业者直接点出，想要1比1复刻出体验层面能媲美正版的iPhone 18 Pro，横亘在所有山寨厂商面前的是两道至今无人可以逾越的硬核技术壁垒，没有任何取巧的空间。",
+        "第一道无法突破的壁垒是苹果完全自研的A系列芯片，它的核心架构设计、专属配套驱动逻辑，再加上当前最顶尖的2nm先进生产工艺全链路都对外严格封锁，不管是公开流通市场还是灰色产业链，都没有任何渠道能获取到完整的、可落地量产的成熟方案。"
+      ]
+    ]
+  },
+  "3ecbca15cbf1567c6ddd8fd3": {
+    "evidence": {
+      "article_id": "3ecbca15cbf1567c6ddd8fd3",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果首款折叠 iPhone Duo 左手操作视频曝光，操作者称“体验还不错”",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/26 9:32:25",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/26 9:32:25",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T01:32:25+00:00",
+      "raw_lead": "科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，分享了一段 Instagram 用户 Tom Hitchins 发布的视频，展示了苹果首款折叠 iPhone Duo 的左手操作体验。",
+      "source": "IT之家",
+      "title": "苹果首款折叠 iPhone Duo 左手操作视频曝光，操作者称“体验还不错”",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 26 日消息，科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，分享了一段 Instagram 用户 Tom Hitchins 发布的视频，展示了苹果首款折叠 iPhone Duo 的左手操作体验。",
+          "unit_id": "3da934e2368553e24aba9990"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "该媒体指出，苹果 iPhone Duo 在折叠状态下，设备左侧配有铰链，外屏应用程序的 Dock 位于屏幕右侧，现阶段官方支持文档并未明确显示可以将应用 Dock 挪到左侧。",
+          "unit_id": "2891ce8e86659d7e2dbcb256"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在最新分享的视频中，Hitchins（他本人惯常使用右手）以左撇子视角体验 iPhone Duo，并称左手操作“体验还不错”。IT之家附上相关视频如下：",
+          "unit_id": "9929584c875de933cffc30f0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Hitchins 表示他左手单手可以触碰到 iPhone Duo 右侧的应用 Dock，不过由于每个人的手掌大小都不同，所以用户只有在苹果商店亲自试用后，才能确定是否适合自己。",
+          "unit_id": "7c20caa5669ea65db1335052"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "该媒体还指出部分右手用户习惯用左手操作 iPhone，以便腾出惯用手。对于这类用户，iPhone Duo 的右手操作方式同样可能需要适应。",
+          "unit_id": "a394f35dc1725bd42ba4ec17"
+        }
+      ],
+      "url": "https://www.ithome.com/1/007/292.htm"
+    },
+    "recorded_extraction": [
+      "苹果首款折叠 iPhone Duo 左手操作视频曝光，操作者称“体验还不错”",
+      "科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，分享了一段 Instagram 用户 Tom Hitchins 发布的视频，展示了苹果首款折叠 iPhone Duo 的左手操作体验。 IT之家 9 月 26 日消息，科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，分享了一段 Instagram 用户 Tom Hitchins 发布的视频， 展示了苹果首款折叠 iPhone Duo 的左手操作体验。 该媒体指出，苹果 iPhone Duo 在折叠状态下，设备左侧配有铰链，外屏应用程序的 Dock 位于屏幕右侧，现阶段官方支持文档并未明确显示可以将应用 Dock 挪到左侧。 在最新分享的视频中，Hitchins（他本人惯常使用右手）以左撇子视角体验 iPhone Duo ，并称左手操作“体验还不错”。IT之家附上相关视频如下： Hitchins 表示他左手单手可以触碰到 iPhone Duo 右侧的应用 Dock，不过由于每个人的手掌大小都不同，所以用户只有在苹果商店亲自试用后，才能确定是否适合自己。",
+      [
+        "IT之家 9 月 26 日消息，科技媒体 9to5Mac 昨日（9 月 25 日）发布博文，分享了一段 Instagram 用户 Tom Hitchins 发布的视频，展示了苹果首款折叠 iPhone Duo 的左手操作体验。",
+        "该媒体指出，苹果 iPhone Duo 在折叠状态下，设备左侧配有铰链，外屏应用程序的 Dock 位于屏幕右侧，现阶段官方支持文档并未明确显示可以将应用 Dock 挪到左侧。"
+      ]
+    ]
+  },
+  "ba2db18dc8ca71b6d03c7f90": {
+    "evidence": {
+      "article_id": "ba2db18dc8ca71b6d03c7f90",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "两款1.4nm工艺巅峰对决：Intel首次明确14A与台积电A14差距在5%以内",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26 17:45:39",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26 17:45:39",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T09:45:39+00:00",
+      "raw_lead": "快科技9月26日消息，18A工艺量产之后，Intel在先进工艺上赶超的信心越来越足，下一代的1.4nm节点上，Intel的14A工艺明年上半年就会风险试产，2028年量产时间甚至比台积电A14还要早。进度追赶上",
+      "source": "快科技",
+      "title": "两款1.4nm工艺巅峰对决：Intel首次明确14A与台积电A14差距在5%以内",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月26日消息，18A工艺量产之后，Intel在先进工艺上赶超的信心越来越足，下一代的1.4nm节点上，Intel的14A工艺明年上半年就会风险试产，2028年量产时间甚至比台积电A14还要早。",
+          "unit_id": "a38b4b72c0b34cf92b3b1613"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "进度追赶上来了，关键还要看两家工艺的性能水平，Intle代工首席技术与运营官兼总经理Naga Chandrasekaran告诉投资银行KeyBanc说，14A（1.4nm）工艺技术预计性能对比台积电的A14（1.4nm）生产节点将在“5%以内”（ within 5%）。",
+          "unit_id": "3ae60fd714eb6eb5174349e7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Intel高管这番表态很高明，within 5%可以理解为比对手高5%，也有可能是比对手低5%，此番话公关水平Max，但这算是Intel首次公开14A与A14工艺的性能指标。",
+          "unit_id": "8b7bec86b88407f7ed7ab63a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "那具体情况如何呢？TH网站根据Intel、台积电之前对于14A、A14工艺的性能、功耗官方描述，以18A工艺的Core Ultra X9 388H的5.1GHz、N2工艺的EPYC 9586F的5.0GHz、N2工艺的苹果M6处理器的4.78GHz为基准，做了一番推演，具体如下所示：",
+          "unit_id": "67a04ecde092b992343c4359"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "根据不同的预设情况，Intel的14A工艺未来频率在5.9到6.1GHz之间，台积电的A14工艺频率在5.2、5.5到5.75GHz，显示14A工艺未来在性能上实际优势在6.5到16.2%之间，哪怕是用最糟糕的组合来算，性能优势也远超官方所说的5%。",
+          "unit_id": "4ece45814b47fd0ed6328429"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "不过这个推演也就看看，工艺水平上的性能不单单是频率这么简单，影响频率的也不只是工艺，还有CPU的架构等，变量有好多个，所以TH现在的测算跟最终结果偏差很多，如果是拿具体工艺的晶体管开关速度来比更有参考性，只不过这些指标要么没明确公布，要么条件不统一，没法量化计算。",
+          "unit_id": "cfa7fed087fcc5cbf24c79d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "无论是Intel的14A工艺高于或者低于台积电A14工艺，5%的差距都意味着两者在工艺水平基本一致，客户不会简单因为Intel高了5%的性能就转单给Intel，也不会因为Intel差了5%就不考虑，关键的还是要看两家公司的良率、产能、代工报价等，这些因素才是决定订单归属的关键。",
+          "unit_id": "e40b142c42eb58001051f8d1"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154053.htm"
+    },
+    "recorded_extraction": [
+      "两款1.4nm工艺巅峰对决：Intel首次明确14A与台积电A14差距在5%以内",
+      "快科技9月26日消息，18A工艺量产之后，Intel在先进工艺上赶超的信心越来越足，下一代的1.4nm节点上，Intel的14A工艺明年上半年就会风险试产，2028年量产时间甚至比台积电A14还要早。进度追赶上 快科技9月26日消息，18A工艺量产之后，Intel在先进工艺上赶超的信心越来越足，下一代的1.4nm节点上，Intel的14A工艺明年上半年就会风险试产，2028年量产时间甚至比台积电A14还要早。 进度追赶上来了，关键还要看两家工艺的性能水平，Intle代工首席技术与运营官兼总经理Naga Chandrasekaran告诉投资银行KeyBanc说， 14A（1.4nm）工艺技术预计性能对比台积电的A14（1.4nm）生产节点将在“5%以内”（ within 5%）。 Intel高管这番表态很高明，within 5%可以理解为比对手高5%，也有可能是比对手低5%，此番话公关水平Max，但这算是Intel首次公开14A与A14工艺的性能指标。 那具体情况如何呢？TH网站根据Intel、台积电之前对于14A、A14工艺的性能、功耗官方描述，以18A工艺的Core Ultra X9 388H的5.1GHz、N2工艺的EPYC 9586F的5.0GHz、N2工艺的苹果M6处理器的4.78GHz为基准，做了一番推演，具体如下所示：",
+      [
+        "快科技9月26日消息，18A工艺量产之后，Intel在先进工艺上赶超的信心越来越足，下一代的1.4nm节点上，Intel的14A工艺明年上半年就会风险试产，2028年量产时间甚至比台积电A14还要早。",
+        "进度追赶上来了，关键还要看两家工艺的性能水平，Intle代工首席技术与运营官兼总经理Naga Chandrasekaran告诉投资银行KeyBanc说，14A（1.4nm）工艺技术预计性能对比台积电的A14（1.4nm）生产节点将在“5%以内”（ within 5%）。",
+        "Intel高管这番表态很高明，within 5%可以理解为比对手高5%，也有可能是比对手低5%，此番话公关水平Max，但这算是Intel首次公开14A与A14工艺的性能指标。",
+        "那具体情况如何呢？TH网站根据Intel、台积电之前对于14A、A14工艺的性能、功耗官方描述，以18A工艺的Core Ultra X9 388H的5.1GHz、N2工艺的EPYC 9586F的5.0GHz、N2工艺的苹果M6处理器的4.78GHz为基准，做了一番推演，具体如下所示：",
+        "根据不同的预设情况，Intel的14A工艺未来频率在5.9到6.1GHz之间，台积电的A14工艺频率在5.2、5.5到5.75GHz，显示14A工艺未来在性能上实际优势在6.5到16.2%之间，哪怕是用最糟糕的组合来算，性能优势也远超官方所说的5%。",
+        "无论是Intel的14A工艺高于或者低于台积电A14工艺，5%的差距都意味着两者在工艺水平基本一致，客户不会简单因为Intel高了5%的性能就转单给Intel，也不会因为Intel差了5%就不考虑，关键的还是要看两家公司的良率、产能、代工报价等，这些因素才是决定订单归属的关键。"
+      ]
+    ]
+  },
+  "7df296003a68264461be68c5": {
+    "evidence": {
+      "article_id": "7df296003a68264461be68c5",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "x86都做不到的优势：苹果Mac电脑2TB内存可跑1.6万亿参数AI",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26 16:36:24",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26 16:36:24",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T08:36:24+00:00",
+      "raw_lead": "快科技9月26日消息，在AI时代苹果的Mac电脑异军突起，很多人都在买Mac Mini当AI主机，还能跑一些本地大模型，如果是高端的Mac电脑，甚至可以集群跑1.6万亿参数的AI。在对IT部门的内部Jamf用户",
+      "source": "快科技",
+      "title": "x86都做不到的优势：苹果Mac电脑2TB内存可跑1.6万亿参数AI",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月26日消息，在AI时代苹果的Mac电脑异军突起，很多人都在买Mac Mini当AI主机，还能跑一些本地大模型，如果是高端的Mac电脑，甚至可以集群跑1.6万亿参数的AI。",
+          "unit_id": "47991e57eaedc7c219c8c1bd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "在对IT部门的内部Jamf用户大会，苹果官方公布了一系列数据介绍了自家的产品线对本地AI的支持能力，其中iPhone/iPad最高能跑140亿参数的本地AI，Mac Mini最高能跑700亿参数的本地AI，MacBook Pro能跑1200亿参数的。",
+          "unit_id": "2ac79d267a34871a579c7225"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "到了Mac Studio这种工作站级电脑上，能跑4800亿参数的本地AI，四台Mac Stuido集群甚至能跑1.6万亿参数的本地AI——1.6万亿这个级别正好是DeepSeek V4 Pro的规模，也就是说只要4台Mac Studio就能本地运行了，而不是需要动辄投资几百万的大型服务器集群才能跑。",
+          "unit_id": "a98a64587d47a9f86a231a1a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "这里面的关键就在于苹果的内存，虽然是内存容量决定了能跑本地AI的参数规模，但苹果这几年转向了统一内存架构，CPU、GPU可以真正共享内存系统，才是跑本地AI的关键优势。",
+          "unit_id": "0102c65afd81f74dbc3b6172"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "这个优势还是x86平台暂时不具备的，哪怕x86处理器的PC也能配置128GB内存，甚至AMD做到了192GB内存，但本地AI这方面依然是Mac电脑的优势所在。",
+          "unit_id": "757a1a5076c5d8d46c59c389"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "因为苹果的A/M系处理器现在不仅是统一内存，还是芯片级统一封装，因此带宽上极为强悍，Ultra级别的M处理器可以做到1.2TB/s，x86 PC就算用了256bit LPDDR5X-8000内存，带宽也就256GB/s，差距极大，跑AI的效率是没法比的。",
+          "unit_id": "3a6ebb24cd0c4333759c2d64"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "X86 PC阵营中有所突破的也就是AMD的锐龙AI Max处理器，也就是Strix Halo这一代开始的，内存倒也是共享的，也能跑千亿级别的本地大模型了，只不过效率是比不过Mac电脑。",
+          "unit_id": "f6ca2d8a199065e936b74937"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "接下来有望破局的还是NVIDIA的RTX Spark产品线，将RTX 5070级别的GPU核心整合到了CPU中，但它的CPU架构又是ARM阵营的，这又要看微软能不能优化好ARM版Win系统了。",
+          "unit_id": "22f94ad408dd430f94ef08c1"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154046.htm"
+    },
+    "recorded_extraction": [
+      "x86都做不到的优势：苹果Mac电脑2TB内存可跑1.6万亿参数AI",
+      "快科技9月26日消息，在AI时代苹果的Mac电脑异军突起，很多人都在买Mac Mini当AI主机，还能跑一些本地大模型，如果是高端的Mac电脑，甚至可以集群跑1.6万亿参数的AI。在对IT部门的内部Jamf用户 快科技9月26日消息，在AI时代苹果的Mac电脑异军突起，很多人都在买Mac Mini当AI主机，还能跑一些本地大模型，如果是高端的Mac电脑，甚至可以集群跑1.6万亿参数的AI。 在对IT部门的内部Jamf用户大会，苹果官方公布了一系列数据介绍了自家的产品线对本地AI的支持能力，其中iPhone/iPad最高能跑140亿参数的本地AI，Mac Mini最高能跑700亿参数的本地AI，MacBook Pro能跑1200亿参数的。 到了Mac Studio这种工作站级电脑上，能跑4800亿参数的本地AI， 四台Mac Stuido集群甚至能跑1.6万亿参数的本地AI——1.6万亿这个级别正好是DeepSeek V4 Pro的规模 ，也就是说只要4台Mac Studio就能本地运行了，而不是需要动辄投资几百万的大型服务器集群才能跑。 这里面的关键就在于苹果的内存，虽然是内存容量决定了能跑本地AI的参数规模，但苹果这几年转向了统一内存架构，CPU、GPU可以真正共享内存系统，才是跑本地AI的关键优势。",
+      [
+        "快科技9月26日消息，在AI时代苹果的Mac电脑异军突起，很多人都在买Mac Mini当AI主机，还能跑一些本地大模型，如果是高端的Mac电脑，甚至可以集群跑1.6万亿参数的AI。",
+        "在对IT部门的内部Jamf用户大会，苹果官方公布了一系列数据介绍了自家的产品线对本地AI的支持能力，其中iPhone/iPad最高能跑140亿参数的本地AI，Mac Mini最高能跑700亿参数的本地AI，MacBook Pro能跑1200亿参数的。",
+        "到了Mac Studio这种工作站级电脑上，能跑4800亿参数的本地AI，四台Mac Stuido集群甚至能跑1.6万亿参数的本地AI——1.6万亿这个级别正好是DeepSeek V4 Pro的规模，也就是说只要4台Mac Studio就能本地运行了，而不是需要动辄投资几百万的大型服务器集群才能跑。",
+        "这个优势还是x86平台暂时不具备的，哪怕x86处理器的PC也能配置128GB内存，甚至AMD做到了192GB内存，但本地AI这方面依然是Mac电脑的优势所在。",
+        "因为苹果的A/M系处理器现在不仅是统一内存，还是芯片级统一封装，因此带宽上极为强悍，Ultra级别的M处理器可以做到1.2TB/s，x86 PC就算用了256bit LPDDR5X-8000内存，带宽也就256GB/s，差距极大，跑AI的效率是没法比的。",
+        "X86 PC阵营中有所突破的也就是AMD的锐龙AI Max处理器，也就是Strix Halo这一代开始的，内存倒也是共享的，也能跑千亿级别的本地大模型了，只不过效率是比不过Mac电脑。",
+        "接下来有望破局的还是NVIDIA的RTX Spark产品线，将RTX 5070级别的GPU核心整合到了CPU中，但它的CPU架构又是ARM阵营的，这又要看微软能不能优化好ARM版Win系统了。"
+      ]
+    ]
+  },
+  "4ac33692f339e227f3e38640": {
+    "evidence": {
+      "article_id": "4ac33692f339e227f3e38640",
+      "confidence": "detail",
+      "content_form": "hands_on",
+      "discovery_lead": "",
+      "discovery_title": "王自如上手iPhone18 Pro系列：真心劝大家 最好不要换",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-26 15:41:20",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-26 15:41:20",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-26T07:41:20+00:00",
+      "raw_lead": "快科技9月26日消息，9月25日晚间，博主王自如发布iPhone18 Pro系列上手体验视频，从产品体验与商业战略维度，深度解读苹果今年的新品节奏与市场布局。他直言，今年的iPhone18 Pro系列属于典型",
+      "source": "快科技",
+      "title": "王自如上手iPhone18 Pro系列：真心劝大家 最好不要换",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月26日消息，9月25日晚间，博主王自如发布iPhone18 Pro系列上手体验视频，从产品体验与商业战略维度，深度解读苹果今年的新品节奏与市场布局。",
+          "unit_id": "1f3d95cb876a865ee9d46b64"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "他直言，今年的iPhone18 Pro系列属于典型的产品小年，整体升级幅度有限，普通用户无需换机，新机更多是苹果商业策略驱动下的产物，而非颠覆性产品迭代。",
+          "unit_id": "581873b2430e8d147dc182ac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "王自如表示，iPhone产品线有大年、小年之分。产品大年通常伴随机身ID重大改动、核心功能重构或全新功能落地；",
+          "unit_id": "4b0acc6633cef1cc9b4c8e40"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "而小年的核心特征为外观ID延续上代设计，仅在性能、影像、软件层面进行小幅增量升级，今年的iPhone18 Pro正是标准的小年机型。",
+          "unit_id": "089b00966c76a35a764f5614"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "基于此，他给出明确购机建议：无论用户手持iPhone17 Pro或更早的旧款机型，最好不要换，新机不仅售价上调，综合升级体验也无法匹配溢价成本，且无全新外观设计加持，无法带来社交价值增益。",
+          "unit_id": "1b6388e77d275b02e139acca"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在产品硬件与体验层面，iPhone18 Pro整体迭代保守，核心升级针对性极强，普通用户感知微弱。",
+          "unit_id": "4373729efd8e4a6d6be0b2c4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "外观与结构上，iPhone17系列完成了一次关键性ID革新，彻底解决iPhone16、iPhone15系列饱受诟病的通信、散热、续航三大痛点。",
+          "unit_id": "819aeaa6bd1f5700c3c7066a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "其通过更换铝合金中框、抬高机身摄像模组Deco的设计，降低金属屏蔽效应、优化机身内部空间，大幅改善信号表现并扩容电池。而iPhone18 Pro完全沿用该套设计与材质方案，无任何结构性优化。",
+          "unit_id": "cc1449af93d1e3a4170e21b1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "质感层面，iPhone16系列的钛合金中框+玻璃背板组合，具备更强的金属质感与机身致密感，上手高级感突出。",
+          "unit_id": "c57ad1d8820fe74fc9145276"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "iPhone17 Pro、iPhone18 Pro换装阳极氧化磨砂铝合金材质后，机身一体性与金属质感有所弱化。",
+          "unit_id": "aaa7378f298afe33ab8fbbcf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "在王自如看来，这一定程度上属于材质体验的倒退，苹果此举核心是沿用成熟工艺实现降本增效，该套机身设计或将持续沿用三至四代机型，小年机型仅依靠全新配色制造时尚话题度。",
+          "unit_id": "3e2310f6981d1140e90b74f4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "性能与续航方面，iPhone18 Pro搭载两纳米工艺A12 Pro芯片，搭配扩容电池，续航与持续性能输出相较上代小幅提升。",
+          "unit_id": "ff711d58840b181c702bc910"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "实测数据显示，iPhone18 Pro标准版续航基本持平iPhone17 Pro Max，iPhone18 Pro Max续航略有领先，游戏高负载场景下的掉电控制、性能稳定性略有优化，但整体提升幅度有限，不足以支撑新机溢价。",
+          "unit_id": "f15fc0daffd3180f026285e5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "该机最大的硬件升级为内存性能，内存带宽、吞吐速度、延迟表现提升超50%，但这一升级并非服务普通日常使用，而是为苹果端侧AI大模型做前置布局。",
+          "unit_id": "c0c874c8e36704180a4566fa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "AI推理运行高度依赖内存吞吐能力，此次内存升级核心是提升设备AI响应速度与模型运行效率。",
+          "unit_id": "782a98558f01f24a14f24367"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "不过对于国行用户而言，苹果原生AI功能无法使用，这项核心升级几乎没有实际价值，仅能小幅提升APP启动、超大视频导出等小众场景的速度，体验提升微乎其微。",
+          "unit_id": "aa77011bb67e196a9ada2126"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "影像方面，iPhone18 Pro新增的可变光圈功能技术含金量与工程难度极高，能够规避计算摄影的算法浮动问题，通过物理光圈还原真实成像效果。",
+          "unit_id": "6531f3359f454758e976da50"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "但王自如认为，该功能属于典型的高感知、低频次、低价值升级，99%的普通用户无法发挥其专业价值，日常拍摄中感知不到明显提升，仅适合专业创作人群，对大众用户的实际体验增益极低。",
+          "unit_id": "6ea510801effe5d5b716608c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "综合来看，今年iPhone18 Pro的各项升级，几乎没有同时满足高频使用、高体验价值、高感知度的核心亮点，产品力迭代十分有限。",
+          "unit_id": "cda9a4b3dd2e860a8d7faad3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "相较于保守的产品升级，苹果今年的新品发布节奏展现出极强的商业属性，是典型的商业驱动型布局，而非产品驱动迭代。",
+          "unit_id": "a2de55b1c628e25909edccd5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "今年秋季发布会，苹果仅推出iPhone18 Pro系列与iPhone Duo折叠屏机型，传统的标准版、Air机型延后至明年上半年发布，人为打造上下半年双换机潮。",
+          "unit_id": "e983f0442f48ff1a99050f3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "当前智能手机市场增量见顶、竞争白热化，苹果此举意在盘活全年销量。过往苹果上半年仅推出SE、慈善特别版等小众机型，对销量拉动作用微弱。",
+          "unit_id": "38ff00441979874a5cf1e0af"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "而标准版、Air机型是iPhone产品线中出货量最大的品类，将其挪至上半年发布，可精准承接上半年换机需求，搭配下半年Pro系列、折叠屏机型，形成全年两轮稳定的销售曲线。",
+          "unit_id": "c43d3e83ef002f4eff642ad1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "同时，错峰发布可有效规避多款新机同期上市带来的用户决策混淆，避免消费者在标准版、Air、Pro机型之间纠结观望，减少用户流失。",
+          "unit_id": "35368c3a987f2444865f8322"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "核心目的是精准锁定市场中间摇摆人群，简化消费决策、提升换机转化率，最大化挖掘市场销量潜力。",
+          "unit_id": "137907c336512736360570fe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "王自如补充称，苹果的商业布局极具前瞻性与稳健性。iPhone17系列上市后，凭借出色的SoC性能、高刷屏、整机配置与品牌溢价，产品力足以支撑半年以上的市场竞争力，Air机型发布一年后依旧具备行业领先优势，这也为新机错峰发布、拉长产品销售周期提供了基础条件。",
+          "unit_id": "3d77a6d4118e5855c49cd1d8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "这种精准研判产品生命周期、灵活调整发布节奏的策略，是苹果长期以来的核心商业优势。",
+          "unit_id": "f91a4fc86a1c81e52305468b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "定价策略上，在全球内存涨价的行业背景下，iPhone18 Pro系列小幅涨价100至150美金，涨价幅度十分克制，精准拿捏用户换机价格阈值，在平衡成本压力、保障利润的同时，最大程度降低用户的换机抵触情绪。",
+          "unit_id": "864df7e16c2f79d573697542"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154039.htm"
+    },
+    "recorded_extraction": [
+      "王自如上手iPhone18 Pro系列：真心劝大家 最好不要换",
+      "快科技9月26日消息，9月25日晚间，博主王自如发布iPhone18 Pro系列上手体验视频，从产品体验与商业战略维度，深度解读苹果今年的新品节奏与市场布局。他直言，今年的iPhone18 Pro系列属于典型 快科技9月26日消息， 9月25日晚间，博主王自如发布iPhone18 Pro系列上手体验视频，从产品体验与商业战略维度，深度解读苹果今年的新品节奏与市场布局。 他直言，今年的iPhone18 Pro系列属于典型的产品小年，整体升级幅度有限，普通用户无需换机，新机更多是苹果商业策略驱动下的产物，而非颠覆性产品迭代。 而小年的核心特征为外观ID延续上代设计，仅在性能、影像、软件层面进行小幅增量升级，今年的iPhone18 Pro正是标准的小年机型。 基于此，他给出明确购机建议：无论用户手持iPhone17 Pro或更早的旧款机型，最好不要换，新机不仅售价上调，综合升级体验也无法匹配溢价成本，且无全新外观设计加持，无法带来社交价值增益。",
+      [
+        "快科技9月26日消息，9月25日晚间，博主王自如发布iPhone18 Pro系列上手体验视频，从产品体验与商业战略维度，深度解读苹果今年的新品节奏与市场布局。",
+        "他直言，今年的iPhone18 Pro系列属于典型的产品小年，整体升级幅度有限，普通用户无需换机，新机更多是苹果商业策略驱动下的产物，而非颠覆性产品迭代。",
+        "王自如表示，iPhone产品线有大年、小年之分。产品大年通常伴随机身ID重大改动、核心功能重构或全新功能落地；",
+        "而小年的核心特征为外观ID延续上代设计，仅在性能、影像、软件层面进行小幅增量升级，今年的iPhone18 Pro正是标准的小年机型。",
+        "基于此，他给出明确购机建议：无论用户手持iPhone17 Pro或更早的旧款机型，最好不要换，新机不仅售价上调，综合升级体验也无法匹配溢价成本，且无全新外观设计加持，无法带来社交价值增益。",
+        "在产品硬件与体验层面，iPhone18 Pro整体迭代保守，核心升级针对性极强，普通用户感知微弱。",
+        "外观与结构上，iPhone17系列完成了一次关键性ID革新，彻底解决iPhone16、iPhone15系列饱受诟病的通信、散热、续航三大痛点。",
+        "其通过更换铝合金中框、抬高机身摄像模组Deco的设计，降低金属屏蔽效应、优化机身内部空间，大幅改善信号表现并扩容电池。而iPhone18 Pro完全沿用该套设计与材质方案，无任何结构性优化。",
+        "质感层面，iPhone16系列的钛合金中框+玻璃背板组合，具备更强的金属质感与机身致密感，上手高级感突出。",
+        "iPhone17 Pro、iPhone18 Pro换装阳极氧化磨砂铝合金材质后，机身一体性与金属质感有所弱化。",
+        "性能与续航方面，iPhone18 Pro搭载两纳米工艺A12 Pro芯片，搭配扩容电池，续航与持续性能输出相较上代小幅提升。",
+        "实测数据显示，iPhone18 Pro标准版续航基本持平iPhone17 Pro Max，iPhone18 Pro Max续航略有领先，游戏高负载场景下的掉电控制、性能稳定性略有优化，但整体提升幅度有限，不足以支撑新机溢价。",
+        "该机最大的硬件升级为内存性能，内存带宽、吞吐速度、延迟表现提升超50%，但这一升级并非服务普通日常使用，而是为苹果端侧AI大模型做前置布局。",
+        "不过对于国行用户而言，苹果原生AI功能无法使用，这项核心升级几乎没有实际价值，仅能小幅提升APP启动、超大视频导出等小众场景的速度，体验提升微乎其微。",
+        "影像方面，iPhone18 Pro新增的可变光圈功能技术含金量与工程难度极高，能够规避计算摄影的算法浮动问题，通过物理光圈还原真实成像效果。",
+        "但王自如认为，该功能属于典型的高感知、低频次、低价值升级，99%的普通用户无法发挥其专业价值，日常拍摄中感知不到明显提升，仅适合专业创作人群，对大众用户的实际体验增益极低。",
+        "综合来看，今年iPhone18 Pro的各项升级，几乎没有同时满足高频使用、高体验价值、高感知度的核心亮点，产品力迭代十分有限。",
+        "今年秋季发布会，苹果仅推出iPhone18 Pro系列与iPhone Duo折叠屏机型，传统的标准版、Air机型延后至明年上半年发布，人为打造上下半年双换机潮。"
+      ]
+    ]
+  }
+}

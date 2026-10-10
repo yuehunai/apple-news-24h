@@ -168,7 +168,7 @@ class EventCampaignBoundaryTests(unittest.TestCase):
         localized_announcement = article_for(
             self.module,
             "苹果秋季新品发布会官宣定档 9 月 10 日",
-            "苹果宣布举行秋季发布会，中文主题为亮新篇，来耀眼。",
+            "苹果宣布将于北京时间9月10日举行秋季发布会，中文主题为亮新篇，来耀眼。",
             "IT之家",
         )
         production_hurdle = article_for(

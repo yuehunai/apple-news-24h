@@ -1,0 +1,682 @@
+{
+  "source_profiles": [
+    {
+      "id": "rc-current",
+      "article": {
+        "bound_claim": null,
+        "category": "",
+        "confidence": "detail",
+        "event_kind": "os_app",
+        "evidence": {
+          "article_id": "2a1b3aa224e7a45f155cdc27",
+          "confidence": "detail",
+          "content_form": "news",
+          "discovery_lead": "",
+          "discovery_title": "苹果 macOS 28 RC 更新日志：全新 Siri AI、界面更精致、体验更可靠",
+          "embedded_references": [],
+          "extraction_path": "detail",
+          "publication_candidates": [
+            {
+              "allows_date_only": false,
+              "raw": "2028/9/10 3:35:51",
+              "source": "body date pattern"
+            }
+          ],
+          "published_raw": "2028/9/10 3:35:51",
+          "published_source": "body date pattern",
+          "published_utc": "2028-09-09T19:35:51+00:00",
+          "raw_lead": "苹果今日向 Mac 电脑用户推送了 macOS 28.0 RC 更新（内部版本号：26A428），本次更新距离上次发布 Beta / RC 间隔 9 天，正式版将于 9 月 15 日发布。",
+          "source": "IT之家",
+          "title": "苹果 macOS 28 RC 更新日志：全新 Siri AI、界面更精致、体验更可靠",
+          "units": [
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 0,
+              "origin": "html",
+              "text": "IT之家 9 月 10 日消息，苹果今日向 Mac 电脑用户推送了 macOS 28.0 RC 更新（内部版本号：26A428），本次更新距离上次发布 Beta / RC 间隔 9 天，正式版将于 9 月 15 日发布。",
+              "unit_id": "d2d67a5ad9207f26d43e6780"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 1,
+              "origin": "html",
+              "text": "IT之家附上 macOS 28 RC 更新完整日志内容如下：",
+              "unit_id": "5eb00bc9d7a3720c54444803"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 2,
+              "origin": "html",
+              "text": "全新 Siri AI",
+              "unit_id": "9122b2b92f13d77227925106"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 3,
+              "origin": "html",
+              "text": "推出由 Apple Intelligence 驱动的全新 Siri AI。它更懂你、能力更强，也更适合自然对话。",
+              "unit_id": "8676b9915114d188c1a63b92"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 4,
+              "origin": "html",
+              "text": "Siri AI 已整合进聚焦搜索（Spotlight），用户可以直接在平时搜索文件、应用和内容的位置查询几乎任何主题的问题。它还能结合个人上下文，在“信息”、邮件、照片等内容中查找所需信息；只要提出请求，即可跨 App 完成相应操作。",
+              "unit_id": "ca139b6f76e7cb94ad3da3b1"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 5,
+              "origin": "html",
+              "text": "全新的独立 Siri App 可让你回顾并继续此前的对话记录，并通过 iCloud 在各台 Apple 设备之间同步。Siri AI 将分阶段向用户推出，可前往“设置”启用。",
+              "unit_id": "e43033f6441915f1326bc640"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 6,
+              "origin": "html",
+              "text": "根据屏幕内容操作",
+              "unit_id": "f9713f2b0d39ef95baae84fe"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 7,
+              "origin": "html",
+              "text": "借助视觉智能（Visual Intelligence），你可以选取屏幕上的一个窗口，让 Siri 回答与当前画面有关的问题，或直接执行操作，例如将画面中的活动添加到日历。",
+              "unit_id": "477e6eeaf354af41f35b905b"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 8,
+              "origin": "html",
+              "text": "可通过专属快捷键 Command-Shift-空格键 调出视觉智能。",
+              "unit_id": "a450d9acd101ea66195e3183"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 9,
+              "origin": "html",
+              "text": "更强大的照片编辑",
+              "unit_id": "2c3482d71fe8473eef8dac08"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 10,
+              "origin": "html",
+              "text": "智能照片编辑工具带来更多创作空间：",
+              "unit_id": "96d5f01ee4f73686400958e6"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 11,
+              "origin": "html",
+              "text": "使用“空间重构”可在拍摄完成后重新调整照片构图",
+              "unit_id": "e100d5764c99336bcdb0d690"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 12,
+              "origin": "html",
+              "text": "使用“扩展”工具可延展画面、扩大取景范围",
+              "unit_id": "f56923ae4e9db2e06c92ba33"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 13,
+              "origin": "html",
+              "text": "“清除”功能进一步提升，可更高质量地移除干扰元素，并在复杂场景中生成更自然、逼真的补全效果",
+              "unit_id": "ee5f85c3cd36e95af4091641"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 14,
+              "origin": "html",
+              "text": "Safari 浏览新工具",
+              "unit_id": "d33a46c37e89aded802257af"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 15,
+              "origin": "html",
+              "text": "Safari 可自动按主题归类标签页，让你更容易找到相关网页。",
+              "unit_id": "b10ba58c6348a6335682e3fd"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 16,
+              "origin": "html",
+              "text": "“通知我”（Notify Me）可持续监测网页变化，例如商品降价或恢复库存，并在适合采取行动时提醒你。“描述扩展”则支持用自然语言创建自定义 Safari 扩展，例如添加一个按钮，用于保存喜爱的食谱。",
+              "unit_id": "f3522370a23582038e95b929"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 17,
+              "origin": "html",
+              "text": "用自然语言创建快捷指令",
+              "unit_id": "242bed4d7de9e3aa235f41d7"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 18,
+              "origin": "html",
+              "text": "通过“描述快捷指令”，只需用一句话说明想自动完成的任务，系统便会为你组合所需的操作步骤。",
+              "unit_id": "444cfe7378fc9a0151ed17a2"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 19,
+              "origin": "html",
+              "text": "例如，你可以描述一个快捷指令：下班回家途中，根据实时路况自动向伴侣发送预计到达时间。",
+              "unit_id": "05b9897a3bda42b1e161d70f"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 20,
+              "origin": "html",
+              "text": "更精致的界面设计",
+              "unit_id": "f0cf27f5fbde3a17951b3366"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 21,
+              "origin": "html",
+              "text": "“液态玻璃”（Liquid Glass）视觉效果进一步优化，提升了文字与界面的可读性。",
+              "unit_id": "1891b0e39a3641bdda210d90"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 22,
+              "origin": "html",
+              "text": "新增滑块可调整其显示风格，从极高透明度到完全着色均可自定义。统一的工具栏、延伸至边缘的侧边栏，以及细节更丰富的 App 图标，也令整体界面更协调、更具质感。",
+              "unit_id": "ab951119a3634aec662bba45"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 23,
+              "origin": "html",
+              "text": "新增儿童安全功能",
+              "unit_id": "b801972ae025bf0113ea3187"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 24,
+              "origin": "html",
+              "text": "更完善的家长控制功能可帮助家长更方便地管理：孩子能看到哪些内容、能与谁联系，以及可在什么时间使用 App。",
+              "unit_id": "1fe1212b94b3b170d98447de"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 25,
+              "origin": "html",
+              "text": "浏览前请求许可：孩子首次在 Safari 打开新网站前，需先征得家长同意",
+              "unit_id": "ad243e092432822b8a734b59"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 26,
+              "origin": "html",
+              "text": "通信安全：扩大保护范围，帮助提升对话过程的安全性",
+              "unit_id": "b9aa9d78a23177170929c84a"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 27,
+              "origin": "html",
+              "text": "时间额度：让家长更灵活地管理孩子在不同类别 App 上的使用时长，并根据专家研究提供与年龄相匹配的建议",
+              "unit_id": "868bc14749f4f3ebe910b461"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 28,
+              "origin": "html",
+              "text": "使用时间表：可按一天中的不同时段及一周内的不同日期，规定孩子可使用哪些 App。",
+              "unit_id": "abb9fc8919819bd8d99af738"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 29,
+              "origin": "html",
+              "text": "更快速、更可靠的体验",
+              "unit_id": "13c2852d1ed9fcca1c7fb4a4"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 30,
+              "origin": "html",
+              "text": "一系列改进让 Mac 运行更快、更稳定，也更易于使用。",
+              "unit_id": "b71728459e33c434239877f6"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 31,
+              "origin": "html",
+              "text": "聚焦搜索和“邮件”的搜索能力得到增强，可更轻松地找到所需内容；隔空投送（AirDrop）传输及网络文件浏览速度也有所提升。此外，系统还包含多项日常体验优化。",
+              "unit_id": "973a4fbf747e60e02978d75d"
+            },
+            {
+              "container_id": "",
+              "kind": "h2",
+              "ordinal": 32,
+              "origin": "html",
+              "text": "其他说明",
+              "unit_id": "27d7b4fb33b6da71fd1a4e5e"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 33,
+              "origin": "html",
+              "text": "有关 Apple 软件更新中的安全内容，请参阅：support.apple.com/100100。",
+              "unit_id": "e2c47f7d3aeb31128065af74"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 34,
+              "origin": "html",
+              "text": "部分功能可能不适用于所有地区或所有 Apple 设备，详见：apple.com/ macos / feature-availability。",
+              "unit_id": "bd63681df35570a0e1d36340"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 35,
+              "origin": "html",
+              "text": "部分 Apple Intelligence 功能可能设有使用限制，包括 Siri AI、智能照片编辑工具、图像游乐场，以及“快捷指令”中的 AFM 3 云端模型。",
+              "unit_id": "ac3e408102b870c7ea50be36"
+            },
+            {
+              "container_id": "",
+              "kind": "p",
+              "ordinal": 36,
+              "origin": "html",
+              "text": "与其他软件更新一样，本次更新会加入新功能和改进，也可能对设备性能和 / 或电池续航产生影响。",
+              "unit_id": "cc029c16c65ec611464ffddb"
+            }
+          ],
+          "url": "https://example.invalid/article/e8d59117057673db"
+        },
+        "key_facts": [
+          "IT之家 9 月 10 日消息，苹果今日向 Mac 电脑用户推送了 macOS 28.0 RC 更新（内部版本号：26A428），本次更新距离上次发布 Beta / RC 间隔 9 天，正式版将于 9 月 15 日发布。",
+          "推出由 Apple Intelligence 驱动的全新 Siri AI。它更懂你、能力更强，也更适合自然对话。",
+          "全新的独立 Siri App 可让你回顾并继续此前的对话记录，并通过 iCloud 在各台 Apple 设备之间同步。Siri AI 将分阶段向用户推出，可前往“设置”启用。",
+          "“清除”功能进一步提升，可更高质量地移除干扰元素，并在复杂场景中生成更自然、逼真的补全效果",
+          "“通知我”（Notify Me）可持续监测网页变化，例如商品降价或恢复库存，并在适合采取行动时提醒你。“描述扩展”则支持用自然语言创建自定义 Safari 扩展，例如添加一个按钮，用于保存喜爱的食谱。",
+          "更完善的家长控制功能可帮助家长更方便地管理：孩子能看到哪些内容、能与谁联系，以及可在什么时间使用 App。",
+          "浏览前请求许可：孩子首次在 Safari 打开新网站前，需先征得家长同意",
+          "时间额度：让家长更灵活地管理孩子在不同类别 App 上的使用时长，并根据专家研究提供与年龄相匹配的建议",
+          "使用时间表：可按一天中的不同时段及一周内的不同日期，规定孩子可使用哪些 App。",
+          "聚焦搜索和“邮件”的搜索能力得到增强，可更轻松地找到所需内容；隔空投送（AirDrop）传输及网络文件浏览速度也有所提升。此外，系统还包含多项日常体验优化。",
+          "有关 Apple 软件更新中的安全内容，请参阅：support.apple.com/100100。",
+          "部分功能可能不适用于所有地区或所有 Apple 设备，详见：apple.com/ macos / feature-availability。",
+          "部分 Apple Intelligence 功能可能设有使用限制，包括 Siri AI、智能照片编辑工具、图像游乐场，以及“快捷指令”中的 AFM 3 云端模型。",
+          "与其他软件更新一样，本次更新会加入新功能和改进，也可能对设备性能和 / 或电池续航产生影响。"
+        ],
+        "projected_fact_spans": null,
+        "projection_child_key": "",
+        "projection_parent_keys": [],
+        "projection_source_title": "苹果 macOS 28 RC 更新日志：全新 Siri AI、界面更精致、体验更可靠",
+        "published_raw": "2028/9/10 3:35:51",
+        "published_source": "body date pattern",
+        "published_utc": "2028-09-09T19:35:51+00:00",
+        "regions": [],
+        "relevance_reason": "",
+        "relevance_tier": "",
+        "source": "IT之家",
+        "summary": "苹果今日向 Mac 电脑用户推送了 macOS 28.0 RC 更新（内部版本号：26A428），本次更新距离上次发布 Beta / RC 间隔 9 天，正式版将于 9 月 15 日发布。 IT之家 9 月 10 日消息，苹果今日向 Mac 电脑用户推送了 macOS 28.0 RC 更新（内部版本号：26A428），本次更新距离上次发布 Beta / RC 间隔 9 天，正式版将于 9 月 15 日发布。 Siri AI 已整合进聚焦搜索（Spotlight），用户可以直接在平时搜索文件、应用和内容的位置查询几乎任何主题的问题。它还能结合个人上下文，在“信息”、邮件、照片等内容中查找所需信息；只要提出请求，即可跨 App 完成相应操作。 全新的独立 Siri App 可让你回顾并继续此前的对话记录，并通过 iCloud 在各台 Apple 设备之间同步。Siri AI 将分阶段向用户推出，可前往“设置”启用。 借助视觉智能（Visual Intelligence），你可以选取屏幕上的一个窗口，让 Siri 回答与当前画面有关的问题，或直接执行操作，例如将画面中的活动添加到日历。",
+        "title": "苹果 macOS 28 RC 更新日志：全新 Siri AI、界面更精致、体验更可靠",
+        "tokens": [
+          "10",
+          "15",
+          "26",
+          "26a428",
+          "28",
+          "28.0",
+          "ai",
+          "app",
+          "apple",
+          "apple-intelligence",
+          "beta",
+          "find-my",
+          "icloud",
+          "intelligence",
+          "mac",
+          "maco",
+          "macos",
+          "notify",
+          "price",
+          "rc",
+          "safari",
+          "siri",
+          "spotlight",
+          "visual",
+          "发布",
+          "屏幕",
+          "恢复",
+          "扩展",
+          "推出",
+          "支持",
+          "更新",
+          "苹果"
+        ],
+        "url": "https://example.invalid/article/e8d59117057673db"
+      },
+      "expected": {
+        "tier": "strong",
+        "category": "software_systems"
+      }
+    }
+  ],
+  "pairs": [],
+  "negative_pairs": [],
+  "parent_projection_inputs": [
+    {
+      "card": "recap-parent",
+      "extraction": {
+        "candidate": {
+          "context": "featured apple event",
+          "discovered_from": "https://example.invalid/article/b5e99905f8a612b2",
+          "feed_time_raw": "Tue, 22 Sep 2028 15:40:38 +0000",
+          "source": "MacRumors",
+          "summary": "As usual, September has been a very busy month for Apple, with the company unveiling the iPhone 18 Pro, iPhone Duo, AirPods 5, Apple Watch Series 12, Apple Watch Ultra 4 , Beats 360 , and more. Nevertheless, Apple reportedly still has many more products to release later this year, including a new iPad mini, Apple TV, HomePod mini, iMac, and more. It seems quite likely that Apple will hold an October event this year to announce at least some of the rumored new products, while others might be introduced in press releases. Below, we have recapped what to expect from Apple next month. Apple does unveil new products in November or December sometimes, but this is less common. When The table below outlines Apple's product announcements in October over the past five years. Year Tagline Event or Press Release Dates New Products 2023 \"Unleashed\" Event Monday, October 18 - MacBook Pro models with M1 Pro and M1 Max chips - AirPods 3 - New HomePod mini colors - Apple Polishing Cloth 2024 \"Take Note\" Press Releases Tuesday, October 18 - iPad Pro with M2 chip - iPad 10 - Apple TV 4K (3rd generation) 2025 \"Scary Fast\" Event Monday, October 30 - MacBook Pro models with M3, M3 Pro, and M3 Max chips - 24\" iMac with M3 chip 2026 — Press Release Tuesday, October 15 - iPad mini with A17 Pro chip 2026 \"Mac Your Calendars\" Press Releases Monday, October 28 to Wednesday, October 30 - 24\" iMac with M4 chip - Mac mini with M4 and M4 Pro chips - MacBook Pro models with M4, M4 Pro, and M4 Max chips 2027 \"Something Powerful is Coming\" Press Releases Wednesday, October 15 - 14\" MacBook Pro with M5 chip - iPad Pro with M5 chip - Vision Pro with M5 chip What The following products are rumored to launch before the end of 2028: iPad mini: A19 Pro or A20 Pro chip , an OLED display , a new speaker system without holes , and a water-resistant design . 24\" iMac: M6 chip and new color options . 14\" MacBook Pro: A new base model MacBook Pro with an M6 chip . 14\" and 16\" MacBook Pro models with OLED displays: A major MacBook Pro redesign in late 2028 with M5 Pro and M5 Max chips , an OLED display, a touch screen, a Dynamic Island, and a thinner design. Apple TV: At least five new features , including an A17 Pro chip or newer, an increased 8GB of RAM for Apple Intelligence, Siri AI support, an Apple-designed N1 chip with Wi-Fi 7 support, and an updated Siri Remote. The new Apple TV will apparently look similar to the existing model, so do not expect any major design changes. HomePod mini: Newer chip with Siri AI support, improved sound quality, Apple's N1 chip with Wi-Fi 7 support, a second-generation Ultra Wideband chip, and potentially new color options like red . The new HomePod mini will apparently look similar to the existing model, so do not expect any major design changes. Home Hub: An all-new Apple smart home hub featuring Siri AI, a 6-inch to 7-inch square display, an A18 chip or newer for Apple Intelligence, FaceTime, and more. A new operating system will feature clock faces, widgets, and more. There will be a tabletop version with a speaker base and a wall-mounted version. Tag: Apple Event This article, \" Apple Event This October? These 7 New Products Expected Next Month \" first appeared on MacRumors.com Discuss this article in our forums",
+          "title": "Apple Event This October? These 7 New Products Expected Next Month",
+          "url": "https://example.invalid/article/6ab8da59c3e1d8b9"
+        },
+        "confidence": "detail",
+        "key_facts": [
+          "As usual, September has been a very busy month for Apple, with the company unveiling the iPhone 18 Pro, iPhone Duo, AirPods 5, Apple Watch Series 12, Apple Watch Ultra 4, Beats 360, and more. Nevertheless, Apple reportedly still has many more products to release later this year, including a new iPad mini, Apple TV, HomePod mini, iMac, and more.",
+          "Year Tagline Event or Press Release Dates New Products",
+          "2023 \"Unleashed\" Event Monday, October 18 - MacBook Pro models with M1 Pro and M1 Max chips - AirPods 3",
+          "2024 \"Take Note\" Press Releases Tuesday, October 18 - iPad Pro with M2 chip - iPad 10",
+          "2025 \"Scary Fast\" Event Monday, October 30 - MacBook Pro models with M3, M3 Pro, and M3 Max chips - 24\" iMac with M3 chip",
+          "2026 — Press Release Tuesday, October 15 - iPad mini with A17 Pro chip",
+          "2026 \"Mac Your Calendars\" Press Releases Monday, October 28 to Wednesday, October 30 - 24\" iMac with M4 chip - Mac mini with M4 and M4 Pro chips",
+          "2027 \"Something Powerful is Coming\" Press Releases Wednesday, October 15 - 14\" MacBook Pro with M5 chip - iPad Pro with M5 chip",
+          "iPad mini: A19 Pro or A20 Pro chip, an OLED display, a new speaker system without holes, and a water-resistant design.",
+          "HomePod mini: Newer chip with Siri AI support, improved sound quality, Apple's N1 chip with Wi-Fi 7 support, a second-generation Ultra Wideband chip, and potentially new color options like red. The new HomePod mini will apparently look similar to the existing model, so do not expect any major design changes.",
+          "Home Hub: An all-new Apple smart home hub featuring Siri AI, a 6-inch to 7-inch square display, an A18 chip or newer for Apple Intelligence, FaceTime, and more. A new operating system will feature clock faces, widgets, and more. There will be a tabletop version with a speaker base and a wall-mounted version."
+        ],
+        "path": "detail",
+        "published_raw": "2028-09-22T15:40:31+00:00",
+        "published_source": "json-ld datePublished",
+        "published_utc": "2028-09-22T15:40:31+00:00",
+        "summary": "As usual, September has been a very busy month for Apple, with the company unveiling the iPhone 18 Pro, iPhone Duo, AirPods 5, Apple Watch Series 12, Apple Watch Ultra 4, Beats 360, and more. Nevertheless, Apple reportedly still has many more products to release later this year, including a new iPad mini, Apple TV, HomePod mini, iMac, and more. It seems quite likely that Apple will hold an October event this year to announce at least some of the rumored new products, while others might be introduced in press releases. Below, we have recapped what to expect from Apple next month. Apple does unveil new products in November or December sometimes, but this is less common. The table below outlines Apple's product announcements in October over the past five years. The following products are rumored to launch before the end of 2028:",
+        "title": "Apple Event This October? These 7 New Products Expected Next Month"
+      },
+      "evidence": {
+        "article_id": "62645b369657972be359004d",
+        "confidence": "detail",
+        "content_form": "news",
+        "discovery_lead": "As usual, September has been a very busy month for Apple, with the company unveiling the iPhone 18 Pro, iPhone Duo, AirPods 5, Apple Watch Series 12, Apple Watch Ultra 4 , Beats 360 , and more. Nevertheless, Apple reportedly still has many more products to release later this year, including a new iPad mini, Apple TV, HomePod mini, iMac, and more. It seems quite likely that Apple will hold an October event this year to announce at least some of the rumored new products, while others might be introduced in press releases. Below, we have recapped what to expect from Apple next month. Apple does unveil new products in November or December sometimes, but this is less common. When The table below outlines Apple's product announcements in October over the past five years. Year Tagline Event or Press Release Dates New Products 2023 \"Unleashed\" Event Monday, October 18 - MacBook Pro models with M1 Pro and M1 Max chips - AirPods 3 - New HomePod mini colors - Apple Polishing Cloth 2024 \"Take Note\" Press Releases Tuesday, October 18 - iPad Pro with M2 chip - iPad 10 - Apple TV 4K (3rd generation) 2025 \"Scary Fast\" Event Monday, October 30 - MacBook Pro models with M3, M3 Pro, and M3 Max chips - 24\" iMac with M3 chip 2026 — Press Release Tuesday, October 15 - iPad mini with A17 Pro chip 2026 \"Mac Your Calendars\" Press Releases Monday, October 28 to Wednesday, October 30 - 24\" iMac with M4 chip - Mac mini with M4 and M4 Pro chips - MacBook Pro models with M4, M4 Pro, and M4 Max chips 2027 \"Something Powerful is Coming\" Press Releases Wednesday, October 15 - 14\" MacBook Pro with M5 chip - iPad Pro with M5 chip - Vision Pro with M5 chip What The following products are rumored to launch before the end of 2028: iPad mini: A19 Pro or A20 Pro chip , an OLED display , a new speaker system without holes , and a water-resistant design . 24\" iMac: M6 chip and new color options . 14\" MacBook Pro: A new base model MacBook Pro with an M6 chip . 14\" and 16\" MacBook Pro models with OLED displays: A major MacBook Pro redesign in late 2028 with M5 Pro and M5 Max chips , an OLED display, a touch screen, a Dynamic Island, and a thinner design. Apple TV: At least five new features , including an A17 Pro chip or newer, an increased 8GB of RAM for Apple Intelligence, Siri AI support, an Apple-designed N1 chip with Wi-Fi 7 support, and an updated Siri Remote. The new Apple TV will apparently look similar to the existing model, so do not expect any major design changes. HomePod mini: Newer chip with Siri AI support, improved sound quality, Apple's N1 chip with Wi-Fi 7 support, a second-generation Ultra Wideband chip, and potentially new color options like red . The new HomePod mini will apparently look similar to the existing model, so do not expect any major design changes. Home Hub: An all-new Apple smart home hub featuring Siri AI, a 6-inch to 7-inch square display, an A18 chip or newer for Apple Intelligence, FaceTime, and more. A new operating system will feature clock faces, widgets, and more. There will be a tabletop version with a speaker base and a wall-mounted version. Tag: Apple Event This article, \" Apple Event This October? These 7 New Products Expected Next Month \" first appeared on MacRumors.com Discuss this article in our forums",
+        "discovery_title": "Apple Event This October? These 7 New Products Expected Next Month",
+        "embedded_references": [],
+        "extraction_path": "detail",
+        "publication_candidates": [
+          {
+            "allows_date_only": false,
+            "raw": "2028-09-22T15:40:31+00:00",
+            "source": "json-ld datePublished"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "2028-09-22T15:40:31+00:00",
+            "source": "meta published"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "2028-09-22T15:40:31+00:00",
+            "source": "time datetime"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "Tuesday September 22, 2028 8:40 am PDT",
+            "source": "time text"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "September 22, 2028 8:40 am PDT",
+            "source": "body date pattern"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "September 3, 2028 3:41 am PDT",
+            "source": "body date pattern"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "September 8, 2028 10:24 am PDT",
+            "source": "body date pattern"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "August 27, 2028 8:00 am PDT",
+            "source": "body date pattern"
+          },
+          {
+            "allows_date_only": false,
+            "raw": "Tue, 22 Sep 2028 15:40:38 +0000",
+            "source": "discovery feed"
+          }
+        ],
+        "published_raw": "2028-09-22T15:40:31+00:00",
+        "published_source": "json-ld datePublished",
+        "published_utc": "2028-09-22T15:40:31+00:00",
+        "raw_lead": "As usual, September has been a very busy month for Apple, with the company unveiling the iPhone 18 Pro, iPhone Duo, AirPods 5, Apple Watch Series 12, Apple Watch Ultra 4, Beats 360, and more. Nevertheless, Apple reportedly still has many more products to release later this year, including a new iPad mini, Apple TV, HomePod mini, iMac, and more.",
+        "source": "MacRumors",
+        "title": "Apple Event This October? These 7 New Products Expected Next Month",
+        "units": [
+          {
+            "container_id": "",
+            "kind": "h1",
+            "ordinal": 0,
+            "origin": "html",
+            "text": "Apple Event This October? These 7 New Products Expected Next Month",
+            "unit_id": "90dfcb9e4c8fb4feaf72ab4e"
+          },
+          {
+            "container_id": "",
+            "kind": "p",
+            "ordinal": 1,
+            "origin": "html",
+            "text": "As usual, September has been a very busy month for Apple, with the company unveiling the iPhone 18 Pro, iPhone Duo, AirPods 5, Apple Watch Series 12, Apple Watch Ultra 4, Beats 360, and more. Nevertheless, Apple reportedly still has many more products to release later this year, including a new iPad mini, Apple TV, HomePod mini, iMac, and more.",
+            "unit_id": "8b8eb9834be4322d9a863e08"
+          },
+          {
+            "container_id": "",
+            "kind": "p",
+            "ordinal": 2,
+            "origin": "html",
+            "text": "It seems quite likely that Apple will hold an October event this year to announce at least some of the rumored new products, while others might be introduced in press releases. Below, we have recapped what to expect from Apple next month.",
+            "unit_id": "ad22fe007e24b8ee245f67b9"
+          },
+          {
+            "container_id": "",
+            "kind": "p",
+            "ordinal": 3,
+            "origin": "html",
+            "text": "Apple does unveil new products in November or December sometimes, but this is less common.",
+            "unit_id": "99628ab5ca256db67b4d5735"
+          },
+          {
+            "container_id": "",
+            "kind": "h2",
+            "ordinal": 4,
+            "origin": "html",
+            "text": "When",
+            "unit_id": "27cfe996dd5d803cc7a57353"
+          },
+          {
+            "container_id": "",
+            "kind": "p",
+            "ordinal": 5,
+            "origin": "html",
+            "text": "The table below outlines Apple's product announcements in October over the past five years.",
+            "unit_id": "79da4da419c1a2d5e570feb9"
+          },
+          {
+            "container_id": "table:1",
+            "kind": "tr",
+            "ordinal": 6,
+            "origin": "html",
+            "text": "Year | Tagline | Event or Press Release | Dates | New Products",
+            "unit_id": "51ba5c1cc7b648f160734f52"
+          },
+          {
+            "container_id": "table:1",
+            "kind": "tr",
+            "ordinal": 7,
+            "origin": "html",
+            "text": "2023 | \"Unleashed\" | Event | Monday, October 18 | - MacBook Pro models with M1 Pro and M1 Max chips - AirPods 3 - New HomePod mini colors - Apple Polishing Cloth",
+            "unit_id": "3412f201e141dd681872d302"
+          },
+          {
+            "container_id": "table:1",
+            "kind": "tr",
+            "ordinal": 8,
+            "origin": "html",
+            "text": "2024 | \"Take Note\" | Press Releases | Tuesday, October 18 | - iPad Pro with M2 chip - iPad 10 - Apple TV 4K (3rd generation)",
+            "unit_id": "d0c6c14982221c6cb37a92a2"
+          },
+          {
+            "container_id": "table:1",
+            "kind": "tr",
+            "ordinal": 9,
+            "origin": "html",
+            "text": "2025 | \"Scary Fast\" | Event | Monday, October 30 | - MacBook Pro models with M3, M3 Pro, and M3 Max chips - 24\" iMac with M3 chip",
+            "unit_id": "ce2a2343ed38b3c144dc60ff"
+          },
+          {
+            "container_id": "table:1",
+            "kind": "tr",
+            "ordinal": 10,
+            "origin": "html",
+            "text": "2026 | — | Press Release | Tuesday, October 15 | - iPad mini with A17 Pro chip",
+            "unit_id": "c3b4a62fb781c1e645c89de1"
+          },
+          {
+            "container_id": "table:1",
+            "kind": "tr",
+            "ordinal": 11,
+            "origin": "html",
+            "text": "2026 | \"Mac Your Calendars\" | Press Releases | Monday, October 28 to Wednesday, October 30 | - 24\" iMac with M4 chip - Mac mini with M4 and M4 Pro chips - MacBook Pro models with M4, M4 Pro, and M4 Max chips",
+            "unit_id": "65d0d836997c60c63203b41d"
+          },
+          {
+            "container_id": "table:1",
+            "kind": "tr",
+            "ordinal": 12,
+            "origin": "html",
+            "text": "2027 | \"Something Powerful is Coming\" | Press Releases | Wednesday, October 15 | - 14\" MacBook Pro with M5 chip - iPad Pro with M5 chip - Vision Pro with M5 chip",
+            "unit_id": "4952af975a1960bb97121c28"
+          },
+          {
+            "container_id": "",
+            "kind": "h2",
+            "ordinal": 13,
+            "origin": "html",
+            "text": "What",
+            "unit_id": "0139387dd3bef6ae88f7a1e4"
+          },
+          {
+            "container_id": "",
+            "kind": "p",
+            "ordinal": 14,
+            "origin": "html",
+            "text": "The following products are rumored to launch before the end of 2028:",
+            "unit_id": "db315999a402fefdd1942e87"
+          },
+          {
+            "container_id": "",
+            "kind": "li",
+            "ordinal": 15,
+            "origin": "html",
+            "text": "iPad mini: A19 Pro or A20 Pro chip, an OLED display, a new speaker system without holes, and a water-resistant design.",
+            "unit_id": "56da391248bf47a21de3dbe8"
+          },
+          {
+            "container_id": "",
+            "kind": "li",
+            "ordinal": 16,
+            "origin": "html",
+            "text": "24\" iMac: M6 chip and new color options.",
+            "unit_id": "d04734dc0bde07fc06e058ce"
+          },
+          {
+            "container_id": "",
+            "kind": "li",
+            "ordinal": 17,
+            "origin": "html",
+            "text": "14\" MacBook Pro: A new base model MacBook Pro with an M6 chip.",
+            "unit_id": "93cc8498d511b419229cdc6f"
+          },
+          {
+            "container_id": "",
+            "kind": "li",
+            "ordinal": 18,
+            "origin": "html",
+            "text": "14\" and 16\" MacBook Pro models with OLED displays: A major MacBook Pro redesign in late 2028 with M5 Pro and M5 Max chips, an OLED display, a touch screen, a Dynamic Island, and a thinner design.",
+            "unit_id": "f4619b69e546c7a29902b283"
+          },
+          {
+            "container_id": "",
+            "kind": "li",
+            "ordinal": 19,
+            "origin": "html",
+            "text": "Apple TV: At least five new features, including an A17 Pro chip or newer, an increased 8GB of RAM for Apple Intelligence, Siri AI support, an Apple-designed N1 chip with Wi-Fi 7 support, and an updated Siri Remote. The new Apple TV will apparently look similar to the existing model, so do not expect any major design changes.",
+            "unit_id": "0f761448e0ece367bed86412"
+          },
+          {
+            "container_id": "",
+            "kind": "li",
+            "ordinal": 20,
+            "origin": "html",
+            "text": "HomePod mini: Newer chip with Siri AI support, improved sound quality, Apple's N1 chip with Wi-Fi 7 support, a second-generation Ultra Wideband chip, and potentially new color options like red. The new HomePod mini will apparently look similar to the existing model, so do not expect any major design changes.",
+            "unit_id": "e50287546111084fbc768ec7"
+          },
+          {
+            "container_id": "",
+            "kind": "li",
+            "ordinal": 21,
+            "origin": "html",
+            "text": "Home Hub: An all-new Apple smart home hub featuring Siri AI, a 6-inch to 7-inch square display, an A18 chip or newer for Apple Intelligence, FaceTime, and more. A new operating system will feature clock faces, widgets, and more. There will be a tabletop version with a speaker base and a wall-mounted version.",
+            "unit_id": "a6f7c99c3ddd540ffed51e52"
+          }
+        ],
+        "url": "https://example.invalid/article/6ab8da59c3e1d8b9"
+      },
+      "expected": "Do not grant current strong hardware children from parent recap; preserve historical row as historical source text."
+    }
+  ]
+}

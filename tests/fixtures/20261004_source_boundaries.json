@@ -1,0 +1,2457 @@
+{
+  "066d9c1d25fab19abdba62f0": {
+    "evidence": {
+      "article_id": "066d9c1d25fab19abdba62f0",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 4 日消息，任天堂旗下手游《马力欧卡丁车 巡回赛》（Mario Kart Tour）已于 9 月 30 日正式停止服务。 任天堂于 2026 年 7 月宣布终止服务，Gold Pass 订阅的自动续费和新订阅同样已被停止。服务终止后，游戏对已安装的玩家同样无法再运行，任天堂也表示目前没有推出离线版的计划。 《马力欧卡丁车 巡回赛》是马力欧卡丁车系列的手游作品，于 2019 年 9 月 25 日登陆 iOS 和安卓平台，采用免费游玩模式，依靠内购盈利。游戏中曾备受争议的“抽水管”（gacha pipe）角色抽卡系统已于 2022 年移除。停服时，游戏共拥有 267 名可玩角色（含替换服装）、340 台卡丁车、238 个滑翔翼和 546 条赛道。 据市场分析机构 AppMagic 估算，该游戏自推出以来全球下载量已超过 2.76 亿次，在七年运营期间为任天堂带来约 2.685 亿美元 （IT之家注：现汇率约合 18.04 亿元人民币） 收入，且收入规模逐年下滑。AppMagic 数据显示，游戏月收入在 2020 年和 2021 年的大部分时间里约为 500 万至 600 万美元，到 2026 年 7 月任天堂宣布停服时已降至约 65 万美元。",
+      "discovery_title": "任天堂《马力欧卡丁车 巡回赛》已停服，估算七年收入约2.685亿美元",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/4 8:52:40",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 04 Oct 2026 00:52:40 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/4 8:52:40",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-04T00:52:40+00:00",
+      "raw_lead": "该作运营七年，累计下载超 2.76 亿次，目前无推出离线版的计划，收入规模逐年下滑#任天堂# #马力欧卡丁车巡回赛#",
+      "source": "IT之家",
+      "title": "任天堂《马力欧卡丁车 巡回赛》已停服，估算七年收入约2.685亿美元",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 4 日消息，任天堂旗下手游《马力欧卡丁车 巡回赛》（Mario Kart Tour）已于 9 月 30 日正式停止服务。",
+          "unit_id": "2ecd43ce7e49fbb374075c6f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "任天堂于 2026 年 7 月宣布终止服务，Gold Pass 订阅的自动续费和新订阅同样已被停止。服务终止后，游戏对已安装的玩家同样无法再运行，任天堂也表示目前没有推出离线版的计划。",
+          "unit_id": "acba1ad96e3f500c4e885e21"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "《马力欧卡丁车 巡回赛》是马力欧卡丁车系列的手游作品，于 2019 年 9 月 25 日登陆 iOS 和安卓平台，采用免费游玩模式，依靠内购盈利。游戏中曾备受争议的“抽水管”（gacha pipe）角色抽卡系统已于 2022 年移除。停服时，游戏共拥有 267 名可玩角色（含替换服装）、340 台卡丁车、238 个滑翔翼和 546 条赛道。",
+          "unit_id": "69591fcb7cc3757f6e93e709"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "据市场分析机构 AppMagic 估算，该游戏自推出以来全球下载量已超过 2.76 亿次，在七年运营期间为任天堂带来约 2.685 亿美元（IT之家注：现汇率约合 18.04 亿元人民币）收入，且收入规模逐年下滑。AppMagic 数据显示，游戏月收入在 2020 年和 2021 年的大部分时间里约为 500 万至 600 万美元，到 2026 年 7 月任天堂宣布停服时已降至约 65 万美元。",
+          "unit_id": "9ee20fc13fbaa4d78ce91f9d"
+        }
+      ],
+      "url": "https://www.ithome.com/1/009/602.htm"
+    },
+    "recorded_extraction": [
+      "任天堂《马力欧卡丁车 巡回赛》已停服，估算七年收入约2.685亿美元",
+      "该作运营七年，累计下载超 2.76 亿次，目前无推出离线版的计划，收入规模逐年下滑#任天堂# #马力欧卡丁车巡回赛# IT之家 10 月 4 日消息，任天堂旗下手游《马力欧卡丁车 巡回赛》（Mario Kart Tour）已于 9 月 30 日正式停止服务。 任天堂于 2026 年 7 月宣布终止服务，Gold Pass 订阅的自动续费和新订阅同样已被停止。服务终止后，游戏对已安装的玩家同样无法再运行，任天堂也表示目前没有推出离线版的计划。 《马力欧卡丁车 巡回赛》是马力欧卡丁车系列的手游作品，于 2019 年 9 月 25 日登陆 iOS 和安卓平台，采用免费游玩模式，依靠内购盈利。游戏中曾备受争议的“抽水管”（gacha pipe）角色抽卡系统已于 2022 年移除。停服时，游戏共拥有 267 名可玩角色（含替换服装）、340 台卡丁车、238 个滑翔翼和 546 条赛道。 据市场分析机构 AppMagic 估算，该游戏自推出以来全球下载量已超过 2.76 亿次，在七年运营期间为任天堂带来约 2.685 亿美元 （IT之家注：现汇率约合 18.04 亿元人民币） 收入，且收入规模逐年下滑。AppMagic 数据显示，游戏月收入在 2020 年和 2021 年的大部分时间里约为 500 万至 600 万美元，到 2026 年 7 月任天堂宣布停服时已降至约 65 万美元。",
+      [
+        "IT之家 10 月 4 日消息，任天堂旗下手游《马力欧卡丁车 巡回赛》（Mario Kart Tour）已于 9 月 30 日正式停止服务。",
+        "任天堂于 2026 年 7 月宣布终止服务，Gold Pass 订阅的自动续费和新订阅同样已被停止。服务终止后，游戏对已安装的玩家同样无法再运行，任天堂也表示目前没有推出离线版的计划。",
+        "《马力欧卡丁车 巡回赛》是马力欧卡丁车系列的手游作品，于 2019 年 9 月 25 日登陆 iOS 和安卓平台，采用免费游玩模式，依靠内购盈利。游戏中曾备受争议的“抽水管”（gacha pipe）角色抽卡系统已于 2022 年移除。停服时，游戏共拥有 267 名可玩角色（含替换服装）、340 台卡丁车、238 个滑翔翼和 546 条赛道。",
+        "据市场分析机构 AppMagic 估算，该游戏自推出以来全球下载量已超过 2.76 亿次，在七年运营期间为任天堂带来约 2.685 亿美元（IT之家注：现汇率约合 18.04 亿元人民币）收入，且收入规模逐年下滑。AppMagic 数据显示，游戏月收入在 2020 年和 2021 年的大部分时间里约为 500 万至 600 万美元，到 2026 年 7 月任天堂宣布停服时已降至约 65 万美元。"
+      ]
+    ]
+  },
+  "070a4cd57b1adfd1165746c4": {
+    "evidence": {
+      "article_id": "070a4cd57b1adfd1165746c4",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple @ Work is exclusively brought to you by Mosyle, the only Apple Unified Platform. Mosyle is the only solution that integrates in a single professional grade platform all the solutions necessary to seamlessly and automatically deploy, manage, and protect Apple devices at work. Over 45,000 organizations trust Mosyle to make millions of Apple devices work ready with no effort and at an affordable cost. Request your EXTENDED TRIAL today and understand why Mosyle is everything you need to work with Apple. MacPaw spent nearly two decades building consumer software for Mac users. CleanMyMac is one of the Mac utilities on the market, and it’s my go-to when I need to free up hard drive space, uninstall apps, etc. The company is making a different kind of bet with Leebry, a Work AI platform aimed at helping IT teams. more… Mosyle is the only solution…",
+      "discovery_title": "Apple @ Work: The numbers on AI trust for IT are not great, and one company is trying to fix it",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T13:45:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T13:45:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 13:45:00 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03T13:45:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-03T13:45:00+00:00",
+      "raw_lead": "90% of companies deploy AI without auditing their knowledge base. MacPaw's new Leebry platform is built to close that trust gap for IT teams.",
+      "source": "9to5Mac",
+      "title": "Apple @ Work: The numbers on AI trust for IT are not great, and one company is trying to fix it - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "MacPaw spent nearly two decades building consumer software for Mac users. CleanMyMac is one of the Mac utilities on the market, and it’s my go-to when I need to free up hard drive space, uninstall apps, etc. The company is making a different kind of bet with Leebry, a Work AI platform aimed at helping IT teams.",
+          "unit_id": "7d02cbdae3226ad464cfd5f0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "About Apple @ Work: Bradley Chambers has been an Apple IT admin since 2009. Through his experience deploying and managing firewalls, switches, a mobile device management system, enterprise grade WiFi, 1000s of Macs, and 1000s of iPads, Bradley will highlight ways in which Apple IT managers deploy Apple devices, build networks to support them, train users, share stories from the trenches of IT management, and ways Apple could improve its products for IT departments.",
+          "unit_id": "3c4428ad4a4319007dce6f65"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The AI trust numbers",
+          "unit_id": "883d71f2721d2ae0bdd280e6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "MacPaw’s 2026 AI at Work report is where you see the issue IT faces, as they found that 90% of companies deploy AI without thoroughly auditing their internal knowledge base first. That means that internal AI tools are answering employee questions based on whatever it can find, including old product docs, outdated policies, and random Reddit discussion forums.",
+          "unit_id": "3aa55978649a60347eb2e6ef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "In this survey, MacPaw found that 6 in 10 IT leaders see a real disconnect between what their C-Suite expects from AI tools (thanks to LinkedIn feeds) and what their teams can safely and accurately deliver. That gap is where most AI disappointment lives, and it’s the problem Leebry is attempting to solve for IT teams.",
+          "unit_id": "39967e425c58d1884806a8fa"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "What Leebry actually does",
+          "unit_id": "d4bc584a7e28aa3632fd4a47"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Leebry began as an internal MacPaw hackathon project in 2025. The problem it was solving was employees repeatedly asking the same questions internally, even when the answers already existed somewhere in the company’s documentation, intranets, Slack threads, etc. MacPaw built a Slack bot to surface those answers and point employees to the exact source. Within a few months, it was resolving 30% of MacPaw’s own level 1 IT tickets, so that became the foundation for what they’re launching today with Leebry.",
+          "unit_id": "d9a421e15a913363c630f187"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The platform automates level 1 support tickets, handles access provisioning and removal as employees join, move roles, or leave, and answers employee questions across the tools they already use. Every Leebry response links back to its source, so employees can verify the answer rather than just trust it (and prove it), and can flag stale or outdated information that could affect accuracy. That last part is the direct product response to the 90% knowledge audit problem from their own research.",
+          "unit_id": "546593d2e0a356b5e488a8e7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "One detail worth calling out for security-conscious IT folks: Leebry is permission-aware, meaning it authenticates each user and surfaces only the information they are permitted to see. That matters more than it sounds as a lot of AI tools draw on a shared knowledge pool and let users surface things they shouldn’t access. Leebry also ships with an MCP server that exposes the device management control plane to AI agents, with admin-set guardrails on every action, so teams can delegate repetitive work to agents without giving up control over what those agents can actually do.",
+          "unit_id": "9d4c378a00ed81f61ce423fc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "For IT orgs that work extensively with Apple, the access provisioning aspect is interesting. Automating access changes as people move within the organization can be a huge pain point for SMBs without a dedicated IAM team. Most of the time, it’s manual, it’s slow, and departing employees end up with access that should have been revoked days earlier. I’ve run into this myself quite a bit.",
+          "unit_id": "6a6e1f23b9f58abb9ecfbe2c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "“Businesses don’t need another tool to check, they need work taken off their plate, without sacrificing oversight or control,” said Dan Jaenicke, Director of B2B Product Development at MacPaw.",
+          "unit_id": "1152998de51430e383083cf7"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Wrap up",
+          "unit_id": "a7930eab192f61e1cb0923ae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "The fair question here is why an IT team should trust a consumer Mac software company to build enterprise tooling. I think the answer is actually in the product’s origin story. MacPaw built Leebry to solve their own internal IT problem first, which is a better foundation than most enterprise software gets. It wasn’t built to make money. It was built to solve a customer (even internal) problem, so it’ll work well for other teams. The reality is all orgs have docs spread out across team chat, file sharing, intranets, etc and we’re all guilty of asking for someone else to find it for us.",
+          "unit_id": "4e5f02054558a5da9aede40a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Leebry aims to make it easy for IT to solve the same questions folks ask over and over again.",
+          "unit_id": "e03eb6c33b9a6825c1891cf6"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/03/macpaw-leebry/"
+    },
+    "recorded_extraction": [
+      "Apple @ Work: The numbers on AI trust for IT are not great, and one company is trying to fix it - 9to5Mac",
+      "90% of companies deploy AI without auditing their knowledge base. MacPaw's new Leebry platform is built to close that trust gap for IT teams. MacPaw spent nearly two decades building consumer software for Mac users. CleanMyMac is one of the Mac utilities on the market, and it’s my go-to when I need to free up hard drive space, uninstall apps, etc. The company is making a different kind of bet with Leebry , a Work AI platform aimed at helping IT teams. MacPaw’s 2026 AI at Work report is where you see the issue IT faces, as they found that 90% of companies deploy AI without thoroughly auditing their internal knowledge base first. That means that internal AI tools are answering employee questions based on whatever it can find, including old product docs, outdated policies, and random Reddit discussion forums. In this survey, MacPaw found that 6 in 10 IT leaders see a real disconnect between what their C-Suite expects from AI tools (thanks to LinkedIn feeds) and what their teams can safely and accurately deliver. That gap is where most AI disappointment lives, and it’s the problem Leebry is attempting to solve for IT teams. Leebry began as an internal MacPaw hackathon project in 2025. The problem it was solving was employees repeatedly asking the same questions internally, even when the answers already existed somewhere in the company’s documentation, intranets, Slack threads, etc. MacPaw built a Slack bot to surface those answers and point employees to the exact source. Within a few months, it was resolving 30% of MacPaw’s own level 1 IT tickets, so that became the foundation for what they’re launching today with Leebry.",
+      [
+        "MacPaw’s 2026 AI at Work report is where you see the issue IT faces, as they found that 90% of companies deploy AI without thoroughly auditing their internal knowledge base first. That means that internal AI tools are answering employee questions based on whatever it can find, including old product docs, outdated policies, and random Reddit discussion forums.",
+        "In this survey, MacPaw found that 6 in 10 IT leaders see a real disconnect between what their C-Suite expects from AI tools (thanks to LinkedIn feeds) and what their teams can safely and accurately deliver. That gap is where most AI disappointment lives, and it’s the problem Leebry is attempting to solve for IT teams.",
+        "Leebry began as an internal MacPaw hackathon project in 2025. The problem it was solving was employees repeatedly asking the same questions internally, even when the answers already existed somewhere in the company’s documentation, intranets, Slack threads, etc. MacPaw built a Slack bot to surface those answers and point employees to the exact source. Within a few months, it was resolving 30% of MacPaw’s own level 1 IT tickets, so that became the foundation for what they’re launching today with Leebry.",
+        "The platform automates level 1 support tickets, handles access provisioning and removal as employees join, move roles, or leave, and answers employee questions across the tools they already use. Every Leebry response links back to its source, so employees can verify the answer rather than just trust it (and prove it), and can flag stale or outdated information that could affect accuracy. That last part is the direct product response to the 90% knowledge audit problem from their own research.",
+        "“Businesses don’t need another tool to check, they need work taken off their plate, without sacrificing oversight or control,” said Dan Jaenicke, Director of B2B Product Development at MacPaw."
+      ]
+    ]
+  },
+  "14e0fb51490ba822a387c850": {
+    "evidence": {
+      "article_id": "14e0fb51490ba822a387c850",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "OpenAI在近日举行的Dev Day开发者大会上集中发布了一系列新功能。单独来看，这些功能分别涉及插件、AI智能体、应用集成、身份认证和企业软件市场，但将它们放在一起观察，可以看到OpenAI正在推动一种与传统App Store完全不同的软件分发模式：用户不再先寻找应用，再打开应用完成任务，而是直接告诉ChatGPT自己想做什么，由AI决定应该调用哪个应用，并在对话界面内完成工作。 阅读全文",
+      "discovery_title": "ChatGPT正在变成“软件入口” 用户以后可能不再主动寻找App",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "8 分钟前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 14:19",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 00:17",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 21:57",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 18:33",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月04日 02:14",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 18:14:07 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月04日 02:14",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T18:14:00+00:00",
+      "raw_lead": "OpenAI在近日举行的DevDay开发者大会上集中发布了一系列新功能。单独来看，这些功能分别涉及插件、AI智能体、应用集成、身份认证和企业软件市场，但将它们放在一起观察，可以看到OpenAI正在推动一种与传统AppStore完全不同的软件分发模式：用户不再先寻找应用，再打开应用完成任务，而是直接告诉ChatGPT自己想做什么，由AI决定应该调用哪个应用，并在对话界面内完成工作。",
+      "source": "cnBeta",
+      "title": "ChatGPT正在变成“软件入口” 用户以后可能不再主动寻找App - AI 人工智能 - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "OpenAI在近日举行的Dev Day开发者大会上集中发布了一系列新功能。单独来看，这些功能分别涉及插件、AI智能体、应用集成、身份认证和企业软件市场，但将它们放在一起观察，可以看到OpenAI正在推动一种与传统App Store完全不同的软件分发模式：用户不再先寻找应用，再打开应用完成任务，而是直接告诉ChatGPT自己想做什么，由AI决定应该调用哪个应用，并在对话界面内完成工作。",
+          "unit_id": "56ae1a8a4ffbdfd0cd05356a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "传统的软件模式是“应用驱动”。用户想设计图片，就打开Photoshop或Figma；想管理项目，就打开对应的项目管理软件；想安排会议，则需要进入日历或者会议应用。苹果和Google的应用商店正是建立在这种模式之上，用户首先发现、下载和安装应用，然后再使用应用提供的功能。",
+          "unit_id": "2b746d7f9d07c3da509b9975"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "OpenAI正在尝试把这个流程反过来。",
+          "unit_id": "932ba11623d15380b8a40424"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "按照OpenAI公布的规划，ChatGPT将成为应用发现和运行的主要入口。当用户在对话中提出一个任务，而系统判断某个第三方应用能够帮助完成任务时，ChatGPT可以直接推荐相关应用。用户确认连接后，就可以在ChatGPT内部使用该应用，而不必离开当前对话。",
+          "unit_id": "13fab819dadab5ad8546e108"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "这次变化的核心之一是对ChatGPT插件体系的扩展。开发者现在可以创建更加完整的应用体验，而不仅仅是让ChatGPT调用一个API。第三方应用可以在ChatGPT侧边栏拥有自己的入口，还能够提供交互式面板，让用户直接在聊天过程中操作原本需要独立网站或者独立App才能使用的功能。",
+          "unit_id": "de00a997acb75a5f1c20f5fe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "例如，设计软件可以在ChatGPT中直接提供设计修改界面，用户可以让AI理解自己的要求，然后通过应用完成具体编辑；开发工具也可以成为AI智能体执行任务时调用的后台工具。",
+          "unit_id": "86c2318e5a4dc48f0cd86a2a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "OpenAI展示的案例包括Figma和Adobe等设计工具。用户可以在ChatGPT对话过程中处理现有项目，或者直接调用某项此前必须打开独立软件才能使用的功能。",
+          "unit_id": "bb30b7bd1f91a94182e6dd1a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "OpenAI自己也展示了一款会议应用的使用方式。用户可以让应用读取日历中的即将到来的会议，并使用AI自动记录会议内容，在会议结束后生成总结以及后续行动事项。整个过程不再要求用户在多个应用之间来回切换。",
+          "unit_id": "d584f4590a6836cb81c920bc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "这意味着ChatGPT正在逐渐从一个“聊天窗口”变成一个软件操作层。传统App仍然存在，但用户与它们交互的方式可能发生改变：应用负责提供具体能力，而ChatGPT负责理解用户意图、选择工具以及协调不同应用之间的工作。",
+          "unit_id": "de4a178749d02fcf37bd44b0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "OpenAI还推出了“Sign in with ChatGPT”身份体系。用户可以利用自己的ChatGPT身份登录支持该功能的第三方应用，同时把自己现有的AI使用额度带到这些应用中。",
+          "unit_id": "f393ad673be536d7992364b3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "首批合作伙伴包括Cognition旗下的Devin、Notion、Vercel、T3、OpenClaw和Dactyl等，共有16家公司参与初始计划，OpenAI表示未来还会继续扩大合作范围。",
+          "unit_id": "b240d343863601a51e013cf9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "这种身份体系实际上解决了AI应用生态中的一个重要问题。过去用户使用第三方AI应用时，往往需要单独创建账户、配置模型、购买额度。现在，OpenAI希望让ChatGPT成为这些AI应用共同的身份和AI能力入口。",
+          "unit_id": "fd1a85658d2fc0e1132d328d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "OpenAI还进一步扩大了ChatGPT Sites的作用。用户利用ChatGPT创建的轻量级网站可以承载这些第三方应用，并允许其他人访问。当同事打开这样的页面时，他们可以使用自己的账户、数据以及权限，而不是共享创建者的权限。",
+          "unit_id": "cc5d7fcaa2c8724786d45c83"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "这使得ChatGPT生成的网站逐渐从“AI生成的一次性网页”向可供多人使用的小型软件平台转变。",
+          "unit_id": "310dfe89cd6ce5266cda948a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "与此同时，OpenAI正在建立自己的应用审核体系。开发者提交插件后，可以跟踪审核进度，查看需要修改的问题，并在必要时要求人工审核。开发者还可以更新插件中的工具，而不必每次都重新从头提交整个应用。",
+          "unit_id": "0e2531add114a539d4a2946b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "这种机制实际上非常类似苹果App Store的审核流程，只不过审核对象从传统的移动App变成了能够在ChatGPT中运行的AI原生应用。",
+          "unit_id": "219e8a76537f80ac8e8f7971"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "OpenAI还宣布推出企业应用市场。首批市场中已经有30多家合作伙伴，包括Adobe、Figma、Sierra、Decagon、HubSpot、Salesforce、ServiceNow、Harvey、Legora、Palo Alto Networks、CrowdStrike和Baseten等。",
+          "unit_id": "8d1e855245bf00996bfc339e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "符合条件的企业客户可以将部分已经承诺支付给OpenAI的预算用于购买获得批准的合作伙伴软件。这样一来，OpenAI不仅希望成为AI工具的提供商，也开始试图成为企业软件的分发平台。",
+          "unit_id": "1c5c923928ebadc9dd91426d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "但真正可能改变传统应用商店模式的部分，是OpenAI同时推进的AI智能体。",
+          "unit_id": "77eb35595cc6198cd4a37559"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "OpenAI此次推出的自主AI智能体Dots能够拥有自己的云端计算机和浏览器，并可以访问用户连接的应用。用户不需要先判断“我应该用哪个App”，而是直接告诉AI自己想完成什么任务，智能体再决定应该调用哪些工具。",
+          "unit_id": "bcc916cff9528679318cffd5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "例如，过去用户想建立一个网站，可能需要先打开代码编辑器，再使用设计工具，然后进入GitHub，最后使用部署平台。而在智能体模式下，用户只需要告诉AI希望完成什么，智能体可以自行决定需要调用哪些应用。",
+          "unit_id": "98bec7faa66cda137b2be386"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "OpenAI表示，Dots已经能够连接其生态中的4000多个应用。",
+          "unit_id": "04b4495a4b9630b3219c798b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "这实际上把传统App Store中的“应用选择权”部分转移给了AI。",
+          "unit_id": "0a1ef3bae02a46dbd1a7323f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "过去，苹果和Google的应用商店通过搜索、分类、排行榜和推荐帮助用户寻找应用；而在AI智能体模式下，用户甚至可能不知道最终使用了哪个应用。用户只提出目标，AI根据任务决定工具。",
+          "unit_id": "effbc4db3a506f6d140b1502"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "OpenAI还希望让Dots具备一定的主动性。例如，智能体可以在用户没有明确提出请求时发现项目中的问题，或者提醒用户完成之前遗忘的任务。不过，这类主动操作仍然需要得到用户授权。",
+          "unit_id": "5cd0c067c5c00cc5e84d29ec"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "OpenAI称，Dots可以在后台利用已经连接的应用进行所谓的“主动研究”，但在这一阶段主要采用只读方式。真正涉及修改、发送或其他具有实际影响的操作时，用户仍然拥有控制权。",
+          "unit_id": "e2a76410a4aae6e6224a10a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "如果这种模式发展成熟，传统App Store的经济结构也可能受到影响。",
+          "unit_id": "ef2d49e2d6fd21a12c466ea3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "过去，软件开发商需要努力争取用户进入App Store、搜索自己的应用、下载应用并长期使用。未来则可能变成开发商首先确保自己的软件能够被AI智能体识别和调用。用户甚至可能根本没有意识到自己正在使用哪个具体App。",
+          "unit_id": "0e932a04604794a8866780e1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "例如，一家公司可以继续在自己的网站上销售订阅服务，用户完成购买后，再将账户连接到ChatGPT或者Codex，让AI智能体代表用户使用该服务。",
+          "unit_id": "3a676d9894d8afd102869bbe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 29,
+          "origin": "html",
+          "text": "不过，OpenAI目前并没有宣布一套类似苹果App Store的完整支付和分成体系。也就是说，现阶段OpenAI主要解决的是应用的发现、分发、身份认证以及调用问题，并没有明确宣布由OpenAI统一收取第三方软件费用，再按照类似App Store的模式与开发者分成。",
+          "unit_id": "ddee00c9f90e0bebfe2647bd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 30,
+          "origin": "html",
+          "text": "这也是目前这个新生态与传统应用商店之间的重要区别。",
+          "unit_id": "849f28b36fda8370c10e64db"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 31,
+          "origin": "html",
+          "text": "从技术层面看，OpenAI真正试图改变的并不是“App放在哪里”，而是软件与人的交互关系。",
+          "unit_id": "dd063421e0d2b2ad72901dac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 32,
+          "origin": "html",
+          "text": "传统模式是“人→App→功能”，用户必须知道自己需要什么软件；而AI代理模式逐渐变成“人→AI→多个App→任务结果”。在后一种模式中，软件本身越来越像AI可以调用的工具，而不是用户必须亲自操作的目的地。",
+          "unit_id": "1c9c1f97461960349302cf05"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 33,
+          "origin": "html",
+          "text": "这可能解释了为什么OpenAI此次同时推进应用插件、ChatGPT身份、企业应用市场以及Dots智能体。它们并不是完全独立的产品，而是在共同构建一个新的软件生态：ChatGPT负责理解需求，智能体负责执行任务，第三方应用提供专业能力，而开发者则通过这个新的AI入口获得用户。",
+          "unit_id": "c3b49d18f6fcd5570168e541"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 34,
+          "origin": "html",
+          "text": "如果这一模式最终成为主流，那么未来用户打开电脑或手机之后，最先打开的可能不再是某一个具体应用，而是一个AI入口。至于任务究竟由哪款软件完成，则可能变成用户根本不需要关心的问题。",
+          "unit_id": "89ab317c07eb7d1047da06ca"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 35,
+          "origin": "html",
+          "text": "这也是OpenAI此次Dev Day众多产品更新背后最值得关注的变化：它并不是简单地给ChatGPT增加几个插件，而是在尝试把ChatGPT从一个“使用应用的工具”进一步变成“决定用户使用哪些应用的平台”。而一旦软件分发入口从App Store逐渐转移到AI智能体，苹果和Google长期建立起来的应用生态模式也将面对一种全新的竞争方式。",
+          "unit_id": "c961f5c25aac479cf2a6d8ec"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1580608.htm"
+    },
+    "recorded_extraction": [
+      "ChatGPT正在变成“软件入口” 用户以后可能不再主动寻找App - AI 人工智能 - cnBeta.COM",
+      "OpenAI在近日举行的DevDay开发者大会上集中发布了一系列新功能。单独来看，这些功能分别涉及插件、AI智能体、应用集成、身份认证和企业软件市场，但将它们放在一起观察，可以看到OpenAI正在推动一种与传统AppStore完全不同的软件分发模式：用户不再先寻找应用，再打开应用完成任务，而是直接告诉ChatGPT自己想做什么，由AI决定应该调用哪个应用，并在对话界面内完成工作。 OpenAI在近日举行的Dev Day开发者大会上集中发布了一系列新功能。单独来看，这些功能分别涉及插件、AI智能体、应用集成、身份认证和企业软件市场，但将它们放在一起观察，可以看到OpenAI正在推动一种与传统App Store完全不同的软件分发模式：用户不再先寻找应用，再打开应用完成任务，而是直接告诉ChatGPT自己想做什么，由AI决定应该调用哪个应用，并在对话界面内完成工作。 传统的软件模式是“应用驱动”。用户想设计图片，就打开Photoshop或Figma；想管理项目，就打开对应的项目管理软件；想安排会议，则需要进入日历或者会议应用。苹果和Google的应用商店正是建立在这种模式之上，用户首先发现、下载和安装应用，然后再使用应用提供的功能。 按照OpenAI公布的规划，ChatGPT将成为应用发现和运行的主要入口。当用户在对话中提出一个任务，而系统判断某个第三方应用能够帮助完成任务时，ChatGPT可以直接推荐相关应用。用户确认连接后，就可以在ChatGPT内部使用该应用，而不必离开当前对话。 这次变化的核心之一是对ChatGPT插件体系的扩展。开发者现在可以创建更加完整的应用体验，而不仅仅是让ChatGPT调用一个API。第三方应用可以在ChatGPT侧边栏拥有自己的入口，还能够提供交互式面板，让用户直接在聊天过程中操作原本需要独立网站或者独立App才能使用的功能。",
+      [
+        "OpenAI在近日举行的Dev Day开发者大会上集中发布了一系列新功能。单独来看，这些功能分别涉及插件、AI智能体、应用集成、身份认证和企业软件市场，但将它们放在一起观察，可以看到OpenAI正在推动一种与传统App Store完全不同的软件分发模式：用户不再先寻找应用，再打开应用完成任务，而是直接告诉ChatGPT自己想做什么，由AI决定应该调用哪个应用，并在对话界面内完成工作。",
+        "传统的软件模式是“应用驱动”。用户想设计图片，就打开Photoshop或Figma；想管理项目，就打开对应的项目管理软件；想安排会议，则需要进入日历或者会议应用。苹果和Google的应用商店正是建立在这种模式之上，用户首先发现、下载和安装应用，然后再使用应用提供的功能。",
+        "这次变化的核心之一是对ChatGPT插件体系的扩展。开发者现在可以创建更加完整的应用体验，而不仅仅是让ChatGPT调用一个API。第三方应用可以在ChatGPT侧边栏拥有自己的入口，还能够提供交互式面板，让用户直接在聊天过程中操作原本需要独立网站或者独立App才能使用的功能。",
+        "首批合作伙伴包括Cognition旗下的Devin、Notion、Vercel、T3、OpenClaw和Dactyl等，共有16家公司参与初始计划，OpenAI表示未来还会继续扩大合作范围。",
+        "OpenAI还宣布推出企业应用市场。首批市场中已经有30多家合作伙伴，包括Adobe、Figma、Sierra、Decagon、HubSpot、Salesforce、ServiceNow、Harvey、Legora、Palo Alto Networks、CrowdStrike和Baseten等。",
+        "OpenAI此次推出的自主AI智能体Dots能够拥有自己的云端计算机和浏览器，并可以访问用户连接的应用。用户不需要先判断“我应该用哪个App”，而是直接告诉AI自己想完成什么任务，智能体再决定应该调用哪些工具。",
+        "传统模式是“人→App→功能”，用户必须知道自己需要什么软件；而AI代理模式逐渐变成“人→AI→多个App→任务结果”。在后一种模式中，软件本身越来越像AI可以调用的工具，而不是用户必须亲自操作的目的地。"
+      ]
+    ]
+  },
+  "178f25f45a1947fb5a3d77b4": {
+    "evidence": {
+      "article_id": "178f25f45a1947fb5a3d77b4",
+      "confidence": "detail",
+      "content_form": "roundup",
+      "discovery_lead": "Apple’s current iPad, the A16 model, has gone untouched for well over a year. It remains the only device in Apple’s core product lineup without support for Apple Intelligence. Rumors had swirled for quite some time about an A18 model coming this year. Now, it’s sounding like Apple has an even bigger plan. more… It remains the only device in…",
+      "discovery_title": "Here’s everything we know so far about Apple’s next entry-level iPad: A19 chip, more",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T16:36:23+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T16:36:25+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T16:36:23+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T16:36:25+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 16:36:23 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03T16:36:23+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-03T16:36:23+00:00",
+      "raw_lead": "Apple’s current iPad, the A16 model, has gone untouched for well over a year. It remains the only device in...",
+      "source": "9to5Mac",
+      "title": "Here's everything we know so far about Apple's next entry-level iPad: A19 chip, more - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple’s current iPad, the A16 model, has gone untouched for well over a year. It remains the only device in Apple’s core product lineup without support for Apple Intelligence. Rumors had swirled for quite some time about an A18 model coming this year. Now, it’s sounding like Apple has an even bigger plan.",
+          "unit_id": "2c209165d710a9d73dd0621b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "It’s likely safe to assume that the delays with this product launch have much to do with the ongoing memory crisis affecting the electronics industry. It wouldn’t surprise me if Apple had the A18 refresh roadmapped for earlier this year alongside the debut of the M4 iPad Air, then had to push it.",
+          "unit_id": "3c58eaf87f38ef8855cd6f36"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "As a reminder, Apple raised the price of the base iPad from $349 to $449 this summer alongside the rest of its memory-related price hikes. This brings it back to the price it initially launched at in 2022.",
+          "unit_id": "e7bac6081a9bd8f4434dc4b7"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "New iPad details",
+          "unit_id": "a7c7e36c48cbe2db101360d9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "However, a new leak from MacRumors contributor Aaron Perris paints a more promising picture. Instead of utilizing the A18 chip, it sounds like the next entry-level iPad will equip the A19 chip. Alongside that, you’ll get the N1 networking chip, as well as the C1X modem on the cellular version. This’ll bring support for Wi-Fi 7 to Apple’s cheapest iPad.",
+          "unit_id": "be604dbb7284f03dcb323368"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "The A19 iPad will also be equipped with 8GB of memory, allowing users to run Siri AI, though you’ll still miss out on the most capable local models and the more advanced dictation models, as those features require 12GB of memory. It’s not a major loss, but worth pointing out.",
+          "unit_id": "136686cb6b3534e2ab9c1e68"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Another possibility is that the A19 iPad might offer a new name. With the debut of the MacBook Neo, Apple marketing exec Greg Joswiak pointed out that calling the MacBook Neo just “MacBook” would leave it without an identity. Hopefully, with the next entry-level iPad, we also get some sort of proper name like “SE” or “Neo” so we have something to call it.",
+          "unit_id": "a12a0b474cf1a52e545dc560"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Beyond that, don’t expect any sort of redesign or display improvements. There may be new colors, but probably nothing else. I personally wish Apple would bring USB 3 to the product, so users don’t have to suffer with such slow transfer speeds. It’d certainly help justify the new higher starting price.",
+          "unit_id": "93f337c16e23f555597a0f80"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Release date",
+          "unit_id": "1f0cb4a4bc3919fa1c9d4890"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Apple’s next budget iPad should be releasing next Spring, per Bloomberg’s Mark Gurman. That’ll accompany other products like the M6 MacBook Air, A19 Pro MacBook Neo, M7 14-inch MacBook Pro, and more.",
+          "unit_id": "94e43dac04bfedac00ea1a3e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Are you someone in the market for the entry-level iPad? What are you most looking forward to? Let us know in the comments.",
+          "unit_id": "98e32595061b43dba63e4c98"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/03/apples-next-ipad-a19-details-release-date/"
+    },
+    "recorded_extraction": [
+      "Here's everything we know so far about Apple's next entry-level iPad: A19 chip, more - 9to5Mac",
+      "Apple’s current iPad, the A16 model, has gone untouched for well over a year. It remains the only device in... Apple’s current iPad , the A16 model, has gone untouched for well over a year. It remains the only device in Apple’s core product lineup without support for Apple Intelligence. Rumors had swirled for quite some time about an A18 model coming this year . Now, it’s sounding like Apple has an even bigger plan. It’s likely safe to assume that the delays with this product launch have much to do with the ongoing memory crisis affecting the electronics industry. It wouldn’t surprise me if Apple had the A18 refresh roadmapped for earlier this year alongside the debut of the M4 iPad Air , then had to push it. As a reminder, Apple raised the price of the base iPad from $349 to $449 this summer alongside the rest of its memory-related price hikes . This brings it back to the price it initially launched at in 2022. However, a new leak from MacRumors contributor Aaron Perris paints a more promising picture. Instead of utilizing the A18 chip, it sounds like the next entry-level iPad will equip the A19 chip. Alongside that, you’ll get the N1 networking chip, as well as the C1X modem on the cellular version. This’ll bring support for Wi-Fi 7 to Apple’s cheapest iPad.",
+      [
+        "Apple’s current iPad, the A16 model, has gone untouched for well over a year. It remains the only device in Apple’s core product lineup without support for Apple Intelligence. Rumors had swirled for quite some time about an A18 model coming this year. Now, it’s sounding like Apple has an even bigger plan.",
+        "It’s likely safe to assume that the delays with this product launch have much to do with the ongoing memory crisis affecting the electronics industry. It wouldn’t surprise me if Apple had the A18 refresh roadmapped for earlier this year alongside the debut of the M4 iPad Air, then had to push it.",
+        "As a reminder, Apple raised the price of the base iPad from $349 to $449 this summer alongside the rest of its memory-related price hikes. This brings it back to the price it initially launched at in 2022.",
+        "However, a new leak from MacRumors contributor Aaron Perris paints a more promising picture. Instead of utilizing the A18 chip, it sounds like the next entry-level iPad will equip the A19 chip. Alongside that, you’ll get the N1 networking chip, as well as the C1X modem on the cellular version. This’ll bring support for Wi-Fi 7 to Apple’s cheapest iPad.",
+        "The A19 iPad will also be equipped with 8GB of memory, allowing users to run Siri AI, though you’ll still miss out on the most capable local models and the more advanced dictation models, as those features require 12GB of memory. It’s not a major loss, but worth pointing out.",
+        "Another possibility is that the A19 iPad might offer a new name. With the debut of the MacBook Neo, Apple marketing exec Greg Joswiak pointed out that calling the MacBook Neo just “MacBook” would leave it without an identity. Hopefully, with the next entry-level iPad, we also get some sort of proper name like “SE” or “Neo” so we have something to call it.",
+        "Beyond that, don’t expect any sort of redesign or display improvements. There may be new colors, but probably nothing else. I personally wish Apple would bring USB 3 to the product, so users don’t have to suffer with such slow transfer speeds. It’d certainly help justify the new higher starting price.",
+        "Apple’s next budget iPad should be releasing next Spring, per Bloomberg’s Mark Gurman. That’ll accompany other products like the M6 MacBook Air, A19 Pro MacBook Neo, M7 14-inch MacBook Pro, and more."
+      ]
+    ]
+  },
+  "26ce147984dd0afa9e1cc447": {
+    "evidence": {
+      "article_id": "26ce147984dd0afa9e1cc447",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "消息源 @kro_roe 于 10 月 1 日在 X 平台发布推文，爆料称三星为了增强和苹果 iPhone Duo 的竞争，为 Galaxy Z Fold9 设定了激进研发目标，该折叠手机在展开状态下厚度为 3.9 毫米，折叠状态下为 7.9 毫米。",
+      "discovery_title": "对抗苹果 iPhone Duo：曝三星 Galaxy Z Fold9 折叠手机目标厚度 3.9mm/7.9mm",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/3 10:24:00",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T10:24:00.0530000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/3 10:24:00",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T02:24:00+00:00",
+      "raw_lead": "消息源 @kro_roe 于 10 月 1 日在 X 平台发布推文，爆料称三星为了增强和苹果 iPhone Duo 的竞争，为 Galaxy Z Fold9 设定了激进研发目标，该折叠手机在展开状态下厚度为 3.9 毫米，折叠状态下为 7.9 毫米。",
+      "source": "IT之家",
+      "title": "对抗苹果 iPhone Duo：曝三星 Galaxy Z Fold9 折叠手机目标厚度 3.9mm/7.9mm",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 3 日消息，消息源 @kro_roe 于 10 月 1 日在 X 平台发布推文，爆料称三星为了增强和苹果 iPhone Duo 的竞争，为 Galaxy Z Fold9 设定了激进研发目标，该折叠手机在展开状态下厚度为 3.9 毫米，折叠状态下为 7.9 毫米。",
+          "unit_id": "16489a8789406ad05fb231d1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家查询公开资料，@kro_roe 在三星 / Exynos / 高通旗舰芯片与机型规划这一垂直领域，属于较活跃且被媒体频繁引用的爆料者，有一定信息渠道和业内关注度。目前 Android Headline 等多家海外媒体已采用该消息源内容跟进报道。",
+          "unit_id": "dfe1cd130c081ca1a1dcaabd"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "机型 | 折叠后厚度 | 展开后厚度 | 重量",
+          "unit_id": "1e6eddbf778817af6f811fe5"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "三星 Galaxy Z Fold9（目标） | 7.9 毫米 | 3.9 毫米 | 未公布",
+          "unit_id": "4307d77dbd6519ad05239745"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "三星 Galaxy Z Fold8 | 9.7 毫米 | 4.5 毫米（不含相机凸起） | 201 克",
+          "unit_id": "e6ec0fdcfdf95d0fd69095e3"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "苹果 iPhone Duo | 11.3 毫米 | 5.2 毫米 | 254 克",
+          "unit_id": "24b32b5c937285b365ec0fe7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "若达成 7.9 毫米的折叠厚度，Galaxy Z Fold 9 将较 Galaxy Z Fold 8 的 9.7 毫米减少 1.8 毫米。摄像头方面，爆料者称三星考虑在 Galaxy Z Fold 9 的内屏采用屏下摄像头（UDC）。其表示该方案“可能已经得到证实”，但未公布具体配置或量产细节。",
+          "unit_id": "c3cdbbc7798c5dcc8b0c1821"
+        }
+      ],
+      "url": "https://www.ithome.com/1/009/405.htm"
+    },
+    "recorded_extraction": [
+      "对抗苹果 iPhone Duo：曝三星 Galaxy Z Fold9 折叠手机目标厚度 3.9mm/7.9mm",
+      "消息源 @kro_roe 于 10 月 1 日在 X 平台发布推文，爆料称三星为了增强和苹果 iPhone Duo 的竞争，为 Galaxy Z Fold9 设定了激进研发目标，该折叠手机在展开状态下厚度为 3.9 毫米，折叠状态下为 7.9 毫米。 IT之家 10 月 3 日消息，消息源 @kro_roe 于 10 月 1 日在 X 平台发布推文，爆料称三星为了增强和苹果 iPhone Duo 的竞争，为 Galaxy Z Fold9 设定了激进研发目标， 该折叠手机在展开状态下厚度为 3.9 毫米，折叠状态下为 7.9 毫米。 IT之家查询公开资料，@kro_roe 在三星 / Exynos / 高通旗舰芯片与机型规划这一垂直领域，属于较活跃且被媒体频繁引用的爆料者，有一定信息渠道和业内关注度。目前 Android Headline 等多家海外媒体已采用该消息源内容跟进报道。 若达成 7.9 毫米的折叠厚度， Galaxy Z Fold 9 将较 Galaxy Z Fold 8 的 9.7 毫米减少 1.8 毫米 。摄像头方面，爆料者称三星考虑在 Galaxy Z Fold 9 的内屏采用屏下摄像头（UDC）。其表示该方案“可能已经得到证实”，但未公布具体配置或量产细节。",
+      [
+        "IT之家 10 月 3 日消息，消息源 @kro_roe 于 10 月 1 日在 X 平台发布推文，爆料称三星为了增强和苹果 iPhone Duo 的竞争，为 Galaxy Z Fold9 设定了激进研发目标，该折叠手机在展开状态下厚度为 3.9 毫米，折叠状态下为 7.9 毫米。",
+        "三星 Galaxy Z Fold9（目标）7.9 毫米3.9 毫米未公布",
+        "三星 Galaxy Z Fold89.7 毫米4.5 毫米（不含相机凸起）201 克",
+        "苹果 iPhone Duo11.3 毫米5.2 毫米254 克",
+        "若达成 7.9 毫米的折叠厚度，Galaxy Z Fold 9 将较 Galaxy Z Fold 8 的 9.7 毫米减少 1.8 毫米。摄像头方面，爆料者称三星考虑在 Galaxy Z Fold 9 的内屏采用屏下摄像头（UDC）。其表示该方案“可能已经得到证实”，但未公布具体配置或量产细节。"
+      ]
+    ]
+  },
+  "3b60cae6c0982b1d46465ca7": {
+    "evidence": {
+      "article_id": "3b60cae6c0982b1d46465ca7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "I’m someone who doesn’t often upgrade my Apple Watch right when a new one comes out. The Apple Watch Series 10 I owned prior was only purchased this January, despite initially coming out in September 2024. That said, Apple Watch Series 12 was a highly compelling purchase, despite the fact that the two largely share the same design language. Here’s why I took the leap. more… The Apple Watch Series…",
+      "discovery_title": "Here’s why I upgraded from the Apple Watch Series 10 to Series 12",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T18:48:22+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T18:48:24+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T18:48:22+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T18:48:24+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 18:48:22 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03T18:48:22+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-03T18:48:22+00:00",
+      "raw_lead": "I’m someone who doesn’t often upgrade my Apple Watch right when a new one comes out. The Apple Watch Series...",
+      "source": "9to5Mac",
+      "title": "Here's why I upgraded from the Apple Watch Series 10 to Series 12 - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "I’m someone who doesn’t often upgrade my Apple Watch right when a new one comes out. The Apple Watch Series 10 I owned prior was only purchased this January, despite initially coming out in September 2024. That said, Apple Watch Series 12 was a highly compelling purchase, despite the fact that the two largely share the same design language. Here’s why I took the leap.",
+          "unit_id": "d760f1badf1cf0005fe69de6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "So yes, the Series 10 and Series 12 largely share the same design. In fact, the Series 12 is arguably a regression because the bezels are slightly thicker. This didn’t bother me, because I use a watch face with a black background anyways.",
+          "unit_id": "af5dac9c595a3ce521d46f4c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "However, the new features of Apple Watch Series 12 really fascinated me. In particular, I was compelled by the much improved heart-rate monitor, as well as the new ‘Readiness’ app. Everything on the Series 12 also feels substantially faster, especially Siri.",
+          "unit_id": "22a1c6d625ce981229827cf9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Previous Apple Watches never really gave me what I wanted in terms of health tracking. Series 12 provides much more insight. Before, you sort of just had your activity rings and a bunch of scattered data in the Health app. Now, the new Health app tells you absolutely everything you need to know in an incredibly useful manner.",
+          "unit_id": "52e7055034500b8e4f79ec69"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "I am still wearing my WHOOP, primarily because I’d like to compare the two over a longer term before I ditch it fully, but as of now, Apple’s Health app holds up – and I’m happy with what the Apple Watch Series 12 offers in terms of health tracking.",
+          "unit_id": "de097408148a9a00bbb1e09f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Also worth noting that the WHOOP is a $239/year subscription that largely doesn’t offer much over Apple Health anymore.",
+          "unit_id": "a5370a114b0bffefb8644060"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "All in all, my purchase of the Apple Watch Series 12 can be summarized by the fact that the Apple Watch made a major push into getting serious as a health wearable. It no longer feels like as much of an afterthought.",
+          "unit_id": "889c09c15f986bf3a701e72f"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/03/heres-why-i-upgraded-from-the-apple-watch-series-10-to-series-12/"
+    },
+    "recorded_extraction": [
+      "Here's why I upgraded from the Apple Watch Series 10 to Series 12 - 9to5Mac",
+      "I’m someone who doesn’t often upgrade my Apple Watch right when a new one comes out. The Apple Watch Series... I’m someone who doesn’t often upgrade my Apple Watch right when a new one comes out. The Apple Watch Series 10 I owned prior was only purchased this January, despite initially coming out in September 2024. That said, Apple Watch Series 12 was a highly compelling purchase, despite the fact that the two largely share the same design language. Here’s why I took the leap. So yes, the Series 10 and Series 12 largely share the same design. In fact, the Series 12 is arguably a regression because the bezels are slightly thicker . This didn’t bother me, because I use a watch face with a black background anyways. However, the new features of Apple Watch Series 12 really fascinated me. In particular, I was compelled by the much improved heart-rate monitor, as well as the new ‘Readiness’ app. Everything on the Series 12 also feels substantially faster, especially Siri. Previous Apple Watches never really gave me what I wanted in terms of health tracking. Series 12 provides much more insight. Before, you sort of just had your activity rings and a bunch of scattered data in the Health app. Now, the new Health app tells you absolutely everything you need to know in an incredibly useful manner.",
+      [
+        "I’m someone who doesn’t often upgrade my Apple Watch right when a new one comes out. The Apple Watch Series 10 I owned prior was only purchased this January, despite initially coming out in September 2024. That said, Apple Watch Series 12 was a highly compelling purchase, despite the fact that the two largely share the same design language. Here’s why I took the leap.",
+        "So yes, the Series 10 and Series 12 largely share the same design. In fact, the Series 12 is arguably a regression because the bezels are slightly thicker. This didn’t bother me, because I use a watch face with a black background anyways.",
+        "However, the new features of Apple Watch Series 12 really fascinated me. In particular, I was compelled by the much improved heart-rate monitor, as well as the new ‘Readiness’ app. Everything on the Series 12 also feels substantially faster, especially Siri.",
+        "Previous Apple Watches never really gave me what I wanted in terms of health tracking. Series 12 provides much more insight. Before, you sort of just had your activity rings and a bunch of scattered data in the Health app. Now, the new Health app tells you absolutely everything you need to know in an incredibly useful manner.",
+        "I am still wearing my WHOOP, primarily because I’d like to compare the two over a longer term before I ditch it fully, but as of now, Apple’s Health app holds up – and I’m happy with what the Apple Watch Series 12 offers in terms of health tracking.",
+        "Also worth noting that the WHOOP is a $239/year subscription that largely doesn’t offer much over Apple Health anymore.",
+        "All in all, my purchase of the Apple Watch Series 12 can be summarized by the fact that the Apple Watch made a major push into getting serious as a health wearable. It no longer feels like as much of an afterthought."
+      ]
+    ]
+  },
+  "3cadfcbb4022c3f7fef845c7": {
+    "evidence": {
+      "article_id": "3cadfcbb4022c3f7fef845c7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "苹果近日正式确认，部分美国AT&T用户使用的iPhone 18 Pro Max存在严重的蜂窝网络连接问题。受影响设备可能突然失去移动网络服务，无法正常拨打电话、收发短信或使用蜂窝数据，部分设备会长期停留在“SOS”状态。更值得注意的是，苹果确认，如果设备已经因为这一问题彻底失去蜂窝服务，单纯更新系统或运营商配置并不能恢复正常，必须更换整机。 阅读全文",
+      "discovery_title": "苹果确认iPhone 18 Pro Max出现的AT&T蜂窝网络故障无法修复 必须整机更换",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "昨天 13:29",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 05:14",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 15:00",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月03日 14:11",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 06:11:22 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月03日 14:11",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T06:11:00+00:00",
+      "raw_lead": "苹果近日正式确认，部分美国AT&T用户使用的iPhone18ProMax存在严重的蜂窝网络连接问题。受影响设备可能突然失去移动网络服务，无法正常拨打电话、收发短信或使用蜂窝数据，部分设备会长期停留在“SOS”状态。更值得注意的是，苹果确认，如果设备已经因为这一问题彻底失去蜂窝服务，单纯更新系统或运营商配置并不能恢复正常，必须更换整机。",
+      "source": "cnBeta",
+      "title": "苹果确认iPhone 18 Pro Max出现的AT&T蜂窝网络故障无法修复 必须整机更换 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "苹果近日正式确认，部分美国AT&T用户使用的iPhone 18 Pro Max存在严重的蜂窝网络连接问题。受影响设备可能突然失去移动网络服务，无法正常拨打电话、收发短信或使用蜂窝数据，部分设备会长期停留在“SOS”状态。更值得注意的是，苹果确认，如果设备已经因为这一问题彻底失去蜂窝服务，单纯更新系统或运营商配置并不能恢复正常，必须更换整机。",
+          "unit_id": "69c715c3d456e745a003a354"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "苹果表示，目前确认受到影响的是“少量”AT&T网络上的iPhone 18 Pro Max。公司已经在本周早些时候发布iOS 27.0.1，并于10月2日进一步推出针对AT&T的运营商配置更新。这两项更新的主要作用是防止尚未出现故障的设备继续受到影响，而不是修复已经发生蜂窝通信故障的设备。",
+          "unit_id": "ec087ae0817f6352d5ecb347"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "苹果在声明中表示，公司已经确认AT&T网络上的少量iPhone 18 Pro Max存在可能导致设备失去服务、无法拨打电话的问题。苹果强烈建议所有iPhone 18 Pro Max用户立即升级至iOS 27.0.1，同时新的运营商配置更新也已经开始推送。苹果称，两项更新结合起来旨在降低这一问题再次发生的概率。",
+          "unit_id": "0ebbb7937185169484495518"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "运营商配置更新的版本从此前的72.0.2升级至72.1。苹果表示，AT&T用户将在未来14天内自动收到该更新。如果希望立即检查是否可以获得更新，可以进入“设置→通用→关于本机”，系统在检测到新的运营商配置后会提示安装。",
+          "unit_id": "103b3c0708607f428ed41308"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "但对于已经出现故障的设备，情况完全不同。苹果明确表示，如果一台iPhone 18 Pro Max已经因为此次问题失去蜂窝网络服务，那么iOS 27.0.1和新的运营商配置更新都无法让它恢复正常。受影响用户需要联系苹果客服或AT&T，或者直接前往Apple Store或AT&T门店处理设备更换。",
+          "unit_id": "578cbf990602a428a6a3f51f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "这也解释了为什么此前不少用户在安装iOS 27.0.1之后仍然无法解决问题。此前AT&T已经向部分用户发送短信，要求他们立即升级系统，并提醒问题可能导致电话、短信、数据甚至911紧急呼叫无法正常完成。但大量已经出现故障的用户反馈称，升级之后设备仍然处于SOS状态。现在苹果的正式说明表明，这并不一定意味着更新本身没有作用，而是因为软件更新的定位主要是“预防”，并不是对已经发生故障的设备进行修复。",
+          "unit_id": "8717f92814c5d268689f5118"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "此次问题自iPhone 18 Pro Max于9月18日上市后陆续出现。受影响用户报告称，手机可能间歇性或持续无法连接AT&T网络，电话、短信和移动数据全部失效。部分用户经过重新启动、重新配置eSIM等操作后仍无法恢复正常。随着投诉数量增加，苹果和AT&T最终开始联合处理这一问题。",
+          "unit_id": "c91db44f59aab3eb3c6f94fd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "目前苹果仍没有公布导致故障的具体技术原因，因此还无法确定究竟是基带硬件、iOS、运营商配置、eSIM配置流程，还是这些因素之间的组合导致了问题。",
+          "unit_id": "5a24c178e496a804559179d4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "值得注意的是，美国销售的iPhone 18 Pro Max在今年的iPhone产品线中具有一个特殊之处：它采用高通Snapdragon X80蜂窝基带，而iPhone 18 Pro以及iPhone Duo则采用苹果自研的C2基带。美国以外销售的iPhone 18 Pro Max同样采用C2基带。因此，目前出现问题的设备恰好集中在“美国版iPhone 18 Pro Max+AT&T”这一组合上。",
+          "unit_id": "6dd0a2f1fc5398c6071bf0f2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "不过，苹果并没有表示高通基带就是故障源头，目前也没有确凿证据证明Snapdragon X80存在硬件缺陷。不能仅仅因为受影响机型采用高通基带，就认定问题来自基带本身。尤其是此次故障同时涉及AT&T网络和设备服务状态，因此运营商配置、网络侧参数以及设备自身的通信模块之间如何发生异常，目前仍有待进一步调查。",
+          "unit_id": "78a8f725b01d3ba27e5649ab"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "从苹果目前的处理方式来看，公司显然已经将“已经失联的设备”和“尚未发生故障的设备”区别对待。对于正常工作的iPhone 18 Pro Max，苹果希望通过iOS 27.0.1和新的运营商配置更新提前规避风险；对于已经发生故障的设备，则直接采用硬件更换方案，而不是继续要求用户反复恢复系统或重新配置eSIM。",
+          "unit_id": "777dfbb85f06d01192e5b8d9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "苹果目前也没有宣布针对这一问题推出独立的正式服务计划，因此尚不清楚未来是否会公布更详细的维修计划。不过，从苹果已经明确要求更换受影响设备这一点来看，至少对于目前已经确认失去蜂窝服务的机器，用户无需继续等待后续系统更新来尝试“修复”，更换设备才是苹果目前给出的正式解决方案。",
+          "unit_id": "5057c26032f4e7770c2fc247"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "目前苹果强调，除了AT&T网络上的部分iPhone 18 Pro Max之外，没有发现其他iPhone型号或其他运营商受到同一问题影响。这意味着现阶段还不能将此次事件扩大解释为iPhone 18系列普遍存在的蜂窝通信故障。",
+          "unit_id": "c293a5dbab2bc263be79ae6c"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1580568.htm"
+    },
+    "recorded_extraction": [
+      "苹果确认iPhone 18 Pro Max出现的AT&T蜂窝网络故障无法修复 必须整机更换 - Apple iPhone - cnBeta.COM",
+      "苹果近日正式确认，部分美国AT&T用户使用的iPhone18ProMax存在严重的蜂窝网络连接问题。受影响设备可能突然失去移动网络服务，无法正常拨打电话、收发短信或使用蜂窝数据，部分设备会长期停留在“SOS”状态。更值得注意的是，苹果确认，如果设备已经因为这一问题彻底失去蜂窝服务，单纯更新系统或运营商配置并不能恢复正常，必须更换整机。 苹果近日正式确认，部分美国AT&T用户使用的iPhone 18 Pro Max存在严重的蜂窝网络连接问题。受影响设备可能突然失去移动网络服务，无法正常拨打电话、收发短信或使用蜂窝数据，部分设备会长期停留在“SOS”状态。更值得注意的是，苹果确认，如果设备已经因为这一问题彻底失去蜂窝服务，单纯更新系统或运营商配置并不能恢复正常，必须更换整机。 苹果表示，目前确认受到影响的是“少量”AT&T网络上的iPhone 18 Pro Max。公司已经在本周早些时候发布iOS 27.0.1，并于10月2日进一步推出针对AT&T的运营商配置更新。这两项更新的主要作用是防止尚未出现故障的设备继续受到影响，而不是修复已经发生蜂窝通信故障的设备。 苹果在声明中表示，公司已经确认AT&T网络上的少量iPhone 18 Pro Max存在可能导致设备失去服务、无法拨打电话的问题。苹果强烈建议所有iPhone 18 Pro Max用户立即升级至iOS 27.0.1，同时新的运营商配置更新也已经开始推送。苹果称，两项更新结合起来旨在降低这一问题再次发生的概率。 运营商配置更新的版本从此前的72.0.2升级至72.1。苹果表示，AT&T用户将在未来14天内自动收到该更新。如果希望立即检查是否可以获得更新，可以进入“设置→通用→关于本机”，系统在检测到新的运营商配置后会提示安装。",
+      [
+        "苹果近日正式确认，部分美国AT&T用户使用的iPhone 18 Pro Max存在严重的蜂窝网络连接问题。受影响设备可能突然失去移动网络服务，无法正常拨打电话、收发短信或使用蜂窝数据，部分设备会长期停留在“SOS”状态。更值得注意的是，苹果确认，如果设备已经因为这一问题彻底失去蜂窝服务，单纯更新系统或运营商配置并不能恢复正常，必须更换整机。",
+        "苹果表示，目前确认受到影响的是“少量”AT&T网络上的iPhone 18 Pro Max。公司已经在本周早些时候发布iOS 27.0.1，并于10月2日进一步推出针对AT&T的运营商配置更新。这两项更新的主要作用是防止尚未出现故障的设备继续受到影响，而不是修复已经发生蜂窝通信故障的设备。",
+        "苹果在声明中表示，公司已经确认AT&T网络上的少量iPhone 18 Pro Max存在可能导致设备失去服务、无法拨打电话的问题。苹果强烈建议所有iPhone 18 Pro Max用户立即升级至iOS 27.0.1，同时新的运营商配置更新也已经开始推送。苹果称，两项更新结合起来旨在降低这一问题再次发生的概率。",
+        "运营商配置更新的版本从此前的72.0.2升级至72.1。苹果表示，AT&T用户将在未来14天内自动收到该更新。如果希望立即检查是否可以获得更新，可以进入“设置→通用→关于本机”，系统在检测到新的运营商配置后会提示安装。",
+        "但对于已经出现故障的设备，情况完全不同。苹果明确表示，如果一台iPhone 18 Pro Max已经因为此次问题失去蜂窝网络服务，那么iOS 27.0.1和新的运营商配置更新都无法让它恢复正常。受影响用户需要联系苹果客服或AT&T，或者直接前往Apple Store或AT&T门店处理设备更换。",
+        "这也解释了为什么此前不少用户在安装iOS 27.0.1之后仍然无法解决问题。此前AT&T已经向部分用户发送短信，要求他们立即升级系统，并提醒问题可能导致电话、短信、数据甚至911紧急呼叫无法正常完成。但大量已经出现故障的用户反馈称，升级之后设备仍然处于SOS状态。现在苹果的正式说明表明，这并不一定意味着更新本身没有作用，而是因为软件更新的定位主要是“预防”，并不是对已经发生故障的设备进行修复。",
+        "此次问题自iPhone 18 Pro Max于9月18日上市后陆续出现。受影响用户报告称，手机可能间歇性或持续无法连接AT&T网络，电话、短信和移动数据全部失效。部分用户经过重新启动、重新配置eSIM等操作后仍无法恢复正常。随着投诉数量增加，苹果和AT&T最终开始联合处理这一问题。",
+        "值得注意的是，美国销售的iPhone 18 Pro Max在今年的iPhone产品线中具有一个特殊之处：它采用高通Snapdragon X80蜂窝基带，而iPhone 18 Pro以及iPhone Duo则采用苹果自研的C2基带。美国以外销售的iPhone 18 Pro Max同样采用C2基带。因此，目前出现问题的设备恰好集中在“美国版iPhone 18 Pro Max+AT&T”这一组合上。",
+        "不过，苹果并没有表示高通基带就是故障源头，目前也没有确凿证据证明Snapdragon X80存在硬件缺陷。不能仅仅因为受影响机型采用高通基带，就认定问题来自基带本身。尤其是此次故障同时涉及AT&T网络和设备服务状态，因此运营商配置、网络侧参数以及设备自身的通信模块之间如何发生异常，目前仍有待进一步调查。",
+        "从苹果目前的处理方式来看，公司显然已经将“已经失联的设备”和“尚未发生故障的设备”区别对待。对于正常工作的iPhone 18 Pro Max，苹果希望通过iOS 27.0.1和新的运营商配置更新提前规避风险；对于已经发生故障的设备，则直接采用硬件更换方案，而不是继续要求用户反复恢复系统或重新配置eSIM。",
+        "苹果目前也没有宣布针对这一问题推出独立的正式服务计划，因此尚不清楚未来是否会公布更详细的维修计划。不过，从苹果已经明确要求更换受影响设备这一点来看，至少对于目前已经确认失去蜂窝服务的机器，用户无需继续等待后续系统更新来尝试“修复”，更换设备才是苹果目前给出的正式解决方案。",
+        "目前苹果强调，除了AT&T网络上的部分iPhone 18 Pro Max之外，没有发现其他iPhone型号或其他运营商受到同一问题影响。这意味着现阶段还不能将此次事件扩大解释为iPhone 18系列普遍存在的蜂窝通信故障。"
+      ]
+    ]
+  },
+  "48923b211c3bc40943f39bc2": {
+    "evidence": {
+      "article_id": "48923b211c3bc40943f39bc2",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 4 日消息，Qwen3.8‑27B 是一款性能不错的人工智能模型，但前提是设备拥有足够的显存与系统内存。搭载 M4 Pro 芯片的 MacBook Pro 仅有 24GB 统一内存，在运行该 AI 模型时，预填充速度会因此受到限制。据 Wccftech 报道，有一名用户通过 USB‑C 接口将 iPhone 17 Pro Max 外接至这台便携 Mac 电脑上，并借助自制软件，使得该 AI 模型的预填充性能最高提升了 44%。 IT之家注意到，为突破这台 Mac 24GB 统一内存的上限，Reddit 用户“u/StayLameBro”采用两种方式，把运算任务拆分交给 Mac 本机和 iPhone 17 Pro Max 协同处理。针对预填充加速，MacBook Pro 负责处理每一批 256 个 token 当中的第 1 至 40 层，再将激活值数据流传输到手机端；与此同时，iPhone 利用 A19 Pro 的 GPU 运行第 41 至 64 层，而 Mac 这边则已经开始处理下一批数据。依靠 GPU 运算，手机端的运行速度相比不使用 GPU 时提升约 2.4 倍。 整套方案里，神经网络引擎也没有闲置。每 16K 长度的旧上下文会被编译为一套神经网络引擎模型。在 140K 上下文长度下，相较于仅使用 A19 Pro 的 GPU，单 token 写入耗时从 279 毫秒缩短至 176 毫秒。拿将一份 2000token 的文件预填充并保存会话这项任务来看性能表现：上下文设为 8K 时，仅靠 Mac 本机的速度是每秒 132 个 token；外接 iPhone 之后达到每秒 177 个 token，性能提升 35%。上下文设为 16K 时，速度从每秒 109 个 token 上涨至每秒 157 个 token，增幅高达 44%。 当上下文窗口设置为 32K 时，预填充速度从每秒 101 个 token 提升至每秒 130 个 token，性能改善 29%。把 iPhone 17 Pro Max 外接在 M4 Pro 版 MacBook Pro 上，使用这套自制软件，按理可以得到十分出色的预填充速度。可惜正如这名 Reddit 用户指出的，现实并没有这么美好，这套方案还存在若干局限。举例来说，在 64K 以内的场景，手机并不会加速文本生成，文本生成的工作依旧全部交由 Mac 完成。 另外值得一提的是，驱动 iPhone 18 Pro 以及 iPhone 18 Pro Max 的 A20 Pro 芯片有望提供更大的性能余量。一方面它本身的整体性能更强；另一方面它配备双 16 核神经网络引擎。据称，针对专门适配神经网络处理器的任务，这款引擎的数据吞吐能力甚至超过该系统级芯片内置的 7 核 GPU。这套自制软件目前已经开源，可以在 GitHub 上下载，项目名称叫作“backburner”。 即便仅仅作为一项实验，也能够看出预填充速度提升带来的收益相当可观。后续自然还有继续挖掘性能潜力的空间；不过这或许也意味着，未来 iPhone 这类设备也有可能步入和内存、固态硬盘一样的供货紧缺阶段。",
+      "discovery_title": "苹果 MacBook Pro 外接 iPhone 17 Pro Max 运行 AI 模型，预填充性能最高提升 44%",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/4 7:10:40",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 23:10:40 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/4 7:10:40",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T23:10:40+00:00",
+      "raw_lead": "通过 USB-C 外接 iPhone 17 Pro Max，用户利用自制软件将运算任务拆分，让 Mac 与手机 GPU 协同计算。在 16K 上下文下预填充速度提升 44%，但文本生成环节仍无法借助手机加速。该软件已开源，项目名为 backburner。#AI模型# #iPhone 17 Pro Max#",
+      "source": "IT之家",
+      "title": "苹果 MacBook Pro 外接 iPhone 17 Pro Max 运行 AI 模型，预填充性能最高提升 44%",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 4 日消息，Qwen3.8‑27B 是一款性能不错的人工智能模型，但前提是设备拥有足够的显存与系统内存。搭载 M4 Pro 芯片的 MacBook Pro 仅有 24GB 统一内存，在运行该 AI 模型时，预填充速度会因此受到限制。据 Wccftech 报道，有一名用户通过 USB‑C 接口将 iPhone 17 Pro Max 外接至这台便携 Mac 电脑上，并借助自制软件，使得该 AI 模型的预填充性能最高提升了 44%。",
+          "unit_id": "d66bc649a569648474d103a2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家注意到，为突破这台 Mac 24GB 统一内存的上限，Reddit 用户“u/StayLameBro”采用两种方式，把运算任务拆分交给 Mac 本机和 iPhone 17 Pro Max 协同处理。针对预填充加速，MacBook Pro 负责处理每一批 256 个 token 当中的第 1 至 40 层，再将激活值数据流传输到手机端；与此同时，iPhone 利用 A19 Pro 的 GPU 运行第 41 至 64 层，而 Mac 这边则已经开始处理下一批数据。依靠 GPU 运算，手机端的运行速度相比不使用 GPU 时提升约 2.4 倍。",
+          "unit_id": "efa9964892ba4085cdd45132"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "整套方案里，神经网络引擎也没有闲置。每 16K 长度的旧上下文会被编译为一套神经网络引擎模型。在 140K 上下文长度下，相较于仅使用 A19 Pro 的 GPU，单 token 写入耗时从 279 毫秒缩短至 176 毫秒。拿将一份 2000token 的文件预填充并保存会话这项任务来看性能表现：上下文设为 8K 时，仅靠 Mac 本机的速度是每秒 132 个 token；外接 iPhone 之后达到每秒 177 个 token，性能提升 35%。上下文设为 16K 时，速度从每秒 109 个 token 上涨至每秒 157 个 token，增幅高达 44%。",
+          "unit_id": "409d4d05bcd6f35081b29d35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "当上下文窗口设置为 32K 时，预填充速度从每秒 101 个 token 提升至每秒 130 个 token，性能改善 29%。把 iPhone 17 Pro Max 外接在 M4 Pro 版 MacBook Pro 上，使用这套自制软件，按理可以得到十分出色的预填充速度。可惜正如这名 Reddit 用户指出的，现实并没有这么美好，这套方案还存在若干局限。举例来说，在 64K 以内的场景，手机并不会加速文本生成，文本生成的工作依旧全部交由 Mac 完成。",
+          "unit_id": "ba42f3f8f9b14fd326f0ffd8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "另外值得一提的是，驱动 iPhone 18 Pro 以及 iPhone 18 Pro Max 的 A20 Pro 芯片有望提供更大的性能余量。一方面它本身的整体性能更强；另一方面它配备双 16 核神经网络引擎。据称，针对专门适配神经网络处理器的任务，这款引擎的数据吞吐能力甚至超过该系统级芯片内置的 7 核 GPU。这套自制软件目前已经开源，可以在 GitHub 上下载，项目名称叫作“backburner”。",
+          "unit_id": "fc04628b88571bb84e7985be"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "即便仅仅作为一项实验，也能够看出预填充速度提升带来的收益相当可观。后续自然还有继续挖掘性能潜力的空间；不过这或许也意味着，未来 iPhone 这类设备也有可能步入和内存、固态硬盘一样的供货紧缺阶段。",
+          "unit_id": "fcff357081bf4fbee5f637a2"
+        }
+      ],
+      "url": "https://www.ithome.com/1/009/586.htm"
+    },
+    "recorded_extraction": [
+      "苹果 MacBook Pro 外接 iPhone 17 Pro Max 运行 AI 模型，预填充性能最高提升 44%",
+      "通过 USB-C 外接 iPhone 17 Pro Max，用户利用自制软件将运算任务拆分，让 Mac 与手机 GPU 协同计算。在 16K 上下文下预填充速度提升 44%，但文本生成环节仍无法借助手机加速。该软件已开源，项目名为 backburner。#AI模型# #iPhone 17 Pro Max# IT之家 10 月 4 日消息，Qwen3.8‑27B 是一款性能不错的人工智能模型，但前提是设备拥有足够的显存与系统内存。搭载 M4 Pro 芯片的 MacBook Pro 仅有 24GB 统一内存，在运行该 AI 模型时，预填充速度会因此受到限制。据 Wccftech 报道，有一名用户通过 USB‑C 接口将 iPhone 17 Pro Max 外接至这台便携 Mac 电脑上，并借助自制软件，使得该 AI 模型的预填充性能最高提升了 44%。 IT之家注意到，为突破这台 Mac 24GB 统一内存的上限，Reddit 用户“u/StayLameBro”采用两种方式，把运算任务拆分交给 Mac 本机和 iPhone 17 Pro Max 协同处理。针对预填充加速，MacBook Pro 负责处理每一批 256 个 token 当中的第 1 至 40 层，再将激活值数据流传输到手机端；与此同时， iPhone 利用 A19 Pro 的 GPU 运行第 41 至 64 层，而 Mac 这边则已经开始处理下一批数据。依靠 GPU 运算，手机端的运行速度相比不使用 GPU 时提升约 2.4 倍。 整套方案里，神经网络引擎也没有闲置。每 16K 长度的旧上下文会被编译为一套神经网络引擎模型。在 140K 上下文长度下，相较于仅使用 A19 Pro 的 GPU，单 token 写入耗时从 279 毫秒缩短至 176 毫秒。拿将一份 2000token 的文件预填充并保存会话这项任务来看性能表现：上下文设为 8K 时，仅靠 Mac 本机的速度是每秒 132 个 token；外接 iPhone 之后达到每秒 177 个 token，性能提升 35%。上下文设为 16K 时，速度从每秒 109 个 token 上涨至每秒 157 个 token，增幅高达 44%。 当上下文窗口设置为 32K 时，预填充速度从每秒 101 个 token 提升至每秒 130 个 token，性能改善 29%。把 iPhone 17 Pro Max 外接在 M4 Pro 版 MacBook Pro 上，使用这套自制软件，按理可以得到十分出色的预填充速度。可惜正如这名 Reddit 用户指出的，现实并没有这么美好，这套方案还存在若干局限。举例来说，在 64K 以内的场景，手机并不会加速文本生成，文本生成的工作依旧全部交由 Mac 完成。",
+      [
+        "IT之家 10 月 4 日消息，Qwen3.8‑27B 是一款性能不错的人工智能模型，但前提是设备拥有足够的显存与系统内存。搭载 M4 Pro 芯片的 MacBook Pro 仅有 24GB 统一内存，在运行该 AI 模型时，预填充速度会因此受到限制。据 Wccftech 报道，有一名用户通过 USB‑C 接口将 iPhone 17 Pro Max 外接至这台便携 Mac 电脑上，并借助自制软件，使得该 AI 模型的预填充性能最高提升了 44%。",
+        "IT之家注意到，为突破这台 Mac 24GB 统一内存的上限，Reddit 用户“u/StayLameBro”采用两种方式，把运算任务拆分交给 Mac 本机和 iPhone 17 Pro Max 协同处理。针对预填充加速，MacBook Pro 负责处理每一批 256 个 token 当中的第 1 至 40 层，再将激活值数据流传输到手机端；与此同时，iPhone 利用 A19 Pro 的 GPU 运行第 41 至 64 层，而 Mac 这边则已经开始处理下一批数据。依靠 GPU 运算，手机端的运行速度相比不使用 GPU 时提升约 2.4 倍。",
+        "整套方案里，神经网络引擎也没有闲置。每 16K 长度的旧上下文会被编译为一套神经网络引擎模型。在 140K 上下文长度下，相较于仅使用 A19 Pro 的 GPU，单 token 写入耗时从 279 毫秒缩短至 176 毫秒。拿将一份 2000token 的文件预填充并保存会话这项任务来看性能表现：上下文设为 8K 时，仅靠 Mac 本机的速度是每秒 132 个 token；外接 iPhone 之后达到每秒 177 个 token，性能提升 35%。上下文设为 16K 时，速度从每秒 109 个 token 上涨至每秒 157 个 token，增幅高达 44%。",
+        "当上下文窗口设置为 32K 时，预填充速度从每秒 101 个 token 提升至每秒 130 个 token，性能改善 29%。把 iPhone 17 Pro Max 外接在 M4 Pro 版 MacBook Pro 上，使用这套自制软件，按理可以得到十分出色的预填充速度。可惜正如这名 Reddit 用户指出的，现实并没有这么美好，这套方案还存在若干局限。举例来说，在 64K 以内的场景，手机并不会加速文本生成，文本生成的工作依旧全部交由 Mac 完成。",
+        "另外值得一提的是，驱动 iPhone 18 Pro 以及 iPhone 18 Pro Max 的 A20 Pro 芯片有望提供更大的性能余量。一方面它本身的整体性能更强；另一方面它配备双 16 核神经网络引擎。据称，针对专门适配神经网络处理器的任务，这款引擎的数据吞吐能力甚至超过该系统级芯片内置的 7 核 GPU。这套自制软件目前已经开源，可以在 GitHub 上下载，项目名称叫作“backburner”。"
+      ]
+    ]
+  },
+  "496711bc1bd1f0d2bf64b98e": {
+    "evidence": {
+      "article_id": "496711bc1bd1f0d2bf64b98e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "一项由开发者完成的实验显示，通过定制软件将iPhone 17 Pro Max与搭载M4 Pro芯片的MacBook Pro连接后，可以显著提升本地大语言模型的运行效率。在运行Qwen3.8-27B模型时，系统预填充（Prefill）性能最高提升达到44%。 阅读全文",
+      "discovery_title": "开发者将iPhone 17 Pro Max变成MacBook Pro的第二块GPU",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "7 小时前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 13:29",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 05:14",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 15:00",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月03日 22:04",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 14:04:44 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月03日 22:04",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T14:04:00+00:00",
+      "raw_lead": "一项由开发者完成的实验显示，通过定制软件将iPhone17ProMax与搭载M4Pro芯片的MacBookPro连接后，可以显著提升本地大语言模型的运行效率。在运行Qwen3.8-27B模型时，系统预填充（Prefill）性能最高提升达到44%。",
+      "source": "cnBeta",
+      "title": "开发者将iPhone 17 Pro Max变成MacBook Pro的第二块GPU - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "一项由开发者完成的实验显示，通过定制软件将iPhone 17 Pro Max与搭载M4 Pro芯片的MacBook Pro连接后，可以显著提升本地大语言模型的运行效率。在运行Qwen3.8-27B模型时，系统预填充（Prefill）性能最高提升达到44%。",
+          "unit_id": "19cd31715722209f16394d40"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "此次实验的背景是，大型语言模型对显存和系统内存容量要求极高。虽然搭载M4 Pro芯片的MacBook Pro拥有24GB统一内存，但在运行270亿参数级别的大模型时仍会受到内存容量和上下文窗口规模的限制。开发者因此尝试利用iPhone 17 Pro Max作为额外计算节点，通过USB-C接口与MacBook Pro协同运行模型。",
+          "unit_id": "f798270a6579048e6be5e017"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "根据开发者公布的方案，MacBook Pro负责处理每个256 Token批次中的第1层至第40层计算任务，并将中间激活数据实时传输至iPhone。随后，iPhone 17 Pro Max利用A19 Pro芯片中的GPU继续执行第41层至第64层运算，而Mac则同步开始处理下一批数据。通过这种流水线式分工，两台设备能够同时参与模型推理过程。",
+          "unit_id": "101939319f790c0998512da6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "实验结果显示，相较于仅使用MacBook Pro运行模型，引入iPhone后预填充速度获得明显提升。在8K上下文窗口下，处理速度从每秒132个Token提高至177个Token，增幅达到35%；在16K上下文窗口下，性能从每秒109个Token提升至157个Token，增幅达到44%；在32K上下文窗口场景中，处理速度则从每秒101个Token提升至130个Token，增幅约29%。",
+          "unit_id": "4018d78cc3026167d45f4efc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "除了GPU协同计算之外，A19 Pro芯片中的神经网络引擎也参与了部分任务。开发者表示，每16K历史上下文会被转换为专用神经网络模型进行处理。在14万Token上下文规模下，单Token写入时间从仅依赖GPU时的279毫秒缩短至176毫秒，进一步提升了长上下文场景下的运行效率。",
+          "unit_id": "57e9e0d36b9d1952698b6037"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "不过，这一方案并非没有限制。开发者指出，iPhone主要帮助提升预填充阶段性能，而在64K以下文本生成任务中，大部分实际推理工作仍然主要由Mac完成。此外，该方案需要专门开发的软件支持，目前并不适用于普通用户直接部署。",
+          "unit_id": "3560f19e038db11820b1bbc8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "尽管如此，这项实验展示了消费级苹果设备在本地人工智能计算方面的潜力。随着移动芯片性能持续提升，未来智能手机、平板电脑以及个人电脑之间或许能够形成更加灵活的协同计算体系，从而降低运行大型人工智能模型对单一设备硬件配置的依赖。",
+          "unit_id": "995d7f7d607ccf7e7a3b02bd"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1580600.htm"
+    },
+    "recorded_extraction": [
+      "开发者将iPhone 17 Pro Max变成MacBook Pro的第二块GPU - Apple iPhone - cnBeta.COM",
+      "一项由开发者完成的实验显示，通过定制软件将iPhone17ProMax与搭载M4Pro芯片的MacBookPro连接后，可以显著提升本地大语言模型的运行效率。在运行Qwen3.8-27B模型时，系统预填充（Prefill）性能最高提升达到44%。 一项由开发者完成的实验显示，通过定制软件将iPhone 17 Pro Max与搭载M4 Pro芯片的MacBook Pro连接后，可以显著提升本地大语言模型的运行效率。在运行Qwen3.8-27B模型时，系统预填充（Prefill）性能最高提升达到44%。 此次实验的背景是，大型语言模型对显存和系统内存容量要求极高。虽然搭载M4 Pro芯片的MacBook Pro拥有24GB统一内存，但在运行270亿参数级别的大模型时仍会受到内存容量和上下文窗口规模的限制。开发者因此尝试利用iPhone 17 Pro Max作为额外计算节点，通过USB-C接口与MacBook Pro协同运行模型。 根据开发者公布的方案，MacBook Pro负责处理每个256 Token批次中的第1层至第40层计算任务，并将中间激活数据实时传输至iPhone。随后，iPhone 17 Pro Max利用A19 Pro芯片中的GPU继续执行第41层至第64层运算，而Mac则同步开始处理下一批数据。通过这种流水线式分工，两台设备能够同时参与模型推理过程。 实验结果显示，相较于仅使用MacBook Pro运行模型，引入iPhone后预填充速度获得明显提升。在8K上下文窗口下，处理速度从每秒132个Token提高至177个Token，增幅达到35%；在16K上下文窗口下，性能从每秒109个Token提升至157个Token，增幅达到44%；在32K上下文窗口场景中，处理速度则从每秒101个Token提升至130个Token，增幅约29%。",
+      [
+        "一项由开发者完成的实验显示，通过定制软件将iPhone 17 Pro Max与搭载M4 Pro芯片的MacBook Pro连接后，可以显著提升本地大语言模型的运行效率。在运行Qwen3.8-27B模型时，系统预填充（Prefill）性能最高提升达到44%。",
+        "此次实验的背景是，大型语言模型对显存和系统内存容量要求极高。虽然搭载M4 Pro芯片的MacBook Pro拥有24GB统一内存，但在运行270亿参数级别的大模型时仍会受到内存容量和上下文窗口规模的限制。开发者因此尝试利用iPhone 17 Pro Max作为额外计算节点，通过USB-C接口与MacBook Pro协同运行模型。",
+        "根据开发者公布的方案，MacBook Pro负责处理每个256 Token批次中的第1层至第40层计算任务，并将中间激活数据实时传输至iPhone。随后，iPhone 17 Pro Max利用A19 Pro芯片中的GPU继续执行第41层至第64层运算，而Mac则同步开始处理下一批数据。通过这种流水线式分工，两台设备能够同时参与模型推理过程。",
+        "实验结果显示，相较于仅使用MacBook Pro运行模型，引入iPhone后预填充速度获得明显提升。在8K上下文窗口下，处理速度从每秒132个Token提高至177个Token，增幅达到35%；在16K上下文窗口下，性能从每秒109个Token提升至157个Token，增幅达到44%；在32K上下文窗口场景中，处理速度则从每秒101个Token提升至130个Token，增幅约29%。",
+        "除了GPU协同计算之外，A19 Pro芯片中的神经网络引擎也参与了部分任务。开发者表示，每16K历史上下文会被转换为专用神经网络模型进行处理。在14万Token上下文规模下，单Token写入时间从仅依赖GPU时的279毫秒缩短至176毫秒，进一步提升了长上下文场景下的运行效率。",
+        "不过，这一方案并非没有限制。开发者指出，iPhone主要帮助提升预填充阶段性能，而在64K以下文本生成任务中，大部分实际推理工作仍然主要由Mac完成。此外，该方案需要专门开发的软件支持，目前并不适用于普通用户直接部署。"
+      ]
+    ]
+  },
+  "91f5d0d8ca426b0aeceeba7f": {
+    "evidence": {
+      "article_id": "91f5d0d8ca426b0aeceeba7f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 3 日消息，制造商 Arcturus 宣布为 V 社 Steam Frame 头显推出一款 Vision Camera 彩透外置摄像头模块，可以显著提升头显的透视（Passthrough）画面质量，定价 150 美元 （IT之家注：现汇率约合 1,007 元人民币） 。 该模块重量仅 10 克，采用即插即用设计，与 Steam Frame 的机身高度融合，可以直接安装在 Steam Frame 鼻梁下方隐藏的扩展接口中。安装后无需重启头显，系统即可自动切换至 Arcturus 摄像头。原本使用 Steam Frame 内置透视画面的场景，例如 SteamVR 背景以及混合现实游戏，都会改为使用 Vision Camera 提供的画面。 外媒 RoadtoVR 上手后认为，Vision Camera 不仅为 Steam Frame 引入了彩色画面，实际上透视分辨率也有极大提升。一个比较直观的测试方式是通过透视画面阅读手机屏幕，Steam Frame 原生摄像头基本无法完成这一任务，而安装 Vision Camera 后则已经可以较为清晰地读取手机屏幕内容。从实际观感来看， 升级后的 Steam Frame 透视效果大致可以达到 Meta Quest 3 的水平，但与苹果 Vision Pro 相比仍存在明显差距 。 ▲ 原版 Steam Frame 透视效果 ▲ 加装 Arcturus Vision 后的透视效果 除了提升透视效果，Vision Camera 还支持拍摄高质量空间视频。用户可以通过 Arcturus 为 Steam Frame 推出的免费应用进行录制和播放。官方数据显示，该摄像头最高支持录制 2464×2464 分辨率（也就是约 600 万像素）60fps 视频。 此外，Arcturus 还提供了名为 Sync 的配套工具，目前支持 Windows 和 Mac 平台，未来计划推出 Linux 版本。用户可以利用该工具将头显中录制的视频传输至电脑，并转换为其他 VR 头显能够播放的格式。",
+      "discovery_title": "V社 Steam Frame 头显第三方摄像头模块 Arcturus Vision 上市：可提供高分辨率彩透效果，售 150 美元",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/3 19:30:34",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 11:30:34 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/3 19:30:34",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T11:30:34+00:00",
+      "raw_lead": "第三方模块 Arcturus Vision 正式开售，售价 150 美元。仅重 10 克，即插即用，装于鼻梁下方扩展接口且无需重启。升级后透视效果可达 Meta Quest 3 水平，还支持 2464×2464 分辨率、60fps 空间视频录制。你愿意买单吗？#SteamFrame# #VR头显#",
+      "source": "IT之家",
+      "title": "V社 Steam Frame 头显第三方摄像头模块 Arcturus Vision 上市：可提供高分辨率彩透效果，售 150 美元",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 3 日消息，制造商 Arcturus 宣布为 V 社 Steam Frame 头显推出一款 Vision Camera 彩透外置摄像头模块，可以显著提升头显的透视（Passthrough）画面质量，定价 150 美元（IT之家注：现汇率约合 1,007 元人民币）。",
+          "unit_id": "2fa2effdb398f3ea803ea779"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "该模块重量仅 10 克，采用即插即用设计，与 Steam Frame 的机身高度融合，可以直接安装在 Steam Frame 鼻梁下方隐藏的扩展接口中。安装后无需重启头显，系统即可自动切换至 Arcturus 摄像头。原本使用 Steam Frame 内置透视画面的场景，例如 SteamVR 背景以及混合现实游戏，都会改为使用 Vision Camera 提供的画面。",
+          "unit_id": "b8008df0af009443747bf3e9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "外媒 RoadtoVR 上手后认为，Vision Camera 不仅为 Steam Frame 引入了彩色画面，实际上透视分辨率也有极大提升。一个比较直观的测试方式是通过透视画面阅读手机屏幕，Steam Frame 原生摄像头基本无法完成这一任务，而安装 Vision Camera 后则已经可以较为清晰地读取手机屏幕内容。从实际观感来看，升级后的 Steam Frame 透视效果大致可以达到 Meta Quest 3 的水平，但与苹果 Vision Pro 相比仍存在明显差距。",
+          "unit_id": "c7f769d6b0bf2da1449f2ed7"
+        },
+        {
+          "container_id": "caption",
+          "kind": "text",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "▲ 原版 Steam Frame 透视效果",
+          "unit_id": "5474bb7a800fa76e6788bee5"
+        },
+        {
+          "container_id": "caption",
+          "kind": "text",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "▲ 加装 Arcturus Vision 后的透视效果",
+          "unit_id": "85f44f27ef792e513383b9cd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "除了提升透视效果，Vision Camera 还支持拍摄高质量空间视频。用户可以通过 Arcturus 为 Steam Frame 推出的免费应用进行录制和播放。官方数据显示，该摄像头最高支持录制 2464×2464 分辨率（也就是约 600 万像素）60fps 视频。",
+          "unit_id": "5b9d6d3205df796c4f588396"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "此外，Arcturus 还提供了名为 Sync 的配套工具，目前支持 Windows 和 Mac 平台，未来计划推出 Linux 版本。用户可以利用该工具将头显中录制的视频传输至电脑，并转换为其他 VR 头显能够播放的格式。",
+          "unit_id": "ce2fa86ea740f4a1e80bb2f7"
+        }
+      ],
+      "url": "https://www.ithome.com/1/009/531.htm"
+    },
+    "recorded_extraction": [
+      "V社 Steam Frame 头显第三方摄像头模块 Arcturus Vision 上市：可提供高分辨率彩透效果，售 150 美元",
+      "第三方模块 Arcturus Vision 正式开售，售价 150 美元。仅重 10 克，即插即用，装于鼻梁下方扩展接口且无需重启。升级后透视效果可达 Meta Quest 3 水平，还支持 2464×2464 分辨率、60fps 空间视频录制。你愿意买单吗？#SteamFrame# #VR头显# IT之家 10 月 3 日消息，制造商 Arcturus 宣布为 V 社 Steam Frame 头显推出一款 Vision Camera 彩透外置摄像头模块，可以显著提升头显的透视（Passthrough）画面质量，定价 150 美元 （IT之家注：现汇率约合 1,007 元人民币） 。 该模块重量仅 10 克，采用即插即用设计，与 Steam Frame 的机身高度融合，可以直接安装在 Steam Frame 鼻梁下方隐藏的扩展接口中。安装后无需重启头显，系统即可自动切换至 Arcturus 摄像头。原本使用 Steam Frame 内置透视画面的场景，例如 SteamVR 背景以及混合现实游戏，都会改为使用 Vision Camera 提供的画面。 外媒 RoadtoVR 上手后认为，Vision Camera 不仅为 Steam Frame 引入了彩色画面，实际上透视分辨率也有极大提升。一个比较直观的测试方式是通过透视画面阅读手机屏幕，Steam Frame 原生摄像头基本无法完成这一任务，而安装 Vision Camera 后则已经可以较为清晰地读取手机屏幕内容。从实际观感来看， 升级后的 Steam Frame 透视效果大致可以达到 Meta Quest 3 的水平，但与苹果 Vision Pro 相比仍存在明显差距 。 除了提升透视效果，Vision Camera 还支持拍摄高质量空间视频。用户可以通过 Arcturus 为 Steam Frame 推出的免费应用进行录制和播放。官方数据显示，该摄像头最高支持录制 2464×2464 分辨率（也就是约 600 万像素）60fps 视频。",
+      [
+        "IT之家 10 月 3 日消息，制造商 Arcturus 宣布为 V 社 Steam Frame 头显推出一款 Vision Camera 彩透外置摄像头模块，可以显著提升头显的透视（Passthrough）画面质量，定价 150 美元（IT之家注：现汇率约合 1,007 元人民币）。",
+        "该模块重量仅 10 克，采用即插即用设计，与 Steam Frame 的机身高度融合，可以直接安装在 Steam Frame 鼻梁下方隐藏的扩展接口中。安装后无需重启头显，系统即可自动切换至 Arcturus 摄像头。原本使用 Steam Frame 内置透视画面的场景，例如 SteamVR 背景以及混合现实游戏，都会改为使用 Vision Camera 提供的画面。",
+        "外媒 RoadtoVR 上手后认为，Vision Camera 不仅为 Steam Frame 引入了彩色画面，实际上透视分辨率也有极大提升。一个比较直观的测试方式是通过透视画面阅读手机屏幕，Steam Frame 原生摄像头基本无法完成这一任务，而安装 Vision Camera 后则已经可以较为清晰地读取手机屏幕内容。从实际观感来看，升级后的 Steam Frame 透视效果大致可以达到 Meta Quest 3 的水平，但与苹果 Vision Pro 相比仍存在明显差距。",
+        "除了提升透视效果，Vision Camera 还支持拍摄高质量空间视频。用户可以通过 Arcturus 为 Steam Frame 推出的免费应用进行录制和播放。官方数据显示，该摄像头最高支持录制 2464×2464 分辨率（也就是约 600 万像素）60fps 视频。",
+        "此外，Arcturus 还提供了名为 Sync 的配套工具，目前支持 Windows 和 Mac 平台，未来计划推出 Linux 版本。用户可以利用该工具将头显中录制的视频传输至电脑，并转换为其他 VR 头显能够播放的格式。"
+      ]
+    ]
+  },
+  "9c0202e67931629ca71f3634": {
+    "evidence": {
+      "article_id": "9c0202e67931629ca71f3634",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月3日消息，据媒体报道， 美版iPhone 18 Pro Max出现断网问题，苹果公司确认，只能通过换机解决。 北京时间10月3日，彭博社报道称， 苹果公司表示，最近升级到该公司iPhone 18 Pro Max的“少量”AT&T公司用户将需要更换设备，因为一个故障导致他们失去了蜂窝网服务。 iPhone 18 Pro Max售价1299美元，于两周前正式上市发售，是苹果除折叠屏手机iPhone Duo之外的最高端机型。 AT&T的问题已导致部分iPhone 18 Pro Max用户无法拨打电话、访问数据或在联网时收发短信。 目前尚不清楚有多少人遇到此问题，受影响的用户发现，除非连接到Wi-Fi网络，否则他们的设备基本无法使用。 苹果发言人在提供给彭博社的一份声明中表示：“我们已发现一个影响少数AT&T网络iPhone 18 Pro Max用户的故障，可能导致设备失去服务并无法拨打电话。” 苹果公司已发布运营商设置更新，并推出了iOS操作系统的新版本27.0.1，以防止该问题进一步蔓延。 运营商设置修复程序将在未来14天内自动为AT&T用户下载，但苹果仍建议消费者立即安装任何可用的软件更新。 报道称，对于已经受到影响的用户，唯一的解决办法是更换手机，使用苹果或AT&T提供的新设备。 其他还提到，在美国销售的iPhone 18 Pro Max与其他新款机型有一点不同：它搭载的是由高通公司制造的蜂窝基带， 包括较小的iPhone 18 Pro在内的所有其他版本，均配备苹果自研的C2基带。 根据用户报告，只有iPhone 18 Pro Max受到了AT&T这一漏洞的影响。",
+      "discovery_title": "苹果确认：美版iPhone 18 Pro Max有问题 只能通过换机解决",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03 15:56:21",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03 15:56:21",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03 15:56:21",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T07:56:21+00:00",
+      "raw_lead": "快科技10月3日消息，据媒体报道，美版iPhone 18 Pro Max出现断网问题，苹果公司确认，只能通过换机解决。北京时间10月3日，彭博社报道称，苹果公司表示，最近升级到该公司iPhone 18 Pro Max的",
+      "source": "快科技",
+      "title": "苹果确认：美版iPhone 18 Pro Max有问题 只能通过换机解决",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月3日消息，据媒体报道，美版iPhone 18 Pro Max出现断网问题，苹果公司确认，只能通过换机解决。",
+          "unit_id": "92ab65d6e5339b18b1fa31c3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "北京时间10月3日，彭博社报道称，苹果公司表示，最近升级到该公司iPhone 18 Pro Max的“少量”AT&T公司用户将需要更换设备，因为一个故障导致他们失去了蜂窝网服务。",
+          "unit_id": "6d064675d92d4299d66117a2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "iPhone 18 Pro Max售价1299美元，于两周前正式上市发售，是苹果除折叠屏手机iPhone Duo之外的最高端机型。",
+          "unit_id": "5c93c0f5452be7f4a7d49bb6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "AT&T的问题已导致部分iPhone 18 Pro Max用户无法拨打电话、访问数据或在联网时收发短信。",
+          "unit_id": "48775a517424e2d26bbe0a06"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "目前尚不清楚有多少人遇到此问题，受影响的用户发现，除非连接到Wi-Fi网络，否则他们的设备基本无法使用。",
+          "unit_id": "faae8ff85ba193cdd07baa81"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "苹果发言人在提供给彭博社的一份声明中表示：“我们已发现一个影响少数AT&T网络iPhone 18 Pro Max用户的故障，可能导致设备失去服务并无法拨打电话。”",
+          "unit_id": "7df01de35b77f089fc459dd8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "苹果公司已发布运营商设置更新，并推出了iOS操作系统的新版本27.0.1，以防止该问题进一步蔓延。",
+          "unit_id": "33eee04cbff803f49ae53f01"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "运营商设置修复程序将在未来14天内自动为AT&T用户下载，但苹果仍建议消费者立即安装任何可用的软件更新。",
+          "unit_id": "d841ed91e6c30cdef4e5a9c0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "报道称，对于已经受到影响的用户，唯一的解决办法是更换手机，使用苹果或AT&T提供的新设备。",
+          "unit_id": "d6eadcdcb58eb426f46635c7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "其他还提到，在美国销售的iPhone 18 Pro Max与其他新款机型有一点不同：它搭载的是由高通公司制造的蜂窝基带，包括较小的iPhone 18 Pro在内的所有其他版本，均配备苹果自研的C2基带。",
+          "unit_id": "9fa0c591cdc1e9ac9ea97379"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "根据用户报告，只有iPhone 18 Pro Max受到了AT&T这一漏洞的影响。",
+          "unit_id": "0dc6ba198f0f605b9cee6819"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1155/1155264.htm"
+    },
+    "recorded_extraction": [
+      "苹果确认：美版iPhone 18 Pro Max有问题 只能通过换机解决",
+      "快科技10月3日消息，据媒体报道，美版iPhone 18 Pro Max出现断网问题，苹果公司确认，只能通过换机解决。北京时间10月3日，彭博社报道称，苹果公司表示，最近升级到该公司iPhone 18 Pro Max的 快科技10月3日消息，据媒体报道， 美版iPhone 18 Pro Max出现断网问题，苹果公司确认，只能通过换机解决。 北京时间10月3日，彭博社报道称， 苹果公司表示，最近升级到该公司iPhone 18 Pro Max的“少量”AT&T公司用户将需要更换设备，因为一个故障导致他们失去了蜂窝网服务。 iPhone 18 Pro Max售价1299美元，于两周前正式上市发售，是苹果除折叠屏手机iPhone Duo之外的最高端机型。 苹果发言人在提供给彭博社的一份声明中表示：“我们已发现一个影响少数AT&T网络iPhone 18 Pro Max用户的故障，可能导致设备失去服务并无法拨打电话。”",
+      [
+        "快科技10月3日消息，据媒体报道，美版iPhone 18 Pro Max出现断网问题，苹果公司确认，只能通过换机解决。",
+        "北京时间10月3日，彭博社报道称，苹果公司表示，最近升级到该公司iPhone 18 Pro Max的“少量”AT&T公司用户将需要更换设备，因为一个故障导致他们失去了蜂窝网服务。",
+        "iPhone 18 Pro Max售价1299美元，于两周前正式上市发售，是苹果除折叠屏手机iPhone Duo之外的最高端机型。",
+        "AT&T的问题已导致部分iPhone 18 Pro Max用户无法拨打电话、访问数据或在联网时收发短信。",
+        "苹果发言人在提供给彭博社的一份声明中表示：“我们已发现一个影响少数AT&T网络iPhone 18 Pro Max用户的故障，可能导致设备失去服务并无法拨打电话。”",
+        "苹果公司已发布运营商设置更新，并推出了iOS操作系统的新版本27.0.1，以防止该问题进一步蔓延。",
+        "运营商设置修复程序将在未来14天内自动为AT&T用户下载，但苹果仍建议消费者立即安装任何可用的软件更新。",
+        "其他还提到，在美国销售的iPhone 18 Pro Max与其他新款机型有一点不同：它搭载的是由高通公司制造的蜂窝基带，包括较小的iPhone 18 Pro在内的所有其他版本，均配备苹果自研的C2基带。",
+        "根据用户报告，只有iPhone 18 Pro Max受到了AT&T这一漏洞的影响。"
+      ]
+    ]
+  },
+  "c0f6b9ba61a571d727ad5cc8": {
+    "evidence": {
+      "article_id": "c0f6b9ba61a571d727ad5cc8",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月3日消息，据MacRumors报道， 美国运营商AT&T确认，部分美版iPhone 18 Pro Max出现蜂窝网络异常故障，并表示正与苹果协同排查。 自9月18日该机上市以来，苹果支持社区、Reddit等平台已出现数千条用户反馈。 受影响设备会间歇性或完全断开AT&T网络，无法正常通话、收发短信或使用移动数据，甚至影响紧急呼叫，手机常自动进入SOS紧急模式。 AT&T已向用户推送短信，建议立即升级至iOS27.0.1。但不少受影响用户反馈，该版本并未解决网络故障。 更新日志显示， iOS27.0.1仅修复Face ID相关漏洞，未列出网络问题修复项。运营商内部邮件也承认，此次更新仅用于降低后续风险。 对于已经受到影响的用户，唯一的解决办法是更换手机，使用苹果或AT&T提供的新设备。 据悉，美版iPhone 18 Pro Max是新款iPhone中唯一配备高通蜂窝基带的机型；其他地区同款机型以及iPhone 18 Pro、iPhone Duo均搭载苹果自研C2基带。不过，目前尚无证据证明故障由基带直接导致。部分用户申请保修换机遭门店拒绝。 对于9月18日首发购机的消费者，10月2日是苹果14天无理由退货截止日。",
+      "discovery_title": "升级无效！iPhone18 Pro Max遭遇蜂窝连接问题：数千用户中招",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03 18:09:01",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03 18:09:01",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03 18:09:01",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-03T10:09:01+00:00",
+      "raw_lead": "快科技10月3日消息，据MacRumors报道，美国运营商AT&T确认，部分美版iPhone 18 Pro Max出现蜂窝网络异常故障，并表示正与苹果协同排查。自9月18日该机上市以来，苹果支持社区、Reddit等平",
+      "source": "快科技",
+      "title": "升级无效！iPhone18 Pro Max遭遇蜂窝连接问题：数千用户中招",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月3日消息，据MacRumors报道，美国运营商AT&T确认，部分美版iPhone 18 Pro Max出现蜂窝网络异常故障，并表示正与苹果协同排查。",
+          "unit_id": "87ac173ca77298a870ac1c44"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "自9月18日该机上市以来，苹果支持社区、Reddit等平台已出现数千条用户反馈。受影响设备会间歇性或完全断开AT&T网络，无法正常通话、收发短信或使用移动数据，甚至影响紧急呼叫，手机常自动进入SOS紧急模式。",
+          "unit_id": "c7a6cab2f3b5bf21d71acdf0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "AT&T已向用户推送短信，建议立即升级至iOS27.0.1。但不少受影响用户反馈，该版本并未解决网络故障。",
+          "unit_id": "bd9e67113c2ae9d91c0124bf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "更新日志显示，iOS27.0.1仅修复Face ID相关漏洞，未列出网络问题修复项。运营商内部邮件也承认，此次更新仅用于降低后续风险。",
+          "unit_id": "845e914f2ef3dfe84678b9f7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "对于已经受到影响的用户，唯一的解决办法是更换手机，使用苹果或AT&T提供的新设备。",
+          "unit_id": "9a03c250613f30a676f09c46"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "据悉，美版iPhone 18 Pro Max是新款iPhone中唯一配备高通蜂窝基带的机型；其他地区同款机型以及iPhone 18 Pro、iPhone Duo均搭载苹果自研C2基带。不过，目前尚无证据证明故障由基带直接导致。部分用户申请保修换机遭门店拒绝。",
+          "unit_id": "9fc1c1c2cfabe6d42e23bb10"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "对于9月18日首发购机的消费者，10月2日是苹果14天无理由退货截止日。",
+          "unit_id": "ced1783df0dee8a7bea5a962"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1155/1155278.htm"
+    },
+    "recorded_extraction": [
+      "升级无效！iPhone18 Pro Max遭遇蜂窝连接问题：数千用户中招",
+      "快科技10月3日消息，据MacRumors报道，美国运营商AT&T确认，部分美版iPhone 18 Pro Max出现蜂窝网络异常故障，并表示正与苹果协同排查。自9月18日该机上市以来，苹果支持社区、Reddit等平 快科技10月3日消息，据MacRumors报道， 美国运营商AT&T确认，部分美版iPhone 18 Pro Max出现蜂窝网络异常故障，并表示正与苹果协同排查。 自9月18日该机上市以来，苹果支持社区、Reddit等平台已出现数千条用户反馈。 受影响设备会间歇性或完全断开AT&T网络，无法正常通话、收发短信或使用移动数据，甚至影响紧急呼叫，手机常自动进入SOS紧急模式。 更新日志显示， iOS27.0.1仅修复Face ID相关漏洞，未列出网络问题修复项。运营商内部邮件也承认，此次更新仅用于降低后续风险。 据悉，美版iPhone 18 Pro Max是新款iPhone中唯一配备高通蜂窝基带的机型；其他地区同款机型以及iPhone 18 Pro、iPhone Duo均搭载苹果自研C2基带。不过，目前尚无证据证明故障由基带直接导致。部分用户申请保修换机遭门店拒绝。",
+      [
+        "快科技10月3日消息，据MacRumors报道，美国运营商AT&T确认，部分美版iPhone 18 Pro Max出现蜂窝网络异常故障，并表示正与苹果协同排查。",
+        "自9月18日该机上市以来，苹果支持社区、Reddit等平台已出现数千条用户反馈。受影响设备会间歇性或完全断开AT&T网络，无法正常通话、收发短信或使用移动数据，甚至影响紧急呼叫，手机常自动进入SOS紧急模式。",
+        "AT&T已向用户推送短信，建议立即升级至iOS27.0.1。但不少受影响用户反馈，该版本并未解决网络故障。",
+        "更新日志显示，iOS27.0.1仅修复Face ID相关漏洞，未列出网络问题修复项。运营商内部邮件也承认，此次更新仅用于降低后续风险。",
+        "据悉，美版iPhone 18 Pro Max是新款iPhone中唯一配备高通蜂窝基带的机型；其他地区同款机型以及iPhone 18 Pro、iPhone Duo均搭载苹果自研C2基带。不过，目前尚无证据证明故障由基带直接导致。部分用户申请保修换机遭门店拒绝。",
+        "对于9月18日首发购机的消费者，10月2日是苹果14天无理由退货截止日。"
+      ]
+    ]
+  },
+  "ecfba95cdaacdd3a20b8b5cb": {
+    "evidence": {
+      "article_id": "ecfba95cdaacdd3a20b8b5cb",
+      "confidence": "detail",
+      "content_form": "third_party_spotlight",
+      "discovery_lead": "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app world. If you’re a developer and would like your app featured, get in contact. Everyone has issues with iPhone storage. Even if you use iCloud, Apple has a large gap between tiers, with it immediately jumping from 200GB at $3 to 2TB at $10. If you just want a little bit more than 200GB, it can be hard to justify that upgrade. HEVCut aims to fix this by optimizing your photo library, without needing to delete anything. more… This is a weekly 9to5Mac series where we showcase the latest apps in the indie app…",
+      "discovery_title": "Indie App Spotlight: ‘HEVCut’ helps you trim your photo library without deleting anything",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T19:30:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T19:30:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 19:30:00 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03T19:30:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-03T19:30:00+00:00",
+      "raw_lead": "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app...",
+      "source": "9to5Mac",
+      "title": "Indie App Spotlight: ‘HEVCut’ helps you trim your photo library without deleting anything - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app world. If you’re a developer and would like your app featured, get in contact.",
+          "unit_id": "2a80cc08d2fa281f4e69b8da"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Everyone has issues with iPhone storage. Even if you use iCloud, Apple has a large gap between tiers, with it immediately jumping from 200GB at $3 to 2TB at $10. If you just want a little bit more than 200GB, it can be hard to justify that upgrade. HEVCut aims to fix this by optimizing your photo library, without needing to delete anything.",
+          "unit_id": "a07f9bcc9c94a3d65009a75b"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Highlights",
+          "unit_id": "171173ef9b17c667e0535301"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "To be clear, HEVCut also offers the normal features you’d expect in a photo cleanup app: it helps you find duplicate shots, as well as the ability to easily delete photos in a nice swipe left/right interface.",
+          "unit_id": "decfd3de7552c37940f3083b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "That’s not the key highlight, though. As I said earlier, it can go through your photos library and compress media. It’s highly effective, so you save 50-80% on each file, while not losing much in image quality.",
+          "unit_id": "ba4a85a301d1ac3c61f1f62f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "It runs all on device, so you’re not giving up your privacy to compress your images. This can easily help you save hundreds of gigs of local or iCloud storage.",
+          "unit_id": "9d4b59d763c3ff3ca08f1b54"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "It also supports a nifty video editor for trimming down videos to shorter lengths to share with friends, in case you tend to record entire events when you only need a few key moments.",
+          "unit_id": "e36fed0818bd0aadfc861f85"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Download the app",
+          "unit_id": "376bca4404bbb94dab480948"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "HEVCut is available for free on the App Store in a limited capacity, but to unlock the full experience, including the best resolution settings, you’ll need HEVCut Pro for $24.99/year or $39.99 for the lifetime upgrade. There’s a $0.49 1 week trial if you’d like to give it a shot before committing.",
+          "unit_id": "139c48bdc3b1f08d67238c90"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/03/indie-app-spotlight-hevcut-iphone-photo-storage/"
+    },
+    "recorded_extraction": [
+      "Indie App Spotlight: ‘HEVCut’ helps you trim your photo library without deleting anything - 9to5Mac",
+      "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app... Welcome to Indie App Spotlight . This is a weekly 9to5Mac series where we showcase the latest apps in the indie app world. If you’re a developer and would like your app featured, get in contact . Everyone has issues with iPhone storage. Even if you use iCloud, Apple has a large gap between tiers, with it immediately jumping from 200GB at $3 to 2TB at $10. If you just want a little bit more than 200GB, it can be hard to justify that upgrade. HEVCut aims to fix this by optimizing your photo library, without needing to delete anything. To be clear, HEVCut also offers the normal features you’d expect in a photo cleanup app: it helps you find duplicate shots, as well as the ability to easily delete photos in a nice swipe left/right interface. That’s not the key highlight, though. As I said earlier, it can go through your photos library and compress media. It’s highly effective, so you save 50-80% on each file, while not losing much in image quality.",
+      [
+        "Welcome to Indie App Spotlight. This is a weekly 9to5Mac series where we showcase the latest apps in the indie app world. If you’re a developer and would like your app featured, get in contact.",
+        "Everyone has issues with iPhone storage. Even if you use iCloud, Apple has a large gap between tiers, with it immediately jumping from 200GB at $3 to 2TB at $10. If you just want a little bit more than 200GB, it can be hard to justify that upgrade. HEVCut aims to fix this by optimizing your photo library, without needing to delete anything.",
+        "That’s not the key highlight, though. As I said earlier, it can go through your photos library and compress media. It’s highly effective, so you save 50-80% on each file, while not losing much in image quality.",
+        "HEVCut is available for free on the App Store in a limited capacity, but to unlock the full experience, including the best resolution settings, you’ll need HEVCut Pro for $24.99/year or $39.99 for the lifetime upgrade. There’s a $0.49 1 week trial if you’d like to give it a shot before committing."
+      ]
+    ]
+  },
+  "f123a4fc832533fd4a4260de": {
+    "evidence": {
+      "article_id": "f123a4fc832533fd4a4260de",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple SouthGate in Bath, England closed for renovations on July 4. Three months later, on the day the iPhone Duo is available, it will reopen to customers. Prior to its closure, it was a smaller store, with the updated wood design. The renovation is expected to bring a redesigned Genius Bar, and a dedicated pickup counter. Apple SouthGate website Continue Reading on AppleInsider | Discuss on our Forums",
+      "discovery_title": "Apple SouthGate reopening on October 23",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T15:41:23+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T15:41:23+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat Oct 03 2026, 11:41 AM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T15:41:23+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "9 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-02T21:25:19+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-02T20:46:27+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-02T20:34:10+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-02T19:36:15+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-02T19:03:50+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-02T16:24:06+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-02T16:22:30+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 day ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 03 2026, 11:41 AM EDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 15:41:23 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03T15:41:23+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-03T15:41:23+00:00",
+      "raw_lead": "Apple SouthGate in Bath, England closed for renovations on July 4. Three months later, on the day the iPhone Duo is available, it will reopen to customers.",
+      "source": "AppleInsider",
+      "title": "Apple SouthGate reopening on October 23",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple SouthGate in Bath, England closed for renovations on July 4. Three months later, on the day the iPhone Duo is available, it will reopen to customers.",
+          "unit_id": "9636e26bde555d8a78334529"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Prior to its closure, it was a smaller store, with the updated wood design. The renovation is expected to bring a redesigned Genius Bar, and a dedicated pickup counter.",
+          "unit_id": "e31d20ba575e1b84349f4cd7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple SouthGate website",
+          "unit_id": "1af4be9c08ff1e0c1faa078d"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/10/03/apple-southgate-reopening-on-october-23?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "Apple SouthGate reopening on October 23",
+      "Apple SouthGate in Bath, England closed for renovations on July 4. Three months later, on the day the iPhone Duo is available, it will reopen to customers. Prior to its closure, it was a smaller store, with the updated wood design. The renovation is expected to bring a redesigned Genius Bar, and a dedicated pickup counter.",
+      [
+        "Apple SouthGate in Bath, England closed for renovations on July 4. Three months later, on the day the iPhone Duo is available, it will reopen to customers."
+      ]
+    ]
+  },
+  "f5858694132390a62501cc40": {
+    "evidence": {
+      "article_id": "f5858694132390a62501cc40",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple today confirmed that a \"small number\" of iPhone 18 Pro Max users on the AT&T network have experienced an issue that causes the device to lose cellular service, thereby preventing phone calls, text messages, and data from working. Thousands of users complained about the issue across the Apple Support Community and other platforms. Apple said it released iOS 27.0.1 earlier this week and an AT&T carrier settings update earlier today to help prevent more iPhone 18 Pro Max users from being impacted by this issue going forward. In a statement shared with MacRumors , Apple strongly encouraged all iPhone 18 Pro Max users to update to iOS 27.0.1 now. To install the update, open the Settings app on your iPhone and tap on General → Software Update. The carrier settings update for the iPhone 18 Pro Max will automatically download for AT&T users over the next 14 days, according to Apple. To manually trigger the update, users can open the Settings app and tap on General → About. Apple's full statement: We have identified an issue affecting a small number of iPhone 18 Pro Max users on the AT&T network that may cause a device to lose service and be unable to make calls. We released iOS 27.0.1 earlier this week and strongly encourage all iPhone 18 Pro Max users to update now, and are also issuing a carrier settings update today. These updates together are meant to help prevent this issue from occurring. Notably, Apple said that iPhone 18 Pro Max devices that have been affected by this cellular issue on the AT&T network cannot have service reactivated with a software update. Instead, Apple said the device must be replaced entirely, and it advises affected customers to contact Apple Support or AT&T, or visit an Apple Store or AT&T location. Apple said it has only observed this issue with iPhone 18 Pro Max users on the AT&T network. No other iPhone models or carriers are known to be impacted. Apple did not disclose the underlying cause of the issue. U.S. models of the iPhone 18 Pro Max rely on Qualcomm's Snapdragon X80 modem for cellular connectivity, while variants of the device sold in all other countries are equipped with Apple's custom C2 modem. It is unclear if this modem difference is a factor in this AT&T issue. It is also unclear if there will eventually be an Apple Service Program dedicated to this issue. In the meantime, it sounds like Apple Stores will replace affected iPhone 18 Pro Max devices for free, so book an appointment with the Genius Bar if necessary. Related Roundup: iPhone 18 Pro Buyer's Guide: iPhone 18 Pro (Buy Now) Related Forum: iPhone This article, \" Apple Says iPhone 18 Pro Max Users With AT&T Cellular Issue Need to Have Device Replaced \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple Says iPhone 18 Pro Max Users With AT&T Cellular Issue Need to Have Device Replaced",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T03:21:12+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T03:21:12+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T03:21:12+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Friday October 2, 2026 8:21 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 2, 2026 8:21 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 9, 2026 9:10 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 8, 2026 10:24 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 12, 2026 3:27 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 03:21:12 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03T03:21:12+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-03T03:21:12+00:00",
+      "raw_lead": "Apple today confirmed that a \"small number\" of iPhone 18 Pro Max users on the AT&T network have experienced an issue that causes the device to lose cellular service, thereby preventing phone calls, text messages, and data from working. Thousands of users complained about the issue across the Apple Support Community and other platforms.",
+      "source": "MacRumors",
+      "title": "Apple Says iPhone 18 Pro Max Users With AT&T Cellular Issue Need to Have Device Replaced",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Says iPhone 18 Pro Max Users With AT&T; Cellular Issue Need to Have Device Replaced",
+          "unit_id": "76a897c3b6c9656b41aa2d9b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple today confirmed that a \"small number\" of iPhone 18 Pro Max users on the AT&T; network have experienced an issue that causes the device to lose cellular service, thereby preventing phone calls, text messages, and data from working. Thousands of users complained about the issue across the Apple Support Community and other platforms.",
+          "unit_id": "254d0b2bac67c4430704b301"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple said it released iOS 27.0.1 earlier this week and an AT&T; carrier settings update earlier today to help prevent more iPhone 18 Pro Max users from being impacted by this issue going forward. In a statement shared with MacRumors, Apple strongly encouraged all iPhone 18 Pro Max users to update to iOS 27.0.1 now. To install the update, open the Settings app on your iPhone and tap on General → Software Update.",
+          "unit_id": "302b397177f31e88116c1abe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The carrier settings update for the iPhone 18 Pro Max will automatically download for AT&T; users over the next 14 days, according to Apple. To manually trigger the update, users can open the Settings app and tap on General → About.",
+          "unit_id": "e9245bb90e32e6915f8031c4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Apple's full statement:",
+          "unit_id": "461cf6e74706ab419c42709b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "We have identified an issue affecting a small number of iPhone 18 Pro Max users on the AT&T; network that may cause a device to lose service and be unable to make calls. We released iOS 27.0.1 earlier this week and strongly encourage all iPhone 18 Pro Max users to update now, and are also issuing a carrier settings update today. These updates together are meant to help prevent this issue from occurring.",
+          "unit_id": "92d7286dc04b93d9c251f64b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Notably, Apple said that iPhone 18 Pro Max devices that have been affected by this cellular issue on the AT&T; network cannot have service reactivated with a software update. Instead, Apple said the device must be replaced entirely, and it advises affected customers to contact Apple Support or AT&T;, or visit an Apple Store or AT&T; location.",
+          "unit_id": "470db2a286428e3d5a609752"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Apple said it has only observed this issue with iPhone 18 Pro Max users on the AT&T; network. No other iPhone models or carriers are known to be impacted.",
+          "unit_id": "1c23a77d42f4d2af9438c18f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Apple did not disclose the underlying cause of the issue. U.S. models of the iPhone 18 Pro Max rely on Qualcomm's Snapdragon X80 modem for cellular connectivity, while variants of the device sold in all other countries are equipped with Apple's custom C2 modem. It is unclear if this modem difference is a factor in this AT&T; issue.",
+          "unit_id": "7b4c91eedea3b4896b7984a7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "It is also unclear if there will eventually be an Apple Service Program dedicated to this issue. In the meantime, it sounds like Apple Stores will replace affected iPhone 18 Pro Max devices for free, so book an appointment with the Genius Bar if necessary.",
+          "unit_id": "29bb5018e7d263e6800829b7"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/02/apple-statement-on-iphone-18-pro-max-att-issue/"
+    },
+    "recorded_extraction": [
+      "Apple Says iPhone 18 Pro Max Users With AT&T Cellular Issue Need to Have Device Replaced",
+      "Apple today confirmed that a \"small number\" of iPhone 18 Pro Max users on the AT&T network have experienced an issue that causes the device to lose cellular service, thereby preventing phone calls, text messages, and data from working. Thousands of users complained about the issue across the Apple Support Community and other platforms. Apple said it released iOS 27.0.1 earlier this week and an AT&T carrier settings update earlier today to help prevent more iPhone 18 Pro Max users from being impacted by this issue going forward. In a statement shared with MacRumors , Apple strongly encouraged all iPhone 18 Pro Max users to update to iOS 27.0.1 now. To install the update, open the Settings app on your iPhone and tap on General → Software Update. The carrier settings update for the iPhone 18 Pro Max will automatically download for AT&T users over the next 14 days, according to Apple. To manually trigger the update, users can open the Settings app and tap on General → About. We have identified an issue affecting a small number of iPhone 18 Pro Max users on the AT&T network that may cause a device to lose service and be unable to make calls. We released iOS 27.0.1 earlier this week and strongly encourage all iPhone 18 Pro Max users to update now, and are also issuing a carrier settings update today. These updates together are meant to help prevent this issue from occurring. Notably, Apple said that iPhone 18 Pro Max devices that have been affected by this cellular issue on the AT&T network cannot have service reactivated with a software update. Instead, Apple said the device must be replaced entirely, and it advises affected customers to contact Apple Support or AT&T, or visit an Apple Store or AT&T location.",
+      [
+        "Apple today confirmed that a \"small number\" of iPhone 18 Pro Max users on the AT&T network have experienced an issue that causes the device to lose cellular service, thereby preventing phone calls, text messages, and data from working. Thousands of users complained about the issue across the Apple Support Community and other platforms.",
+        "The carrier settings update for the iPhone 18 Pro Max will automatically download for AT&T users over the next 14 days, according to Apple. To manually trigger the update, users can open the Settings app and tap on General → About.",
+        "We have identified an issue affecting a small number of iPhone 18 Pro Max users on the AT&T network that may cause a device to lose service and be unable to make calls. We released iOS 27.0.1 earlier this week and strongly encourage all iPhone 18 Pro Max users to update now, and are also issuing a carrier settings update today. These updates together are meant to help prevent this issue from occurring.",
+        "Notably, Apple said that iPhone 18 Pro Max devices that have been affected by this cellular issue on the AT&T network cannot have service reactivated with a software update. Instead, Apple said the device must be replaced entirely, and it advises affected customers to contact Apple Support or AT&T, or visit an Apple Store or AT&T location.",
+        "Apple said it has only observed this issue with iPhone 18 Pro Max users on the AT&T network. No other iPhone models or carriers are known to be impacted.",
+        "Apple did not disclose the underlying cause of the issue. U.S. models of the iPhone 18 Pro Max rely on Qualcomm's Snapdragon X80 modem for cellular connectivity, while variants of the device sold in all other countries are equipped with Apple's custom C2 modem. It is unclear if this modem difference is a factor in this AT&T issue.",
+        "It is also unclear if there will eventually be an Apple Service Program dedicated to this issue. In the meantime, it sounds like Apple Stores will replace affected iPhone 18 Pro Max devices for free, so book an appointment with the Genius Bar if necessary."
+      ]
+    ]
+  },
+  "2453554c282406eacca66d43": {
+    "evidence": {
+      "article_id": "2453554c282406eacca66d43",
+      "source": "IT之家",
+      "url": "https://www.ithome.com/1/009/588.htm",
+      "title": "苹果 Apple TV 为美国用户免费直播 2026 F1 巴林大奖赛：无需订阅即可观看，维斯塔潘、汉密尔顿排位前二",
+      "raw_lead": "本场排位赛已结束，维斯塔潘拿下赛季首个杆位。本次赛事因中东局势改在马来西亚雪邦赛道举办，该赛道时隔 9 年重返 F1 赛历。#F1巴林大奖赛#",
+      "content_form": "news",
+      "units": [
+        {
+          "unit_id": "b34176cc8a776de205374bb6",
+          "kind": "p",
+          "text": "IT之家 10 月 4 日消息，2026 年 F1 巴林大奖赛将于今天 15:00 在马来西亚雪邦国际赛车场举行。苹果 Apple TV 宣布将免费直播本周末的巴林大奖赛，用户无需购买订阅即可观赛，覆盖练习赛、排位赛和正赛的完整赛程。",
+          "origin": "html",
+          "ordinal": 0,
+          "container_id": ""
+        },
+        {
+          "unit_id": "09a180c8591171e491eda037",
+          "kind": "p",
+          "text": "美国观众只需使用兼容设备上的 Apple TV 应用即可观看，支持的设备包括苹果设备、Amazon Fire TV、Roku、PlayStation、Xbox 和 Android 等，也可以通过浏览器访问 Apple TV 网页版。",
+          "origin": "html",
+          "ordinal": 1,
+          "container_id": ""
+        },
+        {
+          "unit_id": "8eca3daeb79f3cd0271c72d3",
+          "kind": "p",
+          "text": "IT之家提醒：此次免订阅观看安排针对美国地区，其他地区并不适用。",
+          "origin": "html",
+          "ordinal": 2,
+          "container_id": ""
+        },
+        {
+          "unit_id": "4e704e0b7d7a756122a64d4b",
+          "kind": "p",
+          "text": "本场比赛的排位赛已经结束，红牛车手马克斯 · 维斯塔潘拿下 2026 赛季个人首个杆位，法拉利车手刘易斯 · 汉密尔顿位居第二。另外，梅赛德斯车手基米 · 安东内利原本排位第四，但由于红牛车手伊萨克 · 哈贾尔罚退 5 位，因此安东内利最终升至第三发车位。",
+          "origin": "html",
+          "ordinal": 3,
+          "container_id": ""
+        },
+        {
+          "unit_id": "198b49b8882d29b667ad0e06",
+          "kind": "p",
+          "text": "这场比赛之所以出现在马来西亚，而不是通常的巴林萨基尔赛道，是因为中东地区局势导致原定于 4 月举行的巴林大奖赛无法按计划进行。",
+          "origin": "html",
+          "ordinal": 4,
+          "container_id": ""
+        },
+        {
+          "unit_id": "cf15504b398cd9065f0e5596",
+          "kind": "p",
+          "text": "F1 官方 3 月确认，巴林和沙特阿拉伯大奖赛不会在原定 4 月举行；随后 F1 与国际汽联宣布，雪邦国际赛车场将在 10 月 2 日至 4 日承办这场以“巴林大奖赛（马来西亚站）”名义举行的比赛。雪邦赛道上一次承办 F1 大奖赛还是在 2017 年，本次回归也是该赛道时隔 9 年再次出现在 F1 赛历中。",
+          "origin": "html",
+          "ordinal": 5,
+          "container_id": ""
+        },
+        {
+          "unit_id": "17694d0934a3300789f1c25b",
+          "kind": "p",
+          "text": "对于车手而言，重返雪邦也带来了不同于传统巴林站的挑战。赛道全长 5.543 公里，拥有长直道和高速弯角，炎热、潮湿的天气以及较为磨损轮胎的路面都会影响比赛策略。",
+          "origin": "html",
+          "ordinal": 6,
+          "container_id": ""
+        },
+        {
+          "unit_id": "510515b18c6f59f645bf4548",
+          "kind": "p",
+          "text": "值得一提的是，安东内利在最终练习赛中跑出全场最快圈速，维斯塔潘排名第二；但排位赛中维斯塔潘凭借 1 分 35 秒 130 的成绩拿下杆位，并以约 0.3 秒优势领先汉密尔顿。",
+          "origin": "html",
+          "ordinal": 7,
+          "container_id": ""
+        }
+      ],
+      "publication_candidates": [
+        {
+          "raw": "2026/10/4 7:24:08",
+          "source": "body date pattern",
+          "allows_date_only": false
+        }
+      ],
+      "published_utc": "2026-10-03T23:24:08+00:00",
+      "published_raw": "2026/10/4 7:24:08",
+      "published_source": "body date pattern",
+      "confidence": "detail",
+      "extraction_path": "detail",
+      "discovery_title": "苹果 Apple TV 为美国用户免费直播 2026 F1 巴林大奖赛：无需订阅即可观看，维斯塔潘、汉密尔顿排位前二",
+      "discovery_lead": "IT之家 10 月 4 日消息，2026 年 F1 巴林大奖赛将于今天 15:00 在马来西亚雪邦国际赛车场举行。苹果 Apple TV 宣布将免费直播本周末的巴林大奖赛，用户无需购买订阅即可观赛，覆盖练习赛、排位赛和正赛的完整赛程。 美国观众只需使用兼容设备上的 Apple TV 应用即可观看，支持的设备包括苹果设备、Amazon Fire TV、Roku、PlayStation、Xbox 和 Android 等，也可以通过浏览器访问 Apple TV 网页版。 IT之家提醒：此次免订阅观看安排针对美国地区，其他地区并不适用。 本场比赛的排位赛已经结束，红牛车手马克斯 · 维斯塔潘拿下 2026 赛季个人首个杆位，法拉利车手刘易斯 · 汉密尔顿位居第二。另外，梅赛德斯车手基米 · 安东内利原本排位第四，但由于红牛车手伊萨克 · 哈贾尔罚退 5 位，因此安东内利最终升至第三发车位。 这场比赛之所以出现在马来西亚，而不是通常的巴林萨基尔赛道，是因为中东地区局势导致原定于 4 月举行的巴林大奖赛无法按计划进行。 F1 官方 3 月确认，巴林和沙特阿拉伯大奖赛不会在原定 4 月举行；随后 F1 与国际汽联宣布，雪邦国际赛车场将在 10 月 2 日至 4 日承办这场以“巴林大奖赛（马来西亚站）”名义举行的比赛。雪邦赛道上一次承办 F1 大奖赛还是在 2017 年，本次回归也是该赛道时隔 9 年再次出现在 F1 赛历中。 对于车手而言，重返雪邦也带来了不同于传统巴林站的挑战。赛道全长 5.543 公里，拥有长直道和高速弯角，炎热、潮湿的天气以及较为磨损轮胎的路面都会影响比赛策略。 值得一提的是，安东内利在最终练习赛中跑出全场最快圈速，维斯塔潘排名第二；但排位赛中维斯塔潘凭借 1 分 35 秒 130 的成绩拿下杆位，并以约 0.3 秒优势领先汉密尔顿。 本场排位赛已结束，维斯塔潘拿下赛季首个杆位。本次赛事因中东局势改在马来西亚雪邦赛道举办，该赛道时隔 9 年重返 F1 赛历。#F1巴林大奖赛#",
+      "embedded_references": []
+    },
+    "recorded_extraction": [
+      "苹果 Apple TV 为美国用户免费直播 2026 F1 巴林大奖赛：无需订阅即可观看，维斯塔潘、汉密尔顿排位前二",
+      "本场排位赛已结束，维斯塔潘拿下赛季首个杆位。本次赛事因中东局势改在马来西亚雪邦赛道举办，该赛道时隔 9 年重返 F1 赛历。#F1巴林大奖赛# IT之家 10 月 4 日消息，2026 年 F1 巴林大奖赛将于今天 15:00 在马来西亚雪邦国际赛车场举行。苹果 Apple TV 宣布将免费直播本周末的巴林大奖赛，用户无需购买订阅即可观赛，覆盖练习赛、排位赛和正赛的完整赛程。 美国观众只需使用兼容设备上的 Apple TV 应用即可观看，支持的设备包括苹果设备、Amazon Fire TV、Roku、PlayStation、Xbox 和 Android 等，也可以通过浏览器访问 Apple TV 网页版。 本场比赛的排位赛已经结束，红牛车手马克斯 · 维斯塔潘拿下 2026 赛季个人首个杆位，法拉利车手刘易斯 · 汉密尔顿位居第二。另外，梅赛德斯车手基米 · 安东内利原本排位第四，但由于红牛车手伊萨克 · 哈贾尔罚退 5 位，因此安东内利最终升至第三发车位。 这场比赛之所以出现在马来西亚，而不是通常的巴林萨基尔赛道，是因为中东地区局势导致原定于 4 月举行的巴林大奖赛无法按计划进行。",
+      [
+        "IT之家 10 月 4 日消息，2026 年 F1 巴林大奖赛将于今天 15:00 在马来西亚雪邦国际赛车场举行。苹果 Apple TV 宣布将免费直播本周末的巴林大奖赛，用户无需购买订阅即可观赛，覆盖练习赛、排位赛和正赛的完整赛程。",
+        "美国观众只需使用兼容设备上的 Apple TV 应用即可观看，支持的设备包括苹果设备、Amazon Fire TV、Roku、PlayStation、Xbox 和 Android 等，也可以通过浏览器访问 Apple TV 网页版。",
+        "本场比赛的排位赛已经结束，红牛车手马克斯 · 维斯塔潘拿下 2026 赛季个人首个杆位，法拉利车手刘易斯 · 汉密尔顿位居第二。另外，梅赛德斯车手基米 · 安东内利原本排位第四，但由于红牛车手伊萨克 · 哈贾尔罚退 5 位，因此安东内利最终升至第三发车位。",
+        "这场比赛之所以出现在马来西亚，而不是通常的巴林萨基尔赛道，是因为中东地区局势导致原定于 4 月举行的巴林大奖赛无法按计划进行。",
+        "F1 官方 3 月确认，巴林和沙特阿拉伯大奖赛不会在原定 4 月举行；随后 F1 与国际汽联宣布，雪邦国际赛车场将在 10 月 2 日至 4 日承办这场以“巴林大奖赛（马来西亚站）”名义举行的比赛。雪邦赛道上一次承办 F1 大奖赛还是在 2017 年，本次回归也是该赛道时隔 9 年再次出现在 F1 赛历中。",
+        "对于车手而言，重返雪邦也带来了不同于传统巴林站的挑战。赛道全长 5.543 公里，拥有长直道和高速弯角，炎热、潮湿的天气以及较为磨损轮胎的路面都会影响比赛策略。",
+        "值得一提的是，安东内利在最终练习赛中跑出全场最快圈速，维斯塔潘排名第二；但排位赛中维斯塔潘凭借 1 分 35 秒 130 的成绩拿下杆位，并以约 0.3 秒优势领先汉密尔顿。"
+      ]
+    ],
+    "capture_note": "Detail fetched on 2026-10-04 after original run; discovery preserved in frozen cache."
+  },
+  "6bf3cf457cd9fcb92cf7ce10": {
+    "evidence": {
+      "article_id": "6bf3cf457cd9fcb92cf7ce10",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "The Bahrain Grand Prix is streaming for free on Apple TV this weekend, subscription not required. Rather amusingly, the location of the Bahrain Grand Prix is actually in Sepang, Malaysia. Usually, F1 on Apple TV requires a paid subscription. But this weekend, it’s free for everyone to tune in. You can catch up on qualifying in preparation to stream the live race tonight, which kicks off at 3 AM Eastern Time. more… Rather amusingly, the location…",
+      "discovery_title": "Watch F1 on Apple TV tonight, free for everyone in the US",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T19:44:04+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T19:44:06+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T19:44:04+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-03T19:44:06+00:00",
+          "source": "meta modified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 03 Oct 2026 19:44:04 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-03T19:44:04+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-03T19:44:04+00:00",
+      "raw_lead": "The Bahrain Grand Prix is streaming for free on Apple TV this weekend, subscription not required. Rather amusingly, the location...",
+      "source": "9to5Mac",
+      "title": "Watch F1 on Apple TV tonight, free for everyone in the US - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "The Bahrain Grand Prix is streaming for free on Apple TV this weekend, subscription not required. Rather amusingly, the location of the Bahrain Grand Prix is actually in Sepang, Malaysia.",
+          "unit_id": "3b068eaf2311a5b704e3bd75"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Usually, F1 on Apple TV requires a paid subscription. But this weekend, it’s free for everyone to tune in. You can catch up on qualifying in preparation to stream the live race tonight, which kicks off at 3 AM Eastern Time.",
+          "unit_id": "1a96a44f5456fee53b7d8d08"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "All you need to watch is to get the Apple TV app on a compatible device, be in the United States, and stay up late enough to watch live.",
+          "unit_id": "3f8d12f4cdf32bbd04cd1ba3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Coverage starts at 1:50 AM Eastern Time, with the race scheduled to start at 3 AM Eastern Time. You can of course watch later on-demand, if you’d opt to go to bed at a reasonable hour.",
+          "unit_id": "659858d3c01f0f78fd59e2da"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "You can get the Apple TV app on Apple devices, Amazon Fire Stick, Roku, PlayStation, Xbox, Android and more. You can also watch in a web browser at tv.apple.com.",
+          "unit_id": "18bdf9b71e478de55de2146f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "With qualifying happening earlier today, Red Bull’s Max Verstappen has snatched pole position for the first time this season, with Lewis Hamilton taking second and championship leader Kim Antonelli in third. It’s Red Bull’s best chance at a race win so far this year.",
+          "unit_id": "16fa9c64457aa45073d2eba7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "You may be wondering why the Bahrain Grand Prix is being hosted in Malaysia. In a normal year, the Bahrain GP would have happened much earlier in the season. But due to the ongoing Iran war, the race was cancelled and the Bahrain organizers instead decided to sponsor a race elsewhere in the world instead.",
+          "unit_id": "ac70c59cbfddb8bb4f0785a2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Despite not being part of the official F1 calendar anymore, Sepang is a fan favourite circuit that should make for some exciting action on track.",
+          "unit_id": "618923d2464763da2e56f686"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Again, use the Apple TV app to tune in for free, no subscription required. The race starts at 3 AM Eastern Time, with broadcast coverage starting at 1:50 AM.",
+          "unit_id": "ed26cbae98045ec8bab99d34"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/03/watch-f1-on-apple-tv-tonight-free-bahrain-gp/"
+    },
+    "recorded_extraction": [
+      "Watch F1 on Apple TV tonight, free for everyone in the US - 9to5Mac",
+      "The Bahrain Grand Prix is streaming for free on Apple TV this weekend, subscription not required. Rather amusingly, the location... All you need to watch is to get the Apple TV app on a compatible device, be in the United States, and stay up late enough to watch live. Coverage starts at 1:50 AM Eastern Time, with the race scheduled to start at 3 AM Eastern Time. You can of course watch later on-demand, if you’d opt to go to bed at a reasonable hour. You can get the Apple TV app on Apple devices, Amazon Fire Stick, Roku, PlayStation, Xbox, Android and more. You can also watch in a web browser at tv.apple.com . With qualifying happening earlier today, Red Bull’s Max Verstappen has snatched pole position for the first time this season, with Lewis Hamilton taking second and championship leader Kim Antonelli in third. It’s Red Bull’s best chance at a race win so far this year.",
+      [
+        "Coverage starts at 1:50 AM Eastern Time, with the race scheduled to start at 3 AM Eastern Time. You can of course watch later on-demand, if you’d opt to go to bed at a reasonable hour."
+      ]
+    ],
+    "capture_note": "Captured in 2026-10-04 live validation after original automation."
+  },
+  "68a64255ee5087d8ec8fe99c": {
+    "evidence": {
+      "article_id": "68a64255ee5087d8ec8fe99c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月4日消息， 今天苹果官方正式面向全球科技媒体公开发布声明，宣布将针对存在特定网络故障问题的iPhone 18 Pro Max机型提供免费换新服务，打消此前很多碰到故障的用户的使用顾虑。 苹果在发给海外主流科技媒体的正式说明中提到，他们后台监测到，使用美国AT&T运营商网络的极少数iPhone 18 Pro Max用户，遇到了一个偶发系统问题，该故障可能会导致设备直接失去蜂窝网络服务，完全没法正常拨打电话。 受这一故障影响的iPhone，不仅无法连接AT&T的网络完成通话，也不能正常收发短信，移动数据上网功能也会同步中断，直接变成只能连接WiFi的便携娱乐设备。 目前经过大量实测排查确认，这一故障仅影响特定版本的iPhone 18 Pro Max，不会波及尺寸更小的iPhone 18 Pro，也不会影响其他世代的任何iPhone机型。 现在苹果官方还没有对外明确说明，到底是不是手机内置的调制解调器硬件出了问题才导致这一故障。市面上普通发售的iPhone 18 Pro，以及所有在美国本土以外地区售卖的iPhone 18 Pro Max机型，统一都搭载苹果自研的Apple C2调制解调器。 只有针对美国本土市场专门发售的iPhone 18 Pro Max机型，才会采用高通供应的调制解调器，后续10月23日正式开售的iPhone Duo机型，也将搭载苹果自研的Apple C2调制解调器。 不少国内用户完全可以放心，国行版本的iPhone 18 Pro Max全部搭载苹果自研C2基带，完全不在这次故障影响的范围之内，目前国内市场没有用户反馈同类断网无法通话的问题，自然也不会涉及到这次针对美国特定版本的免费换新政策。",
+      "discovery_title": "苹果宣布：将为受影响iPhone 18 Pro Max用户免费更换新机 只针对AT&T网络版本",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04 10:26:48",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-04 10:26:48",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-04 10:26:48",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-04T02:26:48+00:00",
+      "raw_lead": "快科技10月4日消息，今天苹果官方正式面向全球科技媒体公开发布声明，宣布将针对存在特定网络故障问题的iPhone 18 Pro Max机型提供免费换新服务，打消此前很多碰到故障的用户的使用顾虑。苹果",
+      "source": "快科技",
+      "title": "苹果宣布：将为受影响iPhone 18 Pro Max用户免费更换新机 只针对AT&T网络版本",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月4日消息，今天苹果官方正式面向全球科技媒体公开发布声明，宣布将针对存在特定网络故障问题的iPhone 18 Pro Max机型提供免费换新服务，打消此前很多碰到故障的用户的使用顾虑。",
+          "unit_id": "7b74fb16e5e606fa64d06d3a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "苹果在发给海外主流科技媒体的正式说明中提到，他们后台监测到，使用美国AT&T运营商网络的极少数iPhone 18 Pro Max用户，遇到了一个偶发系统问题，该故障可能会导致设备直接失去蜂窝网络服务，完全没法正常拨打电话。",
+          "unit_id": "4bfbe53e0f4889f95bf4e7c3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "受这一故障影响的iPhone，不仅无法连接AT&T的网络完成通话，也不能正常收发短信，移动数据上网功能也会同步中断，直接变成只能连接WiFi的便携娱乐设备。",
+          "unit_id": "6e161f80d85808681309b3b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "目前经过大量实测排查确认，这一故障仅影响特定版本的iPhone 18 Pro Max，不会波及尺寸更小的iPhone 18 Pro，也不会影响其他世代的任何iPhone机型。",
+          "unit_id": "acfde5aebd7bd869f5c2007f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "现在苹果官方还没有对外明确说明，到底是不是手机内置的调制解调器硬件出了问题才导致这一故障。市面上普通发售的iPhone 18 Pro，以及所有在美国本土以外地区售卖的iPhone 18 Pro Max机型，统一都搭载苹果自研的Apple C2调制解调器。",
+          "unit_id": "ad65c5882055bdf1572c144d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "只有针对美国本土市场专门发售的iPhone 18 Pro Max机型，才会采用高通供应的调制解调器，后续10月23日正式开售的iPhone Duo机型，也将搭载苹果自研的Apple C2调制解调器。",
+          "unit_id": "39f511923b54f4576134f472"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "不少国内用户完全可以放心，国行版本的iPhone 18 Pro Max全部搭载苹果自研C2基带，完全不在这次故障影响的范围之内，目前国内市场没有用户反馈同类断网无法通话的问题，自然也不会涉及到这次针对美国特定版本的免费换新政策。",
+          "unit_id": "eb84eb87e0a5e7135d942054"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1155/1155314.htm"
+    },
+    "recorded_extraction": [
+      "苹果宣布：将为受影响iPhone 18 Pro Max用户免费更换新机 只针对AT&T网络版本",
+      "快科技10月4日消息，今天苹果官方正式面向全球科技媒体公开发布声明，宣布将针对存在特定网络故障问题的iPhone 18 Pro Max机型提供免费换新服务，打消此前很多碰到故障的用户的使用顾虑。苹果 快科技10月4日消息， 今天苹果官方正式面向全球科技媒体公开发布声明，宣布将针对存在特定网络故障问题的iPhone 18 Pro Max机型提供免费换新服务，打消此前很多碰到故障的用户的使用顾虑。 苹果在发给海外主流科技媒体的正式说明中提到，他们后台监测到，使用美国AT&T运营商网络的极少数iPhone 18 Pro Max用户，遇到了一个偶发系统问题，该故障可能会导致设备直接失去蜂窝网络服务，完全没法正常拨打电话。 受这一故障影响的iPhone，不仅无法连接AT&T的网络完成通话，也不能正常收发短信，移动数据上网功能也会同步中断，直接变成只能连接WiFi的便携娱乐设备。 目前经过大量实测排查确认，这一故障仅影响特定版本的iPhone 18 Pro Max，不会波及尺寸更小的iPhone 18 Pro，也不会影响其他世代的任何iPhone机型。",
+      [
+        "快科技10月4日消息，今天苹果官方正式面向全球科技媒体公开发布声明，宣布将针对存在特定网络故障问题的iPhone 18 Pro Max机型提供免费换新服务，打消此前很多碰到故障的用户的使用顾虑。",
+        "苹果在发给海外主流科技媒体的正式说明中提到，他们后台监测到，使用美国AT&T运营商网络的极少数iPhone 18 Pro Max用户，遇到了一个偶发系统问题，该故障可能会导致设备直接失去蜂窝网络服务，完全没法正常拨打电话。",
+        "受这一故障影响的iPhone，不仅无法连接AT&T的网络完成通话，也不能正常收发短信，移动数据上网功能也会同步中断，直接变成只能连接WiFi的便携娱乐设备。",
+        "目前经过大量实测排查确认，这一故障仅影响特定版本的iPhone 18 Pro Max，不会波及尺寸更小的iPhone 18 Pro，也不会影响其他世代的任何iPhone机型。",
+        "现在苹果官方还没有对外明确说明，到底是不是手机内置的调制解调器硬件出了问题才导致这一故障。市面上普通发售的iPhone 18 Pro，以及所有在美国本土以外地区售卖的iPhone 18 Pro Max机型，统一都搭载苹果自研的Apple C2调制解调器。",
+        "只有针对美国本土市场专门发售的iPhone 18 Pro Max机型，才会采用高通供应的调制解调器，后续10月23日正式开售的iPhone Duo机型，也将搭载苹果自研的Apple C2调制解调器。",
+        "不少国内用户完全可以放心，国行版本的iPhone 18 Pro Max全部搭载苹果自研C2基带，完全不在这次故障影响的范围之内，目前国内市场没有用户反馈同类断网无法通话的问题，自然也不会涉及到这次针对美国特定版本的免费换新政策。"
+      ]
+    ]
+  }
+}

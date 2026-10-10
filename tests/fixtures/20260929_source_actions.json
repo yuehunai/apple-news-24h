@@ -1,0 +1,3361 @@
+{
+  "27fff017815c3ddf6cb740d8": {
+    "evidence": {
+      "article_id": "27fff017815c3ddf6cb740d8",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "tvOS 27 adds new reason to use profiles on your Apple TV 4K - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T13:45:10+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T13:45:12+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T13:45:10+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T13:45:12+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-28T13:45:10+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T13:45:10+00:00",
+      "raw_lead": "Apple keeps improving its profiles feature on Apple TV 4K, and a new change in tvOS 27 offers another reason to use profiles.",
+      "source": "9to5Mac",
+      "title": "tvOS 27 adds new reason to use profiles on your Apple TV 4K - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple keeps improving its profiles feature on Apple TV 4K, and a change in tvOS 27 related to app access offers another reason to use profiles.",
+          "unit_id": "9259bb5048065bafb4964742"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "tvOS 27 lets you restrict users from launching specific apps",
+          "unit_id": "83ba406c553faf079e836a12"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "User profiles are a common feature of every major streaming service. They ensure viewers in a shared household can keep their viewing history and recommendations separate, among other benefits.",
+          "unit_id": "8b9179b5e61cc3127df63a6d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Apple has long had a profiles feature in tvOS, but it’s gotten a lot more useful in the past year thanks to several recent upgrades.",
+          "unit_id": "d11e3e77852d594278f28de4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Now tvOS 27 has introduced another improvement. Per Apple’s official release notes:",
+          "unit_id": "7a2ba407e18026b35cc52661"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Individual app controls in Settings let you block users from launching specific apps.",
+          "unit_id": "2cf36d9c454a982470d02278"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "This change is clearly intended for parents.",
+          "unit_id": "83da20e4a8c7c84fec4b39c1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Profiles for children can already limit the types of content they’ll see in the Apple TV app. That’s a useful feature, but it won’t keep your child from opening a different app with no such restrictions.",
+          "unit_id": "cf233b385657688b75ab83d5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Now though, parents can open Settings and block certain apps from being launched at all when a child’s profile is active.",
+          "unit_id": "3169e91ea0fe811d8db1b81b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "It’s a good step toward making profiles as full-featured as they deserve to be, and aligns with Apple’s recent focus in iOS 27 on upgrading parental controls.",
+          "unit_id": "6adece7f1ade1038a940e7d0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "On the subject of profile improvements, iOS 27.2 and iPadOS 27.2 will bring Apple’s profile system to iPhone and iPad for the first time. You can read about that change here.",
+          "unit_id": "63b0b1e630e2c876b7149581"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Do you use profiles on your Apple TV? What new features do you hope get added? Let us know in the comments.",
+          "unit_id": "597d3aaf36a4686701680978"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/28/tvos-27-adds-new-reason-to-use-profiles-on-your-apple-tv-4k/"
+    },
+    "recorded_extraction": [
+      "tvOS 27 adds new reason to use profiles on your Apple TV 4K - 9to5Mac",
+      "Apple keeps improving its profiles feature on Apple TV 4K, and a new change in tvOS 27 offers another reason to use profiles. Apple keeps improving its profiles feature on Apple TV 4K, and a change in tvOS 27 related to app access offers another reason to use profiles. User profiles are a common feature of every major streaming service. They ensure viewers in a shared household can keep their viewing history and recommendations separate, among other benefits. Apple has long had a profiles feature in tvOS, but it’s gotten a lot more useful in the past year thanks to several recent upgrades . Individual app controls in Settings let you block users from launching specific apps.",
+      [
+        "Apple keeps improving its profiles feature on Apple TV 4K, and a change in tvOS 27 related to app access offers another reason to use profiles.",
+        "tvOS 27 lets you restrict users from launching specific apps",
+        "It’s a good step toward making profiles as full-featured as they deserve to be, and aligns with Apple’s recent focus in iOS 27 on upgrading parental controls.",
+        "On the subject of profile improvements, iOS 27.2 and iPadOS 27.2 will bring Apple’s profile system to iPhone and iPad for the first time. You can read about that change here."
+      ]
+    ]
+  },
+  "0ef007a497e8c01d77fe8bbb": {
+    "evidence": {
+      "article_id": "0ef007a497e8c01d77fe8bbb",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "iPhone Duo StandBy night mode is going to get some unannounced features",
+      "embedded_references": [
+        {
+          "body_element_index": 17,
+          "html_tag": "<a href=\"https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw\">",
+          "object_id": "2104567049963921785",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw"
+        },
+        {
+          "body_element_index": 30,
+          "html_tag": "<a href=\"https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw\">",
+          "object_id": "2104567049963921785",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:27:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:39:08+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:39:08+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon Sep 28 2026, 11:27 AM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-29T00:03:34+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 hour ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T17:34:54+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "7 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T17:31:07+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:27:24+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:09:10+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:06:30+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T13:55:33+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "11 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T12:42:28+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "12 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 28 2026, 11:27 AM EDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-28T15:27:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T15:27:00+00:00",
+      "raw_lead": "The forthcoming iPhone Duo has more features than Apple has revealed, including a whole series of faces for its StandBy mode. Here's what to eventually look for.",
+      "source": "AppleInsider",
+      "title": "iPhone Duo StandBy night mode is going to get some unannounced features",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "The forthcoming iPhone Duo has more features than Apple has revealed, including a whole series of faces for its StandBy mode. Here's what to eventually look for.",
+          "unit_id": "b04c73814d49d45e6190eaa7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "While pre-orders for iPhone Duo don't start until October 16, and the Xcode betas still don't show developers everything, one has found many new options coming to iOS 27 for this device.",
+          "unit_id": "e4eb43267d44f0c6e309eb78"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Developer pdfu reports that the Xcode 27.1 simulator is lacking Rushmore, an app that is for displaying the new StandBy faces. But despite that, they have managed to get certain of the new faces running.",
+          "unit_id": "0e7e5608764204943dc5b6e5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Here's a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. pic.twitter.com/lDQHOy5R0e",
+          "unit_id": "c461cd397f3a7a9596ac4a51"
+        },
+        {
+          "container_id": "",
+          "kind": "blockquote",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "— pdfu (@itspdfu) September 28, 2026",
+          "unit_id": "be421bd7f83b19955af54a96"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "These working ones are variants on familiar clock and calendar faces as used on the iPhone's current StandBy mode. But code references describe several more options.",
+          "unit_id": "6ab03f0fee9539dfcf5dc365"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Here's a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. pic.twitter.com/lDQHOy5R0e",
+          "unit_id": "bda3594fc062308fa18b778e"
+        },
+        {
+          "container_id": "",
+          "kind": "blockquote",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "— pdfu (@itspdfu) September 28, 2026",
+          "unit_id": "8eff042f3dd1be96f2939d86"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Just because something is referenced in code, it doesn't necessarily mean that it will launch immediately. But those code references show five more faces:",
+          "unit_id": "9fa2875c70fa653d774c3703"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Home Camera: up to nine camera views",
+          "unit_id": "1aa74a45d7c917601676746c"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Home Module",
+          "unit_id": "572ff7e16d553e886577fa37"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Flow",
+          "unit_id": "fa448cd507dcba2412becebf"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Fade",
+          "unit_id": "b2ab24013b5053957fa54d93"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Snoopy",
+          "unit_id": "1b5f1fc02ae551aaf87536a7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "There are no details for Home Modular, Flow, or Fade. But the code for Flow also includes the term ResponsiveArt, which suggests that it will at least be an animated face.",
+          "unit_id": "e863a68f48159e01c9dd1752"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Face editor",
+          "unit_id": "bf93ec96aa79d3a8ca8a33f6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "The iPhone Duo will also feature a revised editor for customizing these StandBy faces. It's very similar to the existing one on iPhone and is perhaps more like the Apple Watch face editor.",
+          "unit_id": "3ad742ef19a9dd6c94baf7c9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Users can swipe left and right to adjust, for instance, the style of an analog clock, its numerals, light mode and dark mode, plus the color of the face and the hands.",
+          "unit_id": "05a00a5845a65b512bc7e4ce"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "Some of these clock faces also have room for two widgets. Then some more are digital instead of analog and there pdfu has found code references for five layouts:",
+          "unit_id": "d865a297eb6671be3a64f40e"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "StandBy",
+          "unit_id": "36e570156ef26b22358fa45f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "Stacked",
+          "unit_id": "75ac8053f6b63e12a2149ed8"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "Top",
+          "unit_id": "a108d2afc8b14401cd8bbc58"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "Middle",
+          "unit_id": "cd250e7e6dc66b42a090a85f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "Bottom",
+          "unit_id": "cc89a140616a8634e22e4b6e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "The presumption is that all but the StandBy one may actually be intended for when the iPhone is opened like a book.",
+          "unit_id": "a3bb5cdaff5666b3eed4dd3d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "Developer pdfu has a strong track record for examining beta code. They confirmed that the iPhone Duo would use Touch ID, for instance, and most recently uncovered that Siri could be replaced by Claude or ChatGPT.",
+          "unit_id": "bde72ec64c5c86209ee18737"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/09/28/iphone-duo-standby-night-mode-is-going-to-get-some-unannounced-features?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "iPhone Duo StandBy night mode is going to get some unannounced features",
+      "The forthcoming iPhone Duo has more features than Apple has revealed, including a whole series of faces for its StandBy mode. Here's what to eventually look for. While pre-orders for iPhone Duo don't start until October 16 , and the Xcode betas still don't show developers everything, one has found many new options coming to iOS 27 for this device. Developer pdfu reports that the Xcode 27.1 simulator is lacking Rushmore, an app that is for displaying the new StandBy faces. But despite that, they have managed to get certain of the new faces running. Here's a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. pic.twitter.com/lDQHOy5R0e These working ones are variants on familiar clock and calendar faces as used on the iPhone 's current StandBy mode. But code references describe several more options.",
+      [
+        "While pre-orders for iPhone Duo don't start until October 16, and the Xcode betas still don't show developers everything, one has found many new options coming to iOS 27 for this device.",
+        "Developer pdfu reports that the Xcode 27.1 simulator is lacking Rushmore, an app that is for displaying the new StandBy faces. But despite that, they have managed to get certain of the new faces running.",
+        "Here's a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. pic.twitter.com/lDQHOy5R0e— pdfu (@itspdfu) September 28, 2026",
+        "Home Camera: up to nine camera views"
+      ]
+    ]
+  },
+  "447d6a9b5b4bfcee5b8b06ea": {
+    "evidence": {
+      "article_id": "447d6a9b5b4bfcee5b8b06ea",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "iPhone 18 Pro系列出现自动重启BUG 苹果回应：系统软件出问题 将推送更新修复",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28 15:58:46",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-28 15:58:46",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-28T07:58:46+00:00",
+      "raw_lead": "快科技9月28日消息，近日有大量消费者在社交平台反馈，iPhone 18 Pro系列疑似出现系统BUG，当用户在面部识别失败的情况下，手机可能卡死、自动重启等问题。从部分用户在社交平台上分享的反馈来",
+      "source": "快科技",
+      "title": "iPhone 18 Pro系列出现自动重启BUG 苹果回应：系统软件出问题 将推送更新修复",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技9月28日消息，近日有大量消费者在社交平台反馈，iPhone 18 Pro系列疑似出现系统BUG，当用户在面部识别失败的情况下，手机可能卡死、自动重启等问题。",
+          "unit_id": "620f1b5a1556fd956148bac0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "从部分用户在社交平台上分享的反馈来看，这一漏洞会导致设备在特定的面部识别解锁或者身份验证场景下突发卡死，紧接着系统自动重启，直接打断用户正在进行的操作。",
+          "unit_id": "da86a407b1915319ebac1ea3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "早在9月21日，杭州数码市场的经营户谈及类似现象，称每年都有这种情况。而且只有在特定情况下，才会出现死机的情况，可能要等下一个版本更新。",
+          "unit_id": "f44347d63e4f577b2778ab42"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "针对此事，9月28日，苹果官方客服人员表示，近期也有接到出现类似问题用户的反馈，问题出在系统软件方面，和硬件本身没有关系，“已在第一时间提交工程部去调查，后续会通过系统版本更新来解决”。",
+          "unit_id": "05e71591d396529c9d07ea2b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "公开资料显示，iPhone 18 Pro系列是苹果于9月10日发布，包含iPhone 18 Pro和iPhone 18 Pro Max，国行起售价9999元，9月18日正式发售。",
+          "unit_id": "c810c2c4f3f569314134c9d6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "但发售至今仅10天，便因Face ID面容识别功能方面的严重系统漏洞被众多用户吐槽。",
+          "unit_id": "728bcebb28dc9710e16efd5a"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1154/1154392.htm"
+    },
+    "recorded_extraction": [
+      "iPhone 18 Pro系列出现自动重启BUG 苹果回应：系统软件出问题 将推送更新修复",
+      "快科技9月28日消息，近日有大量消费者在社交平台反馈，iPhone 18 Pro系列疑似出现系统BUG，当用户在面部识别失败的情况下，手机可能卡死、自动重启等问题。从部分用户在社交平台上分享的反馈来 快科技9月28日消息，近日有大量消费者在社交平台反馈，iPhone 18 Pro系列疑似出现系统BUG，当用户在面部识别失败的情况下，手机可能卡死、自动重启等问题。 从部分用户在社交平台上分享的反馈来看，这一漏洞会导致设备在特定的面部识别解锁或者身份验证场景下突发卡死，紧接着系统自动重启，直接打断用户正在进行的操作。 早在9月21日，杭州数码市场的经营户谈及类似现象，称每年都有这种情况。而且只有在特定情况下，才会出现死机的情况，可能要等下一个版本更新。 针对此事，9月28日，苹果官方客服人员表示，近期也有接到出现类似问题用户的反馈，问题出在系统软件方面，和硬件本身没有关系，“已在第一时间提交工程部去调查，后续会通过系统版本更新来解决”。",
+      [
+        "快科技9月28日消息，近日有大量消费者在社交平台反馈，iPhone 18 Pro系列疑似出现系统BUG，当用户在面部识别失败的情况下，手机可能卡死、自动重启等问题。",
+        "早在9月21日，杭州数码市场的经营户谈及类似现象，称每年都有这种情况。而且只有在特定情况下，才会出现死机的情况，可能要等下一个版本更新。",
+        "针对此事，9月28日，苹果官方客服人员表示，近期也有接到出现类似问题用户的反馈，问题出在系统软件方面，和硬件本身没有关系，“已在第一时间提交工程部去调查，后续会通过系统版本更新来解决”。",
+        "公开资料显示，iPhone 18 Pro系列是苹果于9月10日发布，包含iPhone 18 Pro和iPhone 18 Pro Max，国行起售价9999元，9月18日正式发售。",
+        "但发售至今仅10天，便因Face ID面容识别功能方面的严重系统漏洞被众多用户吐槽。"
+      ]
+    ]
+  },
+  "487f335029b57719e5f1091c": {
+    "evidence": {
+      "article_id": "487f335029b57719e5f1091c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple releases macOS 27.0.1, macOS 26.7.1 and macOS 15.8.1 - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T17:15:11+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T18:00:07+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T17:15:11+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T18:00:07+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-28T17:15:11+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T17:15:11+00:00",
+      "raw_lead": "Following two release candidates, Apple today released macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1, as well as macOS 27.0.1.",
+      "source": "9to5Mac",
+      "title": "Apple releases macOS 27.0.1, macOS 26.7.1 and macOS 15.8.1 - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Following two release candidates, Apple today released macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1, as well as macOS 27.0.1. Here are the details.",
+          "unit_id": "c88fc37c213a5a9159ab6b4f"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "macOS 27.0.1, macOS 26.7.1 and macOS 15.8.1 now available",
+          "unit_id": "7a6086afb0e195c12e318ae6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "After two release candidates, Apple is now rolling out macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1, in addition to macOS 27.0.1 Golden Gate, the first update since the release of macOS 27 earlier this month.",
+          "unit_id": "d29fab5bd145764d15e74889"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Today’s releases come exactly one week after Apple rolled out the second round of release candidates, which also included public releases the following day.",
+          "unit_id": "62df83614da6976998dd24e4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Apple’s release notes during the RC mentioned only standard security fixes and performance improvements, but recent point releases have included significant security patches, many of which address vulnerabilities discovered with the help of AI tools.",
+          "unit_id": "4c8ee7e59c99c13dea0b0b24"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple has even confirmed that the growing capabilities of AI tools are affecting its security release cadence. In June, the company said it had pushed out fixes originally planned for version 26.6 ahead of schedule because AI can speed up the development of malicious hacking tools, reducing the amount of time Apple wants to leave between making fixes public and getting them into users’ hands.",
+          "unit_id": "1f0fd9b6d24ec7f8a539ecc4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple will likely release the security details for macOS 27.0.1 Golden Gate, macOS Tahoe 26.7.1, and macOS Sequoia 15.8.1 in the coming hours, and we’ll report back with the noteworthy tidbits.",
+          "unit_id": "9a412fb3b22ce54b35494580"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Update, 1:59 p.m. ET: Apple says macOS 27.0.1 Golden Gate “has no published CVE entries,” but says macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1 fix the following issue:",
+          "unit_id": "aad537a9962c776fc4903bf3"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "CoreGraphics",
+          "unit_id": "8b5432a6aa5b7795c99b6990"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Available for: macOS Sequoia",
+          "unit_id": "38e58b00362be51726dea02c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Impact: Processing a maliciously crafted file may lead to arbitrary code execution. Apple is aware of a report that this issue may have been exploited in an extremely sophisticated attack against specific targeted individuals on versions of iOS before iOS 27.",
+          "unit_id": "0d6aa2ec18e43d74fe4436b4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Description: An out-of-bounds write issue was addressed with improved bounds checking.",
+          "unit_id": "4a28c12fb9bbac353e613729"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "CVE-2026-86950: Meta Product Security",
+          "unit_id": "52cd2752f4c1bdb7544d6b5d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "The release build for today’s macOS releases are:",
+          "unit_id": "f188c7c109eb2b2eedab3d15"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "macOS Sequoia 15.8: 24H32",
+          "unit_id": "6f4b2f950d8d1ab6e68db353"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "macOS Tahoe 26.7.1: 25G241",
+          "unit_id": "8318aaa74a0f4492b505bb76"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "macOS 27.0.1 Golden Gate: 26A5434",
+          "unit_id": "46677a97202b76b3d479fc16"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Did you spot anything new in today’s releases? Let us know in the comments.",
+          "unit_id": "d38a5328aa8fea1e76b5343f"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/28/apple-releases-macos-27-0-1-golden-gate-plus-macos-tahoe-26-7-1-and-macos-sequoia-15-8-1/"
+    },
+    "recorded_extraction": [
+      "Apple releases macOS 27.0.1, macOS 26.7.1 and macOS 15.8.1 - 9to5Mac",
+      "Following two release candidates, Apple today released macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1, as well as macOS 27.0.1. After two release candidates, Apple is now rolling out macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1, in addition to macOS 27.0.1 Golden Gate, the first update since the release of macOS 27 earlier this month. Today’s releases come exactly one week after Apple rolled out the second round of release candidates , which also included public releases the following day. Apple’s release notes during the RC mentioned only standard security fixes and performance improvements, but recent point releases have included significant security patches, many of which address vulnerabilities discovered with the help of AI tools. Apple has even confirmed that the growing capabilities of AI tools are affecting its security release cadence. In June, the company said it had pushed out fixes originally planned for version 26.6 ahead of schedule because AI can speed up the development of malicious hacking tools, reducing the amount of time Apple wants to leave between making fixes public and getting them into users’ hands.",
+      [
+        "Following two release candidates, Apple today released macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1, as well as macOS 27.0.1. Here are the details.",
+        "macOS 27.0.1, macOS 26.7.1 and macOS 15.8.1 now available",
+        "After two release candidates, Apple is now rolling out macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1, in addition to macOS 27.0.1 Golden Gate, the first update since the release of macOS 27 earlier this month.",
+        "Apple has even confirmed that the growing capabilities of AI tools are affecting its security release cadence. In June, the company said it had pushed out fixes originally planned for version 26.6 ahead of schedule because AI can speed up the development of malicious hacking tools, reducing the amount of time Apple wants to leave between making fixes public and getting them into users’ hands.",
+        "Apple will likely release the security details for macOS 27.0.1 Golden Gate, macOS Tahoe 26.7.1, and macOS Sequoia 15.8.1 in the coming hours, and we’ll report back with the noteworthy tidbits.",
+        "Update, 1:59 p.m. ET: Apple says macOS 27.0.1 Golden Gate “has no published CVE entries,” but says macOS Tahoe 26.7.1 and macOS Sequoia 15.8.1 fix the following issue:",
+        "CoreGraphics Available for: macOS Sequoia Impact: Processing a maliciously crafted file may lead to arbitrary code execution. Apple is aware of a report that this issue may have been exploited in an extremely sophisticated attack against specific targeted individuals on versions of iOS before iOS 27. Description: An out-of-bounds write issue was addressed with improved bounds checking. CVE-2026-86950: Meta Product Security"
+      ]
+    ]
+  },
+  "24c2505bb7b25fb50091cbb3": {
+    "evidence": {
+      "article_id": "24c2505bb7b25fb50091cbb3",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "First granular 27.0.1 updates arrive for IOS, macOS",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T17:34:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T18:21:21+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T18:21:21+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon Sep 28 2026, 01:34 PM EDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T18:59:37+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T19:10:27+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T19:13:01+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-29T00:03:34+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "1 hour ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T17:34:54+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "7 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T17:31:07+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "8 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:27:24+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:09:10+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T15:06:30+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "10 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T13:55:33+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "11 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T12:42:28+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "12 hours ago",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sep 28 2026, 01:34 PM EDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-28T17:34:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T17:34:00+00:00",
+      "raw_lead": "The first granular updates to Apple's milestone operating system releases have arrived, with 27.0.1 updates now here for iOS, iPadOS, macOS, watchOS, and visionOS.",
+      "source": "AppleInsider",
+      "title": "First granular 27.0.1 updates arrive for IOS, macOS",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "The first granular updates to Apple's milestone operating system releases have arrived, with 27.0.1 updates now here for iOS, iPadOS, macOS, watchOS, and visionOS.",
+          "unit_id": "05bb16a862b35a69ead52219"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple released its major yearly operating system revision on September 14, bringing iOS, iPadOS, macOS, watchOS, tvOS, and visionOS to the 27 generation. Two weeks later, Apple's released the first small update to the public.",
+          "unit_id": "6588c381f53d9ebe51fd0f6a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The granular update is a minor version change, and is quite typical for Apple to release shortly after the main releases.",
+          "unit_id": "034f6d2f4e43af81d0c31d77"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The new updates are:",
+          "unit_id": "7f400f5f374c8498046cd5b4"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "iOS 27.0.1, build 24A446",
+          "unit_id": "6022e4de345dacde244a05fa"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "iPadOS 27.0.1, build 24A446",
+          "unit_id": "87c9b26a35f7ea3bb2fdff96"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "macOS 27.0.1, build 26A434",
+          "unit_id": "34e92f805b29d284ac528e01"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "watchOS 27.0.1, build 24R365",
+          "unit_id": "06031c62fde57864b7fcb508"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "visionOS 27.0.1, build 24M372.",
+          "unit_id": "18d637bdbc6df155ad0624bd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Apple also released granular updates to its earlier operating systems, too.",
+          "unit_id": "a27f28cc9577f71d7ccc04ae"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "iOS 26.7.1, build 23H30",
+          "unit_id": "abae4134db21f40bb1b86c11"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "iPadOS 26.7.1, build 23H30",
+          "unit_id": "055b948d2e75df36337aef72"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "macOS 26.7.1, build 25G241",
+          "unit_id": "5fd361430e7b7b3f5859463e"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "macOS 15.8.1, build 24H32.",
+          "unit_id": "cc38fc91e35aeb889e628a6e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "At this early stage, it is unclear exactly what has changed with each operating system. However, while a granular release doesn't tend to have major feature changes, they usually include bug fixes and performance improvements for issues that emerge after launch.",
+          "unit_id": "e665eb7e769acb3a1fb33ceb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "This will probably include fixes for things like Neural Engine timeouts and Face ID kernel panics. For the latter, Apple confirmed a software update will fix the issue.",
+          "unit_id": "04d5a863c407a83d372d7c77"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/09/28/first-granular-2701-updates-arrive-for-ios-macos?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "First granular 27.0.1 updates arrive for IOS, macOS",
+      "The first granular updates to Apple's milestone operating system releases have arrived, with 27.0.1 updates now here for iOS, iPadOS, macOS, watchOS, and visionOS. Apple released its major yearly operating system revision on September 14, bringing iOS, iPadOS , macOS , watchOS , tvOS , and visionOS to the 27 generation. Two weeks later, Apple's released the first small update to the public. The granular update is a minor version change, and is quite typical for Apple to release shortly after the main releases. Apple also released granular updates to its earlier operating systems, too. At this early stage, it is unclear exactly what has changed with each operating system. However, while a granular release doesn't tend to have major feature changes, they usually include bug fixes and performance improvements for issues that emerge after launch .",
+      [
+        "The first granular updates to Apple's milestone operating system releases have arrived, with 27.0.1 updates now here for iOS, iPadOS, macOS, watchOS, and visionOS.",
+        "Apple released its major yearly operating system revision on September 14, bringing iOS, iPadOS, macOS, watchOS, tvOS, and visionOS to the 27 generation. Two weeks later, Apple's released the first small update to the public.",
+        "iOS 27.0.1, build 24A446",
+        "iPadOS 27.0.1, build 24A446",
+        "macOS 27.0.1, build 26A434",
+        "watchOS 27.0.1, build 24R365",
+        "visionOS 27.0.1, build 24M372.",
+        "iOS 26.7.1, build 23H30",
+        "iPadOS 26.7.1, build 23H30",
+        "macOS 26.7.1, build 25G241",
+        "macOS 15.8.1, build 24H32.",
+        "At this early stage, it is unclear exactly what has changed with each operating system. However, while a granular release doesn't tend to have major feature changes, they usually include bug fixes and performance improvements for issues that emerge after launch."
+      ]
+    ]
+  },
+  "330a77eaa1f9833e2a33f784": {
+    "evidence": {
+      "article_id": "330a77eaa1f9833e2a33f784",
+      "confidence": "detail",
+      "content_form": "tutorial",
+      "discovery_lead": "",
+      "discovery_title": "macOS 27: How to use the new 'Notify Me' feature in Safari - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T22:53:05+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T22:53:07+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T22:53:05+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T22:53:07+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-28T22:53:05+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T22:53:05+00:00",
+      "raw_lead": "Safari's new “Notify Me” feature lets users get alerted when a website updates content they’re interested in. Here’s how to use it.",
+      "source": "9to5Mac",
+      "title": "macOS 27: How to use the new 'Notify Me' feature in Safari - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "9to5Mac is brought to you by CleanMyMac by MacPaw. With the release of macOS 27 Golden Gate, use CleanMyMac first to free up space, optimize your system, and ensure your new Mac runs at 100% on day one. Learn more.",
+          "unit_id": "a49f09a2ee01991b1c9ad8f4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "One of the many new features included in macOS 27 Golden Gate is Safari’s new “Notify Me” feature, which lets users get alerted when a website updates content they’re interested in. Here’s how to use it.",
+          "unit_id": "db36b1660d52849e78336cb2"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Safari can now notify you when webpages change",
+          "unit_id": "acafdc2e18184d053ca29567"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "One of the most useful ways Apple has incorporated Apple Intelligence into macOS 27 Golden Gate is through Safari’s new “Notify Me” feature.",
+          "unit_id": "054109e0a43f4b5eb22d6e9c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "With it, users can ask Safari to monitor a webpage for specific changes and receive a notification when it detects an update.",
+          "unit_id": "49dc646438ca356ae7abbd9c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "When setting up a new custom notification, in addition to telling Safari what to look for, the user can also set a regular schedule ranging from hourly to monthly.",
+          "unit_id": "0cb74cd37ec53a5e32edd8f5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "After the custom notification is set up, Safari will check the webpage according to the selected schedule and notify the user when it detects the requested change, such as a price drop, an item coming back in stock, changes to policies, registrations opening, or new information being added to the page.",
+          "unit_id": "f6d3543bd1f96ee66f9ef579"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Setting up Safari’s new “Notify Me” feature:",
+          "unit_id": "920eb6d4ee7ad23f18e86d96"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "On Safari, go to the webpage you want to keep an eye on.",
+          "unit_id": "099795e35cc2b16d1bd3dcdb"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Click the Page menu button to the right of the Smart Search field.",
+          "unit_id": "c52ea6e57b5d00368a61dc64"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Select “Notify Me” from the pop-up menu.",
+          "unit_id": "d19c51c1ab5483a3a9056b53"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "In the “What should Safari look for?” field, describe what you want. Apple Intelligence will then analyze the page’s contents to determine whether it can handle your request.",
+          "unit_id": "8818a531f621cbbc2a416b33"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Optionally, you can set how often and when Safari should check for updates. Hourly and Daily let you choose a specific time, while Weekly and Monthly also let you choose specific days.",
+          "unit_id": "0780bcc82b32fbb869a2a925"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Click Done. Alternatively, Safari may show a Next button instead. In that case, macOS will ask for permission to send Safari notifications. You can also manage Safari notification permissions from Settings > Notifications > Safari.",
+          "unit_id": "db8c0da9b59dcbe7da4ecfc8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Importantly, since the feature relies on Apple Intelligence, it may not be available in all languages or regions. To check the current availability status, follow this link.",
+          "unit_id": "b2247d072feb3345b992aef2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Do you have a creative idea for how to use Safari’s new Notify Me feature? Let us know in the comments.",
+          "unit_id": "c1084e86e7a26b1d9a29fafc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "9to5Mac is brought to you by CleanMyMac by MacPaw. With the release of macOS 27 Golden Gate, use CleanMyMac first to free up space, optimize your system, and ensure your new Mac runs at 100% on day one. Learn more.",
+          "unit_id": "173a6b0b3a42207d36178a84"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/28/macos-27-how-to-use-the-new-notify-me-feature-in-safari/"
+    },
+    "recorded_extraction": [
+      "macOS 27: How to use the new 'Notify Me' feature in Safari - 9to5Mac",
+      "Safari's new “Notify Me” feature lets users get alerted when a website updates content they’re interested in. Here’s how to use it. 9to5Mac is brought to you by CleanMyMac by MacPaw . With the release of macOS 27 Golden Gate, use CleanMyMac first to free up space, optimize your system, and ensure your new Mac runs at 100% on day one. Learn more . One of the many new features included in macOS 27 Golden Gate is Safari’s new “Notify Me” feature, which lets users get alerted when a website updates content they’re interested in. Here’s how to use it. One of the most useful ways Apple has incorporated Apple Intelligence into macOS 27 Golden Gate is through Safari’s new “Notify Me” feature. With it, users can ask Safari to monitor a webpage for specific changes and receive a notification when it detects an update.",
+      [
+        "9to5Mac is brought to you by CleanMyMac by MacPaw. With the release of macOS 27 Golden Gate, use CleanMyMac first to free up space, optimize your system, and ensure your new Mac runs at 100% on day one. Learn more.",
+        "One of the many new features included in macOS 27 Golden Gate is Safari’s new “Notify Me” feature, which lets users get alerted when a website updates content they’re interested in. Here’s how to use it.",
+        "One of the most useful ways Apple has incorporated Apple Intelligence into macOS 27 Golden Gate is through Safari’s new “Notify Me” feature.",
+        "When setting up a new custom notification, in addition to telling Safari what to look for, the user can also set a regular schedule ranging from hourly to monthly.",
+        "After the custom notification is set up, Safari will check the webpage according to the selected schedule and notify the user when it detects the requested change, such as a price drop, an item coming back in stock, changes to policies, registrations opening, or new information being added to the page.",
+        "On Safari, go to the webpage you want to keep an eye on.",
+        "Select “Notify Me” from the pop-up menu.",
+        "In the “What should Safari look for?” field, describe what you want. Apple Intelligence will then analyze the page’s contents to determine whether it can handle your request.",
+        "Optionally, you can set how often and when Safari should check for updates. Hourly and Daily let you choose a specific time, while Weekly and Monthly also let you choose specific days.",
+        "Importantly, since the feature relies on Apple Intelligence, it may not be available in all languages or regions. To check the current availability status, follow this link."
+      ]
+    ]
+  },
+  "26d08fa574869e0135ad08cf": {
+    "evidence": {
+      "article_id": "26d08fa574869e0135ad08cf",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果 visionOS 27.0.1 发布，整合安全修复",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/29 1:58:09",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/29 1:58:09",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-28T17:58:09+00:00",
+      "raw_lead": "苹果今日向 Vision Pro 用户推送了 visionOS 27.0.1 更新（内部版本号：24M372），本次更新距离上次发布正式版间隔 14 天。",
+      "source": "IT之家",
+      "title": "苹果 visionOS 27.0.1 发布，整合安全修复",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 29 日消息，苹果今日向 Vision Pro 用户推送了 visionOS 27.0.1 更新（内部版本号：24M372），本次更新距离上次发布正式版间隔 14 天。",
+          "unit_id": "f46abe51df08ead74fd2ebdf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "需要注意的是，因苹果各区域节点服务器配置缓存问题，可能有些地方探测到升级更新的时间略有延迟，一般半小时内，不会太久。",
+          "unit_id": "1d4f7e1e9d720cd82db653a8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在官方 visionOS 27.0.1 更新日志中，苹果只是写道：“本次更新包含针对 Apple Vision Pro 的安全修复”。用户可以通过以下步骤下载最新更新：在 Vision Pro 设备上，依次进入“设置”>“常规”>“软件更新”。看到更新后，选择“下载并安装”。",
+          "unit_id": "ec48bd9154e35594d53ce4d9"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "附 visionOS 27 发布历史：",
+          "unit_id": "68c1618f7bf89e91ccb14eef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "2026-09-22：visionOS 27.2 Beta 2 (24N5093f)",
+          "unit_id": "9e058edd845d03e13cf3a40f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "2026-09-17：visionOS 27.2 Beta (24N5088l)",
+          "unit_id": "6b9dc24a1e815ae7b25a54fd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "2026-09-15：visionOS 27.0 (24M362)",
+          "unit_id": "0055f0c061e1e1d9eb508209"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "2026-09-10：visionOS 27.0 RC (24M362)",
+          "unit_id": "b46e36ffdcf3f9b84fff9e4d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "2026-09-01：visionOS 27.0 Beta 8 (24M5361a)",
+          "unit_id": "e2f3ea6615b4683667998527"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "2026-08-25：visionOS 27.0 Beta 7 (24M5359a)",
+          "unit_id": "16fb7ae575f6564f263f4478"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "2026-08-18：visionOS 27.0 Beta 6 (24M5355a)",
+          "unit_id": "10ed196719f2c7545ad1ce35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "2026-08-11：visionOS 27.0 Beta 5 (24M5348b)",
+          "unit_id": "8683fb55aa313d84cc2385d5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "2026-07-21：visionOS 27.0 Beta 4 (24M5326g)",
+          "unit_id": "06b4126d0680ff69fc7dbf45"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "2026-07-07：visionOS 27.0 Beta 3 (24M5316k)",
+          "unit_id": "9f63c959ff351b21e65ba005"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "2026-06-23：visionOS 27.0 Beta 2 (24M5306i)",
+          "unit_id": "3dd7d5ba611a56dfa9392190"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "2026-06-09：visionOS 27 Beta (24M5291p)",
+          "unit_id": "89e19bba4d9629ed453d5134"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "IT之家小伙伴如果找到更多新内容，可以在投稿或评论区中提出你的发现 ~",
+          "unit_id": "b72cfddb0733995c3d7d4df2"
+        }
+      ],
+      "url": "https://www.ithome.com/1/008/068.htm"
+    },
+    "recorded_extraction": [
+      "苹果 visionOS 27.0.1 发布，整合安全修复",
+      "苹果今日向 Vision Pro 用户推送了 visionOS 27.0.1 更新（内部版本号：24M372），本次更新距离上次发布正式版间隔 14 天。 IT之家 9 月 29 日消息，苹果今日向 Vision Pro 用户推送了 visionOS 27.0.1 更新（内部版本号：24M372），本次更新距离上次发布正式版间隔 14 天。 在官方 visionOS 27.0.1 更新日志中，苹果只是写道：“本次更新包含针对 Apple Vision Pro 的安全修复”。用户可以通过以下步骤下载最新更新：在 Vision Pro 设备上，依次进入“设置”>“常规”>“软件更新”。看到更新后，选择“下载并安装”。",
+      [
+        "IT之家 9 月 29 日消息，苹果今日向 Vision Pro 用户推送了 visionOS 27.0.1 更新（内部版本号：24M372），本次更新距离上次发布正式版间隔 14 天。",
+        "在官方 visionOS 27.0.1 更新日志中，苹果只是写道：“本次更新包含针对 Apple Vision Pro 的安全修复”。用户可以通过以下步骤下载最新更新：在 Vision Pro 设备上，依次进入“设置”>“常规”>“软件更新”。看到更新后，选择“下载并安装”。"
+      ]
+    ]
+  },
+  "83b398dd12991adeb2bd1b0d": {
+    "evidence": {
+      "article_id": "83b398dd12991adeb2bd1b0d",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "iPhone Duo StandBy Leak Reveals Five Unannounced Faces",
+      "embedded_references": [
+        {
+          "body_element_index": 18,
+          "html_tag": "<a href=\"https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw\">",
+          "object_id": "2104567049963921785",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-29T00:04:42+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-29T00:04:42+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-29T00:04:42+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Monday September 28, 2026 5:04 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 28, 2026 5:04 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 9, 2026 10:56 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 9, 2026 9:10 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 3, 2026 3:41 am PDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-29T00:04:42+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-29T00:04:42+00:00",
+      "raw_lead": "We've seen previews of iOS 27 running on the iPhone Duo, including a new StandBy mode that activates even when the iPhone isn't charging. Apple showed the mode in press materials, but leaker pdfu today shared a more in-depth look at some of the options. There are multiple StandBy faces available on the iPhone Duo, five of which we weren't aware of. A Home Camera view will show a single camera feed or a grid of up to nine camera feeds.",
+      "source": "MacRumors",
+      "title": "iPhone Duo StandBy Leak Reveals Five Unannounced Faces",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo StandBy Leak Reveals Five Unannounced Faces",
+          "unit_id": "408211e9357942da216b1de3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "We've seen previews of iOS 27 running on the iPhone Duo, including a new StandBy mode that activates even when the iPhone isn't charging. Apple showed the mode in press materials, but leaker pdfu today shared a more in-depth look at some of the options.",
+          "unit_id": "b3bcb95197e3fc3054ec31ac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "There are multiple StandBy faces available on the ‌iPhone Duo‌, five of which we weren't aware of.",
+          "unit_id": "4c81bda4013d6c0872859bdb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "A Home Camera view will show a single camera feed or a grid of up to nine camera feeds. There's a Home Modular option that likely shows smart home controls, and a Snoopy-themed face.",
+          "unit_id": "94671561815719852418e7c6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Here's a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. 🧵 pic.twitter.com/lDQHOy5R0e — pdfu (@itspdfu) September 28, 2026",
+          "unit_id": "e2f5b75fcfb9b5e5c611db55"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple also appears to be adding a face called Flow that could have animations, and there's a face named Fade with no details available. Faces we've seen in marketing materials include Analog, Digital, Classic Calendar, Weather, Photos, Memories, Shared Albums, and Modular.",
+          "unit_id": "8362e16cc8912e21020f46d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "A face editor will let users adjust the StandBy mode interface, choosing different styles and colors, similar to the existing iPhone StandBy customization screens. Swipe gestures are available for quick visual adjustments.",
+          "unit_id": "cfcd22447d6607847d05f5fa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "There are five widget layouts to choose from for clock faces that support widgets. The layouts include StandBy, Stacked, Top, Middle, and Bottom.",
+          "unit_id": "e2e90ca7bc74b2666f53cc89"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "The ‌iPhone Duo‌ will be available for pre-order on October 16 ahead of an October 23 launch, and we'll likely see more details come out as we approach the release date.",
+          "unit_id": "5006bdcab92007c8b27ec6ee"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/28/iphone-duo-standby-leak/"
+    },
+    "recorded_extraction": [
+      "iPhone Duo StandBy Leak Reveals Five Unannounced Faces",
+      "We've seen previews of iOS 27 running on the iPhone Duo, including a new StandBy mode that activates even when the iPhone isn't charging. Apple showed the mode in press materials, but leaker pdfu today shared a more in-depth look at some of the options. There are multiple StandBy faces available on the iPhone Duo, five of which we weren't aware of. A Home Camera view will show a single camera feed or a grid of up to nine camera feeds. We've seen previews of iOS 27 running on the iPhone Duo , including a new StandBy mode that activates even when the iPhone isn't charging. Apple showed the mode in press materials, but leaker pdfu today shared a more in-depth look at some of the options. There are multiple StandBy faces available on the ‌iPhone Duo‌, five of which we weren't aware of. A Home Camera view will show a single camera feed or a grid of up to nine camera feeds. There's a Home Modular option that likely shows smart home controls, and a Snoopy-themed face. Here's a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. 🧵 pic.twitter.com/lDQHOy5R0e — pdfu (@itspdfu) September 28, 2026 Apple also appears to be adding a face called Flow that could have animations, and there's a face named Fade with no details available. Faces we've seen in marketing materials include Analog, Digital, Classic Calendar, Weather, Photos , Memories, Shared Albums, and Modular.",
+      [
+        "We've seen previews of iOS 27 running on the iPhone Duo, including a new StandBy mode that activates even when the iPhone isn't charging. Apple showed the mode in press materials, but leaker pdfu today shared a more in-depth look at some of the options.",
+        "Here's a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. 🧵 pic.twitter.com/lDQHOy5R0e — pdfu (@itspdfu) September 28, 2026 Apple also appears to be adding a face called Flow that could have animations, and there's a face named Fade with no details available. Faces we've seen in marketing materials include Analog, Digital, Classic Calendar, Weather, Photos, Memories, Shared Albums, and Modular.",
+        "The ‌iPhone Duo‌ will be available for pre-order on October 16 ahead of an October 23 launch, and we'll likely see more details come out as we approach the release date."
+      ]
+    ]
+  },
+  "00cba6663e1c97b216c60838": {
+    "evidence": {
+      "article_id": "00cba6663e1c97b216c60838",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "消息称苹果推进 Vision Pro 头显继任机型，正并行验证 4 款原型机",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/29 7:21:34",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/29 7:21:34",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-28T23:21:34+00:00",
+      "raw_lead": "科技媒体 AppleInsider 昨日（9 月 28 日）发布博文，报道称尽管外界消息称苹果收缩 Vision Pro 团队，不过内部仍在推进继任型号 N224，当前正并行验证 4 款原型机。",
+      "source": "IT之家",
+      "title": "消息称苹果推进 Vision Pro 头显继任机型，正并行验证 4 款原型机",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 29 日消息，科技媒体 AppleInsider 昨日（9 月 28 日）发布博文，报道称尽管外界消息称苹果收缩 Vision Pro 团队，不过内部仍在推进继任型号 N224，当前正并行验证 4 款原型机。",
+          "unit_id": "3164edfd2157fcae8abbe67f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "N224 项目由苹果秘密项目部门（Special Projects Group）主导，该部门负责从概念到原型的早期开发。在 M2 机型发布至 M5 机型上市的 28 个月间，苹果继续坚持原有技术路线，并未加速推进其他设计。",
+          "unit_id": "cc50c56b32febec08a74c0a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "目前爆料验证的 4 款原型机中，其中一款原型采用类似 Meta 的外部计算模块设计，将主要处理器置于头显之外的独立设备。这种设计可以减轻头显重量，同时维持高分辨率与广视野表现。",
+          "unit_id": "c0ee075e9323ec4c9659cca9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "IT之家援引博文介绍，在研发 Vision Pro 头显过程中，苹果秉承“1,000 个‘不’换来一个‘是’”设计理念，期间经历打磨了多个原型产品，其中最值得关注的是 N107、N100 与 N109 三款原型：",
+          "unit_id": "fc71832361a79cdffc64c535"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "N107 将计算任务卸载至外部设备如 Mac，视觉保真度较低，类似 XReal 眼镜。",
+          "unit_id": "c0107516098699cbfce97d70"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "N100 尝试将计算模块移至电池组，维持封闭式 VR 设计，代号“Vision Air”。",
+          "unit_id": "9328daa481925ec326b00be5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "N109 则为更轻便、低成本版本，但搭载性能较弱的芯片。",
+          "unit_id": "9327f1e75f6ec27eb2c4965e"
+        }
+      ],
+      "url": "https://www.ithome.com/1/008/078.htm"
+    },
+    "recorded_extraction": [
+      "消息称苹果推进 Vision Pro 头显继任机型，正并行验证 4 款原型机",
+      "科技媒体 AppleInsider 昨日（9 月 28 日）发布博文，报道称尽管外界消息称苹果收缩 Vision Pro 团队，不过内部仍在推进继任型号 N224，当前正并行验证 4 款原型机。 IT之家 9 月 29 日消息，科技媒体 AppleInsider 昨日（9 月 28 日）发布博文，报道称尽管外界消息称苹果收缩 Vision Pro 团队， 不过内部仍在推进继任型号 N224，当前正并行验证 4 款原型机。 N224 项目由苹果秘密项目部门（Special Projects Group）主导，该部门负责从概念到原型的早期开发。在 M2 机型发布至 M5 机型上市的 28 个月间，苹果继续坚持原有技术路线，并未加速推进其他设计。 目前爆料验证的 4 款原型机中，其中一款原型采用类似 Meta 的外部计算模块设计，将主要处理器置于头显之外的独立设备。这种设计可以减轻头显重量，同时维持高分辨率与广视野表现。 IT之家援引博文介绍，在研发 Vision Pro 头显过程中，苹果秉承“1,000 个‘不’换来一个‘是’”设计理念，期间经历打磨了多个原型产品，其中最值得关注的是 N107、N100 与 N109 三款原型：",
+      [
+        "IT之家 9 月 29 日消息，科技媒体 AppleInsider 昨日（9 月 28 日）发布博文，报道称尽管外界消息称苹果收缩 Vision Pro 团队，不过内部仍在推进继任型号 N224，当前正并行验证 4 款原型机。",
+        "N224 项目由苹果秘密项目部门（Special Projects Group）主导，该部门负责从概念到原型的早期开发。在 M2 机型发布至 M5 机型上市的 28 个月间，苹果继续坚持原有技术路线，并未加速推进其他设计。",
+        "目前爆料验证的 4 款原型机中，其中一款原型采用类似 Meta 的外部计算模块设计，将主要处理器置于头显之外的独立设备。这种设计可以减轻头显重量，同时维持高分辨率与广视野表现。",
+        "IT之家援引博文介绍，在研发 Vision Pro 头显过程中，苹果秉承“1,000 个‘不’换来一个‘是’”设计理念，期间经历打磨了多个原型产品，其中最值得关注的是 N107、N100 与 N109 三款原型：",
+        "N107 将计算任务卸载至外部设备如 Mac，视觉保真度较低，类似 XReal 眼镜。",
+        "N100 尝试将计算模块移至电池组，维持封闭式 VR 设计，代号“Vision Air”。"
+      ]
+    ]
+  },
+  "710d5c909dde3b17dbc1243e": {
+    "evidence": {
+      "article_id": "710d5c909dde3b17dbc1243e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "New Vision Pro Headset: Apple Considering Four Different Concepts",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T10:52:40+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T10:52:40+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T10:52:40+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Monday September 28, 2026 3:52 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 28, 2026 3:52 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "August 30, 2026 7:54 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 14, 2026 2:04 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 9, 2026 8:47 am PDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-09-28T10:52:40+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T10:52:40+00:00",
+      "raw_lead": "Apple is working on a \"completely revamped\" Vision Pro headset that could go in any of four directions and likely won't arrive before late 2028 or early 2029, according to Bloomberg's Mark Gurman. Writing in his latest Power On newsletter, Gurman said Apple's Vision team is exploring four concepts for the device, codenamed N224, including designs that offload internal components in a similar way to Meta's latest VR Glasses, which are expected to launch next spring.",
+      "source": "MacRumors",
+      "title": "New Vision Pro Headset: Apple Considering Four Different Concepts",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "New Vision Pro Headset: Apple Considering Four Different Concepts",
+          "unit_id": "4aa5a3c896f24560cc8ea0c6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple is working on a \"completely revamped\" Vision Pro headset that could go in any of four directions and likely won't arrive before late 2028 or early 2029, according to Bloomberg's Mark Gurman.",
+          "unit_id": "b44aabaf43e86a1ebb82dca5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Writing in his latest Power On newsletter, Gurman said Apple's Vision team is exploring four concepts for the device, codenamed N224, including designs that offload internal components in a similar way to Meta's latest VR Glasses, which are expected to launch next spring.",
+          "unit_id": "30351acfe654f254021441c5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "An external computing module on Meta's device houses the battery and main processor, and can be clipped to the user's waist. Gurman, who has previewed Meta's headset, says the module is about the same size and weight as the current Vision Pro's battery pack, but with a grippy exterior.",
+          "unit_id": "5a8d88c900d621a63917bf6e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Gurman reports that regardless of the Vision team's work, senior Apple decision-makers still consider the external puck concept as a \"poor user experience\" and want the company to stick with \"something closer to an all-in-one design.\"",
+          "unit_id": "8398766f6dfbca4bfa049eae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "If any of this sounds familiar, that's because Gurman reported in June that Apple was still working on a cheaper, lighter successor to its Vision Pro headset. (The device-in-development is distinct from the long-rumored \"Vision Air,\" which was cancelled last year.)",
+          "unit_id": "20b77683f48c6486d850771d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple knows it needs to come up with ways to simplify the design and make something cheaper and lighter, and it is said to be actively exploring ways to reduce the headset's weight by experimenting with plastic, titanium, other metals and various materials.",
+          "unit_id": "e48cc6939eb8fd1157905b23"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Still, Gurman has been told the work is on \"life support\" as the company focuses more on smart glasses, which it aims to release in late 2027. Despite the Vision Pro's most senior leaders \"pressing their bosses to keep the category alive, funded and growing at Apple,\" Gurman says there's still no guarantee a new headset will ever launch.",
+          "unit_id": "49d24dea514a3b5e3ca09243"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/09/28/apple-working-on-four-new-vision-pro-concepts/"
+    },
+    "recorded_extraction": [
+      "New Vision Pro Headset: Apple Considering Four Different Concepts",
+      "Apple is working on a \"completely revamped\" Vision Pro headset that could go in any of four directions and likely won't arrive before late 2028 or early 2029, according to Bloomberg's Mark Gurman. Writing in his latest Power On newsletter, Gurman said Apple's Vision team is exploring four concepts for the device, codenamed N224, including designs that offload internal components in a similar way to Meta's latest VR Glasses, which are expected to launch next spring. An external computing module on Meta's device houses the battery and main processor, and can be clipped to the user's waist. Gurman, who has previewed Meta's headset, says the module is about the same size and weight as the current Vision Pro's battery pack, but with a grippy exterior. Gurman reports that regardless of the Vision team's work, senior Apple decision-makers still consider the external puck concept as a \"poor user experience\" and want the company to stick with \"something closer to an all-in-one design.\" If any of this sounds familiar, that's because Gurman reported in June that Apple was still working on a cheaper, lighter successor to its Vision Pro headset. (The device-in-development is distinct from the long-rumored \"Vision Air,\" which was cancelled last year .) Apple knows it needs to come up with ways to simplify the design and make something cheaper and lighter, and it is said to be actively exploring ways to reduce the headset's weight by experimenting with plastic, titanium, other metals and various materials.",
+      [
+        "Apple is working on a \"completely revamped\" Vision Pro headset that could go in any of four directions and likely won't arrive before late 2028 or early 2029, according to Bloomberg's Mark Gurman.",
+        "Still, Gurman has been told the work is on \"life support\" as the company focuses more on smart glasses, which it aims to release in late 2027. Despite the Vision Pro's most senior leaders \"pressing their bosses to keep the category alive, funded and growing at Apple,\" Gurman says there's still no guarantee a new headset will ever launch."
+      ]
+    ]
+  },
+  "bacd790dbd3df6445af85070": {
+    "evidence": {
+      "article_id": "bacd790dbd3df6445af85070",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Leak reveals new iPhone Duo features not yet announced - 9to5Mac",
+      "embedded_references": [
+        {
+          "body_element_index": 23,
+          "html_tag": "<a href=\"https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw\">",
+          "object_id": "2104567049963921785",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/itspdfu/status/2104567049963921785?ref_src=twsrc%5Etfw"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T14:41:27+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T14:41:29+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T14:41:27+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T14:41:29+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-28T14:41:27+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T14:41:27+00:00",
+      "raw_lead": "iPhone Duo is coming soon, and there are several unannounced features coming to its StandBy mode that were just discovered in Apple code.",
+      "source": "9to5Mac",
+      "title": "Leak reveals new iPhone Duo features not yet announced - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo is coming October 23, but there are several unannounced features coming to its StandBy mode that were just discovered hidden in Apple code.",
+          "unit_id": "866d8fe3feff9fd3e1241b44"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "iPhone Duo StandBy mode will have a variety of additional views not yet seen",
+          "unit_id": "fa81022e52dd58e0d79855c5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "When iPhone Duo arrives next month, it will be the most versatile iPhone yet. That’s in part due to its two displays, but also thanks to special modes that are available in different setups.",
+          "unit_id": "85c284c17ef8a5662df5d2d8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "You can use iPhone Duo folded or unfolded, in landscape or portrait, and in “seated” or “standing” configurations.",
+          "unit_id": "76b453e9848b7a1a212be5b8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Standing is a great setup for watching videos, but it also enables a range of new StandBy features. And unlike previous iPhones, you can use iPhone Duo’s StandBy mode even when it’s not charging.",
+          "unit_id": "ef73b29ee494df0c5df0b1c2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple showed off several StandBy examples at its unveiling earlier this month. But additional features have just been uncovered by leaker pdfu.",
+          "unit_id": "bd0c87df44543e88e04dff64"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Here’s a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. 🧵 pic.twitter.com/lDQHOy5R0e",
+          "unit_id": "79620c7158a3750e962b7b08"
+        },
+        {
+          "container_id": "",
+          "kind": "blockquote",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "— pdfu (@itspdfu) September 28, 2026",
+          "unit_id": "a6a4a57b5ce31b29610e60a0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Per pdfu’s thread, code reveals five new StandBy views not previously announced:",
+          "unit_id": "d260d1fc31d8b613b430f6a2"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Home Camera",
+          "unit_id": "587e954f07b5788fd6913fbb"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Home Modular",
+          "unit_id": "bb10b4a5191a6dd0cb2740ce"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Flow",
+          "unit_id": "3aac187ba122500e32902c42"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Fade",
+          "unit_id": "92f0cf1297d2ea892642f2f8"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Snoopy",
+          "unit_id": "873f3e71e263f3ac1f4837ae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "The first two let you view a single camera feed or a grid of camera feeds, or set up your own custom smart home controls. pdfu believes Flow will portray responsive art of some sort, and there are no details yet on Fade but it may be similar. The Snoopy face is expected to resemble Apple’s tvOS screensaver.",
+          "unit_id": "8d0871f8fa38512834618b8d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "These join previously seen StandBy views like Analog, Digital, Classic Calendar, Weather, Photos, Memories, Shared Albums, and Modular.",
+          "unit_id": "20598dafd25d4de131956878"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "pdfu’s full thread on X also reveals how iPhone Duo’s customization screen for several StandBy views will work.",
+          "unit_id": "c0276e9a079410ec7146fe07"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Do you expect to use StandBy mode often on your iPhone Duo? Let us know in the comments.",
+          "unit_id": "fbb37ce7f389c008c9e4606b"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/28/leak-reveals-new-iphone-duo-features-not-yet-announced/"
+    },
+    "recorded_extraction": [
+      "Leak reveals new iPhone Duo features not yet announced - 9to5Mac",
+      "iPhone Duo is coming soon, and there are several unannounced features coming to its StandBy mode that were just discovered in Apple code. iPhone Duo is coming October 23 , but there are several unannounced features coming to its StandBy mode that were just discovered hidden in Apple code. When iPhone Duo arrives next month, it will be the most versatile iPhone yet. That’s in part due to its two displays, but also thanks to special modes that are available in different setups. You can use iPhone Duo folded or unfolded, in landscape or portrait, and in “seated” or “standing” configurations. Standing is a great setup for watching videos, but it also enables a range of new StandBy features. And unlike previous iPhones, you can use iPhone Duo’s StandBy mode even when it’s not charging.",
+      [
+        "iPhone Duo is coming October 23, but there are several unannounced features coming to its StandBy mode that were just discovered hidden in Apple code.",
+        "Standing is a great setup for watching videos, but it also enables a range of new StandBy features. And unlike previous iPhones, you can use iPhone Duo’s StandBy mode even when it’s not charging.",
+        "Here’s a deep dive into StandBy mode on iPhone Duo. Rushmore, the app meant to host the redesigned faces, is missing from the iOS 27.1 simulator. But its localization strings reveal unreported faces, and I got some new faces running in the current renderer. 🧵 pic.twitter.com/lDQHOy5R0e— pdfu (@itspdfu) September 28, 2026"
+      ]
+    ]
+  },
+  "678094f38a16da7a71caa318": {
+    "evidence": {
+      "article_id": "678094f38a16da7a71caa318",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果首款折叠 iPhone Duo 待机模式前瞻：史努比等 5 种界面、配新表盘编辑器",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/29 8:08:23",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/29 8:08:23",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-29T00:08:23+00:00",
+      "raw_lead": "消息源 @itspdfu 昨日（9 月 28 日）在 X 平台发布推文，通过挖掘 iOS 27.1 系统代码，发现苹果首款折叠 iPhone Duo 在开启待机（StandBy）模式后，会新增 5 个全新界面，并增强自定义编辑器。",
+      "source": "IT之家",
+      "title": "苹果首款折叠 iPhone Duo 待机模式前瞻：史努比等 5 种界面、配新表盘编辑器",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 29 日消息，消息源 @itspdfu 昨日（9 月 28 日）在 X 平台发布推文，通过挖掘 iOS 27.1 系统代码，发现苹果首款折叠 iPhone Duo 在开启待机（StandBy）模式后，会新增 5 个全新界面，并增强自定义编辑器。",
+          "unit_id": "a69b998f020eaf72c7c1ea91"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "待机模式于 2023 年 9 月随 iOS 17 系统引入，在 iPhone 横向放置并充电时，屏幕可显示时钟、日历、照片或小组件等信息，类似智能显示屏。iPhone Duo 因双屏结构，该模式将支持更复杂布局与多任务视图。",
+          "unit_id": "3d5a3428a73c3b101c21d5ae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "根据目前曝光的代码细节，iPhone Duo 支持 5 个界面：",
+          "unit_id": "e6ef212862ad680ba94d4934"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Home Camera（支持最多九路摄像头画面同屏显示）",
+          "unit_id": "633de75ce83d243284af8482"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Home Module（智能家居模块）",
+          "unit_id": "7644b45844f93ea26a3f292a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Flow（其中 Flow 表盘代码含 ResponsiveArt 字段，暗示其可能为动态动画表盘）",
+          "unit_id": "ddd8025c4233b1d94228811b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Fade（暂未发现具体说明）",
+          "unit_id": "ce829dd0c028b315438ab7df"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Snoopy（史努比）",
+          "unit_id": "287c224e1b5bff64a994222c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "iPhone Duo 将配备新版表盘编辑器，操作逻辑接近现有 iPhone 与 Apple Watch 的编辑界面。用户可左右滑动调整模拟时钟样式、数字样式、亮色 / 暗色模式，并自定义表盘背景与指针颜色，部分表盘还支持嵌入两个小组件。",
+          "unit_id": "282d8d74d0a8ee69efba5c80"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "IT之家附上相关截图如下：",
+          "unit_id": "a6fcc94d6555f943e2ddc13b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "在表盘布局方面，代码显示五种排列方式：StandBy、Stacked、Top、Middle、Bottom。推测除 StandBy 外，其余布局可能专用于 iPhone Duo 展开如书本时的横向显示场景，以适配双屏形态下的信息排布需求。",
+          "unit_id": "1df04648337396121d997966"
+        }
+      ],
+      "url": "https://www.ithome.com/1/008/089.htm"
+    },
+    "recorded_extraction": [
+      "苹果首款折叠 iPhone Duo 待机模式前瞻：史努比等 5 种界面、配新表盘编辑器",
+      "消息源 @itspdfu 昨日（9 月 28 日）在 X 平台发布推文，通过挖掘 iOS 27.1 系统代码，发现苹果首款折叠 iPhone Duo 在开启待机（StandBy）模式后，会新增 5 个全新界面，并增强自定义编辑器。 IT之家 9 月 29 日消息，消息源 @itspdfu 昨日（9 月 28 日）在 X 平台发布推文，通过挖掘 iOS 27.1 系统代码，发现苹果首款折叠 iPhone Duo 在开启待机（StandBy）模式后， 会新增 5 个全新界面，并增强自定义编辑器。 待机模式于 2023 年 9 月随 iOS 17 系统引入，在 iPhone 横向放置并充电时，屏幕可显示时钟、日历、照片或小组件等信息，类似智能显示屏。iPhone Duo 因双屏结构，该模式将支持更复杂布局与多任务视图。 iPhone Duo 将配备新版表盘编辑器，操作逻辑接近现有 iPhone 与 Apple Watch 的编辑界面。用户可左右滑动调整模拟时钟样式、数字样式、亮色 / 暗色模式，并自定义表盘背景与指针颜色，部分表盘还支持嵌入两个小组件。 在表盘布局方面，代码显示五种排列方式：StandBy、Stacked、Top、Middle、Bottom。推测除 StandBy 外，其余布局可能专用于 iPhone Duo 展开如书本时的横向显示场景，以适配双屏形态下的信息排布需求。",
+      [
+        "IT之家 9 月 29 日消息，消息源 @itspdfu 昨日（9 月 28 日）在 X 平台发布推文，通过挖掘 iOS 27.1 系统代码，发现苹果首款折叠 iPhone Duo 在开启待机（StandBy）模式后，会新增 5 个全新界面，并增强自定义编辑器。",
+        "待机模式于 2023 年 9 月随 iOS 17 系统引入，在 iPhone 横向放置并充电时，屏幕可显示时钟、日历、照片或小组件等信息，类似智能显示屏。iPhone Duo 因双屏结构，该模式将支持更复杂布局与多任务视图。",
+        "Flow（其中 Flow 表盘代码含 ResponsiveArt 字段，暗示其可能为动态动画表盘）",
+        "iPhone Duo 将配备新版表盘编辑器，操作逻辑接近现有 iPhone 与 Apple Watch 的编辑界面。用户可左右滑动调整模拟时钟样式、数字样式、亮色 / 暗色模式，并自定义表盘背景与指针颜色，部分表盘还支持嵌入两个小组件。"
+      ]
+    ]
+  },
+  "dfce45ccc95615a83752c7f5": {
+    "evidence": {
+      "article_id": "dfce45ccc95615a83752c7f5",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "The iPhone 18 Pro: The best and final iteration of the current form factor?",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T12:08:02+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T12:08:03+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T12:08:02+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T12:08:03+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-28T12:08:02+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T12:08:02+00:00",
+      "raw_lead": "There’s a running joke that Apple always breathlessly announces that each year’s iPhone Pro is “the best iPhone we’ve ever...",
+      "source": "9to5Mac",
+      "title": "The iPhone 18 Pro: The best and final iteration of the current form factor?",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "There’s a running joke that Apple always breathlessly announces that each year’s iPhone Pro is “the best iPhone we’ve ever made,” as if that were in some way surprising. But I do think that there’s some poignancy to the iPhone 18 Pro, because if the rumors about next year’s model are true, this could be the final iteration of the form factor that began with the iPhone X back in 2017.",
+          "unit_id": "aa4111304d183417262636f2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Specifically, we’re expecting next year to see the next big step toward that “single slab of glass” vision which will end the era of evolutionary change we’ve seen over the last decade …",
+          "unit_id": "6c95487e451d39a0f9b69acf"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The evolution of the iPhone Pro models",
+          "unit_id": "e3e9310f525aa48d1c44fbea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "If you were to line up every model from the iPhone 12 Pro to the iPhone 16 Pro, I think many people would struggle to tell the difference visually bar the switch from notch to Dynamic Island in 2022. The iPhone 17 Pro is still only an exception due to the extended camera island and Cosmic Orange option.",
+          "unit_id": "c81294fd930ee28657ca1fb8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Of course, each model had new features, but I think even here it’s fair to say that unless a specific one has particular relevance to you personally, you really need to jump at least two or three generations before an upgrade amounts to a significantly better experience.",
+          "unit_id": "48522e81ae962b006f5b6da4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "This in no way a criticism of Apple. The reality is that premium smartphones are a mature technology, at least in the conventional form-factor. We don’t see massive differences between successive generations because there’s only so much that can be done to improve them on an annual basis.",
+          "unit_id": "386e375e6e59edacb3f85996"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple is now experimenting with different form factors, starting with the iPhone Air and now, of course, the iPhone Duo – and we’re expecting another major design leap next year, in the form of a 20th anniversary model.",
+          "unit_id": "44a4dffa02abb1a8295398df"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "How exactly Apple will position next year’s design remains somewhat unclear. It was initially suggested that it would be a standalone model, distinct from the iPhone 19 Pro, while other reports suggest that it will be next year’s Pro model. There’s also the question of whether Apple will use sequential numbering or skip a number to mark the occasion, so it might instead be called the iPhone 20 Pro.",
+          "unit_id": "76f7e0f90d4d11690e6e1581"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Personally, I do suspect that it will be the new iPhone Pro design, whether Apple calls it the 19 or 20. If this is correct, then the iPhone 18 Pro will be the final iteration of the form factor we’ve had for half a dozen years.",
+          "unit_id": "86231a897da079b4265aa393"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "I’m jumping two generations from the iPhone 16 Pro, so I’m going to separately list the new-to-me features introduced by each year’s models. I’m skipping improvements I see as trivial or completely irrelevant to my use, like 7-core GPU over 6-core and GenLock.",
+          "unit_id": "fe99466f1bf05c4d31f8e03b"
+        },
+        {
+          "container_id": "",
+          "kind": "h4",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "iPhone 17 Pro features carried forward",
+          "unit_id": "dfb622d4d62e829fef2e2557"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Center Stage front camera, for photos and video calls",
+          "unit_id": "550a8d0addd5ce78516a0d1d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Ultra-stabilised video",
+          "unit_id": "d9345b9525f2fc3b1b9a809b"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Dual capture",
+          "unit_id": "8fe65cf937d36f2033151686"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Telephoto lens up from 5x to 8x",
+          "unit_id": "0f9cfb1440970c90920f144d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Telephoto sensor up from 12 MP to 48 MP",
+          "unit_id": "baefa1e310b5acc6ae989635"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "ProRes RAW video",
+          "unit_id": "c5e52ea26b1426e1aa89d95a"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "Better battery life",
+          "unit_id": "4fab3b398c06737c184d721b"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "Faster charging",
+          "unit_id": "275b5d010d001cf0613883f8"
+        },
+        {
+          "container_id": "",
+          "kind": "h4",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "New to iPhone 18 Pro",
+          "unit_id": "bf6e03faca3337ed5c321df4"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "Wider maximum aperture on the main camera lens",
+          "unit_id": "b413d57a1a2cdd51603e07cd"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "Variable aperture main camera lens",
+          "unit_id": "16403a91ee66f6d74210488d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "Pro camera controls (aperture, shutter speed, white balance, histogram)",
+          "unit_id": "256449888f1441ed90d0cf62"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "Photographic Styles v3",
+          "unit_id": "8dd4ccc89f960397fbf62fad"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "Smart focus tracking",
+          "unit_id": "98a499e51bb8e5546c136814"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "Cinematic mode effects from standard video",
+          "unit_id": "b0733cdda501efba4e20617b"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "Tap to zoom and rotate on the front camera",
+          "unit_id": "7c02022df0d8e1c27d3b3705"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "Smaller Dynamic Island, enabling three live activities",
+          "unit_id": "e230d545f73998d7528d1a98"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "(Even) better battery life",
+          "unit_id": "130ecd2ecda049bd334bb306"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 29,
+          "origin": "html",
+          "text": "(Even) faster charging",
+          "unit_id": "e458d48ef961d8b52e5907d2"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 30,
+          "origin": "html",
+          "text": "My personal … focus",
+          "unit_id": "579db2b6de3c95c802658116"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 31,
+          "origin": "html",
+          "text": "Personally, there are five features I will be focusing on in my early usage.",
+          "unit_id": "9f1701f2c19d229731e039b1"
+        },
+        {
+          "container_id": "",
+          "kind": "h4",
+          "ordinal": 32,
+          "origin": "html",
+          "text": "Variable-aperture lens",
+          "unit_id": "1cda975a18db8a7c152ba0cc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 33,
+          "origin": "html",
+          "text": "While the headline feature is that variable aperture lens, I’ve said before that we probably shouldn’t expect too much from it. The maximum aperture is only marginally wider on such a small sensor, so I’m not expecting to see much difference in terms of shallow depth of field.",
+          "unit_id": "041819dae20626e1fc8c0011"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 34,
+          "origin": "html",
+          "text": "However, the maximum aperture does let in a little more light, amounting to around two-thirds of a stop. How much difference that will make remains to be seen, but it should translate to shorter Night Mode exposures. Since this is a feature I use a lot, often handheld, then I am looking forward to trying this.",
+          "unit_id": "5e2b90c016361d7d25ac5b58"
+        },
+        {
+          "container_id": "",
+          "kind": "h4",
+          "ordinal": 35,
+          "origin": "html",
+          "text": "Pro camera controls",
+          "unit_id": "b7c2c1dccd479bb8e1e8f2f6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 36,
+          "origin": "html",
+          "text": "The ability to control shutter speed will definitely have its uses for things like panning shots. And it will certainly be useful to be able to take full control of white balance. I’m also expecting the histogram to be useful when manually setting the exposure.",
+          "unit_id": "a7d6b528d595231f9c3a8e43"
+        },
+        {
+          "container_id": "",
+          "kind": "h4",
+          "ordinal": 37,
+          "origin": "html",
+          "text": "Photographic Styles v3",
+          "unit_id": "d2a1893f7db5033c0c5d6734"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 38,
+          "origin": "html",
+          "text": "I’m generally not a filters kind of guy when it comes to either taking photos or editing them on the iPhone, preferring to do any editing using conventional adjustments afterwards. For that reason, I rarely used the existing Photographic Styles feature and don’t expect to make much use of the latest iteration either. But I must say I am intrigued by the film setting, so I’ll certainly be experimenting with this.",
+          "unit_id": "797853728de2b33fcc40518d"
+        },
+        {
+          "container_id": "",
+          "kind": "h4",
+          "ordinal": 39,
+          "origin": "html",
+          "text": "Smart focus tracking",
+          "unit_id": "898be994939786f5d23b92fa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 40,
+          "origin": "html",
+          "text": "One of the biggest weaknesses with autofocus when it comes to video occurs when the subject briefly passes behind something else and the camera can switch focus to the obstruction. Smart Focus Tracking claims to solve this problem, so I will certainly be putting this to the test.",
+          "unit_id": "fc8fe6381bb6d09c34ea7b3e"
+        },
+        {
+          "container_id": "",
+          "kind": "h4",
+          "ordinal": 41,
+          "origin": "html",
+          "text": "Cinematic Mode effects from standard video",
+          "unit_id": "2794ed0f1c093f3a8c42c023"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 42,
+          "origin": "html",
+          "text": "View all comments",
+          "unit_id": "cf738044377db75c92c6a651"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 43,
+          "origin": "html",
+          "text": "It’s less than a couple of months since I said that Apple appeared to have forgotten about Cinematic video mode. I said that was a great pity because, if Cinematic Mode video worked well, it would be an absolute game-changer for the practicality of the iPhone as a camera for more serious video work. So far, it has been frustratingly close but no cigar.",
+          "unit_id": "4c293649a61941eeb6730aec"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 44,
+          "origin": "html",
+          "text": "However, it appears I was wrong: one of the new iPhone 18 features is that the cinematic video effects can be applied to videos shot in standard mode.",
+          "unit_id": "1bd9f72493d0b3ecbbd1a01e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 45,
+          "origin": "html",
+          "text": "It’s certainly very handy that we no longer need to decide in advance whether or not to use the mode, but what most interests me is that Apple is again paying attention to the feature. This suggests that it is indeed being shown some love, and we therefore can expect it to continue to improve in much the way Portrait mode did for still photos. I’m very much looking forward to testing this.",
+          "unit_id": "3600b294157f6d369cb3d232"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 46,
+          "origin": "html",
+          "text": "These, then, are the features I think could potentially make the most difference to me. How about you? If you’ve upgraded to the iPhone 18 Pro, what features drove your decision? Please share in the comments.",
+          "unit_id": "2c5d86df615e012d5c73ef32"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 47,
+          "origin": "html",
+          "text": "iPhone 18 Pro and iPhone 18 Pro Max cases",
+          "unit_id": "17c5cfbf28450f6a0b20570a"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 48,
+          "origin": "html",
+          "text": "Beats Woven USB-C cables",
+          "unit_id": "852e4487c2a2a3b835c4b460"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/28/the-iphone-18-pro-the-best-and-final-iteration-of-the-current-form-factor/"
+    },
+    "recorded_extraction": [
+      "The iPhone 18 Pro: The best and final iteration of the current form factor?",
+      "There’s a running joke that Apple always breathlessly announces that each year’s iPhone Pro is “the best iPhone we’ve ever... Specifically, we’re expecting next year to see the next big step toward that “single slab of glass” vision which will end the era of evolutionary change we’ve seen over the last decade … If you were to line up every model from the iPhone 12 Pro to the iPhone 16 Pro, I think many people would struggle to tell the difference visually bar the switch from notch to Dynamic Island in 2022. The iPhone 17 Pro is still only an exception due to the extended camera island and Cosmic Orange option. Of course, each model had new features, but I think even here it’s fair to say that unless a specific one has particular relevance to you personally, you really need to jump at least two or three generations before an upgrade amounts to a significantly better experience. This in no way a criticism of Apple. The reality is that premium smartphones are a mature technology, at least in the conventional form-factor. We don’t see massive differences between successive generations because there’s only so much that can be done to improve them on an annual basis.",
+      [
+        "There’s a running joke that Apple always breathlessly announces that each year’s iPhone Pro is “the best iPhone we’ve ever made,” as if that were in some way surprising. But I do think that there’s some poignancy to the iPhone 18 Pro, because if the rumors about next year’s model are true, this could be the final iteration of the form factor that began with the iPhone X back in 2017.",
+        "If you were to line up every model from the iPhone 12 Pro to the iPhone 16 Pro, I think many people would struggle to tell the difference visually bar the switch from notch to Dynamic Island in 2022. The iPhone 17 Pro is still only an exception due to the extended camera island and Cosmic Orange option.",
+        "Apple is now experimenting with different form factors, starting with the iPhone Air and now, of course, the iPhone Duo – and we’re expecting another major design leap next year, in the form of a 20th anniversary model.",
+        "How exactly Apple will position next year’s design remains somewhat unclear. It was initially suggested that it would be a standalone model, distinct from the iPhone 19 Pro, while other reports suggest that it will be next year’s Pro model. There’s also the question of whether Apple will use sequential numbering or skip a number to mark the occasion, so it might instead be called the iPhone 20 Pro.",
+        "Personally, I do suspect that it will be the new iPhone Pro design, whether Apple calls it the 19 or 20. If this is correct, then the iPhone 18 Pro will be the final iteration of the form factor we’ve had for half a dozen years.",
+        "I’m jumping two generations from the iPhone 16 Pro, so I’m going to separately list the new-to-me features introduced by each year’s models. I’m skipping improvements I see as trivial or completely irrelevant to my use, like 7-core GPU over 6-core and GenLock.",
+        "Center Stage front camera, for photos and video calls",
+        "Telephoto sensor up from 12 MP to 48 MP",
+        "Wider maximum aperture on the main camera lens",
+        "Pro camera controls (aperture, shutter speed, white balance, histogram)",
+        "Cinematic mode effects from standard video",
+        "Tap to zoom and rotate on the front camera",
+        "Smaller Dynamic Island, enabling three live activities",
+        "I’m generally not a filters kind of guy when it comes to either taking photos or editing them on the iPhone, preferring to do any editing using conventional adjustments afterwards. For that reason, I rarely used the existing Photographic Styles feature and don’t expect to make much use of the latest iteration either. But I must say I am intrigued by the film setting, so I’ll certainly be experimenting with this.",
+        "However, it appears I was wrong: one of the new iPhone 18 features is that the cinematic video effects can be applied to videos shot in standard mode.",
+        "It’s certainly very handy that we no longer need to decide in advance whether or not to use the mode, but what most interests me is that Apple is again paying attention to the feature. This suggests that it is indeed being shown some love, and we therefore can expect it to continue to improve in much the way Portrait mode did for still photos. I’m very much looking forward to testing this.",
+        "These, then, are the features I think could potentially make the most difference to me. How about you? If you’ve upgraded to the iPhone 18 Pro, what features drove your decision? Please share in the comments.",
+        "iPhone 18 Pro and iPhone 18 Pro Max cases"
+      ]
+    ]
+  },
+  "8567a4d345243f7799cc8aea": {
+    "evidence": {
+      "article_id": "8567a4d345243f7799cc8aea",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "iPhone Duo accessories: Here are five top picks for Apple’s foldable - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T19:24:26+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T19:24:28+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T19:24:26+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T19:24:28+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-28T19:24:26+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T19:24:26+00:00",
+      "raw_lead": "iPhone Duo will be here soon, so if you want to get a head start on accessories for Apple’s new model, here are our recommendations.",
+      "source": "9to5Mac",
+      "title": "iPhone Duo accessories: Here are five top picks for Apple’s foldable - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo will be here soon, so if you want to get a head start on accessories for Apple’s new model, here are our top recommendations.",
+          "unit_id": "8a09ec8b848093ffe8e6a88c"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple Pencil for handwritten notes, sketches, more",
+          "unit_id": "be6baa3b86fc62e769b97690"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "iPhone Duo is the first iPhone that will offer support for Apple Pencil, letting you jot handwritten notes, doodles, and more.",
+          "unit_id": "94afdc65e9856b7c91a5c2f9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Apple Pencil will be supported on iPhone Duo later this year via a software update. But when support comes, Apple says it will require an Apple Pencil (USB-C). No other Pencil models are compatible.",
+          "unit_id": "98fa1fad61e3d2e10c9c1df5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "iPhone Duo will let you use Apple Pencil both on its outer and inner displays. The design of Apple’s first foldable was even inspired by the proportions of a standard A-series paper notebook.",
+          "unit_id": "0c6bbf4ab658f3d4eb65e8e8"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple Pencil (USB-C): now only $69 (down from $79)",
+          "unit_id": "cdcf67fa0dcf775b683fad9e"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Power adapter for fast charging iPhone Duo",
+          "unit_id": "89a46e57d383ad01a28342ea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "iPhone Duo supports fast charging, letting you charge up to 50 percent in just 20 minutes.",
+          "unit_id": "2a0e01087792dfb34c1e2311"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "But in order to get the fastest charging speeds, you’ll need the right power adapter.",
+          "unit_id": "4aae5562c75364d67346e06b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Apple’s 40W Dynamic Power Adapter with 60W Max supports iPhone Duo fast charging, and a great third-party alternative is Anker’s 100W power brick.",
+          "unit_id": "a8f4ab0c1bc1e7a90124363b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Like other models, iPhone Duo doesn’t come with a power adapter in the box—only a USB-C cable. Most of us have 20W chargers lying around, but if you want to get a power adapter that supports the quickest iPhone Duo charging, these two products are my recommendations.",
+          "unit_id": "01e8bdca64a52208f14b4767"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Apple 40W Dynamic Power Adapter with 60W Max: only $34 (down from $39)",
+          "unit_id": "5a1abc6c6a5c2efffe108be9"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Anker 100W USB-C Charger with 5FT Cable: $29",
+          "unit_id": "482fdf17ca86a55e1cb53103"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "MagSafe Car Mount for when you’re on the go",
+          "unit_id": "8e82dbd79fed6c340631f431"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "One of my top iPhone accessory recommendations is ESR’s MagSafe Car Mount. I’ve used it for years, and it should prove a great accessory for iPhone Duo too.",
+          "unit_id": "ddb6ec69ee92bf33ef84fb63"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "With a MagSafe car mount, your iPhone has a secure place to stay while on the go. MagSafe provides a strong magnetic attachment, and you can clip the mount to your A/C vent so it’s made visible and easy to reach as needed.",
+          "unit_id": "2d03949ece29012d093a627b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "I like combining my iPhone with CarPlay when driving, so that in Apple Maps I can get the navigation map on my in-vehicle CarPlay screen while the iPhone shows my full step-by-step directions. I expect this to be even better with the iPhone Duo’s large screen.",
+          "unit_id": "75a0c7d42d9729a731c01509"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "ESR MagSafe Car Mount: only $19 (down from $29)",
+          "unit_id": "33ff11fa656f9fdf0d855c3b"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "iPhone Duo cases",
+          "unit_id": "b075e541429d72411baa6ffe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "Apple isn’t yet selling its new $129 iPhone Duo Folio with Kickstand. But if you’re looking to buy a far more affordable iPhone Duo case, there are plenty of third-party options already available.",
+          "unit_id": "f843aadb6ab0dbd9f3cd0137"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "Buying an iPhone Duo case not only gets you ready for October 23, it’s also a nice way to preview the size and shape of the iPhone Duo before committing $1,999 or more.",
+          "unit_id": "c227b50496e3fd367aefbf79"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "I haven’t tested these cases, but here are some options I’m interested in.",
+          "unit_id": "016edd39b950c68ba64df787"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "SPIDERCASE Magnetic Case: Built-in stand and screen protector for $39",
+          "unit_id": "3dc7539e1e443e7ef853e494"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "Spigen Ultra Hybrid Pro: Clear case that’s MagSafe-compatible for $34",
+          "unit_id": "a1a4f1ffbafa5ac3b1f3033d"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "Home cameras for iPhone Duo StandBy mode",
+          "unit_id": "e5e7e073853b8f026b8b029c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "iPhone Duo will include a powerful upgrade to the current iPhone StandBy feature. When iPhone Duo is in “standing” mode, it can display a variety of StandBy views even when it’s not charging.",
+          "unit_id": "8639b036ce659f0b5b0bb3d1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "Those StandBy options include ‘Home Camera’ and ‘Home Modular’ views, both of which provide access to smart home accessories.",
+          "unit_id": "07716b996b53f53b1bf7c4f7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "The Home Camera view should be especially useful for keeping track of security cameras throughout your home at a glance. Here are my recommended HomeKit-compatible cameras.",
+          "unit_id": "dabf0da95a3c7da9f7bcdda2"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "Aqara G100 2K security camera: Excellent budget-friendly camera that’s only $39",
+          "unit_id": "4d2670ac66c740e9e89a0fda"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 29,
+          "origin": "html",
+          "text": "eufy 4K security camera: For 4K support, it’s not much pricier at just $59",
+          "unit_id": "b21bec5f6632f05dcbf9c567"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 30,
+          "origin": "html",
+          "text": "What are some iPhone Duo accessories you plan to pick up? Let us know in the comments.",
+          "unit_id": "faaca04c5478e82aef5198d9"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/28/iphone-duo-accessories-here-are-five-top-picks-for-apples-foldable/"
+    },
+    "recorded_extraction": [
+      "iPhone Duo accessories: Here are five top picks for Apple’s foldable - 9to5Mac",
+      "iPhone Duo will be here soon, so if you want to get a head start on accessories for Apple’s new model, here are our recommendations. iPhone Duo will be here soon , so if you want to get a head start on accessories for Apple’s new model, here are our top recommendations. iPhone Duo is the first iPhone that will offer support for Apple Pencil, letting you jot handwritten notes, doodles, and more. Apple Pencil will be supported on iPhone Duo later this year via a software update. But when support comes, Apple says it will require an Apple Pencil (USB-C). No other Pencil models are compatible. iPhone Duo will let you use Apple Pencil both on its outer and inner displays. The design of Apple’s first foldable was even inspired by the proportions of a standard A-series paper notebook.",
+      [
+        "iPhone Duo will be here soon, so if you want to get a head start on accessories for Apple’s new model, here are our top recommendations.",
+        "iPhone Duo is the first iPhone that will offer support for Apple Pencil, letting you jot handwritten notes, doodles, and more.",
+        "iPhone Duo supports fast charging, letting you charge up to 50 percent in just 20 minutes.",
+        "Apple’s 40W Dynamic Power Adapter with 60W Max supports iPhone Duo fast charging, and a great third-party alternative is Anker’s 100W power brick.",
+        "Like other models, iPhone Duo doesn’t come with a power adapter in the box—only a USB-C cable. Most of us have 20W chargers lying around, but if you want to get a power adapter that supports the quickest iPhone Duo charging, these two products are my recommendations.",
+        "Anker 100W USB-C Charger with 5FT Cable: $29",
+        "ESR MagSafe Car Mount: only $19 (down from $29)",
+        "Apple isn’t yet selling its new $129 iPhone Duo Folio with Kickstand. But if you’re looking to buy a far more affordable iPhone Duo case, there are plenty of third-party options already available.",
+        "Buying an iPhone Duo case not only gets you ready for October 23, it’s also a nice way to preview the size and shape of the iPhone Duo before committing $1,999 or more.",
+        "SPIDERCASE Magnetic Case: Built-in stand and screen protector for $39",
+        "Spigen Ultra Hybrid Pro: Clear case that’s MagSafe-compatible for $34",
+        "Aqara G100 2K security camera: Excellent budget-friendly camera that’s only $39",
+        "eufy 4K security camera: For 4K support, it’s not much pricier at just $59"
+      ]
+    ]
+  },
+  "d27555baa32d538a77f11457": {
+    "evidence": {
+      "article_id": "d27555baa32d538a77f11457",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "JBL Live Buds 4 蓝牙耳机新增苹果橙配色：充电盒带 1.57 英寸彩屏，1599 元",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/9/28 21:21:59",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/9/28 21:21:59",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-28T13:21:59+00:00",
+      "raw_lead": "JBL 推出新款 LIVE BUDS4 无线蓝牙耳机，支持智能全彩触屏操作、完全自适应降噪 2.0、蓝牙 6.0，主打超长续航与 Hi-Res 音质，售价 1699 元。",
+      "source": "IT之家",
+      "title": "JBL Live Buds 4 蓝牙耳机新增苹果橙配色：充电盒带 1.57 英寸彩屏，1599 元",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 9 月 28 日消息，JBL LIVE BUDS4 无线蓝牙耳机新增“苹果橙”配色，定价 1699 元，首发 1599 元。",
+          "unit_id": "e579cfb1098ff7118c9b9b0f"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "京东 JBL LIVE BUDS 4 新款无线蓝牙耳机 苹果橙超长续航降噪耳机 智能触屏耳机 华为苹果手机通用耳机 1699 元直达链接",
+          "unit_id": "5d8d763606d7235b8f828a97"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "这款耳机支持蓝牙 6.0 技术，匹配 10mm 驱动单元，单耳重 4.8 克，采用纳米材质一体注塑工艺，拥有 IP55 认证。耳机充电盒配有一块 1.57 英寸屏幕，支持音量调节、曲目切换、降噪调节功能。",
+          "unit_id": "760de76abd6e56a83e84549d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "这款新品主打智能全彩触屏充电仓，全新设计的 Smart Charging Case 兼具耳机控制功能，直观简洁的操作界面，支持音量调节、曲目切换、ANC 或 Ambient Sound 管理及 EQ 精细调校，无需手机或 App 即可完成操作，还支持自定义屏保。",
+          "unit_id": "2b8e9f49baae5245ed2f9cdc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "此外，这款新品支持 360° 空间音频及自适应降噪 2.0 模式，内置六麦克风阵列，耳机单耳续航 10 小时（关闭降噪），在配备充电盒的情况下至高拥有 40 小时续航，充电盒同时支持无线充电。",
+          "unit_id": "fa94a9405528eb94e94a4e97"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "IT之家附不同版本对比如下：",
+          "unit_id": "87de3599463c89ab72de928a"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "京东 JBLLIVEBUDS4 新款无线蓝牙耳机 超长续航降噪耳机 智能触屏耳机 华为苹果手机通用耳机 苹果橙 1699 元 直达链接",
+          "unit_id": "606fd21685f93ee6953f9a13"
+        }
+      ],
+      "url": "https://www.ithome.com/1/008/027.htm"
+    },
+    "recorded_extraction": [
+      "JBL Live Buds 4 蓝牙耳机新增苹果橙配色：充电盒带 1.57 英寸彩屏，1599 元",
+      "JBL 推出新款 LIVE BUDS4 无线蓝牙耳机，支持智能全彩触屏操作、完全自适应降噪 2.0、蓝牙 6.0，主打超长续航与 Hi-Res 音质，售价 1699 元。 IT之家 9 月 28 日消息，JBL LIVE BUDS4 无线蓝牙耳机新增“苹果橙”配色，定价 1699 元，首发 1599 元。 这款耳机支持蓝牙 6.0 技术，匹配 10mm 驱动单元，单耳重 4.8 克，采用纳米材质一体注塑工艺，拥有 IP55 认证。耳机充电盒配有一块 1.57 英寸屏幕，支持音量调节、曲目切换、降噪调节功能。 这款新品主打智能全彩触屏充电仓，全新设计的 Smart Charging Case 兼具耳机控制功能，直观简洁的操作界面，支持音量调节、曲目切换、ANC 或 Ambient Sound 管理及 EQ 精细调校，无需手机或 App 即可完成操作，还支持自定义屏保。 此外，这款新品支持 360° 空间音频及自适应降噪 2.0 模式，内置六麦克风阵列，耳机单耳续航 10 小时（关闭降噪），在配备充电盒的情况下至高拥有 40 小时续航，充电盒同时支持无线充电。",
+      [
+        "IT之家 9 月 28 日消息，JBL LIVE BUDS4 无线蓝牙耳机新增“苹果橙”配色，定价 1699 元，首发 1599 元。",
+        "这款耳机支持蓝牙 6.0 技术，匹配 10mm 驱动单元，单耳重 4.8 克，采用纳米材质一体注塑工艺，拥有 IP55 认证。耳机充电盒配有一块 1.57 英寸屏幕，支持音量调节、曲目切换、降噪调节功能。",
+        "这款新品主打智能全彩触屏充电仓，全新设计的 Smart Charging Case 兼具耳机控制功能，直观简洁的操作界面，支持音量调节、曲目切换、ANC 或 Ambient Sound 管理及 EQ 精细调校，无需手机或 App 即可完成操作，还支持自定义屏保。",
+        "此外，这款新品支持 360° 空间音频及自适应降噪 2.0 模式，内置六麦克风阵列，耳机单耳续航 10 小时（关闭降噪），在配备充电盒的情况下至高拥有 40 小时续航，充电盒同时支持无线充电。"
+      ]
+    ]
+  },
+  "2631496c36db32777aae25dc": {
+    "evidence": {
+      "article_id": "2631496c36db32777aae25dc",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple’s Taptic Engine patent defeat sends litigation funder’s shares up 9% - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T20:21:14+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T20:21:16+00:00",
+          "source": "json-ld dateModified"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T20:21:14+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-09-28T20:21:16+00:00",
+          "source": "meta modified"
+        }
+      ],
+      "published_raw": "2026-09-28T20:21:14+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-09-28T20:21:14+00:00",
+      "raw_lead": "Shares in litigation funder Burford Capital jumped 9% today as a result of Apple’s $5.7 billion verdict over Taptic Engine patent infringement.",
+      "source": "9to5Mac",
+      "title": "Apple’s Taptic Engine patent defeat sends litigation funder’s shares up 9% - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Shares in litigation funder Burford Capital jumped more than 9% today as a result of Apple’s $5.7 billion verdict over Taptic Engine patent infringement. Here are the details.",
+          "unit_id": "0fb4a02c23636a64474b7474"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple verdict lifts litigation funder valuation",
+          "unit_id": "c2f25141141fde1710869650"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Last Friday, a US jury ruled that Apple’s Taptic Engine infringes on two patents held by California-based company Taction Technology.",
+          "unit_id": "98f05d8846974c820b6361d1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Apple introduced the Taptic Engine in September 2014 with the first Apple Watch, and the technology has since expanded to other products, including the iPhone, where it provides haptic feedback for notifications, interactions, and other system events.",
+          "unit_id": "ac65a63d2925df4ae00f161a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "When Taction filed its patent infringement lawsuit in 2021, the company accused Apple of directly and indirectly infringing two of its patents through the Taptic Engine used in a range of iPhone and Apple Watch models.",
+          "unit_id": "0c702ec5a33f2442007fb1d4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Last Friday, following the verdict, Taction said the jury had “vindicated its patent rights,” while Apple said it strongly disagreed with the decision and would appeal.",
+          "unit_id": "c969df4187969e844d1ed45d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Earlier today, as reported by The Financial Times, litigation funder Burford Capital disclosed that it has a financial entitlement in the case, and that it could be entitled to $1.4 billion if the $5.7 billion verdict is ultimately paid in full.",
+          "unit_id": "d4ea81dbfd5c8495909ec24c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The disclosure sent Burford shares sharply higher in London, with the stock closing up 9.41% and giving the company a market capitalization of £659.9 million, or roughly $875 million.",
+          "unit_id": "2c328d04407f37b2e8481b3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Bloomberg Law notes that court records show that Taction received funding from Kenosha Investments LP and Gronostaj Investments LLC. The report also notes that Kenosha has been identified as an indirect subsidiary of Burford, which finances lawsuits in exchange for a share of any eventual recovery.",
+          "unit_id": "90a1d9ad9df8b7a5aaee64e9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "In a statement to investors on Monday, Burford said that if the $5.7 billion verdict were paid in full, its $1.4 billion entitlement would be split roughly equally between the company’s own balance sheet and its investment funds.",
+          "unit_id": "f510ed45b978a0ca1ec358a0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "To read The Financial Times’ full report, follow this link.",
+          "unit_id": "c6b4aa7396bedd24c3b72ddc"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/09/28/apples-taptic-engine-patent-defeat-sends-litigation-funders-shares-up-9/"
+    },
+    "recorded_extraction": [
+      "Apple’s Taptic Engine patent defeat sends litigation funder’s shares up 9% - 9to5Mac",
+      "Shares in litigation funder Burford Capital jumped 9% today as a result of Apple’s $5.7 billion verdict over Taptic Engine patent infringement. Shares in litigation funder Burford Capital jumped more than 9% today as a result of Apple’s $5.7 billion verdict over Taptic Engine patent infringement. Here are the details. Last Friday, a US jury ruled that Apple’s Taptic Engine infringes on two patents held by California-based company Taction Technology. Apple introduced the Taptic Engine in September 2014 with the first Apple Watch, and the technology has since expanded to other products, including the iPhone, where it provides haptic feedback for notifications, interactions, and other system events. When Taction filed its patent infringement lawsuit in 2021, the company accused Apple of directly and indirectly infringing two of its patents through the Taptic Engine used in a range of iPhone and Apple Watch models.",
+      [
+        "Shares in litigation funder Burford Capital jumped more than 9% today as a result of Apple’s $5.7 billion verdict over Taptic Engine patent infringement. Here are the details.",
+        "Apple introduced the Taptic Engine in September 2014 with the first Apple Watch, and the technology has since expanded to other products, including the iPhone, where it provides haptic feedback for notifications, interactions, and other system events.",
+        "When Taction filed its patent infringement lawsuit in 2021, the company accused Apple of directly and indirectly infringing two of its patents through the Taptic Engine used in a range of iPhone and Apple Watch models.",
+        "Earlier today, as reported by The Financial Times, litigation funder Burford Capital disclosed that it has a financial entitlement in the case, and that it could be entitled to $1.4 billion if the $5.7 billion verdict is ultimately paid in full.",
+        "The disclosure sent Burford shares sharply higher in London, with the stock closing up 9.41% and giving the company a market capitalization of £659.9 million, or roughly $875 million.",
+        "In a statement to investors on Monday, Burford said that if the $5.7 billion verdict were paid in full, its $1.4 billion entitlement would be split roughly equally between the company’s own balance sheet and its investment funds."
+      ]
+    ]
+  },
+  "bdb38ea76d0c63849e7eab58": {
+    "evidence": {
+      "article_id": "bdb38ea76d0c63849e7eab58",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "随着苹果首款折叠屏手机iPhone Duo发布日期临近，其专属StandBy待机模式的更多细节被提前曝光。最新泄露信息显示，苹果实际上准备了多款尚未公开的新界面，使这一功能远比发布会上展示的内容更加丰富。 阅读全文",
+      "discovery_title": "iPhone Duo待机模式曝光更多秘密：隐藏五款全新界面 或化身智能家居控制中心",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "前天 20:10",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 14:20",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "5 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "6 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年09月29日 11:07",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Tue, 29 Sep 2026 03:07:39 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年09月29日 11:07",
+      "published_source": "body date pattern",
+      "published_utc": "2026-09-29T03:07:00+00:00",
+      "raw_lead": "随着苹果首款折叠屏手机iPhoneDuo发布日期临近，其专属StandBy待机模式的更多细节被提前曝光。最新泄露信息显示，苹果实际上准备了多款尚未公开的新界面，使这一功能远比发布会上展示的内容更加丰富。",
+      "source": "cnBeta",
+      "title": "iPhone Duo待机模式曝光更多秘密：隐藏五款全新界面 或化身智能家居控制中心 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "随着苹果首款折叠屏手机iPhone Duo发布日期临近，其专属StandBy待机模式的更多细节被提前曝光。最新泄露信息显示，苹果实际上准备了多款尚未公开的新界面，使这一功能远比发布会上展示的内容更加丰富。",
+          "unit_id": "bd76165e5f08964c9d063374"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "此前苹果已经确认，iPhone Duo将搭载专门优化的StandBy模式。与现有iPhone不同，新系统即使在没有连接充电器的情况下也能启用。得益于折叠结构，用户可以将手机半展开摆放，让设备自然形成支架形态，持续显示各种信息内容。",
+          "unit_id": "3fb894dcbc72220034dc2ba5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "根据开发者通过iOS 27.1测试代码发现的信息，苹果至少还隐藏了五款尚未公布的新StandBy界面，分别被命名为Home Camera、Home Modular、Flow、Fade以及Snoopy。",
+          "unit_id": "6985d90980d0fe7007504a64"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "其中最实用的新功能是Home Camera。该界面能够直接显示智能家居摄像头画面，既支持单一路实时监控，也能够同时显示最多九个摄像头组成的监控矩阵。对于已经使用HomeKit生态的用户而言，iPhone Duo在待机状态下几乎可以直接充当监控显示终端。",
+          "unit_id": "861472f0ae9c9c091e61aa12"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "另一款名为Home Modular的界面则被认为与智能家居控制中心有关。虽然苹果尚未公布具体功能，但从命名和代码信息来看，它很可能用于集中管理家庭设备、智能场景以及各类家庭自动化控制项目。",
+          "unit_id": "c244084fb7d6266769bfe33a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "与此同时，苹果还开发了两款更加神秘的新界面。",
+          "unit_id": "d185bdedb8e7889217fa5dc1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "其中Flow似乎与动态艺术效果有关，相关代码中出现了“响应式艺术”等描述，意味着界面可能会根据时间、环境或者用户操作产生变化。至于Fade，目前尚未发现明确功能信息，具体用途仍然未知。",
+          "unit_id": "729ca2a9dd4d1514a3ef59ea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "此外，苹果还准备了一款Snoopy主题界面。考虑到近年来苹果持续强化《花生漫画》相关合作，这套界面预计将采用动画风格，为待机模式增添更多娱乐和个性化元素。",
+          "unit_id": "fae254ac605a678eaccf91a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "这些新界面将加入苹果此前已经公开展示的StandBy功能阵容。目前已知的官方界面包括模拟时钟、数字时钟、经典日历、天气、照片、回忆、共享相册以及模块化信息面板等内容。",
+          "unit_id": "c521d68420bce63768aaed33"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "泄露内容还揭示了苹果全新的StandBy编辑系统。",
+          "unit_id": "2dc9608928e0fb954cf2f48f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "未来用户可以像定制Apple Watch表盘一样，自定义待机界面的配色方案、显示风格和布局结构。部分界面支持通过左右滑动快速切换样式，并实时预览最终效果。",
+          "unit_id": "c381d9e0621c82380f8130c4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "对于支持小组件的界面，苹果还准备了五种不同布局模式，包括StandBy、Stacked、Top、Middle以及Bottom等排列方式，让用户根据个人喜好调整信息展示区域。",
+          "unit_id": "03b3e64951381ecea230dfe7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "分析人士认为，这些变化显示苹果对iPhone Duo的定位已经超越传统智能手机。借助折叠设计、双屏结构以及全新的StandBy系统，这款设备正在被打造为能够长期摆放在桌面、床头柜或厨房台面上的智能信息终端。",
+          "unit_id": "ad38f67a051bc0ba5bb26534"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "从监控摄像头查看、智能家居控制到个性化信息显示，iPhone Duo似乎正在向一种介于手机与智能显示屏之间的新设备形态发展。而随着10月上市时间临近，苹果未来还可能公布更多与折叠形态相关的专属功能。",
+          "unit_id": "48c738473e157a26413b1a97"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1579952.htm"
+    },
+    "recorded_extraction": [
+      "iPhone Duo待机模式曝光更多秘密：隐藏五款全新界面 或化身智能家居控制中心 - Apple iPhone - cnBeta.COM",
+      "随着苹果首款折叠屏手机iPhoneDuo发布日期临近，其专属StandBy待机模式的更多细节被提前曝光。最新泄露信息显示，苹果实际上准备了多款尚未公开的新界面，使这一功能远比发布会上展示的内容更加丰富。 随着苹果首款折叠屏手机iPhone Duo发布日期临近，其专属StandBy待机模式的更多细节被提前曝光。最新泄露信息显示，苹果实际上准备了多款尚未公开的新界面，使这一功能远比发布会上展示的内容更加丰富。 此前苹果已经确认，iPhone Duo将搭载专门优化的StandBy模式。与现有iPhone不同，新系统即使在没有连接充电器的情况下也能启用。得益于折叠结构，用户可以将手机半展开摆放，让设备自然形成支架形态，持续显示各种信息内容。 根据开发者通过iOS 27.1测试代码发现的信息，苹果至少还隐藏了五款尚未公布的新StandBy界面，分别被命名为Home Camera、Home Modular、Flow、Fade以及Snoopy。 其中最实用的新功能是Home Camera。该界面能够直接显示智能家居摄像头画面，既支持单一路实时监控，也能够同时显示最多九个摄像头组成的监控矩阵。对于已经使用HomeKit生态的用户而言，iPhone Duo在待机状态下几乎可以直接充当监控显示终端。",
+      [
+        "随着苹果首款折叠屏手机iPhone Duo发布日期临近，其专属StandBy待机模式的更多细节被提前曝光。最新泄露信息显示，苹果实际上准备了多款尚未公开的新界面，使这一功能远比发布会上展示的内容更加丰富。",
+        "根据开发者通过iOS 27.1测试代码发现的信息，苹果至少还隐藏了五款尚未公布的新StandBy界面，分别被命名为Home Camera、Home Modular、Flow、Fade以及Snoopy。",
+        "其中最实用的新功能是Home Camera。该界面能够直接显示智能家居摄像头画面，既支持单一路实时监控，也能够同时显示最多九个摄像头组成的监控矩阵。对于已经使用HomeKit生态的用户而言，iPhone Duo在待机状态下几乎可以直接充当监控显示终端。",
+        "另一款名为Home Modular的界面则被认为与智能家居控制中心有关。虽然苹果尚未公布具体功能，但从命名和代码信息来看，它很可能用于集中管理家庭设备、智能场景以及各类家庭自动化控制项目。",
+        "其中Flow似乎与动态艺术效果有关，相关代码中出现了“响应式艺术”等描述，意味着界面可能会根据时间、环境或者用户操作产生变化。至于Fade，目前尚未发现明确功能信息，具体用途仍然未知。",
+        "这些新界面将加入苹果此前已经公开展示的StandBy功能阵容。目前已知的官方界面包括模拟时钟、数字时钟、经典日历、天气、照片、回忆、共享相册以及模块化信息面板等内容。",
+        "未来用户可以像定制Apple Watch表盘一样，自定义待机界面的配色方案、显示风格和布局结构。部分界面支持通过左右滑动快速切换样式，并实时预览最终效果。",
+        "对于支持小组件的界面，苹果还准备了五种不同布局模式，包括StandBy、Stacked、Top、Middle以及Bottom等排列方式，让用户根据个人喜好调整信息展示区域。",
+        "从监控摄像头查看、智能家居控制到个性化信息显示，iPhone Duo似乎正在向一种介于手机与智能显示屏之间的新设备形态发展。而随着10月上市时间临近，苹果未来还可能公布更多与折叠形态相关的专属功能。"
+      ]
+    ]
+  }
+}
