@@ -1,0 +1,1832 @@
+{
+  "911633911af07701f1e75411": {
+    "evidence": {
+      "article_id": "911633911af07701f1e75411",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "彭博社知名苹果记者马克·古尔曼(Mark Gurman)表示，在美国苹果零售店购买iPhone Duo的用户，在首次开机时将迎来一个小惊喜。当苹果在10月23日正式发售iPhone Duo时，部分在美国苹果零售店购买该设备的顾客，将能够让其初始设置屏幕显示带有自己姓名的个性化内容。 阅读全文",
+      "discovery_title": "苹果iPhone Duo专属惊喜曝光 古尔曼：首次开机可显示用户名字",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "10 分钟前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "15 分钟前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 15:48",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 05:33",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 14:21",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月10日 14:16",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 06:16:38 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月10日 14:16",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T06:16:00+00:00",
+      "raw_lead": "彭博社知名苹果记者马克·古尔曼(MarkGurman)表示，在美国苹果零售店购买iPhoneDuo的用户，在首次开机时将迎来一个小惊喜。当苹果在10月23日正式发售iPhoneDuo时，部分在美国苹果零售店购买该设备的顾客，将能够让其初始设置屏幕显示带有自己姓名的个性化内容。",
+      "source": "cnBeta",
+      "title": "苹果iPhone Duo专属惊喜曝光 古尔曼：首次开机可显示用户名字 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "彭博社知名苹果记者马克·古尔曼(Mark Gurman)表示，在美国苹果零售店购买iPhone Duo的用户，在首次开机时将迎来一个小惊喜。当苹果在10月23日正式发售iPhone Duo时，部分在美国苹果零售店购买该设备的顾客，将能够让其初始设置屏幕显示带有自己姓名的个性化内容。",
+          "unit_id": "7f116a276b150aa678ae872f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "iPhone Duo",
+          "unit_id": "4d154e5a43aa2e6c0ebfb619"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "古尔曼发帖称，苹果零售店将有一套定制设备开机画面的系统，能让iPhone Duo在首次开机时显示包含顾客姓名的问候语，例如“你好，马克”。他表示，这项功能仅在美国推出，仅支持iPhone Duo，仅支持英语和西班牙语。",
+          "unit_id": "38c70d1c32b71448b28d2a68"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "古尔曼的帖子",
+          "unit_id": "e4cdcd224daa32498beecc45"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "目前尚不清楚苹果将如何实现这项功能，也不确定是否会使用苹果零售店现有的Presto系统。该系统可以在不拆开包装盒的情况下，通过无线方式更新iPhone。",
+          "unit_id": "03e52b4839c1ec319c20b5b3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "古尔曼在2023年首次曝光了Presto系统。借助这套系统，苹果零售店员工可以在iPhone仍处于密封包装中的情况下，启动设备、安装软件更新，然后再关机。",
+          "unit_id": "0b9e7511473f509c8537b23e"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1581478.htm"
+    },
+    "recorded_extraction": [
+      "苹果iPhone Duo专属惊喜曝光 古尔曼：首次开机可显示用户名字 - Apple iPhone - cnBeta.COM",
+      "彭博社知名苹果记者马克·古尔曼(MarkGurman)表示，在美国苹果零售店购买iPhoneDuo的用户，在首次开机时将迎来一个小惊喜。当苹果在10月23日正式发售iPhoneDuo时，部分在美国苹果零售店购买该设备的顾客，将能够让其初始设置屏幕显示带有自己姓名的个性化内容。 彭博社知名苹果记者马克·古尔曼(Mark Gurman)表示，在美国苹果零售店购买iPhone Duo的用户，在首次开机时将迎来一个小惊喜。当苹果在10月23日正式发售iPhone Duo时，部分在美国苹果零售店购买该设备的顾客，将能够让其初始设置屏幕显示带有自己姓名的个性化内容。 古尔曼发帖称，苹果零售店将有一套定制设备开机画面的系统，能让iPhone Duo在首次开机时显示包含顾客姓名的问候语，例如“你好，马克”。他表示， 这项功能仅在美国推出，仅支持iPhone Duo，仅支持英语和西班牙语。 目前尚不清楚苹果将如何实现这项功能，也不确定是否会使用苹果零售店现有的Presto系统。该系统可以在不拆开包装盒的情况下，通过无线方式更新iPhone。 古尔曼在2023年首次曝光了Presto系统。借助这套系统，苹果零售店员工可以在iPhone仍处于密封包装中的情况下，启动设备、安装软件更新，然后再关机。",
+      [
+        "彭博社知名苹果记者马克·古尔曼(Mark Gurman)表示，在美国苹果零售店购买iPhone Duo的用户，在首次开机时将迎来一个小惊喜。当苹果在10月23日正式发售iPhone Duo时，部分在美国苹果零售店购买该设备的顾客，将能够让其初始设置屏幕显示带有自己姓名的个性化内容。",
+        "古尔曼发帖称，苹果零售店将有一套定制设备开机画面的系统，能让iPhone Duo在首次开机时显示包含顾客姓名的问候语，例如“你好，马克”。他表示，这项功能仅在美国推出，仅支持iPhone Duo，仅支持英语和西班牙语。",
+        "目前尚不清楚苹果将如何实现这项功能，也不确定是否会使用苹果零售店现有的Presto系统。该系统可以在不拆开包装盒的情况下，通过无线方式更新iPhone。",
+        "古尔曼在2023年首次曝光了Presto系统。借助这套系统，苹果零售店员工可以在iPhone仍处于密封包装中的情况下，启动设备、安装软件更新，然后再关机。"
+      ]
+    ]
+  },
+  "0df787e7d111c2b0adf68600": {
+    "evidence": {
+      "article_id": "0df787e7d111c2b0adf68600",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "爆料者 itspdfu 透露，苹果使用零售店原有的未拆封设备系统更新工具，为 iPhone Duo 设置专属开机欢迎界面。不仅如此，早在今年 6 月，爆料者 SteveMoser 就发现，苹果在 iOS 27 中专门加入了一款名为 Macintosh Skeletal 的新字体。",
+      "discovery_title": "苹果 iPhone Duo 开机欢迎画面爆料：能显示你的名字，且有望用上新字体",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/10 14:32:55",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T14:32:55.7130000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/10 14:32:55",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T06:32:55+00:00",
+      "raw_lead": "爆料者 itspdfu 透露，苹果使用零售店原有的未拆封设备系统更新工具，为 iPhone Duo 设置专属开机欢迎界面。不仅如此，早在今年 6 月，爆料者 SteveMoser 就发现，苹果在 iOS 27 中专门加入了一款名为 Macintosh Skeletal 的新字体。",
+      "source": "IT之家",
+      "title": "苹果 iPhone Duo 开机欢迎画面爆料：能显示你的名字，且有望用上新字体",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 10 日消息，在苹果零售店购买 iPhone Duo 的用户，有望获得一项特别的个性化服务：首次开机的欢迎界面上加入买家的姓名。用户第一次开机时，屏幕上显示的就不再是简单的“Hello”，而是带有自己名字的“Hello, [姓名]”。",
+          "unit_id": "ec2704da36c256e0242c79a1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据IT之家今天早些时候报道，彭博社记者马克 · 古尔曼称，只有在苹果实体零售店购买 iPhone Duo 的顾客才能享受这项服务。买家的姓名会在首次开机时与“Hello”一同显示。该服务仅限美国市场，支持英语和西班牙语。",
+          "unit_id": "7b3c1e2d08982a54e6627cbf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "随后，爆料者 @itspdfu 透露，苹果使用零售店原有的未拆封设备系统更新工具，为 iPhone Duo 设置专属开机欢迎界面。不仅如此，早在今年 6 月，爆料者 @SteveMoser 就发现，苹果在 iOS 27 中专门加入了一款名为 Macintosh Skeletal 的新字体。",
+          "unit_id": "e879dbd396d22c0bbc9c7b82"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "定制完成后，开机时的“Hello”将不再像往常一样以不同语言轮流显示。为了保证文字清晰易读，买家的姓名会始终单独显示在另一行。",
+          "unit_id": "e096d2fb77a88b332491240b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "苹果此前支持通过官方在线商店购买 iPad、AirTag 等产品的用户，在设备背面激光镌刻文字，iPhone Duo 则进一步将个性化定制扩展到了开机界面。",
+          "unit_id": "c329d36859a5be9e9318d7ae"
+        }
+      ],
+      "url": "https://www.ithome.com/1/011/351.htm"
+    },
+    "recorded_extraction": [
+      "苹果 iPhone Duo 开机欢迎画面爆料：能显示你的名字，且有望用上新字体",
+      "爆料者 itspdfu 透露，苹果使用零售店原有的未拆封设备系统更新工具，为 iPhone Duo 设置专属开机欢迎界面。不仅如此，早在今年 6 月，爆料者 SteveMoser 就发现，苹果在 iOS 27 中专门加入了一款名为 Macintosh Skeletal 的新字体。 IT之家 10 月 10 日消息，在苹果零售店购买 iPhone Duo 的用户，有望获得一项特别的个性化服务：首次开机的欢迎界面上加入买家的姓名。用户第一次开机时，屏幕上显示的就不再是简单的“Hello”，而是带有自己名字的“Hello, [姓名]”。 据IT之家今天早些时候报道，彭博社记者马克 · 古尔曼称，只有在苹果实体零售店购买 iPhone Duo 的顾客才能享受这项服务。买家的姓名会在首次开机时与“Hello”一同显示。该服务仅限美国市场，支持英语和西班牙语。 随后，爆料者 @itspdfu 透露，苹果使用零售店原有的未拆封设备系统更新工具，为 iPhone Duo 设置专属开机欢迎界面。不仅如此，早在今年 6 月，爆料者 @SteveMoser 就发现，苹果在 iOS 27 中专门加入了一款 名为 Macintosh Skeletal 的新字体 。 定制完成后，开机时的“Hello”将不再像往常一样以不同语言轮流显示。为了保证文字清晰易读，买家的姓名会 始终单独显示在另一行 。",
+      [
+        "IT之家 10 月 10 日消息，在苹果零售店购买 iPhone Duo 的用户，有望获得一项特别的个性化服务：首次开机的欢迎界面上加入买家的姓名。用户第一次开机时，屏幕上显示的就不再是简单的“Hello”，而是带有自己名字的“Hello, [姓名]”。",
+        "据IT之家今天早些时候报道，彭博社记者马克 · 古尔曼称，只有在苹果实体零售店购买 iPhone Duo 的顾客才能享受这项服务。买家的姓名会在首次开机时与“Hello”一同显示。该服务仅限美国市场，支持英语和西班牙语。",
+        "随后，爆料者 @itspdfu 透露，苹果使用零售店原有的未拆封设备系统更新工具，为 iPhone Duo 设置专属开机欢迎界面。不仅如此，早在今年 6 月，爆料者 @SteveMoser 就发现，苹果在 iOS 27 中专门加入了一款名为 Macintosh Skeletal 的新字体。",
+        "苹果此前支持通过官方在线商店购买 iPad、AirTag 等产品的用户，在设备背面激光镌刻文字，iPhone Duo 则进一步将个性化定制扩展到了开机界面。"
+      ]
+    ]
+  },
+  "3d5bab99f044a1e1fef6e84c": {
+    "evidence": {
+      "article_id": "3d5bab99f044a1e1fef6e84c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月10日消息，科技博主Mark Gurman在社交平台上爆料称，用户在苹果零售店购买折叠屏iPhone Duo时，将获得一项个性化服务。 系统首次开机时会显示用户的名字，以往新iPhone首次开机时会显示“Hello”，而iPhone Duo预计会显示“Hello+名字”。这项服务将面向美国用户提供，并支持英语和西班牙语两种语言。 该消息一出便引发热议，相关话题还登上了热搜榜。 有博主表示，苹果开始整情绪价值了，毕竟是苹果最贵的iPhone，仪式感还是要有的。这么简单的一个程序只有iPhone Duo才有，情绪价值拉满。 据悉，iPhone Duo将于10月16日晚8点开启预售，10月23日正式发售，起售价为15999元。 在工业设计上，iPhone Duo采用书本式折叠方案。闭合时，外屏为5.4英寸；展开后，内屏达到7.6英寸。其厚度仅5.2毫米，折叠后为11.3毫米，重量为254克，并提供夜空色、星光白色两种配色。 与此同时，苹果为新机定制了纳米纹理哑光表面与抗刮涂层，以分散弯折应力并减轻折痕可见度。由于机身空间限制，该机取消了Face ID，改用集成于侧边按钮的Touch ID，同时支持Apple Pencil。 在核心配置上，iPhone Duo搭载iPhone 18 Pro同款A20 Pro芯片及苹果自研C2基带，提供256GB、512GB、1TB和2TB四种存储选择。后置4800万像素双摄，包含主摄和超广角，没有长焦镜头，并预装最新的iOS 27系统。 虽然砍掉了长焦，并且不支持Face ID，但iPhone Duo仍然拥有极高的关注度。预计上市后会供不应求，黄牛渠道溢价销售的可能性较大。",
+      "discovery_title": "史无前例！iPhone Duo首次开机时显示用户名：情绪价值拉满",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 17:40:14",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 17:40:14",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10 17:40:14",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T09:40:14+00:00",
+      "raw_lead": "快科技10月10日消息，科技博主Mark Gurman在社交平台上爆料称，用户在苹果零售店购买折叠屏iPhone Duo时，将获得一项个性化服务。系统首次开机时会显示用户的名字，以往新iPhone首次开机时会显",
+      "source": "快科技",
+      "title": "史无前例！iPhone Duo首次开机时显示用户名：情绪价值拉满",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月10日消息，科技博主Mark Gurman在社交平台上爆料称，用户在苹果零售店购买折叠屏iPhone Duo时，将获得一项个性化服务。",
+          "unit_id": "72eb34d71d9f6c28612db6de"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "系统首次开机时会显示用户的名字，以往新iPhone首次开机时会显示“Hello”，而iPhone Duo预计会显示“Hello+名字”。这项服务将面向美国用户提供，并支持英语和西班牙语两种语言。",
+          "unit_id": "d5b22f063c3ea6c8a7e90861"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "该消息一出便引发热议，相关话题还登上了热搜榜。有博主表示，苹果开始整情绪价值了，毕竟是苹果最贵的iPhone，仪式感还是要有的。这么简单的一个程序只有iPhone Duo才有，情绪价值拉满。",
+          "unit_id": "24d41a2c0620526a28899058"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "据悉，iPhone Duo将于10月16日晚8点开启预售，10月23日正式发售，起售价为15999元。",
+          "unit_id": "fe5ce8c946af33c5f7007a3e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "在工业设计上，iPhone Duo采用书本式折叠方案。闭合时，外屏为5.4英寸；展开后，内屏达到7.6英寸。其厚度仅5.2毫米，折叠后为11.3毫米，重量为254克，并提供夜空色、星光白色两种配色。",
+          "unit_id": "5e68d3e04c7e85fa9ecdfc0e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "与此同时，苹果为新机定制了纳米纹理哑光表面与抗刮涂层，以分散弯折应力并减轻折痕可见度。由于机身空间限制，该机取消了Face ID，改用集成于侧边按钮的Touch ID，同时支持Apple Pencil。",
+          "unit_id": "a03a985543c55790d166f2d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "在核心配置上，iPhone Duo搭载iPhone 18 Pro同款A20 Pro芯片及苹果自研C2基带，提供256GB、512GB、1TB和2TB四种存储选择。后置4800万像素双摄，包含主摄和超广角，没有长焦镜头，并预装最新的iOS 27系统。",
+          "unit_id": "ebf9bf86975128870302c653"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "虽然砍掉了长焦，并且不支持Face ID，但iPhone Duo仍然拥有极高的关注度。预计上市后会供不应求，黄牛渠道溢价销售的可能性较大。",
+          "unit_id": "a015540108324cd3c34a68a6"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1156/1156449.htm"
+    },
+    "recorded_extraction": [
+      "史无前例！iPhone Duo首次开机时显示用户名：情绪价值拉满",
+      "快科技10月10日消息，科技博主Mark Gurman在社交平台上爆料称，用户在苹果零售店购买折叠屏iPhone Duo时，将获得一项个性化服务。系统首次开机时会显示用户的名字，以往新iPhone首次开机时会显 快科技10月10日消息，科技博主Mark Gurman在社交平台上爆料称，用户在苹果零售店购买折叠屏iPhone Duo时，将获得一项个性化服务。 系统首次开机时会显示用户的名字，以往新iPhone首次开机时会显示“Hello”，而iPhone Duo预计会显示“Hello+名字”。这项服务将面向美国用户提供，并支持英语和西班牙语两种语言。 该消息一出便引发热议，相关话题还登上了热搜榜。 有博主表示，苹果开始整情绪价值了，毕竟是苹果最贵的iPhone，仪式感还是要有的。这么简单的一个程序只有iPhone Duo才有，情绪价值拉满。 在工业设计上，iPhone Duo采用书本式折叠方案。闭合时，外屏为5.4英寸；展开后，内屏达到7.6英寸。其厚度仅5.2毫米，折叠后为11.3毫米，重量为254克，并提供夜空色、星光白色两种配色。",
+      [
+        "快科技10月10日消息，科技博主Mark Gurman在社交平台上爆料称，用户在苹果零售店购买折叠屏iPhone Duo时，将获得一项个性化服务。",
+        "系统首次开机时会显示用户的名字，以往新iPhone首次开机时会显示“Hello”，而iPhone Duo预计会显示“Hello+名字”。这项服务将面向美国用户提供，并支持英语和西班牙语两种语言。",
+        "据悉，iPhone Duo将于10月16日晚8点开启预售，10月23日正式发售，起售价为15999元。",
+        "在工业设计上，iPhone Duo采用书本式折叠方案。闭合时，外屏为5.4英寸；展开后，内屏达到7.6英寸。其厚度仅5.2毫米，折叠后为11.3毫米，重量为254克，并提供夜空色、星光白色两种配色。",
+        "与此同时，苹果为新机定制了纳米纹理哑光表面与抗刮涂层，以分散弯折应力并减轻折痕可见度。由于机身空间限制，该机取消了Face ID，改用集成于侧边按钮的Touch ID，同时支持Apple Pencil。",
+        "在核心配置上，iPhone Duo搭载iPhone 18 Pro同款A20 Pro芯片及苹果自研C2基带，提供256GB、512GB、1TB和2TB四种存储选择。后置4800万像素双摄，包含主摄和超广角，没有长焦镜头，并预装最新的iOS 27系统。",
+        "虽然砍掉了长焦，并且不支持Face ID，但iPhone Duo仍然拥有极高的关注度。预计上市后会供不应求，黄牛渠道溢价销售的可能性较大。"
+      ]
+    ]
+  },
+  "ef15ad762f1748c0414ee756": {
+    "evidence": {
+      "article_id": "ef15ad762f1748c0414ee756",
+      "confidence": "discovery",
+      "content_form": "news",
+      "discovery_lead": "New owners of the iPhone Duo will get an extra treat if they buy it from an Apple Store, with the option to personalize the smartphone's boot-up screen to greet them by name. An open iPhone Duo The iPhone Duo will be available to the public from October 23, with preorders starting from October 12 . However, for some customers who opt for the full in-store Apple purchase experience, they can get an extra bit of personalization. According to Bloomberg's Mark Gurman in an X post late on Friday, Apple's retail stores will have a system that will modify the boot process of the iPhone Duo. When booted up, the iPhone Duo will show on screen \"Hello\" followed by the owner's name, such as \"Hello, John\" when it turns on for the first time. Continue Reading on AppleInsider | Discuss on our Forums",
+      "discovery_title": "iPhone Duo will greet some owners by name on its first boot",
+      "embedded_references": [],
+      "extraction_path": "discovery_fallback",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 11:36:38 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "Sat, 10 Oct 2026 11:36:38 +0000",
+      "published_source": "discovery fallback",
+      "published_utc": "2026-10-10T11:36:38+00:00",
+      "raw_lead": "New owners of the iPhone Duo will get an extra treat if they buy it from an Apple Store, with the option to personalize the smartphone's boot-up screen to greet them by name. An open iPhone Duo The iPhone Duo will be available to the public from October 23, with preorders starting from October 12 . However, for some customers who opt for the full in-store Apple purchase experience, they can get an extra bit of personalization. According to Bloomberg's Mark Gurman in an X post late on Friday, Apple's retail stores will have a system that will modify the boot process of the iPhone Duo. When booted up, the iPhone Duo will show on screen \"Hello\" followed by the owner's name, such as \"Hello, John\" when it turns on for the first time. Continue Reading on AppleInsider | Discuss on our Forums",
+      "source": "AppleInsider",
+      "title": "iPhone Duo will greet some owners by name on its first boot",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "discovery",
+          "text": "New owners of the iPhone Duo will get an extra treat if they buy it from an Apple Store, with the option to personalize the smartphone's boot-up screen to greet them by name. An open iPhone Duo The iPhone Duo will be available to the public from October 23, with preorders starting from October 12 . However, for some customers who opt for the full in-store Apple purchase experience, they can get an extra bit of personalization. According to Bloomberg's Mark Gurman in an X post late on Friday, Apple's retail stores will have a system that will modify the boot process of the iPhone Duo. When booted up, the iPhone Duo will show on screen \"Hello\" followed by the owner's name, such as \"Hello, John\" when it turns on for the first time. Continue Reading on AppleInsider | Discuss on our Forums",
+          "unit_id": "de1a8ddd1838506aa4dbe3bf"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/10/10/iphone-duo-will-greet-some-owners-by-name-on-its-first-boot?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "iPhone Duo will greet some owners by name on its first boot",
+      "New owners of the iPhone Duo will get an extra treat if they buy it from an Apple Store, with the option to personalize the smartphone's boot-up screen to greet them by name. An open iPhone Duo The iPhone Duo will be available to the public from October 23, with preorders starting from October 12. However, for some customers who opt for the full in-store Apple purchase experience, they can get an extra bit of personalization. According to Bloomberg's Mark Gurman in an X post late on Friday, Apple's retail stores will have a system that will modify the boot process of the iPhone Duo. When booted up, the iPhone Duo will show on screen \"Hello\" followed by the owner's name, such as \"Hello, John\" when it turns on for the first time. Continue Reading on AppleInsider | Discuss on our Forums",
+      [
+        "New owners of the iPhone Duo will get an extra treat if they buy it from an Apple Store, with the option to personalize the smartphone's boot-up screen to greet them by name.",
+        "An open iPhone Duo The iPhone Duo will be available to the public from October 23, with preorders starting from October 12.",
+        "However, for some customers who opt for the full in-store Apple purchase experience, they can get an extra bit of personalization."
+      ]
+    ]
+  },
+  "feef9c943c782c88c5186be2": {
+    "evidence": {
+      "article_id": "feef9c943c782c88c5186be2",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple @ Work is exclusively brought to you by Mosyle, the only Apple Unified Platform. Mosyle is the only solution that integrates in a single professional grade platform all the solutions necessary to seamlessly and automatically deploy, manage, and protect Apple devices at work. Over 45,000 organizations trust Mosyle to make millions of Apple devices work ready with no effort and at an affordable cost. Request your EXTENDED TRIAL today and understand why Mosyle is everything you need to work with Apple. Typically, Apple’s fall updates for IT are around better way to manage devices, etc. This year, there was an underrated update that I think will be a real win in certain situations: remote AppleCare log collection. more… Mosyle is the only solution…",
+      "discovery_title": "Apple @ Work: Remote AppleCare log collection is one of the most underrated updates in macOS 27",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:00:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:00:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 13:00:00 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10T13:00:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-10T13:00:00+00:00",
+      "raw_lead": "macOS 27 lets IT admins trigger AppleCare log collection remotely via device management service and logs go straight to Apple.",
+      "source": "9to5Mac",
+      "title": "Apple @ Work: Remote AppleCare log collection is one of the most underrated updates in macOS 27 - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Typically, Apple’s fall updates for IT are around better way to manage devices, etc. This year, there was an underrated update that I think will be a real win in certain situations: remote AppleCare log collection.",
+          "unit_id": "bdf7355ef74750df31050e14"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "About Apple @ Work: Bradley Chambers has been an Apple IT admin since 2009. Through his experience deploying and managing firewalls, switches, a mobile device management system, enterprise grade WiFi, 1000s of Macs, and 1000s of iPads, Bradley will highlight ways in which Apple IT managers deploy Apple devices, build networks to support them, train users, share stories from the trenches of IT management, and ways Apple could improve its products for IT departments.",
+          "unit_id": "151ceb3487e7c12c502a6137"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "If you’ve ever opened an AppleCare support case for a hard-to-reproduce issue in your Apple fleet, you know how hard this process is. AppleCare needed a sysdiagnose and getting one meant either physically having the device or walking a user through a series of steps they’ve never done before. That process worked eventually, but it was slow, required the user to be available and willing to help, and, for remote employees or traveling executives, made it appear that IT didn’t have sufficient visibility into the logs of what was happening on the devices. The issue is that they somewhat didn’t.",
+          "unit_id": "d027eb8900a2e96b7fbf75c0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The harder the issue was to reproduce, the more frustrating this was for IT. By the time you got the logs, the device had rebooted, the macOS state had changed, and you were starting over with your troubleshooting.",
+          "unit_id": "48043d0e0950b5eae8acf5e0"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "TriggerEnhancedLogCollection is your friend",
+          "unit_id": "21172aabd2cc89c5d4fb87eb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Apple introduced two new device management commands in iOS, iPadOS, macOS, and tvOS 27: TriggerEnhancedLogCollection and a cancel command. The process is straightforward. You open an AppleCare case, AppleCare provides you a token, and you pass that token through your device management when you trigger the command. The device collects the logs and uploads them directly to Apple, where they are automatically attached to the ticket with Apple.",
+          "unit_id": "ddf97a59c15a66554a1d0282"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "The device also reports its status through declarative management at all times, so you can see whether log collection has started, whether it’s finished, whether it’s waiting on user consent, and if the upload is in progress.",
+          "unit_id": "efeaa9a1773903d1aeeec1ed"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Interactive vs non-interactive",
+          "unit_id": "4c4520b3cc7231692eefe966"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "There are two modes for this command, and the difference matters depending on what you’re managing. On iOS, non-interactive mode is available when the device has no passcode and no accounts, so it collects and uploads logs in the background without user involvement. I think this would be applicable in kiosk/POS type settings. On tvOS and Shared iPads, non-interactive is always available.",
+          "unit_id": "9e1163ddbcdcd6d4691ebfd4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "On macOS, interactive mode is required. The user sees a notification and is prompted to consent to both the log collection and the upload. They can decline, but this is still dramatically better than the old process, but it’s not completely hands-off. The user is in the loop., but at least it’s a simple UI box..",
+          "unit_id": "396e054bbfb35f200fc655e4"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Wrap up",
+          "unit_id": "c7503300c2546a6059863dca"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Remote and hybrid work make manual log collection harder and a remote user in a different city experiencing intermittent macOS issues is one of the more challenging support scenarios an IT team can face. With this feature, the moment that Apple’s team asks for logs, you can send the command from your device management console, the device does the work, and Apple has the info it needs to work the case.",
+          "unit_id": "e77eafe258cafc102705aac1"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/10/apple-work-remote-applecare-log-collection-is-one-of-the-most-useful-behind-the-scenes-updates-in-macos-27/"
+    },
+    "recorded_extraction": [
+      "Apple @ Work: Remote AppleCare log collection is one of the most underrated updates in macOS 27 - 9to5Mac",
+      "macOS 27 lets IT admins trigger AppleCare log collection remotely via device management service and logs go straight to Apple. Typically, Apple’s fall updates for IT are around better way to manage devices, etc. This year, there was an underrated update that I think will be a real win in certain situations: remote AppleCare log collection . If you’ve ever opened an AppleCare support case for a hard-to-reproduce issue in your Apple fleet, you know how hard this process is. AppleCare needed a sysdiagnose and getting one meant either physically having the device or walking a user through a series of steps they’ve never done before. That process worked eventually, but it was slow, required the user to be available and willing to help, and, for remote employees or traveling executives, made it appear that IT didn’t have sufficient visibility into the logs of what was happening on the devices. The issue is that they somewhat didn’t. The harder the issue was to reproduce, the more frustrating this was for IT. By the time you got the logs, the device had rebooted, the macOS state had changed, and you were starting over with your troubleshooting. Apple introduced two new device management commands in iOS, iPadOS, macOS, and tvOS 27: TriggerEnhancedLogCollection and a cancel command. The process is straightforward. You open an AppleCare case, AppleCare provides you a token, and you pass that token through your device management when you trigger the command. The device collects the logs and uploads them directly to Apple, where they are automatically attached to the ticket with Apple.",
+      [
+        "If you’ve ever opened an AppleCare support case for a hard-to-reproduce issue in your Apple fleet, you know how hard this process is. AppleCare needed a sysdiagnose and getting one meant either physically having the device or walking a user through a series of steps they’ve never done before. That process worked eventually, but it was slow, required the user to be available and willing to help, and, for remote employees or traveling executives, made it appear that IT didn’t have sufficient visibility into the logs of what was happening on the devices. The issue is that they somewhat didn’t.",
+        "Apple introduced two new device management commands in iOS, iPadOS, macOS, and tvOS 27: TriggerEnhancedLogCollection and a cancel command. The process is straightforward. You open an AppleCare case, AppleCare provides you a token, and you pass that token through your device management when you trigger the command. The device collects the logs and uploads them directly to Apple, where they are automatically attached to the ticket with Apple.",
+        "Remote and hybrid work make manual log collection harder and a remote user in a different city experiencing intermittent macOS issues is one of the more challenging support scenarios an IT team can face. With this feature, the moment that Apple’s team asks for logs, you can send the command from your device management console, the device does the work, and Apple has the info it needs to work the case."
+      ]
+    ]
+  },
+  "4b36848bc25a7b54eea1c2d2": {
+    "evidence": {
+      "article_id": "4b36848bc25a7b54eea1c2d2",
+      "confidence": "detail",
+      "content_form": "roundup",
+      "discovery_lead": "Apple reportedly plans to unveil an all-new smart home hub as part of the \"Welcome home\" product launch it announced for Tuesday, October 13. Our image above is just a rough concept based on rumored design details, so be prepared for the device's actual appearance to be different. The device will likely be unveiled in a press release shared on the Apple Newsroom website at around 9 a.m. Eastern Time on Tuesday, as that is when Apple's private \"Welcome home\" experience in New York begins. At the experience, invited reporters and content creators will likely receive hands-on time with the home hub. The hub is said to be designed for managing smart home accessories in the Apple Home app, home security monitoring, digital photo galleries, calendar appointments, music playback, FaceTime video calls, and more. As a user approaches the hub, or moves away from it, the size of the interface elements will reportedly adjust. The device will be ideal for the kitchen, bedroom, and living room, and it will reportedly have multi-user support for families. The hub reportedly has a 6-inch square display, and an A18 chip or newer for Apple Intelligence, with Siri AI expected to be a tentpole feature. A new operating system — potentially named \"homeOS\" — will feature clock faces, widgets, and more. There will be a tabletop version of the hub with a speaker base, plus a wall-mounted version. Some of the preinstalled Apple apps that will apparently be available on the new platform include Calendar, Camera, Apple Music, Apple Podcasts, Apple News, Reminders, Notes, and the new Siri app with Siri AI conversation history. Do not expect third-party apps at launch, though, as the device reportedly lacks an App Store. The device is often referred to as a \"HomePad\" in rumors because of expectations that it will be sort of a HomePod-iPad hybrid, but perhaps Apple will opt for a straightforward \"Apple Home\" name, or perhaps it will go with \" HomeView \" based on trademark filings that are potentially linked to the company. We will soon find out. This article, \" Apple's All-New Home Hub Will Be Revealed October 13: What to Expect \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple's All-New Home Hub Will Be Revealed October 13: What to Expect",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:58:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:58:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:58:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 10, 2026 6:58 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 10, 2026 6:58 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 8, 2026 9:04 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 8, 2026 1:31 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 8, 2026 3:59 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 13:58:00 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10T13:58:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-10T13:58:00+00:00",
+      "raw_lead": "Apple reportedly plans to unveil an all-new smart home hub as part of the \"Welcome home\" product launch it announced for Tuesday, October 13. Our image above is just a rough concept based on rumored design details, so be prepared for the device's actual appearance to be different. The device will likely be unveiled in a press release shared on the Apple Newsroom website at around 9 a.m.",
+      "source": "MacRumors",
+      "title": "Apple's All-New Home Hub Will Be Revealed October 13: What to Expect",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple's All-New Home Hub Will Be Revealed October 13: What to Expect",
+          "unit_id": "63e8b1b6ea8cd5047579c124"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple reportedly plans to unveil an all-new smart home hub as part of the \"Welcome home\" product launch it announced for Tuesday, October 13.",
+          "unit_id": "2443f9c2f6beaffd8d69d491"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Our image above is just a rough concept based on rumored design details, so be prepared for the device's actual appearance to be different.",
+          "unit_id": "c89f4a2e87826082bfd8b03e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The device will likely be unveiled in a press release shared on the Apple Newsroom website at around 9 a.m. Eastern Time on Tuesday, as that is when Apple's private \"Welcome home\" experience in New York begins. At the experience, invited reporters and content creators will likely receive hands-on time with the home hub.",
+          "unit_id": "60e9375c9a7d6bcf2062cb63"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "The hub is said to be designed for managing smart home accessories in the Apple Home app, home security monitoring, digital photo galleries, calendar appointments, music playback, FaceTime video calls, and more. As a user approaches the hub, or moves away from it, the size of the interface elements will reportedly adjust.",
+          "unit_id": "3bb15f2bfbb66424f6d97885"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "The device will be ideal for the kitchen, bedroom, and living room, and it will reportedly have multi-user support for families.",
+          "unit_id": "ab8080fedb59f478a8a708de"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "The hub reportedly has a 6-inch square display, and an A18 chip or newer for Apple Intelligence, with Siri AI expected to be a tentpole feature. A new operating system — potentially named \"homeOS\" — will feature clock faces, widgets, and more. There will be a tabletop version of the hub with a speaker base, plus a wall-mounted version.",
+          "unit_id": "915a3917861fbed64dfe867a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Some of the preinstalled Apple apps that will apparently be available on the new platform include Calendar, Camera, Apple Music, Apple Podcasts, Apple News, Reminders, Notes, and the new Siri app with Siri AI conversation history. Do not expect third-party apps at launch, though, as the device reportedly lacks an App Store.",
+          "unit_id": "58c8fddd29a4abc74c5e9104"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "The device is often referred to as a \"HomePad\" in rumors because of expectations that it will be sort of a HomePod-iPad hybrid, but perhaps Apple will opt for a straightforward \"Apple Home\" name, or perhaps it will go with \"HomeView\" based on trademark filings that are potentially linked to the company. We will soon find out.",
+          "unit_id": "7ad02261c8697147765c4d20"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/10/apple-to-unveil-all-new-type-of-device/"
+    },
+    "recorded_extraction": [
+      "Apple's All-New Home Hub Will Be Revealed October 13: What to Expect",
+      "Apple reportedly plans to unveil an all-new smart home hub as part of the \"Welcome home\" product launch it announced for Tuesday, October 13. Our image above is just a rough concept based on rumored design details, so be prepared for the device's actual appearance to be different. The device will likely be unveiled in a press release shared on the Apple Newsroom website at around 9 a.m. Our image above is just a rough concept based on rumored design details, so be prepared for the device's actual appearance to be different. The device will likely be unveiled in a press release shared on the Apple Newsroom website at around 9 a.m. Eastern Time on Tuesday, as that is when Apple's private \"Welcome home\" experience in New York begins. At the experience, invited reporters and content creators will likely receive hands-on time with the home hub. The hub is said to be designed for managing smart home accessories in the Apple Home app, home security monitoring, digital photo galleries, calendar appointments, music playback, FaceTime video calls, and more. As a user approaches the hub, or moves away from it, the size of the interface elements will reportedly adjust. The device will be ideal for the kitchen, bedroom, and living room, and it will reportedly have multi-user support for families.",
+      [
+        "Apple reportedly plans to unveil an all-new smart home hub as part of the \"Welcome home\" product launch it announced for Tuesday, October 13.",
+        "The device will likely be unveiled in a press release shared on the Apple Newsroom website at around 9 a.m. Eastern Time on Tuesday, as that is when Apple's private \"Welcome home\" experience in New York begins. At the experience, invited reporters and content creators will likely receive hands-on time with the home hub.",
+        "The hub reportedly has a 6-inch square display, and an A18 chip or newer for Apple Intelligence, with Siri AI expected to be a tentpole feature. A new operating system — potentially named \"homeOS\" — will feature clock faces, widgets, and more. There will be a tabletop version of the hub with a speaker base, plus a wall-mounted version.",
+        "Some of the preinstalled Apple apps that will apparently be available on the new platform include Calendar, Camera, Apple Music, Apple Podcasts, Apple News, Reminders, Notes, and the new Siri app with Siri AI conversation history. Do not expect third-party apps at launch, though, as the device reportedly lacks an App Store."
+      ]
+    ]
+  },
+  "d5fda65430fec2ff22aedde0": {
+    "evidence": {
+      "article_id": "d5fda65430fec2ff22aedde0",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "After a nearly four-year wait, a new Apple TV is finally expected to be announced as part of Apple's \"Welcome home\" launch on Tuesday, October 13. We expect the new Apple TV to be announced in a press release shared on the Apple Newsroom website on Tuesday, and then selected reporters and content creators invited to Apple's \"Welcome home\" experience in New York that day will likely share hands-on photos and videos of the device. The experience begins at 9 a.m. Eastern Time. The fourth-generation Apple TV 4K is rumored to be equipped with an A19 or A19 Pro chip . This chip upgrade would result in the Apple TV having 8GB to 12GB of RAM, and this will reportedly enable Siri AI support on the device. The current Apple TV, announced in October 2022, has an A15 Bionic chip and 4GB of RAM. The new model is also expected to be equipped with Apple's N1 chip with support for Wi-Fi 7, which would enable faster speeds and lower latency compared to the current Apple TV's Wi-Fi 6, when the device is used with a Wi-Fi 7 router. The N1 chip also supports Bluetooth 6.0, whereas the current Apple TV supports Bluetooth 5.0. A leaked image of the new Apple TV did not reveal any external design changes compared to the current model. However, the accompanying Siri Remote is expected to be revised in some way, as a new version was referenced in Apple's software code. In June, the Apple TV 4K received a price increase amid surging memory chip costs. In the U.S., for example, the device now starts at $199, up from $129. Related Roundup: Apple TV Buyer's Guide: Apple TV (Don't Buy) Related Forum: Apple TV and Home Theater This article, \" A New Apple TV 4K is Finally Coming on Tuesday \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "A New Apple TV 4K is Finally Coming on Tuesday",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:45:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:45:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T13:45:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 10, 2026 6:45 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 10, 2026 6:45 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 25, 2026 8:16 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 15, 2026 1:43 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "September 25, 2026 8:18 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 13:45:00 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10T13:45:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-10T13:45:00+00:00",
+      "raw_lead": "After a nearly four-year wait, a new Apple TV is finally expected to be announced as part of Apple's \"Welcome home\" launch on Tuesday, October 13. We expect the new Apple TV to be announced in a press release shared on the Apple Newsroom website on Tuesday, and then selected reporters and content creators invited to Apple's \"Welcome home\" experience in New York that day will likely share hands-on photos and videos of the device. The experience begins at 9 a.m.",
+      "source": "MacRumors",
+      "title": "A New Apple TV 4K is Finally Coming on Tuesday",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "A New Apple TV 4K is Finally Coming on Tuesday",
+          "unit_id": "611ed2a3ed6cad0e5cfa6a94"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "After a nearly four-year wait, a new Apple TV is finally expected to be announced as part of Apple's \"Welcome home\" launch on Tuesday, October 13.",
+          "unit_id": "6ba8009922cb8c5128ae945a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "We expect the new Apple TV to be announced in a press release shared on the Apple Newsroom website on Tuesday, and then selected reporters and content creators invited to Apple's \"Welcome home\" experience in New York that day will likely share hands-on photos and videos of the device. The experience begins at 9 a.m. Eastern Time.",
+          "unit_id": "76e8e9f8c6ebc531b605854c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The fourth-generation Apple TV 4K is rumored to be equipped with an A19 or A19 Pro chip. This chip upgrade would result in the Apple TV having 8GB to 12GB of RAM, and this will reportedly enable Siri AI support on the device. The current Apple TV, announced in October 2022, has an A15 Bionic chip and 4GB of RAM.",
+          "unit_id": "eaf6479af883e771afec9775"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "The new model is also expected to be equipped with Apple's N1 chip with support for Wi-Fi 7, which would enable faster speeds and lower latency compared to the current Apple TV's Wi-Fi 6, when the device is used with a Wi-Fi 7 router. The N1 chip also supports Bluetooth 6.0, whereas the current Apple TV supports Bluetooth 5.0.",
+          "unit_id": "b2da7e21e4589327d0338957"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "A leaked image of the new Apple TV did not reveal any external design changes compared to the current model. However, the accompanying Siri Remote is expected to be revised in some way, as a new version was referenced in Apple's software code.",
+          "unit_id": "079e8f245e1b6a59bf37f0cd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "In June, the Apple TV 4K received a price increase amid surging memory chip costs. In the U.S., for example, the device now starts at $199, up from $129.",
+          "unit_id": "0f4ac4cf5572dcbe0ae67dde"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/10/new-apple-tv-4k-is-coming-tuesday/"
+    },
+    "recorded_extraction": [
+      "A New Apple TV 4K is Finally Coming on Tuesday",
+      "After a nearly four-year wait, a new Apple TV is finally expected to be announced as part of Apple's \"Welcome home\" launch on Tuesday, October 13. We expect the new Apple TV to be announced in a press release shared on the Apple Newsroom website on Tuesday, and then selected reporters and content creators invited to Apple's \"Welcome home\" experience in New York that day will likely share hands-on photos and videos of the device. The experience begins at 9 a.m. We expect the new Apple TV to be announced in a press release shared on the Apple Newsroom website on Tuesday, and then selected reporters and content creators invited to Apple's \"Welcome home\" experience in New York that day will likely share hands-on photos and videos of the device. The experience begins at 9 a.m. Eastern Time. The fourth-generation Apple TV 4K is rumored to be equipped with an A19 or A19 Pro chip . This chip upgrade would result in the Apple TV having 8GB to 12GB of RAM, and this will reportedly enable Siri AI support on the device. The current Apple TV, announced in October 2022, has an A15 Bionic chip and 4GB of RAM. The new model is also expected to be equipped with Apple's N1 chip with support for Wi-Fi 7, which would enable faster speeds and lower latency compared to the current Apple TV's Wi-Fi 6, when the device is used with a Wi-Fi 7 router. The N1 chip also supports Bluetooth 6.0, whereas the current Apple TV supports Bluetooth 5.0. A leaked image of the new Apple TV did not reveal any external design changes compared to the current model. However, the accompanying Siri Remote is expected to be revised in some way, as a new version was referenced in Apple's software code.",
+      [
+        "After a nearly four-year wait, a new Apple TV is finally expected to be announced as part of Apple's \"Welcome home\" launch on Tuesday, October 13.",
+        "The fourth-generation Apple TV 4K is rumored to be equipped with an A19 or A19 Pro chip. This chip upgrade would result in the Apple TV having 8GB to 12GB of RAM, and this will reportedly enable Siri AI support on the device. The current Apple TV, announced in October 2022, has an A15 Bionic chip and 4GB of RAM.",
+        "A leaked image of the new Apple TV did not reveal any external design changes compared to the current model. However, the accompanying Siri Remote is expected to be revised in some way, as a new version was referenced in Apple's software code."
+      ]
+    ]
+  },
+  "23cbd651210d5ad44b64779e": {
+    "evidence": {
+      "article_id": "23cbd651210d5ad44b64779e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "在经历了近四年的等待之后，苹果预计将于10月13日发布新一代Apple TV 4K。这款产品预计将作为苹果“Welcome Home”新品发布活动的一部分登场，成为苹果家庭娱乐产品线的重要更新。 阅读全文",
+      "discovery_title": "苹果新一代Apple TV 4K有望于10月13日正式亮相",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "前天 21:53",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "4 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-9-30 03:05",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-9-17 22:11",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-9-15 20:46",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月10日 22:53",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 14:53:50 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月10日 22:53",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T14:53:00+00:00",
+      "raw_lead": "在经历了近四年的等待之后，苹果预计将于10月13日发布新一代AppleTV4K。这款产品预计将作为苹果“WelcomeHome”新品发布活动的一部分登场，成为苹果家庭娱乐产品线的重要更新。",
+      "source": "cnBeta",
+      "title": "苹果新一代Apple TV 4K有望于10月13日正式亮相 - Apple App Store/音乐/TV/新闻/播客 - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "在经历了近四年的等待之后，苹果预计将于10月13日发布新一代Apple TV 4K。这款产品预计将作为苹果“Welcome Home”新品发布活动的一部分登场，成为苹果家庭娱乐产品线的重要更新。",
+          "unit_id": "9a0bbc9154948eb6bcd2f474"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "根据目前披露的信息，苹果预计将在当地时间10月13日通过Newsroom新闻稿正式发布新款Apple TV。与此同时，受邀参加当天纽约“Welcome Home”体验活动的媒体记者和内容创作者也有望率先分享设备的上手照片和体验视频。活动计划于美国东部时间上午9点开始。",
+          "unit_id": "98e97779e532e44f1182b1ad"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "硬件方面，新款Apple TV 4K预计将搭载A19或A19 Pro处理器，相比现有机型使用的A15仿生芯片实现明显升级。消息称，新设备内存容量将提升至8GB至12GB，这也将为其支持苹果新一代Siri人工智能功能提供硬件基础。作为对比，2022年发布的现款Apple TV 4K仅配备4GB内存。",
+          "unit_id": "45b4ceaee24536358b312e25"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "在无线连接方面，新设备预计还将采用苹果自研的N1网络芯片，支持Wi‑Fi 7标准。与现有产品搭载的Wi‑Fi 6相比，Wi‑Fi 7能够提供更高的数据传输速度以及更低的网络延迟。同时，N1芯片还将支持Bluetooth 6.0蓝牙标准，为未来的家庭智能设备连接带来更多可能性。",
+          "unit_id": "559755ff2ec5e5e1152cf624"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "外观设计方面，目前泄露的信息显示，新款Apple TV整体机身设计与现有型号基本保持一致，并未出现明显变化。不过，随机附带的Siri Remote遥控器预计将进行一定程度的改进或重新设计，具体细节尚未公布。",
+          "unit_id": "bbf5e02f4fd57fa5e9b513c2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "值得注意的是，今年6月，受存储芯片成本持续上涨影响，苹果已经上调了Apple TV 4K的售价。以美国市场为例，该产品起售价从此前的129美元上涨至199美元。外界普遍预计，新一代机型发布后，其定价策略也将成为消费者关注的重点。",
+          "unit_id": "acf74110f729b7379a75030e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "如果相关传闻属实，这将是苹果自2022年推出现款Apple TV 4K以来，对该产品系列进行的首次重大硬件升级。凭借更强的处理器、更大的内存容量以及Wi‑Fi 7支持，新一代Apple TV有望进一步强化其在家庭影音娱乐和智能家居生态中的核心地位。",
+          "unit_id": "f16fc897550069d50029867a"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1581558.htm"
+    },
+    "recorded_extraction": [
+      "苹果新一代Apple TV 4K有望于10月13日正式亮相 - Apple App Store/音乐/TV/新闻/播客 - cnBeta.COM",
+      "在经历了近四年的等待之后，苹果预计将于10月13日发布新一代AppleTV4K。这款产品预计将作为苹果“WelcomeHome”新品发布活动的一部分登场，成为苹果家庭娱乐产品线的重要更新。 根据目前披露的信息，苹果预计将在当地时间10月13日通过Newsroom新闻稿正式发布新款Apple TV。与此同时，受邀参加当天纽约“Welcome Home”体验活动的媒体记者和内容创作者也有望率先分享设备的上手照片和体验视频。活动计划于美国东部时间上午9点开始。 硬件方面，新款Apple TV 4K预计将搭载A19或A19 Pro处理器，相比现有机型使用的A15仿生芯片实现明显升级。消息称，新设备内存容量将提升至8GB至12GB，这也将为其支持苹果新一代Siri人工智能功能提供硬件基础。作为对比，2022年发布的现款Apple TV 4K仅配备4GB内存。 在无线连接方面，新设备预计还将采用苹果自研的N1网络芯片，支持Wi‑Fi 7标准。与现有产品搭载的Wi‑Fi 6相比，Wi‑Fi 7能够提供更高的数据传输速度以及更低的网络延迟。同时，N1芯片还将支持Bluetooth 6.0蓝牙标准，为未来的家庭智能设备连接带来更多可能性。 外观设计方面，目前泄露的信息显示，新款Apple TV整体机身设计与现有型号基本保持一致，并未出现明显变化。不过，随机附带的Siri Remote遥控器预计将进行一定程度的改进或重新设计，具体细节尚未公布。",
+      [
+        "根据目前披露的信息，苹果预计将在当地时间10月13日通过Newsroom新闻稿正式发布新款Apple TV。与此同时，受邀参加当天纽约“Welcome Home”体验活动的媒体记者和内容创作者也有望率先分享设备的上手照片和体验视频。活动计划于美国东部时间上午9点开始。",
+        "硬件方面，新款Apple TV 4K预计将搭载A19或A19 Pro处理器，相比现有机型使用的A15仿生芯片实现明显升级。消息称，新设备内存容量将提升至8GB至12GB，这也将为其支持苹果新一代Siri人工智能功能提供硬件基础。作为对比，2022年发布的现款Apple TV 4K仅配备4GB内存。",
+        "在无线连接方面，新设备预计还将采用苹果自研的N1网络芯片，支持Wi‑Fi 7标准。与现有产品搭载的Wi‑Fi 6相比，Wi‑Fi 7能够提供更高的数据传输速度以及更低的网络延迟。同时，N1芯片还将支持Bluetooth 6.0蓝牙标准，为未来的家庭智能设备连接带来更多可能性。",
+        "值得注意的是，今年6月，受存储芯片成本持续上涨影响，苹果已经上调了Apple TV 4K的售价。以美国市场为例，该产品起售价从此前的129美元上涨至199美元。外界普遍预计，新一代机型发布后，其定价策略也将成为消费者关注的重点。",
+        "如果相关传闻属实，这将是苹果自2022年推出现款Apple TV 4K以来，对该产品系列进行的首次重大硬件升级。凭借更强的处理器、更大的内存容量以及Wi‑Fi 7支持，新一代Apple TV有望进一步强化其在家庭影音娱乐和智能家居生态中的核心地位。"
+      ]
+    ]
+  },
+  "5b8ad820f617d815e970e704": {
+    "evidence": {
+      "article_id": "5b8ad820f617d815e970e704",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "一项面向Android读者的调查把苹果首款折叠屏iPhone Duo推到了一个微妙位置：在“本身就对折叠屏感兴趣”的安卓用户里，43.7%愿意考虑换去iPhone Duo——其中26.4%直接说“会换”，17.3%则表示“相机再强一点就换”。 但把样本放大到全部受访者，画风就冷静了：38.9%对折叠屏根本没兴趣，34.4%仍想继续用安卓折叠屏，只有16.1%明确愿意换iPhone Duo，10.6%有兴趣但要求相机表现再提升。 两项相加约26.7%。如果剔掉不关注折叠屏的人，想留在安卓折叠屏阵营的比例反而冲到56.3%——多数折叠屏老玩家并没有准备转向苹果。 iPhone Duo到底是什么来头？它走“较宽机身+折痕更淡的内屏+专属大屏软件”路线，海外起价1999美元，国行15999元起，定位不是走量机，而是苹果进折叠圈的“门面”。 5.4英寸外屏+7.6英寸内屏、A20Pro、钛金属边框、纳米纹理涂层，这些让它在质感上很有杀伤力；但相机、价格和系统自由度，正好也是安卓用户最犹豫的三件事。 有人怕1999美元太贵，有人嫌iPhone跟Windows协同别扭，还有人不想放弃安卓装第三方应用、随便挪文件的那份自由。 更现实的是，真要换折叠屏，他们还会先比一轮三星Galaxy Z Fold、vivo、荣耀、OPPO——这些品牌在铰链、长焦、分屏、本地化上已经卷了好几年。 所以这份调查的结论其实很克制：iPhone Duo不是没吸引力，而是“进入了安卓用户的备选清单”；但它想从三星、华为、荣耀、OV嘴里抢人，得先回答三个问题——够不够便宜？拍得够不够好？用起来够不够开放？ 折叠屏的牌桌早就不是苹果一家说了算。iPhone Duo来了，是搅局者；但是否掀桌，还得等真机口碑和首发销量说话。",
+      "discovery_title": "iPhone Duo能撬动安卓折叠屏用户吗：最新调查报告出炉",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 20:52:54",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 20:52:54",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10 20:52:54",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T12:52:54+00:00",
+      "raw_lead": "一项面向Android读者的调查把苹果首款折叠屏iPhone Duo推到了一个微妙位置：在“本身就对折叠屏感兴趣”的安卓用户里，43.7%愿意考虑换去iPhone Duo——其中26.4%直接说&ld",
+      "source": "快科技",
+      "title": "iPhone Duo能撬动安卓折叠屏用户吗：最新调查报告出炉",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "一项面向Android读者的调查把苹果首款折叠屏iPhone Duo推到了一个微妙位置：在“本身就对折叠屏感兴趣”的安卓用户里，43.7%愿意考虑换去iPhone Duo——其中26.4%直接说“会换”，17.3%则表示“相机再强一点就换”。",
+          "unit_id": "f29f60a7791470b13fc0d1cf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "但把样本放大到全部受访者，画风就冷静了：38.9%对折叠屏根本没兴趣，34.4%仍想继续用安卓折叠屏，只有16.1%明确愿意换iPhone Duo，10.6%有兴趣但要求相机表现再提升。",
+          "unit_id": "73fc8d7829c73533083c84ae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "两项相加约26.7%。如果剔掉不关注折叠屏的人，想留在安卓折叠屏阵营的比例反而冲到56.3%——多数折叠屏老玩家并没有准备转向苹果。",
+          "unit_id": "c48523ae54b2a06555fb04bd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "iPhone Duo到底是什么来头？它走“较宽机身+折痕更淡的内屏+专属大屏软件”路线，海外起价1999美元，国行15999元起，定位不是走量机，而是苹果进折叠圈的“门面”。",
+          "unit_id": "6dc46a84240c1e11fa8bec74"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "5.4英寸外屏+7.6英寸内屏、A20Pro、钛金属边框、纳米纹理涂层，这些让它在质感上很有杀伤力；但相机、价格和系统自由度，正好也是安卓用户最犹豫的三件事。",
+          "unit_id": "cc5b70a21812c44325d5811e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "有人怕1999美元太贵，有人嫌iPhone跟Windows协同别扭，还有人不想放弃安卓装第三方应用、随便挪文件的那份自由。",
+          "unit_id": "013706fc3c5275563b49e33d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "更现实的是，真要换折叠屏，他们还会先比一轮三星Galaxy Z Fold、vivo、荣耀、OPPO——这些品牌在铰链、长焦、分屏、本地化上已经卷了好几年。",
+          "unit_id": "2358e27a4a2f9f37096c8346"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "所以这份调查的结论其实很克制：iPhone Duo不是没吸引力，而是“进入了安卓用户的备选清单”；但它想从三星、华为、荣耀、OV嘴里抢人，得先回答三个问题——够不够便宜？拍得够不够好？用起来够不够开放？",
+          "unit_id": "c6c987b6ef5f82dc7bcc1d33"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "折叠屏的牌桌早就不是苹果一家说了算。iPhone Duo来了，是搅局者；但是否掀桌，还得等真机口碑和首发销量说话。",
+          "unit_id": "e01896c94560b725f031b0e0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "责任编辑：振亭",
+          "unit_id": "8ccc10ace6783fc359dd13e6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "文章内容举报",
+          "unit_id": "4642e1d6cc12224cdfbf2af7"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1156/1156499.htm"
+    },
+    "recorded_extraction": [
+      "iPhone Duo能撬动安卓折叠屏用户吗：最新调查报告出炉",
+      "一项面向Android读者的调查把苹果首款折叠屏iPhone Duo推到了一个微妙位置：在“本身就对折叠屏感兴趣”的安卓用户里，43.7%愿意考虑换去iPhone Duo——其中26.4%直接说&ld 一项面向Android读者的调查把苹果首款折叠屏iPhone Duo推到了一个微妙位置：在“本身就对折叠屏感兴趣”的安卓用户里，43.7%愿意考虑换去iPhone Duo——其中26.4%直接说“会换”，17.3%则表示“相机再强一点就换”。 但把样本放大到全部受访者，画风就冷静了：38.9%对折叠屏根本没兴趣，34.4%仍想继续用安卓折叠屏，只有16.1%明确愿意换iPhone Duo，10.6%有兴趣但要求相机表现再提升。 两项相加约26.7%。如果剔掉不关注折叠屏的人，想留在安卓折叠屏阵营的比例反而冲到56.3%——多数折叠屏老玩家并没有准备转向苹果。 iPhone Duo到底是什么来头？它走“较宽机身+折痕更淡的内屏+专属大屏软件”路线，海外起价1999美元，国行15999元起，定位不是走量机，而是苹果进折叠圈的“门面”。",
+      [
+        "一项面向Android读者的调查把苹果首款折叠屏iPhone Duo推到了一个微妙位置：在“本身就对折叠屏感兴趣”的安卓用户里，43.7%愿意考虑换去iPhone Duo——其中26.4%直接说“会换”，17.3%则表示“相机再强一点就换”。",
+        "但把样本放大到全部受访者，画风就冷静了：38.9%对折叠屏根本没兴趣，34.4%仍想继续用安卓折叠屏，只有16.1%明确愿意换iPhone Duo，10.6%有兴趣但要求相机表现再提升。",
+        "两项相加约26.7%。如果剔掉不关注折叠屏的人，想留在安卓折叠屏阵营的比例反而冲到56.3%——多数折叠屏老玩家并没有准备转向苹果。",
+        "iPhone Duo到底是什么来头？它走“较宽机身+折痕更淡的内屏+专属大屏软件”路线，海外起价1999美元，国行15999元起，定位不是走量机，而是苹果进折叠圈的“门面”。",
+        "5.4英寸外屏+7.6英寸内屏、A20Pro、钛金属边框、纳米纹理涂层，这些让它在质感上很有杀伤力；但相机、价格和系统自由度，正好也是安卓用户最犹豫的三件事。",
+        "有人怕1999美元太贵，有人嫌iPhone跟Windows协同别扭，还有人不想放弃安卓装第三方应用、随便挪文件的那份自由。"
+      ]
+    ]
+  },
+  "9b3dcb8491530365a92f0601": {
+    "evidence": {
+      "article_id": "9b3dcb8491530365a92f0601",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "苹果供应链人士表示，“这意味着销量在往更高价值产品倾斜，所以整体利好苹果供应链公司业绩。”（证券时报）",
+      "discovery_title": "消息称苹果 iPhone Duo 折叠屏手机加单 30%，iPhone 18 Pro 系列总订单量未变",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/10 14:24:49",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10T14:24:49.4670000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/10 14:24:49",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T06:24:49+00:00",
+      "raw_lead": "苹果供应链人士表示，“这意味着销量在往更高价值产品倾斜，所以整体利好苹果供应链公司业绩。”（证券时报）",
+      "source": "IT之家",
+      "title": "消息称苹果 iPhone Duo 折叠屏手机加单 30%，iPhone 18 Pro 系列总订单量未变",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 10 日消息，据证券时报记者从苹果供应链方面获悉，苹果公司结构性调整 2026 年秋季手机新品订单量。",
+          "unit_id": "92ef6eb263158612d206df5c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家附相关调整如下：",
+          "unit_id": "4bea4a4d33d5bfcc130b8d09"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "对 iPhone Duo 加单 30%，但总量仍未超过 1000 万台。",
+          "unit_id": "262954f3fe73de965f03ad61"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "对 iPhone 18 Pro 砍单 10%—15%，同时对 iPhone 18 Pro Max 加单 10%—15%，iPhone 18 Pro 系列总订单量未变。",
+          "unit_id": "9cc8a81c221b7375e40b3a5e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "苹果供应链人士表示，“这意味着销量在往更高价值产品倾斜，所以整体利好苹果供应链公司业绩。”",
+          "unit_id": "6c62d7aa471ba2ff4a2064a8"
+        }
+      ],
+      "url": "https://www.ithome.com/1/011/346.htm"
+    },
+    "recorded_extraction": [
+      "消息称苹果 iPhone Duo 折叠屏手机加单 30%，iPhone 18 Pro 系列总订单量未变",
+      "苹果供应链人士表示，“这意味着销量在往更高价值产品倾斜，所以整体利好苹果供应链公司业绩。”（证券时报） IT之家 10 月 10 日消息，据证券时报记者从苹果供应链方面获悉，苹果公司结构性调整 2026 年秋季手机新品订单量。 对 iPhone 18 Pro 砍单 10%—15%，同时对 iPhone 18 Pro Max 加单 10%—15%， iPhone 18 Pro 系列总订单量未变 。",
+      [
+        "IT之家 10 月 10 日消息，据证券时报记者从苹果供应链方面获悉，苹果公司结构性调整 2026 年秋季手机新品订单量。",
+        "对 iPhone Duo 加单 30%，但总量仍未超过 1000 万台。",
+        "对 iPhone 18 Pro 砍单 10%—15%，同时对 iPhone 18 Pro Max 加单 10%—15%，iPhone 18 Pro 系列总订单量未变。"
+      ]
+    ]
+  },
+  "b5aea388df4ca964fd0a3841": {
+    "evidence": {
+      "article_id": "b5aea388df4ca964fd0a3841",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月10日消息， 据证券时报报道，苹果供应链方面透露，苹果公司结构性调整2026年秋季手机新品订单量：对iPhone Duo加单30%，但总量仍未超过1000万台； 与此同时，苹果对iPhone 18 Pro砍单10%—15%，并对iPhone 18 Pro Max加单10%—15%，iPhone 18 Pro系列总订单量未变。 “这意味着销量在往更高价值产品倾斜，所以整体利好苹果供应链公司业绩。”苹果供应链人士表示。 值得一提的是，在存储芯片涨价、整机成本走高的大环境下，苹果把产能向高溢价机型倾斜。iPhone 18 Pro Max与 iPhone Duo两款高价机型分摊了零部件成本压力，单机利润更高，反而能拉高整体盈利水平。 从预约热度来看，仅在京东自营旗舰店的预约人数就已突破200万，这还不算官网、天猫、线下门店的排队用户。 不仅如此，有部分黄牛在社交媒体和二手交易平台上发布iPhone Duo的预定广告。 按照当前热度，10月16日晚8点开启预售之后，首轮货源大概率会被瞬间抢空，黄牛加价拿货的现象或将再度上演。 值得一提的是，第三方机构Counterpoint 给出预测：iPhone Duo在2026年内整体销量有望达到600万台。 结合本次加单动作来看，第一代折叠 iPhone的市场接受度已超出苹果前期保守预估，后续不排除继续微调产能。",
+      "discovery_title": "苹果首款折叠屏iPhone Duo供应链加单30% 还未开售 京东预约人数破200万",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 15:39:34",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 15:39:34",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10 15:39:34",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T07:39:34+00:00",
+      "raw_lead": "快科技10月10日消息，据证券时报报道，苹果供应链方面透露，苹果公司结构性调整2026年秋季手机新品订单量：对iPhone Duo加单30%，但总量仍未超过1000万台；与此同时，苹果对iPhone 18 Pro砍单",
+      "source": "快科技",
+      "title": "苹果首款折叠屏iPhone Duo供应链加单30% 还未开售 京东预约人数破200万",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月10日消息，据证券时报报道，苹果供应链方面透露，苹果公司结构性调整2026年秋季手机新品订单量：对iPhone Duo加单30%，但总量仍未超过1000万台；",
+          "unit_id": "262ec656a915ccc84940058b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "与此同时，苹果对iPhone 18 Pro砍单10%—15%，并对iPhone 18 Pro Max加单10%—15%，iPhone 18 Pro系列总订单量未变。",
+          "unit_id": "12e5754566dc14fc9de40e40"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "“这意味着销量在往更高价值产品倾斜，所以整体利好苹果供应链公司业绩。”苹果供应链人士表示。",
+          "unit_id": "0877f44c8f14f2c01e1bf05e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "值得一提的是，在存储芯片涨价、整机成本走高的大环境下，苹果把产能向高溢价机型倾斜。iPhone 18 Pro Max与 iPhone Duo两款高价机型分摊了零部件成本压力，单机利润更高，反而能拉高整体盈利水平。",
+          "unit_id": "f690117622d918c987b8524c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "从预约热度来看，仅在京东自营旗舰店的预约人数就已突破200万，这还不算官网、天猫、线下门店的排队用户。",
+          "unit_id": "d3f491282d5e3bc029189486"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "不仅如此，有部分黄牛在社交媒体和二手交易平台上发布iPhone Duo的预定广告。",
+          "unit_id": "a1e895e636e33c6e1dc392a0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "按照当前热度，10月16日晚8点开启预售之后，首轮货源大概率会被瞬间抢空，黄牛加价拿货的现象或将再度上演。",
+          "unit_id": "84971208025d000b68d63d78"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "值得一提的是，第三方机构Counterpoint 给出预测：iPhone Duo在2026年内整体销量有望达到600万台。",
+          "unit_id": "3cf6412e19694e5f4543b325"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "结合本次加单动作来看，第一代折叠 iPhone的市场接受度已超出苹果前期保守预估，后续不排除继续微调产能。",
+          "unit_id": "1e84dd1dbab3fb02611aca76"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1156/1156441.htm"
+    },
+    "recorded_extraction": [
+      "苹果首款折叠屏iPhone Duo供应链加单30% 还未开售 京东预约人数破200万",
+      "快科技10月10日消息，据证券时报报道，苹果供应链方面透露，苹果公司结构性调整2026年秋季手机新品订单量：对iPhone Duo加单30%，但总量仍未超过1000万台；与此同时，苹果对iPhone 18 Pro砍单 快科技10月10日消息， 据证券时报报道，苹果供应链方面透露，苹果公司结构性调整2026年秋季手机新品订单量：对iPhone Duo加单30%，但总量仍未超过1000万台； 与此同时，苹果对iPhone 18 Pro砍单10%—15%，并对iPhone 18 Pro Max加单10%—15%，iPhone 18 Pro系列总订单量未变。 值得一提的是，在存储芯片涨价、整机成本走高的大环境下，苹果把产能向高溢价机型倾斜。iPhone 18 Pro Max与 iPhone Duo两款高价机型分摊了零部件成本压力，单机利润更高，反而能拉高整体盈利水平。 值得一提的是，第三方机构Counterpoint 给出预测：iPhone Duo在2026年内整体销量有望达到600万台。",
+      [
+        "快科技10月10日消息，据证券时报报道，苹果供应链方面透露，苹果公司结构性调整2026年秋季手机新品订单量：对iPhone Duo加单30%，但总量仍未超过1000万台；",
+        "与此同时，苹果对iPhone 18 Pro砍单10%—15%，并对iPhone 18 Pro Max加单10%—15%，iPhone 18 Pro系列总订单量未变。",
+        "值得一提的是，在存储芯片涨价、整机成本走高的大环境下，苹果把产能向高溢价机型倾斜。iPhone 18 Pro Max与 iPhone Duo两款高价机型分摊了零部件成本压力，单机利润更高，反而能拉高整体盈利水平。",
+        "从预约热度来看，仅在京东自营旗舰店的预约人数就已突破200万，这还不算官网、天猫、线下门店的排队用户。",
+        "按照当前热度，10月16日晚8点开启预售之后，首轮货源大概率会被瞬间抢空，黄牛加价拿货的现象或将再度上演。",
+        "值得一提的是，第三方机构Counterpoint 给出预测：iPhone Duo在2026年内整体销量有望达到600万台。"
+      ]
+    ]
+  },
+  "ddaae9bbaa81f97f46a555ec": {
+    "evidence": {
+      "article_id": "ddaae9bbaa81f97f46a555ec",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "iPhone Duo还没开卖，热度就已经爆了。最新消息显示，苹果已经给供应链加单30%，但总量仍然控制在1000万台以内。与此同时，京东自营旗舰店的预约人数已经突破200万。 根据证券时报从供应链方面获得的信息，苹果正在对秋季新品的订单做结构性调整。简单说就是把产能往高价值机型上倾斜——iPhone Duo加单30%，iPhone 18 Pro Max加单10%到15%，而iPhone 18 Pro则相应砍单10%到15%。Pro系列整体订单量其实没变，只是内部做了转移。 这种操作背后的逻辑很清楚：在存储芯片涨价、整机成本走高的大环境下，高端机型利润空间更大，能更好地消化成本压力。供应链人士也说了，销量往更高价值产品倾斜，对苹果供应链公司的业绩反而是利好。 预约数据也印证了高端机型的热度。仅京东自营一个渠道，iPhone Duo的预约人数就已经超过200万，这还没算官网、天猫和线下门店的。对于一台起售价15999元的折叠屏来说，这个预约量相当夸张。 热度高了，黄牛自然不会缺席。社交媒体和二手交易平台上已经出现了iPhone Duo的预定广告，加价幅度从几千到上万不等。按照目前这个势头，10月16日晚8点预售开启后，首轮货源大概率一抢而空，黄牛加价拿货的戏码估计又要重演一遍。 第三方机构Counterpoint此前预测，iPhone Duo在2026年全年销量有望达到600万台。结合这次加单来看，第 一代折叠iPhone的市场接受度已经超出了苹果前期的保守预期，后续不排除继续调整产能的可能。 有意思的是，前段时间还有消息说苹果要削减iPhone 18 Pro系列订单，理由是内存涨价推高售价导致需求不如往年。现在看来，不是需求不行了，而是用户的选择变了——要么直接上Pro Max，要么一步到位冲折叠屏Duo，中间的标准版反而被两头挤压。 总的来看，苹果这波订单结构调整挺聪明的，既顺应了用户需求变化，又能保证利润水平。至于iPhone Duo最终能不能撑起600万台的预期，等首销数据出来就见分晓了。",
+      "discovery_title": "200多万人疯抢！iPhone Duo热度彻底引爆：苹果已加单",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 19:52:38",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 19:52:38",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10 19:52:38",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T11:52:38+00:00",
+      "raw_lead": "iPhone Duo还没开卖，热度就已经爆了。最新消息显示，苹果已经给供应链加单30%，但总量仍然控制在1000万台以内。与此同时，京东自营旗舰店的预约人数已经突破200万。根据证券时报从供应链方面",
+      "source": "快科技",
+      "title": "200多万人疯抢！iPhone Duo热度彻底引爆：苹果已加单",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo还没开卖，热度就已经爆了。最新消息显示，苹果已经给供应链加单30%，但总量仍然控制在1000万台以内。与此同时，京东自营旗舰店的预约人数已经突破200万。",
+          "unit_id": "39c604479934303e630cf952"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "根据证券时报从供应链方面获得的信息，苹果正在对秋季新品的订单做结构性调整。简单说就是把产能往高价值机型上倾斜——iPhone Duo加单30%，iPhone 18 Pro Max加单10%到15%，而iPhone 18 Pro则相应砍单10%到15%。Pro系列整体订单量其实没变，只是内部做了转移。",
+          "unit_id": "10032f4c075e7b386f611e9a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "这种操作背后的逻辑很清楚：在存储芯片涨价、整机成本走高的大环境下，高端机型利润空间更大，能更好地消化成本压力。供应链人士也说了，销量往更高价值产品倾斜，对苹果供应链公司的业绩反而是利好。",
+          "unit_id": "dde102b8fc03f24b582e5066"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "预约数据也印证了高端机型的热度。仅京东自营一个渠道，iPhone Duo的预约人数就已经超过200万，这还没算官网、天猫和线下门店的。对于一台起售价15999元的折叠屏来说，这个预约量相当夸张。",
+          "unit_id": "46cb96d3394eb05dc16f97a0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "热度高了，黄牛自然不会缺席。社交媒体和二手交易平台上已经出现了iPhone Duo的预定广告，加价幅度从几千到上万不等。按照目前这个势头，10月16日晚8点预售开启后，首轮货源大概率一抢而空，黄牛加价拿货的戏码估计又要重演一遍。",
+          "unit_id": "72129e7224a6ef204da1073b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "第三方机构Counterpoint此前预测，iPhone Duo在2026年全年销量有望达到600万台。结合这次加单来看，第 一代折叠iPhone的市场接受度已经超出了苹果前期的保守预期，后续不排除继续调整产能的可能。",
+          "unit_id": "df0e8e7b7cac6f07894e15db"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "有意思的是，前段时间还有消息说苹果要削减iPhone 18 Pro系列订单，理由是内存涨价推高售价导致需求不如往年。现在看来，不是需求不行了，而是用户的选择变了——要么直接上Pro Max，要么一步到位冲折叠屏Duo，中间的标准版反而被两头挤压。",
+          "unit_id": "e0edd4adbd1fb1913b0750d1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "总的来看，苹果这波订单结构调整挺聪明的，既顺应了用户需求变化，又能保证利润水平。至于iPhone Duo最终能不能撑起600万台的预期，等首销数据出来就见分晓了。",
+          "unit_id": "ac62d6e5a4e639f73f49ad71"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "责任编辑：振亭",
+          "unit_id": "d8026043164ba81d830137f9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "文章内容举报",
+          "unit_id": "1bdc68bd2cf8823a2bc18fe0"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1156/1156489.htm"
+    },
+    "recorded_extraction": [
+      "200多万人疯抢！iPhone Duo热度彻底引爆：苹果已加单",
+      "iPhone Duo还没开卖，热度就已经爆了。最新消息显示，苹果已经给供应链加单30%，但总量仍然控制在1000万台以内。与此同时，京东自营旗舰店的预约人数已经突破200万。根据证券时报从供应链方面 iPhone Duo还没开卖，热度就已经爆了。最新消息显示，苹果已经给供应链加单30%，但总量仍然控制在1000万台以内。与此同时，京东自营旗舰店的预约人数已经突破200万。 根据证券时报从供应链方面获得的信息，苹果正在对秋季新品的订单做结构性调整。简单说就是把产能往高价值机型上倾斜——iPhone Duo加单30%，iPhone 18 Pro Max加单10%到15%，而iPhone 18 Pro则相应砍单10%到15%。Pro系列整体订单量其实没变，只是内部做了转移。 这种操作背后的逻辑很清楚：在存储芯片涨价、整机成本走高的大环境下，高端机型利润空间更大，能更好地消化成本压力。供应链人士也说了，销量往更高价值产品倾斜，对苹果供应链公司的业绩反而是利好。 预约数据也印证了高端机型的热度。仅京东自营一个渠道，iPhone Duo的预约人数就已经超过200万，这还没算官网、天猫和线下门店的。对于一台起售价15999元的折叠屏来说，这个预约量相当夸张。",
+      [
+        "iPhone Duo还没开卖，热度就已经爆了。最新消息显示，苹果已经给供应链加单30%，但总量仍然控制在1000万台以内。与此同时，京东自营旗舰店的预约人数已经突破200万。",
+        "根据证券时报从供应链方面获得的信息，苹果正在对秋季新品的订单做结构性调整。简单说就是把产能往高价值机型上倾斜——iPhone Duo加单30%，iPhone 18 Pro Max加单10%到15%，而iPhone 18 Pro则相应砍单10%到15%。Pro系列整体订单量其实没变，只是内部做了转移。",
+        "预约数据也印证了高端机型的热度。仅京东自营一个渠道，iPhone Duo的预约人数就已经超过200万，这还没算官网、天猫和线下门店的。对于一台起售价15999元的折叠屏来说，这个预约量相当夸张。",
+        "热度高了，黄牛自然不会缺席。社交媒体和二手交易平台上已经出现了iPhone Duo的预定广告，加价幅度从几千到上万不等。按照目前这个势头，10月16日晚8点预售开启后，首轮货源大概率一抢而空，黄牛加价拿货的戏码估计又要重演一遍。",
+        "第三方机构Counterpoint此前预测，iPhone Duo在2026年全年销量有望达到600万台。结合这次加单来看，第 一代折叠iPhone的市场接受度已经超出了苹果前期的保守预期，后续不排除继续调整产能的可能。",
+        "有意思的是，前段时间还有消息说苹果要削减iPhone 18 Pro系列订单，理由是内存涨价推高售价导致需求不如往年。现在看来，不是需求不行了，而是用户的选择变了——要么直接上Pro Max，要么一步到位冲折叠屏Duo，中间的标准版反而被两头挤压。",
+        "总的来看，苹果这波订单结构调整挺聪明的，既顺应了用户需求变化，又能保证利润水平。至于iPhone Duo最终能不能撑起600万台的预期，等首销数据出来就见分晓了。"
+      ]
+    ]
+  },
+  "d24ead9751cc08650522322d": {
+    "evidence": {
+      "article_id": "d24ead9751cc08650522322d",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月10日消息，iPhone 18 Pro系列在国内正式开售还没满一个月，全网累计激活量就已经突破300万台，足见这款新旗舰的市场热度远超外界早前的预期。 有数码博主最新披露的终端市场数据显示，2026年第40周也就是9月28日至10月4日的统计周期里，苹果iPhone 18 Pro系列在中国市场的单周激活量依旧保持高速增长态势，完全没有出现往年新品开售后热度快速回落的走势。 其中iPhone 18 Pro Max单周激活量直接突破76万台，iPhone 18 Pro与iPhone 18 Pro Max两款机型加在一起，整周合计激活量超过112万台，相当于平均每天就有16万台新iPhone Pro系列机型被用户拆封激活投入使用。 统计数据显示，截至开售第三周结束，该系列在国内的累计激活量就已经达到289万台，而最新的实时统计数据显示，全系列激活量已经正式突破300万台大关。 从单品的销售结构来看，大屏大内存的iPhone 18 Pro Max在整个产品线里占据绝对主导地位，出货占比超过全系列总销量的一半，消费者加钱选购超大杯机型的意愿比往年所有iPhone新品周期都要强烈。 尽管此前受存储芯片等上游供应链成本大幅上涨的影响，iPhone 18 Pro系列的国行起售价直接上调到了9999元，几乎摸到了万元门槛，但是这个涨价幅度并没有对国内用户的换机需求产生明显的抑制作用，高端用户对价格的敏感度远低于中低端消费市场。 在行业看来， 最近这段时间安卓阵营的旗舰机型普遍因为各类核心零部件成本上升上调了终端定价，原本万元价位段的安卓旗舰和苹果iPhone Pro系列之间的价差被大幅缩小，反倒间接衬托出了苹果高端产品线的性价比，不少原本打算选购安卓顶配旗舰的用户最终转头选择了入手新iPhone。",
+      "discovery_title": "开卖还没1个月！iPhone 18 Pro系列国内激活量超300万台 更贵的Pro Max占一半",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 23:59:00",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-10 23:59:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-10 23:59:00",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T15:59:00+00:00",
+      "raw_lead": "快科技10月10日消息，iPhone 18 Pro系列在国内正式开售还没满一个月，全网累计激活量就已经突破300万台，足见这款新旗舰的市场热度远超外界早前的预期。有数码博主最新披露的终端市场数据显示",
+      "source": "快科技",
+      "title": "开卖还没1个月！iPhone 18 Pro系列国内激活量超300万台 更贵的Pro Max占一半",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月10日消息，iPhone 18 Pro系列在国内正式开售还没满一个月，全网累计激活量就已经突破300万台，足见这款新旗舰的市场热度远超外界早前的预期。",
+          "unit_id": "e1a4f45b504d538595d7f4ec"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "有数码博主最新披露的终端市场数据显示，2026年第40周也就是9月28日至10月4日的统计周期里，苹果iPhone 18 Pro系列在中国市场的单周激活量依旧保持高速增长态势，完全没有出现往年新品开售后热度快速回落的走势。",
+          "unit_id": "24ba2dec601aba0661ed9e1d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "其中iPhone 18 Pro Max单周激活量直接突破76万台，iPhone 18 Pro与iPhone 18 Pro Max两款机型加在一起，整周合计激活量超过112万台，相当于平均每天就有16万台新iPhone Pro系列机型被用户拆封激活投入使用。",
+          "unit_id": "61e43000f316a5f6d6eb43fb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "统计数据显示，截至开售第三周结束，该系列在国内的累计激活量就已经达到289万台，而最新的实时统计数据显示，全系列激活量已经正式突破300万台大关。",
+          "unit_id": "80b9d7c47dd0baf9265ff40f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "从单品的销售结构来看，大屏大内存的iPhone 18 Pro Max在整个产品线里占据绝对主导地位，出货占比超过全系列总销量的一半，消费者加钱选购超大杯机型的意愿比往年所有iPhone新品周期都要强烈。",
+          "unit_id": "f10bd41f5689b338506aa850"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "尽管此前受存储芯片等上游供应链成本大幅上涨的影响，iPhone 18 Pro系列的国行起售价直接上调到了9999元，几乎摸到了万元门槛，但是这个涨价幅度并没有对国内用户的换机需求产生明显的抑制作用，高端用户对价格的敏感度远低于中低端消费市场。",
+          "unit_id": "ba3cef4471439400007eb33e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "在行业看来，最近这段时间安卓阵营的旗舰机型普遍因为各类核心零部件成本上升上调了终端定价，原本万元价位段的安卓旗舰和苹果iPhone Pro系列之间的价差被大幅缩小，反倒间接衬托出了苹果高端产品线的性价比，不少原本打算选购安卓顶配旗舰的用户最终转头选择了入手新iPhone。",
+          "unit_id": "0aea78e16d7ee0274fd9aff5"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1156/1156512.htm"
+    },
+    "recorded_extraction": [
+      "开卖还没1个月！iPhone 18 Pro系列国内激活量超300万台 更贵的Pro Max占一半",
+      "快科技10月10日消息，iPhone 18 Pro系列在国内正式开售还没满一个月，全网累计激活量就已经突破300万台，足见这款新旗舰的市场热度远超外界早前的预期。有数码博主最新披露的终端市场数据显示 快科技10月10日消息，iPhone 18 Pro系列在国内正式开售还没满一个月，全网累计激活量就已经突破300万台，足见这款新旗舰的市场热度远超外界早前的预期。 有数码博主最新披露的终端市场数据显示，2026年第40周也就是9月28日至10月4日的统计周期里，苹果iPhone 18 Pro系列在中国市场的单周激活量依旧保持高速增长态势，完全没有出现往年新品开售后热度快速回落的走势。 其中iPhone 18 Pro Max单周激活量直接突破76万台，iPhone 18 Pro与iPhone 18 Pro Max两款机型加在一起，整周合计激活量超过112万台，相当于平均每天就有16万台新iPhone Pro系列机型被用户拆封激活投入使用。 统计数据显示，截至开售第三周结束，该系列在国内的累计激活量就已经达到289万台，而最新的实时统计数据显示，全系列激活量已经正式突破300万台大关。",
+      [
+        "快科技10月10日消息，iPhone 18 Pro系列在国内正式开售还没满一个月，全网累计激活量就已经突破300万台，足见这款新旗舰的市场热度远超外界早前的预期。",
+        "有数码博主最新披露的终端市场数据显示，2026年第40周也就是9月28日至10月4日的统计周期里，苹果iPhone 18 Pro系列在中国市场的单周激活量依旧保持高速增长态势，完全没有出现往年新品开售后热度快速回落的走势。",
+        "其中iPhone 18 Pro Max单周激活量直接突破76万台，iPhone 18 Pro与iPhone 18 Pro Max两款机型加在一起，整周合计激活量超过112万台，相当于平均每天就有16万台新iPhone Pro系列机型被用户拆封激活投入使用。",
+        "统计数据显示，截至开售第三周结束，该系列在国内的累计激活量就已经达到289万台，而最新的实时统计数据显示，全系列激活量已经正式突破300万台大关。",
+        "从单品的销售结构来看，大屏大内存的iPhone 18 Pro Max在整个产品线里占据绝对主导地位，出货占比超过全系列总销量的一半，消费者加钱选购超大杯机型的意愿比往年所有iPhone新品周期都要强烈。",
+        "尽管此前受存储芯片等上游供应链成本大幅上涨的影响，iPhone 18 Pro系列的国行起售价直接上调到了9999元，几乎摸到了万元门槛，但是这个涨价幅度并没有对国内用户的换机需求产生明显的抑制作用，高端用户对价格的敏感度远低于中低端消费市场。"
+      ]
+    ]
+  },
+  "39959f07c35432bce89e6679": {
+    "evidence": {
+      "article_id": "39959f07c35432bce89e6679",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "今天微博话题“iPhone 18 Pro卖不动了”冲上热搜榜，迅速引发热议。 有媒体援引知情人士消息称，存储芯片成本大幅上涨迫使苹果提价，从而抑制了消费者需求，苹果已要求供应商削减iPhone 18 Pro和iPhone 18 Pro Max的零部件产量。一名企业高管表示，仅10月一个月，苹果对这两款高端机型的订单就削减了15%至20%。 阅读全文",
+      "discovery_title": "iPhone 18 Pro卖不动了？ 多位博主驳斥：国产加起来也没苹果多",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "昨天 15:48",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "昨天 05:33",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "前天 14:21",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "3 天前",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月10日 14:02",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 06:02:45 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月10日 14:02",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T06:02:00+00:00",
+      "raw_lead": "今天微博话题“iPhone18Pro卖不动了”冲上热搜榜，迅速引发热议。有媒体援引知情人士消息称，存储芯片成本大幅上涨迫使苹果提价，从而抑制了消费者需求，苹果已要求供应商削减iPhone18Pro和iPhone18ProMax的零部件产量。一名企业高管表示，仅10月一个月，苹果对这两款高端机型的订单就削减了15%至20%。",
+      "source": "cnBeta",
+      "title": "iPhone 18 Pro卖不动了？ 多位博主驳斥：国产加起来也没苹果多 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "今天微博话题“iPhone 18 Pro卖不动了”冲上热搜榜，迅速引发热议。有媒体援引知情人士消息称，存储芯片成本大幅上涨迫使苹果提价，从而抑制了消费者需求，苹果已要求供应商削减iPhone 18 Pro和iPhone 18 Pro Max的零部件产量。一名企业高管表示，仅10月一个月，苹果对这两款高端机型的订单就削减了15%至20%。",
+          "unit_id": "7a5b826d7c1df75aed42c58d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "然而在该话题下，多位博主发文驳斥：“iPhone 18 Pro系列销量比国产旗舰加起来都多，你管这叫卖不动？”从第三方统计数据来看，这种反驳并非没有依据。",
+          "unit_id": "3c8bc44a5d34be3551b74e6e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在W40周国庆假期期间，iPhone 18 Pro Max单周激活量超过76万台，iPhone 18 Pro和iPhone 18 Pro Max单周合计激活量超过112万台，开售三周累计激活量达到289万台，实时激活数据已经超过300万台。",
+          "unit_id": "d09474c6fd72c942189c7b34"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "在W39周，iPhone 18 Pro Max和iPhone 18 Pro的销量分别位列第一名和第二名，远远超过其他机型。多方数据表明，iPhone 18 Pro系列依然是畅销品。",
+          "unit_id": "283d82d2f37908a9a8909863"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "尽管该机起售价上涨了1000元，但与此同时，安卓旗舰也因成本压力集体大涨，这在客观上缩小了与iPhone之间的价格差距，让iPhone在高端市场的吸引力进一步凸显。",
+          "unit_id": "f6299942740d1e1f611092c6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "另一方面，老用户进入换机周期，而这一代产品将2nm芯片、可变光圈主摄和更小的灵动岛集于一身，升级幅度明显，也由此引发了一波换机潮。因此，所谓“卖不动”的说法，与当前的市场表现并不完全相符。",
+          "unit_id": "5fdb4876ea8001d45dcfe7f2"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1581452.htm"
+    },
+    "recorded_extraction": [
+      "iPhone 18 Pro卖不动了？ 多位博主驳斥：国产加起来也没苹果多 - Apple iPhone - cnBeta.COM",
+      "今天微博话题“iPhone18Pro卖不动了”冲上热搜榜，迅速引发热议。有媒体援引知情人士消息称，存储芯片成本大幅上涨迫使苹果提价，从而抑制了消费者需求，苹果已要求供应商削减iPhone18Pro和iPhone18ProMax的零部件产量。一名企业高管表示，仅10月一个月，苹果对这两款高端机型的订单就削减了15%至20%。 今天微博话题“iPhone 18 Pro卖不动了”冲上热搜榜，迅速引发热议。 有媒体援引知情人士消息称，存储芯片成本大幅上涨迫使苹果提价，从而抑制了消费者需求，苹果已要求供应商削减iPhone 18 Pro和iPhone 18 Pro Max的零部件产量。一名企业高管表示，仅10月一个月，苹果对这两款高端机型的订单就削减了15%至20%。 然而在该话题下，多位博主发文驳斥：“iPhone 18 Pro系列销量比国产旗舰加起来都多，你管这叫卖不动？” 从第三方统计数据来看，这种反驳并非没有依据。 在W40周国庆假期期间，iPhone 18 Pro Max单周激活量超过76万台，iPhone 18 Pro和iPhone 18 Pro Max单周合计激活量超过112万台，开售三周累计激活量达到289万台，实时激活数据已经超过300万台。 在W39周，iPhone 18 Pro Max和iPhone 18 Pro的销量分别位列第一名和第二名，远远超过其他机型。多方数据表明，iPhone 18 Pro系列依然是畅销品。",
+      [
+        "今天微博话题“iPhone 18 Pro卖不动了”冲上热搜榜，迅速引发热议。有媒体援引知情人士消息称，存储芯片成本大幅上涨迫使苹果提价，从而抑制了消费者需求，苹果已要求供应商削减iPhone 18 Pro和iPhone 18 Pro Max的零部件产量。一名企业高管表示，仅10月一个月，苹果对这两款高端机型的订单就削减了15%至20%。",
+        "然而在该话题下，多位博主发文驳斥：“iPhone 18 Pro系列销量比国产旗舰加起来都多，你管这叫卖不动？”从第三方统计数据来看，这种反驳并非没有依据。",
+        "在W40周国庆假期期间，iPhone 18 Pro Max单周激活量超过76万台，iPhone 18 Pro和iPhone 18 Pro Max单周合计激活量超过112万台，开售三周累计激活量达到289万台，实时激活数据已经超过300万台。",
+        "在W39周，iPhone 18 Pro Max和iPhone 18 Pro的销量分别位列第一名和第二名，远远超过其他机型。多方数据表明，iPhone 18 Pro系列依然是畅销品。",
+        "尽管该机起售价上涨了1000元，但与此同时，安卓旗舰也因成本压力集体大涨，这在客观上缩小了与iPhone之间的价格差距，让iPhone在高端市场的吸引力进一步凸显。",
+        "另一方面，老用户进入换机周期，而这一代产品将2nm芯片、可变光圈主摄和更小的灵动岛集于一身，升级幅度明显，也由此引发了一波换机潮。因此，所谓“卖不动”的说法，与当前的市场表现并不完全相符。"
+      ]
+    ]
+  },
+  "062a51d9b2b3196841f45e6a": {
+    "evidence": {
+      "article_id": "062a51d9b2b3196841f45e6a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 10 日消息，苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文， 宣布在中国超过 95% 的生产制造现已采用可再生能源 。 他表示，这离不开与 Apple 供应商携手付出的非凡努力。他还认为，守护我们共同的地球家园， 造福下一代，值得我们全力以赴 。 据IT之家此前报道，去年 10 月，苹果宣布在中国超过 90% 的生产制造现已采用可再生能源，逾百家供应商共同促成了这一进展。2018 年，苹果设立首支中国清洁能源基金，该基金成功超额完成在中国 14 个省份开发逾 1 吉瓦可再生能源项目的目标。去年初，苹果发起第二支中国清洁能源基金， 总投资额达 7.2 亿元人民币 。 今日早些时候， 苹果公司发布公告，宣布第二期中国清洁能源基金扩容 ，承诺投资总额增至 2.12 亿美元 （IT之家注：现汇率约合 14.22 亿元人民币） 。相较去年 1 亿美元 （现汇率约合 6.71 亿元人民币） 的初始锚定投资，基金规模增长约 1 倍。 位于广西的风电项目，由 Apple 第二期中国清洁能源基金的初步投资支持开发 苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文，宣布在中国超过 95% 的生产制造现已采用可再生能源。他表示，这离不开与 Apple 供应商携手付出的非凡努力。守护我们共同的地球家园，造福下一代，值得我们全力以赴。#苹果在华超 95% 生产采用可再生能源# 苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文，宣布在中国超过 95% 的生产制造现已采用可再生能源。他表示，这离不开与 Apple 供应商携手付出的非凡努力。守护我们共同的地球家园，造福下一代，值得我们全力以赴。#苹果在华超 95% 生产采用可再生能源#",
+      "discovery_title": "苹果新任 CEO 特努斯：在中国超 95% 生产制造已采用可再生能源，造福下一代值得全力以赴",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/10 21:56:03",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 13:56:03 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/10 21:56:03",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T13:56:03+00:00",
+      "raw_lead": "苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文，宣布在中国超过 95% 的生产制造现已采用可再生能源。他表示，这离不开与 Apple 供应商携手付出的非凡努力。守护我们共同的地球家园，造福下一代，值得我们全力以赴。#苹果在华超 95% 生产采用可再生能源#",
+      "source": "IT之家",
+      "title": "苹果新任 CEO 特努斯：在中国超 95% 生产制造已采用可再生能源，造福下一代值得全力以赴",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 10 日消息，苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文，宣布在中国超过 95% 的生产制造现已采用可再生能源。",
+          "unit_id": "59ad46f6ce121d8bc2688ab6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "他表示，这离不开与 Apple 供应商携手付出的非凡努力。他还认为，守护我们共同的地球家园，造福下一代，值得我们全力以赴。",
+          "unit_id": "028dba95394a9e4164e6ded9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "据IT之家此前报道，去年 10 月，苹果宣布在中国超过 90% 的生产制造现已采用可再生能源，逾百家供应商共同促成了这一进展。2018 年，苹果设立首支中国清洁能源基金，该基金成功超额完成在中国 14 个省份开发逾 1 吉瓦可再生能源项目的目标。去年初，苹果发起第二支中国清洁能源基金，总投资额达 7.2 亿元人民币。",
+          "unit_id": "b8c66345ddea3a66c53fb20e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "今日早些时候，苹果公司发布公告，宣布第二期中国清洁能源基金扩容，承诺投资总额增至 2.12 亿美元（IT之家注：现汇率约合 14.22 亿元人民币）。相较去年 1 亿美元（现汇率约合 6.71 亿元人民币）的初始锚定投资，基金规模增长约 1 倍。",
+          "unit_id": "79e02ec3a56511552202affb"
+        },
+        {
+          "container_id": "caption",
+          "kind": "text",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "位于广西的风电项目，由 Apple 第二期中国清洁能源基金的初步投资支持开发",
+          "unit_id": "ca1d8f997a28bc5b3ec56226"
+        }
+      ],
+      "url": "https://www.ithome.com/1/011/516.htm"
+    },
+    "recorded_extraction": [
+      "苹果新任 CEO 特努斯：在中国超 95% 生产制造已采用可再生能源，造福下一代值得全力以赴",
+      "苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文，宣布在中国超过 95% 的生产制造现已采用可再生能源。他表示，这离不开与 Apple 供应商携手付出的非凡努力。守护我们共同的地球家园，造福下一代，值得我们全力以赴。#苹果在华超 95% 生产采用可再生能源# IT之家 10 月 10 日消息，苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文， 宣布在中国超过 95% 的生产制造现已采用可再生能源 。 他表示，这离不开与 Apple 供应商携手付出的非凡努力。他还认为，守护我们共同的地球家园， 造福下一代，值得我们全力以赴 。 据IT之家此前报道，去年 10 月，苹果宣布在中国超过 90% 的生产制造现已采用可再生能源，逾百家供应商共同促成了这一进展。2018 年，苹果设立首支中国清洁能源基金，该基金成功超额完成在中国 14 个省份开发逾 1 吉瓦可再生能源项目的目标。去年初，苹果发起第二支中国清洁能源基金， 总投资额达 7.2 亿元人民币 。 今日早些时候， 苹果公司发布公告，宣布第二期中国清洁能源基金扩容 ，承诺投资总额增至 2.12 亿美元 （IT之家注：现汇率约合 14.22 亿元人民币） 。相较去年 1 亿美元 （现汇率约合 6.71 亿元人民币） 的初始锚定投资，基金规模增长约 1 倍。",
+      [
+        "IT之家 10 月 10 日消息，苹果现任首席执行官约翰 · 特努斯（John Ternus）刚刚在微博发文，宣布在中国超过 95% 的生产制造现已采用可再生能源。",
+        "据IT之家此前报道，去年 10 月，苹果宣布在中国超过 90% 的生产制造现已采用可再生能源，逾百家供应商共同促成了这一进展。2018 年，苹果设立首支中国清洁能源基金，该基金成功超额完成在中国 14 个省份开发逾 1 吉瓦可再生能源项目的目标。去年初，苹果发起第二支中国清洁能源基金，总投资额达 7.2 亿元人民币。",
+        "今日早些时候，苹果公司发布公告，宣布第二期中国清洁能源基金扩容，承诺投资总额增至 2.12 亿美元（IT之家注：现汇率约合 14.22 亿元人民币）。相较去年 1 亿美元（现汇率约合 6.71 亿元人民币）的初始锚定投资，基金规模增长约 1 倍。"
+      ]
+    ]
+  },
+  "a4fa6c3557110d0369488986": {
+    "evidence": {
+      "article_id": "a4fa6c3557110d0369488986",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 10 日消息，综合部分博主透露，苹果前首席执行官、现苹果公司董事会执行主席蒂姆 · 库克（Tim Cook）再度开启中国之行。 IT之家注意到，目前蒂姆 · 库克首站落地广东广州，现场观看使用苹果 iPhone 18 Pro 手机拍摄非遗咏春作品，记录传统文化。 IT之家随附官方照片如下： 如今约翰 · 特努斯（John Ternus）已接替库克出任苹果 CEO，蒂姆 · 库克卸任苹果 CEO 一职，转任董事会执行主席，继续负责与全球政策制定者沟通等事务。 库克卸任 CEO 转任董事会执行主席后首次访华，首站广州。现场他用尚未发布的 iPhone 18 Pro 拍摄非遗咏春，记录传统文化。这次行程背后又有什么新信号？#库克访华# #iPhone18Pro#",
+      "discovery_title": "库克卸任 CEO 后首次来华：首站落地广州，观看苹果 iPhone 18 Pro 手机拍摄的非遗咏春作品",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/10 20:08:39",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 10 Oct 2026 12:08:39 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/10 20:08:39",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T12:08:39+00:00",
+      "raw_lead": "库克卸任 CEO 转任董事会执行主席后首次访华，首站广州。现场他用尚未发布的 iPhone 18 Pro 拍摄非遗咏春，记录传统文化。这次行程背后又有什么新信号？#库克访华# #iPhone18Pro#",
+      "source": "IT之家",
+      "title": "库克卸任 CEO 后首次来华：首站落地广州，观看苹果 iPhone 18 Pro 手机拍摄的非遗咏春作品",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 10 日消息，综合部分博主透露，苹果前首席执行官、现苹果公司董事会执行主席蒂姆 · 库克（Tim Cook）再度开启中国之行。",
+          "unit_id": "80b9240e2df82d840e15897d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家注意到，目前蒂姆 · 库克首站落地广东广州，现场观看使用苹果 iPhone 18 Pro 手机拍摄非遗咏春作品，记录传统文化。",
+          "unit_id": "c7c19cf90d81f8c47cbb0ff4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "IT之家随附官方照片如下：",
+          "unit_id": "a862889a972cfcf99d891699"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "如今约翰 · 特努斯（John Ternus）已接替库克出任苹果 CEO，蒂姆 · 库克卸任苹果 CEO 一职，转任董事会执行主席，继续负责与全球政策制定者沟通等事务。",
+          "unit_id": "4a4efcc490a4c6903b418a34"
+        }
+      ],
+      "url": "https://www.ithome.com/1/011/501.htm"
+    },
+    "recorded_extraction": [
+      "库克卸任 CEO 后首次来华：首站落地广州，观看苹果 iPhone 18 Pro 手机拍摄的非遗咏春作品",
+      "库克卸任 CEO 转任董事会执行主席后首次访华，首站广州。现场他用尚未发布的 iPhone 18 Pro 拍摄非遗咏春，记录传统文化。这次行程背后又有什么新信号？#库克访华# #iPhone18Pro# IT之家 10 月 10 日消息，综合部分博主透露，苹果前首席执行官、现苹果公司董事会执行主席蒂姆 · 库克（Tim Cook）再度开启中国之行。 IT之家注意到，目前蒂姆 · 库克首站落地广东广州，现场观看使用苹果 iPhone 18 Pro 手机拍摄非遗咏春作品，记录传统文化。 如今约翰 · 特努斯（John Ternus）已接替库克出任苹果 CEO，蒂姆 · 库克卸任苹果 CEO 一职，转任董事会执行主席，继续负责与全球政策制定者沟通等事务。",
+      [
+        "IT之家 10 月 10 日消息，综合部分博主透露，苹果前首席执行官、现苹果公司董事会执行主席蒂姆 · 库克（Tim Cook）再度开启中国之行。",
+        "IT之家注意到，目前蒂姆 · 库克首站落地广东广州，现场观看使用苹果 iPhone 18 Pro 手机拍摄非遗咏春作品，记录传统文化。"
+      ]
+    ]
+  },
+  "a44278bc9274acf84d99e72b": {
+    "evidence": {
+      "article_id": "a44278bc9274acf84d99e72b",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月11日消息，日前， 苹果董事会执行董事长蒂姆·库克现身广州，开启卸任苹果CEO后的首次中国之行。 此次中国行，库克将广州作为首站，探班了使用iPhone 18 Pro系列拍摄的咏春短片现场。 在一处岭南园林中，库克观看了青年导演古天鸡与咏春拳传承人戴子龙合作拍摄的咏春短片，并现场观摩咏春招式演示，与主创团队交流拍摄过程及专业工作流程。 据介绍，创作团队利用iPhone 18 Pro系列的摄像头系统，记录咏春拳快速变化的动作，展现中国传统武术的魅力。 库克表示：“很高兴再次来到中国！在广州第一次透过iPhone 18 Pro镜头感受咏春的魅力，真是一次难忘的体验。” 值得一提的是，据媒体报道， 库克此次访华可能与即将召开的清华大学经济管理学院顾问委员会2026年会议有关。 该会议将于10月13日至14日在北京举行，库克目前担任清华大学经济管理学院顾问委员会主席。 今年顾问委员会新增委员3人，新增接任委员5人，3位新增委员分别是英伟达CEO黄仁勋、AMDCEO苏姿丰、瑞士百达集团高级管理合伙人百达铭。",
+      "discovery_title": "库克卸任苹果CEO后首次访华！现身广州 探班iPhone 18 Pro咏春短片拍摄",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-11 07:27:07",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-11 07:27:07",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-11 07:27:07",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-10T23:27:07+00:00",
+      "raw_lead": "快科技10月11日消息，日前，苹果董事会执行董事长蒂姆·库克现身广州，开启卸任苹果CEO后的首次中国之行。此次中国行，库克将广州作为首站，探班了使用iPhone 18 Pro系列拍摄的咏春短片",
+      "source": "快科技",
+      "title": "库克卸任苹果CEO后首次访华！现身广州 探班iPhone 18 Pro咏春短片拍摄",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月11日消息，日前，苹果董事会执行董事长蒂姆·库克现身广州，开启卸任苹果CEO后的首次中国之行。",
+          "unit_id": "aa5799b66a5403bb448c68d1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "此次中国行，库克将广州作为首站，探班了使用iPhone 18 Pro系列拍摄的咏春短片现场。",
+          "unit_id": "7bb0e9a6fa893953aa5d4087"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在一处岭南园林中，库克观看了青年导演古天鸡与咏春拳传承人戴子龙合作拍摄的咏春短片，并现场观摩咏春招式演示，与主创团队交流拍摄过程及专业工作流程。",
+          "unit_id": "8676043bfcdd6543de7881a2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "据介绍，创作团队利用iPhone 18 Pro系列的摄像头系统，记录咏春拳快速变化的动作，展现中国传统武术的魅力。",
+          "unit_id": "29270d2ad993f02792db5832"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "库克表示：“很高兴再次来到中国！在广州第一次透过iPhone 18 Pro镜头感受咏春的魅力，真是一次难忘的体验。”",
+          "unit_id": "bdf70a836818457c2138b33e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "值得一提的是，据媒体报道，库克此次访华可能与即将召开的清华大学经济管理学院顾问委员会2026年会议有关。",
+          "unit_id": "8e160b3a0508ecd693483a4b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "该会议将于10月13日至14日在北京举行，库克目前担任清华大学经济管理学院顾问委员会主席。",
+          "unit_id": "228985877cc8312b52c2e483"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "今年顾问委员会新增委员3人，新增接任委员5人，3位新增委员分别是英伟达CEO黄仁勋、AMD CEO苏姿丰、瑞士百达集团高级管理合伙人百达铭。",
+          "unit_id": "f578881c7fb058898adf32db"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1156/1156514.htm"
+    },
+    "recorded_extraction": [
+      "库克卸任苹果CEO后首次访华！现身广州 探班iPhone 18 Pro咏春短片拍摄",
+      "快科技10月11日消息，日前，苹果董事会执行董事长蒂姆·库克现身广州，开启卸任苹果CEO后的首次中国之行。此次中国行，库克将广州作为首站，探班了使用iPhone 18 Pro系列拍摄的咏春短片 在一处岭南园林中，库克观看了青年导演古天鸡与咏春拳传承人戴子龙合作拍摄的咏春短片，并现场观摩咏春招式演示，与主创团队交流拍摄过程及专业工作流程。 今年顾问委员会新增委员3人，新增接任委员5人，3位新增委员分别是英伟达CEO黄仁勋、AMD CEO苏姿丰、瑞士百达集团高级管理合伙人百达铭。",
+      [
+        "快科技10月11日消息，日前，苹果董事会执行董事长蒂姆·库克现身广州，开启卸任苹果CEO后的首次中国之行。",
+        "此次中国行，库克将广州作为首站，探班了使用iPhone 18 Pro系列拍摄的咏春短片现场。",
+        "据介绍，创作团队利用iPhone 18 Pro系列的摄像头系统，记录咏春拳快速变化的动作，展现中国传统武术的魅力。",
+        "库克表示：“很高兴再次来到中国！在广州第一次透过iPhone 18 Pro镜头感受咏春的魅力，真是一次难忘的体验。”",
+        "值得一提的是，据媒体报道，库克此次访华可能与即将召开的清华大学经济管理学院顾问委员会2026年会议有关。",
+        "该会议将于10月13日至14日在北京举行，库克目前担任清华大学经济管理学院顾问委员会主席。",
+        "今年顾问委员会新增委员3人，新增接任委员5人，3位新增委员分别是英伟达CEO黄仁勋、AMD CEO苏姿丰、瑞士百达集团高级管理合伙人百达铭。"
+      ]
+    ]
+  }
+}

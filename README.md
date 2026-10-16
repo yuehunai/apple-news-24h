@@ -12,16 +12,16 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.0.0 - 2026-10-10
+### 2.1.0 - 2026-10-16
 
-- Refactored the `1.77.0` pipeline into shared models, collection and evidence utilities, source-bound claim projection, and unified event matching and reconciliation; removed competing grouping and relevance decisions from output assembly.
-- Improved cross-language grouping around the reported actor, action and object, preserving version, region, stage, direction and measurement-period boundaries across mixed articles and follow-up reports.
-- Added `source_evidence`, source-linked fact origins and visible unresolved-fragment dispositions; carried material numbers, lists, conditions and attribution through per-source fact preparation and event fact plans. Discovery-only captures now carry explicit review markers when full article text is unavailable.
-- Improved candidate admission and source discovery for thin reports, current disclosures and Apple-related legal or company actions, while preserving nine primary sources, UTC window checks and collection budgets.
-- Refined relevance and section assignment for current first-party capabilities, platform interoperability and Apple-device measurements; kept recaps, tutorials, third-party recommendations and competitor background from overriding the reported action.
-- Added POSIX cache/output resource locking and retained guarded startup cleanup; reused source preparation and bounded compiled-rule caches to reduce repeated processing without reducing source or fact coverage.
-- Updated the skill to consume crawler decisions, review specific evidence gaps and draft in small checked batches, preserving supported facts and source links without editorial wrap-up sentences.
-- Added fixed-input replay and same-window comparison tooling and expanded offline coverage from 1,529 to 2,317 passing tests. Kept the standard-library runtime, existing CLI, two brief sections and explicit-only skill invocation.
+- Improved bounded discovery on rolling MacRumors and IT之家 lists, including published pagination and recovery from transient empty pages, and supplemented MyDrivers category discovery; normalized duplicate links and strengthened title-and-lead admission for sparse Apple reports and device-market results without increasing collection budgets.
+- Improved publication-time selection using publisher-owned fields before dates in article prose; excluded modification/upload timestamps and inactive markup, and kept mixed date formats in document order when falling back to visible text.
+- Refactored collection and text/time utilities into their owning modules and separated source binding from eligibility for charts, device measurements, feature inventories, invitations and company-responsibility reports; retired competing decisions within those scopes while retaining unmigrated paths.
+- Improved cross-language grouping and software/hardware assignment around locally supported subjects, operations, stages and qualifiers; prevented comparison devices, shared topics, product inventories and background claims from merging distinct actions or creating unsupported events.
+- Improved fact coverage through nested lists, local prerequisites, measurement series and nonnumeric details; preserved source attribution, exact spans where available, and supporting facts from deferred sources without promoting their entire articles.
+- Added `collection_warnings` to ordinary JSON and file-output status when listing coverage remains unconfirmed; retained source evidence for reports that produce no event and exposed unresolved ownership or eligibility for review instead of silently assigning a weak tier in migrated scopes.
+- Updated the skill to use one evidence-to-draft workflow, resolve pronouns and conflicting source claims, and verify concrete operations and conditions; kept complete final-brief delivery and removed redundant checklist work, repeated reporting-status summaries and reader-inference advice.
+- Removed unused helpers and redundant test constructs while preserving real regression coverage; expanded the offline suite from 2,317 to 2,657 tests. Kept the standard-library runtime, existing CLI, nine primary sources, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
 
@@ -39,7 +39,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 The crawler separates collection, source evidence, event decisions, and output assembly. A source can support several independent actions; each projected claim keeps its local evidence, while unresolved material remains available for review.
 
 - `skills/scripts/apple_news_24h.py` is the CLI and pipeline coordinator. It prepares source facts and assembles JSON and Markdown from the reconciled event and fact plans.
-- `skills/scripts/apple_news_core/collection.py` owns source definitions, HTTP/cache utilities, resource locks and candidate-admission helpers; `article_processing.py` handles article text cleanup and captured evidence preparation.
+- `skills/scripts/apple_news_core/collection.py` owns source definitions, URL normalization, HTTP/cache utilities, resource locks and concurrent discovery/detail scheduling; `article_processing.py` handles article text cleanup, timestamp parsing and captured evidence preparation. The CLI supplies fetch functions, budgets and the runtime clock.
 - `models.py` defines shared data. `event_identity.py` binds concrete subjects and actions to their source evidence, and `article_projector.py` separates supported claims while retaining unassigned source material.
 - `event_matcher.py` provides the common pair decision. `event_reconciler.py` forms groups and resolves relevance, category, and source-attributed fact plans. Output assembly consumes those decisions instead of running a second grouping or relevance engine.
 - `tests/` covers discovery, time parsing, cache handling, event boundaries, fact attribution, and output. Fixed-input replay checks and live collection validation serve different purposes; saved pages do not prove current discovery or network health.
@@ -101,18 +101,22 @@ python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format jso
 
 JSON keeps included brief items in `events`. Weak Apple-adjacent candidates, such as third-party app stories or competitor comparisons that do not describe a direct Apple action, may be kept in `deferred_events` for review. Event objects can include `event_kind`, `relevance_tier`, `relevance_reason`, `regions`, and `merge_warnings`.
 
+If a source listing stops before its window coverage is confirmed, `collection_warnings` appears in JSON and the file-output status even without `--include-diagnostics`. A healthy event count does not resolve that source gap; follow the documented source fallback and retain any unresolved limitation in review notes.
+
 JSON also exposes evidence for attribution and coverage review:
 
 | Field | Purpose |
 | --- | --- |
-| `source_evidence` | Captured source units and publication evidence, linked by `evidence_id`. |
+| `source_evidence` | Captured source units and publication evidence, linked by `evidence_id`; retained even when an unresolved source produces no event. |
 | `fact_sources[].origins` | Source support and, when available, exact unit spans for each event fact. |
 | `evidence_dispositions` | Recorded destinations of projected or unresolved source material. |
 | `final_brief_queue` | Event candidates and unresolved fragments requiring a decision. `capture_status: discovery-only` flags a source for which full text was unavailable; it does not promote the item. |
 
 Required flags ask for a decision, not automatic inclusion. `required_final_brief_titles`, `final_brief_markdown`, and an adjacent `*.brief.md` are coverage scaffolds, not the finished brief. Write from source-supported summaries and facts, checking independent actions, material qualifications and each bullet's supporting URLs.
 
-Version 2.0.0 keeps the existing CLI and relevance tiers and adds evidence fields to JSON. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
+For source-bound reports, binding and news eligibility are separate decisions. App-publisher charts, device benchmarks, operating-feature inventories, media invitations and current company-responsibility interviews preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
+
+Version 2.1.0 keeps the existing CLI and relevance tiers while extending the evidence and review reporting introduced in 2.0.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
 
 Diagnostics for debugging source failures:
 

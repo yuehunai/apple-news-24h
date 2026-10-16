@@ -1,0 +1,206 @@
+{
+  "c39455485589f9825ba55b3f": {
+    "article_id": "c39455485589f9825ba55b3f",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "Apple has responded to OpenAI’s allegations that one of its former employees who departed for Apple took confidential files along with him. Here are the details. more…",
+    "discovery_title": "Here’s Apple’s official response to OpenAI’s trade secret theft allegations",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T19:57:37+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T19:57:37+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thu, 15 Oct 2026 19:57:37 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-10-15T19:57:37+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-10-15T19:57:37+00:00",
+    "raw_lead": "Apple has responded to OpenAI’s allegations that one of its former employees who departed for Apple took confidential files along with him.",
+    "source": "9to5Mac",
+    "title": "Here’s Apple’s official response to OpenAI’s trade secret theft allegations - 9to5Mac",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Apple has responded to OpenAI’s allegations that one of its former employees who departed for Apple took confidential files along with him. Here are the details.",
+        "unit_id": "9ec6fc810817e76d90f2c3a2"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "A bit of context",
+        "unit_id": "7cfdc9384763e2c2ee47baf4"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "Earlier this year, Apple filed a trade secret misappropriation lawsuit against two former employees (Chang Liu and Tang Tan), OpenAI, and io Products.",
+        "unit_id": "b7c7d1677ff5cc67b5d0d2f2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "And while this case has had its twists and turns, things took an even more unexpected turn yesterday when a new OpenAI filing alleged essentially the same thing, but in reverse.",
+        "unit_id": "1030e46df7140468f56637a0"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "As we covered in more detail here, OpenAI claims that a former employee who departed for Apple sent “over a hundred highly confidential files about at least one unreleased OpenAI device under development to his personal accounts.”",
+        "unit_id": "17eae0716157e8ec8ea3e91f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Soon after OpenAI made its filing, Reuters reported that “Apple said it has policies and procedures ​in place to ensure new employees do not use confidential information from previous employers and it has found no evidence to support OpenAI’s ​allegations.”",
+        "unit_id": "29504cdd1f173c5caf7b024a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "Now, Apple’s response, along with two supplementary exhibits, has been made public in a new court filing, providing more details about its investigation and challenging OpenAI’s decision to bring the allegations before the judge.",
+        "unit_id": "08b32bba195cc1e95a9d9730"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Apple shoots back",
+        "unit_id": "e198f5289b7593dd579d575d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "In its response, the company notes that OpenAI made the filing “without any notice to Apple,” and adds that OpenAI’s allegations are “unrelated to the claims” in its main trade secret misappropriation case.",
+        "unit_id": "e5fea4dfb95afb7e130f2802"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "Interestingly, Apple shares that the employee at the center of these new allegations “had left Apple for OpenAI and subsequently decided to return to Apple.”",
+        "unit_id": "8c9fee877076914edcc15f71"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "[REDACTED] is an engineer on Apple’s Manufacturing Design team, which is the same role he held at Apple before departing for OpenAI. He focuses on iPhone.",
+        "unit_id": "2e851496b6758fc316527b35"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "Apple said that it investigated the issue as soon as OpenAI brought it to the company on October 9, and that on October 12 “Apple wrote OpenAI to inform it that it had been unable to locate any OpenAI confidential information.”",
+        "unit_id": "df5a868eea5c7d87a6e858c7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "Apple said it requested additional information from OpenAI to continue its investigation, but received no response before OpenAI brought the allegations to court:",
+        "unit_id": "d90898349322bf6bff1401d5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Apple requested more specific information so that it could perform alternative searches. OpenAI did not respond, and instead filed Docket No. 176 with the Court. Apple will continue to work with OpenAI to investigate its allegations.",
+        "unit_id": "43c6109946162498a48b1ab8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "Finally, Apple says that even though “[n]one of this relates to the present lawsuit, […] which concerns OpenAI’s misuse of Apple’s confidential information,” and adds in a supplementary exhibit that it is “taking appropriate steps, including preservation of evidence, to comply with its legal obligations in connection with [OpenAI’s] Letter.”",
+        "unit_id": "7a475a57f6ac63f5c6c72dd2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "You can read Apple’s response in full below:",
+        "unit_id": "5960ece496004eb7debdcb6a"
+      },
+      {
+        "container_id": "",
+        "kind": "div",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "gov.uscourts.cand.474095.177.0Download",
+        "unit_id": "e1e634a836c3ece3dd08da66"
+      }
+    ],
+    "url": "https://9to5mac.com/2026/10/15/heres-apples-official-response-to-openais-trade-secret-theft-allegations/"
+  },
+  "38d7bd9c7339546989dd8881": {
+    "article_id": "38d7bd9c7339546989dd8881",
+    "confidence": "discovery",
+    "content_form": "news",
+    "discovery_lead": "Apple won against Envirodigm in a trade secret lawsuit surrounding iPhone's anodization process, but an appeal has revived the case in the hopes of catching Apple in some wrongdoing. iPhone 6 by iPhone 6s A little-known lawsuit was brought against Apple in 2020 by Envirodigm alleging trade secret theft. The company said it had a meeting with Apple in August 2013, revealed a secret anodization process that could be used for iPhone, then Apple used that process from 2015 on without involving Envirodigm. Apple went on to win the case via summary judgment due to Envirodigm's failure to disclose the formula Apple allegedly stole. According to a report from Bloomberg Law , Apple has told the California appeals panel that its summary judgement should be upheld. Continue Reading on AppleInsider | Discuss on our Forums",
+    "discovery_title": "Trade secret lawsuit on iPhone's anodization process now being appealed",
+    "embedded_references": [],
+    "extraction_path": "discovery_fallback",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "Fri, 16 Oct 2026 02:45:05 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "Fri, 16 Oct 2026 02:45:05 +0000",
+    "published_source": "discovery fallback",
+    "published_utc": "2026-10-16T02:45:05+00:00",
+    "raw_lead": "Apple won against Envirodigm in a trade secret lawsuit surrounding iPhone's anodization process, but an appeal has revived the case in the hopes of catching Apple in some wrongdoing. iPhone 6 by iPhone 6s A little-known lawsuit was brought against Apple in 2020 by Envirodigm alleging trade secret theft. The company said it had a meeting with Apple in August 2013, revealed a secret anodization process that could be used for iPhone, then Apple used that process from 2015 on without involving Envirodigm. Apple went on to win the case via summary judgment due to Envirodigm's failure to disclose the formula Apple allegedly stole. According to a report from Bloomberg Law , Apple has told the California appeals panel that its summary judgement should be upheld. Continue Reading on AppleInsider | Discuss on our Forums",
+    "source": "AppleInsider",
+    "title": "Trade secret lawsuit on iPhone's anodization process now being appealed",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "discovery",
+        "text": "Apple won against Envirodigm in a trade secret lawsuit surrounding iPhone's anodization process, but an appeal has revived the case in the hopes of catching Apple in some wrongdoing. iPhone 6 by iPhone 6s A little-known lawsuit was brought against Apple in 2020 by Envirodigm alleging trade secret theft. The company said it had a meeting with Apple in August 2013, revealed a secret anodization process that could be used for iPhone, then Apple used that process from 2015 on without involving Envirodigm. Apple went on to win the case via summary judgment due to Envirodigm's failure to disclose the formula Apple allegedly stole. According to a report from Bloomberg Law , Apple has told the California appeals panel that its summary judgement should be upheld. Continue Reading on AppleInsider | Discuss on our Forums",
+        "unit_id": "28aac6a81840672766ca23df"
+      }
+    ],
+    "url": "https://appleinsider.com/articles/26/10/16/trade-secret-lawsuit-on-iphones-anodization-process-now-being-appealed?utm_source=rss"
+  }
+}

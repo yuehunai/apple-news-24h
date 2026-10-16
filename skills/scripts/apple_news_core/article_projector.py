@@ -14,8 +14,9 @@ import re
 import unicodedata
 from typing import Iterable, Sequence
 
-from .event_identity import _compiled_rule, disclosed_device_subjects, high_confidence_direct_apple_action, iphone_report_subjects, EventIdentity, build_event_identity, bind_article_claims, rollout_language_names, source_sentence_spans, is_os_release_announcement, source_disclosure_bundle, source_editorial_outlook, source_dated_launch_frame, source_leadership_interview_frame, source_operation_frame
+from .event_identity import _compiled_rule, disclosed_device_subjects, high_confidence_direct_apple_action, iphone_report_subjects, EventIdentity, build_event_identity, bind_article_claims, rollout_language_names, source_sentence_spans, is_os_release_announcement, source_disclosure_bundle, source_editorial_outlook, source_dated_launch_frame, source_leadership_interview_frame, source_operation_frame, source_executive_government_frame, source_executive_people, source_denies_action, source_device_operation_frame, source_editorial_evaluation, source_apple_invitation_fact
 from .models import ArticleEvidence, BoundClaim
+from .event_identity import bind_source_report
 from .article_processing import editorial_list_unit_ids, release_history_unit_ids, inline_media_marker_spans, clean_sentence, clean_fact_text, score_terms, add_unique_text, roundup_title_from_item
 
 
@@ -360,11 +361,11 @@ def project_content_source_sections(
 
 
 
-def project_article_evidence(evidence: ArticleEvidence) -> tuple[tuple[ClaimProjection, ...], tuple[tuple[str, int, int], ...], tuple[tuple[str, int, int, str], ...]]:
+def project_article_evidence(evidence: ArticleEvidence, *, claims: tuple[BoundClaim, ...] | None = None) -> tuple[tuple[ClaimProjection, ...], tuple[tuple[str, int, int], ...], tuple[tuple[str, int, int, str], ...]]:
     """Return owned projections and the exact unprocessed source unit ids."""
     units = {unit.unit_id: unit for unit in evidence.units}
     projections = []
-    for claim in bind_article_claims(evidence):
+    for claim in bind_article_claims(evidence) if claims is None else claims:
         if claim.object == "languages":
             index = next(i for i, unit in enumerate(evidence.units) if unit.unit_id == claim.unit_ids[-1])
             following = []
@@ -380,8 +381,11 @@ def project_article_evidence(evidence: ArticleEvidence) -> tuple[tuple[ClaimProj
                 claim = replace(claim, qualifiers=qualifiers, unit_ids=claim.unit_ids + tuple(unit.unit_id for unit in following),
                     evidence_spans=claim.evidence_spans + tuple((unit.unit_id, 0, len(unit.text)) for unit in following))
         facts = tuple(units[key].text[start:end] for key, start, end in claim.evidence_spans)
-        title = evidence.title if claim.action in {"document-publication", "plan-launch", "feature-rollout", "web-exploit-campaign"} else facts[0]
-        projections.append(ClaimProjection(title, facts[0], facts,
+        summary = facts[0] if facts else ""
+        title = evidence.title if not facts or claim.action in {"document-publication", "plan-launch", "feature-rollout", "web-exploit-campaign", "cpu-benchmark-report", "platform-capability-inventory-report", "app-publisher-chart-report", "media-invitation", "leadership-report"} else summary
+        if claim.action == 'reported-launch-plan':
+            title = claim.subject.replace('-', ' ') + ' launch report'
+        projections.append(ClaimProjection(title, summary, facts,
                                           claim.subject, claim.action, claim))
     assigned = [span for projection in projections for span in projection.claim.evidence_spans]
     remaining, excluded = source_evidence_remainder(evidence, assigned)
@@ -395,7 +399,11 @@ def project_reportable_evidence(evidence: ArticleEvidence) -> tuple[tuple[ClaimP
     Local claim extraction remains available through project_article_evidence;
     those subordinate claims must not replace the source's primary release.
     """
-    if is_os_release_announcement(evidence.title):
+    report = bind_source_report(evidence)
+    if report is not None:
+        return project_article_evidence(evidence, claims=report)
+    device = source_device_operation_frame(evidence.title, evidence.raw_lead)
+    if is_os_release_announcement(evidence.title) or (device and device.action == "device-announcement"):
         remaining, excluded = source_evidence_remainder(evidence, [])
         return (), tuple(remaining), tuple(excluded)
     return project_article_evidence(evidence)
@@ -457,6 +465,25 @@ def source_evidence_remainder(evidence: ArticleEvidence, assigned):
         for start, end in gaps:
             if unit.unit_id in history_units:
                 excluded.append((unit.unit_id, start, end, "Explicit release-history appendix, not current release requirements"))
+                continue
+            # A narrator's forecast before an independently bound report is
+            # not part of that reporter's claim. Keep the original evidence,
+            # but do not require consumption to turn it back into source news.
+            author_prediction = (unit.kind == 'p' and start == 0
+                and any(key == unit.unit_id and owned_start == end for key, owned_start, _ in assigned)
+                # Postposed attribution can make first-person language a
+                # source's commitment even without quotation marks.
+                and not _compiled_rule(
+                    r"\b(?:according\s+to|[a-z][a-z0-9'’-]*\s+"
+                    r"(?:said|says|stated|states|told|wrote|writes|announced|announces))\b",
+                    re.I).search(unit.text[start:end])
+                and _compiled_rule(
+                    r"\s*(?:what\s+)?(?:we|I)\s+(?:(?:probably|perhaps|likely)\s+|"
+                    r"(?:expect|think|believe|suspect|predict|anticipate)\b)"
+                    r"[^.!?。！？\"“”]*", re.I).fullmatch(unit.text[start:end]))
+            if author_prediction:
+                excluded.append((unit.unit_id, start, end,
+                    "Editorial inference: first-person author prediction, not the adjacent attributed report"))
                 continue
             separator = bool(_compiled_rule(r"[\s,，;；。.!！？?、]+", 0).fullmatch(unit.text[start:end]))
             if separator or unit.kind == "h1":
@@ -738,14 +765,106 @@ def project_roundup_items(title: str, summary: str, key_facts: list[str], *,
     return variants or [(title, summary, key_facts)]
 
 
+def adjacent_unattributed_prediction_spans(text: str) -> tuple[tuple[int, int], ...]:
+    """Review a possible new forecast instead of inheriting a prior speaker.
+
+    This does not classify the sentence as opinion or remove its evidence.
+    Quoted continuations and forecasts with their own attribution stay bound.
+    """
+    parts = tuple(source_sentence_spans(text))
+    attribution = _compiled_rule(
+        r'\b(?:says?|said|reports?|reported|according\s+to|told|states?|stated|'
+        r'writes?|wrote|announces?|announced)\b|'
+        r'\b(?:the\s+)?(?:report|company|source|outlet)\s+(?:adds?|expects?|predicts?)\b|'
+        r'据.{0,35}(?:报道|透露|称)|(?:报道|消息|报告|该公司|该媒体).{0,12}(?:称|表示|预计|补充)|表示|透露', re.I)
+    prediction = _compiled_rule(
+        r'\b(?:may|might|could)\s+(?:(?:still|also|yet|potentially)\s+)*'
+        r'(?:be\s+(?:announced|unveiled|released|shipped|shown\s+(?:off|tomorrow|this|next|later|earlier))\b|go\s+on\s+sale\b|'
+        r'(?:ship|arrive|launch)\s+(?:tomorrow|this|next|later|earlier|in\s+stores)\b)|'
+        r'(?:它们|这些(?:设备|产品)|这款(?:设备|产品)|该(?:设备|产品)).{0,8}'
+        r'(?:可能|也许|或许).{0,8}(?:上市|发售|发货|亮相|(?:提前|公开)展示)', re.I)
+    result = []
+    for index, (start, end) in enumerate(parts[1:], start=1):
+        prior = text[slice(*parts[index - 1])]
+        current = text[start:end]
+        if not (attribution.search(prior) and prediction.search(current)) or attribution.search(current):
+            continue
+        prefix = text[:start]
+        if (prefix.count('“') > prefix.count('”') or prefix.count('‘') > prefix.count('’')
+                or prefix.count('"') % 2
+                or len(_compiled_rule(r"(?<!\w)'|'(?!\w)", 0).findall(prefix)) % 2
+                or _compiled_rule(r'\b(?:if|unless|depending)\b|如果|只要|除非', re.I).search(current)):
+            continue
+        result.append((start, end))
+    return tuple(result)
+
+
+def project_sectioned_home_preview(evidence: ArticleEvidence, fact_limit: int) -> list[tuple[str, str, list[str]]]:
+    """Use explicit device sections, never a borrowed UI or silicon name.
+
+    Only paragraphs within a recognized section may inherit its owner. Short
+    list items require that section's explicit enumeration introduction.
+    """
+    s = lambda pattern, text: _compiled_rule(pattern, re.I).search(text)
+    if not (s(r'products?|产品|新品', evidence.title)
+            and s(r'what\s+to\s+expect|发布|新品', evidence.raw_lead)
+            and s(r'smart\s*(?:home|hub)|智能家居', evidence.raw_lead)):
+        return []
+    groups: dict[str, list[str]] = {}
+    owner = None
+    enumeration = False
+    labels = {'apple-home-hub': 'Apple smart home hub device disclosure',
+              'apple-tv': 'Apple TV 4K hardware configuration disclosure',
+              'homepod-mini': 'Apple HomePod mini device disclosure',
+              'accessories': 'Apple smart home accessories partnership disclosure',
+              'surround': 'Apple TV and HomePod surround sound software feature report'}
+    for unit in evidence.units:
+        text = unit.text
+        if unit.kind in {'h2', 'h3'}:
+            owner = None
+            enumeration = False
+            if unit.kind == 'h3':
+                if s(r'smart\s*(?:display|hub)|智能.{0,5}(?:屏|中枢)', text): owner = 'apple-home-hub'
+                elif s(r'apple\s*tv', text): owner = 'apple-tv'
+                elif s(r'homepod\s*mini', text): owner = 'homepod-mini'
+                elif s(r'second.party|联合开发', text): owner = 'accessories'
+            continue
+        if not owner or unit.kind not in {'p', 'li'}:
+            continue
+        if unit.kind == 'li':
+            if enumeration and len(text.split()) <= 4 and not s(r'https?://|[。.!?]', text):
+                groups.setdefault(owner, []).append(text)
+            continue
+        enumeration = bool(s(r'(?:colors?|配色)\s*[:：]$', text))
+        current = owner
+        if (owner == 'apple-tv' and s(r'software\s+features?|软件功能', text)
+                and s(r'surround\s+sound|环绕声', text) and s(r'code\s+references?|代码', text)):
+            current = 'surround'
+        uncertain = adjacent_unattributed_prediction_spans(text)
+        # A paragraph's product owner does not establish the speaker of every
+        # sentence. Unbound predictions remain available in source review.
+        facts = [text[a:b] for a, b in source_sentence_spans(text)
+                 if (a, b) not in uncertain] if uncertain else [text]
+        groups.setdefault(current, []).extend(facts)
+    # Require independently reported details, not merely a linked contents list.
+    if len(groups) < 2 or any(not any(s(r'report|bloomberg|gurman|透露|据|彭博', p) for p in facts)
+                              for facts in groups.values()):
+        return []
+    return [(labels[owner], ' '.join(facts[:4]), facts[:fact_limit]) for owner, facts in groups.items()]
+
+
 def project_smart_home_roadmap(
     title: str,
     summary: str,
     key_facts: list[str],
-    *, fact_limit: int,
+    *, fact_limit: int, evidence: ArticleEvidence | None = None,
 ) -> list[tuple[str, str, list[str]]]:
     """Project a genuine multi-product smart-home roadmap into product actions."""
     original = [(title, summary, key_facts)]
+    if evidence is not None:
+        sectioned = project_sectioned_home_preview(evidence, fact_limit)
+        if sectioned:
+            return sectioned
     title_lower = title.lower()
     # A retail-layout, merchandising, or launch-preparation report has one
     # operational predicate. Product roadmaps in its background explain the
@@ -759,6 +878,109 @@ def project_smart_home_roadmap(
     )
     if retail_operation:
         return original
+    opening = evidence.raw_lead if evidence is not None else summary[:600]
+    current_paragraph_report = bool(evidence is not None
+        and _compiled_rule(r'苹果(?:公司)?.{0,20}(?:将于|计划|即将|预计).{0,25}发布.{0,12}(?:一系列|多款).{0,12}智能家居|'
+            r'Apple.{0,20}(?:will|plans?\s+to).{0,25}(?:announce|unveil|launch).{0,20}(?:lineup|several|multiple).{0,20}(?:smart.home|home)', re.I).search(opening)
+        and not _compiled_rule(r'去年|此前|历史|last\s+year|previously', re.I).search(opening)
+        and not source_denies_action(title, opening, r'发布|推出|announce|unveil|launch')
+        and not _compiled_rule(r'取消|放弃|cancel|abandon', re.I).search(title + ' ' + opening))
+    listed_report = bool(len(hardware_action_subjects(title)) >= 2 and _compiled_rule(
+        r'\b(?:details?|specifications?)\b.{0,20}\b(?:leak\w*|reveal\w*)\b|多款.{0,20}细节', re.I).search(title))
+    if evidence is not None and (listed_report or current_paragraph_report):
+        # Captured product lists use local name declarations and carry the
+        # owner into following descriptions. Never rewrite the source facts.
+        groups: dict[str, list[str]] = {}
+        aliases: dict[str, str] = {}
+        current_owner = None
+        partners: set[str] = set()
+        items = []
+        for unit in evidence.units:
+            if unit.kind == 'li':
+                items.append(unit.text)
+            elif current_paragraph_report and unit.kind == 'p':
+                for start, end in source_sentence_spans(unit.text):
+                    items.extend(value.strip() for value in _compiled_rule(r'(?<=[；;])', 0).split(unit.text[start:end], 0) if value.strip())
+        for value in items:
+            historical_year = _compiled_rule(r'(?:自|在)?(20\d{2})年', 0).search(value)
+            if (current_paragraph_report and historical_year and evidence.published_utc
+                    and int(historical_year.group(1)) < int(evidence.published_utc[:4])):
+                continue
+            if current_paragraph_report and _compiled_rule(
+                    r'^(?:如果|竞品|这意味着|通过让)|(?:去年|此前|上周五)|'
+                    r'解决了.{0,20}弱点|通常享有|未能成为', re.I).search(value):
+                continue
+            declaration = _compiled_rule(r"(?:home\s+hub|家庭中枢|家居中枢).{0,65}?(?:named|called|命名为|定名)\s*[\"“‘']?([a-z][a-z0-9-]+)", re.I).search(value)
+            reverse_declaration = _compiled_rule(r'名为\s*([a-z][a-z0-9-]+)\s*的.{0,20}(?:家居|家庭)中枢', re.I).search(value)
+            if declaration or reverse_declaration:
+                aliases[(declaration or reverse_declaration).group(1).lower()] = 'apple-home-hub'
+            owned_value = _compiled_rule(r'^(?:unlike|in\s+contrast\s+to|compared\s+(?:with|to))\b[^,，]+[,，]\s*|^(?:与[^，]+不同|相比[^，]+)[，,]\s*', re.I).sub('', value, 1)
+            named = {owner for alias, owner in aliases.items() if _compiled_rule(r'(?<![a-z0-9])' + re.escape(alias) + r'(?![a-z0-9])', re.I).search(owned_value)}
+            subjects = hardware_action_subjects(owned_value)
+            primary = owned_multi_product_hardware_subject(owned_value)
+            joint_development = bool(_compiled_rule(
+                r'developed\s+in\s+partnership\s+with\s+apple|apple\s+and\s+[^.!?]{1,40}\s+co.developed|苹果与[^。]{1,25}合作开发|(?:苹果|该公司).{0,10}与[^。]{1,45}合作[^。]{0,40}(?:研发|开发|设计)', re.I).search(owned_value)
+                and not source_denies_action(owned_value, '', r'(?:co.)?develop\w*|合作开发')
+                and not _compiled_rule(r'\b(?:might|could|may)\s+(?:be\s+)?(?:co.)?develop|可能.{0,10}合作开发', re.I).search(owned_value))
+            if joint_development:
+                partner = _compiled_rule(r'与([^，。]{1,18}?)(?:展开|合作)', re.I).search(owned_value)
+                if partner:
+                    partners.add(partner.group(1).strip())
+                    short = _compiled_rule(r'^[A-Za-z]+', 0).match(partner.group(1).strip())
+                    if short: partners.add(short.group())
+            local_partner = any(name in owned_value for name in partners)
+            paragraph_accessory = bool(current_paragraph_report and (
+                (local_partner and _compiled_rule(r'制造|产品支持|承担|财务|发货', re.I).search(owned_value))
+                or (current_owner == 'apple-home-accessories' and _compiled_rule(r'称为|合作|配件.{0,30}(?:功能|性能)', re.I).search(owned_value))))
+            accessory_continuation = bool(current_owner == 'apple-home-accessories'
+                and _compiled_rule(r"^[A-Z][A-Za-z -]*['’]s\s+accessories", 0).search(owned_value))
+            predicate = _compiled_rule(r'\b(?:will|is|has|supports?|features?)\b|将|会|支持|配备|搭载|有两个版本', re.I).search(owned_value)
+            owned_alias = next((owner for alias, owner in aliases.items()
+                if predicate and _compiled_rule(r'(?<![a-z0-9])' + re.escape(alias) + r'(?![a-z0-9])', re.I).search(owned_value[:predicate.start()])), None)
+            if joint_development or accessory_continuation or paragraph_accessory:
+                owner = 'apple-home-accessories'
+            elif len(subjects) >= 2 and _compiled_rule(r'\b(?:and|both)\b|和|与', re.I).search(owned_value) and _compiled_rule(r'launch|ship|上市|发货|交付', re.I).search(owned_value):
+                owner = 'apple-home-delivery-batch'
+            elif owned_alias:
+                owner = owned_alias
+            elif current_paragraph_report and _compiled_rule(r'^(?:虽然屏幕|另一款|台面式|壁挂式)', re.I).search(owned_value):
+                owner = current_owner
+            elif primary:
+                owner = primary
+            elif named and (not predicate or len(subjects) == 0):
+                owner = next(iter(named))
+            elif len(subjects) == 1:
+                owner = next(iter(subjects))
+            elif _compiled_rule(r'^(?:it|the\s+(?:device|model)|this|它|该设备|这款|台面式|壁挂式|一款经过)', re.I).search(owned_value):
+                owner = current_owner
+            else:
+                owner = None
+            if current_paragraph_report:
+                concrete = _compiled_rule(r'配备|配有|搭载|内置|版本|配色|支持|触控|控制|测试|升级|交付|发货|推出|合作|研发|开发|称为|制造|负责|承担|名为|名称|设计', re.I).search(owned_value)
+                if owner not in {'apple-home-hub','homepod','homepod-mini','apple-tv','apple-home-accessories','apple-home-delivery-batch'} or not concrete or source_denies_action(owned_value, '', r'发布|交付|研发|开发|合作'):
+                    owner = None
+            if owner:
+                groups.setdefault(owner, []).append(value)
+            if owner or not current_paragraph_report:
+                current_owner = owner
+        labels = {'apple-home-hub': 'Apple smart home hub device disclosure',
+            'homepod': 'Apple HomePod mini device disclosure',
+            'homepod-mini': 'Apple HomePod mini device disclosure',
+            'apple-tv': 'Apple TV 4K hardware configuration disclosure',
+            'apple-home-accessories': 'Apple smart home accessories partnership disclosure',
+            'apple-home-delivery-batch': 'Apple TV and HomePod mini joint delivery schedule'}
+        if current_paragraph_report:
+            for owner in ('apple-tv', 'homepod'):
+                own_text = ' '.join(groups.get(owner, ()))
+                if owner == 'apple-tv':
+                    model = _compiled_rule(r'apple\s*tv\s*(4k|hd)(?![a-z0-9])', re.I).search(own_text)
+                    labels[owner] = 'Apple TV' + (' ' + model.group(1).upper() if model else '') + ' hardware configuration disclosure'
+                if owner == 'homepod' and not _compiled_rule(r'homepod\s*mini', re.I).search(own_text):
+                    labels[owner] = 'Apple HomePod device disclosure'
+        if len(groups) >= 2:
+            return [(labels.get(owner, 'Apple ' + owner.replace('-', ' ') + ' device disclosure'),
+                     ' '.join(facts[:6]), facts[:fact_limit]) for owner, facts in groups.items()]
+
     umbrella_title = bool(
         _compiled_rule(r"\b(?:smart[- ]home\s+(?:products?|hardware|lineup|refresh)|"
             r"home\s+products?\s+nearly\s+ready)\b|"
@@ -870,8 +1092,8 @@ def project_multi_family_iphone_report(
     ) > 0
     shared_headline_action = bool(
         _compiled_rule(r"\b(?:prices?|pricing|costs?|colors?|colou?rs?|finishes?|production|"
-            r"shipments?|orders?|preorders?|pre-orders?|availability|sales?)\b|"
-            r"(?:价格|售价|成本|配色|颜色|量产|生产|出货|订单|预购|供货|开售|销量)", re.I).search(title_lower)
+            r"shipments?|orders?|preorders?|pre-orders?|availability|sales?|benchmarks?|measurements?)\b|"
+            r"(?:价格|售价|成本|配色|颜色|量产|生产|出货|订单|预购|供货|开售|销量|跑分|实测)", re.I).search(title_lower)
     )
     # Multiple model names do not make a multi-action report when the headline
     # owns one shared price, finish, production, availability, or sales action.
@@ -894,8 +1116,8 @@ def project_multi_family_iphone_report(
     sentences: list[str] = []
     seen: set[str] = set()
     for value in [summary, *key_facts]:
-        for sentence in _compiled_rule(r"(?<=[.!?。！？])\s*", 0).split(value, 0):
-            add_unique_text(sentences, seen, clean_sentence(sentence), min_chars=12)
+        for start, end in source_sentence_spans(value):
+            add_unique_text(sentences, seen, clean_sentence(value[start:end]), min_chars=12)
     exclusive: dict[str, list[str]] = {}
     for sentence in sentences:
         subjects = iphone_report_subjects(sentence)
@@ -935,7 +1157,8 @@ def project_hardware_roadmap(
     """Project an explicit multi-product roadmap onto its product-level actions."""
     original = [(title, summary, key_facts)]
     title_lower = title.lower()
-    if single_source_disclosure:
+    device = source_device_operation_frame(title, summary, tuple(key_facts))
+    if single_source_disclosure or (device and device.action == "device-announcement"):
         return original
     if _compiled_rule(r"\b(?:unidentified|unresolved|unknown)\b.{0,36}"
         r"\b(?:device|product|hardware)\s+identifiers?\b|"
@@ -1433,7 +1656,17 @@ def project_hardware_roadmap(
             if not re.search(generic_pattern, remaining_scope, re.I):
                 specific_label = label
                 break
-        variant_title = f"Apple {specific_label} roadmap update"
+        configuration_report = bool(subject in {"homepod", "apple-tv"}
+            and _compiled_rule(r"新款|新一代|此次更新", re.I).search(scoped_text)
+            and _compiled_rule(r"(?:将|将在).{0,45}(?:处理性能|处理器|内部硬件)", re.I).search(scoped_text)
+            and _compiled_rule(r"据称|消息显示|消息人士|透露", re.I).search(scoped_text)
+            and not _compiled_rule(r"去年|此前|旧款|取消|否认|预购|交付|发货|价格|售价", re.I).search(scoped_text))
+        if subject == "homepod" and _compiled_rule(r"(?<![a-z0-9])homepod\s*mini(?![a-z])", re.I).search(scoped_text):
+            specific_label = "HomePod mini"
+            devices = disclosed_device_subjects(evidence.raw_lead if evidence else summary)
+            if devices.get("homepod-mini"):
+                specific_label += " " + devices["homepod-mini"]
+        variant_title = f"Apple {specific_label} " + ("hardware configuration disclosure" if configuration_report else "roadmap update")
         variants.append(
             (variant_title, " ".join(evidence_facts[:6]), evidence_facts[:fact_limit])
         )
@@ -1658,6 +1891,10 @@ def historical_roadmap_recap_without_current_report(title: str, summary: str, ke
         r"\b(?:rumou?red|expected)\s+(?:products?|devices?)\s+to\s+(?:launch|arrive)\b|"
         r"(?:回顾|汇总).{0,65}(?:此前|以往|旧报道|传闻|预期)", re.I).search(opening)
     if not retrospective:
+        prospective = _compiled_rule(r"即将亮相|发布前瞻|新品前瞻|launching\s+soon|what\s+to\s+expect", re.I).search(title)
+        prior_rumors = any(_compiled_rule(r"此前.{0,16}(?:传闻|报道)|早前.{0,16}(?:消息|爆料)|previous(?:ly)?\s+(?:reports?|rumou?rs?)", re.I).search(fact) for fact in key_facts)
+        retrospective = prospective and prior_rumors
+    if not retrospective:
         # Some publisher leads promise a "latest" forecast, while the body
         # explicitly introduces an editor's preview and then walks through
         # separately dated earlier reports. The source's own stage ordering,
@@ -1748,6 +1985,71 @@ def project_disclosed_devices(evidence: ArticleEvidence, *, fact_limit: int):
              " ".join(facts[:6]), facts[:fact_limit]) for subject, facts in ready.items()]
 
 
+def project_executive_visit_actions(title: str, summary: str, evidence: ArticleEvidence | None,
+                                   *, fact_limit: int):
+    """Separate the government's meeting from concrete local visit activities.
+
+    Visit biography and a bare itinerary do not create a second action. Only
+    current interaction/retail/creator passages support that projection.
+    """
+    if evidence is None:
+        return []
+    s = lambda pattern, text: _compiled_rule(pattern, re.I).search(text)
+    opening = ' '.join(u.text for u in evidence.units[:4])
+    if not s(r'apple|苹果', title + opening) or not s(r'库克|(?:tim\s*)?cook(?![a-z])|特努斯|ternus', title):
+        return []
+    meeting = source_executive_government_frame(title, ' '.join(u.text for u in evidence.units))
+    if meeting is None:
+        return []
+    person = meeting.subject.split(':')[2]
+    meetings, visits = [], []
+    owner = ''
+    for unit in evidence.units:
+        if unit.kind != 'p' or unit.container_id == 'caption':
+            continue
+        for start, end in source_sentence_spans(unit.text):
+            clause = unit.text[start:end].strip()
+            if s(r'据.{0,20}昨日.{0,8}报道|此前|去年|last\s+year|previously|在担任.+期间', clause):
+                owner = ''
+                continue
+            actors = source_executive_people(clause)
+            if actors and actors != {person}:
+                owner = ''
+                continue
+            local_meeting = source_executive_government_frame(clause, '', context_actor=person)
+            if local_meeting is not None and (local_meeting.subject != meeting.subject or local_meeting.action != meeting.action):
+                owner = ''
+                continue
+            if local_meeting is not None:
+                owner = 'meeting'
+            elif (s(r'喝早茶|早茶店|探班|探访|到访.{0,15}零售店|开发者交流|developers|创作|主创人员', clause)
+                    and (actors == {person} or s(r'^(?:他|两人|一行)', clause))):
+                owner = 'visit'
+            elif s(r'业务布局|扩大.{0,15}业务|供应链协同|创新生态|制造.{0,20}合作|销售渠道|表示欢迎', clause):
+                owner = 'meeting'
+            elif not s(r'^他|^两人|^其中|^据了解|^除了|^此次|^库克|^蒂姆|^孟|^双方|^在广州', clause):
+                owner = ''
+            if owner == 'meeting':
+                if clause not in meetings: meetings.append(clause)
+            elif owner == 'visit':
+                if clause not in visits: visits.append(clause)
+    if not meetings:
+        return []
+    person = meeting.subject.split(':')[2]
+    name = person.replace('-', ' ').title()
+    # The identity resolver already owns the counterpart and phase. Keep the
+    # source headline instead of inventing a role from its opaque subject key.
+    variants = [(title, ' '.join(meetings[:6]), meetings[:fact_limit])]
+    if visits:
+        # Prefer an explicitly named destination; this does not infer a visit
+        # from the government's location or the executive's biography.
+        location = next((key for key, pattern in (('Guangzhou', r'广州|guangzhou'), ('Shanghai', r'上海|shanghai'),
+            ('Beijing', r'北京|beijing'), ('Shenzhen', r'深圳|shenzhen')) if s(pattern, ' '.join(visits) + ' ' + opening)), '')
+        if location:
+            variants.append((f'Apple executive {name} visited {location}', ' '.join(visits[:6]), visits[:fact_limit]))
+    return variants
+
+
 def project_compound_article(title: str, summary: str, key_facts: list[str], *,
         identity: EventIdentity, headline_identity: EventIdentity, fact_identities: Iterable[EventIdentity],
         release_clauses: Sequence[tuple[str, EventIdentity]], release_facts: Iterable[tuple[str, EventIdentity]],
@@ -1756,7 +2058,7 @@ def project_compound_article(title: str, summary: str, key_facts: list[str], *,
         evidence: ArticleEvidence | None = None) -> list[tuple[str, str, list[str]]]:
     """One projection order, using prepared source identities and parent forms."""
     original = [(title, summary, key_facts)]
-    if identity.content_form in {"podcast", "poll"}:
+    if identity.content_form in {"podcast", "poll"} or source_editorial_evaluation(title, summary):
         return original
     if source_editorial_outlook(title, summary, tuple(u.text for u in evidence.units) if evidence else tuple(key_facts)):
         return original
@@ -1774,6 +2076,9 @@ def project_compound_article(title: str, summary: str, key_facts: list[str], *,
             return original
     if source_leadership_interview_frame(title, summary, passages) is not None:
         return original
+    executive_actions = project_executive_visit_actions(title, summary, evidence, fact_limit=fact_limit)
+    if executive_actions:
+        return executive_actions
     inventory = project_current_release_inventory(title, summary, evidence, fact_limit)
     if inventory:
         return inventory
@@ -1792,7 +2097,7 @@ def project_compound_article(title: str, summary: str, key_facts: list[str], *,
     claims = project_multi_subject_apple_silicon_claims(title, summary, key_facts)
     if claims:
         return [(claim.title, claim.summary, list(claim.key_facts)) for claim in claims]
-    variants = project_smart_home_roadmap(title, summary, key_facts, fact_limit=fact_limit)
+    variants = project_smart_home_roadmap(title, summary, key_facts, fact_limit=fact_limit, evidence=evidence)
     if variants != original:
         return variants
     variants = project_title_content_announcements(title, summary, key_facts, identity=identity, fact_limit=fact_limit, trailer_evidence=trailer_evidence)
@@ -1903,12 +2208,15 @@ def projected_source_dispositions(evidence: ArticleEvidence, child_facts: Sequen
     remaining, excluded = source_evidence_remainder(evidence, [span for spans in assigned for span in spans])
     selected = locate_source_facts(evidence, source_facts)
     units = {unit.unit_id: unit for unit in evidence.units}
+    predictions = {key: adjacent_unattributed_prediction_spans(units[key].text)
+                   for key in {span[0] for span in remaining}}
     visible, exclusions, seen = [], list(excluded), set()
     for key, start, end in remaining:
         text = units[key].text[start:end]
         selected_context = any(unit_key == key and left < end and start < right for unit_key, left, right in selected)
         current_action = high_confidence_direct_apple_action(build_event_identity(text, ""))
-        if selected_context or current_action:
+        attribution_review = any(start < right and left < end for left, right in predictions[key])
+        if selected_context or current_action or attribution_review or source_apple_invitation_fact(text):
             if text not in seen:
                 visible.append((key, start, end))
                 seen.add(text)

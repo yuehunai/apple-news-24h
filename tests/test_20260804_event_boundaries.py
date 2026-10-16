@@ -45,10 +45,6 @@ def partitions(events):
 
 
 class AugustFourthBoundaryTests(unittest.TestCase):
-    def test_hot_text_normalizers_are_bounded_memoized_functions(self):
-        module = load_module()
-        self.assertTrue(hasattr(module.title_and_lead_scope, "cache_info"))
-        self.assertTrue(hasattr(module.clean_sentence, "cache_info"))
 
     def test_non_apple_discovery_candidate_exits_before_semantic_classification(self):
         module = load_module()

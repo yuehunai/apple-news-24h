@@ -1,0 +1,1411 @@
+{
+  "r3-54a2aa5303eda632a03546bf": {
+    "article_id": "54a2aa5303eda632a03546bf",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "Apple's new CEO John Ternus has been featured on the cover of the latest TIME magazine edition, with the tagline \"Apple's new era.\" TIME 's interview with Ternus: John Ternus Is Engineering a New Era for Apple Tag: John Ternus This article, \" Apple CEO John Ternus Featured on TIME Magazine Cover: 'New Era' \" first appeared on MacRumors.com Discuss this article in our forums",
+    "discovery_title": "Apple CEO John Ternus Featured on TIME Magazine Cover: 'New Era'",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T13:37:57+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T13:37:57+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T13:37:57+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thursday October 15, 2026 6:37 am PDT",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "October 15, 2026 6:37 am PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thu, 15 Oct 2026 13:38:02 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-10-15T13:37:57+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-10-15T13:37:57+00:00",
+    "raw_lead": "Apple's new CEO John Ternus has been featured on the cover of the latest TIME magazine edition, with the tagline \"Apple's new era\". Apple's new CEO John Ternus has been featured on the cover of the latest TIME magazine edition, with the tagline \"Apple's new era\".",
+    "source": "MacRumors",
+    "title": "Apple CEO John Ternus Featured on TIME Magazine Cover: 'New Era'",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "h1",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Apple CEO John Ternus Featured on TIME Magazine Cover: 'New Era'",
+        "unit_id": "f693c1c3eb48895e0fc3b49e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "Apple's new CEO John Ternus has been featured on the cover of the latest TIME magazine edition, with the tagline \"Apple's new era.\"",
+        "unit_id": "d56e7eb9bd5c8f3cf34bd02e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "TIME's interview with Ternus: John Ternus Is Engineering a New Era for Apple",
+        "unit_id": "678a9a65b1b233384a3c80d2"
+      }
+    ],
+    "url": "https://www.macrumors.com/2026/10/15/john-ternus-on-time-magazine-cover/"
+  },
+  "r4-54a2aa5303eda632a03546bf": {
+    "article_id": "54a2aa5303eda632a03546bf",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "Apple CEO John Ternus has been featured on the cover of TIME Magazine's \"Best Inventions of 2026\" edition, available October 26. Ternus, who joined Apple in 2001 and was formerly its senior vice president of hardware engineering, succeeded Tim Cook as the company's CEO on September 1. This paved the way for Ternus to unveil the iPhone Duo just eight days later. Ternus believes the iPhone Duo stands apart from other foldable smartphones. \"The other examples in the world felt kind of cheap and crappy,\" said Ternus, in an interview with TIME 's Andrew R. Chow. Ternus was eight years old when his father purchased an Apple II computer. \"I started playing games on it and fell in love with Apple,\" he said.",
+    "discovery_title": "Apple CEO John Ternus Featured on Cover of TIME Magazine: 'New Era'",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T13:37:57+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T13:37:57+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T13:37:57+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thursday October 15, 2026 6:37 am PDT",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "October 15, 2026 6:37 am PDT",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thu, 15 Oct 2026 13:37:57 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-10-15T13:37:57+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-10-15T13:37:57+00:00",
+    "raw_lead": "Apple CEO John Ternus has been featured on the cover of TIME Magazine's \"Best Inventions of 2026\" edition, available October 26. Ternus, who joined Apple in 2001 and was formerly its senior vice president of hardware engineering, succeeded Tim Cook as the company's CEO on September 1. This paved the way for Ternus to unveil the iPhone Duo just eight days later. Ternus believes the iPhone Duo stands apart from other foldable smartphones.",
+    "source": "MacRumors",
+    "title": "Apple CEO John Ternus Featured on Cover of TIME Magazine: 'New Era'",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "h1",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "Apple CEO John Ternus Featured on Cover of TIME Magazine: 'New Era'",
+        "unit_id": "0f525df5853b675880a8500e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "Apple CEO John Ternus has been featured on the cover of TIME Magazine's \"Best Inventions of 2026\" edition, available October 26.",
+        "unit_id": "a3881bde4e0a418fee0f356e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "Ternus, who joined Apple in 2001 and was formerly its senior vice president of hardware engineering, succeeded Tim Cook as the company's CEO on September 1. This paved the way for Ternus to unveil the iPhone Duo just eight days later.",
+        "unit_id": "7f9c2babf2d89025b5f19439"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "Ternus believes the iPhone Duo stands apart from other foldable smartphones.",
+        "unit_id": "7a021bb14af64dcf36775109"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "\"The other examples in the world felt kind of cheap and crappy,\" said Ternus, in an interview with TIME's Andrew R. Chow.",
+        "unit_id": "f27cb4abab12243afe57d571"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Ternus was eight years old when his father purchased an Apple II computer. \"I started playing games on it and fell in love with Apple,\" he said.",
+        "unit_id": "7ebc19614cba04b56955d0f8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "Cook remains at Apple as executive chairman, with his primary focus being engaging with policymakers around the world. \"He has great relationships and loves Apple,\" Ternus said of Cook. \"So wherever he can help, he is happy to help.\"",
+        "unit_id": "a57b3f804312d8991462c0f3"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "In a separate interview, Cook said he is \"not meddling\" with Ternus.",
+        "unit_id": "97017b4e44e33c44776cb51d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Apple's large language models that power Siri AI are \"based on Google's Gemini models and cloud technology,\" according to a joint announcement from Apple and Google earlier this year. When asked about this, Ternus said Apple does not always have to make the whole widget, with the company focused on areas it can provide \"differentiation.\"",
+        "unit_id": "9c2817c922dabf877bba2ac6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "\"There's not really a goal that we have to make every single thing in a product,\" he said. \"We make the things where we can really bring differentiation.\"",
+        "unit_id": "6a6ec6d74f57e05f31d63a19"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Apple also tries to remain focused.",
+        "unit_id": "43f4124953e7d80feb9a3983"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "\"You can't do everything,\" Ternus added. \"So we kind of try to constrain ourselves to the stuff that matters most—and then put all of our effort into those things.\"",
+        "unit_id": "662bdfaec8d61f94a2543d2e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "The full magazine cover is below.",
+        "unit_id": "276060b58d62b5f95524adcb"
+      }
+    ],
+    "url": "https://www.macrumors.com/2026/10/15/john-ternus-on-time-magazine-cover/"
+  },
+  "r4-4661b7af3fcb8ac7532a0534": {
+    "article_id": "4661b7af3fcb8ac7532a0534",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "TIME has just published its list of the best inventions of 2026, and iPhone Duo made the list with John Ternus featured on the magazine cover. Here’s what Ternus said in his interview with TIME. more… TIME has just published its list of the best inventions of 2026, and iPhone Duo made the list with John…",
+    "discovery_title": "John Ternus talks iPhone Duo, ‘cheap and crappy’ foldables in new interview",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T14:11:18+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-15T14:11:18+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thu, 15 Oct 2026 14:11:18 +0000",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-10-15T14:11:18+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-10-15T14:11:18+00:00",
+    "raw_lead": "TIME just published its list of best inventions of 2026, and iPhone Duo made the list with John Ternus interviewed for the cover story.",
+    "source": "9to5Mac",
+    "title": "John Ternus talks iPhone Duo, ‘cheap and crappy’ foldables in new interview - 9to5Mac",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "TIME has just published its list of the best inventions of 2026, and iPhone Duo made the list with John Ternus featured on the magazine cover. Here’s what Ternus said in his interview with TIME.",
+        "unit_id": "a723ab2d0a99ada51ce543fc"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "John Ternus on iPhone Duo origins, delay to market, more",
+        "unit_id": "bebb733a00a5b8b4b3ecbadb"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "John Ternus sat down with TIME for a wide-ranging interview centered on iPhone Duo, but also covering a variety of other topics, including AI.",
+        "unit_id": "b05c34c486f1364580b6076a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "Regarding the iPhone Duo, which is hitting the market nearly a decade after other foldables, Ternus was involved in early foldable work at Apple all the way back in 2011.",
+        "unit_id": "9bcf2b58a41e0b0203f3e509"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "In 2011, when many people still carried around flip phones, Ternus and five other engineers filed a patent application for foldable electronic devices, exploring what kind of batteries and circuit boards might be needed for such an idea. “It felt clear that we were going to eventually get to a place where OLED displays were going to be flexible,” Ternus says.",
+        "unit_id": "28e61a3d575845df93ba5aec"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "Ternus wasn’t a fan of early attempts at foldables from other companies in the 2010s. He says, “The other examples in the world felt kind of cheap and crappy.”",
+        "unit_id": "15392829d0344a0014bb002f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "The drive to achieve a foldable unlike its competitors is evidenced by a story from Richard Dinh, Apple’s VP of Product Design.",
+        "unit_id": "fee70dd47b4da6e92b5fc32d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Along the way, Ternus encouraged the team to invest more time and effort in the project, even as other foldables beat them to market. Dinh says that at one point, he asked Ternus whether his team should proceed with a top surface material similar to those of its competitors, which Dinh felt had flaws but was potentially good enough.",
+        "unit_id": "946209880674762f986d70a6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "“And he was like, ‘Look, Rich, you’ll know when it’s the right thing.’ And that gave us the confidence to really push the boundaries on innovation and manufacturing, and fly worldwide to connect our suppliers together and come up with the nanotexture [a surface technology],” Dinh says. The result—a surface made from a custom polymer and built atop a hinge with more than 100 tiny interior precision components—has impressed its first users, who have said they can barely detect a crease at all.",
+        "unit_id": "ff2bcb4536c802d31ae7ed80"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "The story also mentions that Ternus “has devoted much of his early tenure as CEO to obsessing over design, spending multiple days a week in the studio with the industrial-design and human-interface teams.” This echoes previous Bloomberg reporting around Ternus’s early priorities.",
+        "unit_id": "1f1969e1cafafed7ed1d4677"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Other topics Ternus addresses in the interview include:",
+        "unit_id": "4ab09a1737c78299f3a0c2f4"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "Apple Intelligence’s reliance on Gemini technology: “There’s not really a goal that we have to make every single thing in a product. We make the things where we can really bring differentiation.”",
+        "unit_id": "fb695fad09e26242cd72567e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "Siri AI’s unique advantages: “Everything in your life is on your phone. With Siri AI, you can leverage all that information to do things, learn things, and figure out things in a way that nobody else can do.”",
+        "unit_id": "3c34798f06ebb4f4c517a25b"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Not sleeping much before September event: “I was on such a moment of adrenaline and caffeine and excitement for the day.”",
+        "unit_id": "d7024d1a7f1ef2bc8e255b20"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "The full TIME article is well worth a read, available here.",
+        "unit_id": "7dc2a3031f40bf641577d3af"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "What are your takeaways from the latest John Ternus interview? Let us know in the comments.",
+        "unit_id": "9ef51b29316933401af75f3f"
+      }
+    ],
+    "url": "https://9to5mac.com/2026/10/15/john-ternus-talks-iphone-duo-cheap-and-crappy-foldables-in-new-interview/"
+  },
+  "r4-75f2b8516e97b7e08cc908f8": {
+    "article_id": "75f2b8516e97b7e08cc908f8",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "苹果首席执行官约翰·特努斯（John Ternus）登上最新一期《时代》杂志封面，封面主题为“苹果的新时代”（Apple’s New Era）。这是特努斯接替Tim Cook执掌苹果后，受到国际主流媒体重点关注的又一标志性事件。《时代》杂志通过对这位苹果新掌门人的专访，探讨了他的工程师背景、产品设计理念、人工智能战略，以及苹果在竞争环境不断变化的情况下将如何寻找新的增长方向。 阅读全文",
+    "discovery_title": "苹果新任CEO约翰·特努斯登上《时代》杂志封面：以“新时代”为主题",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "21 分钟前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "22 分钟前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "9 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "9 小时前",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026年10月15日 21:42",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thu, 15 Oct 2026 13:42:42 GMT",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026年10月15日 21:42",
+    "published_source": "body date pattern",
+    "published_utc": "2026-10-15T13:42:00+00:00",
+    "raw_lead": "苹果首席执行官约翰·特努斯（JohnTernus）登上最新一期《时代》杂志封面，封面主题为“苹果的新时代”（Apple’sNewEra）。这是特努斯接替TimCook执掌苹果后，受到国际主流媒体重点关注的又一标志性事件。《时代》杂志通过对这位苹果新掌门人的专访，探讨了他的工程师背景、产品设计理念、人工智能战略，以及苹果在竞争环境不断变化的情况下将如何寻找新的增长方向。",
+    "source": "cnBeta",
+    "title": "苹果新任CEO约翰·特努斯登上《时代》杂志封面：以“新时代”为主题 - Apple 苹果 - cnBeta.COM",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "苹果首席执行官约翰·特努斯（John Ternus）登上最新一期《时代》杂志封面，封面主题为“苹果的新时代”（Apple’s New Era）。这是特努斯接替Tim Cook执掌苹果后，受到国际主流媒体重点关注的又一标志性事件。《时代》杂志通过对这位苹果新掌门人的专访，探讨了他的工程师背景、产品设计理念、人工智能战略，以及苹果在竞争环境不断变化的情况下将如何寻找新的增长方向。",
+        "unit_id": "5ed82c92c943c0c994526249"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "此次报道发表于2026年10月15日。《时代》杂志将特努斯与苹果首款折叠屏手机iPhone Duo联系起来，将这款产品视为苹果近年来最重要的设计变革之一。特努斯于9月1日正式接任苹果CEO，而iPhone Duo的推出恰好成为他执掌公司后最受瞩目的产品事件之一。",
+        "unit_id": "9a5fc0b12465ec714f92fe72"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "与史蒂夫·乔布斯的鲜明个性和Tim Cook擅长供应链管理、商业运营及国际事务的形象不同，特努斯长期以来一直是一名相对低调的工程师。他于2001年加入苹果，此前曾在一家虚拟现实企业工作，拥有宾夕法尼亚大学机械工程专业背景。在苹果工作的25年间，他逐步晋升，最终成为硬件工程部门的核心负责人，并深度参与Mac、iPad、iPhone和AirPods等产品的开发。",
+        "unit_id": "c6d08399c19bc78f092ee24d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "特努斯的职业经历使他对产品设计、工程实现和制造流程有着深入理解。苹果内部人士认为，他尤其重视硬件与软件之间的协同，希望让技术在用户使用产品时尽可能自然地融入体验，而不是让用户时刻感受到技术本身的复杂性。",
+        "unit_id": "5dae978fa7a65fa1f90e3eca"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "在特努斯看来，苹果的竞争力并不只是来自某一项孤立的技术，而是来自硬件、软件和服务的整体配合。这种理念也体现在iPhone Duo的开发过程中。苹果虽然比三星等竞争对手更晚进入折叠屏手机市场，但公司希望通过更完善的设计和制造工艺，避免产品仅仅成为一款能够折叠的普通智能手机。",
+        "unit_id": "d64cc31a34d745a9c61168dd"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "据《时代》杂志报道，苹果早在2011年就开始探索折叠式电子设备的设计。当时，特努斯与另外五名工程师共同提交了相关专利申请，研究柔性显示屏设备所需的电池、线路板和内部结构。随着柔性OLED技术逐渐成熟，苹果开始有机会将这一早期构想转化为真正的消费产品。",
+        "unit_id": "b4d5ffa8414f57bb1da0a05b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "不过，从概念到最终产品仍然经历了漫长的开发过程。特努斯认为，早期一些折叠屏手机在耐用性、外观和使用体验方面存在不足，尤其是屏幕折痕问题，容易破坏设备展开后的整体观感。因此，苹果没有急于推出产品，而是继续投入时间改进显示屏、铰链和内部结构。",
+        "unit_id": "941d61546a9177f9fd7cac5d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "为了改善折叠屏的整体体验，苹果重新设计了显示系统，使设备能够在内外两块屏幕之间实现更加自然的切换，同时调整iOS界面布局，将部分主要控制元素移动到展开状态下更便于拇指触及的位置。",
+        "unit_id": "74dcd337eb1db11fb3e45465"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "在机械结构方面，iPhone Duo采用了复杂的铰链设计，内部包含超过100个精密零部件。苹果还开发了特殊的表面材料和纳米纹理处理方案，希望降低反光，并尽可能减少屏幕折痕带来的视觉影响。苹果产品设计副总裁理查德·丁（Richard Dinh）表示，特努斯在开发过程中鼓励团队继续探索更好的方案，而不是因为竞争对手已经推出类似产品，就接受一个仅仅达到基本要求的设计。",
+        "unit_id": "47b552e5f376b87ce799e286"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "iPhone Duo展开后可以提供接近平板电脑的使用空间，用户可以并排查看两个网站、运行适合大屏幕的应用，或利用双摄像头在FaceTime视频通话中同时展示自己和周围环境。与此同时，设备折叠后仍然可以放入口袋，试图兼顾智能手机的便携性和小型平板电脑的显示面积。",
+        "unit_id": "fe12664f76ac40812585a2a8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "不过，这款产品的商业前景仍存在不确定性。《时代》杂志指出，iPhone Duo的起售价超过1999美元，较高的价格可能让部分消费者望而却步。折叠屏手机还需要证明其耐用性和实际使用价值，才能从相对小众的产品类别发展为更广泛的主流市场。",
+        "unit_id": "3f78b0a0c47e0e7e1aabce4e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "在特努斯看来，苹果的未来并不只是不断推出外观新颖的硬件。人工智能已经成为整个科技行业最重要的竞争领域之一，而苹果在生成式AI领域的进展相对缓慢，也因此面临外界越来越多的质疑。",
+        "unit_id": "764f955f8c8665cba0f8f664"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "自2022年底ChatGPT迅速走红以来，微软、Google、Meta、亚马逊、英伟达、OpenAI和Anthropic等公司都在人工智能领域投入巨额资金，争夺模型能力、计算基础设施和企业市场。相比之下，苹果直到2024年才正式推出Apple Intelligence，此后又在个性化Siri的开发过程中遭遇延误。",
+        "unit_id": "ed80009addb90d1e9b7b538d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "《时代》杂志指出，苹果曾经尝试通过内部技术推进Siri升级，但后来决定重新调整方向。新版Siri最终采用了结合GoogleGemini技术的人工智能方案，并于2026年9月在美国推出。这使苹果处于一种特殊的位置：它需要依靠竞争对手提供的部分关键技术，才能完善自身产品的AI能力。",
+        "unit_id": "75fc5d51935b04592281f8a9"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "对于外界有关苹果正在放弃核心技术自主开发的质疑，特努斯并不认同。他表示，苹果并没有要求自己必须独立制造产品中的每一个组成部分。显示屏、内存和调制解调器等硬件本来就来自供应商，关键在于苹果是否能够通过自己的技术和设计创造出真正有差异化的产品。",
+        "unit_id": "399d10e714f7cec38dafb298"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "苹果希望将人工智能定位为一种融入日常设备的辅助能力，而不是单纯追求模型规模或复杂推理能力。特努斯认为，即使其他公司成功开发出更强大的人工智能，消费者仍然需要通过设备与这些技术互动。他强调，人们依然需要手机来交谈、观看图片、记录生活和处理日常事务，因此智能设备不会因为人工智能的发展而失去意义。",
+        "unit_id": "44bcd079db05a1dbd805b176"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "苹果还强调，个人化和隐私保护是其AI战略的重要组成部分。新版Siri能够在获得用户许可的情况下，结合设备中的信息完成更复杂的任务，例如从邮件中找到航班确认信息、帮助用户准备会议，或分析Apple Watch收集的健康数据。",
+        "unit_id": "3d13fc204dc0dea69de79b63"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "苹果认为，人工智能的实用价值不仅取决于底层模型有多强，还取决于模型能否与操作系统、设备芯片以及用户授权提供的个人信息有效结合。相比让AI自由生成各种答案或长时间与用户进行开放式对话，苹果更希望它能够在明确的场景中帮助用户完成实际任务。",
+        "unit_id": "ab93fb3ffc9da4e10f79d69e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "不过，这一战略也面临现实挑战。苹果在生成式AI领域落后于部分竞争对手，而其对外部技术的依赖可能影响公司对核心体验的控制程度。如何在借助合作伙伴技术的同时，继续保持产品的差异化和隐私保护优势，将是特努斯任期内必须解决的问题。",
+        "unit_id": "16ee27dd2e22d5d7889d454f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "除了人工智能，内存芯片供应也是特努斯上任后需要面对的重要挑战。全球内存市场供应紧张，已经推高相关成本，并可能影响苹果产品的生产进度。此前有报道称，苹果曾测试一家中国企业生产的内存芯片，以寻找更多供应来源，但这一做法也引发美国部分议员对国家安全问题的担忧。",
+        "unit_id": "a60dca18d66be1568bc19917"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 20,
+        "origin": "html",
+        "text": "特努斯将当前的内存供应问题形容为一场危机，并表示苹果认为所有可行的解决方案都应该纳入考虑范围。这一表态反映出，即使苹果拥有强大的供应链管理能力，也无法完全避开全球半导体市场的波动。",
+        "unit_id": "209495edab2a5d688374ce43"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 21,
+        "origin": "html",
+        "text": "与此同时，特努斯正在进一步强化产品设计在苹果内部的地位。据此前报道，他上任后频繁前往工业设计和人机交互团队，与相关人员讨论产品方案。这与库克更为人熟知的供应链和运营管理背景形成对比，也被视为苹果重新强调硬件工程和产品设计的一种信号。",
+        "unit_id": "0b5b7cf8007138c5abb52a07"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 22,
+        "origin": "html",
+        "text": "苹果过去十多年逐渐扩大了服务业务的重要性，iCloud、App Store和Apple Music等服务成为公司收入结构的重要组成部分。但随着部分服务业务的增长速度有所放缓，特努斯的上任可能意味着苹果将重新加强对硬件产品创新的关注。",
+        "unit_id": "8335404661c6c65b1cd0f1a6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 23,
+        "origin": "html",
+        "text": "与此同时，苹果也需要应对社会和监管机构对数字产品影响的日益关注。各地政府正在加强对儿童使用社交媒体、人工智能和智能手机的监管，并要求科技公司提供更完善的安全工具。特努斯表示，儿童安全将继续成为苹果产品设计的重要考虑因素。他还提到，自己过去曾利用苹果的屏幕使用时间功能管理孩子的设备使用情况，但认为此前的工具仍有改进空间。",
+        "unit_id": "ab07176e4e012baf8c62e33c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 24,
+        "origin": "html",
+        "text": "在他看来，苹果需要让家长更容易管理孩子能够使用哪些应用，以及他们在设备上花费多少时间。公司已经在2026年9月更新了屏幕使用时间功能，希望为家长提供更直观的控制方式。",
+        "unit_id": "85ae7b863f4c4245c1af0123"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 25,
+        "origin": "html",
+        "text": "尽管面临人工智能竞争、供应链压力和监管挑战，苹果仍然拥有庞大的用户基础。《时代》杂志报道指出，苹果目前拥有约25亿台活跃设备，年度收入接近5000亿美元。庞大的生态系统使用户能够在iPhone、Mac、iPad和其他产品之间无缝切换，也为苹果将人工智能整合到现有产品中提供了重要基础。",
+        "unit_id": "9d25e14df66bea087ef8ef99"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 26,
+        "origin": "html",
+        "text": "特努斯能否将这一优势转化为下一阶段的增长动力，仍然有待观察。与乔布斯相比，他缺少鲜明的个人魅力标签；与库克相比，他也尚未证明自己能够同样娴熟地处理全球政治和供应链问题。但在工程和产品开发领域积累的经验，可能成为他领导苹果的重要优势。",
+        "unit_id": "9db17e9fde9819d1077d07b9"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 27,
+        "origin": "html",
+        "text": "此次登上《时代》杂志封面，既是对特努斯个人职业经历的关注，也反映出外界对苹果新领导时代的期待。iPhone Duo展示了苹果在硬件设计方面仍然具备进行重大创新的能力，而人工智能则将决定这种硬件优势能否在未来继续转化为竞争力。",
+        "unit_id": "de2f6097591dfa9b040fda10"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 28,
+        "origin": "html",
+        "text": "对于特努斯而言，真正的挑战并不是简单复制乔布斯或库克的成功模式，而是找到符合自身工程师背景、同时又适应新技术竞争环境的领导方式。苹果能否在保持产品设计优势的同时，缩小AI领域的差距，将成为这位新任CEO未来几年最重要的考验。",
+        "unit_id": "5b0fb8019fdf59c6cb2d857f"
+      }
+    ],
+    "url": "https://www.cnbeta.com.tw/articles/tech/1582346.htm"
+  },
+  "r4-606e01c61dce3ba01dfb796d": {
+    "article_id": "606e01c61dce3ba01dfb796d",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "IT之家 10 月 15 日消息，《时代》周刊（TIME）今日公布了 2026 年度“最佳发明”（Best Inventions of 2026）专题，苹果公司新任 CEO 约翰・特努斯（John Ternus）登上专题封面。 同时，特纳斯接受了《时代》杂志的独家专访，首次以封面人物的身份畅谈了 iPhone Duo，以及他将如何带领这家标志性公司迈向下一个 50 年。 此次专题将聚焦改变人们生活、工作和思考方式的新产品与创意。该专题属于《时代》周刊每年推出的“最佳发明”特刊，该评选已持续 25 年以上。 根据官方介绍，今年共收录 300 项最佳发明，以及 100 项特别提名（Special Mentions），重点关注医疗健康、人工智能、绿色能源等领域，同时覆盖消费电子、机器人、交通、设计和日常生活创新。 《时代》周刊介绍，评选团队向全球编辑和记者征集提名，同时开放线上申请，并重点关注医疗保健、人工智能和绿色能源等领域。官方评选主要考虑四个维度：原创性、实际效能、创新雄心与社会影响力。因此，这份榜单不仅是新产品推荐，也能用来观察未来一年的科技创新方向。 IT之家按领域分类整理如下： 一、消费电子 Apple iPhone Duo Framework Laptop 13 Pro HP EliteBoard G1a Next Gen AI PC Samsung Galaxy S26 Ultra Fujifilm Instax Mini Evo Cinema Asus Zenbook Duo Anker Prime Charger GoPro Mission 1 Pro ILS Plaud NotePin S LG OLED Evo AI W6 Xteink X4 Pro 二、人工智能 Anthropic Claude Code Lovable Google SynthID Meta Omnilingual ASR Nvidia NemoClaw Aaru Antithesis Bria Fibo Inception Mercury 2 Silicon Quantum Computing Watermelon 三、无障碍技术（Accessibility） Immortal Cosmetic Art Ubokobong Bionic Arm Mangoslab Nemonic Dot OneCourt Strutt ev¹ HapWare Aleye SignUp Snowball 四、航空航天（Aerospace） Joby Aviation Aircraft NASA Nancy Grace Roman Space Telescope 五、农业（Agriculture） Beewise Robi Burro Grande 44 2nd Nature AgWaste Portal BioLumic xTraits VunaNexus Aurin 六、其他科技与创新领域 以下为榜单涉及的其他主要类别，便于后续继续按领域扩展完整名单： 应用与软件（Apps & Software） 建筑与建成环境（Architecture） 美妆（Beauty） 连接与通信（Connectivity） 设计（Design） 教育（Education） 能源与公用事业（Energy & Utilities） 娱乐与游戏（Entertainment & Gaming） 实验性创新（Experimental） 时尚（Fashion） 金融与数字资产（Finance & Crypto） 食品与饮料（Food & Drink） 绿色科技（Green Tech） 健康与福祉（Health & Wellness） 家居（Home） 物流（Logistics） 制造与材料（Manufacturing & Materials） 医疗与医疗保健（Medical Care） 户外（Outdoor） 育儿（Parenting） 隐私与安全（Privacy & Security） 产品设计（Product Design） 生产力（Productivity） 再利用与回收（Recycling） 机器人（Robotics） 社会影响（Social Impact） 运动与健身（Sports & Fitness） 可持续发展（Sustainability） 玩具与游戏（Toys & Games） 交通运输（Transportation） 旅行与酒店服务（Travel & Hospitality） 可穿戴技术（Wearables） 七、其他值得关注的创新项目 Epirus Leonidas：反无人机防御系统 Claude Code：AI 编程工具 Lovable：自然语言驱动的应用开发平台 Google SynthID：AI 生成内容水印技术 Meta Omnilingual ASR：多语言语音识别技术 Nvidia NemoClaw：自主 AI 智能体相关技术 特努斯刚接任苹果 CEO，此次在专访中谈及 iPhone Duo，以及苹果未来发展规划，相关专题将于 10 月 26 日正式推出。#苹果# #特努斯#",
+    "discovery_title": "苹果 CEO 特努斯登上《时代》周刊封面：谈公司未来 50 年，iPhone Duo 入选 2026 年度“最佳发明”",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026/10/15 21:48:15",
+        "source": "source publication field"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026/10/15 21:48:15",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Thu, 15 Oct 2026 13:48:15 GMT",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026/10/15 21:48:15",
+    "published_source": "source publication field",
+    "published_utc": "2026-10-15T13:48:15+00:00",
+    "raw_lead": "特努斯刚接任苹果 CEO，此次在专访中谈及 iPhone Duo，以及苹果未来发展规划，相关专题将于 10 月 26 日正式推出。#苹果# #特努斯#",
+    "source": "IT之家",
+    "title": "苹果 CEO 特努斯登上《时代》周刊封面：谈公司未来 50 年，iPhone Duo 入选 2026 年度“最佳发明”",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "IT之家 10 月 15 日消息，《时代》周刊（TIME）今日公布了 2026 年度“最佳发明”（Best Inventions of 2026）专题，苹果公司新任 CEO 约翰・特努斯（John Ternus）登上专题封面。",
+        "unit_id": "548ae74a202e123298c6b1b2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "同时，特纳斯接受了《时代》杂志的独家专访，首次以封面人物的身份畅谈了 iPhone Duo，以及他将如何带领这家标志性公司迈向下一个 50 年。",
+        "unit_id": "a9c6cd0c846854cf378ba122"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "此次专题将聚焦改变人们生活、工作和思考方式的新产品与创意。该专题属于《时代》周刊每年推出的“最佳发明”特刊，该评选已持续 25 年以上。",
+        "unit_id": "43d0fe15a58f10e1a444ca8f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "根据官方介绍，今年共收录 300 项最佳发明，以及 100 项特别提名（Special Mentions），重点关注医疗健康、人工智能、绿色能源等领域，同时覆盖消费电子、机器人、交通、设计和日常生活创新。",
+        "unit_id": "466b6a27fc69c3bd76e558c9"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "《时代》周刊介绍，评选团队向全球编辑和记者征集提名，同时开放线上申请，并重点关注医疗保健、人工智能和绿色能源等领域。官方评选主要考虑四个维度：原创性、实际效能、创新雄心与社会影响力。因此，这份榜单不仅是新产品推荐，也能用来观察未来一年的科技创新方向。",
+        "unit_id": "bc692f7fc32966d7f245753a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "IT之家按领域分类整理如下：",
+        "unit_id": "e6f46f787a59c0e43edff7da"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "一、消费电子",
+        "unit_id": "a1ff5dcdfaa5120761e5540c"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "Apple iPhone Duo",
+        "unit_id": "f341314553f98fb13d950ff7"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "Framework Laptop 13 Pro",
+        "unit_id": "011d0b1b4c4f403a439515c7"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "HP EliteBoard G1a Next Gen AI PC",
+        "unit_id": "052a465531fe875e2747c3b7"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "Samsung Galaxy S26 Ultra",
+        "unit_id": "ac13d0a27925ca310931c926"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "Fujifilm Instax Mini Evo Cinema",
+        "unit_id": "4d1957876c4b619c6f8f791f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "Asus Zenbook Duo",
+        "unit_id": "d002d1c2aa1e6dd4d22c40a0"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "Anker Prime Charger",
+        "unit_id": "685306293cc46bdd467c63e9"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "GoPro Mission 1 Pro ILS",
+        "unit_id": "af4165d100d200ae20923354"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "Plaud NotePin S",
+        "unit_id": "7f982781a3cb153b4d245419"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "LG OLED Evo AI W6",
+        "unit_id": "bc6b4f258e3d175d02f20b22"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "Xteink X4 Pro",
+        "unit_id": "6e678fd4da96f597276a931f"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "二、人工智能",
+        "unit_id": "5cd3618c00079d6ef709f0e5"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "Anthropic Claude Code",
+        "unit_id": "c1ec0f3979bc0774e8d1a36d"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 20,
+        "origin": "html",
+        "text": "Lovable",
+        "unit_id": "91046d88fd29e159316e311e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 21,
+        "origin": "html",
+        "text": "Google SynthID",
+        "unit_id": "08fae87e5f09613c38ff26e6"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 22,
+        "origin": "html",
+        "text": "Meta Omnilingual ASR",
+        "unit_id": "e7d2cae45b17133d1d1d19d7"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 23,
+        "origin": "html",
+        "text": "Nvidia NemoClaw",
+        "unit_id": "0e7b8029e525f2ca50ef82bb"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 24,
+        "origin": "html",
+        "text": "Aaru",
+        "unit_id": "29dea11bd5e2647bd90380f0"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 25,
+        "origin": "html",
+        "text": "Antithesis",
+        "unit_id": "35ffff174a8d70b3e3295d42"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 26,
+        "origin": "html",
+        "text": "Bria Fibo",
+        "unit_id": "bad1ff4310323991eb1474e2"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 27,
+        "origin": "html",
+        "text": "Inception Mercury 2",
+        "unit_id": "c1a0222a740496c7f2010a9b"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 28,
+        "origin": "html",
+        "text": "Silicon Quantum Computing Watermelon",
+        "unit_id": "3a8caab3cf8562ee53fd39d7"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 29,
+        "origin": "html",
+        "text": "三、无障碍技术（Accessibility）",
+        "unit_id": "dccbdf1e4fd98e120a811bad"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 30,
+        "origin": "html",
+        "text": "Immortal Cosmetic Art Ubokobong Bionic Arm",
+        "unit_id": "b36a458c70c5637270d70e81"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 31,
+        "origin": "html",
+        "text": "Mangoslab Nemonic Dot",
+        "unit_id": "85eca3b8668e441462664c57"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 32,
+        "origin": "html",
+        "text": "OneCourt",
+        "unit_id": "58424850ac56a9ed9e9ad32d"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 33,
+        "origin": "html",
+        "text": "Strutt ev¹",
+        "unit_id": "9f7f1705f343146514410b6f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 34,
+        "origin": "html",
+        "text": "HapWare Aleye",
+        "unit_id": "5ec4b157733ab494c66d5720"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 35,
+        "origin": "html",
+        "text": "SignUp",
+        "unit_id": "a57e8001f4ff942c6dd84818"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 36,
+        "origin": "html",
+        "text": "Snowball",
+        "unit_id": "306af6e9306ec3d7ec8c8d62"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 37,
+        "origin": "html",
+        "text": "四、航空航天（Aerospace）",
+        "unit_id": "2c0ea300956dc0f70a19707e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 38,
+        "origin": "html",
+        "text": "Joby Aviation Aircraft",
+        "unit_id": "125f0b8598d31027284d0ad6"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 39,
+        "origin": "html",
+        "text": "NASA Nancy Grace Roman Space Telescope",
+        "unit_id": "8499fa6bd4df4c3bbd7fbdb0"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 40,
+        "origin": "html",
+        "text": "五、农业（Agriculture）",
+        "unit_id": "aeda6591bef1f3f2d4073e3c"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 41,
+        "origin": "html",
+        "text": "Beewise Robi",
+        "unit_id": "d2eb6aa379812c0db24d1327"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 42,
+        "origin": "html",
+        "text": "Burro Grande 44",
+        "unit_id": "46be4e3cd57b0bb13990d762"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 43,
+        "origin": "html",
+        "text": "2nd Nature AgWaste Portal",
+        "unit_id": "0748f2ff27af8ed1a764f01e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 44,
+        "origin": "html",
+        "text": "BioLumic xTraits",
+        "unit_id": "52fcb06b94078996f390f346"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 45,
+        "origin": "html",
+        "text": "VunaNexus Aurin",
+        "unit_id": "45a99e892d87c4d149c1cf31"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 46,
+        "origin": "html",
+        "text": "六、其他科技与创新领域",
+        "unit_id": "1c7c043fafae24297215b11c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 47,
+        "origin": "html",
+        "text": "以下为榜单涉及的其他主要类别，便于后续继续按领域扩展完整名单：",
+        "unit_id": "49185d627b9ef921441f03a0"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 48,
+        "origin": "html",
+        "text": "应用与软件（Apps & Software）",
+        "unit_id": "de36363d65fdb9f64ebace40"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 49,
+        "origin": "html",
+        "text": "建筑与建成环境（Architecture）",
+        "unit_id": "be38355e063d508761ef842f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 50,
+        "origin": "html",
+        "text": "美妆（Beauty）",
+        "unit_id": "c60b539be0784567b7abb2f0"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 51,
+        "origin": "html",
+        "text": "连接与通信（Connectivity）",
+        "unit_id": "c30a4e9492f1999d31497cd9"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 52,
+        "origin": "html",
+        "text": "设计（Design）",
+        "unit_id": "80bb0919cc8c37bd945f6951"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 53,
+        "origin": "html",
+        "text": "教育（Education）",
+        "unit_id": "3042e4e8ef38074ba61f87e3"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 54,
+        "origin": "html",
+        "text": "能源与公用事业（Energy & Utilities）",
+        "unit_id": "de997221dd9ba5d658d8575e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 55,
+        "origin": "html",
+        "text": "娱乐与游戏（Entertainment & Gaming）",
+        "unit_id": "9ff6fecf3d0cbb1530da1b18"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 56,
+        "origin": "html",
+        "text": "实验性创新（Experimental）",
+        "unit_id": "dfe9a6c8730c6809b95254ac"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 57,
+        "origin": "html",
+        "text": "时尚（Fashion）",
+        "unit_id": "4e2861a08a568da82bf87d19"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 58,
+        "origin": "html",
+        "text": "金融与数字资产（Finance & Crypto）",
+        "unit_id": "071cba2cd353bf2f2f80da3a"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 59,
+        "origin": "html",
+        "text": "食品与饮料（Food & Drink）",
+        "unit_id": "5bc2682ec2fe46c6e3aaa7f7"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 60,
+        "origin": "html",
+        "text": "绿色科技（Green Tech）",
+        "unit_id": "db6ab6f8529d016dbcf28171"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 61,
+        "origin": "html",
+        "text": "健康与福祉（Health & Wellness）",
+        "unit_id": "f79a88cfcde658f369f98170"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 62,
+        "origin": "html",
+        "text": "家居（Home）",
+        "unit_id": "49b288aa1b2843aad144f7e4"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 63,
+        "origin": "html",
+        "text": "物流（Logistics）",
+        "unit_id": "061cc2bd6bfed11c523b6e50"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 64,
+        "origin": "html",
+        "text": "制造与材料（Manufacturing & Materials）",
+        "unit_id": "0889ba44bd7d677951ef96b3"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 65,
+        "origin": "html",
+        "text": "医疗与医疗保健（Medical Care）",
+        "unit_id": "6eab25a0e2440c87287c0ba1"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 66,
+        "origin": "html",
+        "text": "户外（Outdoor）",
+        "unit_id": "eb1e9ad44d69188de01d0d20"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 67,
+        "origin": "html",
+        "text": "育儿（Parenting）",
+        "unit_id": "d8074b69d3e3743cf75db0bd"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 68,
+        "origin": "html",
+        "text": "隐私与安全（Privacy & Security）",
+        "unit_id": "d6e7753cc46ddbdfad0f9e23"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 69,
+        "origin": "html",
+        "text": "产品设计（Product Design）",
+        "unit_id": "f6b15b77d6bc1a589da053db"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 70,
+        "origin": "html",
+        "text": "生产力（Productivity）",
+        "unit_id": "0cbcc292443f31698c65a3de"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 71,
+        "origin": "html",
+        "text": "再利用与回收（Recycling）",
+        "unit_id": "1ece9a6a121bfa53c526596b"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 72,
+        "origin": "html",
+        "text": "机器人（Robotics）",
+        "unit_id": "55514e7221d0b8ca93f21473"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 73,
+        "origin": "html",
+        "text": "社会影响（Social Impact）",
+        "unit_id": "20310045363fff2c517a404d"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 74,
+        "origin": "html",
+        "text": "运动与健身（Sports & Fitness）",
+        "unit_id": "1cfa54d424ef1b48bbefd467"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 75,
+        "origin": "html",
+        "text": "可持续发展（Sustainability）",
+        "unit_id": "154fc0dbadccd7ed77741bb7"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 76,
+        "origin": "html",
+        "text": "玩具与游戏（Toys & Games）",
+        "unit_id": "9c040fe6a5bd33f0190f893f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 77,
+        "origin": "html",
+        "text": "交通运输（Transportation）",
+        "unit_id": "e5ce2fc52de0e0db9ccf1299"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 78,
+        "origin": "html",
+        "text": "旅行与酒店服务（Travel & Hospitality）",
+        "unit_id": "e82a6c3dc97af507071bc73a"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 79,
+        "origin": "html",
+        "text": "可穿戴技术（Wearables）",
+        "unit_id": "b2ebd87269b3584440b24438"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 80,
+        "origin": "html",
+        "text": "七、其他值得关注的创新项目",
+        "unit_id": "eeb0060e1db56bc71462778e"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 81,
+        "origin": "html",
+        "text": "Epirus Leonidas：反无人机防御系统",
+        "unit_id": "0d5dbfe7b0275c97c87ab14f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 82,
+        "origin": "html",
+        "text": "Claude Code：AI 编程工具",
+        "unit_id": "86db57da69f1449f0fc4c378"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 83,
+        "origin": "html",
+        "text": "Lovable：自然语言驱动的应用开发平台",
+        "unit_id": "23a22b736c73d6cbea2bfebc"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 84,
+        "origin": "html",
+        "text": "Google SynthID：AI 生成内容水印技术",
+        "unit_id": "681a3d6f65e439db9c54bd11"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 85,
+        "origin": "html",
+        "text": "Meta Omnilingual ASR：多语言语音识别技术",
+        "unit_id": "2fe66592d7ad24f600886e74"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 86,
+        "origin": "html",
+        "text": "Nvidia NemoClaw：自主 AI 智能体相关技术",
+        "unit_id": "8f391a55f03973884e44de89"
+      }
+    ],
+    "url": "https://www.ithome.com/1/013/658.htm"
+  }
+}

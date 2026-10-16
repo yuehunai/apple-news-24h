@@ -3,8 +3,9 @@ import json
 import sys
 import tempfile
 import unittest
-from datetime import timezone
+from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "skills" / "scripts" / "apple_news_24h.py"
@@ -66,6 +67,17 @@ class TimeCacheAndNewsroomTests(unittest.TestCase):
         self.assertEqual(et_value.astimezone(timezone.utc).isoformat(), "2026-05-28T22:43:00+00:00")
         self.assertEqual(cn_value.astimezone(timezone.utc).isoformat(), "2026-05-28T22:43:00+00:00")
 
+        class Clock(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return cls(2031, 1, 1, tzinfo=tz)
+
+        with patch.object(module, "datetime", Clock):
+            inferred = module.parse_datetime_value("5 月 29 日 06:43", "Asia/Shanghai")
+            explicit = module.parse_datetime_value("2026 年 5 月 29 日 06:43", "Asia/Shanghai")
+        self.assertEqual(inferred.isoformat(), "2031-05-29T06:43:00+08:00")
+        self.assertEqual(explicit, cn_value)
+
     def test_parse_datetime_value_handles_slash_dates_from_chinese_sites(self):
         module = load_module()
 
@@ -103,6 +115,36 @@ class TimeCacheAndNewsroomTests(unittest.TestCase):
         """
 
         self.assertEqual(module.extract_apple_newsroom_time_candidates(page), [])
+
+    def test_modified_time_roles_do_not_become_publication_fallbacks(self):
+        module = load_module()
+        stamp = '2026-10-14T23:20:01+00:00'
+        for markup in (
+            '<time itemProp="dateModified" dateTime="' + stamp + '">October 14, 2026 11:20 pm UTC</time>',
+            '<time itemprop=dateModified datetime="' + stamp + '">October 14, 2026 11:20 pm UTC</time>',
+            '<time property="article:modified_time" datetime="' + stamp + '">October 14, 2026 11:20 pm UTC</time>',
+            '<time class="updated" datetime="' + stamp + '">2026-10-14 23:20:01</time>',
+            '<meta property="article:modified_time" content="' + stamp + '">',
+            '<script type="application/ld+json">' + json.dumps({'@type':'Article','dateModified':stamp}) + '</script>',
+            '<script type="application/ld+json">' + json.dumps({'@type':'VideoObject','uploadDate':stamp}) + '</script>',
+        ):
+            with self.subTest(markup=markup):
+                self.assertEqual(module.extract_time_candidates(markup), [])
+                self.assertEqual(module.extract_apple_newsroom_time_candidates(markup), [])
+        page = '<time itemprop="datePublished" datetime="' + stamp + '"></time>'
+        self.assertIn((stamp, 'time datetime'), module.extract_time_candidates(page))
+
+    def test_publication_fallback_does_not_read_following_article_cards(self):
+        module = load_module()
+        page = ('<h1>Apple Invites</h1><article><br/></article>'
+                '<h2>Apple Invites Articles</h2><div><a href="/another-story/">New features</a>'
+                '<span>October 14, 2026 1:20 pm PDT</span></div>'
+                '<time datetime="2026-10-14T20:20:00Z">October 14, 2026 1:20 pm PDT</time>')
+        self.assertEqual(module.extract_time_candidates(page), [])
+        self.assertEqual(module.extract_apple_newsroom_time_candidates(page), [])
+        byline = '<div>October 13, 2026 1:20 pm PDT</div>'
+        self.assertIn(('October 13, 2026 1:20 pm PDT', 'body date pattern'),
+                      module.extract_time_candidates(byline + page))
 
     def test_apple_newsroom_accepts_article_date_published(self):
         module = load_module()

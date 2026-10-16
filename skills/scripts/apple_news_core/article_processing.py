@@ -2,12 +2,15 @@
 from __future__ import annotations
 from functools import lru_cache
 import hashlib
+import email.utils
+from datetime import datetime, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 import html
 import json
 import re
 import urllib.parse
 from html.parser import HTMLParser
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 from .models import ArticleEvidence, EvidenceUnit, PublicationEvidence, EmbeddedReference
 
 @lru_cache(maxsize=128)
@@ -34,6 +37,43 @@ def strip_tags(value: str) -> str:
     value = _compiled_markup_rule(r"(?is)<[^>]+>", 0).sub(" ", value, 0)
     value = html.unescape(value)
     return _compiled_markup_rule(r"\s+", 0).sub(" ", value, 0).strip()
+
+
+def visible_element_text(text: str, element_id: str) -> str:
+    """Read a named visible field, ignoring markup examples and inactive content."""
+    class FieldParser(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack: list[tuple[str, bool, bool]] = []
+            self.parts: list[str] = []
+            self.found = False
+
+        def handle_starttag(self, tag, attrs):
+            blocked = tag in {"script", "style", "template", "pre", "code"} or bool(
+                self.stack and self.stack[-1][1])
+            selected = bool(self.stack and self.stack[-1][2])
+            if not blocked and not self.found and dict(attrs).get("id") == element_id:
+                selected = self.found = True
+            if tag not in EvidenceTextExtractor.void_tags:
+                self.stack.append((tag, blocked, selected))
+
+        def handle_startendtag(self, tag, attrs):
+            self.handle_starttag(tag, attrs)
+            self.handle_endtag(tag)
+
+        def handle_endtag(self, tag):
+            for index in range(len(self.stack) - 1, -1, -1):
+                if self.stack[index][0] == tag:
+                    del self.stack[index:]
+                    break
+
+        def handle_data(self, data):
+            if self.stack and self.stack[-1][2] and not self.stack[-1][1]:
+                self.parts.append(data)
+
+    parser = FieldParser()
+    parser.feed(text)
+    return " ".join(" ".join(parser.parts).split())
 
 
 def json_ld_objects(text: str) -> list[Any]:
@@ -327,6 +367,9 @@ def preferred_content_scope(text: str) -> str:
 
 
 def article_scope(text: str) -> str:
+    # Remove non-content before looking for paragraph/container markup: script
+    # strings can themselves contain HTML and must never become source prose.
+    text = _compiled_markup_rule(r'(?is)<(script|style)\b[^>]*>.*?</\1\s*>', 0).sub(' ', text, 0)
     preferred = preferred_content_scope(text)
     if preferred:
         return preferred
@@ -384,7 +427,8 @@ class EvidenceTextExtractor(HTMLParser):
             self.parts.append(' ')
         elif tag in self.block_tags and not self.row:
             self.flush()
-            self.kind = tag
+            # Paragraph/layout wrappers do not turn a list member into prose.
+            self.kind = 'li' if tag in {'p', 'div', 'section'} and 'li' in self.stack else tag
             if tag == 'table':
                 self.table_number += 1
             if tag == 'tr':
@@ -412,6 +456,8 @@ class EvidenceTextExtractor(HTMLParser):
             del self.caption_stack[index:]
         if not self.row:
             self.kind = next((t for t in reversed(self.stack) if t in self.block_tags), 'text')
+            if self.kind in {'p', 'div', 'section'} and 'li' in self.stack:
+                self.kind = 'li'
 
     def handle_data(self, data):
         if not any(t in self.ignored_tags for t in self.stack):
@@ -482,10 +528,6 @@ def editorial_list_unit_ids(evidence: ArticleEvidence) -> frozenset[str]:
             credits = False
             description = ""
     return frozenset(result)
-
-
-def clean_evidence_scope(text: str) -> str:
-    return remove_noise_blocks(text)
 
 
 
@@ -613,12 +655,12 @@ def evidence_body_scope(text: str, *, filtered: bool = False) -> str:
             fragments.append(inner)
             covered_until = match.end() + len(inner)
     if fragments:
-        return clean_evidence_scope('\n'.join(fragments))
+        return remove_noise_blocks('\n'.join(fragments))
     for tag in ('article', 'main'):
         match = re.search(rf'(?is)<{tag}\b[^>]*>', text)
         if match:
-            return clean_evidence_scope(balanced_element_inner(text, match.start(), tag))
-    return clean_evidence_scope(text)
+            return remove_noise_blocks(balanced_element_inner(text, match.start(), tag))
+    return remove_noise_blocks(text)
 
 
 class EmbeddedReferenceExtractor(HTMLParser):
@@ -687,7 +729,7 @@ def capture_article_evidence(
             body_markup = EvidenceMarkupFilter()
             body_markup.feed(body)
             body_markup.close()
-            segments.append(('jsonld:articleBody', clean_evidence_scope(''.join(body_markup.parts))))
+            segments.append(('jsonld:articleBody', remove_noise_blocks(''.join(body_markup.parts))))
         segments.append(('html', evidence_body_scope(''.join(page.parts), filtered=True)))
     elif discovery_lead:
         segments.append(('discovery', f'<p>{html.escape(discovery_lead)}</p>'))
@@ -805,11 +847,11 @@ def score_terms(text: str, terms: Iterable[str]) -> int:
 
 
 def inline_media_marker_spans(text: str) -> tuple[tuple[int, int], ...]:
-    """Locate explicit serialized media metadata, not prose mentioning images."""
+    """Locate serialized media metadata and shopping cards, not ordinary prose."""
     spans = []
-    for match in _compiled_markup_rule(r"\[\s*(?:Image|Video):\s*(?P<caption>[^\[\]]*?)\s*(?P<url>https?://[^\s\[\]]+)\s*\]", re.I).finditer(text):
+    for match in _compiled_markup_rule(r"\[\s*(?P<kind>Image|Video|Product):\s*(?P<caption>[^\[\]]*?)\s*(?P<url>https?://[^\s\[\]]+)\s*\]", re.I).finditer(text):
         caption = match.group("caption")
-        if not caption.strip():
+        if match.group('kind').lower() == 'product' or not caption.strip():
             spans.append(match.span())
         else:
             # Caption prose remains original text; only its serialization label
@@ -910,3 +952,537 @@ def roundup_title_from_item(value: str) -> str:
     if len(first_sentence) <= 140:
         return first_sentence
     return first_sentence[:137].rstrip() + "..."
+
+
+def find_json_key(value: Any, keys: set[str]) -> str:
+    if isinstance(value, dict):
+        for key, item in value.items():
+            if key in keys and isinstance(item, str):
+                return item
+        for item in value.values():
+            found = find_json_key(item, keys)
+            if found:
+                return found
+    elif isinstance(value, list):
+        for item in value:
+            found = find_json_key(item, keys)
+            if found:
+                return found
+    return ""
+
+
+
+class ArticleTextExtractor(HTMLParser):
+    block_tags = {"p", "li", "h2", "h3", "tr", "blockquote"}
+    div_class_fragments = (
+        "pagebody-copy",
+        "article-copy",
+        "body-copy",
+        "entry-content",
+        "post-content",
+        "story-content",
+    )
+    void_tags = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.units: list[tuple[str, str]] = []
+        self._capture_tag: str | None = None
+        self._capture_kind = ""
+        self._depth = 0
+        self._parts: list[str] = []
+
+    def _is_block(self, tag: str, attrs: list[tuple[str, str | None]]) -> bool:
+        if tag in self.block_tags:
+            return True
+        if tag != "div":
+            return False
+        classes = " ".join(value or "" for name, value in attrs if name.lower() == "class")
+        return any(fragment in classes for fragment in self.div_class_fragments)
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        tag = tag.lower()
+        if self._capture_tag:
+            if tag == "br":
+                self._parts.append(" ")
+            elif tag in {"td", "th"} and self._capture_kind == "tr" and self._parts:
+                self._parts.append(" | ")
+            if tag not in self.void_tags:
+                self._depth += 1
+            return
+        if self._is_block(tag, attrs):
+            self._capture_tag = tag
+            self._capture_kind = tag
+            self._depth = 1
+            self._parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self._capture_tag:
+            self._parts.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if not self._capture_tag:
+            return
+        self._depth -= 1
+        if self._depth > 0:
+            return
+        text = _compiled_markup_rule(r"\s+", 0).sub(" ", "".join(self._parts), 0).strip()
+        min_len = 20 if self._capture_kind in {"li", "tr"} else 30
+        if len(text) >= min_len:
+            self.units.append((self._capture_kind, html.unescape(text)))
+        self._capture_tag = None
+        self._capture_kind = ""
+        self._parts = []
+
+
+
+def extract_text_units(text: str) -> list[tuple[str, str]]:
+    scoped_text = article_scope(text)
+    parser = ArticleTextExtractor()
+    try:
+        parser.feed(scoped_text)
+    except Exception:
+        parser.units = []
+    units = parser.units
+    if units:
+        return units
+
+    fallback_units: list[tuple[str, str]] = []
+    for match in _compiled_markup_rule(r"(?is)<(?P<tag>p|li|h2|h3|tr)\b[^>]*>(?P<body>.*?)</(?P=tag)>", 0).finditer(scoped_text):
+        cleaned = strip_tags(match.group("body"))
+        min_len = 20 if match.group("tag").lower() in {"li", "tr"} else 30
+        if len(cleaned) >= min_len:
+            fallback_units.append((match.group("tag").lower(), cleaned))
+    return fallback_units
+
+
+
+def split_fact_candidates(tag: str, value: str) -> list[str]:
+    if tag in {"li", "tr"} or len(value) <= 700:
+        return [value]
+    parts = [
+        cleaned
+        for part in _compiled_markup_rule(r"(?<=[.!?。！？])\s+", 0).split(value, 0)
+        if (cleaned := clean_fact_text(part))
+    ]
+    return parts or [value]
+
+
+
+def combine_summaries(primary: str, secondary: str) -> str:
+    parts: list[str] = []
+    seen: set[str] = set()
+    for value in [primary, secondary]:
+        cleaned = clean_sentence(value)
+        if not cleaned:
+            continue
+        for sentence in _compiled_markup_rule(r"(?<=[.!?。！？])\s+", 0).split(cleaned, 0):
+            sentence = clean_sentence(sentence)
+            if not sentence:
+                continue
+            key = sentence.lower()[:120]
+            if key in seen:
+                continue
+            parts.append(sentence)
+            seen.add(key)
+            if len(parts) >= 8:
+                break
+    return " ".join(parts)
+
+
+
+def _publication_time_markup(text: str) -> str:
+    """Remove explicit non-publication time elements before any date fallback."""
+    attributes = _compiled_markup_rule(
+        r'''\b(?:itemprop|property|class)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))''', re.I)
+    role = _compiled_markup_rule(r"(?:^|[^a-z])(?:datemodified|uploaddate|modified|updated|lastmod)(?:$|[^a-z])", re.I)
+    return _compiled_markup_rule(r"(?is)<time\b([^>]*)>(.*?)</time>", 0).sub(
+        lambda match: '' if any(role.search(' '.join(value or '' for value in attr.groups()))
+            for attr in attributes.finditer(match.group(1))) else match.group(), text)
+
+
+def _publication_visible_markup(text: str) -> str:
+    """Keep the primary article and its preceding byline, not following cards."""
+    article = _compiled_markup_rule(r'(?is)<article\b[^>]*>', 0).search(text)
+    if article:
+        return text[:article.end()] + balanced_element_inner(text, article.start(), 'article')
+    return text
+
+
+def extract_time_candidates(text: str, source_name: str = '') -> list[tuple[str, str]]:
+    text = _publication_time_markup(text)
+    candidates: list[tuple[str, str]] = []
+    if source_name == 'IT之家':
+        published = visible_element_text(text, 'pubtime_baidu')
+        if published:
+            candidates.append((published, 'source publication field'))
+    if source_name == '快科技':
+        # This publisher's article metadata is a publication timestamp, unlike
+        # preorder/release dates mentioned in the article's prose.
+        for script in _compiled_markup_rule(r'<script\b[^>]*>(.*?)</script>', re.I | re.S).finditer(text):
+            # Preserve quoted values while removing inactive comment text.
+            code = _compiled_markup_rule(r'''("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|/\*.*?\*/|//[^\r\n]*''', re.S).sub(
+                lambda match: match.group(1) or ' ', script.group(1))
+            published = _compiled_markup_rule(r"(?:^|[;\r\n])\s*var\s+g_PostDateStr\s*=\s*new\s+Date\(\s*['\"]"
+                r"(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}(?:\.\d+)?)['\"]\s*\)", 0).search(code)
+            if published:
+                candidates.append((published.group(1), 'source publication metadata'))
+                break
+    for obj in json_ld_objects(text):
+        found = find_json_key(obj, {"datePublished", "dateCreated"})
+        if found:
+            candidates.append((found, "json-ld datePublished"))
+
+    for names, label in [
+        (
+            [
+                "article:published_time",
+                "article:published",
+                "datePublished",
+                "date",
+                "pubdate",
+                "publish_date",
+                "dc.date",
+                "dc.date.issued",
+            ],
+            "meta published",
+        ),
+    ]:
+        found = meta_content(text, names)
+        if found:
+            candidates.append((found, label))
+
+    text = _publication_visible_markup(text)
+    for match in _compiled_markup_rule(r"(?is)<time\b([^>]*)>(.*?)</time>", 0).finditer(text):
+        attrs, body = match.groups()
+        datetime_match = _compiled_markup_rule(r"""datetime\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
+        if datetime_match:
+            candidates.append((datetime_match.group(1), "time datetime"))
+        body_text = strip_tags(body)
+        if body_text:
+            candidates.append((body_text, "time text"))
+
+    text_only = strip_tags(text[:120_000])
+    date_patterns = [
+        r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+        r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
+        r"Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4}(?:,)?\s+"
+        r"(?:at\s+)?\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?|AM|PM)?\s*"
+        r"(?:PST|PDT|PT|EST|EDT|ET|GMT|UTC|[+-]\d{2}:?\d{2})?",
+        r"(?:\d{4}\s*年\s*)?\d{1,2}\s*月\s*\d{1,2}\s*日\s*"
+        r"\d{1,2}[:：]\d{2}(?:[:：]\d{2})?",
+        r"\d{4}/\d{1,2}/\d{1,2}\s+"
+        r"\d{1,2}:\d{2}(?::\d{2})?",
+        r"\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}(?::\d{2})?"
+        r"(?:Z|[+-]\d{2}:?\d{2})?",
+    ]
+    body_dates = sorted((match.start(), match.group(0))
+        for pattern in date_patterns
+        for match in _compiled_markup_rule(pattern, re.I).finditer(text_only))
+    for _, raw in body_dates:
+        candidates.append((raw, "body date pattern"))
+        if len(candidates) > 20:
+            break
+    return candidates
+
+
+
+def extract_apple_newsroom_time_candidates(text: str) -> list[tuple[str, str, bool]]:
+    """Return Apple Newsroom publication candidates only.
+
+    Newsroom pages often refresh dateModified and VideoObject uploadDate when
+    media assets change. Those values are not the article's publication time.
+    """
+    text = _publication_time_markup(text)
+    candidates: list[tuple[str, str, bool]] = []
+    for obj in json_ld_objects(text):
+        for node in iter_json_ld_nodes(obj):
+            if not isinstance(node, dict):
+                continue
+            type_names = json_type_names(node)
+            if "NewsArticle" not in type_names and "Article" not in type_names:
+                continue
+            raw = node.get("datePublished") or node.get("dateCreated")
+            if isinstance(raw, str) and raw.strip():
+                candidates.append((raw, "apple newsroom datePublished", True))
+
+    for names, label in [
+        (
+            [
+                "article:published_time",
+                "article:published",
+                "datePublished",
+                "pubdate",
+                "publish_date",
+                "dc.date",
+                "dc.date.issued",
+            ],
+            "apple newsroom meta published",
+        ),
+    ]:
+        found = meta_content(text, names)
+        if found:
+            candidates.append((found, label, True))
+
+    text = _publication_visible_markup(text)
+    visible_date = _compiled_markup_rule(r"(?is)<[^>]+class=['\"][^'\"]*category-eyebrow__date[^'\"]*['\"][^>]*>(.*?)</[^>]+>", 0).search(text)
+    if visible_date:
+        cleaned = strip_tags(visible_date.group(1))
+        if cleaned:
+            candidates.append((cleaned, "apple newsroom visible date", True))
+
+    for match in _compiled_markup_rule(r"(?is)<time\b([^>]*)>(.*?)</time>", 0).finditer(text):
+        attrs, body = match.groups()
+        datetime_match = _compiled_markup_rule(r"""datetime\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
+        if datetime_match:
+            candidates.append((datetime_match.group(1), "apple newsroom time datetime", True))
+        body_text = strip_tags(body)
+        if body_text:
+            candidates.append((body_text, "apple newsroom time text", True))
+    return candidates
+
+
+TIMEZONE_ABBREVIATIONS = {
+    "UTC": timezone.utc,
+    "GMT": timezone.utc,
+    "Z": timezone.utc,
+    "PST": timezone(timedelta(hours=-8), "PST"),
+    "PDT": timezone(timedelta(hours=-7), "PDT"),
+    "MST": timezone(timedelta(hours=-7), "MST"),
+    "MDT": timezone(timedelta(hours=-6), "MDT"),
+    "CST": timezone(timedelta(hours=-6), "CST"),
+    "CDT": timezone(timedelta(hours=-5), "CDT"),
+    "EST": timezone(timedelta(hours=-5), "EST"),
+    "EDT": timezone(timedelta(hours=-4), "EDT"),
+}
+
+
+GENERIC_TIMEZONES = {
+    "PT": "America/Los_Angeles",
+    "ET": "America/New_York",
+}
+
+
+MONTHS = {
+    "jan": 1,
+    "january": 1,
+    "feb": 2,
+    "february": 2,
+    "mar": 3,
+    "march": 3,
+    "apr": 4,
+    "april": 4,
+    "may": 5,
+    "jun": 6,
+    "june": 6,
+    "jul": 7,
+    "july": 7,
+    "aug": 8,
+    "august": 8,
+    "sep": 9,
+    "sept": 9,
+    "september": 9,
+    "oct": 10,
+    "october": 10,
+    "nov": 11,
+    "november": 11,
+    "dec": 12,
+    "december": 12,
+}
+
+
+def zoneinfo_or_none(name: str | None) -> Any:
+    if not name:
+        return None
+    try:
+        return ZoneInfo(name)
+    except ZoneInfoNotFoundError:
+        return None
+    except Exception:
+        return None
+
+
+def tz_from_token(token: str | None, default_tz_name: str) -> Any:
+    if token:
+        normalized = token.upper().replace(".", "")
+        if normalized.startswith(("+", "-")):
+            compact = normalized.replace(":", "")
+            if _compiled_markup_rule(r"[+-]\d{4}", 0).fullmatch(compact):
+                sign = 1 if compact[0] == "+" else -1
+                hours = int(compact[1:3])
+                minutes = int(compact[3:5])
+                return timezone(sign * timedelta(hours=hours, minutes=minutes))
+        if normalized in TIMEZONE_ABBREVIATIONS:
+            return TIMEZONE_ABBREVIATIONS[normalized]
+        if normalized in GENERIC_TIMEZONES:
+            tz = zoneinfo_or_none(GENERIC_TIMEZONES[normalized])
+            if tz is not None:
+                return tz
+    tz = zoneinfo_or_none(default_tz_name)
+    return tz or timezone.utc
+
+
+def localize_naive(value: datetime, default_tz_name: str, tz_token: str | None = None) -> datetime:
+    return value.replace(tzinfo=tz_from_token(tz_token, default_tz_name))
+
+
+def parse_datetime_value(raw_value: str, default_tz_name: str, *,
+                         current_year: Callable[[], int] = lambda: datetime.now().year) -> datetime | None:
+    if not raw_value:
+        return None
+    raw = html.unescape(strip_tags(raw_value))
+    raw = raw.replace("\xa0", " ")
+    raw = _compiled_markup_rule(r"\s+", 0).sub(" ", raw, 0).strip()
+    raw = _compiled_markup_rule(r"^(Published|Updated|Posted|Last updated)\s*:?\s*", re.I).sub("", raw, 0)
+    raw = raw.strip(" -|")
+
+    iso_match = _compiled_markup_rule(r"\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?", 0).search(raw)
+    if iso_match:
+        iso_text = iso_match.group(0).replace("Z", "+00:00")
+        if "T" not in iso_text:
+            iso_text = iso_text.replace(" ", "T", 1)
+        if _compiled_markup_rule(r"[+-]\d{4}$", 0).search(iso_text):
+            iso_text = f"{iso_text[:-2]}:{iso_text[-2:]}"
+        iso_text = _compiled_markup_rule(r"(\.\d{6})\d+(?=(?:[+-]\d{2}:?\d{2})?$)", 0).sub(r"\1", iso_text, 0)
+        try:
+            parsed = datetime.fromisoformat(iso_text)
+            if parsed.tzinfo is None:
+                parsed = localize_naive(parsed, default_tz_name)
+            return parsed
+        except ValueError:
+            pass
+
+    slash_match = _compiled_markup_rule(r"(\d{4})/(\d{1,2})/(\d{1,2})\s+"
+        r"(\d{1,2}):(\d{2})(?::(\d{2}))?", 0).search(raw)
+    if slash_match:
+        year_s, month_s, day_s, hour_s, minute_s, second_s = slash_match.groups()
+        parsed = datetime(
+            int(year_s),
+            int(month_s),
+            int(day_s),
+            int(hour_s),
+            int(minute_s),
+            int(second_s or 0),
+        )
+        return localize_naive(parsed, default_tz_name)
+
+    month_pattern = (
+        r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+        r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
+        r"Nov(?:ember)?|Dec(?:ember)?)"
+    )
+    natural_match = re.search(
+        r"(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)?\.?\s*"
+        + month_pattern
+        + r"\s+(\d{1,2}),?\s+(\d{4})(?:,)?(?:\s+(?:at\s+)?)?"
+        + r"(\d{1,2}):(\d{2})(?::(\d{2}))?\s*"
+        + r"(a\.?m\.?|p\.?m\.?|AM|PM)?\s*([A-Z]{1,4}|[+-]\d{2}:?\d{2})?",
+        raw,
+        re.I,
+    )
+    if natural_match:
+        month_name, day_s, year_s, hour_s, minute_s, second_s, ampm, tz_token = (
+            natural_match.groups()
+        )
+        hour = int(hour_s)
+        if ampm:
+            ampm_clean = ampm.lower().replace(".", "")
+            if ampm_clean == "pm" and hour != 12:
+                hour += 12
+            elif ampm_clean == "am" and hour == 12:
+                hour = 0
+        parsed = datetime(
+            int(year_s),
+            MONTHS[month_name.lower().rstrip(".")],
+            int(day_s),
+            hour,
+            int(minute_s),
+            int(second_s or 0),
+        )
+        return localize_naive(parsed, default_tz_name, tz_token)
+
+    try:
+        parsed = email.utils.parsedate_to_datetime(raw)
+        if parsed:
+            if parsed.tzinfo is None:
+                parsed = localize_naive(parsed, default_tz_name)
+            return parsed
+    except Exception:
+        pass
+
+    chinese_match = _compiled_markup_rule(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日\s*"
+        r"(\d{1,2})[:：](\d{2})(?:[:：](\d{2}))?", 0).search(raw)
+    if chinese_match:
+        year_s, month_s, day_s, hour_s, minute_s, second_s = chinese_match.groups()
+        year = int(year_s) if year_s else current_year()
+        parsed = datetime(
+            year,
+            int(month_s),
+            int(day_s),
+            int(hour_s),
+            int(minute_s),
+            int(second_s or 0),
+        )
+        return localize_naive(parsed, default_tz_name)
+
+    numeric_match = _compiled_markup_rule(r"(\d{1,2})/(\d{1,2})/(\d{4})[,\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*"
+        r"(a\.?m\.?|p\.?m\.?|AM|PM)?\s*([A-Z]{1,4}|[+-]\d{2}:?\d{2})?", re.I).search(raw)
+    if numeric_match:
+        month_s, day_s, year_s, hour_s, minute_s, second_s, ampm, tz_token = (
+            numeric_match.groups()
+        )
+        hour = int(hour_s)
+        if ampm:
+            ampm_clean = ampm.lower().replace(".", "")
+            if ampm_clean == "pm" and hour != 12:
+                hour += 12
+            elif ampm_clean == "am" and hour == 12:
+                hour = 0
+        parsed = datetime(
+            int(year_s),
+            int(month_s),
+            int(day_s),
+            hour,
+            int(minute_s),
+            int(second_s or 0),
+        )
+        return localize_naive(parsed, default_tz_name, tz_token)
+
+    return None
+
+
+def parse_date_only_value(raw_value: str, default_tz_name: str) -> datetime | None:
+    if not raw_value:
+        return None
+    raw = html.unescape(strip_tags(raw_value))
+    raw = raw.replace("\xa0", " ")
+    raw = _compiled_markup_rule(r"\s+", 0).sub(" ", raw, 0).strip()
+    raw = raw.strip(" -|")
+    iso_match = _compiled_markup_rule(r"\b(\d{4})-(\d{2})-(\d{2})(?:Z)?\b", 0).search(raw)
+    if iso_match:
+        year_s, month_s, day_s = iso_match.groups()
+        parsed = datetime(int(year_s), int(month_s), int(day_s), 12, 0, 0)
+        return localize_naive(parsed, default_tz_name)
+
+    month_pattern = (
+        r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+        r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
+        r"Nov(?:ember)?|Dec(?:ember)?)"
+    )
+    natural_match = re.search(
+        month_pattern + r"\s+(\d{1,2}),?\s+(\d{4})",
+        raw,
+        re.I,
+    )
+    if natural_match:
+        month_name, day_s, year_s = natural_match.groups()
+        parsed = datetime(
+            int(year_s),
+            MONTHS[month_name.lower().rstrip(".")],
+            int(day_s),
+            12,
+            0,
+            0,
+        )
+        return localize_naive(parsed, default_tz_name)
+    return None

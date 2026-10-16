@@ -1,0 +1,180 @@
+{
+  "source": "IT之家",
+  "url": "https://www.ithome.com/1/013/117.htm",
+  "title": "苹果公布 iPhone Duo 折叠屏手机维修预估费用：内屏损坏 7998 元、电池服务 1898 元",
+  "html": "<article><p data-vmark=\"5619\">IT之家注意到，苹果官网现已公布了 <a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">iPhone </a>Duo 手机的维修预估费用。</p><ul class=\" list-paddingleft-2\"><li><p data-vmark=\"0e17\">表层损坏：398 元</p></li><li><p data-vmark=\"40cf\">背面玻璃损坏：1,598 元</p></li><li><p data-vmark=\"2462\">电池服务：1,898 元</p></li><li><p data-vmark=\"6e92\">后置相机损坏：1,798 元</p></li><li><p data-vmark=\"99b0\">外屏损坏：3,198 元</p></li><li><p data-vmark=\"b430\">外屏和背面玻璃损坏：4,298 元</p></li><li><p data-vmark=\"ba97\">内屏损坏：7,998 元</p></li><li><p data-vmark=\"54b2\">其他损坏：11,998 元</p></li></ul><p data-vmark=\"df6a\">而对于购买了 AppleCare+（2 年期 2,599 元）的用户，相关服务费用变为 0 - 628 元。</p><ul class=\" list-paddingleft-2\"><li><p data-vmark=\"4b74\">电池服务：0 元</p></li><li><p data-vmark=\"ab50\">表层损坏：139 元</p></li><li><p data-vmark=\"faab\">背面玻璃损坏：188 元</p></li><li><p data-vmark=\"99e1\">外屏损坏：188 元</p></li><li><p data-vmark=\"167d\">内屏损坏：628 元</p></li><li><p data-vmark=\"410f\">其他意外损坏：628 元</p></li></ul></article>",
+  "expected_rows": [
+    "表层损坏：398 元",
+    "背面玻璃损坏：1,598 元",
+    "电池服务：1,898 元",
+    "后置相机损坏：1,798 元",
+    "外屏损坏：3,198 元",
+    "外屏和背面玻璃损坏：4,298 元",
+    "内屏损坏：7,998 元",
+    "其他损坏：11,998 元",
+    "电池服务：0 元",
+    "表层损坏：139 元",
+    "背面玻璃损坏：188 元",
+    "外屏损坏：188 元",
+    "内屏损坏：628 元",
+    "其他意外损坏：628 元"
+  ],
+  "cache_sha256": "7c0872d48a5dfe5935f56db56f356d646500ec208e193a6c061412d6b66cb822",
+  "paragraph_requirements": {
+    "source": "快科技",
+    "url": "https://news.mydrivers.com/1/1157/1157351.htm",
+    "title": "国行Apple Watch上线睡眠呼吸暂停通知 特努斯：很自豪能惠及更多人",
+    "summary": "快科技10月14日消息，今日，苹果宣布国行Apple Watch正式上线“睡眠呼吸暂停迹象提示”功能。 苹果CEO特努斯表示：“很多人受到睡眠呼吸暂停的困扰，却往往并不自知。很高兴App",
+    "html": "<article><p>快科技10月14日消息，今日，苹果宣布国行Apple Watch正式上线“睡眠呼吸暂停迹象提示”功能。</p><p>苹果CEO特努斯表示：“很多人受到睡眠呼吸暂停的困扰，却往往并不自知。很高兴Apple Watch的睡眠呼吸暂停迹象提示功能现已在中国推出，也很自豪让这项功能惠及更多人。”</p><p>据介绍，该功能可在用户睡眠期间监测呼吸紊乱情况，并在检测到持续存在中度至重度睡眠呼吸暂停迹象时向用户发出通知。</p><p>具体来说，用户佩戴Apple Watch入睡后，设备会通过加速计监测睡眠期间与呼吸节律变化相关的细微手腕动作，并将数据转化为呼吸紊乱指标。</p><p>系统会在30天评估周期内分析用户数据，如果持续出现呼吸紊乱水平“上升”的情况，将提醒用户可能存在睡眠呼吸暂停迹象。</p><p>苹果建议，尚未被诊断为睡眠呼吸暂停的用户收到通知后，可进一步咨询医生。</p><p>苹果强调，移动睡眠呼吸暂停迹象提示软件不适用于诊断、治疗或辅助管理睡眠呼吸暂停。</p><p>支持机型方面，该功能适用于Apple Watch Series 9及后续机型、Apple Watch Ultra 2及后续机型，以及Apple Watch SE 3。</p><p>使用该功能需要满足以下条件：</p><p>Apple Watch升级至最新版本watchOS；</p><p>iPhone升级至最新版本iOS；</p><p>开启“通过Apple Watch追踪睡眠”功能；</p><p>在30天评估期内，佩戴Apple Watch睡眠至少10晚。</p><p>此外，该功能适用于年满18周岁，且此前未被诊断患有睡眠呼吸暂停的用户。</p></article>",
+    "required": [
+      "苹果强调，移动睡眠呼吸暂停迹象提示软件不适用于诊断、治疗或辅助管理睡眠呼吸暂停。",
+      "使用该功能需要满足以下条件：",
+      "Apple Watch升级至最新版本watchOS；",
+      "iPhone升级至最新版本iOS；",
+      "开启“通过Apple Watch追踪睡眠”功能；",
+      "在30天评估期内，佩戴Apple Watch睡眠至少10晚。"
+    ],
+    "evidence": {
+      "article_id": "64838c609393481a8761806f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月14日消息，今日，苹果宣布国行Apple Watch正式上线“睡眠呼吸暂停迹象提示”功能。 苹果CEO特努斯表示：“很多人受到睡眠呼吸暂停的困扰，却往往并不自知。很高兴App",
+      "discovery_title": "国行Apple Watch上线重磅功能！特努斯：很自豪惠及更多人",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-14 14:42:28.910",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-14 14:42:28",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-10-14 14:42:28.910",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-14T06:42:28.910000+00:00",
+      "raw_lead": "快科技10月14日消息，今日，苹果宣布国行Apple Watch正式上线“睡眠呼吸暂停迹象提示”功能。苹果CEO特努斯表示：“很多人受到睡眠呼吸暂停的困扰，却往往并不自知。很高兴App",
+      "source": "快科技",
+      "title": "国行Apple Watch上线睡眠呼吸暂停通知 特努斯：很自豪能惠及更多人",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月14日消息，今日，苹果宣布国行Apple Watch正式上线“睡眠呼吸暂停迹象提示”功能。",
+          "unit_id": "629b3653e201af676f5de731"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "苹果CEO特努斯表示：“很多人受到睡眠呼吸暂停的困扰，却往往并不自知。很高兴Apple Watch的睡眠呼吸暂停迹象提示功能现已在中国推出，也很自豪让这项功能惠及更多人。”",
+          "unit_id": "d0738c3569b552b3a5f0eb6d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "据介绍，该功能可在用户睡眠期间监测呼吸紊乱情况，并在检测到持续存在中度至重度睡眠呼吸暂停迹象时向用户发出通知。",
+          "unit_id": "82eb110f0058d75e97c3738c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "具体来说，用户佩戴Apple Watch入睡后，设备会通过加速计监测睡眠期间与呼吸节律变化相关的细微手腕动作，并将数据转化为呼吸紊乱指标。",
+          "unit_id": "f3aca38cddd1c145c45dbde0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "系统会在30天评估周期内分析用户数据，如果持续出现呼吸紊乱水平“上升”的情况，将提醒用户可能存在睡眠呼吸暂停迹象。",
+          "unit_id": "34c40ac2ae3a7aa28a6807fc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "苹果建议，尚未被诊断为睡眠呼吸暂停的用户收到通知后，可进一步咨询医生。",
+          "unit_id": "4c21c5b2748dcd065c1340f7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "苹果强调，移动睡眠呼吸暂停迹象提示软件不适用于诊断、治疗或辅助管理睡眠呼吸暂停。",
+          "unit_id": "03a2ceb2fd3dbe655a07ef9d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "支持机型方面，该功能适用于Apple Watch Series 9及后续机型、Apple Watch Ultra 2及后续机型，以及Apple Watch SE 3。",
+          "unit_id": "550dda5c56771ad9ae505cf6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "使用该功能需要满足以下条件：",
+          "unit_id": "5ca8c9955acaec519e7ad1ec"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Apple Watch升级至最新版本watchOS；",
+          "unit_id": "57f438c31547a15af6c2d386"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "iPhone升级至最新版本iOS；",
+          "unit_id": "8ce8cf5f35eb5880cbc56e69"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "开启“通过Apple Watch追踪睡眠”功能；",
+          "unit_id": "f653f3df2ee0cd0cf3131de0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "在30天评估期内，佩戴Apple Watch睡眠至少10晚。",
+          "unit_id": "6265fc576eb6a8898f41af33"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "此外，该功能适用于年满18周岁，且此前未被诊断患有睡眠呼吸暂停的用户。",
+          "unit_id": "6321f70a9f664f2a332bc7fb"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1157/1157351.htm"
+    }
+  }
+}

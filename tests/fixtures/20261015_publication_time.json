@@ -1,0 +1,27 @@
+{
+  "provenance": "Fragments copied from the fixed-window live cache; script publication and body event date are distinct.",
+  "sources": [
+    {
+      "url": "https://news.mydrivers.com/1/1156/1156732.htm",
+      "cache_sha_name": "beccc569d177b571bc4bf12a15e31d7f9451e9502fbdf3cea28df4b74449b1e0.json",
+      "publication_script": "<script language=\"javascript\">\r\n    MTiaoZhuan(1156732);\r\n    var s_NewsID = 1156732;\r\n    var s_authorID = 1391597; \r\n    var g_private = false;\r\n    var g_PostDateStr = new Date('2026-10-12 14:21:28.673');\r\n</script>",
+      "body_event_paragraph": "<p>苹果官网显示，iPhone Duo将于10月16日20:00正式开启预购，10月23日发售，国行起售价15999元。</p>",
+      "published_raw": "2026-10-12 14:21:28.673"
+    },
+    {
+      "url": "https://news.mydrivers.com/1/1156/1156886.htm",
+      "cache_sha_name": "29810b0968fdcd1447a0ca09f7822abcbdf1bf05708ba389d2b71547264ec174.json",
+      "publication_script": "<script language=\"javascript\">\r\n    MTiaoZhuan(1156886);\r\n    var s_NewsID = 1156886;\r\n    var s_authorID = 1219816; \r\n    var g_private = false;\r\n    var g_PostDateStr = new Date('2026-10-12 21:52:50.313');\r\n</script>",
+      "body_event_paragraph": "<p>根据苹果官网公开信息，iPhone Duo将于10月16日20:00正式开启国行预购，10月23日正式开售，这款折叠新机国行起售价定为15999元，正式拉开苹果折叠手机时代的序幕。</p>",
+      "published_raw": "2026-10-12 21:52:50.313"
+    }
+  ],
+  "visible_publication": {
+    "source": "IT之家",
+    "url": "https://www.ithome.com/1/012/574.htm",
+    "publication_element": "<span id=\"pubtime_baidu\">2026/10/13 21:35:09</span>",
+    "body_event_paragraph": "<p data-vmark=\"4a1b\"><a class=\"s_tag\" href=\"https://www.ithome.com/\" target=\"_blank\">IT之家</a> 10 月 13 日消息，宝可梦公司今天宣布，全新 Pokémon × Beats Pill 无线蓝牙音箱即将登场。这款联名产品将于太平洋夏令时 10 月 15 日 8:00（北京时间 23:00），<strong>在苹果官网等渠道开售</strong>。</p>",
+    "published_raw": "2026/10/13 21:35:09",
+    "capture_sha256": "d0101f3688c041b9e992291f3e79e9acf1eb937a681becedae9b1a8d04461649"
+  }
+}

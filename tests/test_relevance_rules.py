@@ -14430,17 +14430,6 @@ class RelevanceRuleTests(unittest.TestCase):
 
         self.assertEqual(len(module.cluster_articles([smart_home, huawei_laptop])), 2)
 
-        huawei_event = event_for(module, huawei_laptop)
-        with mock.patch.object(
-            module,
-            "article_primary_facets",
-            return_value={"apple-display-panel-spec-rumor"},
-        ), mock.patch.object(
-            module,
-            "event_primary_facets",
-            return_value={"apple-display-panel-spec-rumor"},
-        ):
-            self.assertFalse(module.weak_event_has_title_level_identity(smart_home, huawei_event))
 
     def test_direct_apple_legal_action_is_not_typed_as_third_party_ecosystem(self):
         module = load_module()

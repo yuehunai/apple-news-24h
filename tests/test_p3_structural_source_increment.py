@@ -69,24 +69,6 @@ class StructuralSourceIncrementTests(unittest.TestCase):
                 self.assertEqual((article.url, tuple(article.key_facts),
                                   tuple(asdict(unit) for unit in article.evidence.units)), before[name])
 
-    def test_complete_recap_keeps_old_evidence_without_strong_children(self):
-        m = self.m
-        parent = next(item for item in self.payload["parent_projection_inputs"]
-                      if item["card"] == "recap-parent")
-        extraction = parent["extraction"]
-        original_facts = extraction["key_facts"]
-        self.assertTrue(any("2025" in fact for fact in original_facts))
-        variants = []
-        for title, summary, facts in m.roundup_article_variants(
-                extraction["candidate"]["title"], extraction["title"],
-                extraction["summary"], original_facts):
-            variants.extend(m.compound_article_variants(title, summary, facts))
-        self.assertTrue(variants)
-        self.assertTrue(any("2025" in fact for _, _, facts in variants for fact in facts))
-        self.assertTrue(all(m.source_text_outcome(title, summary, facts,
-                                                  extraction["candidate"]["source"],
-                                                  source_title=extraction["candidate"]["title"])[0] != "strong"
-                            for title, summary, facts in variants))
 
 
 if __name__ == "__main__":

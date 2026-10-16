@@ -20,6 +20,7 @@ from .models import PreparedFact, SourceFactView, EventFactPlan
 from .event_identity import (
     REGION_TERMS,
     is_personal_product_complaint,
+    is_os_release_announcement,
     is_weekly_editorial_recap,
     source_design_oversight,
     source_free_race_stream,
@@ -40,14 +41,22 @@ from .event_identity import (
     source_device_workload_measure,
     source_hardware_project,
     source_operation_frame,
+    source_market_measurement_frame,
+    is_joint_market_measurement,
     source_dated_launch_frame,
     source_editorial_outlook,
+    source_editorial_evaluation,
     home_os_development_action,
     descriptive_apple_product_reference,
     is_platform_compatible_accessory_title,
     first_party_hardware_implementation,
     OS_COMPONENT_PATTERNS,
     source_sentence_spans,
+    source_primary_assertion,
+    source_predicate_role,
+    source_product_lifecycle_assertion,
+    source_current_lifecycle_update,
+    source_denies_action,
     has_haptic_patent_subject,
     current_public_os_release,
     is_apple_led_developer_submission_story,
@@ -60,7 +69,7 @@ from .event_identity import (
     primary_assertion_components,
     quantified_apple_company_performance_subject,
 )
-from .models import BoundClaim, ReconciliationProfile
+from .models import BoundClaim, ClaimEligibility, ReconciliationProfile
 from .event_matcher import (
     FIRST_PARTY_SERVICE_PRODUCTS, identity_pair_decision, profile_pair_decision, _explicit_identity_conflict,
     _content_work_profile, _compatible_content_work_profiles,
@@ -1162,12 +1171,19 @@ def _primary_content_schedule(lead: str) -> set[str]:
 
 
 def _content_work_assertion(title: str, lead: str) -> tuple[str, str] | None:
-    """Return a title-led Apple TV work and action without using publisher data."""
+    """Resolve a named media work and action; this does not establish ownership."""
     # Key-fact evidence follows the lead in callers. Keep enough bounded text
     # to reach a source-attributed production fact without scanning page chrome.
     headline_claim = _headline_content_claim(title, lead)
     if headline_claim:
         return headline_claim
+    if _compiled_rule(r'\b(?:film|movie|video|series)\b|电影|影片|视频|剧集', re.I).search(title):
+        availability = _compiled_rule(r'[《“"]([^》”"]{1,160})[》”"]\s*'
+            r'(?:(?:is\s+)?now\s+available\s+on|(?:现已|已经)?(?:登陆|上线))\s*'
+            r'(?:apple\s+)?(?:vision\s+pro|apple\s*tv|iphone|ipad)\b', re.I).search(lead[:2200])
+        if availability:
+            return _compiled_rule(r'[^a-z0-9\u3400-\u9fff]+').sub('-',
+                _normalized(availability.group(1))).strip('-'), 'playback-availability'
     raw = f"{title}. {lead[:2200]}"
     trailer_raw = _current_trailer_assertion_text(raw)
     trailer_title = _current_trailer_assertion_text(title)
@@ -1392,6 +1408,18 @@ def _product_lifecycle_subjects(text: str, identity: EventIdentity) -> set[str]:
             }
         }
     return subjects
+
+
+def _product_lifecycle_year_keys(text: str, subjects: set[str]) -> set[str]:
+    """Keep years attached to named models, not the report's calendar date."""
+    keys: set[str] = set()
+    for subject in subjects:
+        model = re.escape(subject).replace(r"\-", r"\s*")
+        matches = _compiled_rule(r"(?<!\d)(20\d{2})\s*(?:(?:年款|款)\s*)?" + model + r"(?![a-z0-9])|"
+            + model + r"\s*(?:[（(]\s*)?(20\d{2})\s*(?:年款|款|model\b|[）)])", re.I).finditer(text)
+        keys.update(f"lifecycle-model-year:{subject}:{next(v for v in match.groups() if v)}"
+                    for match in matches)
+    return keys
 
 
 def _first_party_facility_subject(text: str) -> str:
@@ -2189,8 +2217,9 @@ def _structured_assertion_keys(
         )
     ):
         subject, action = content
-        event_keys.add(f"structured-assertion:apple-tv:{subject}:{action}")
-        boundaries.add(f"structured-subject:apple-tv:{subject}")
+        service = "media-playback" if action == "playback-availability" else "apple-tv"
+        event_keys.add(f"structured-assertion:{service}:{subject}:{action}")
+        boundaries.add(f"structured-subject:{service}:{subject}")
         separation |= {f"content-title:{subject}", f"content-action:{action}"}
         separation.update(_primary_content_schedule(lead))
         if action in {"free-streaming-event", "panel-lineup", "premiere-announcement"}:
@@ -2335,44 +2364,6 @@ def _structured_assertion_keys(
             "content-title:classic-movie-catalog",
             "content-action:catalog-addition",
         }
-
-    lifecycle_action = bool(
-        (
-            _contains(
-                title_scope,
-                "obsolete",
-                "vintage products list",
-                "obsolete products list",
-                "停产产品",
-                "停产名单",
-                "过时产品",
-                "过时名单",
-                "复古产品",
-                "复古名单",
-            )
-            or _compiled_rule('停产[\\"\'”’]?[\\s·]*产品', 0).search(title_scope)
-        )
-        and _contains(
-            evidence_scope,
-            "apple",
-            "苹果",
-            "repairs",
-            "parts",
-            "service",
-            "维修",
-            "零件",
-            "服务",
-        )
-    )
-    if lifecycle_action:
-        lifecycle_subjects = _product_lifecycle_subjects(evidence_scope, identity)
-        for subject in lifecycle_subjects:
-            event_keys.add(
-                f"structured-assertion:product-lifecycle:{subject}:obsolete"
-            )
-            separation.add(f"assertion-subject:product-lifecycle:{subject}")
-        boundaries.add("structured-action:product-lifecycle-obsolete")
-        separation.add("assertion-action:product-lifecycle-obsolete")
 
     third_party_software_fix = bool(
         _contains(evidence_scope, "linux", "kernel", "内核")
@@ -4797,6 +4788,12 @@ def _first_party_content_claim(
             subject = _compiled_rule(r"[^a-z0-9]+", 0).sub("-", named_game.group(1).strip("'\" ").casefold(), 0).strip("-")
             if subject and not _compiled_rule(r"\d+[- ]|games?\b", 0).match(subject):
                 return subject, "arcade-catalog-addition"
+    owned_release = _compiled_rule(r"^(?:apple\s+(?:has\s+)?(?:releases?|released|launches?|launched)\s+"
+        r"(?:(?:its|a|new|immersive)\s+)*(?:film|movie|video|series)\b|"
+        r"苹果(?:发布|推出)(?:了|新|沉浸式|空间)*(?:影片|电影|视频|剧集))\s*[\"“《]([^\"”》]+)[\"”》]", re.I).match(title_text)
+    if owned_release:
+        subject = _compiled_rule(r"[^a-z0-9\u3400-\u9fff]+").sub("-", owned_release.group(1)).strip("-")
+        return subject, "release"
     if "apple-tv" not in identity.products and not owned_film_title:
         return None
     quoted_title = _quoted_subjects(title)
@@ -8256,25 +8253,8 @@ def _primary_claim_projection(
             trusted=True,
         )
 
-    executive_transition_interview = bool(
-        _compiled_rule(r"\b(?:ceo|chief executive|tim cook|john ternus)\b|"
-            r"(?:首席执行官|库克|特努斯|ceo)", re.I).search(title_text)
-        and _compiled_rule(r"\b(?:interview|reflects?|looks?\s+back|discusses?\s+(?:his|her)\s+legacy)\b|"
-            r"(?:接受采访|专访|回顾|谈及).{0,24}(?:经历|任期|遗产|管理)", re.I).search(title_text)
-        and _compiled_rule(r"\b(?:before\s+(?:leaving|stepping\s+down)|final\s+days?)\b|"
-            r"(?:卸任前|离任前|交接前)", re.I).search(title_text)
-    )
-    if executive_transition_interview:
-        add_claim(
-            "apple-leadership",
-            "transition-interview",
-            category="software_systems",
-            trusted=True,
-        )
-
     leadership_transition = bool(
         not executive_farewell
-        and not executive_transition_interview
         and (
             (
                 _contains(title_text, "tim cook", "库克")
@@ -8570,7 +8550,8 @@ def _primary_claim_projection(
             r"(?:details?|specifications?|specs?|configurations?)\b|"
             r"(?:隐藏|新增|更多|技术)?(?:细节|规格|配置)(?:曝光|披露|公开)?", re.I).search(title_text)
     )
-    if current_hardware_details_report:
+    if current_hardware_details_report and source_predicate_role(
+            _short_lead_scope(lead, sentences=1)) == "current":
         generation = next(
             (
                 component.removeprefix("apple-silicon-generation:")
@@ -8988,6 +8969,16 @@ def _primary_claim_projection(
     # measurement. The measured row may follow several market-context rows.
     market_result_keys = _measured_apple_market_result_keys(title, lead, " ".join((evidence, *source_facts)))
     if market_result_keys:
+        report = source_market_measurement_frame(title, lead, source_facts)
+        if report and report.subject.endswith(':smartphone-shipments'):
+            stamp = report.year + '-' + report.period
+            if any(key.split(':')[3] == stamp for key in market_result_keys if len(key.split(':')) == 6):
+                event_keys.add('primary-claim:' + report.subject + ':measured-apple-market-result')
+                for prefix, value in (('source-report-year:', report.year),
+                                      ('source-report-period:', report.period),
+                                      ('source-report-region:', report.region)):
+                    if value:
+                        separation.add(prefix + value)
         event_keys |= market_result_keys
         separation.add("primary-claim-predicate:measured-apple-market-result")
         market_scopes = {
@@ -9996,6 +9987,9 @@ def _measured_apple_market_result_keys(
     """Project quantified Apple market results with their report context."""
     title_scope = _normalized(title)
     primary_lead = _primary_assertion_scope("", lead)[1]
+    # A causal background clause does not own the current report's action.
+    # Keep the leading measurement itself when it is the substantive assertion.
+    primary_lead = _compiled_rule(r",\s*(?:following|after|building\s+on)\b", re.I).split(primary_lead, 1)[0]
     title_or_lead_owns_result = any(
         _contains(scope, "apple", "iphone", "苹果")
         and _contains(
@@ -10133,6 +10127,9 @@ def _measured_apple_market_result_keys(
             if owner:
                 apple_clause = True
                 clause = clause[owner.start():]
+                if is_joint_market_measurement(clause):
+                    apple_clause = False
+                    continue
             elif not (apple_clause and _compiled_rule(r"\s*(?:and (?:(?:lifting|increasing) (?:its|apple's)|grew|rose|gained|increased|fell|declined|held|holds|had|accounted|accounts|represented|represents)|its|market share|shipments|(?:online\s+)?sales\s+share|(?:线上)?销量份额|市场份额|份额|出货量)", re.I).match(clause)):
                 apple_clause = False
             if not apple_clause:
@@ -10214,6 +10211,7 @@ _HARDWARE_FIRST_PARTY_PRODUCTS = {
 
 
 _SPECIFIC_FIRST_PARTY_PRODUCTS = {
+    "apple-smart-home-os",
     "apple-home-hub",
     "apple-power-adapter",
     "game-controller",
@@ -10557,6 +10555,7 @@ def _source_local_current_action(
     title: str, lead: str, source_facts: tuple[str, ...], identity: EventIdentity,
     name_aliases: Mapping[str, str] | None = None,
     regions: Iterable[str] = (), evidence: str = "", source_units: tuple[str, ...] = (),
+    published_year: str = "",
 ) -> ReconciliationProfile | None:
     """Bind the source's current actor, object and stage before background keys.
 
@@ -10638,11 +10637,20 @@ def _source_local_current_action(
         and has(r"\b(?:our|top)\s+(?:recommendations|picks)|购买推荐|配件推荐", headline + " " + opening[:350])))
     publisher_opinion = (identity.content_form == "analysis"
         and has(r"\bi\s+(?:do\s+)?think\b|我认为|我觉得", opening[:700]))
+    quoted_purchase_opinion = (
+        has(r"calls?|says?|评|称", headline)
+        and has(r"not\s+worth\s+buying|waste\s+of\s+money|浪费钱|不值得(?:买|购买)|不值这个价", headline)
+        and has(r"ceo|executive|高管|创始人|首席执行官", headline))
     suggested_policy = (has(r"may\s+have\s+to|should|应该", headline)
         and has(r"(?:now\s+)?being\s+suggested|建议", opening)
         and has(r"not\s+a\s+live\s+issue|could\s+start\s+to\s+hit|未来可能影响", ' '.join(source_units or source_facts))
         and not has(r"court|regulat|legislation|法院|法规", opening))
-    if publisher_selection or publisher_opinion or suggested_policy or source_editorial_outlook(title, lead, source_units or source_facts):
+    if (publisher_selection or publisher_opinion or quoted_purchase_opinion or suggested_policy
+            or source_editorial_evaluation(title, lead)
+            or (identity.content_form == "podcast"
+                and not is_os_release_announcement(title)
+                and _title_owned_action_profile(title, lead, evidence, identity) is None)
+            or source_editorial_outlook(title, lead, source_units or source_facts)):
         return profile(f"editorial:{headline}", "publisher-source-form", tier="weak",
                        category="hardware_products", kind="general_company",
                        content_form=identity.content_form,
@@ -10683,7 +10691,9 @@ def _source_local_current_action(
     if weekly_measure:
         return profile(weekly_measure, "weekly-unit-sales-report", category="hardware_products",
                        kind="hardware_market", reason="source-owned product, region, week and sales quantity")
-    operation = source_operation_frame(title, lead, source_facts, identity, source_units=source_units)
+    operation = source_operation_frame(title, lead, source_facts, identity, source_units=source_units, published_year=published_year)
+    if operation is not None and operation.bound_claim is not None:
+        return bound_reconciliation_profile(operation.bound_claim)
     if operation is not None:
         if operation.action in {'launch-date-confirmation', 'launch-date-report'}:
             # Calendar evidence supplements an owned launch, never replaces
@@ -10698,6 +10708,14 @@ def _source_local_current_action(
                 # Established announcement/asset aliases can carry sparse
                 # identity through a dated source; retain that shared path.
                 operation = None
+    if (operation is not None and operation.action == "market-measurement-report"
+            and operation.subject.endswith(":smartphone-shipments")):
+        measured = _measured_apple_market_result_keys(title, lead, " ".join((evidence, *source_facts)))
+        stamp = operation.year + "-" + operation.period
+        if any(key.split(":")[3] == stamp for key in measured if len(key.split(":")) == 6):
+            # Numeric reports retain existing metric-role evidence. The same
+            # source-owned report key is also attached by claim projection.
+            operation = None
     if operation is not None:
         # Generic device operations supplement the existing precise claim parser;
         # region, investigator, part code and before/after relations remain binding.
@@ -10719,11 +10737,23 @@ def _source_local_current_action(
                 category_hint="software_systems", identity=identity, relevance_tier="strong",
                 trusted_direct_action=True, promotion_reason="source-owned first-party firmware release",
                 event_kind_hint="os_app")
-        result = profile(operation.subject, operation.action, tier=operation.tier,
+        action = ('measured-apple-market-result'
+            if operation.action == 'market-measurement-report' and operation.subject.endswith(':smartphone-shipments')
+            else operation.action)
+        result = profile(operation.subject, action, tier=operation.tier,
                        category=operation.category, kind=operation.kind,
                        reason=("third-party source-owned action" if operation.subject.startswith("third-party:")
                                else "source-local " + operation.action if operation.tier == "weak"
                                else "source-owned operation and functional category"))
+        if operation.subject.startswith('apple-immersive:content:') and operation.action == 'premiere-schedule':
+            work = operation.subject.removeprefix('apple-immersive:content:').replace('-', ' ')
+            schedule = {'content-primary-premiere'}
+            if operation.period:
+                schedule.add('content-date:' + operation.period)
+            if operation.year:
+                schedule.add('content-date-year:' + operation.year)
+            result = replace(result, separation_keys=result.separation_keys | schedule | {
+                'content-title:' + work.replace(' ', '-'), 'content-action:premiere-schedule'})
         if operation.action == "forecast-correction":
             # A revision of a forecast is itself an affirmative disclosure;
             # negation of the old forecast does not deny the current report.
@@ -11306,6 +11336,8 @@ def _source_local_current_action(
                        tier="weak", category="hardware_products", kind="hardware_market",
                        reason="source reports an executive displaying the device at an awards event")
 
+    # Legacy product-explanation interviews remain outside the migrated
+    # company-responsibility scope; retire this branch with that family.
     # A past CEO quote is background in launch, store, guide and event reports.
     # The interview must be the opening assertion about this product and actor.
     first_assertion = _compiled_rule(r"[。！？；;]|(?<=[.!?])\s+(?=[a-z])", 0).split(opening, 1)[0]
@@ -11350,13 +11382,6 @@ def _source_local_current_action(
         if has(r"\b(?:releas\w*|arrived|deployed|rolling\s+out|fix\w*|update)\b|推送|修复", local):
             return profile(f"watchos-{os_version.group(1)}:watch-restart", "public-fix-release",
                            reason="current watchOS restart fix release")
-    ios_test = _compiled_rule(r"\bios\s*(\d+(?:\.\d+){1,2})\b", 0).search(local)
-    if (ios_test and has(r"\b(?:testing|tested|internal\s+test|logs?)\b|测试", opening)
-            and has(r"\b(?:coming\s+soon|follow-up|upcoming|not\s+available)\b|尚未发布|即将", local)
-            and not has(r"\b(?:beta\s*\d+|releases?|released|seeds?|rolls?\s+out)\b|正式发布", headline)):
-        return profile(f"ios-{ios_test.group(1)}", "internal-test-observation",
-                       reason="source-observed Apple internal iOS testing")
-
     if (has(r"\b(?:at&t|att)\b", headline)
             and has(r"\biphone\s+handoff\b", headline)
             and has(r"\b(?:potential|existing\s+esim|noncommittal|no\s+imminent\s+plans)\b|现有\s*esim", local)):
@@ -11454,6 +11479,7 @@ def build_reconciliation_profile(
     source_facts: tuple[str, ...] = (),
     source_units: tuple[str, ...] = (),
     name_aliases: Mapping[str, str] | None = None,
+    published_year: str = "",
 ) -> ReconciliationProfile:
     regions = tuple(regions)
     card_rate = _card_savings_rate_report(title, lead, source_facts)
@@ -11498,7 +11524,7 @@ def build_reconciliation_profile(
             defer_reason="third-party accessory; platform name is compatibility context",
             hard_boundary="third-party-platform-accessory",
         )
-    source_action = _source_local_current_action(title, lead, source_facts, identity, name_aliases, regions, evidence, source_units)
+    source_action = _source_local_current_action(title, lead, source_facts, identity, name_aliases, regions, evidence, source_units, published_year)
     if source_action is not None:
         return source_action
     named_action = _source_owned_named_action(title, lead)
@@ -11590,11 +11616,6 @@ def build_reconciliation_profile(
     # automatically cross-event keys: even a precise facet can describe more
     # than one action in a busy news cycle.
     event_keys: set[str] = {component for component in identity.title_components if component.startswith("system-wallpaper:")}
-    named_action = _source_owned_named_action(title, lead)
-    if named_action is not None:
-        subject, predicate = named_action
-        actor = "us-government" if subject.startswith("us-government:") else "apple"
-        event_keys.add(f"primary-claim:{actor}:{subject}:{predicate}")
     boundary_keys: set[str] = set()
     separation_keys = _product_separation_keys(identity)
     document_stage = _ssd_support_document_stage(title, lead)
@@ -12144,6 +12165,7 @@ def build_reconciliation_profile(
         if dated_campaign is not None:
             separation_keys.add('source-launch-stage:' + dated_campaign.action)
     content_claim = _first_party_content_claim(title, lead, identity, evidence)
+    independent_content_playback = False
     if content_claim:
         content_subject, content_action = content_claim
         content_service = "apple-arcade-content" if content_action == "arcade-catalog-addition" else "apple-tv-content"
@@ -12156,6 +12178,11 @@ def build_reconciliation_profile(
         }
         category_hint = "software_systems"
         trusted_direct_action = True
+    elif (media := _content_work_assertion(title, lead)) is not None and media[1] == 'playback-availability':
+        # A media work's playback host does not turn its release into hardware
+        # news. Resolving that object supplies no Apple publication authority.
+        category_hint = "software_systems"
+        independent_content_playback = True
     hardware_products = identity.title_products & {
         "airpods",
         "apple-home-hub",
@@ -12179,20 +12206,34 @@ def build_reconciliation_profile(
     structured_direct_assertion = bool(
         any(key.startswith("structured-assertion:") for key in assertion_events)
     )
-    direct_product_lifecycle_action = is_direct_apple_product_lifecycle_action(
+    repair_cutoff = is_direct_apple_product_lifecycle_action(
         title,
         f"{lead} {evidence}",
     )
+    direct_product_lifecycle_action = repair_cutoff or source_current_lifecycle_update(title, lead)
     if direct_product_lifecycle_action:
-        lifecycle_scope = f"{title_text} {_normalized(lead)[:900]} {_normalized(evidence)[:1200]}"
-        lifecycle_subjects = _product_lifecycle_subjects(lifecycle_scope, identity)
+        trusted_direct_action = True
+        lifecycle_scope, lifecycle_state = source_product_lifecycle_assertion(title, lead)
+        if lifecycle_state == "listed" and repair_cutoff:
+            # This branch requires a concrete end to official repair support.
+            lifecycle_state = "obsolete"
+        lifecycle_subjects = _product_lifecycle_subjects(lifecycle_scope,
+            build_event_identity(lifecycle_scope, ""))
+        separation_keys |= _product_lifecycle_year_keys(lifecycle_scope, lifecycle_subjects)
+        if not identity.title_products:
+            listed = _compiled_rule(r"\bapple\s+(?:(?:today|has|now|just)\s+)*added\s+"
+                r"([^.!?。]{1,250}?)\s+to\s+(?:its|the)\s+(?:obsolete|vintage)\s+(?:products?\s+)?list", 0).search(
+                    _primary_assertion_scope('', lead)[1])
+            if listed:
+                inventory = build_event_identity(listed.group(1), '')
+                lifecycle_subjects |= _product_lifecycle_subjects(listed.group(1), inventory)
         for subject in lifecycle_subjects:
             event_keys.add(
-                f"structured-assertion:product-lifecycle:{subject}:obsolete"
+                f"structured-assertion:product-lifecycle:{subject}:{lifecycle_state}"
             )
             separation_keys.add(f"assertion-subject:product-lifecycle:{subject}")
-        boundary_keys.add("structured-action:product-lifecycle-obsolete")
-        separation_keys.add("assertion-action:product-lifecycle-obsolete")
+        boundary_keys.add(f"structured-action:product-lifecycle-{lifecycle_state}")
+        separation_keys.add(f"assertion-action:product-lifecycle-{lifecycle_state}")
         category_hint = "hardware_products"
     title_owned_direct_action = bool(
         identity.action_owner == "apple"
@@ -13190,7 +13231,7 @@ def build_reconciliation_profile(
         event_keys.add("apple-home:first-party-security-camera-roadmap")
         boundary_keys.add("apple-home:first-party-security-camera-roadmap")
         separation_keys.add("action:first-party-home-camera-roadmap")
-        category_hint = "software_systems"
+        category_hint = "hardware_products"
 
     # Preparation belongs to its local object: apps and store pages are not
     # evidence that two sources report the same internal event operation.
@@ -13402,6 +13443,8 @@ def build_reconciliation_profile(
         or (
             not editorial_first_party_action
             and
+            not direct_product_lifecycle_action
+            and
             not versioned_os_action
             and not versioned_os_compatibility_action
             and not current_generation_product_report
@@ -13515,6 +13558,8 @@ def build_reconciliation_profile(
         defer_reason = (
             "third-party app availability without an Apple platform change"
         )
+    if independent_content_playback:
+        defer_reason = "media availability without an Apple publication action"
     if event_format_plan:
         # A concrete, currently reported operating format is itself the event
         # action; an analytical headline angle must not demote that evidence.
@@ -13666,6 +13711,16 @@ def build_reconciliation_profile(
         )
     ):
         category_hint = "hardware_products"
+    if ("primary-claim-predicate:measured-apple-market-result" in separation_keys
+            and source_market_measurement_frame(title, lead, source_units or source_facts,
+                                                published_year=published_year) is not None):
+        # A verified current Apple result owns the report even when component
+        # prices explain its market context. Preserve the existing metric keys.
+        separation_keys.add("source-local-action-authority")
+        category_hint = "hardware_products"
+        resolved_relevance_tier = "strong"
+        structural_direct_action = True
+        defer_reason = hard_boundary = ""
     return ReconciliationProfile(
         event_keys=frozenset(event_keys),
         boundary_keys=frozenset(boundary_keys),
@@ -13770,6 +13825,11 @@ def resolve_reconciliation_outcome(
 
 
 def _source_reconciliation_outcome(profile: ReconciliationProfile) -> tuple[str, str, str]:
+    if profile.eligibility is not None:
+        decision = profile.eligibility
+        if not decision.resolved:
+            raise ValueError("Unresolved source qualification requires evidence review")
+        return decision.tier, decision.reason, decision.category
     identity = profile.identity
     category = profile.category_hint
     if not category:
@@ -13780,8 +13840,6 @@ def _source_reconciliation_outcome(profile: ReconciliationProfile) -> tuple[str,
         category = ("hardware_products" if financed_device or hardware_wave else "software_systems" if (products & _SOFTWARE_FIRST_PARTY_PRODUCTS or profile.event_kind_hint == "legal_antitrust")
                     else "hardware_products" if products & _HARDWARE_FIRST_PARTY_PRODUCTS or profile.event_kind_hint in {"hardware_market", "retail_store"}
                     else "software_systems")
-    if profile.bound_claim is not None:
-        return "strong", "source-local Apple action", category
     parent = profile.parent_source
     if parent is not None and parent.identity is not None and parent.identity.content_form in {
             "buying_advice", "deal", "poll", "roundup", "third_party_spotlight", "tutorial", "analysis", "opinion"}:
@@ -13812,9 +13870,14 @@ def _source_reconciliation_outcome(profile: ReconciliationProfile) -> tuple[str,
         # A product name in an ad is not an independent product action. A
         # specific first-party campaign has already supplied trusted support.
         return "weak", "routine product advertisement without a distinct Apple campaign action", category
-    concrete_source = any(not key.startswith("structured-canonical-title:") for key in profile.event_keys)
+    # Unmigrated families retain their old qualification until a source
+    # relationship replaces it. These retrieval keys are never typed evidence
+    # and cannot authorize a migrated, unresolved or source-local claim.
+    legacy_news_signal = (profile.bound_claim is None
+        and "source-local-action-authority" not in profile.separation_keys
+        and any(not key.startswith("structured-canonical-title:") for key in profile.event_keys))
     if (identity is not None and identity.scope == "apple-direct" and identity.content_form == "news"
-            and (identity.action_owner in {"apple", "apple-target"} or identity.title_actions or concrete_source)):
+            and (identity.action_owner in {"apple", "apple-target"} or identity.title_actions or legacy_news_signal)):
         reason = "source-backed Apple lawsuit or court action" if "legal" in identity.actions else "title-owned Apple news action"
         return "strong", reason, category
     return "weak", "no source-backed independent Apple action", category
@@ -13960,11 +14023,11 @@ def validate_evidence_dispositions(evidence, projections, remainder_ids, exclude
             raise ValueError("Foreign claim source")
         facts = tuple(units[key].text[start:end] for key, start, end in claim.evidence_spans
                       if key in units and 0 <= start < end <= len(units[key].text))
-        if any(key not in claim.unit_ids or not 0 <= start < end <= len(units[key].text)
-               or not any(owned_key == key and owned_start <= start < end <= owned_end
-                          for owned_key, owned_start, owned_end in claim.evidence_spans)
+        # Identity evidence may establish a role or attribution without being
+        # selected as a news fact. Both still reference this exact source.
+        if any(key not in units or not 0 <= start < end <= len(units[key].text)
                for _, _, _, key, start, end in claim.qualifiers):
-            raise ValueError("Claim qualifiers must resolve inside their owned source units")
+            raise ValueError("Claim qualifiers must resolve to original source spans")
         if facts != projection.key_facts or set(claim.unit_ids) != {key for key, _, _ in claim.evidence_spans}:
             raise ValueError("Claim facts must resolve to original source spans")
 
@@ -13995,16 +14058,32 @@ def source_profile_merge_keys(profile: ReconciliationProfile) -> set[tuple[str, 
     return {(key, ()) for key in facets}
 
 
+def claim_eligibility(claim: BoundClaim) -> ClaimEligibility:
+    """Apply news policy to a relationship, independently of binding success."""
+    category = claim.category or ("hardware_products" if claim.action == "product-launch" else "software_systems")
+    if claim.report_role == "background" and claim.evidence_spans:
+        return ClaimEligibility("weak", category, "Background assertion without an independent current report")
+    if not (claim.subject and claim.action and claim.object and claim.subject_relation and claim.report_role and claim.evidence_spans):
+        return ClaimEligibility("", category, claim.review_reason or "Source subject, action or report role remains unresolved")
+    if claim.report_role != "independent":
+        return ClaimEligibility("", category, "Supporting assertion requires an established source action")
+    if claim.subject_relation == "independent":
+        return ClaimEligibility("weak", category, "Independent third-party action; Apple is the host platform")
+    if claim.subject_relation == "apple-direct":
+        return ClaimEligibility("strong", category, "Source-bound independent Apple report")
+    if claim.subject_relation == "platform-interop":
+        return ClaimEligibility("ecosystem", "software_systems", "Concrete Apple platform interoperability operation")
+    return ClaimEligibility("", category, "Source relationship to Apple remains unresolved")
+
+
 def bound_reconciliation_profile(claim: BoundClaim) -> ReconciliationProfile:
-    hardware = claim.action == "product-launch"
-    if claim.object == "source-operation":
-        return ReconciliationProfile(frozenset(), frozenset(), bound_claim=claim,
-            category_hint=claim.category,event_kind_hint=claim.event_kind,
-            relevance_tier="strong",trusted_direct_action=True,
-            promotion_reason="source-bound current operation")
+    decision = claim_eligibility(claim)
     return ReconciliationProfile(frozenset(), frozenset(), bound_claim=claim,
-                                 category_hint="hardware_products" if hardware else "software_systems",
-                                 event_kind_hint="hardware_market" if hardware else "software_update")
+        category_hint=decision.category,
+        event_kind_hint=claim.event_kind or ("hardware_market" if claim.action == "product-launch" else "software_update"),
+        relevance_tier=decision.tier, promotion_reason=decision.reason,
+        trusted_direct_action=decision.tier == "strong", eligibility=decision,
+        review_reasons=(claim.review_reason,) if claim.review_reason else ())
 
 
 

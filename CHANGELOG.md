@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.1.0 - 2026-10-16
+
+- Improved bounded discovery on rolling MacRumors and IT之家 lists, including published pagination and recovery from transient empty pages, and supplemented MyDrivers category discovery; normalized duplicate links and strengthened title-and-lead admission for sparse Apple reports and device-market results without increasing collection budgets.
+- Improved publication-time selection using publisher-owned fields before dates in article prose; excluded modification/upload timestamps and inactive markup, and kept mixed date formats in document order when falling back to visible text.
+- Refactored collection and text/time utilities into their owning modules and separated source binding from eligibility for charts, device measurements, feature inventories, invitations and company-responsibility reports; retired competing decisions within those scopes while retaining unmigrated paths.
+- Improved cross-language grouping and software/hardware assignment around locally supported subjects, operations, stages and qualifiers; prevented comparison devices, shared topics, product inventories and background claims from merging distinct actions or creating unsupported events.
+- Improved fact coverage through nested lists, local prerequisites, measurement series and nonnumeric details; preserved source attribution, exact spans where available, and supporting facts from deferred sources without promoting their entire articles.
+- Added `collection_warnings` to ordinary JSON and file-output status when listing coverage remains unconfirmed; retained source evidence for reports that produce no event and exposed unresolved ownership or eligibility for review instead of silently assigning a weak tier in migrated scopes.
+- Updated the skill to use one evidence-to-draft workflow, resolve pronouns and conflicting source claims, and verify concrete operations and conditions; kept complete final-brief delivery and removed redundant checklist work, repeated reporting-status summaries and reader-inference advice.
+- Removed unused helpers and redundant test constructs while preserving real regression coverage; expanded the offline suite from 2,317 to 2,657 tests. Kept the standard-library runtime, existing CLI, nine primary sources, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.0.0 - 2026-10-10
 
 - Refactored the `1.77.0` pipeline into shared models, collection and evidence utilities, source-bound claim projection, and unified event matching and reconciliation; removed competing grouping and relevance decisions from output assembly.

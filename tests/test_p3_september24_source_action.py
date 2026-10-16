@@ -85,11 +85,11 @@ class SourceLocalStageTests(unittest.TestCase):
 
     def test_ceo_interview_background_cannot_own_launch_store_or_event_display(self):
         m = self.m
-        interview = article_for(
-            m, "苹果CEO：iPhone Duo设计为何如此",
-            "苹果CEO特努斯近日接受媒体专访，首次解读 iPhone Duo 的设计理念。",
-            "Interview News",
-        )
+        interview_title = "苹果CEO：iPhone Duo设计为何如此"
+        interview_lead = "苹果CEO特努斯近日接受媒体专访，首次解读 iPhone Duo 的设计理念。"
+        # A topic-only excerpt requires source evidence, not an eligible event
+        # fabricated through the old interview retrieval key.
+        interview_profile = m.source_text_profile(interview_title, interview_lead, [], "Interview News")
         launch = article_for(
             m, "Apple unveils iPhone Duo in two configurations",
             "Apple unveiled iPhone Duo today in two configurations. CEO Ternus "
@@ -105,17 +105,15 @@ class SourceLocalStageTests(unittest.TestCase):
             "Apple displayed iPhone Duo at the event, where CEO Ternus appeared. "
             "In an earlier interview, Ternus discussed its design.", "Event News",
         )
-        profiles = [m.article_reconciliation_profile(article)
-                    for article in (interview, launch, store, display)]
-        interview_key = "primary-claim:apple-executive:iphone-duo:design-interview:interview-remarks"
-        self.assertIn(interview_key, profiles[0].event_keys)
+        profiles = [interview_profile, *(m.article_reconciliation_profile(article)
+                    for article in (launch, store, display))]
+        self.assertEqual(interview_profile.bound_claim.action, 'leadership-report')
+        self.assertFalse(interview_profile.eligibility.resolved)
+        from apple_news_core.event_reconciler import profile_pair_decision
         for profile in profiles[1:]:
-            self.assertNotIn(interview_key, profile.event_keys)
-        groups = [{article.source for article in event.articles}
-                  for event in m.cluster_articles([interview, launch, store, display])]
-        for other in (launch, store, display):
-            self.assertFalse(any({interview.source, other.source} <= group
-                                 for group in groups), groups)
+            self.assertNotEqual(profile_pair_decision(interview_profile, profile), 'match')
+            self.assertNotEqual(profile_pair_decision(profile, interview_profile), 'match')
+        self.assertEqual(len(m.cluster_articles([launch, store, display])), 3)
 
     def test_cross_language_event_display_is_not_design_interview(self):
         m = self.m

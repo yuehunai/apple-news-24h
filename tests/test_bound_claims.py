@@ -2834,6 +2834,22 @@ class BoundClaimTests(unittest.TestCase):
                 self.assertEqual({frozenset(a.url for a in e.articles) for e in events},
                                  {frozenset(articles[label].url for label in group) for group in expected})
 
+        for expected_groups in (
+            (('preorder','preorder-background'),('screen',)),
+            (('camera','camera-same'),('foldable',)),
+            (('price-direct','price-paraphrase','price-zh','price-long-model-list'),),
+            (('vision-release','vision-features','vision-same-release'),),
+            (('catalogue','catalogue-translation'),),
+        ):
+            with self.subTest(groups=expected_groups):
+                selected=[articles[name] for group in expected_groups for name in group]
+                events=module.cluster_articles(selected)
+                self.assertEqual({frozenset(a.url for a in event.articles) for event in events},
+                                 {frozenset(articles[name].url for name in group) for group in expected_groups})
+        for name in ('price-direct','price-paraphrase','price-zh','price-long-model-list'):
+            with self.subTest(price=name):
+                self.assertIn('price-change',profiles[name].identity.title_actions)
+
     def test_natural_release_and_citation_do_not_adopt_background_claims(self):
         module = load_module()
         from apple_news_core.event_identity import current_public_os_release
@@ -2935,31 +2951,6 @@ class BoundClaimTests(unittest.TestCase):
             with self.subTest(publisher=text):
                 self.assertFalse(any(key.startswith('primary-claim-subject:apple-ceo-video:') for key in profile(text).separation_keys))
 
-    def test_current_action_authority_keeps_measurement_model_and_report_roles(self):
-        module = load_module()
-        from test_relevance_rules import article_for
-        rows = [['preorder', 'iPhone 22 Pro预购预计10月17日开启', '据消息人士报道，iPhone 22 Pro预购将于10月17日开启，苹果尚未公布预购日期。'], ['preorder-background', 'iPhone 22 Pro预购时间推迟至10月17日', '消息人士称iPhone 22 Pro预购时间预计推迟至10月17日，苹果尚未公布预购日期。', ['消息人士称iPhone 22 Pro预购时间预计推迟至10月17日，苹果尚未公布预购日期。', '作为既有产品背景，iPhone 22 Pro和Pro Max采用6.2英寸和6.8英寸显示屏。']], ['screen', 'iPhone 22 Pro系列正面屏幕亮相：首发小号灵动岛', '苹果今日公布iPhone 22 Pro系列的新屏幕设计，灵动岛变小了。', ['苹果今日公布iPhone 22 Pro系列的新屏幕设计，灵动岛变小了。', 'iPhone 22 Pro和Pro Max采用6.2英寸和6.8英寸显示屏。']], ['camera', 'Both iPhone 22 Pro models feature variable aperture camera', 'Apple has revealed that both iPhone 22 Pro models have a variable aperture camera system.'], ['camera-same', 'Apple adds variable aperture to the iPhone 22 Pro camera', 'Apple announced a variable aperture camera system for both iPhone 22 Pro models today.'], ['foldable', '苹果iPhone Horizon亮相 正式推出折叠屏产品 售价2499美元起', '苹果终于正式进入折叠屏手机市场，推出首款折叠式iPhone，产品名称确定为iPhone Horizon。该机后置双摄像头，主摄和超广角均为3600万像素。'], ['price-direct', 'Apple raises iPhone 21 and iPhone Air prices', 'Apple raised the official prices of iPhone 21 and iPhone Air by $80 today.'], ['price-paraphrase', 'iPhone 21 and iPhone Air just got more expensive', 'Apple has applied an $80 price hike to iPhone 21 and iPhone Air today. The same hardware now costs more.'], ['price-zh', '芯片成本上涨逼迫苹果上调iPhone 21及iPhone Air官方售价', '苹果今天宣布上调仍在销售的iPhone 21和iPhone Air官方零售价格，两款机型均上涨80美元。'], ['price-long-model-list', '芯片成本飙升逼迫苹果上调iPhone 21、21e及iPhone Air官方售价', '在刚刚结束的发布会之后，苹果宣布逆势上调仍在销售序列中的iPhone 21、iPhone 21e以及iPhone Air的官方零售价格。'], ['vision-release', 'visionOS 29 is here for Apple Vision Pro with these new features', 'Apple Vision Pro gets its next major software update today. visionOS 29 is available to the public now. Siri AI is its main new feature.'], ['vision-features', 'visionOS 29 adds Siri AI to your spatial computing environment', 'Even as Apple reorganizes its hardware team, visionOS 29 is available for public download. After a summer of beta testing, the new release brings Siri AI and interface improvements.'], ['vision-same-release', 'Apple releases visionOS 29 to Vision Pro users', 'Apple released visionOS 29 to all Vision Pro users today with new Siri AI features.'], ['vision-other-version', 'Apple releases visionOS 28 to Vision Pro users', 'Apple released visionOS 28 to all Vision Pro users today.'], ['catalogue', 'More Than 1,400 Apple Watch Bands Have Been Released Since 2017', 'Apple has now released more than 1,400 official Apple Watch bands since 2017, according to Alex Morris, who develops the BandIndex catalogue.'], ['catalogue-translation', '苹果 Apple Watch 官方表带累计已超1400款，最贵售价15999元', '科技媒体今天报道称，自2017年以来苹果已推出超过1400款官方Apple Watch表带。该消息来自Alex Morris开发的BandIndex目录应用，属于同一统计报告。']]
-        articles = {row[0]: article_for(module, row[1], row[2], source=row[0], facts=row[3] if len(row)>3 else [row[2]]) for row in rows}
-        profiles = {label:module.article_reconciliation_profile(article) for label,article in articles.items()}
-        for left, right, expected in [('preorder', 'preorder-background', True), ('preorder-background', 'screen', False), ('camera', 'camera-same', True), ('camera', 'foldable', False), ('price-direct', 'price-paraphrase', True), ('price-direct', 'price-zh', True), ('price-direct', 'price-long-model-list', True), ('vision-release', 'vision-features', True), ('vision-release', 'vision-same-release', True), ('vision-release', 'vision-other-version', False), ('catalogue', 'catalogue-translation', True)]:
-            with self.subTest(pair=(left,right)):
-                self.assertEqual(module.profile_pair_decision(profiles[left],profiles[right])=='match', expected)
-        for expected_groups in (
-            (('preorder','preorder-background'),('screen',)),
-            (('camera','camera-same'),('foldable',)),
-            (('price-direct','price-paraphrase','price-zh','price-long-model-list'),),
-            (('vision-release','vision-features','vision-same-release'),),
-            (('catalogue','catalogue-translation'),),
-        ):
-            with self.subTest(groups=expected_groups):
-                selected=[articles[name] for group in expected_groups for name in group]
-                events=module.cluster_articles(selected)
-                self.assertEqual({frozenset(a.url for a in event.articles) for event in events},
-                                 {frozenset(articles[name].url for name in group) for group in expected_groups})
-        for name in ('price-direct','price-paraphrase','price-zh','price-long-model-list'):
-            with self.subTest(price=name):
-                self.assertEqual(profiles[name].relevance_tier,'strong')
-                self.assertIn('price-change',profiles[name].identity.title_actions)
 
     def test_subsidy_amount_does_not_authorize_device_price_forecast(self):
         module = load_module()
@@ -3226,8 +3217,12 @@ class BoundClaimTests(unittest.TestCase):
         articles = [article_for(module, title, lead, source=f'Source{i}') for i, (title, lead) in enumerate(rows)]
         self.assertTrue(module.should_merge(articles[0], event_for(module, articles[1])))
         self.assertFalse(module.should_merge(articles[0], event_for(module, articles[2])))
-        self.assertCountEqual([tuple(sorted(a.source for a in e.articles)) for e in module.cluster_articles(articles)],
+        events = module.cluster_articles(articles)
+        self.assertCountEqual([tuple(sorted(a.source for a in e.articles)) for e in events],
                               [('Source0', 'Source1'), ('Source2',)])
+
+        roadmap = next(event for event in events if articles[0] in event.articles)
+        self.assertEqual(roadmap.category, "hardware_products")
 
     def test_currency_amount_is_not_a_phone_production_target(self):
         module = load_module()

@@ -10,50 +10,70 @@ coverage into events, and emits JSON or a Markdown draft.
 from __future__ import annotations
 
 import argparse
-import email.utils
 import hashlib
 import html
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
-import concurrent.futures
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
-import xml.etree.ElementTree as ET
 from dataclasses import asdict, replace
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache
-from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any, Iterable, Iterator
+from typing import Any
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from apple_news_core.models import (Source, Candidate, Article, Event, FetchSettings, PublicationEvidence, PreparedFact, SourceFactView)  # noqa: E402
-from apple_news_core import collection  # noqa: E402
-from apple_news_core.collection import build_sources, cache_key, decode_response, iri_to_uri  # noqa: E402
+from apple_news_core import collection, article_processing  # noqa: E402
+from apple_news_core.article_processing import (
+    MONTHS,
+    ZoneInfo,
+    ZoneInfoNotFoundError,
+    zoneinfo_or_none,
+    parse_date_only_value,
+    find_json_key,
+    ArticleTextExtractor,
+    extract_text_units,
+    split_fact_candidates,
+    combine_summaries,
+    extract_time_candidates,
+    extract_apple_newsroom_time_candidates
+)
+from apple_news_core.collection import (
+    xml_text,
+    xml_text_raw,
+    source_context_terms,
+    atom_link,
+    parse_xml_feed,
+    wordpress_rendered_text,
+    wordpress_utc_timestamp,
+    parse_wordpress_posts_api,
+    same_domain,
+    extract_ithome_listing_metadata,
+    normalize_url
+)
+from apple_news_core.collection import build_sources, cache_key, iri_to_uri  # noqa: E402
 
 from apple_news_core.article_processing import (  # noqa: E402
     editorial_list_unit_ids,
     release_history_unit_ids,
     newsletter_navigation_noise,
     strip_tags,
+    visible_element_text,
     is_roundup_article_title,
     clean_roundup_item_text,
     split_roundup_item_candidates,
     roundup_title_from_item,
-    ascii_lexical_term_present,
     term_present,
-    normalized_term_tuple,
-    cached_score_terms,
     score_terms,
     clean_fact_text,
     add_unique_text,
@@ -64,14 +84,9 @@ from apple_news_core.article_processing import (  # noqa: E402
     structured_article_body_html,
     meta_content,
     extract_title,
-    TRAILING_PROMO_SECTION_PATTERNS,
     remove_trailing_promo_sections,
-    remove_article_end_tail_sections,
     remove_noise_blocks,
     source_description_without_editorial_prefix,
-    PREFERRED_CONTENT_CLASS_FRAGMENTS,
-    balanced_element_inner,
-    preferred_content_scope,
     article_scope,
     capture_article_evidence,
     capture_article_title_evidence,
@@ -80,6 +95,7 @@ from apple_news_core.article_processing import (  # noqa: E402
 
 from apple_news_core.event_identity import (
     REGION_TERMS,  # noqa: E402
+    PRODUCT_PATTERNS,
     CROSS_PRODUCT_IDENTITY_FACETS,
     apple_silicon_generation_keys,
     MULTI_PRODUCT_HARDWARE_SUBJECTS,
@@ -93,6 +109,18 @@ from apple_news_core.event_identity import (
     _compiled_rule,
     _identity_preparation_scope,
     source_sentence_spans,
+    source_attributed_quote_spans,
+    source_hardware_action_frame,
+    source_device_behavior_test_frame,
+    source_device_operation_frame,
+    bind_source_report,
+    bind_device_conditions,
+    source_current_report_frame,
+    source_internal_testing_frame,
+    source_device_test_objects,
+    source_market_measurement_frame,
+    source_apple_invitation_fact,
+    source_executive_visit_frame,
     source_employee_leave_notice,
     source_local_report_passages,
     organization_action_frame,
@@ -120,6 +148,7 @@ from apple_news_core.article_projector import (  # noqa: E402
     projected_source_dispositions,
     source_evidence_remainder,
     attributed_content_synopsis_subject,
+    adjacent_unattributed_prediction_spans,
     focus_source_roundup,
     project_compound_article,
     project_os_release_variants,
@@ -137,6 +166,7 @@ from apple_news_core.event_reconciler import (
     resolve_sparse_release_profiles,  # noqa: E402
     resolve_event_outcome,
     bound_reconciliation_profile,
+    claim_eligibility,
     validate_evidence_dispositions,
     validate_source_span_dispositions,
     ReconciliationProfile,
@@ -151,15 +181,6 @@ from apple_news_core.event_reconciler import (
     resolve_reconciliation_outcome,
     supported_reconciliation_event_keys,
 )
-
-try:
-    from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
-except Exception:  # pragma: no cover - zoneinfo exists on supported Python 3.
-    ZoneInfo = None  # type: ignore[assignment]
-
-    class ZoneInfoNotFoundError(Exception):
-        pass
-
 
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -190,51 +211,6 @@ FINAL_BRIEF_OMISSION_NOT_ALLOWED_FOR = [
     "same_day_major_news",
 ]
 
-TIMEZONE_ABBREVIATIONS = {
-    "UTC": timezone.utc,
-    "GMT": timezone.utc,
-    "Z": timezone.utc,
-    "PST": timezone(timedelta(hours=-8), "PST"),
-    "PDT": timezone(timedelta(hours=-7), "PDT"),
-    "MST": timezone(timedelta(hours=-7), "MST"),
-    "MDT": timezone(timedelta(hours=-6), "MDT"),
-    "CST": timezone(timedelta(hours=-6), "CST"),
-    "CDT": timezone(timedelta(hours=-5), "CDT"),
-    "EST": timezone(timedelta(hours=-5), "EST"),
-    "EDT": timezone(timedelta(hours=-4), "EDT"),
-}
-
-GENERIC_TIMEZONES = {
-    "PT": "America/Los_Angeles",
-    "ET": "America/New_York",
-}
-
-MONTHS = {
-    "jan": 1,
-    "january": 1,
-    "feb": 2,
-    "february": 2,
-    "mar": 3,
-    "march": 3,
-    "apr": 4,
-    "april": 4,
-    "may": 5,
-    "jun": 6,
-    "june": 6,
-    "jul": 7,
-    "july": 7,
-    "aug": 8,
-    "august": 8,
-    "sep": 9,
-    "sept": 9,
-    "september": 9,
-    "oct": 10,
-    "october": 10,
-    "nov": 11,
-    "november": 11,
-    "dec": 12,
-    "december": 12,
-}
 
 APPLE_TERMS = [
     "apple",
@@ -253,6 +229,7 @@ APPLE_TERMS = [
     "watchos",
     "tvos",
     "visionos",
+    "homeos",
     "airpods",
     "apple watch",
     "vision pro",
@@ -305,6 +282,15 @@ APPLE_TERMS = [
 ]
 
 BARE_APPLE_CHIP_TERMS = {"m1", "m2", "m3", "m4", "m5", "m6", "c1", "c2"}
+
+# Discovery may have only a headline after a rolling feed drops an article.
+# Add named accessory/service aliases, not generic product-type vocabulary.
+# Generic controllers, cloths and car keys still require Apple context.
+DISCOVERY_PRODUCT_TERMS = tuple(dict.fromkeys(
+    alias for _product, aliases in PRODUCT_PATTERNS for alias in aliases
+    if (_product in {'airtag', 'magic-keyboard', 'beats', 'shazam', 'webkit', 'homekit'} or alias == 'homeview')
+    and alias not in APPLE_TERMS
+))
 
 APPLE_CHIP_CONTEXT_TERMS = [
     "apple",
@@ -1447,17 +1433,6 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def zoneinfo_or_none(name: str | None) -> Any:
-    if not name or ZoneInfo is None:
-        return None
-    try:
-        return ZoneInfo(name)
-    except ZoneInfoNotFoundError:
-        return None
-    except Exception:
-        return None
-
-
 def detect_timezone(requested: str) -> tuple[Any, dict[str, Any]]:
     diagnostics: dict[str, Any] = {
         "requested": requested,
@@ -1536,359 +1511,39 @@ def prepare_cache_dir(cache_dir: Path, diagnostics: dict[str, Any]) -> Path:
 
 def fetch_url(
     url: str, cache_dir: Path, diagnostics: dict[str, Any],
-    timeout: float | None = None, retries: int | None = None,
+    timeout: float | None = None, retries: int | None = None, *, method: str = 'GET',
 ) -> str | None:
     return collection.fetch_url(
         url, cache_dir, diagnostics, timeout, retries,
         settings=FetchSettings(FETCH_TIMEOUT, FETCH_RETRIES, USER_AGENT, MAX_RESPONSE_BYTES),
-        now=utc_now,
+        now=utc_now, method=method,
     )
 
 
-def fetch_detail_page_texts(
-    candidates: list[Candidate],
-    cache_dir: Path,
-    diagnostics: dict[str, Any],
-) -> list[str | None]:
-    if not candidates:
-        diagnostics["detail_fetch_workers"] = 0
-        diagnostics["detail_fetch_retry_count"] = 0
-        diagnostics["detail_fetch_retry_recovered"] = 0
-        return []
-    workers = min(DEFAULT_DETAIL_FETCH_WORKERS, len(candidates))
-    diagnostics["detail_fetch_workers"] = workers
-    results: list[str | None] = [None] * len(candidates)
-    first_failures: dict[int, list[dict[str, Any]]] = {}
-
-    def fetch_one(
-        index: int,
-        candidate: Candidate,
-        retries: int | None,
-    ) -> tuple[int, str | None, list[dict[str, Any]]]:
-        local_diagnostics: dict[str, Any] = {"failed_fetches": []}
-        page_text = fetch_url(
-            candidate.url,
-            cache_dir,
-            local_diagnostics,
-            retries=retries,
-        )
-        return index, page_text, list(local_diagnostics.get("failed_fetches", []))
-
-    def run_pass(
-        indexes: list[int],
-        *,
-        retries: int | None,
-    ) -> dict[int, list[dict[str, Any]]]:
-        pass_failures: dict[int, list[dict[str, Any]]] = {}
-        if not indexes:
-            return pass_failures
-        pass_workers = min(DEFAULT_DETAIL_FETCH_WORKERS, len(indexes))
-        if pass_workers <= 1:
-            for index in indexes:
-                candidate = candidates[index]
-                try:
-                    result_index, page_text, local_failures = fetch_one(
-                        index,
-                        candidate,
-                        retries,
-                    )
-                except Exception as exc:
-                    page_text = None
-                    result_index = index
-                    local_failures = [
-                        {
-                            "url": candidate.url,
-                            "error": f"{type(exc).__name__}: {exc}",
-                        }
-                    ]
-                results[result_index] = page_text
-                if page_text is None:
-                    pass_failures[result_index] = local_failures
-            return pass_failures
-
-        with concurrent.futures.ThreadPoolExecutor(max_workers=pass_workers) as executor:
-            future_map = {
-                executor.submit(fetch_one, index, candidates[index], retries): index
-                for index in indexes
-            }
-            for future in concurrent.futures.as_completed(future_map):
-                index = future_map[future]
-                try:
-                    result_index, page_text, local_failures = future.result()
-                except Exception as exc:
-                    candidate = candidates[index]
-                    result_index = index
-                    page_text = None
-                    local_failures = [
-                        {
-                            "url": candidate.url,
-                            "error": f"{type(exc).__name__}: {exc}",
-                        }
-                    ]
-                results[result_index] = page_text
-                if page_text is None:
-                    pass_failures[result_index] = local_failures
-        return pass_failures
-
-    first_failures = run_pass(list(range(len(candidates))), retries=None)
-    retry_indexes = sorted(first_failures)
-    diagnostics["detail_fetch_retry_count"] = len(retry_indexes)
-    retry_failures = run_pass(retry_indexes, retries=0)
-    recovered_indexes = [index for index in retry_indexes if results[index] is not None]
-    diagnostics["detail_fetch_retry_recovered"] = len(recovered_indexes)
-    if recovered_indexes:
-        diagnostics.setdefault("transient_detail_fetches", []).extend(
-            failure
-            for index in recovered_indexes
-            for failure in first_failures.get(index, [])
-        )
-    terminal_failures = [
-        failure
-        for index in retry_indexes
-        if results[index] is None
-        for failure in (
-            retry_failures.get(index)
-            or first_failures.get(index)
-            or [
-                {
-                    "url": candidates[index].url,
-                    "error": "detail fetch failed without an exception record",
-                }
-            ]
-        )
-    ]
-    diagnostics.setdefault("failed_fetches", []).extend(terminal_failures)
-    return results
-
-
-def xml_text(element: ET.Element, names: set[str]) -> str:
-    for child in list(element):
-        name = child.tag.rsplit("}", 1)[-1].lower()
-        if name in names and child.text:
-            return strip_tags(child.text)
-    return ""
-
-
-def xml_text_raw(element: ET.Element, names: set[str]) -> str:
-    for child in list(element):
-        name = child.tag.rsplit("}", 1)[-1].lower()
-        if name in names and child.text:
-            return child.text
-    return ""
-
-
-def source_context_terms(raw_html: str, categories: list[str]) -> str:
-    terms: list[str] = []
-
-    def add(value: str) -> None:
-        normalized = html.unescape(value).strip().lower()
-        if not normalized:
-            return
-        normalized = normalized.replace("_", "-")
-        for part in _compiled_rule(r"[,;/|]+", 0).split(normalized, 0):
-            part = part.strip()
-            if not part or part == "news":
-                continue
-            plain = part.replace("-", " ")
-            if plain not in terms:
-                terms.append(plain)
-
-    for category in categories:
-        add(category)
-    for match in _compiled_rule(r"""data-layer-postcategory\s*=\s*['"]([^'"]+)['"]""", re.I).finditer(raw_html):
-        add(match.group(1))
-    return " ".join(terms)
-
-
-def atom_link(element: ET.Element) -> str:
-    for child in list(element):
-        name = child.tag.rsplit("}", 1)[-1].lower()
-        if name == "link":
-            href = child.attrib.get("href")
-            rel = child.attrib.get("rel", "alternate")
-            if href and rel == "alternate":
-                return href.strip()
-    return ""
-
-
-def parse_xml_feed(text: str, source: Source, feed_url: str) -> list[Candidate]:
-    candidates: list[Candidate] = []
-    try:
-        root = ET.fromstring(text)
-    except ET.ParseError:
-        return candidates
-
-    root_name = root.tag.rsplit("}", 1)[-1].lower()
-    if root_name == "opml":
-        return candidates
-
-    for item in root.iter():
-        name = item.tag.rsplit("}", 1)[-1].lower()
-        if name not in {"item", "entry"}:
-            continue
-        title = xml_text(item, {"title"})
-        link = xml_text(item, {"link"})
-        if not link:
-            link = atom_link(item)
-        raw_summary = xml_text_raw(item, {"description", "summary", "content", "encoded"})
-        summary = strip_tags(raw_summary)
-        published = xml_text(item, {"pubdate", "published", "updated", "dc:date"})
-        categories = [
-            strip_tags(child.text)
-            for child in list(item)
-            if child.tag.rsplit("}", 1)[-1].lower() == "category" and child.text
-        ]
-        context = source_context_terms(raw_summary, categories)
-        if title and link:
-            candidates.append(
-                Candidate(
-                    source=source.name,
-                    url=urllib.parse.urljoin(feed_url, link),
-                    title=title,
-                    summary=summary,
-                    feed_time_raw=published,
-                    discovered_from=feed_url,
-                    context=context,
-                )
-            )
-    return candidates
-
-
-def wordpress_rendered_text(value: Any) -> str:
-    if isinstance(value, dict):
-        for key in ("rendered", "document_title", "raw"):
-            rendered = value.get(key)
-            if isinstance(rendered, str) and rendered.strip():
-                return strip_tags(rendered)
-        return ""
-    if isinstance(value, str):
-        return strip_tags(value)
-    return ""
-
-
-def wordpress_utc_timestamp(value: Any) -> str:
-    if not isinstance(value, str):
-        return ""
-    cleaned = value.strip()
-    if not cleaned:
-        return ""
-    if _compiled_rule(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}", 0).fullmatch(cleaned):
-        return f"{cleaned}+00:00"
-    if cleaned.endswith("Z") or _compiled_rule(r"[+-]\d{2}:?\d{2}$", 0).search(cleaned):
-        return cleaned
-    return cleaned
-
-
-def parse_wordpress_posts_api(text: str, source: Source, api_url: str) -> list[Candidate]:
-    candidates: list[Candidate] = []
-    try:
-        payload = json.loads(text)
-    except json.JSONDecodeError:
-        return candidates
-    if not isinstance(payload, list):
-        return candidates
-
-    for item in payload:
-        if not isinstance(item, dict):
-            continue
-        link = item.get("link")
-        if not isinstance(link, str) or not link.strip():
-            continue
-        title = wordpress_rendered_text(item.get("title"))
-        summary = wordpress_rendered_text(item.get("excerpt"))
-        if not title:
-            continue
-        context_terms: list[str] = []
-        embedded = item.get("_embedded")
-        if isinstance(embedded, dict):
-            term_groups = embedded.get("wp:term")
-            if isinstance(term_groups, list):
-                for group in term_groups:
-                    if not isinstance(group, list):
-                        continue
-                    for term in group:
-                        if not isinstance(term, dict):
-                            continue
-                        for key in ("name", "slug"):
-                            value = term.get(key)
-                            if isinstance(value, str) and value.strip():
-                                context_terms.append(strip_tags(value).replace("-", " "))
-        feed_time_raw = wordpress_utc_timestamp(item.get("date_gmt")) or wordpress_utc_timestamp(
-            item.get("date")
-        )
-        candidates.append(
-            Candidate(
-                source=source.name,
-                url=urllib.parse.urljoin(api_url, html.unescape(link.strip())),
-                title=title,
-                summary=summary,
-                feed_time_raw=feed_time_raw,
-                discovered_from=api_url,
-                context=" ".join(dict.fromkeys(context_terms)),
-            )
-        )
-    return candidates
+def fetch_detail_page_texts(candidates: list[Candidate], cache_dir: Path,
+                            diagnostics: dict[str, Any]) -> list[str | None]:
+    return collection.fetch_detail_page_texts(candidates, cache_dir, diagnostics,
+        fetch=fetch_url, max_workers=DEFAULT_DETAIL_FETCH_WORKERS)
 
 
 def parse_opml_feed_urls(text: str) -> list[str]:
-    try:
-        root = ET.fromstring(text)
-    except ET.ParseError:
-        return []
-    urls: list[str] = []
-    for outline in root.iter():
-        xml_url = outline.attrib.get("xmlUrl") or outline.attrib.get("xmlurl")
-        if xml_url and xml_url.startswith(("http://", "https://")) and xml_url not in urls:
-            urls.append(xml_url)
-    return urls[:MAX_FEEDS_FROM_OPML]
-
-
-def same_domain(url: str, domains: tuple[str, ...]) -> bool:
-    if not domains:
-        return True
-    host = urllib.parse.urlparse(url).netloc.lower().split("@")[-1].split(":")[0]
-    return any(host == domain or host.endswith(f".{domain}") for domain in domains)
-
-
-def extract_ithome_listing_metadata(text: str, page_url: str, source: Source) -> dict[str, dict[str, str]]:
-    metadata: dict[str, dict[str, str]] = {}
-    for item_match in _compiled_rule(r"(?is)<li\b[^>]*>.*?</li>", 0).finditer(text):
-        item_html = item_match.group(0)
-        summary = ""
-        summary_match = _compiled_rule(r"""(?is)<div\b(?=[^>]*class\s*=\s*['"][^'"]*\bm\b[^'"]*['"])[^>]*>(.*?)</div>""", 0).search(item_html)
-        if summary_match:
-            summary = strip_tags(summary_match.group(1))
-        feed_time_raw = ""
-        time_match = _compiled_rule(r"""data-ot\s*=\s*['"]([^'"]+)['"]""", re.I).search(item_html)
-        if time_match:
-            feed_time_raw = html.unescape(time_match.group(1)).strip()
-        if not summary and not feed_time_raw:
-            continue
-        for link_match in _compiled_rule(r"(?is)<a\b([^>]+)>(.*?)</a>", 0).finditer(item_html):
-            attrs, label_html = link_match.groups()
-            href_match = _compiled_rule(r"""href\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
-            if not href_match:
-                continue
-            label = strip_tags(label_html)
-            if not label or len(label) < 8:
-                continue
-            url = urllib.parse.urljoin(page_url, html.unescape(href_match.group(1)))
-            if not url.startswith(("http://", "https://")):
-                continue
-            if not same_domain(url, source.domains):
-                continue
-            metadata[normalize_url(url)] = {"summary": summary, "feed_time_raw": feed_time_raw}
-    return metadata
+    return collection.parse_opml_feed_urls(text, MAX_FEEDS_FROM_OPML)
 
 
 def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate]:
     candidates: list[Candidate] = []
-    seen: set[str] = set()
+    paragraphs = iter(_compiled_rule(r"(?is)<p\b([^>]*)>.*?</p\s*>", 0).finditer(text))
+    paragraph = next(paragraphs, None)
     listing_metadata = (
         extract_ithome_listing_metadata(text, page_url, source) if source.name == "IT之家" else {}
     )
     for match in _compiled_rule(r"(?is)<a\b([^>]+)>(.*?)</a>", 0).finditer(text):
         attrs, label_html = match.groups()
+        while paragraph is not None and paragraph.end() <= match.start():
+            paragraph = next(paragraphs, None)
+        is_excerpt = bool(paragraph is not None
+            and paragraph.start() < match.start() and match.end() <= paragraph.end()
+            and not _compiled_rule(r'''\b(?:title\s*=|(?:class|itemprop)\s*=\s*['"][^'"]*(?:headline|title))''', re.I).search(attrs + ' ' + paragraph.group(1)))
         href_match = _compiled_rule(r"""href\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
         if not href_match:
             continue
@@ -1897,38 +1552,30 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
             continue
         href = html.unescape(href_match.group(1))
         url = urllib.parse.urljoin(page_url, href)
-        if url in seen or not url.startswith(("http://", "https://")):
+        if not url.startswith(("http://", "https://")):
             continue
         if not same_domain(url, source.domains):
             continue
         if not collection.source_article_url_allowed(url, source):
             continue
         metadata = listing_metadata.get(normalize_url(url), {})
-        seen.add(url)
         candidates.append(
             Candidate(
                 source=source.name,
                 url=url,
                 title=label,
-                summary=metadata.get("summary", ""),
+                summary=merge_candidate_text(metadata.get("summary", ""), label if is_excerpt else ""),
                 feed_time_raw=metadata.get("feed_time_raw", ""),
                 discovered_from=page_url,
                 context=source_context_terms(attrs, []),
+                title_is_excerpt=is_excerpt,
             )
         )
-        if len(candidates) >= MAX_PAGE_LINKS:
-            break
-    return candidates
-
-
-
-
-
-
-
-
-
-
+    return collection.limit_page_candidates(
+        merge_duplicate_candidates(candidates), MAX_PAGE_LINKS,
+        lambda candidate: not is_source_daily_brief_candidate(candidate, source)
+        and is_relevant_candidate(candidate, source),
+    )
 
 
 def has_apple_chip_context(text: str) -> bool:
@@ -4190,6 +3837,9 @@ def allowed_url_excluded_candidate(candidate: Candidate, source: Source, text: s
         return True
     if source.name == "MacRumors" and "/guide/" in url_lower:
         guide_identity = title_led_identity(candidate.title, candidate.summary)
+        introduction = source_device_operation_frame(candidate.title, candidate.summary)
+        if introduction is not None and introduction.action == 'device-announcement':
+            return True
         if (
             guide_identity.scope == "apple-direct"
             and guide_identity.content_form == "roundup"
@@ -6255,55 +5905,36 @@ def is_apple_os_support_compatibility_story(text: str) -> bool:
         ],
     ) > 0:
         return False
-    return (
-        score_terms(
-            lower,
-            [
-                "iphone",
-                "iphones",
-                "ipad",
-                "ipads",
-                "mac",
-                "macs",
-                "macbook",
-                "macbooks",
-                "imac",
-                "imacs",
-                "apple watch",
-                "apple tv",
-                "homepod",
-                "vision pro",
-            ],
-        )
-        > 0
-        and score_terms(
-            lower,
-            [
-                "software support",
-                "support ends",
-                "end software support",
-                "drop support",
-                "drops support",
-                "dropped",
-                "not support",
-                "won't support",
-                "no longer support",
-                "losing support",
-                "compatibility list",
-                "compatible",
-                "unsupported",
-                "停止支持",
-                "结束支持",
-                "不再支持",
-                "无缘",
-                "兼容列表",
-                "兼容性",
-            ],
-        )
-        > 0
-        and score_terms(lower, ["ios", "ipados", "macos", "watchos", "tvos", "visionos", "software", "系统"])
-        > 0
-    )
+    # The support relationship must belong to Apple, an Apple OS, or the
+    # supported Apple device. A peripheral's list cannot borrow host names.
+    os_name = r"(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s*\d+(?:\.\d+)*)?"
+    device = r"(?:iphones?|ipads?|macs?|macbooks?|imacs?|apple\s+(?:watch|tv)|homepod|vision\s+pro)"
+    support = (r"(?:compatibility\s+list|compatible\s+(?:with\s+)?|"
+        r"(?:drop(?:s|ped)?|end(?:s|ed)?|stop(?:s|ped)?|no\s+longer|not|won['’]t)\s+(?:software\s+)?support|"
+        r"supports?|unsupported|兼容(?:性)?列表|支持设备列表|(?:停止|结束|不再)?支持|兼容|无缘)")
+    # Resolve the support object's noun phrase, not a later clause's device.
+    # List continuations may supply it only through a local inclusion predicate.
+    object_prefix = (r"\s*(?:[，,:：]\s*)?(?:(?:includes?|to\s+include)\s+)?"
+        r"(?:(?:for|with|the|older|newer|latest|remaining|intel|all|these|following)\s+)*"
+        r"(?:包括|包含|新增支持|支持|以下|部分|旧款|新款)*\s*")
+    supported_device = object_prefix + device + r"(?![a-z])"
+    os_assertion = _compiled_rule(
+        r"(?<![a-z0-9])" + os_name
+        + r"\s*(?:(?:is|will|be|may|might|reportedly|now|still|compatibility)\s+){0,4}"
+        + r"(?:系统)?(?:将|仍|继续|可能|据报)?\s*" + support + supported_device, re.I).search(text)
+    apple_assertion = _compiled_rule(
+        r"(?:\bapple\s+(?:(?:will|now|reportedly)\s+)*(?:updates?|expands?|adds?|ends?|drops?)|"
+        r"苹果(?:公司)?(?:将|现已|已)?(?:更新|公布|扩充|新增|停止|结束))"
+        r"[^。.!?]{0,65}" + support + object_prefix
+        + r"(?:" + device + r"(?![a-z])|\d+\s+(?:Apple\s+)?devices?\b)", re.I).search(text)
+    device_assertion = _compiled_rule(
+        r"(?<![a-z0-9])" + device + r"(?:\s+\d+(?:\s+(?:pro|max|air|mini))*)?"
+        r"\s+(?:(?:will|may|might|can|are|is|no\s+longer|not)\s+){0,3}"
+        r"(?:not\s+support|won['’]t\s+support|losing\s+support|unsupported)"
+        r"[^.!?]{0,35}(?:software|" + os_name + r")", re.I).search(text)
+    return bool((os_assertion or apple_assertion or device_assertion)
+        and _compiled_rule(device, re.I).search(text)
+        and score_terms(lower, ["ios", "ipados", "macos", "watchos", "tvos", "visionos", "software", "系统"]) > 0)
 
 
 def is_apple_silicon_third_party_os_driver_compatibility_story(title: str, text: str) -> bool:
@@ -6504,6 +6135,12 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
         return True
     if is_apple_os_feature_or_summary_story(text):
         return False
+    # A week can modify a concrete scheduled action, rather than name a
+    # weekly editorial column. Other recap/buying-advice cues still apply.
+    if ("this week" in title_lower
+            and not _compiled_rule(r"\b(?:begin|start|open|ship|launch|release|arrive)(?:s|ing|ed)?\b"
+                                   r".{0,50}\bthis week\b", re.I).search(title_lower)):
+        return True
     if score_terms(
         title_lower,
         [
@@ -6511,7 +6148,6 @@ def is_routine_recap_comparison_or_buying_advice(title: str, text: str) -> bool:
             "recap",
             "weekly recap",
             "roundup",
-            "this week",
             "sunday reboot",
             "opinion",
             "commentary",
@@ -8155,20 +7791,6 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
     if score_terms(
         title_lower,
         [
-            "iphone",
-            "ipad",
-            "apple watch",
-            "airpods",
-            "vision pro",
-            "homepod",
-            "macbook",
-            "mac",
-            "beats",
-            "苹果",
-        ],
-    ) > 0 and score_terms(
-        title_lower,
-        [
             "compatible",
             "compatibility",
             "support",
@@ -8199,7 +7821,10 @@ def is_third_party_accessory_platform_compatibility_story(title: str, text: str)
             "保护壳",
             "磁吸",
         ],
-    ) <= 0:
+    ) <= 0 and (title_identity := build_event_identity(title, lead_scope)).title_products and title_identity.scope == "apple-direct":
+        # Use the shared product identity instead of a second device-name list.
+        # Display parts and supported accessories in a first-party report do
+        # not make a third-party accessory its subject.
         return False
     if score_terms(title_lower, ["apple", "beats", "苹果", "官方"]) > 0:
         if score_terms(
@@ -9383,8 +9008,11 @@ def merge_candidate_context(primary: str, secondary: str) -> str:
 
 def merge_two_candidates(existing: Candidate, incoming: Candidate) -> Candidate:
     title = existing.title
-    if title_quality_score(incoming.title) > title_quality_score(existing.title):
+    title_is_excerpt = existing.title_is_excerpt
+    incoming_quality, existing_quality = title_quality_score(incoming.title), title_quality_score(existing.title)
+    if (incoming_quality[0], not incoming.title_is_excerpt, *incoming_quality[1:]) > (existing_quality[0], not existing.title_is_excerpt, *existing_quality[1:]):
         title = incoming.title
+        title_is_excerpt = incoming.title_is_excerpt
     feed_time_raw = existing.feed_time_raw or incoming.feed_time_raw
     discovered_from = existing.discovered_from or incoming.discovered_from
     if incoming.feed_time_raw and not existing.feed_time_raw:
@@ -9397,6 +9025,7 @@ def merge_two_candidates(existing: Candidate, incoming: Candidate) -> Candidate:
         feed_time_raw=feed_time_raw,
         discovered_from=discovered_from,
         context=merge_candidate_context(existing.context, incoming.context),
+        title_is_excerpt=title_is_excerpt,
     )
 
 
@@ -9554,11 +9183,20 @@ def is_relevant_candidate(
         return False
     if is_source_daily_brief_candidate(candidate, source):
         return False
+    if key_facts is not None and collection.market_summary_needs_detail(candidate.title):
+        # A measured Apple result can occur after the lead. Reuse the source
+        # identity authority so another vendor or an old period cannot qualify.
+        if source_market_measurement_frame(candidate.title, candidate.summary, tuple(key_facts)):
+            return True
     url_lower = candidate.url.lower()
     text = f"{candidate.title} {candidate.summary} {candidate.context}"
     lower_text = text.lower()
     apple_score = effective_apple_term_score(text)
     if apple_score <= 0:
+        apple_score = score_terms(text, DISCOVERY_PRODUCT_TERMS)
+    if apple_score <= 0:
+        if key_facts is None and collection.market_summary_needs_detail(candidate.title):
+            return True
         if source.name != "Apple Newsroom":
             return False
         action_score = score_terms(text, POSITIVE_ACTION_TERMS)
@@ -9641,12 +9279,11 @@ def is_relevant_candidate(
         semantic_identity, has_lead=bool(candidate.summary.strip()), event_kind=candidate_event_kind, title=candidate.title
     ):
         return True
-    candidate_tier, _ = classify_relevance_tier(
-        candidate.title,
-        candidate.summary,
-        classification_facts,
-        candidate.source,
-    )
+    profile = source_text_profile(candidate.title, candidate.summary, classification_facts, candidate.source)
+    if profile.eligibility is not None and not profile.eligibility.resolved:
+        return True  # Discovery needs the detail evidence to resolve this source.
+    candidate_tier, _, _ = resolve_reconciliation_outcome(
+        profile, observed_tier="", observed_reason="", observed_category="")
     if (
         candidate_tier == "weak"
         and is_third_party_consumer_app_update_on_apple_platform(candidate.title, text)
@@ -9745,316 +9382,8 @@ def is_relevant_candidate(
     return True
 
 
-def tz_from_token(token: str | None, default_tz_name: str) -> Any:
-    if token:
-        normalized = token.upper().replace(".", "")
-        if normalized.startswith(("+", "-")):
-            compact = normalized.replace(":", "")
-            if _compiled_rule(r"[+-]\d{4}", 0).fullmatch(compact):
-                sign = 1 if compact[0] == "+" else -1
-                hours = int(compact[1:3])
-                minutes = int(compact[3:5])
-                return timezone(sign * timedelta(hours=hours, minutes=minutes))
-        if normalized in TIMEZONE_ABBREVIATIONS:
-            return TIMEZONE_ABBREVIATIONS[normalized]
-        if normalized in GENERIC_TIMEZONES:
-            tz = zoneinfo_or_none(GENERIC_TIMEZONES[normalized])
-            if tz is not None:
-                return tz
-    tz = zoneinfo_or_none(default_tz_name)
-    return tz or timezone.utc
-
-
-def localize_naive(value: datetime, default_tz_name: str, tz_token: str | None = None) -> datetime:
-    return value.replace(tzinfo=tz_from_token(tz_token, default_tz_name))
-
-
 def parse_datetime_value(raw_value: str, default_tz_name: str) -> datetime | None:
-    if not raw_value:
-        return None
-    raw = html.unescape(strip_tags(raw_value))
-    raw = raw.replace("\xa0", " ")
-    raw = _compiled_rule(r"\s+", 0).sub(" ", raw, 0).strip()
-    raw = _compiled_rule(r"^(Published|Updated|Posted|Last updated)\s*:?\s*", re.I).sub("", raw, 0)
-    raw = raw.strip(" -|")
-
-    iso_match = _compiled_rule(r"\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?", 0).search(raw)
-    if iso_match:
-        iso_text = iso_match.group(0).replace("Z", "+00:00")
-        if "T" not in iso_text:
-            iso_text = iso_text.replace(" ", "T", 1)
-        if _compiled_rule(r"[+-]\d{4}$", 0).search(iso_text):
-            iso_text = f"{iso_text[:-2]}:{iso_text[-2:]}"
-        iso_text = _compiled_rule(r"(\.\d{6})\d+(?=(?:[+-]\d{2}:?\d{2})?$)", 0).sub(r"\1", iso_text, 0)
-        try:
-            parsed = datetime.fromisoformat(iso_text)
-            if parsed.tzinfo is None:
-                parsed = localize_naive(parsed, default_tz_name)
-            return parsed
-        except ValueError:
-            pass
-
-    slash_match = _compiled_rule(r"(\d{4})/(\d{1,2})/(\d{1,2})\s+"
-        r"(\d{1,2}):(\d{2})(?::(\d{2}))?", 0).search(raw)
-    if slash_match:
-        year_s, month_s, day_s, hour_s, minute_s, second_s = slash_match.groups()
-        parsed = datetime(
-            int(year_s),
-            int(month_s),
-            int(day_s),
-            int(hour_s),
-            int(minute_s),
-            int(second_s or 0),
-        )
-        return localize_naive(parsed, default_tz_name)
-
-    month_pattern = (
-        r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
-        r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
-        r"Nov(?:ember)?|Dec(?:ember)?)"
-    )
-    natural_match = re.search(
-        r"(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)?\.?\s*"
-        + month_pattern
-        + r"\s+(\d{1,2}),?\s+(\d{4})(?:,)?(?:\s+(?:at\s+)?)?"
-        + r"(\d{1,2}):(\d{2})(?::(\d{2}))?\s*"
-        + r"(a\.?m\.?|p\.?m\.?|AM|PM)?\s*([A-Z]{1,4}|[+-]\d{2}:?\d{2})?",
-        raw,
-        re.I,
-    )
-    if natural_match:
-        month_name, day_s, year_s, hour_s, minute_s, second_s, ampm, tz_token = (
-            natural_match.groups()
-        )
-        hour = int(hour_s)
-        if ampm:
-            ampm_clean = ampm.lower().replace(".", "")
-            if ampm_clean == "pm" and hour != 12:
-                hour += 12
-            elif ampm_clean == "am" and hour == 12:
-                hour = 0
-        parsed = datetime(
-            int(year_s),
-            MONTHS[month_name.lower().rstrip(".")],
-            int(day_s),
-            hour,
-            int(minute_s),
-            int(second_s or 0),
-        )
-        return localize_naive(parsed, default_tz_name, tz_token)
-
-    try:
-        parsed = email.utils.parsedate_to_datetime(raw)
-        if parsed:
-            if parsed.tzinfo is None:
-                parsed = localize_naive(parsed, default_tz_name)
-            return parsed
-    except Exception:
-        pass
-
-    chinese_match = _compiled_rule(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日\s*"
-        r"(\d{1,2})[:：](\d{2})(?:[:：](\d{2}))?", 0).search(raw)
-    if chinese_match:
-        year_s, month_s, day_s, hour_s, minute_s, second_s = chinese_match.groups()
-        year = int(year_s) if year_s else datetime.now().year
-        parsed = datetime(
-            year,
-            int(month_s),
-            int(day_s),
-            int(hour_s),
-            int(minute_s),
-            int(second_s or 0),
-        )
-        return localize_naive(parsed, default_tz_name)
-
-    month_match = re.search(
-        month_pattern
-        + r"\s+(\d{1,2}),?\s+(\d{4})(?:,)?(?:\s+(?:at\s+)?)?"
-        + r"(\d{1,2}):(\d{2})(?::(\d{2}))?\s*"
-        + r"(a\.?m\.?|p\.?m\.?|AM|PM)?\s*([A-Z]{1,4}|[+-]\d{2}:?\d{2})?",
-        raw,
-        re.I,
-    )
-    if month_match:
-        month_name, day_s, year_s, hour_s, minute_s, second_s, ampm, tz_token = (
-            month_match.groups()
-        )
-        hour = int(hour_s)
-        if ampm:
-            ampm_clean = ampm.lower().replace(".", "")
-            if ampm_clean == "pm" and hour != 12:
-                hour += 12
-            elif ampm_clean == "am" and hour == 12:
-                hour = 0
-        parsed = datetime(
-            int(year_s),
-            MONTHS[month_name.lower().rstrip(".")],
-            int(day_s),
-            hour,
-            int(minute_s),
-            int(second_s or 0),
-        )
-        return localize_naive(parsed, default_tz_name, tz_token)
-
-    numeric_match = _compiled_rule(r"(\d{1,2})/(\d{1,2})/(\d{4})[,\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?\s*"
-        r"(a\.?m\.?|p\.?m\.?|AM|PM)?\s*([A-Z]{1,4}|[+-]\d{2}:?\d{2})?", re.I).search(raw)
-    if numeric_match:
-        month_s, day_s, year_s, hour_s, minute_s, second_s, ampm, tz_token = (
-            numeric_match.groups()
-        )
-        hour = int(hour_s)
-        if ampm:
-            ampm_clean = ampm.lower().replace(".", "")
-            if ampm_clean == "pm" and hour != 12:
-                hour += 12
-            elif ampm_clean == "am" and hour == 12:
-                hour = 0
-        parsed = datetime(
-            int(year_s),
-            int(month_s),
-            int(day_s),
-            hour,
-            int(minute_s),
-            int(second_s or 0),
-        )
-        return localize_naive(parsed, default_tz_name, tz_token)
-
-    return None
-
-
-def parse_date_only_value(raw_value: str, default_tz_name: str) -> datetime | None:
-    if not raw_value:
-        return None
-    raw = html.unescape(strip_tags(raw_value))
-    raw = raw.replace("\xa0", " ")
-    raw = _compiled_rule(r"\s+", 0).sub(" ", raw, 0).strip()
-    raw = raw.strip(" -|")
-    iso_match = _compiled_rule(r"\b(\d{4})-(\d{2})-(\d{2})(?:Z)?\b", 0).search(raw)
-    if iso_match:
-        year_s, month_s, day_s = iso_match.groups()
-        parsed = datetime(int(year_s), int(month_s), int(day_s), 12, 0, 0)
-        return localize_naive(parsed, default_tz_name)
-
-    month_pattern = (
-        r"(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
-        r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
-        r"Nov(?:ember)?|Dec(?:ember)?)"
-    )
-    natural_match = re.search(
-        month_pattern + r"\s+(\d{1,2}),?\s+(\d{4})",
-        raw,
-        re.I,
-    )
-    if natural_match:
-        month_name, day_s, year_s = natural_match.groups()
-        parsed = datetime(
-            int(year_s),
-            MONTHS[month_name.lower().rstrip(".")],
-            int(day_s),
-            12,
-            0,
-            0,
-        )
-        return localize_naive(parsed, default_tz_name)
-    return None
-
-
-def find_json_key(value: Any, keys: set[str]) -> str:
-    if isinstance(value, dict):
-        for key, item in value.items():
-            if key in keys and isinstance(item, str):
-                return item
-        for item in value.values():
-            found = find_json_key(item, keys)
-            if found:
-                return found
-    elif isinstance(value, list):
-        for item in value:
-            found = find_json_key(item, keys)
-            if found:
-                return found
-    return ""
-
-
-class ArticleTextExtractor(HTMLParser):
-    block_tags = {"p", "li", "h2", "h3", "tr", "blockquote"}
-    div_class_fragments = (
-        "pagebody-copy",
-        "article-copy",
-        "body-copy",
-        "entry-content",
-        "post-content",
-        "story-content",
-    )
-    void_tags = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
-
-    def __init__(self) -> None:
-        super().__init__(convert_charrefs=True)
-        self.units: list[tuple[str, str]] = []
-        self._capture_tag: str | None = None
-        self._capture_kind = ""
-        self._depth = 0
-        self._parts: list[str] = []
-
-    def _is_block(self, tag: str, attrs: list[tuple[str, str | None]]) -> bool:
-        if tag in self.block_tags:
-            return True
-        if tag != "div":
-            return False
-        classes = " ".join(value or "" for name, value in attrs if name.lower() == "class")
-        return any(fragment in classes for fragment in self.div_class_fragments)
-
-    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        tag = tag.lower()
-        if self._capture_tag:
-            if tag == "br":
-                self._parts.append(" ")
-            if tag not in self.void_tags:
-                self._depth += 1
-            return
-        if self._is_block(tag, attrs):
-            self._capture_tag = tag
-            self._capture_kind = tag
-            self._depth = 1
-            self._parts = []
-
-    def handle_data(self, data: str) -> None:
-        if self._capture_tag:
-            self._parts.append(data)
-
-    def handle_endtag(self, tag: str) -> None:
-        if not self._capture_tag:
-            return
-        self._depth -= 1
-        if self._depth > 0:
-            return
-        text = _compiled_rule(r"\s+", 0).sub(" ", "".join(self._parts), 0).strip()
-        min_len = 20 if self._capture_kind in {"li", "tr"} else 30
-        if len(text) >= min_len:
-            self.units.append((self._capture_kind, html.unescape(text)))
-        self._capture_tag = None
-        self._capture_kind = ""
-        self._parts = []
-
-
-def extract_text_units(text: str) -> list[tuple[str, str]]:
-    scoped_text = article_scope(text)
-    parser = ArticleTextExtractor()
-    try:
-        parser.feed(scoped_text)
-    except Exception:
-        parser.units = []
-    units = parser.units
-    if units:
-        return units
-
-    fallback_units: list[tuple[str, str]] = []
-    for match in _compiled_rule(r"(?is)<(?P<tag>p|li|h2|h3|tr)\b[^>]*>(?P<body>.*?)</(?P=tag)>", 0).finditer(scoped_text):
-        cleaned = strip_tags(match.group("body"))
-        min_len = 20 if match.group("tag").lower() in {"li", "tr"} else 30
-        if len(cleaned) >= min_len:
-            fallback_units.append((match.group("tag").lower(), cleaned))
-    return fallback_units
+    return article_processing.parse_datetime_value(raw_value, default_tz_name, current_year=lambda: datetime.now().year)
 
 
 def fact_noise(value: str) -> bool:
@@ -10177,21 +9506,8 @@ def fact_noise(value: str) -> bool:
     return False
 
 
-
-
 def data_value_count(value: str) -> int:
     return sum(1 for match in DATA_VALUE_PATTERN.finditer(value) if _compiled_rule(r"\d", 0).search(match.group(0)))
-
-
-def split_fact_candidates(tag: str, value: str) -> list[str]:
-    if tag in {"li", "tr"} or len(value) <= 700:
-        return [value]
-    parts = [
-        clean_fact_text(part)
-        for part in _compiled_rule(r"(?<=[.!?。！？])\s+", 0).split(value, 0)
-        if clean_fact_text(part)
-    ]
-    return parts or [value]
 
 
 def is_key_fact(tag: str, value: str) -> bool:
@@ -10259,8 +9575,6 @@ def is_contextual_structured_list_fact(tag: str, value: str, title: str, context
     return labelled_row and (price_transition or data_value_count(value) >= 3)
 
 
-
-
 def key_fact_min_chars(value: str) -> int:
     cleaned = clean_fact_text(value)
     compact_price_row = bool(
@@ -10287,6 +9601,7 @@ def extract_key_facts(text: str, title: str, source_name: str) -> list[str]:
     facts: list[str] = []
     seen: set[str] = set()
     title_text = clean_fact_text(title)
+    market_report = collection.market_summary_needs_detail(title_text)
     list_context = ""
     for tag, unit in extract_text_units(text):
         cleaned = clean_fact_text(unit)
@@ -10303,7 +9618,7 @@ def extract_key_facts(text: str, title: str, source_name: str) -> list[str]:
                 and data_value_count(candidate) == 0
             ):
                 continue
-            if is_key_fact(tag, candidate) or is_contextual_structured_list_fact(
+            if source_apple_invitation_fact(candidate) or (market_report and source_market_measurement_frame(title_text, '', (candidate,))) or is_key_fact(tag, candidate) or is_contextual_structured_list_fact(
                 tag,
                 candidate,
                 title_text,
@@ -10360,27 +9675,6 @@ def extract_summary(text: str, fallback: str) -> str:
     if parts:
         return " ".join(parts)
     return strip_tags(fallback)
-
-
-def combine_summaries(primary: str, secondary: str) -> str:
-    parts: list[str] = []
-    seen: set[str] = set()
-    for value in [primary, secondary]:
-        cleaned = clean_sentence(value)
-        if not cleaned:
-            continue
-        for sentence in _compiled_rule(r"(?<=[.!?。！？])\s+", 0).split(cleaned, 0):
-            sentence = clean_sentence(sentence)
-            if not sentence:
-                continue
-            key = sentence.lower()[:120]
-            if key in seen:
-                continue
-            parts.append(sentence)
-            seen.add(key)
-            if len(parts) >= 8:
-                break
-    return " ".join(parts)
 
 
 def _topic_boundary_facets_for_text(title: str, summary: str = "") -> frozenset[str]:
@@ -10699,8 +9993,6 @@ def filter_key_facts_for_primary_topic(title: str, summary: str, key_facts: list
     return filtered
 
 
-
-
 def structured_roundup_item_candidates(text: str) -> list[str]:
     items: list[str] = []
     current: list[str] = []
@@ -10744,16 +10036,10 @@ def structured_roundup_item_candidates(text: str) -> list[str]:
     return items
 
 
-
-
-
-
 def is_apple_roundup_item(value: str) -> bool:
     """A child uses the same source action support as standalone reporting."""
     tier, _reason, _category = source_text_outcome(value, value, [value], "")
     return tier in {"strong", "ecosystem"}
-
-
 
 
 def focus_roundup_article(title: str, summary: str, key_facts: list[str], raw_text: str = "") -> tuple[str, str, list[str]]:
@@ -10782,22 +10068,8 @@ def smart_home_roadmap_article_variants(title: str, summary: str, key_facts: lis
     return project_smart_home_roadmap(title, summary, key_facts, fact_limit=MAX_KEY_FACTS)
 
 
-
-
-
-
 def multi_family_iphone_report_variants(title: str, summary: str, key_facts: list[str]) -> list[tuple[str, str, list[str]]]:
     return project_multi_family_iphone_report(title, summary, key_facts, fact_limit=MAX_KEY_FACTS)
-
-
-
-
-
-
-
-
-
-
 
 
 def is_multi_product_catalog_withdrawal_story(
@@ -10934,126 +10206,12 @@ def compound_product_action_variants(title: str, summary: str, key_facts: list[s
         fact_identities=source_product_fact_identities(identity, key_facts))
 
 
-def extract_time_candidates(text: str) -> list[tuple[str, str]]:
-    candidates: list[tuple[str, str]] = []
-    for obj in json_ld_objects(text):
-        for key_group, label in [
-            ({"datePublished", "dateCreated"}, "json-ld datePublished"),
-            ({"dateModified", "uploadDate"}, "json-ld dateModified"),
-        ]:
-            found = find_json_key(obj, key_group)
-            if found:
-                candidates.append((found, label))
-
-    for names, label in [
-        (
-            [
-                "article:published_time",
-                "article:published",
-                "datePublished",
-                "date",
-                "pubdate",
-                "publish_date",
-                "dc.date",
-                "dc.date.issued",
-            ],
-            "meta published",
-        ),
-        (["article:modified_time", "dateModified", "lastmod"], "meta modified"),
-    ]:
-        found = meta_content(text, names)
-        if found:
-            candidates.append((found, label))
-
-    for match in _compiled_rule(r"(?is)<time\b([^>]*)>(.*?)</time>", 0).finditer(text):
-        attrs, body = match.groups()
-        datetime_match = _compiled_rule(r"""datetime\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
-        if datetime_match:
-            candidates.append((datetime_match.group(1), "time datetime"))
-        body_text = strip_tags(body)
-        if body_text:
-            candidates.append((body_text, "time text"))
-
-    text_only = strip_tags(text[:120_000])
-    date_patterns = [
-        r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
-        r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
-        r"Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4}(?:,)?\s+"
-        r"(?:at\s+)?\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?|AM|PM)?\s*"
-        r"(?:PST|PDT|PT|EST|EDT|ET|GMT|UTC|[+-]\d{2}:?\d{2})?",
-        r"(?:\d{4}\s*年\s*)?\d{1,2}\s*月\s*\d{1,2}\s*日\s*"
-        r"\d{1,2}[:：]\d{2}(?:[:：]\d{2})?",
-        r"\d{4}/\d{1,2}/\d{1,2}\s+"
-        r"\d{1,2}:\d{2}(?::\d{2})?",
-        r"\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}(?::\d{2})?"
-        r"(?:Z|[+-]\d{2}:?\d{2})?",
-    ]
-    for pattern in date_patterns:
-        for match in re.finditer(pattern, text_only, re.I):
-            candidates.append((match.group(0), "body date pattern"))
-            if len(candidates) > 20:
-                return candidates
-    return candidates
-
-
-def extract_apple_newsroom_time_candidates(text: str) -> list[tuple[str, str, bool]]:
-    """Return Apple Newsroom publication candidates only.
-
-    Newsroom pages often refresh dateModified and VideoObject uploadDate when
-    media assets change. Those values are not the article's publication time.
-    """
-    candidates: list[tuple[str, str, bool]] = []
-    for obj in json_ld_objects(text):
-        for node in iter_json_ld_nodes(obj):
-            if not isinstance(node, dict):
-                continue
-            type_names = json_type_names(node)
-            if "NewsArticle" not in type_names and "Article" not in type_names:
-                continue
-            raw = node.get("datePublished") or node.get("dateCreated")
-            if isinstance(raw, str) and raw.strip():
-                candidates.append((raw, "apple newsroom datePublished", True))
-
-    for names, label in [
-        (
-            [
-                "article:published_time",
-                "article:published",
-                "datePublished",
-                "pubdate",
-                "publish_date",
-                "dc.date",
-                "dc.date.issued",
-            ],
-            "apple newsroom meta published",
-        ),
-    ]:
-        found = meta_content(text, names)
-        if found:
-            candidates.append((found, label, True))
-
-    visible_date = _compiled_rule(r"(?is)<[^>]+class=['\"][^'\"]*category-eyebrow__date[^'\"]*['\"][^>]*>(.*?)</[^>]+>", 0).search(text)
-    if visible_date:
-        cleaned = strip_tags(visible_date.group(1))
-        if cleaned:
-            candidates.append((cleaned, "apple newsroom visible date", True))
-
-    for match in _compiled_rule(r"(?is)<time\b([^>]*)>(.*?)</time>", 0).finditer(text):
-        attrs, body = match.groups()
-        datetime_match = _compiled_rule(r"""datetime\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
-        if datetime_match:
-            candidates.append((datetime_match.group(1), "apple newsroom time datetime", True))
-        body_text = strip_tags(body)
-        if body_text:
-            candidates.append((body_text, "apple newsroom time text", True))
-    return candidates
-
-
 def extract_article(
     candidate: Candidate,
     source: Source,
     text: str,
     diagnostics: dict[str, Any],
+    publication_candidates: tuple[PublicationEvidence, ...] | None = None,
 ) -> tuple[str, str, list[str], datetime | None, str, str, str]:
     title = extract_title(text, candidate.title)
     body_text = structured_article_body_html(text, source.name)
@@ -11063,10 +10221,12 @@ def extract_article(
     key_facts = filter_key_facts_for_primary_topic(title, summary, key_facts)
     default_tz = source.default_tz
 
-    if source.name == "Apple Newsroom":
+    if publication_candidates is not None:
+        time_candidates = [(entry.raw, entry.source, entry.allows_date_only) for entry in publication_candidates]
+    elif source.name == "Apple Newsroom":
         time_candidates = extract_apple_newsroom_time_candidates(text)
     else:
-        time_candidates = [(raw, label, False) for raw, label in extract_time_candidates(text)]
+        time_candidates = [(raw, label, False) for raw, label in extract_time_candidates(text, source.name)]
 
     for raw, label, allow_date_only in time_candidates:
         parsed = parse_datetime_value(raw, default_tz)
@@ -11214,7 +10374,6 @@ APPLE_PRICE_DETAIL_FACETS = {
 }
 
 APPLE_PRICE_SUBTOPIC_FACETS = APPLE_PRICE_TIMING_FACETS | APPLE_PRICE_DETAIL_FACETS
-
 
 
 REGION_SENSITIVE_EVENT_KINDS = {
@@ -16802,8 +15961,6 @@ def apple_executive_tenure_retrospective_signature(article: Article) -> tuple[fr
     return frozenset(executives), frozenset(years)
 
 
-
-
 def is_legal_case_person_profile_without_new_action(title: str, text: str) -> bool:
     """Detect a person/career profile around an existing Apple case without a new case action."""
     scope = title_and_lead_scope(title, text, limit=1400).lower()
@@ -19932,32 +19089,9 @@ def is_apple_legal_proceeding_story(text: str) -> bool:
     ) > 0 or proceeding_score >= 2
 
 
-def is_os_point_release_internal_testing_story(text: str) -> bool:
-    lower = text.lower()
-    versions = apple_os_version_values_from_text(lower)
-    if not versions:
-        return False
-    if score_terms(lower, ["ios", "ipados", "macos", "watchos", "tvos", "visionos", "系统"]) <= 0:
-        return False
-    if score_terms(
-        lower,
-        [
-            "internal testing",
-            "internally testing",
-            "visitor logs",
-            "access logs",
-            "内部测试",
-            "内部正测试",
-            "正在测试",
-            "访问日志",
-            "网站日志",
-        ],
-    ) > 0:
-        return True
-    return bool(
-        _compiled_rule(r"\b(?:apple|software)\s+engineers?\s+(?:are\s+)?testing\b", 0).search(lower)
-        or _compiled_rule(r"(?:苹果|软件)工程师(?:正在|正)?测试", 0).search(lower)
-    )
+def is_os_point_release_internal_testing_story(title: str, lead: str | None = None) -> bool:
+    """Compatibility view of the core's source-owned testing relation."""
+    return source_internal_testing_frame(title, title if lead is None else lead) is not None
 
 
 def is_apple_watch_band_sensor_story(text: str) -> bool:
@@ -23652,7 +22786,6 @@ EXACT_SHARED_EVENT_TOPIC_FACETS = {
     "apple-intelligence-china-regulatory-rollout",
     "apple-maps-ad-policy",
     "apple-music-top-artists",
-    "apple-hardware-trade-secret-lawsuit",
     "apple-hardware-production-retooling",
     "apple-translate-language-expansion",
     "apple-tv-emmy-nominations",
@@ -23901,7 +23034,7 @@ def _primary_topic_facets(title: str, summary: str = "") -> frozenset[str]:
     )
     if "ios-signing-status" in signing_facets:
         return frozenset(signing_facets)
-    if is_os_point_release_internal_testing_story(combined_text):
+    if is_os_point_release_internal_testing_story(title, summary):
         return frozenset(os_internal_testing_identity_facets(title_facets, combined_facets))
     if (is_os_release_availability_title(title) or is_current_public_beta_release_title(title)) and (
         is_current_public_beta_release_title(title)
@@ -24193,7 +23326,7 @@ def _primary_merge_guard_facets(title: str, summary: str = "") -> frozenset[str]
     )
     if "ios-signing-status" in signing_facets:
         return frozenset(signing_facets)
-    if is_os_point_release_internal_testing_story(combined_text):
+    if is_os_point_release_internal_testing_story(title, summary):
         return frozenset(os_internal_testing_identity_facets(title_facets, combined_facets))
     if (is_os_release_availability_title(title) or is_current_public_beta_release_title(title)) and (
         is_current_public_beta_release_title(title)
@@ -24618,13 +23751,6 @@ def app_store_policy_subtopic_facets_compatible(left_facets: set[str], right_fac
     if not left or not right:
         return True
     return bool(left & right)
-
-
-def event_splittable_topic_facets(event: Event) -> set[str]:
-    facets: set[str] = set()
-    for article in event.articles:
-        facets |= article_splittable_topic_facets(article)
-    return facets
 
 
 def article_merge_guard_facets(article: Article) -> set[str]:
@@ -25850,15 +24976,6 @@ def is_direct_apple_supplier_cost_change_story(title: str, text: str) -> bool:
     )
 
 
-def is_official_apple_product_communication_story(title: str, text: str) -> bool:
-    identity = title_led_identity(title, text)
-    return bool(
-        identity.scope == "apple-direct"
-        and "official-communication" in identity.title_actions
-        and identity.products
-    )
-
-
 def is_direct_apple_product_patent_story(title: str, text: str) -> bool:
     identity = title_led_identity(title, text)
     return bool(
@@ -25869,73 +24986,6 @@ def is_direct_apple_product_patent_story(title: str, text: str) -> bool:
             ["patent", "苹果专利", "专利申请"],
         )
         > 0
-    )
-
-
-def is_first_party_trade_in_valuation_change_story(title: str, text: str) -> bool:
-    """Recognize an Apple-operated trade-in valuation change, not a retailer deal."""
-    scope = title_and_lead_scope(title, text, limit=1200).lower()
-    title_lower = title.lower()
-    if effective_apple_term_score(title_lower) <= 0:
-        return False
-    if not _compiled_rule(r"\btrade[ -]in\s+(?:value|values|offer|offers|estimate|estimates|deal|deals)\b|"
-        r"(?:以旧换新|折抵价|折抵价值|折抵估值)", 0).search(scope):
-        return False
-    if score_terms(
-        scope,
-        [
-            "raises",
-            "raised",
-            "increases",
-            "increased",
-            "updates",
-            "updated",
-            "adjusts",
-            "adjusted",
-            "bumped",
-            "上调",
-            "提高",
-            "调整",
-            "下调",
-        ],
-    ) <= 0:
-        return False
-    return not is_routine_retail_discount_story(title, text)
-
-
-def is_title_led_measured_apple_market_result(title: str, text: str) -> bool:
-    title_lower = title.lower()
-    if effective_apple_term_score(title_lower) <= 0:
-        return False
-    if score_terms(
-        title_lower,
-        [
-            "market share",
-            "premium smartphone market",
-            "high-end smartphone market",
-            "market reaches",
-            "shipments",
-            "sales share",
-            "accounted for",
-            "市场份额",
-            "出货量",
-            "销量占",
-            "高端市场",
-            "高端智能手机市场",
-        ],
-    ) <= 0:
-        return False
-    if (
-        is_broad_multi_vendor_market_report(text, title)
-        or is_multi_brand_comparison_led_market_story(title, text)
-    ):
-        return False
-    if score_terms(title_lower, ["shortage", "limited availability", "短缺", "供货受限", "量产遇挑战"]) > 0:
-        return False
-    scope = title_and_lead_scope(title, text, limit=1000).lower()
-    return bool(
-        _compiled_rule(r"\d+(?:\.\d+)?\s*(?:%|million|billion|万|亿)", 0).search(scope)
-        or score_terms(scope, ["record high", "record share", "创纪录", "历史新高"]) > 0
     )
 
 
@@ -26017,7 +25067,7 @@ def choose_category(title: str, summary: str) -> str:
 def collect_candidates(
     source: Source,
     cache_dir: Path,
-    diagnostics: dict[str, Any],
+    diagnostics: dict[str, Any], *, window_start_utc: datetime | None = None,
 ) -> list[Candidate]:
     candidates: list[Candidate] = []
     source_success = False
@@ -26047,26 +25097,29 @@ def collect_candidates(
 
     for page_url in source.pages:
         text = fetch_url(page_url, cache_dir, diagnostics)
-        if text is None:
-            continue
-        source_success = True
-        candidates.extend(parse_html_links(text, page_url, source))
+        if text is not None:
+            source_success = True
+        page_candidates = parse_html_links(text, page_url, source) if text is not None else []
+        candidates.extend(page_candidates)
+        if source.name == 'MacRumors':
+            candidates.extend(collection.supplement_macrumors_index_candidates(
+                page_url, text, page_candidates, window_start_utc, MAX_PAGE_LINKS,
+                lambda url: fetch_url(url, cache_dir, diagnostics),
+                lambda body, url: parse_html_links(body, url, source),
+                lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
+        if source.name == 'IT之家':
+            candidates.extend(collection.supplement_ithome_tag_candidates(
+                page_url, text, page_candidates, window_start_utc, MAX_PAGE_LINKS,
+                lambda url: fetch_url(url, cache_dir, diagnostics, method='POST'),
+                lambda body, url: parse_html_links(body, url, source),
+                lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
 
     if not source_success:
         diagnostics.setdefault("failed_sources", []).append(source.name)
 
-    filtered_by_url: dict[str, Candidate] = {}
-
-    def candidate_completeness(candidate: Candidate) -> tuple[int, int, int, int]:
-        return (
-            1 if candidate.summary else 0,
-            1 if candidate.feed_time_raw else 0,
-            len(candidate.summary),
-            len(candidate.context),
-        )
+    filtered: list[Candidate] = []
 
     for candidate in merge_duplicate_candidates(candidates):
-        normalized_url = normalize_url(candidate.url)
         if not same_domain(candidate.url, source.domains):
             continue
         if not collection.source_article_url_allowed(candidate.url, source):
@@ -26077,58 +25130,17 @@ def collect_candidates(
             continue
         if not is_relevant_candidate(candidate, source):
             continue
-        existing = filtered_by_url.get(normalized_url)
-        if existing is not None and candidate_completeness(existing) >= candidate_completeness(candidate):
-            continue
-        filtered_by_url[normalized_url] = candidate
-    filtered = list(filtered_by_url.values())
+        filtered.append(candidate)
     diagnostics.setdefault("source_candidate_counts", {})[source.name] = len(filtered)
     return filtered
 
 
-def collect_candidates_from_sources(
-    sources: list[Source],
-    cache_dir: Path,
-    diagnostics: dict[str, Any],
-) -> list[Candidate]:
-    """Discover independent sources concurrently while preserving source order."""
-    if not sources:
-        diagnostics["source_discovery_workers"] = 0
-        return []
-    workers = min(DEFAULT_SOURCE_DISCOVERY_WORKERS, len(sources))
-    diagnostics["source_discovery_workers"] = workers
-    if workers <= 1:
-        return [
-            candidate
-            for source in sources
-            for candidate in collect_candidates(source, cache_dir, diagnostics)
-        ]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
-        per_source = executor.map(
-            lambda source: collect_candidates(source, cache_dir, diagnostics),
-            sources,
-        )
-        return [candidate for candidates in per_source for candidate in candidates]
-
-
-def normalize_url(url: str) -> str:
-    parsed = urllib.parse.urlsplit(url)
-    query = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
-    query = [
-        (key, value)
-        for key, value in query
-        if not key.lower().startswith(("utm_", "fbclid", "gclid"))
-    ]
-    clean_query = urllib.parse.urlencode(query)
-    return urllib.parse.urlunsplit(
-        (
-            parsed.scheme.lower(),
-            parsed.netloc.lower(),
-            parsed.path.rstrip("/"),
-            clean_query,
-            "",
-        )
-    )
+def collect_candidates_from_sources(sources: list[Source], cache_dir: Path,
+                                    diagnostics: dict[str, Any], *,
+                                    window_start_utc: datetime | None = None) -> list[Candidate]:
+    return collection.collect_candidates_from_sources(sources, cache_dir, diagnostics,
+        collect=collect_candidates, max_workers=DEFAULT_SOURCE_DISCOVERY_WORKERS,
+        window_start_utc=window_start_utc)
 
 
 def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]:
@@ -26143,9 +25155,14 @@ def _candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str
         candidate.title, candidate.summary, [candidate.context], candidate.source,
         _source_kind_snapshot=(candidate.title, candidate.summary, (candidate.context,), kind),
     )
-    tier, _reason, _category = resolve_reconciliation_outcome(
-        profile, observed_tier="", observed_reason="", observed_category="")
+    if profile.eligibility is not None:
+        tier = profile.eligibility.tier if profile.eligibility.resolved else None
+    else:
+        tier, _, _ = resolve_reconciliation_outcome(
+            profile, observed_tier="", observed_reason="", observed_category="")
     score = collection.detail_recall_weight(profile, tier, has_lead=bool(candidate.summary.strip()), title=candidate.title)
+    if collection.market_summary_needs_detail(candidate.title):
+        score = max(score, 30)
     if quantified_apple_company_performance_subject(
         candidate.title,
         f"{candidate.summary} {candidate.context}",
@@ -26266,7 +25283,7 @@ def candidate_url_date_bucket(
     if not match:
         return 0
     try:
-        source_tz = ZoneInfo(source.default_tz) if ZoneInfo is not None else timezone.utc
+        source_tz = ZoneInfo(source.default_tz)
     except ZoneInfoNotFoundError:
         source_tz = timezone.utc
     year, month, day = (int(value) for value in match.groups())
@@ -26362,46 +25379,6 @@ def jaccard(a: set[str], b: set[str]) -> float:
     return len(a & b) / len(a | b)
 
 
-def event_kind_compatible(article: Article, event: Event) -> bool:
-    if article.event_kind == event.event_kind:
-        return True
-    article_facets = effective_topic_facets(article_primary_facets(article))
-    event_facets = effective_topic_facets(event_primary_facets(event))
-    if article_facets & event_facets & EXACT_SHARED_EVENT_TOPIC_FACETS:
-        return True
-    strict_kinds = {"messages_platform"}
-    if article.event_kind in strict_kinds or event.event_kind in strict_kinds:
-        return False
-    boundary_kinds = {
-        "company_org",
-        "legal_antitrust",
-        "regional_regulation",
-        "developer_program",
-        "retail_store",
-    }
-    if not ({article.event_kind, event.event_kind} & boundary_kinds):
-        if article_facets and event_facets and article_facets & event_facets:
-            return True
-    if "general_company" in {article.event_kind, event.event_kind}:
-        return True
-    return False
-
-
-def relevance_tier_compatible(article: Article, event: Event) -> bool:
-    if article.relevance_tier == event.relevance_tier:
-        if article.relevance_tier == "weak" and (
-            is_os_beta_advice_or_feature_roundup_title(article.title)
-            or any(is_os_beta_advice_or_feature_roundup_title(item.title) for item in event.articles)
-        ):
-            return False
-        return True
-    article_facets = effective_topic_facets(article_primary_facets(article))
-    event_facets = effective_topic_facets(event_primary_facets(event))
-    if article_facets & event_facets & EXACT_SHARED_EVENT_TOPIC_FACETS:
-        return title_led_event_identity_decision(article, event) != "conflict"
-    return "weak" not in {article.relevance_tier, event.relevance_tier}
-
-
 def regions_compatible(article: Article, event: Event) -> bool:
     common_facets = effective_topic_facets(article_primary_facets(article)) & effective_topic_facets(event_primary_facets(event))
     if any(
@@ -26479,28 +25456,6 @@ def title_hardware_product_families_compatible(article: Article, event: Event) -
     }:
         return True
     if "apple-product-roadmap-list" in (article_facets | event_facets):
-        return True
-    return False
-
-
-def event_title_hardware_product_families_compatible(left: Event, right: Event) -> bool:
-    if left.category != "hardware_products" and right.category != "hardware_products":
-        return True
-    left_groups = event_title_hardware_product_families(left)
-    right_groups = event_title_hardware_product_families(right)
-    if not left_groups or not right_groups:
-        return True
-    if left_groups & right_groups:
-        return True
-    left_facets = effective_topic_facets(event_primary_facets(left))
-    right_facets = effective_topic_facets(event_primary_facets(right))
-    if left_facets & right_facets & {
-        "apple-device-battery-regulation",
-        "apple-education-promotion",
-        "applecare-plan-price-change",
-    }:
-        return True
-    if "apple-product-roadmap-list" in (left_facets | right_facets):
         return True
     return False
 
@@ -26657,11 +25612,6 @@ def topic_facets_compatible(
     return True
 
 
-def event_relevance_tier(articles: list[Article]) -> tuple[str, str]:
-    tier, reason, _, _ = resolve_event_outcome([article_reconciliation_profile(article) for article in articles])
-    return tier, reason
-
-
 SOFTWARE_EVENT_KINDS = {
     "ecosystem_interop",
     "health_research",
@@ -26794,7 +25744,8 @@ def articles_form_cohesive_named_os_component_action(articles: list[Article]) ->
 
 
 def event_merge_warnings(articles: list[Article], *, profiles: list[ReconciliationProfile] | None = None) -> list[str]:
-    warnings: list[str] = []
+    profiles = profiles if profiles is not None else [article_reconciliation_profile(item) for item in articles]
+    warnings: list[str] = list(dict.fromkeys(reason for profile in profiles for reason in profile.review_reasons))
     kinds = {item.event_kind for item in articles if item.event_kind != "general_company"}
     regions = set().union(*(item.regions for item in articles)) if articles else set()
     normalized_regions = regions - {"multi-region"}
@@ -26891,28 +25842,6 @@ def event_merge_warnings(articles: list[Article], *, profiles: list[Reconciliati
         ):
             warnings.append("mixed primary topic facets")
     return warnings
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def market_report_research_firms(title: str, lead: str) -> set[str]:
@@ -27018,8 +25947,6 @@ def market_report_signatures_compatible(article: Article, event: Event) -> bool:
     )
 
 
-
-
 def is_apple_market_report_article(article: Article) -> bool:
     context = article_merge_context(article)
     return "apple-market-share-report" in effective_topic_facets(article_primary_facets(article)) or (
@@ -27064,8 +25991,6 @@ def articles_form_same_global_market_report(articles: list[Article]) -> bool:
         if not all(values) or not set.intersection(*values):
             return False
     return True
-
-
 
 
 def is_foldable_iphone_panel_market_report_context(text: str) -> bool:
@@ -27155,27 +26080,6 @@ def is_apple_stock_target_analyst_story(title: str, text: str) -> bool:
     return score_terms(lower, ["345", "$345", "stock", "shares", "aapl", "股价", "股票"]) > 0
 
 
-def foldable_iphone_panel_and_production_contexts_compatible(article: Article, event: Event) -> bool:
-    article_context = " ".join([article.title, article.summary, *article.key_facts[:4]])
-    event_contexts = [" ".join([item.title, item.summary, *item.key_facts[:4]]) for item in event.articles]
-    article_panel = is_foldable_iphone_panel_market_report_context(article_context)
-    article_production = is_foldable_iphone_production_target_context(article_context)
-    event_panel = any(is_foldable_iphone_panel_market_report_context(context) for context in event_contexts)
-    event_production = any(is_foldable_iphone_production_target_context(context) for context in event_contexts)
-    if article_panel and not article_production and event_production and not event_panel:
-        return False
-    if article_production and not article_panel and event_panel and not event_production:
-        return False
-    if (
-        article_panel != event_panel
-        and (article_panel or event_panel)
-        and (article_production or event_production)
-        and article_panel != article_production
-    ):
-        return False
-    return True
-
-
 def event_has_foldable_iphone_panel_market_report(event: Event) -> bool:
     return any(
         is_foldable_iphone_panel_market_report_context(" ".join([item.title, item.summary, *item.key_facts[:4]]))
@@ -27188,118 +26092,6 @@ def event_has_foldable_iphone_production_target(event: Event) -> bool:
         is_foldable_iphone_production_target_context(" ".join([item.title, item.summary, *item.key_facts[:4]]))
         for item in event.articles
     )
-
-
-def foldable_iphone_panel_and_production_events_compatible(left: Event, right: Event) -> bool:
-    left_panel = event_has_foldable_iphone_panel_market_report(left)
-    left_production = event_has_foldable_iphone_production_target(left)
-    right_panel = event_has_foldable_iphone_panel_market_report(right)
-    right_production = event_has_foldable_iphone_production_target(right)
-    if left_panel and not left_production and right_production and not right_panel:
-        return False
-    if left_production and not left_panel and right_panel and not right_production:
-        return False
-    if (
-        (left_panel or right_panel)
-        and (left_production or right_production)
-        and left_panel != right_panel
-        and left_panel != left_production
-        and right_panel != right_production
-    ):
-        return False
-    return True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def iphone_product_identity_anchors(text: str) -> set[str]:
-    lower = text.lower()
-    anchors = {
-        f"iphone-{match.group(1)}"
-        for match in _compiled_rule(r"(?<![a-z0-9])iphone\s*(\d{1,2})(?!\d)", 0).finditer(lower)
-    }
-    if score_terms(
-        lower,
-        [
-            "foldable iphone",
-            "folding iphone",
-            "iphone fold",
-            "iphone ultra",
-            "折叠屏 iphone",
-            "折叠 iphone",
-            "折叠屏iphone",
-            "折叠iphone",
-            "首款折叠屏",
-            "首款折叠手机",
-        ],
-    ) > 0:
-        anchors.add("foldable-iphone")
-    return anchors
-
-
-def iphone_battery_capacity_signatures(text: str) -> set[str]:
-    normalized = text.lower().replace(",", "")
-    return {
-        match.group(1)
-        for match in _compiled_rule(r"(?<!\d)(\d{3,5})\s*(?:mah|毫安时)(?![a-z])", 0).finditer(normalized)
-    }
-
-
-
-
-def iphone_production_metric_signatures(text: str) -> set[str]:
-    lower = text.lower()
-    signatures = {
-        match.group(1)
-        for match in _compiled_rule(r"(?<!\d)(\d+(?:\.\d+)?)\s*%", 0).finditer(lower)
-    }
-    fraction_groups = {
-        "one-third": ["one-third", "one third", "a third", "1/3", "三分之一"],
-        "one-quarter": ["one-quarter", "one quarter", "a quarter", "1/4", "四分之一"],
-        "one-half": ["one-half", "one half", "a half", "1/2", "二分之一", "一半"],
-    }
-    for signature, terms in fraction_groups.items():
-        if score_terms(lower, terms) > 0:
-            signatures.add(signature)
-    return signatures
-
-
 
 
 def apple_stock_move_metric_signatures(text: str) -> set[str]:
@@ -27343,19 +26135,6 @@ def apple_stock_move_metric_signatures(text: str) -> set[str]:
     return signatures
 
 
-def same_material_apple_stock_move_event(article: Article, event: Event) -> bool:
-    article_text = article_merge_context(article)
-    event_text = event_merge_context(event)
-    if not is_material_apple_stock_move_story(article.title, article_text):
-        return False
-    if not any(is_material_apple_stock_move_story(item.title, article_merge_context(item)) for item in event.articles):
-        return False
-    return bool(
-        apple_stock_move_metric_signatures(article_text)
-        & apple_stock_move_metric_signatures(event_text)
-    )
-
-
 def service_content_title_tokens_from_text(text: str) -> set[str]:
     return {
         token
@@ -27363,14 +26142,6 @@ def service_content_title_tokens_from_text(text: str) -> set[str]:
         if token not in GENERIC_SERVICE_CONTENT_MERGE_TOKENS
         and not _compiled_rule(r"\d{1,4}", 0).fullmatch(token)
     }
-
-
-def service_content_title_shared_tokens(article: Article, event: Event, shared: set[str]) -> set[str]:
-    article_title_tokens = service_content_title_tokens_from_text(article.title)
-    event_title_tokens: set[str] = set()
-    for item in event.articles:
-        event_title_tokens |= service_content_title_tokens_from_text(item.title)
-    return shared & article_title_tokens & event_title_tokens
 
 
 def weak_event_has_title_level_identity(article: Article, event: Event) -> bool:
@@ -27404,14 +26175,6 @@ def service_content_facets_for_merge(facets: set[str]) -> set[str]:
     service_facets = effective_topic_facets(facets) & SERVICE_CONTENT_TOPIC_FACETS
     detail_facets = service_facets & SERVICE_CONTENT_DETAIL_TOPIC_FACETS
     return detail_facets or service_facets
-
-
-def article_service_topic_facets(article: Article) -> set[str]:
-    return service_content_facets_for_merge(article_primary_facets(article))
-
-
-def event_service_topic_facets(event: Event) -> set[str]:
-    return service_content_facets_for_merge(event_primary_facets(event))
 
 
 SERVICE_CONTENT_MONTH_NUMBERS = {
@@ -27451,59 +26214,6 @@ SERVICE_CONTENT_NUMBER_WORDS = {
     "nineteen": 19,
     "twenty": 20,
 }
-
-
-def service_content_release_date_signatures(article: Article) -> set[tuple[int | None, int, int]]:
-    text = " ".join([article.title, article.summary, *article.key_facts])
-    lower = text.lower()
-    signatures: set[tuple[int | None, int, int]] = set()
-    month_pattern = "|".join(SERVICE_CONTENT_MONTH_NUMBERS)
-    for match in re.finditer(
-        rf"\b({month_pattern})\s+(\d{{1,2}})(?:,?\s+(\d{{4}}))?\b",
-        lower,
-    ):
-        signatures.add(
-            (
-                int(match.group(3)) if match.group(3) else None,
-                SERVICE_CONTENT_MONTH_NUMBERS[match.group(1)],
-                int(match.group(2)),
-            )
-        )
-    for match in _compiled_rule(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日", 0).finditer(text):
-        start = max(0, match.start() - 4)
-        prefix = text[start : match.start()]
-        year = int(match.group(1)) if match.group(1) else None
-        if year is None and "明年" in prefix:
-            year = article.published_utc.year + 1
-        signatures.add((year, int(match.group(2)), int(match.group(3))))
-    return signatures
-
-
-def service_content_episode_count_signatures(article: Article) -> set[int]:
-    text = " ".join([article.title, article.summary, *article.key_facts]).lower()
-    counts = {
-        int(match.group(1))
-        for match in _compiled_rule(r"(?<!\d)(\d{1,2})\s*(?:-\s*)?(?:episodes?|集)\b", 0).finditer(text)
-    }
-    for word, value in SERVICE_CONTENT_NUMBER_WORDS.items():
-        if re.search(rf"\b{word}(?:-episode|\s+episodes?)\b", text):
-            counts.add(value)
-    return counts
-
-
-def service_content_dates_compatible(
-    left: set[tuple[int | None, int, int]],
-    right: set[tuple[int | None, int, int]],
-) -> bool:
-    return any(
-        left_month == right_month
-        and left_day == right_day
-        and (left_year is None or right_year is None or left_year == right_year)
-        for left_year, left_month, left_day in left
-        for right_year, right_month, right_day in right
-    )
-
-
 
 
 def service_content_season_signatures(article: Article) -> set[int]:
@@ -27672,29 +26382,6 @@ def same_named_service_content_action_event(article: Article, event: Event) -> b
         if article_seasons and existing_seasons and not (article_seasons & existing_seasons):
             return False
     return True
-
-
-def service_content_title_identity_conflict(article: Article, event: Event) -> bool:
-    """Keep different first-party services and named content subjects from token-merging."""
-    if article.event_kind != "service_content" or event.event_kind != "service_content":
-        return False
-    article_identity = article_title_led_event_identity(article)
-    article_products = set(article_identity.title_products)
-    article_subjects = set(article_identity.title_named_subjects)
-    if not article_products or not article_subjects:
-        return False
-    for existing in event.articles:
-        existing_identity = article_title_led_event_identity(existing)
-        existing_products = set(existing_identity.title_products)
-        existing_subjects = set(existing_identity.title_named_subjects)
-        if (
-            existing_products
-            and existing_subjects
-            and article_products.isdisjoint(existing_products)
-            and article_subjects.isdisjoint(existing_subjects)
-        ):
-            return True
-    return False
 
 
 IDENTITY_UMBRELLA_TOPIC_FACETS = {
@@ -27872,12 +26559,19 @@ def is_apple_supplier_capacity_allocation_story(title: str, lead: str, identity)
     return bool(named_supplier and allocation)
 
 
-def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: tuple[str, str, tuple[str, ...], str] | None = None) -> ReconciliationProfile:
-    # These are the actual source Article fields, with distinct input origins;
-    # an Event's assembled summary never enters this normalization.
+def prepare_article_source(article: Article) -> None:
+    """Bind a source before any profile or fact consumer uses it."""
+    if article.bound_claim is not None:
+        return
+    evidence = article.evidence or capture_article_title_evidence(
+        article.source, article.url, article.title, article.summary, tuple(article.key_facts))
+    report = bind_source_report(evidence)
+    if report is not None:
+        if len(report) != 1:
+            raise ValueError("Multiple source actions require source projection before profiling")
+        article.evidence, article.bound_claim = evidence, report[0]
+        return
     if article.evidence is None:
-        evidence = capture_article_title_evidence(article.source, article.url, article.title,
-                                                  article.summary, tuple(article.key_facts))
         evidence = replace(evidence, content_form=title_led_identity(article.title, "").content_form)
         projection = single_article_input_projection(evidence)
         if projection is not None:
@@ -27889,8 +26583,17 @@ def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: t
                 article.key_facts = list(projection.key_facts)
             if not article.summary:
                 article.summary = projection.summary
+
+
+def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: tuple[str, str, tuple[str, ...], str] | None = None) -> ReconciliationProfile:
+    prepare_article_source(article)
     if article.bound_claim is not None:
         return bound_reconciliation_profile(article.bound_claim)
+    return legacy_article_reconciliation_profile(article, _source_kind_snapshot=_source_kind_snapshot)
+
+
+def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snapshot=None) -> ReconciliationProfile:
+    """Unmigrated source families; never a fallback for an unresolved binding."""
     identity = article_title_led_event_identity(article)
     # Reuse only this call's exact immutable text input. Projection completion
     # or a different parent/source must never inherit the previous kind.
@@ -27951,13 +26654,6 @@ def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: t
         and _compiled_rule(r"(?:照片|相机)[^。.!?]{0,45}(?:绿斑|绿色斑块|异常成像)", 0).search(source_opening)
         and _compiled_rule(r"苹果客服[^。.!?]{0,100}(?:未|没有)[^。.!?]{0,40}(?:大规模|集中上报)", 0).search(source_opening)
         and _compiled_rule(r"(?:单独|具体设备)[^。.!?]{0,30}(?:判断|分析)", 0).search(source_opening)
-    )
-    interview_without_current_product_action = bool(
-        _compiled_rule(r"苹果(?:公司)?(?:新任)?(?:首席执行官|ceo)|\bapple\s+(?:ceo|executive)\b", re.I).search(source_opening)
-        and _compiled_rule(r"(?:采访|专访|访谈|interview)", re.I).search(source_opening)
-        and _compiled_rule(r"iphone\s*duo|one\s+more\s+thing", re.I).search(article.title + " " + source_opening)
-        and _compiled_rule(r"(?:研发理念|设计理念|体验优先|任职后的从业感受|首款折叠屏|design\s+philosophy)", re.I).search(source_opening)
-        and not _compiled_rule(r"(?:苹果|\bapple\b)[^。.!?]{0,55}(?:今天|今日|today)[^。.!?]{0,35}(?:宣布|推出|发布|announced|launched)", re.I).search(source_opening)
     )
     third_party_game_launch = is_third_party_game_or_cross_platform_launch_story(article.title, support_text)
     software_support = [reason for supported, reason in (
@@ -28059,6 +26755,9 @@ def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: t
         (is_apple_silicon_third_party_os_driver_compatibility_story(article.title, support_text), "third-party OS or driver compatibility advancement for Apple Silicon"),
         (is_direct_third_party_apple_data_integration_story(article.title, support_text), "third-party rollout with direct first-party Apple data integration"),
     ) if supported]
+    # Relative report periods follow the source's publication year, including
+    # its local New Year boundary, never the wall clock or a comparison year.
+    publication_year = re.search(r"(?<!\d)(20\d{2})(?!\d)", article.published_raw)
     profile = build_reconciliation_profile(
         title=article.title,
         lead=" ".join(
@@ -28106,6 +26805,7 @@ def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: t
         evidence=structured_evidence,
         source_facts=tuple(article.key_facts),
         source_units=tuple(unit.text for unit in article.evidence.units) if article.evidence else (),
+        published_year=publication_year.group(1) if publication_year else str(article.published_utc.year),
         name_aliases=CROSS_LANGUAGE_TOKEN_MAP,
         embedded_references=article.evidence.embedded_references if article.evidence else (),
     )
@@ -28167,10 +26867,6 @@ def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: t
             promotion_reason="current independent device measurement",
             category_hint="hardware_products",
         )
-    if interview_without_current_product_action:
-        profile = replace(profile, trusted_direct_action=False,
-                          defer_reason="executive interview on existing product design without a current product action",
-                          relevance_tier="weak")
     if ecosystem_support:
         profile = replace(profile, ecosystem_reason="; ".join(ecosystem_support), category_hint="software_systems")
     if is_non_apple_company_financial_result_with_apple_background(
@@ -28333,15 +27029,6 @@ def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: t
                 and _compiled_rule(r"paid|charges?|收费", re.I).search(article.title + " " + ai_primary[1])):
             profile = replace(profile, defer_reason="third-party extension pricing; Apple is background context",
                               event_kind_hint="third_party_ecosystem")
-    if (not is_os_release_announcement(article.title)
-            and is_os_point_release_internal_testing_story(" ".join([article.title, source_scope]))):
-        version_scope = article.title if _compiled_rule(r"(?:ios|ipados|macos|watchos|tvos|visionos)\s+\d", re.I).search(article.title) else source_scope
-        versions = {f"{platform.lower()}:{version}" for platform, version in _compiled_rule(r"\b(iOS|iPadOS|macOS|watchOS|tvOS|visionOS)\s+(\d+(?:\.\d+)+)", re.I).findall(version_scope)}
-        if versions:
-            source_keys.update(f"source-action:apple-os-internal-testing:{version}" for version in versions)
-            profile = replace(profile, separation_keys=profile.separation_keys |
-                              {f"internal-test-version:{version}" for version in versions})
-
     if (is_foldable_iphone_launch_timing_story(article.title, article.summary)
             and _compiled_rule(r"delay|延期|推迟", re.I).search(" ".join([article.title, article.summary]))):
         schedule_scope = " ".join([article.title, article.summary])
@@ -28522,28 +27209,6 @@ def specific_attributed_report_keys(article: Article) -> set[tuple[str, str, str
     }
 
 
-def largest_specific_attributed_report_group(articles: list[Article]) -> list[Article]:
-    buckets: dict[tuple[str, str, str], list[Article]] = {}
-    for article in articles:
-        for key in specific_attributed_report_keys(article):
-            buckets.setdefault(key, []).append(article)
-    cohesive = [
-        group
-        for group in buckets.values()
-        if len(group) >= 2
-        and all(
-            identity_pair_decision(
-                article_title_led_event_identity(left),
-                article_title_led_event_identity(right),
-            )
-            != "conflict"
-            for index, left in enumerate(group)
-            for right in group[index + 1 :]
-        )
-    ]
-    return max(cohesive, key=len, default=[])
-
-
 def title_led_event_identity_decision(article: Article, event: Event) -> str:
     article_identity = article_title_led_event_identity(article)
     article_facets = effective_topic_facets(article_primary_facets(article))
@@ -28577,113 +27242,6 @@ def title_led_event_identity_decision(article: Article, event: Event) -> str:
     ):
         return "match"
     return "unknown"
-
-
-def priority_title_identity_boundary_conflict(left: Article, right: Article) -> bool:
-    """Reject only title boundaries that must outrank broad shared facets."""
-    exclusive_facets = {
-        "apple-hardware-leadership-personnel",
-        "apple-ai-service-cost-policy",
-        "apple-security-report-submission-quota",
-        "icloud-post-employment-file-access",
-        "uk-icloud-backdoor-legal-challenge",
-    }
-    left_exclusive = effective_topic_facets(article_primary_facets(left)) & exclusive_facets
-    right_exclusive = effective_topic_facets(article_primary_facets(right)) & exclusive_facets
-    if (left_exclusive or right_exclusive) and left_exclusive != right_exclusive:
-        return True
-    left_identity = article_title_led_event_identity(left)
-    right_identity = article_title_led_event_identity(right)
-    left_generations = {
-        item for item in left_identity.title_components if item.startswith("product-generation:")
-    }
-    right_generations = {
-        item for item in right_identity.title_components if item.startswith("product-generation:")
-    }
-    left_facets = effective_topic_facets(article_primary_facets(left))
-    right_facets = effective_topic_facets(article_primary_facets(right))
-    price_market_boundary = bool(
-        (
-            "apple-market-share-report" in left_facets
-            and (right_facets & APPLE_PRICE_SUBTOPIC_FACETS)
-        )
-        or (
-            "apple-market-share-report" in right_facets
-            and (left_facets & APPLE_PRICE_SUBTOPIC_FACETS)
-        )
-    )
-    if (
-        price_market_boundary
-        and left_generations
-        and right_generations
-        and not (left_generations & right_generations)
-    ):
-        return True
-    shared_supply_constraint = bool(
-        article_primary_facets(left)
-        & article_primary_facets(right)
-        & {"apple-memory-supply-constraint", "apple-product-supply-constraint"}
-    )
-    left_target = "analyst-target-action" in left_identity.title_components
-    right_target = "analyst-target-action" in right_identity.title_components
-    if left_target != right_target:
-        return True
-    left_institutions = {
-        item for item in left_identity.title_components if item.startswith("analyst-institution:")
-    }
-    right_institutions = {
-        item for item in right_identity.title_components if item.startswith("analyst-institution:")
-    }
-    if left_institutions and right_institutions and not (left_institutions & right_institutions):
-        return True
-    left_intents = {
-        item for item in left_identity.title_components if item.startswith("primary-intent:")
-    }
-    right_intents = {
-        item for item in right_identity.title_components if item.startswith("primary-intent:")
-    }
-    if (
-        left_intents
-        and right_intents
-        and not (left_intents & right_intents)
-        and not shared_supply_constraint
-    ):
-        return True
-    left_display_components = {
-        item
-        for item in left_identity.title_components
-        if item.startswith("display-size:")
-        or item in {"largest-iphone-display", "ltpo-display"}
-    }
-    right_display_components = {
-        item
-        for item in right_identity.title_components
-        if item.startswith("display-size:")
-        or item in {"largest-iphone-display", "ltpo-display"}
-    }
-    if (
-        left_display_components
-        and right_display_components
-        and not (left_display_components & right_display_components)
-    ):
-        return True
-    left_models = {
-        item
-        for item in left_identity.title_components
-        if item.startswith(("iphone-model:", "iphone-family:", "iphone-line:"))
-    }
-    right_models = {
-        item
-        for item in right_identity.title_components
-        if item.startswith(("iphone-model:", "iphone-family:", "iphone-line:"))
-    }
-    if not (left_models and right_models):
-        return False
-    if left_models & right_models:
-        return False
-    left_air = any(item == "iphone-line:air" or item.startswith("iphone-model:air-") for item in left_models)
-    right_air = any(item == "iphone-line:air" or item.startswith("iphone-model:air-") for item in right_models)
-    return not (left_air and right_air)
 
 
 def articles_share_cohesive_title_identity(articles: list[Article]) -> bool:
@@ -28775,37 +27333,6 @@ def articles_have_explicit_identity_conflict(left: Article, right: Article) -> b
     return False
 
 
-def event_accepts_article_identity(article: Article, event: Event) -> bool:
-    return all(not articles_have_explicit_identity_conflict(article, existing) for existing in event.articles)
-
-
-def events_have_cohesive_identities(left: Event, right: Event) -> bool:
-    return all(
-        not articles_have_explicit_identity_conflict(left_article, right_article)
-        for left_article in left.articles
-        for right_article in right.articles
-    )
-
-
-def events_have_bidirectional_pairwise_coverage(left: Event, right: Event) -> bool:
-    """Reject event consolidation supported only by one mixed-topic bridge article."""
-    if not left.articles or not right.articles:
-        return False
-
-    def covered(source: list[Article], target: list[Article]) -> int:
-        return sum(
-            any(articles_have_pairwise_merge_support(article, other) for other in target)
-            for article in source
-        )
-
-    left_covered = covered(left.articles, right.articles)
-    right_covered = covered(right.articles, left.articles)
-    return (
-        left_covered * 2 >= len(left.articles)
-        and right_covered * 2 >= len(right.articles)
-    )
-
-
 def singleton_merge_event(article: Article) -> Event:
     return Event(
         event_id=f"pair:{normalize_url(article.url)}",
@@ -28834,13 +27361,6 @@ def articles_have_pairwise_merge_support(left: Article, right: Article) -> bool:
     )
 
 
-def article_has_pairwise_merge_support(article: Article, event: Event) -> bool:
-    return any(
-        articles_have_pairwise_merge_support(article, existing)
-        for existing in event.articles
-    )
-
-
 def article_os_wave_components(article: Article) -> set[str]:
     article_facets = effective_topic_facets(article_primary_facets(article))
     if "apple-intelligence-china-regulatory-rollout" in article_facets:
@@ -28850,63 +27370,6 @@ def article_os_wave_components(article: Article) -> set[str]:
         for component in article_title_led_event_identity(article).components
         if component.startswith(("os-wave:", "os-wave-platform:"))
     }
-
-
-def event_os_wave_components(event: Event) -> set[str]:
-    return set().union(*(article_os_wave_components(article) for article in event.articles))
-
-
-def os_wave_roles_compatible(article: Article, event: Event) -> bool:
-    article_waves = article_os_wave_components(article)
-    event_article_waves = [article_os_wave_components(existing) for existing in event.articles]
-    event_waves = set().union(*event_article_waves) if event_article_waves else set()
-    if not article_waves and not event_waves:
-        return True
-    if not article_waves or not event_waves:
-        if not is_os_release_availability_article(article) or any(
-            not is_os_release_availability_article(existing)
-            for existing in event.articles
-        ):
-            return False
-        article_facets = article_primary_facets(article)
-        return all(
-            os_release_facets_compatible(
-                article_facets,
-                article_primary_facets(existing),
-            )
-            for existing in event.articles
-        )
-    if any(not waves for waves in event_article_waves):
-        return False
-    article_versioned_waves = {
-        wave for wave in article_waves if wave.startswith("os-wave:")
-    }
-    event_versioned_waves = {
-        wave for wave in event_waves if wave.startswith("os-wave:")
-    }
-    if (
-        article_versioned_waves
-        and event_versioned_waves
-        and not (article_versioned_waves & event_versioned_waves)
-    ):
-        return False
-    shared_versioned_waves = article_versioned_waves & event_versioned_waves
-    if shared_versioned_waves and all(
-        not wave.endswith(":final") for wave in shared_versioned_waves
-    ):
-        return bool(article_waves & event_waves)
-    article_platforms = article_merge_guard_facets(article)
-    if any(
-        not platform_facets_compatible(
-            article_platforms,
-            article_merge_guard_facets(existing),
-        )
-        for existing in event.articles
-    ):
-        return False
-    return bool(article_waves & event_waves)
-
-
 
 
 def rumor_feature_recap_boundary_conflict(article: Article, event: Event) -> bool:
@@ -28932,10 +27395,6 @@ def rumor_feature_recap_boundary_conflict(article: Article, event: Event) -> boo
     return False
 
 
-
-
-
-
 def article_text_cites_source(article: Article, source_name: str) -> bool:
     aliases = {
         "9to5Mac": ("9to5mac", "9 to 5 mac"),
@@ -28951,16 +27410,12 @@ def article_text_cites_source(article: Article, source_name: str) -> bool:
     return any(alias.lower() in text for alias in aliases.get(source_name, (source_name.lower(),)))
 
 
-
-
 def should_merge(article: Article, event: Event) -> bool:
     """Compatibility adapter: the same profile pair owns every approval."""
     members = [article, *event.articles]
     profiles = resolve_sparse_release_profiles({id(member): article_reconciliation_profile(member) for member in members})
     decisions = [profile_pair_decision(profiles[id(article)], profiles[id(existing)]) for existing in event.articles]
     return bool(decisions) and "conflict" not in decisions and "match" in decisions
-
-
 
 
 def is_price_response_or_rationale_fact(value: str) -> bool:
@@ -29093,12 +27548,6 @@ def price_response_evidence_flags(value: str) -> frozenset[str]:
         ("solutions", ["working tirelessly", "find solutions", "寻找解决方案", "竭尽全力"]),
     )
     return frozenset(role for role, phrases in terms if score_terms(value, phrases) > 0)
-
-
-def compact_price_response_must_include_fact(candidates: list[str]) -> str:
-    facts = [PreparedFact(clean_sentence(value), "", roles=price_response_evidence_flags(clean_sentence(value)))
-             for value in candidates if clean_sentence(value)]
-    return compact_source_price_response(facts)
 
 
 def is_structured_data_row_label(value: str) -> bool:
@@ -29414,12 +27863,22 @@ def source_attribution_review_spans(article: Article) -> tuple[tuple[str, int, i
 def evidence_review_item(evidence: ArticleEvidence, spans, reason: str, source_facts=()) -> dict[str, Any]:
     unit_order = {unit.unit_id: index for index, unit in enumerate(evidence.units)}
     source_spans = sorted(spans, key=lambda span: (unit_order.get(span[0], len(unit_order)), span[1], span[2]))
+    selected_units = {key for key, _, _ in source_spans}
+    predictions = {unit.unit_id: adjacent_unattributed_prediction_spans(unit.text)
+                   for unit in evidence.units if unit.unit_id in selected_units}
+    unprocessed = []
+    for key, start, end in source_spans:
+        unit = evidence.units[unit_order[key]]
+        entry = dict(asdict(unit), text=unit.text[start:end], start=start, end=end)
+        if any(start < right and left < end for left, right in predictions[key]):
+            entry['review_reason'] = ('Possible independent writer prediction: the preceding sentence\'s '
+                'attribution does not establish this claim\'s speaker. Resolve from captured context before retaining.')
+        unprocessed.append(entry)
     return {
         "id": "evidence-review:" + evidence.article_id, "required": True,
         "title": evidence.title, "source_names": [evidence.source],
         "source_urls": [evidence.url], "evidence_id": evidence.article_id, "reason": reason,
-        "unprocessed_evidence": [dict(asdict(unit), text=unit.text[start:end], start=start, end=end)
-            for key, start, end in source_spans for unit in evidence.units if unit.unit_id == key]
+        "unprocessed_evidence": unprocessed
             + [{"text": fact.text, "unit_id": "", "location_status": "source-text-only"}
                for fact in source_facts],
     }
@@ -29451,6 +27910,20 @@ def whole_source_media_marker(text: str) -> bool:
     return _compiled_rule(r"\s*\[\s*(?:Image|Video):\s*[^\[\]]*?https?://[^\s\[\]]+\s*\]\s*", re.I).fullmatch(text) is not None
 
 
+def prepare_source_local_report_evidence(evidence: ArticleEvidence, displayed: str = '') -> tuple[PreparedFact, ...]:
+    """Material local reports remain reviewable without a parent Article."""
+    units = {unit.unit_id: unit for unit in evidence.units}
+    pending = []
+    for unit_id, start, end, reason in source_local_report_passages(evidence):
+        text = units[unit_id].text[start:end]
+        if clean_fact_text(text) not in displayed:
+            pending.append(PreparedFact(text, text.casefold(),
+                roles=frozenset({'unprocessed-source-qualification'}),
+                origins=((evidence.source, evidence.url, evidence.article_id, unit_id, start, end),),
+                reason=reason))
+    return tuple(pending)
+
+
 def prepare_source_condition_evidence(article: Article, identity_for_article=None) -> tuple[tuple[PreparedFact, ...], tuple[PreparedFact, ...]]:
     """Recover conditions while tracking the immediately active source topic."""
     evidence = article.evidence
@@ -29458,15 +27931,17 @@ def prepare_source_condition_evidence(article: Article, identity_for_article=Non
         return (), ()
     identity = identity_for_article() if identity_for_article is not None else article_title_led_event_identity(article)
     facts, unresolved = [], []
-    units = {unit.unit_id: unit for unit in evidence.units}
+    for claim in article_source_conditions(article):
+        if claim.report_role == 'unresolved':
+            unit_texts = {unit.unit_id: unit.text for unit in evidence.units}
+            for key, start, end in claim.evidence_spans:
+                text = unit_texts[key][start:end]
+                unresolved.append(PreparedFact(text, text.casefold(),
+                    roles=frozenset({'unprocessed-source-qualification'}),
+                    origins=((article.source, article.url, evidence.article_id, key, start, end),),
+                    reason='Authentication requirement has an unresolved local device owner; verify before assigning support'))
     displayed = clean_fact_text(' '.join([article.summary, *article.key_facts]))
-    for unit_id, start, end, reason in source_local_report_passages(evidence):
-        text = units[unit_id].text[start:end]
-        if clean_fact_text(text) not in displayed:
-            unresolved.append(PreparedFact(text, text.casefold(),
-                roles=frozenset({'unprocessed-source-qualification'}),
-                origins=((article.source, article.url, evidence.article_id, unit_id, start, end),),
-                reason=reason))
+    unresolved.extend(prepare_source_local_report_evidence(evidence, displayed))
     unresolved_preview = preview_reference_needs_review(article.title, article.summary, identity,
                                                          evidence.embedded_references)
     primary_span = next(source_sentence_spans(article.summary), (0, len(article.summary)))
@@ -29652,6 +28127,7 @@ def prepare_source_condition_evidence(article: Article, identity_for_article=Non
                         "Source-local diagnostic evidence or responsibility boundary; retain the complete explanation and uncertainty without treating it as a confirmed cause or enforced behavior")))
         prior_editorial_condition = False
         current_roundup_product = False
+        attributed_quotes = tuple(source_attributed_quote_spans(unit.text))
         for start, end in sentences:
             text = unit.text[start:end]
             if (unresolved_preview and _compiled_rule(r"video|clip|视频|片中", re.I).search(text)
@@ -29670,6 +28146,7 @@ def prepare_source_condition_evidence(article: Article, identity_for_article=Non
                     origins=((article.source, article.url, evidence.article_id, unit.unit_id, start, end),),
                     reason="Explicit attributed Apple component testing and planned device/territory use; retain the local qualification without promoting the surrounding industry report"))
             editorial_condition = bool(article.relevance_tier == "weak"
+                and not any(left <= start and end <= right for left, right in attributed_quotes)
                 and _compiled_rule(r"\bi (?:do )?(?:think|believe|expect)\b|我(?:认为|觉得|相信)", re.I).search(text)
                 and _compiled_rule(r"\b(?:once|if|when|until)\b|只有|如果|一旦|等到", re.I).search(text))
             editorial_followup = bool(prior_editorial_condition and _compiled_rule(r"^(?:That|This|It)\b|^(?:这|那)", re.I).match(text))
@@ -29769,6 +28246,12 @@ def prepare_source_condition_evidence(article: Article, identity_for_article=Non
                 active_topic = False
             elif local_related:
                 active_topic = True
+            if (unit.kind in {"p", "li"} and unit.container_id != "caption"
+                    and _compiled_rule(r"不适用于|不能用于|\bnot\s+(?:intended|designed|meant)\s+for\b", re.I).search(text)):
+                unresolved.append(PreparedFact(text, text.casefold(),
+                    roles=frozenset({"unprocessed-source-qualification"}),
+                    origins=((article.source, article.url, evidence.article_id, unit.unit_id, start, end),),
+                    reason="Source-stated purpose or applicability exclusion; preserve its local subject and scope before assigning it to an action"))
             anaphoric = bool(_compiled_rule(r"^(?:(?:although|however|but)\s+)?(?:the company|it|this design)\b|^(?:虽然|但|然而)?(?:公司|该公司|这一设计)", re.I).match(text))
             legal_request = bool(article.event_kind == "legal_antitrust" and _compiled_rule(r"^(?:The company|The plaintiff|It)\s+(?:is\s+)?(?:requesting|seeking).{0,45}(?:jury trial|court)|(?:请求|要求).{0,20}(?:陪审团|法院)", re.I).search(text))
             condition = bool(re.search(uncertainty, text, re.I))
@@ -29849,10 +28332,6 @@ def prepare_source_condition_evidence(article: Article, identity_for_article=Non
     return tuple(facts), tuple(unresolved)
 
 
-def source_condition_facts(article: Article) -> tuple[PreparedFact, ...]:
-    return prepare_source_condition_evidence(article)[0]
-
-
 def source_local_comparison_owner_facts(article: Article, facts: tuple[PreparedFact, ...]) -> tuple[PreparedFact, ...]:
     """Keep an anaphoric comparison claim with its nearby named example."""
     if article.evidence is None:
@@ -29904,8 +28383,29 @@ def source_is_editorial_recap_or_reader_prompt(article: Article, identity) -> bo
     )
 
 
+def article_source_conditions(article: Article):
+    """Reuse source-local support bindings for this immutable evidence view."""
+    evidence = article.evidence
+    if evidence is None:
+        return ()
+    prepared = article._source_conditions
+    if prepared is None or prepared[0] is not evidence:
+        prepared = (evidence, bind_device_conditions(evidence))
+        article._source_conditions = prepared
+    return prepared[1]
+
+
 def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], identity_for_article=None) -> tuple[PreparedFact, ...]:
     """Prepare source-local mechanisms and qualifications for the fact plan."""
+    if _compiled_rule(r'benchmark|跑分', re.I).search(article.title):
+        prepare_article_source(article)
+        if article.bound_claim is not None and article.bound_claim.action == 'cpu-benchmark-report':
+            units = {unit.unit_id: unit.text for unit in article.evidence.units}
+            return tuple(PreparedFact(units[key][start:end], units[key][start:end].casefold(),
+                roles=frozenset({'source-measurement'}),
+                origins=((article.source, article.url, article.evidence.article_id, key, start, end),))
+                for key, start, end in article.bound_claim.evidence_spans
+                if not any(units[key][start:end].casefold() in fact.text.casefold() for fact in retained))
     if (article.evidence is None or article.bound_claim is not None
             or article.projected_fact_spans is not None
             or clean_sentence(article.title) != clean_sentence(article.evidence.title)):
@@ -29915,8 +28415,61 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
     identity = identity_for_article() if identity_for_article is not None else article_title_led_event_identity(article)
     if source_is_editorial_recap_or_reader_prompt(article, identity):
         return ()
-    if not identity.title_products:
+    # Reuse the authoritative development action when a new device has no
+    # catalog product name yet. Local codenames are evidence bindings only.
+    development = (source_hardware_action_frame(article.title, article.summary, article.key_facts)
+        if _compiled_rule(r'develop|研发|开发', re.I).search(article.title) else None)
+    development = bool(development and development.action == 'hardware-development-report')
+    factory_visit = (source_executive_visit_frame(article.title, article.summary,
+        tuple(unit.text for unit in article.evidence.units))
+        if _compiled_rule(r'到访|参观|访问|\bvisit|\btour', re.I).search(article.title) else None)
+    factory_person = (factory_visit.subject.split(':executive:', 1)[1].split(':factory-visit:', 1)[0]
+        if factory_visit and ':factory-visit:' in factory_visit.subject else '')
+    factory_site = factory_visit.subject.split(':factory-visit:', 1)[1] if factory_person else ''
+    def factory_visit_detail(text: str) -> bool:
+        if not factory_person:
+            return False
+        compact = _compiled_rule(r'[\s·.]', 0).sub('', text)
+        attributed_observation = bool(_compiled_rule(r'^' + re.escape(factory_person)
+            + r'(?:在接受采访时)?(?:表示|称|介绍|指出)[，,:：]?.{0,90}(?:工厂|园区|产线|车间)', re.I).search(compact)
+            and factory_site in compact
+            and _compiled_rule(r'规模|最大|参观|考察|制程|制造', 0).search(compact))
+        assembly_context = bool(source_identity_is_mentioned(identity, text, article.title)
+            and _compiled_rule(r'由[^。！？]{2,40}(?:组装|制造)', 0).search(text)
+            and _compiled_rule(r'目前|正在|正加紧', 0).search(text))
+        return attributed_observation or assembly_context
+    aliases, reporters = set(), set()
+    if development:
+        for unit in article.evidence.units:
+            for begin, end in source_sentence_spans(unit.text):
+                sentence = unit.text[begin:end]
+                owner = _compiled_rule(r'苹果(?:被曝)?(?:正|正在|计划)?(?:研发|开发)|Apple\s+(?:is\s+)?(?:reportedly\s+)?develop', re.I).search(sentence)
+                if not owner:
+                    continue
+                code = _compiled_rule(r'代号为\s*([A-Za-z][A-Za-z0-9-]+)|codenamed\s+([A-Za-z][A-Za-z0-9-]+)', re.I).search(sentence[owner.start():])
+                if not code:
+                    continue
+                alias = next(x for x in code.groups() if x)
+                if aliases and alias.casefold() not in {x.casefold() for x in aliases}:
+                    continue
+                aliases.add(alias)
+                reporter = _compiled_rule(r'(?:科技)?记者([\u4e00-\u9fff·]{2,16})(?:[（(][^）)]{1,45}[）)])?(?:透露|表示|称)', re.I).search(sentence)
+                if reporter:
+                    reporters.add(reporter.group(1))
+                    reporters.add(reporter.group(1).split('·')[-1])
+    if not identity.title_products and not aliases:
         return ()
+    def development_detail(text: str) -> bool:
+        if not aliases:
+            return False
+        material_shape = _compiled_rule(r'(?:金属|铝|合金|塑料|玻璃|陶瓷).{0,12}(?:外壳|机身)|圆柱体|球形|方形|(?:metal|aluminum|plastic|glass).{0,20}(?:cylinder|sphere|case|body)', re.I)
+        for alias in aliases:
+            if _compiled_rule(r'^(?:外形上[，,]\s*)?' + re.escape(alias) + r'(?:是|采用|配备|\s+(?:is|has))', re.I).search(text) and material_shape.search(text):
+                return True
+        # A named reporter must have been introduced while reporting this
+        # device, and must explicitly qualify this design, not a peer device.
+        return bool(active_topic and reporters and any(_compiled_rule(r'^' + re.escape(name) + r'(?:也)?(?:指出|表示|解释)(?:了)?[，,:：]?(?:这种|该)设计', re.I).search(text) for name in reporters)
+            and _compiled_rule(r'(?:需要|必须|仅可|只能|无法|不能|不支持).{0,25}(?:录像|视频|数据|记录|证据|保存|处理)', re.I).search(text))
     relation = _compiled_rule(r"\b(?:brings?|works?|requires?|relies?|needs?|must|may|can|lets?|allows?|"
         r"supports?|remains?|stays?|creates?|fills?|scans?|updates?|puts?|wraps?|indicates?|tied|contact|"
         r"provides?|enables?|offers?)\b|(?:指出|表示|称|要求|必须|可以|支持|开启|关闭|"
@@ -29925,18 +28478,21 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
     # The relation must describe a concrete feature, operating boundary or
     # attributed supply constraint, rather than an author's evaluation.
     detail = _compiled_rule(r"\b(?:results?|ranking|index(?:ing)?|search|settings?|widgets?|"
-        r"events?|reminders?|sign.in|access|sensors?|carriers?|"
+        r"events?|reminders?|sign.in|access|authentication|identity\s+verification|sensors?|carriers?|"
         r"charges?|billing|subscriptions?|esim|streams?|calls?|"
         r"button|flyer|production|hinge|capacity|availability|preinstall(?:ed)?|"
         r"score|watch\s+face|bars?|dots?|categories|description|livestream)\b|"
         r"(?:搜索|结果|排序|索引|设置|组件|日历|提醒|应用|授权|运营商|服务|"
         r"收费|费用|产能|良率|铰链|生产|瓶颈|发售|预购|预装|助手|充电线|充电|"
-        r"传感器|权限|黑名单|运动数据)", re.I)
+        r"传感器|权限|身份验证|生物认证|黑名单|运动数据)", re.I)
+    def has_related_detail(text: str) -> bool:
+        return any(relation.search(text[start:end]) and detail.search(text[start:end])
+            for start, end in source_sentence_spans(text))
     condition = _compiled_rule(r"\b(?:requires?|relies?\s+on|needs?\s+to|must|may\s+(?:not|also)|"
         r"remains?\s+tied|can\s+(?:toggle|turn|disable)|"
         r"only\s+(?:if|on|when)|depending\s+on|until|no\s+longer|cannot|can't|"
         r"removed\b.{0,55}\b(?:action|feature|setting|support|button|option|capability))\b|"
-        r"(?:必须|仅|只要|如果|依赖|仍需|"
+        r"(?:要求|必须|仅|只要|如果|依赖|仍需|"
         r"尚未|不会|可能.{0,16}(?:收费|需要|无法))", re.I)
     # A concrete predicate with its patient, result, or operating limit can be
     # more specific than a domain noun. In particular, "app", "iPhone" and
@@ -29958,8 +28514,8 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
         r"\b(?:offers?|provides?|gives?)\b.{0,100}\bbased\s+on\b.{1,65}|"
         r"\b(?:have|has)\s+control\s+over\b.{1,110}|"
         r"\b(?:made|gave)\s+(?:no|zero)\s+(?:mention|reference)\s+of\b.{1,90}|"
-        r"(?:标注|转换|保存|创建|存储|访问|隔离|删除|开启|连接|遮蔽|检测|"
-        r"签名|显示|调整|录音|追踪|提供|支持|取代).{2,65}", re.I)
+        r"(?:标注|转换|保存|创建|存储(?!芯片|器|设备|容量|空间)|访问|隔离|删除|开启|连接|遮蔽|检测|"
+        r"签名|显示|调整|录音|追踪|提供|支持|取代|修改|替换|封装|拖入|移除).{2,65}", re.I)
     concrete_operation = _compiled_rule(specific_operation.pattern
         + r"|\b(?:finds?|retrieves?)\b(?:\s+\S+){1,18}", re.I)
     # Credit lines, navigation, and evaluative prose can contain the same
@@ -29973,11 +28529,11 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
         r"my\s+(?:favorite|view)|i\s+(?:think|believe)|"
         r"should\s+really|no\s+reason\s+to|is(?:n['’]t|\s+not)\s+known\s+for|"
         r"(?:baseless|groundless|unfounded)\s+(?:accusations?|allegations?|claims?))\b|"
-        r"(?:真正考验|赢得.{0,12}掌声|温暖的微笑|我认为|我觉得|值得|建议|令人|让人)", re.I)
+        r"(?:真正考验|赢得.{0,12}掌声|温暖的微笑|我认为|我觉得|值得(?!注意的是)|建议|令人|让人)", re.I)
     attributed_claim = _compiled_rule(r"\b(?:Apple|the\s+company|an?\s+analyst|developers?)\b.{0,35}"
         r"\b(?:says?|reports?|states?|notes?|confirm(?:s|ed|ing)?)\b|(?:苹果|分析师|开发者).{0,24}(?:称|表示|指出|确认)", re.I)
     source_report = _compiled_rule(r"^(?:an?\s+(?:new\s+)?report\s+(?:says?|reports?|states?)|"
-        r"according\s+to\s+\S+)|(?:据|报道称|报告指出)", re.I)
+        r"according\s+to\s+\S+)|(?:据称|报道称|报告指出|资料称|^(?:据|报道)|[，,：:]\s*据)", re.I)
     media_observation = _compiled_rule(r"\b(?:this|the)\s+(?:video|clip|footage|image|photo)\b"
         r".{0,40}\bshows?\b.{1,90}", re.I)
     production_credit = _compiled_rule(r"\bexecutive[- ]produced\s+and\s+starring\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2}\b|"
@@ -30005,7 +28561,8 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
         r"(?:choice|option)\s+to\s+(?:take|buy|choose)|"
         r"surely\s+\w+|inevitabl\w*)\b|"
         r"(?:未来|将来).{0,35}一定会|"
-        r"^(?:这|那)(?:也)?意味着[^。！？]{0,120}(?:大概率|恐怕|很可能)", re.I)
+        r"^(?:这|那)(?:也)?意味着[^。！？]{0,120}(?:大概率|恐怕|很可能)|"
+        r"^如果[^。！？]{0,80}能够[^。！？]{0,80}就有机会", re.I)
     author_rationale = _compiled_rule(r"\b(?:to\s+keep\s+pace\s+with|in\s+order\s+to\s+compete\s+with)\b"
         r".{0,110}\bneeds?\s+to\b|"
         r"\b(?:might|would|could)\b.{0,80}\b(?:if|perhaps|maybe)\b|"
@@ -30028,7 +28585,7 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
         r"(?:深度共生|全新可能|new\s+possibilities)", re.I)
     named_actor = _compiled_rule(r"^(?:(?:And|But|Also|Then|Meanwhile|Separately)\s+)?"
         r"(?P<name>[A-Z][A-Za-z0-9+&]*(?:\s+[A-Z][A-Za-z0-9+&]*){0,3})\s+"
-        r"(?i:allows|provides|supports|offers|enables|adds|creates|"
+        r"(?i:allows|provides|supports|offers|enables|adds|creates|requires|"
         r"releases|announces|launches|says|reports|increases|increased|reduces|reduced|"
         r"confirms|confirmed|confirming|finds|retrieves)\b", 0)
     source_category: str | None = None
@@ -30036,9 +28593,18 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
         for facet in os_release_facets_from_text(article.title))
     def explicit_subject_is_local(sentence: str) -> bool | None:
         nonlocal source_category
+        lead = _compiled_rule(r"^(?:(?:不过|但|与此同时|此外|同时|然而|另外)[，,\s]*)+", 0).sub("", sentence, 0)
+        # 'Other features' continues the device; a separately owned project
+        # or an object developed by another actor establishes a peer subject.
+        if _compiled_rule(r'^竞品|^(?:另一[个款种]|其他)(?:(?:项目|公司|品牌|厂商|开发者|团队)的|'
+                r'[^，。]{1,25}由[^，。]{1,25}(?:研发|开发|制造|推出))', re.I).search(lead):
+            return False
+        visit_actor = _compiled_rule(r'^([^，,。]{2,45}?)(?:还)?(?:到访|参观)', re.I).search(lead)
+        if visit_actor:
+            actor = _compiled_rule(r'\s+', 0).sub('', visit_actor.group(1), 0)
+            return actor in _compiled_rule(r'\s+', 0).sub('', article.title, 0)
         # A leading product phrase before 的 can introduce a peer subject;
         # product names elsewhere may instead be objects or compatibility.
-        lead = _compiled_rule(r"^(?:(?:不过|但|与此同时|此外|同时|然而|另外)[，,\s]*)+", 0).sub("", sentence, 0)
         subject = _compiled_rule(r"^([^，,。！？!?;；]{1,40}?)的", 0).match(lead)
         if subject:
             named_products = build_event_identity(subject.group(1), "").title_products
@@ -30065,19 +28631,90 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
         name = actor.group("name")
         if name.casefold() in {"this", "that", "these", "those", "it", "they"}:
             return None
+        if name.casefold() == "apple" and identity.title_products:
+            return (identity.scope != "third-party-context"
+                and any(product in identity.title_products and score_terms(sentence, product_aliases) > 0
+                    for product, product_aliases in PRODUCT_PATTERNS))
         return (name.casefold() in article.title.casefold()
             or source_identity_is_mentioned(identity, name, article.title))
     editorial_units = editorial_list_unit_ids(article.evidence)
-    proposals: list[PreparedFact] = []
+    source_conditions = article_source_conditions(article)
+    condition_spans = [span for claim in source_conditions for span in claim.evidence_spans]
+    condition_units = {unit.unit_id: unit.text for unit in article.evidence.units}
+    proposals = [PreparedFact(condition_units[key][start:end], condition_units[key][start:end].casefold(),
+        roles=frozenset({'source-condition'}),
+        origins=((article.source, article.url, article.evidence.article_id, key, start, end),))
+        for claim in source_conditions if claim.report_role == 'supporting'
+        for key, start, end in claim.evidence_spans
+        if not any(condition_units[key][start:end].casefold() in fact.text.casefold() for fact in retained)]
+    measurement = source_device_behavior_test_frame(article.title, article.summary, tuple(article.key_facts))
+    if measurement is not None and measurement.tier == 'strong':
+        measured_device, tester = measurement.subject.split(':tester:', 1)
+        measured_devices = frozenset(measured_device.split(','))
+        tester = tester.replace('-', ' ')
+        tester_prefix = _compiled_rule(r'^' + re.escape(tester).replace(r'\ ', r'[\s-]+')
+            + r'\s*(?:在|使用|通过|将|用|\b(?:used|tested|mounted|compared)\b)', re.I)
+        for unit in article.evidence.units:
+            if unit.kind != 'p':
+                continue
+            for begin, end in source_sentence_spans(unit.text):
+                text = unit.text[begin:end].strip()
+                if (not tester_prefix.search(text)
+                        or not _compiled_rule(r'测试|拍摄|\b(?:tested|compared|photographed)\b', re.I).search(text)
+                        or not _compiled_rule(r'三脚架|主摄|曝光|充电器|tripod|main\s+camera|exposure|charger', re.I).search(text)
+                        or not _compiled_rule(r'模式|环境|条件|对比|光线|日光|夜间|\b(?:modes?|conditions?|daylight|night|compared)\b', re.I).search(text)
+                        or _compiled_rule(r'计划|尚未|去年|此前|建议|应当|步骤|另一|竞品|'
+                            r'\b(?:planned|previously|last\s+year|should|another|separate)\b', re.I).search(text)
+                        or any(text.casefold() in f.text.casefold() for f in retained)):
+                    continue
+                camera_object = _compiled_rule(r'(?:使用|用)\s*([^，,。.!?]{1,65}?)(?:拍摄|进行拍摄)|'
+                    r'\bused\s+([^,.;!?]{1,65}?)\s+to\s+photograph', re.I).search(text)
+                mounted_object = _compiled_rule(r'将\s*([^，,。.!?]{1,65}?)(?:安装|固定|放置)(?:在|到)|'
+                    r'\bmounted\s+([^,.;!?]{1,65}?)\s+on\b', re.I).search(text)
+                if mounted_object:
+                    target = next(value for value in mounted_object.groups() if value)
+                    objects = source_device_test_objects(target)
+                    if not objects or not objects <= measured_devices:
+                        continue
+                if camera_object:
+                    target = next(value for value in camera_object.groups() if value)
+                    implicit_camera = _compiled_rule(r'^(?:(?:该机|其|手机)的?|the\s+)?(?:主摄(?:像头)?|main\s+camera)$', re.I).fullmatch(target.strip())
+                    if not implicit_camera:
+                        objects = source_device_test_objects(target)
+                        if not objects or not objects <= measured_devices:
+                            continue
+                start = unit.text.find(text, begin, end)
+                proposals.append(PreparedFact(text, text.casefold(), roles=frozenset({'source-condition'}),
+                    origins=((article.source, article.url, article.evidence.article_id,
+                              unit.unit_id, start, start + len(text)),)))
     broad_retrieval_details: set[str] = set()
     active_topic = True
+    local_codes = set(aliases)
     for index, unit in enumerate(article.evidence.units):
         if (unit.kind != "p" or unit.container_id == "caption"
                 or unit.unit_id in editorial_units or whole_source_media_marker(unit.text)):
             continue
+        if aliases:
+            introduced = _compiled_rule(r'代号为\s*([A-Za-z][A-Za-z0-9-]+)|codenamed\s+([A-Za-z][A-Za-z0-9-]+)', re.I).search(unit.text)
+            if introduced:
+                code = next(x for x in introduced.groups() if x)
+                local_codes.add(code)
+                active_topic = code.casefold() in {x.casefold() for x in aliases}
+            else:
+                mentioned = [(match.start(), code) for code in local_codes
+                    if (match := _compiled_rule(r'(?<![A-Za-z0-9-])' + re.escape(code) + r'(?![A-Za-z0-9-])', re.I).search(unit.text))]
+                if mentioned:
+                    active_topic = min(mentioned)[1].casefold() in {x.casefold() for x in aliases}
+            for subject_start, subject_end in source_sentence_spans(unit.text):
+                local = explicit_subject_is_local(unit.text[subject_start:subject_end])
+                if local is not None:
+                    active_topic = local
+        local_development_detail = development_detail(unit.text)
+        if not identity.title_products and not local_development_detail:
+            continue
         # A short subject statement can still name the owner of the following
         # pronoun even though it does not qualify as a display fact.
-        if (len(unit.text) < 45 and not (condition.search(unit.text)
+        if (len(unit.text) < 45 and not local_development_detail and not (condition.search(unit.text)
                 and relation.search(unit.text) and detail.search(unit.text))):
             for subject_start, subject_end in source_sentence_spans(unit.text):
                 local = explicit_subject_is_local(unit.text[subject_start:subject_end])
@@ -30168,7 +28805,9 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
                 and not source_report.search(sentence))
             generic_second_person = bool(_compiled_rule(r"^(?:if\s+you\s+have|you\s+(?:also\s+)?(?:don['’]t|do\s+not)\s+only)\b", re.I).match(sentence) and not local_source)
             addressed_imperative = bool(len(sentence) < 45 and _compiled_rule(r"^[A-Z][a-z]+\s+(?:the\s+)?[a-z]+,\s+[A-Z][a-z]+[.!]$", 0).match(sentence))
-            invalid = bool(start >= end_limit or source_chrome.search(sentence)
+            bound_condition = any(key == unit.unit_id and left < stop and start < right
+                                  for key, left, right in condition_spans)
+            invalid = bool(bound_condition or start >= end_limit or source_chrome.search(sentence)
                 or historic_context or failed_proposal_context or separate_stage_context
                 or (sentence.rstrip().endswith((":", "：")) and start == 0)
                 or editorial or generic_second_person or addressed_imperative
@@ -30213,13 +28852,15 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
                     if production_credit.search(text[left:right])), text)
             short_reported_detail = bool(
                 (attributed_claim.search(text) or source_report.search(text))
-                and relation.search(text) and detail.search(text))
-            if ((len(text) < 35 and not short_reported_detail)
+                and has_related_detail(text))
+            if ((len(text) < 35 and not short_reported_detail and not development_detail(text))
                     or text.endswith(("?", "？")) or fact_noise(text)
                     or inline_media_marker_spans(text)
                     or _compiled_rule(r"\b(?:I|my|we|our)\b|(?:我认为|我觉得|欢迎留言|评论区)", re.I).search(text)
                     or _compiled_rule(r"here(?:'s| is)\s+what\s+you\s+need\s+to\s+know", re.I).search(text)
-                    or not ((relation.search(text) and detail.search(text))
+                    or not (has_related_detail(text)
+                            or development_detail(text)
+                            or factory_visit_detail(text)
                             or concrete_operation.search(text)
                             or media_observation.search(text)
                             or production_credit.search(text)
@@ -30247,7 +28888,9 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
                     text = text[:sentence_start].rstrip()
                     break
             if (not scoped_topic or not text
-                    or not ((relation.search(text) and detail.search(text))
+                    or not (has_related_detail(text)
+                            or development_detail(text)
+                            or factory_visit_detail(text)
                             or concrete_operation.search(text)
                             or media_observation.search(text)
                             or production_credit.search(text)
@@ -30286,12 +28929,24 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
                 and _compiled_rule(r"\b(?:I|we)\b.{0,100}\b(?:used|tried|tested|saw|observed)\b", re.I).search(preceding.text)
                 and _compiled_rule(r"\b(?:I|we|me|my)\b", re.I).search(text)
                 and concrete_operation.search(text))
+            # An attributed present capability boundary is a qualification,
+            # even when phrased as a current/new-model comparison. Give the
+            # already scoped exact claim the existing preservation role; do
+            # not promote general benefits or hypothetical improvements.
+            reported_state_limit = bool(
+                source_identity_is_mentioned(identity, text, article.title)
+                and (attributed_claim.search(text) or source_report.search(text))
+                and _compiled_rule(r"(?:现款|现有|目前|当前)|\b(?:current(?:ly)?|existing|now)\b", re.I).search(text)
+                and _compiled_rule(r"(?:没有|不支持|不提供|无法|尚未).{0,40}(?:功能|能力|等级|认证|规格|选项|权限)|"
+                    r"\b(?:no|lacks?|does\s+not|cannot)\b.{0,60}\b(?:support|capabilit\w*|feature|certification|rating|option|permission)\b", re.I).search(text)
+                and not editorial_hypothesis.search(text)
+                and not author_rationale.search(text))
             role = (frozenset({"source-measurement"}) if source_test
-                else frozenset({"source-condition"}) if condition.search(text)
+                else frozenset({"source-condition"}) if condition.search(text) or reported_state_limit
                 else frozenset({"source-support-fact"}))
             proposals.append(PreparedFact(text, text.casefold(), roles=role,
                 origins=tuple(origins)))
-            if not ((relation.search(text) and detail.search(text))
+            if not (has_related_detail(text)
                     or specific_operation.search(text) or media_observation.search(text)
                     or production_credit.search(text) or same_work_extent
                     or verification_correction.search(text)
@@ -30305,6 +28960,41 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
     # Keep them after those facts; budget overflow still goes to source review.
     return tuple(sorted(proposals, key=lambda fact:
         (fact.text in broad_retrieval_details, len(fact.text) > 420)))
+
+
+def source_market_headline_has_uncovered_measurement(article: Article, retained: Sequence[PreparedFact] = ()) -> bool:
+    """A source's headline can report a metric absent from its body shortlist."""
+    if (article.evidence is None or article.bound_claim is not None
+            or article.projected_fact_spans is not None
+            or clean_sentence(article.title) != clean_sentence(article.evidence.title)):
+        return False
+    title = article.title
+    if (_compiled_rule(r'[?？]|\b(?:could|might|may|will|forecast|predict\w*|expect\w*)\b|可能|预计|预测|假如|有望|或将|将会', re.I).search(title)
+            or not source_market_measurement_frame(title, article.summary, tuple(article.key_facts),
+                published_year=str(article.published_utc.year))):
+        return False
+    metrics = (
+        r'average\s+(?:selling\s+)?price|\basp\b|平均(?:销售)?价格|平均售价|均价',
+        r'market\s+share|市场份额|市占率',
+        r'shipments?|出货量',
+        r'revenue|营收|销售收入',
+    )
+    clauses = _compiled_rule(r'[。！？!?；;:：]', 0)
+    def canonical(text):
+        return clean_sentence(text).casefold().strip(' .。')
+    body = {canonical(part) for fact in retained for part in clauses.split(fact.text)}
+    quantity = _compiled_rule(r'[$€£¥￥]\s*\d|\d[\d,.]*\s*(?:%|percent\b|percentage\s+points?\b|'
+        r'billion\b|million\b|thousand\b|units?\b|dollars?\b|万|亿|台|美元|元|个百分点)', re.I)
+    for pattern in metrics:
+        metric = _compiled_rule(pattern, re.I)
+        for clause in clauses.split(title):
+            if not metric.search(clause) or not quantity.search(clause):
+                continue
+            # Only the same complete local claim proves coverage. Matching
+            # numbers cannot transfer a metric, period, actor or direction.
+            if canonical(clause) not in body:
+                return True
+    return False
 
 
 def prepare_source_fact_view(article: Article) -> SourceFactView:
@@ -30378,6 +29068,10 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                 body_normal.append(fact)
             normal = tuple(body_normal)
     normal = source_local_comparison_owner_facts(article, normal)
+    if source_market_headline_has_uncovered_measurement(article, normal):
+        # Preserve the publisher's own title and scope. Without a captured
+        # title unit, prepared() honestly records source-text-only provenance.
+        normal += (prepared(article.title, roles=frozenset({'source-measurement'}), evidence_only=True),)
     if not owned and not projected_view:
         normal += source_supporting_facts(article, normal, local_source_identity)
     if projected_view:
@@ -30421,6 +29115,7 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
         segments = []
         preceding_text = article.evidence.title
         paragraph_list = False
+        requirement_list = False
         editorial_units = editorial_list_unit_ids(article.evidence)
         def short_numeric_row(unit):
             text = unit.text.strip()
@@ -30429,7 +29124,7 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                 and not _compiled_rule(r"[。！？!?;；]", 0).search(text) and not text.endswith("."))
         for unit_index, unit in enumerate(article.evidence.units):
             if unit.unit_id in history_units:
-                paragraph_list = active_context = False
+                paragraph_list = requirement_list = active_context = False
                 context_facts = []
                 preceding_text = ""
                 continue
@@ -30437,16 +29132,23 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                 continue
             dated_timeline_row = bool(_compiled_rule(r"^\s*(?:20\d{2}\s*年|(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|"
                 r"jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+20\d{2})", re.I).match(unit.text))
-            paragraph_list_item = bool(paragraph_list and unit.kind == "p" and len(unit.text.strip()) <= 65
-                and (short_numeric_row(unit) or dated_timeline_row or not _compiled_rule(r"[。！？!?;；:]|：", 0).search(unit.text))
-                and not unit.text.rstrip().endswith("."))
+            row_text = unit.text.strip()
+            requirement_row = bool(requirement_list and row_text.rstrip("；;。.")
+                and not _compiled_rule(r"[。！？!?;；:：]", 0).search(row_text.rstrip("；;。.")))
+            paragraph_list_item = bool(paragraph_list and unit.kind == "p" and len(row_text) <= 65
+                and (requirement_row or ((short_numeric_row(unit) or dated_timeline_row
+                    or not _compiled_rule(r"[。！？!?;；:]|：", 0).search(unit.text))
+                    and not row_text.endswith("."))))
             if not paragraph_list_item:
                 # A colon followed by parallel numeric rows is a list even
                 # without a literal "includes" cue. Its shortest row must not
                 # disappear through the normal display-length filter.
                 following = article.evidence.units[unit_index + 1:unit_index + 3]
+                requirement_list = bool(unit.kind in {"p", "h2", "h3", "h4"}
+                    and row_text.endswith((":", "："))
+                    and _compiled_rule(r"(?:以下|下列|如下)(?:使用)?(?:条件|要求)|\b(?:requirements|prerequisites|conditions)\b", re.I).search(row_text))
                 paragraph_list = bool(unit.kind in {"p", "h2", "h3", "h4"} and unit.text.rstrip().endswith((":", "："))
-                    and (_compiled_rule(r"包括|如下|分别为|following|include", re.I).search(unit.text)
+                    and (requirement_list or _compiled_rule(r"包括|如下|分别为|following|include", re.I).search(unit.text)
                          or (len(following) == 2 and all(short_numeric_row(row) for row in following))))
             spans = tuple(source_sentence_spans(unit.text)) if unit.kind == "p" else ((0, len(unit.text)),)
             flags = []
@@ -30464,13 +29166,15 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                 preceding_text = unit.text
             has_enumeration = any(flags)
             segments.extend((unit, start, end, flag, has_enumeration) for (start, end), flag in zip(spans, flags))
+            if paragraph_list_item and requirement_list and row_text.endswith(("。", ".")):
+                paragraph_list = requirement_list = False
         for unit, fact_start, fact_end, paragraph_enumeration, paragraph_has_enumeration in segments:
             fact_text = unit.text[fact_start:fact_end]
             # A complete prepared response already carries this exact source
             # range and its speaker attribution; sentence splitting must not
             # add the quote and attribution again as overlapping review spans.
             if (unit.text.lstrip().startswith(('"', '“', '‘')) and any(
-                    _compiled_rule(r'["”’]\s+(?:said|says|explained|recalled)\s+[A-Z]', 0).search(fact.text)
+                    any(source_attributed_quote_spans(fact.text))
                     and fact.text == unit.text[origin[4]:origin[5]]
                     and origin[:4] == (article.source, article.url,
                         article.evidence.article_id, unit.unit_id)
@@ -30508,7 +29212,7 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                     context, context_unit = fact_text, unit
                     context_span = (unit.unit_id, fact_start, fact_end)
                     foreign = _compiled_rule(r"^(?:(?:Separately|Meanwhile),?\s+)?([A-Z][A-Za-z0-9]+)\s+(?:adds?|updates?|introduces?|launches?|announces?|offers?)\b", 0).match(context)
-                    possessor = _compiled_rule(r"^(?:(?:Separately|Meanwhile),?\s+)?([A-Z][A-Za-z0-9]*(?:\s+[A-Z][A-Za-z0-9]*){0,2})['’]s\b", 0).match(context)
+                    possessor = _compiled_rule(r"\b([A-Z][A-Za-z0-9]*(?:\s+[A-Z][A-Za-z0-9]*){0,2})['’]s\b", 0).search(context)
                     explicit_owner = (foreign or possessor)
                     source_owner = local_source_identity().action_owner
                     owner_supported = bool(explicit_owner and (
@@ -30585,6 +29289,30 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                         origins=((article.source, article.url, article.evidence.article_id,
                                   *context_span),),
                         reason="Local context needed to review an unassigned source enumeration"),)
+    if article.evidence is not None and not owned and not projected_view:
+        # A table's adjacent unit note qualifies its selected values even when
+        # the publisher marks that short note as an image caption.
+        retained = (*normal, *structured, *price, *responses)
+        selected_units = {origin[3] for fact in retained for origin in fact.origins}
+        units = article.evidence.units
+        selected_tables = {unit.container_id for unit in units
+            if unit.kind == "tr" and unit.unit_id in selected_units and unit.container_id}
+        for index, unit in enumerate(units):
+            if unit.kind not in {"p", "text", "caption"} or unit.unit_id in selected_units:
+                continue
+            if not _compiled_rule(r"(?:单位(?:为|是|[:：])|(?:均)?以)\s*"
+                    r"(?:[十百千万亿]+(?:台|部|人|件|股|元|美元|欧元|英镑|日元)?|"
+                    r"台|部|人|件|股|元|美元|欧元|英镑|日元|人民币|百分比|%)"
+                    r"(?=[\s，,。.;；）)]|$|计算|计量|为单位)|"
+                    r"\b(?:figures|values|shipments|amounts|units)\s+(?:(?:are|given|shown|expressed)\s+)*in\s+"
+                    r"(?:thousands|millions|billions|dollars|percent)\b", re.I).search(unit.text):
+                continue
+            adjacent = units[max(0, index - 1):index] + units[index + 1:index + 2]
+            if any(part.kind == "tr" and part.container_id in selected_tables for part in adjacent):
+                structured += (PreparedFact(unit.text, unit.text.casefold(),
+                    roles=frozenset({"source-condition"}),
+                    origins=((article.source, article.url, article.evidence.article_id,
+                        unit.unit_id, 0, len(unit.text)),)),)
     if article.evidence is not None and not owned and not projected_view:
         # A display-length filter cannot erase an already selected source fact.
         # Keep unresolved short items local, including their reporting context;
@@ -30744,55 +29472,6 @@ def event_summary_merge_keys(event: Event) -> set[tuple[str, tuple[str, ...]]]:
     return set().union(*(source_profile_merge_keys(article_reconciliation_profile(article)) for article in event.articles))
 
 
-
-
-def events_same_foldable_iphone_launch_timing(left: Event, right: Event) -> bool:
-    left_context = event_merge_context(left).lower()
-    right_context = event_merge_context(right).lower()
-    if not any(is_foldable_iphone_launch_timing_story(item.title, article_merge_context(item)) for item in left.articles):
-        return False
-    if not any(is_foldable_iphone_launch_timing_story(item.title, article_merge_context(item)) for item in right.articles):
-        return False
-    left_tokens = set().union(*(article.tokens for article in left.articles))
-    right_tokens = set().union(*(article.tokens for article in right.articles))
-    shared = left_tokens & right_tokens
-    timing_anchors = {
-        "launch",
-        "release",
-        "preorder",
-        "preorders",
-        "delayed",
-        "delay",
-        "september",
-        "q4",
-        "发售",
-        "发布",
-        "预购",
-        "延期",
-        "推迟",
-        "交付",
-    }
-    return bool(shared & timing_anchors) or (
-        score_terms(left_context, ["september", "9 月", "九月", "fourth quarter", "q4", "第四季度", "延期", "正常交付"]) > 0
-        and score_terms(right_context, ["september", "9 月", "九月", "fourth quarter", "q4", "第四季度", "延期", "正常交付"]) > 0
-    )
-
-
-def events_same_apple_stock_target_analyst(left: Event, right: Event) -> bool:
-    left_context = event_merge_context(left).lower()
-    right_context = event_merge_context(right).lower()
-    if not is_apple_stock_target_analyst_story(left.title, left_context):
-        return False
-    if not is_apple_stock_target_analyst_story(right.title, right_context):
-        return False
-    left_tokens = set().union(*(article.tokens for article in left.articles))
-    right_tokens = set().union(*(article.tokens for article in right.articles))
-    shared = left_tokens & right_tokens
-    return bool(shared & {"morgan", "jpmorgan", "aapl", "stock", "target", "345", "price", "目标价", "股价"})
-
-
-
-
 def events_should_merge(left: Event, right: Event) -> bool:
     """Compatibility adapter; event summaries do not provide merge evidence."""
     if not left.articles or not right.articles:
@@ -30802,8 +29481,6 @@ def events_should_merge(left: Event, right: Event) -> bool:
     decisions = [profile_pair_decision(profiles[id(a)], profiles[id(b)])
                  for a in left.articles for b in right.articles]
     return "conflict" not in decisions and "match" in decisions
-
-
 
 
 def event_from_article_group(source_event: Event, articles: list[Article], *, profiles: list[ReconciliationProfile] | None = None) -> Event:
@@ -30836,20 +29513,6 @@ def event_from_article_group(source_event: Event, articles: list[Article], *, pr
     return rebuild_event_from_articles(event, articles, profiles=profiles)
 
 
-def best_topic_group_for_article(article: Article, groups: dict[tuple[str, ...], list[Article]]) -> tuple[str, ...] | None:
-    best_key: tuple[str, ...] | None = None
-    best_score = 0.0
-    for key, group in groups.items():
-        group_tokens = set().union(*(item.tokens for item in group))
-        score = jaccard(article.tokens, group_tokens)
-        if score > best_score:
-            best_score = score
-            best_key = key
-    if best_score < 0.04:
-        return None
-    return best_key
-
-
 def split_mixed_topic_event(event: Event) -> list[Event]:
     """Reconcile original members through the same pair boundary as clustering."""
     groups = reconcile_articles(event.articles, profile_for=article_reconciliation_profile, initial_groups=())
@@ -30863,12 +29526,6 @@ def split_mixed_topic_events(events: list[Event]) -> list[Event]:
     for event in events:
         split_events.extend(split_mixed_topic_event(event))
     return split_events
-
-
-def provisional_seed_groups(articles: list[Article], profiles: dict[int, ReconciliationProfile]) -> list[list[Article]]:
-    """Compatibility forwarding to the shared partition implementation."""
-    return [list(group) for group in reconcile_articles(articles,
-        profile_for=lambda article: profiles[id(article)], initial_groups=())]
 
 
 def cluster_articles(articles: list[Article]) -> list[Event]:
@@ -31193,7 +29850,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     sources = build_sources(now_local)
     sources_by_name = {source.name: source for source in sources}
-    candidates = collect_candidates_from_sources(sources, cache_dir, diagnostics)
+    candidates = collect_candidates_from_sources(sources, cache_dir, diagnostics, window_start_utc=window_start_utc)
 
     deduped_candidates: list[Candidate] = []
     seen_urls: set[str] = set()
@@ -31220,6 +29877,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     articles: list[Article] = []
     evidence_reviews: list[dict[str, Any]] = []
+    evidence_by_id: dict[str, ArticleEvidence] = {}
     evidence_dispositions: dict[str, Any] = {}
     for candidate, page_text in zip(selected_detail_candidates, detail_page_texts):
         source = sources_by_name.get(candidate.source)
@@ -31230,7 +29888,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             if source.name == "Apple Newsroom":
                 publication_candidates = [PublicationEvidence(*entry) for entry in extract_apple_newsroom_time_candidates(page_text)]
             else:
-                publication_candidates = [PublicationEvidence(raw, label) for raw, label in extract_time_candidates(page_text)]
+                publication_candidates = [PublicationEvidence(raw, label) for raw, label in extract_time_candidates(page_text, source.name)]
+        detail_publication_candidates = tuple(publication_candidates)
         if candidate.feed_time_raw:
             publication_candidates.append(PublicationEvidence(candidate.feed_time_raw, "discovery feed"))
         evidence = capture_article_evidence(
@@ -31275,6 +29934,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 source,
                 page_text,
                 diagnostics,
+                detail_publication_candidates,
             )
         evidence = replace(
             evidence, published_utc=published_utc.isoformat() if published_utc else None,
@@ -31284,8 +29944,19 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             continue
         if not (window_start_utc < published_utc <= now_utc):
             continue
+        evidence_by_id[evidence.article_id] = evidence
         projections, remainder_ids, excluded = project_article_evidence(evidence)
         if projections:
+            resolved, pending, pending_reasons = [], list(remainder_ids), []
+            for projection in projections:
+                decision = claim_eligibility(projection.claim)
+                if decision.resolved:
+                    resolved.append(projection)
+                else:
+                    pending.extend(projection.claim.evidence_spans)
+                    pending_reasons.append(decision.reason)
+            projections = tuple(resolved)
+            remainder_ids = tuple(dict.fromkeys(pending))
             validate_evidence_dispositions(evidence, projections, remainder_ids, excluded)
             evidence_dispositions[evidence.article_id] = {
                 "assigned": sorted({span for projection in projections for span in projection.claim.evidence_spans}),
@@ -31304,6 +29975,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 diagnostics["source_article_counts"].get(candidate.source, 0) + len(projections))
             if remainder_ids:
                 evidence_reviews.append(evidence_review_item(evidence, remainder_ids,
+                    "; ".join(dict.fromkeys(pending_reasons)) or
                     "Source units not yet assigned to a supported action; review each unit before omission"))
             continue
         is_roundup = is_roundup_article_title(candidate.title)
@@ -31423,12 +30095,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     deferred_event_dicts = [event_to_dict(event, local_tz) for event in deferred_events]
     final_brief_queue = build_final_brief_queue(event_dicts)
     reviews_by_id = {item["evidence_id"]: item for item in evidence_reviews}
-    evidence_by_id = {article.evidence.article_id: article.evidence for article in articles if article.evidence is not None}
     pending_reviews: dict[str, list[PreparedFact]] = {}
     for event in events_all:
         for fact in event.fact_plan.unprocessed if event.fact_plan is not None else ():
             for _source, _url, article_id, _unit_id, _start, _end in fact.origins:
                 pending_reviews.setdefault(article_id, []).append(fact)
+    represented_sources = {article.evidence.article_id for article in articles if article.evidence is not None}
+    for article_id, evidence in evidence_by_id.items():
+        if article_id not in represented_sources:
+            pending = prepare_source_local_report_evidence(evidence)
+            if pending:
+                pending_reviews.setdefault(article_id, []).extend(pending)
     for article_id, facts in pending_reviews.items():
         evidence = evidence_by_id[article_id]
         spans = sorted({(key, start, end) for fact in facts
@@ -31469,8 +30146,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     data: dict[str, Any] = {
         "evidence_dispositions": evidence_dispositions,
         "source_evidence": {
-            article.evidence.article_id: asdict(article.evidence)
-            for article in articles if article.evidence is not None
+            article_id: asdict(evidence) for article_id, evidence in evidence_by_id.items()
         },
         "generated_at": now_utc.isoformat(),
         "timezone": {
@@ -31498,6 +30174,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "deferred_events": deferred_event_dicts,
     }
     data["final_brief_markdown"] = render_brief_scaffold(data)
+
+    if diagnostics.get("collection_warnings"):
+        data["collection_warnings"] = diagnostics["collection_warnings"]
 
     if args.include_diagnostics:
         diagnostics["fallback_queries"] = fallback_queries(now_local)
@@ -31585,6 +30264,8 @@ def main(argv: list[str] | None = None) -> int:
                 }
                 if brief_output_path is not None:
                     status["brief_output"] = str(brief_output_path)
+                if data.get("collection_warnings"):
+                    status["collection_warnings"] = data["collection_warnings"]
                 print(json.dumps(status, ensure_ascii=False, sort_keys=True))
                 sys.stdout.flush()
                 return 0

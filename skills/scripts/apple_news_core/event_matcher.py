@@ -197,7 +197,10 @@ def _legal_decision(left: EventIdentity, right: EventIdentity) -> MergeDecision 
         return "conflict"
     if left.case_topics and right.case_topics and not (left.case_topics & right.case_topics):
         return "conflict"
-    if (left.counterparties & right.counterparties) or (left.case_topics & right.case_topics):
+    # Retire the broad trade-secret grant here and in exact facets together.
+    # Other legacy legal families retain their behavior until case relations migrate.
+    if ((left.counterparties & right.counterparties)
+            or ((left.case_topics & right.case_topics) - {"trade-secret"})):
         return "match"
     return "unknown"
 
@@ -248,14 +251,41 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
     if isinstance(left, BoundClaim) or isinstance(right, BoundClaim):
         if not isinstance(left, BoundClaim) or not isinstance(right, BoundClaim):
             return "unknown"
+        if not all((left.subject, left.action, left.object, right.subject, right.action, right.object)):
+            return "unknown"
         if (left.subject, left.action, left.object) != (right.subject, right.action, right.object):
             return "conflict"
+        if left.polarity and right.polarity and left.polarity != right.polarity:
+            return "conflict"
+        if left.report_role and right.report_role and left.report_role != right.report_role:
+            return "conflict"
+        if left.action == 'leadership-report':
+            # The same speaker, publisher and topic do not identify an
+            # interview instance. Keep qualification independent of pairing.
+            return 'unknown'
+        if left.action == 'media-invitation':
+            dates = [{kind: {q[2] for q in claim.qualifiers if q[1] == kind}
+                      for kind in ('event-year', 'event-month', 'event-day')} for claim in (left, right)]
+            if any(not all(len(d[k]) == 1 for k in ('event-month', 'event-day'))
+                   or len(d['event-year']) > 1 for d in dates):
+                return 'unknown'
+            if any(dates[0][k] and dates[1][k] and dates[0][k] != dates[1][k] for k in dates[0]):
+                return 'conflict'
+        if left.action == 'app-publisher-chart-report':
+            charts = [{q[2] for q in claim.qualifiers if q[1] == 'chart-kind'} for claim in (left, right)]
+            if not charts[0].intersection(charts[1]):
+                return "unknown"
         # A source-local object/action binding is positive evidence. Qualifiers
         # that both sources specify must not contradict it.
-        left_values = {(q[0], q[1]): q[2] for q in left.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder"} and q[2] != "unspecified"}
-        right_values = {(q[0], q[1]): q[2] for q in right.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder"} and q[2] != "unspecified"}
+        left_values = {(q[0], q[1]): q[2] for q in left.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day"} and q[2] != "unspecified"}
+        right_values = {(q[0], q[1]): q[2] for q in right.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day"} and q[2] != "unspecified"}
         if any(left_values[key] != right_values[key] for key in left_values.keys() & right_values.keys()):
             return "conflict"
+        if left.action == 'cpu-benchmark-report':
+            dates = [{q[1:3] for q in claim.qualifiers if q[1].startswith('observation-')} for claim in (left, right)]
+            records = [{q[2] for q in claim.qualifiers if q[1] == 'measurement-record'} for claim in (left, right)]
+            if not (dates[0] and dates[0] == dates[1]) and not records[0].intersection(records[1]):
+                return "unknown"
         return "match"
     shared_components = left.components & right.components
     left_primary_intents = {
@@ -881,6 +911,7 @@ STRUCTURED_EVIDENCE_KEY_PREFIXES = (
 
 
 _SOFTWARE_FIRST_PARTY_PRODUCTS = {
+    "apple-smart-home-os",
     "app-store",
     "apple-arcade",
     "apple-books",
@@ -2368,6 +2399,17 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
             return "conflict"
     if _source_object_conflict(left, right):
         return "conflict"
+    lifecycle_years = []
+    for profile in (left, right):
+        years: dict[str, set[str]] = {}
+        for key in profile.separation_keys:
+            if key.startswith("lifecycle-model-year:"):
+                _, family, year = key.split(":", 2)
+                years.setdefault(family, set()).add(year)
+        lifecycle_years.append(years)
+    for family in lifecycle_years[0].keys() & lifecycle_years[1].keys():
+        if lifecycle_years[0][family].isdisjoint(lifecycle_years[1][family]):
+            return "conflict"
     for prefix in ("event-operation-action:", "retail-trade-in-action:", "benchmark-report-action:", "clock-workday-region:", "source-report-period:", "source-report-year:", "source-report-region:", "source-model-generation:", "source-launch-stage:"):
         left_actions = {key for key in left.separation_keys if key.startswith(prefix)}
         right_actions = {key for key in right.separation_keys if key.startswith(prefix)}
@@ -2536,18 +2578,13 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
     if any(device_polarities[0][key] != device_polarities[1][key]
            for key in device_polarities[0].keys() & device_polarities[1].keys()):
         return "conflict"
-    for prefix in ("panel-report-institution:", "panel-report-year:", "tariff-arrangement-partner:", "mac-demand-speaker:", "fold-production-stage:", "battery-cell-capacities:", "battery-total-capacity:", "security-bulletin-version:", "vulnerability-component:", "vulnerability-remediation:", "device-feature-generation:", "device-feature-version:", "organization-department:", "organization-leader:", "organization-stage:", "merger-party:", "merger-stage:", "maps-ad-action:", "car-key-partner:", "car-key-stage:", "car-key-version:", "factory-investigation-owner:", "factory-investigation-action:", "content-named-event:", "content-named-event-action:", "content-event-year:", "content-production-work:", "content-production-season:", "source-current-action:", "creator-studio-action:", "beats-cable-finish:", "messages-approved-agent:", "payment-rewards-partner:", "payment-rewards-action:", "fold-launch-stage:", "fold-launch-year:", "ai-cost-service:", "ai-cost-stage:", "ai-cost-owner:", "internal-test-version:",
+    for prefix in ("panel-report-institution:", "panel-report-year:", "tariff-arrangement-partner:", "mac-demand-speaker:", "fold-production-stage:", "battery-cell-capacities:", "battery-total-capacity:", "security-bulletin-version:", "vulnerability-component:", "vulnerability-remediation:", "device-feature-generation:", "device-feature-version:", "organization-department:", "organization-leader:", "organization-stage:", "merger-party:", "merger-stage:", "maps-ad-action:", "car-key-partner:", "car-key-stage:", "car-key-version:", "factory-investigation-owner:", "factory-investigation-action:", "content-named-event:", "content-named-event-action:", "content-event-year:", "content-production-work:", "content-production-season:", "source-current-action:", "creator-studio-action:", "beats-cable-finish:", "messages-approved-agent:", "payment-rewards-partner:", "payment-rewards-action:", "fold-launch-stage:", "fold-launch-year:", "ai-cost-service:", "ai-cost-stage:", "ai-cost-owner:",
                    "education-offer-year:", "education-offer-end:", "education-offer-stage:",
                    "app-acquisition-target:", "app-acquisition-stage:", "clinical-institution:",
                    "clinical-procedure:", "clinical-application:", "shipment-report-year:",
                    "capacity-before:", "capacity-after:", "support-list-feature:", "interview-test-duration:", "teardown-model:"):
         values = [{key for key in profile.separation_keys if key.startswith(prefix)} for profile in (left, right)]
         if all(values) and values[0].isdisjoint(values[1]):
-            return "conflict"
-    for internal, release in ((left, right), (right, left)):
-        if (any(key.startswith("internal-test-version:") for key in internal.separation_keys)
-                and "predicate:os-release-announcement" in release.separation_keys
-                and not any(key.startswith("internal-test-version:") for key in release.separation_keys)):
             return "conflict"
     for capacity, cancellation in ((left, right), (right, left)):
         if (any(key.startswith("capacity-after:") for key in capacity.separation_keys)
@@ -2641,6 +2678,8 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
                 for p in (left,right))
             and not (authoritative or exact_measure
                 or (left.identity is not None and right.identity is not None
+                    and not any("primary-claim-predicate:joint-status-filing" in p.separation_keys
+                                for p in (left, right))
                     and _legal_decision(left.identity,right.identity)=="match")
                 or (evidence and any(
                 not key.startswith(("structured-entity-component:", "structured-component-period:"))

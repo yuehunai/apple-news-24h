@@ -1,5 +1,9 @@
 """Collection transport, cache, and detail recall; no final event decisions."""
 from __future__ import annotations
+from dataclasses import replace
+import html
+import concurrent.futures
+from html.parser import HTMLParser
 import hashlib
 import os
 import tempfile
@@ -9,12 +13,280 @@ import re
 import shutil
 import time
 import urllib.parse
+import xml.etree.ElementTree as ET
 import urllib.request
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Callable
-from .models import Source, FetchSettings, ReconciliationProfile
-from .event_identity import PRODUCT_PATTERNS
+from .article_processing import strip_tags
+from .models import Candidate, Source, FetchSettings, ReconciliationProfile
+from .event_identity import PRODUCT_PATTERNS, high_confidence_direct_apple_action, _compiled_rule
+
+
+def limit_page_candidates(candidates: list[Candidate], limit: int,
+                          eligible: Callable[[Candidate], bool]) -> list[Candidate]:
+    """Spend a crowded page's budget on eligible discovery before filler.
+
+    Eligibility grants detail inspection, not a relevance tier. Keep page order
+    and the existing cap; unrelated links cannot hide later eligible reports.
+    """
+    if len(candidates) <= limit:
+        return candidates
+    selected, remainder = [], []
+    for index, candidate in enumerate(candidates):
+        (selected if eligible(candidate) else remainder).append(index)
+        if len(selected) == limit:
+            break
+    indices = sorted((selected + remainder)[:limit])
+    return [candidates[index] for index in indices]
+
+
+class _ListingLeadParser(HTMLParser):
+    """Read the first text paragraph inside one card's content container."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.depth = 0
+        self.owner_depth = 0
+        self.paragraph = None
+        self.summary = ''
+        self.closed = False
+
+    def handle_starttag(self, tag, attrs):
+        if self.closed or self.summary:
+            return
+        if tag == 'div':
+            self.owner_depth += 1
+            if self.depth:
+                self.depth += 1
+            elif 'js-contentInner' in dict(attrs).get('class', '').split():
+                self.depth = 1
+        if tag == 'p' and self.depth:
+            self.paragraph = []
+
+    def handle_data(self, data):
+        if self.depth and self.paragraph is not None:
+            self.paragraph.append(data)
+
+    def handle_endtag(self, tag):
+        if self.closed:
+            return
+        if tag == 'p' and self.paragraph is not None:
+            text = ' '.join(''.join(self.paragraph).split())
+            if text and not self.summary:
+                self.summary = text[:1200]
+            self.paragraph = None
+        if tag == 'div' and self.depth:
+            self.depth -= 1
+            if not self.depth:
+                self.closed = True
+                self.paragraph = None
+        if tag == 'div' and self.owner_depth:
+            self.owner_depth -= 1
+            if not self.owner_depth:
+                self.closed = True
+                self.paragraph = None
+
+
+def supplement_macrumors_index_candidates(
+    page_url: str, first_text: str | None, first_candidates: list[Candidate],
+    window_start: datetime | None, limit: int,
+    fetch_page: Callable[[str], str | None],
+    parse_page: Callable[[str, str], list[Candidate]],
+    parse_time: Callable[[str], datetime | None], diagnostics: dict[str, Any],
+) -> list[Candidate]:
+    """Follow the index's next links until its dated articles cover the window.
+
+    Sidebar dates and links inside articles cannot establish list coverage.
+    Keep the existing page candidate budget, including first-page discoveries.
+    """
+    parts = urllib.parse.urlsplit(page_url)
+    if (window_start is None or parts.hostname not in {'www.macrumors.com', 'macrumors.com'}
+            or parts.path not in {'', '/'}):
+        return []
+    current_url, body = page_url, first_text
+    seen, visited = {c.url for c in first_candidates}, {page_url}
+    extra, pages, reason = [], 0, 'candidate-budget'
+    while True:
+        if body is None:
+            reason = 'request-failed'
+            break
+        body = _compiled_rule(r'<(script|style)\b[^>]*>.*?</\1\s*>', re.I | re.S).sub('', body)
+        main = _compiled_rule(r'<main\b[^>]*>(.*?)</main>', re.I | re.S).search(body)
+        content, rows = main.group(1) if main else '', []
+        cards = list(_compiled_rule(r'<article\b[^>]*>.*?</article>', re.I | re.S).finditer(content))
+        for card in cards:
+            heading = _compiled_rule(r'<h[1-3]\b[^>]*>.*?</h[1-3]>', re.I | re.S).search(card.group())
+            stamp = _compiled_rule(r'''<time\b[^>]*datetime\s*=\s*['"]([^'"]+)''', re.I).search(card.group())
+            links = parse_page(heading.group(), current_url) if heading else []
+            if links:
+                summary = ''
+                owned = _compiled_rule(r'''<div\b[^>]*data-io-article-url\s*=\s*['"]([^'"]+)['"][^>]*>''', re.I).search(card.group())
+                if owned and urllib.parse.urljoin(current_url, html.unescape(owned.group(1))) == links[0].url:
+                    parser = _ListingLeadParser()
+                    parser.feed(card.group()[owned.start():])
+                    summary = parser.summary
+                rows.append(replace(links[0], summary=summary,
+                                    feed_time_raw=html.unescape(stamp.group(1)) if stamp else ''))
+        if not rows:
+            reason = 'empty-page'
+            break
+        new = [c for c in rows if c.url not in seen]
+        if pages and not new:
+            reason = 'no-progress'
+            break
+        complete = len(new) <= max(0, limit - len(seen))
+        for candidate in rows:
+            if candidate.url in seen or len(seen) < limit:
+                extra.append(candidate)
+                seen.add(candidate.url)
+        dates = [parse_time(c.feed_time_raw) for c in rows]
+        if (complete and len(rows) == len(cards) and all(d is not None and d.utcoffset() is not None for d in dates)
+                and all(a >= b for a, b in zip(dates, dates[1:])) and dates[-1] <= window_start):
+            reason = 'window-covered'
+            break
+        if not complete or len(seen) >= limit:
+            break
+        next_url = None
+        outside_articles = _compiled_rule(r'<article\b[^>]*>.*?</article>', re.I | re.S).sub('', content)
+        navigation = ' '.join(m.group() for m in _compiled_rule(r'<nav\b[^>]*>.*?</nav>', re.I | re.S).finditer(outside_articles))
+        for anchor in _compiled_rule(r'<a\b[^>]*>', re.I).finditer(navigation):
+            rel = _compiled_rule(r'''\brel\s*=\s*['"]([^'"]+)''', re.I).search(anchor.group())
+            href = _compiled_rule(r'''\bhref\s*=\s*['"]([^'"]+)''', re.I).search(anchor.group())
+            if not rel or 'next' not in rel.group(1).lower().split() or not href:
+                continue
+            url = urllib.parse.urljoin(current_url, html.unescape(href.group(1)))
+            target = urllib.parse.urlsplit(url)
+            if (target.scheme == parts.scheme and target.netloc == parts.netloc
+                    and _compiled_rule(r'/[1-9]\d*/').fullmatch(target.path)
+                    and not target.query and not target.fragment and url not in visited):
+                next_url = url
+                break
+        if next_url is None:
+            reason = 'pagination-unavailable'
+            break
+        visited.add(next_url)
+        current_url, body = next_url, fetch_page(next_url)
+        pages += 1
+    diagnostics.setdefault('source_listing_pagination', {})[page_url] = {
+        'additional_pages': pages, 'additional_candidates': len(seen) - len({c.url for c in first_candidates}),
+        'stop_reason': reason,
+    }
+    if reason != 'window-covered':
+        diagnostics.setdefault('collection_warnings', []).append({
+            'source': 'MacRumors', 'url': page_url, 'reason': reason, 'coverage': 'unconfirmed',
+        })
+    return extra
+
+
+def supplement_ithome_tag_candidates(
+    page_url: str, first_text: str | None, first_candidates: list[Candidate],
+    window_start: datetime | None, limit: int,
+    fetch_page: Callable[[str], str | None],
+    parse_page: Callable[[str, str], list[Candidate]],
+    parse_time: Callable[[str], datetime | None], diagnostics: dict[str, Any],
+) -> list[Candidate]:
+    """Follow the published tag-list protocol within the existing page budget."""
+    parts = urllib.parse.urlsplit(page_url)
+    if (window_start is None or parts.hostname not in {'www.ithome.com', 'ithome.com'}
+            or not parts.path.startswith('/tags/')):
+        return []
+    keyword = urllib.parse.unquote(parts.path[len('/tags/'):].strip('/'))
+    if not keyword or '/' in keyword:
+        return []
+    rows, extra = first_candidates, []
+    seen = {c.url for c in rows}
+    page, reason = 0, 'candidate-budget'
+    request_attempts, empty_page_retries, last_page_count = 0, 0, None
+    complete_page = True
+
+    def covers_window(page_rows: list[Candidate]) -> bool:
+        dates = []
+        for candidate in page_rows:
+            value = parse_time(candidate.feed_time_raw)
+            if value is not None and value.utcoffset() is not None:
+                dates.append(value)
+        # A pinned or unordered old item must not prematurely end discovery.
+        return bool(dates and len(dates) == len(page_rows)
+            and all(a >= b for a, b in zip(dates, dates[1:])) and dates[-1] <= window_start)
+
+    protocol_available = bool(first_text and '/category/tagpage?' in first_text)
+    if not protocol_available:
+        reason = ('request-failed' if first_text is None else
+                  'window-covered' if covers_window(rows) else 'pagination-unavailable')
+    while protocol_available and len(seen) < limit:
+        if covers_window(rows):
+            reason = 'window-covered'
+            break
+        page += 1
+        endpoint = urllib.parse.urlunsplit((parts.scheme, parts.netloc, '/category/tagpage',
+            urllib.parse.urlencode({'keyword': keyword, 'page': page}), ''))
+        rows = []
+        for attempt in range(2):
+            request_attempts += 1
+            response = fetch_page(endpoint)
+            if response is None:
+                reason = 'request-failed'
+                break
+            try:
+                payload = json.loads(response)
+                content = payload['content']
+                if payload.get('success') is not True or not isinstance(content.get('html'), str):
+                    raise ValueError('invalid listing response')
+            except (ValueError, KeyError, TypeError, AttributeError):
+                reason = 'invalid-response'
+                break
+            last_page_count = content.get('count')
+            # The endpoint can transiently return success with no list before
+            # the window is covered. Re-fetch once without advancing the page.
+            if attempt == 0 and last_page_count == 0 and not content['html'].strip():
+                empty_page_retries += 1
+                time.sleep(0.5)
+                continue
+            rows = parse_page(content['html'], endpoint)
+            break
+        if reason in {'request-failed', 'invalid-response'}:
+            break
+        if not rows:
+            reason = 'empty-page'
+            break
+        new = [c for c in rows if c.url not in seen]
+        if not new:
+            reason = 'no-progress'
+            break
+        remaining = max(0, limit - len(seen))
+        complete_page = len(new) <= remaining
+        for candidate in new[:remaining]:
+            seen.add(candidate.url)
+            extra.append(candidate)
+    if reason == 'candidate-budget' and complete_page and covers_window(rows):
+        reason = 'window-covered'
+    diagnostics.setdefault('source_listing_pagination', {})[page_url] = {
+        'additional_pages': page, 'additional_candidates': len(extra), 'stop_reason': reason,
+        'request_attempts': request_attempts, 'empty_page_retries': empty_page_retries,
+        'last_page_count': last_page_count,
+    }
+    if reason != 'window-covered':
+        diagnostics.setdefault('collection_warnings', []).append({
+            'source': 'IT之家', 'url': page_url, 'reason': reason, 'coverage': 'unconfirmed',
+        })
+    return extra
+
+
+def market_summary_needs_detail(title: str) -> bool:
+    """Market reports may put Apple's observed result only in their body.
+
+    This grants a detail fetch, never relevance or an Apple market result.
+    Component prices, individual product shipping and shopping lists are not
+    market-result reports.
+    """
+    if _compiled_rule(r'guide|deals?|coupons?|教程|促销|优惠|选购', re.I).search(title):
+        return False
+    if (_compiled_rule(r'美股|美国股市|\b(?:s&p\s*500|nasdaq|dow\s+jones|wall\s+street)\b', re.I).search(title)
+            and _compiled_rule(r'收[涨跌盘]|齐[涨跌]|指数.{0,12}(?:涨|跌)|\b(?:close[sd]?|rose|fell|slumps?|rall(?:y|ies))\b', re.I).search(title)):
+        return True
+    return bool(_compiled_rule(r'\b(?:pc|personal computers?|smartphones?|tablets?|wearables?)\b|个人电脑|(?:智能)?手机(?:市场)?|平板电脑|可穿戴', re.I).search(title)
+        and _compiled_rule(r'\b(?:shipments?|market\s+share|unit\s+sales)\b|出货(?:量)?|市场份额|市占', re.I).search(title)
+        and _compiled_rule(r'(?<![a-z0-9])q[1-4](?!\d)|20\d{2}\s*q[1-4]|quarter|report|research|季度|报告|数据', re.I).search(title))
 
 def is_navigation_url(url: str) -> bool:
     parts = urllib.parse.urlsplit(url)
@@ -112,7 +384,8 @@ def build_sources(now_local: datetime) -> list[Source]:
             name="快科技",
             default_tz="Asia/Shanghai",
             feeds=["https://rss.mydrivers.com/opml.xml"],
-            pages=["https://news.mydrivers.com/"],
+            pages=["https://news.mydrivers.com/", "https://news.mydrivers.com/pingguo.html",
+                   "https://news.mydrivers.com/jiadianshuma.html"],
             domains=("mydrivers.com", "news.mydrivers.com", "www.mydrivers.com"),
         ),
         Source(
@@ -265,18 +538,19 @@ def fetch_url(
     diagnostics: dict[str, Any],
     timeout: float | None = None,
     retries: int | None = None,
-    *, settings: FetchSettings, now: Callable[[], datetime],
+    *, settings: FetchSettings, now: Callable[[], datetime], method: str = 'GET',
 ) -> str | None:
     url = iri_to_uri(url)
     timeout = settings.timeout if timeout is None else timeout
     retries = settings.retries if retries is None else retries
     cache_dir.mkdir(parents=True, exist_ok=True)
-    cache_path = cache_dir / f"{cache_key(url)}.json"
+    cache_path = cache_dir / f"{cache_key(url if method == 'GET' else method + ' ' + url)}.json"
     last_error = ""
 
     for attempt in range(retries + 1):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": settings.user_agent})
+            req = urllib.request.Request(url, headers={"User-Agent": settings.user_agent},
+                data=b'' if method == 'POST' else None, method=method)
             with urllib.request.urlopen(req, timeout=timeout) as response:
                 raw = response.read(settings.max_response_bytes)
                 text = decode_response(raw, response.headers.get("content-type"))
@@ -286,6 +560,8 @@ def fetch_url(
                     "status": getattr(response, "status", None),
                     "text": text,
                 }
+                if method != 'GET':
+                    payload['method'] = method
                 cache_path.write_text(json.dumps(payload), encoding="utf-8")
                 return text
         except Exception as exc:
@@ -312,7 +588,8 @@ def direct_apple_report_needs_detail(identity, *, has_lead: bool) -> bool:
     and third-party actions do not get this exception from background Apple
     names; the downstream source profile still owns relevance.
     """
-    return bool(identity.scope == "apple-direct" and identity.title_products
+    return high_confidence_direct_apple_action(identity) or bool(
+                identity.scope == "apple-direct" and identity.title_products
                 and identity.content_form == "news"
                 and identity.action_owner in {"apple", "apple-target", "unknown"}
                 and (has_lead or identity.title_actions))
@@ -321,7 +598,7 @@ def direct_apple_report_needs_detail(identity, *, has_lead: bool) -> bool:
 def sparse_apple_subject_needs_detail(identity, *, has_lead: bool, event_kind: str, title: str = "") -> bool:
     """An explicit sparse Apple title is collection evidence, not a news verdict."""
     title_text = title.strip()
-    if re.search(r"(?:之家|指南|技巧|教程)$|\b(?:guide|tips|cases)\b|"
+    if title_text.casefold() in {'apple', '苹果', '苹果公司'} or re.search(r"(?:之家|指南|技巧|教程)$|\b(?:guide|tips|cases)\b|"
                  r"\b(?:vs\.?|versus)\b|"
                  r"^(?:how to|hard reset|force restart)\b|"
                  r"[:：]\s*(?:record|apply|reset|restart|enable|disable|customize)\b", title_text, re.I):
@@ -336,10 +613,21 @@ def sparse_apple_subject_needs_detail(identity, *, has_lead: bool, event_kind: s
         for alias in aliases
     ):
         return False
+    # A first-party device can be the host of third-party software. An RSS
+    # excerpt disappearing must not turn that device capability into an app
+    # vendor's action before its detail page has been inspected.
+    device_host = bool(not has_lead and event_kind == 'third_party_ecosystem'
+        and identity is not None and any(
+        _compiled_rule(r'^(?:(?:the|apple[\x27’]s)\s+|苹果的?)?' + re.escape(alias)
+            + r'(?:\s*(?:\d+(?:\.\d+)*|pro|max|air|mini|ultra|se|plus|duo))*\s*'
+              r'(?:(?:now|can)\s+)?(?:runs?|supports?|hosts?|(?:现已|可以|可)?(?:运行|支持))\s*'
+              r'(?:third[ -]party\s+apps?\b|第三方(?:应用|app))', re.I).search(title_text)
+        for product, aliases in PRODUCT_PATTERNS if product in identity.title_products
+        for alias in aliases))
     return bool(not has_lead and identity is not None and identity.scope == "apple-direct"
-                and identity.title_products and identity.content_form == "news"
+                and identity.content_form == "news"
                 and identity.action_owner in {"unknown", "apple", "apple-target"}
-                and event_kind != "third_party_ecosystem")
+                and (event_kind != "third_party_ecosystem" or device_host))
 
 
 
@@ -365,7 +653,7 @@ def current_apple_role_interview_needs_detail(title: str, lead: str, identity) -
         return False
     return bool(re.search(r"\b(?:interview(?:ed)?|sat down|spoke with|talked with)\b", action, re.I))
 
-def detail_recall_weight(profile: ReconciliationProfile, source_tier: str, *, has_lead: bool, title: str = "") -> int:
+def detail_recall_weight(profile: ReconciliationProfile, source_tier: str | None, *, has_lead: bool, title: str = "") -> int:
     """Preserve discovery breadth without granting an editorial outcome.
 
     A known Apple topic can deserve a detail fetch even when its sparse title,
@@ -399,3 +687,390 @@ def detail_recall_weight(profile: ReconciliationProfile, source_tier: str, *, ha
     if sparse_apple_topic:
         return 40
     return 40 if source_tier == "strong" else 30 if source_tier == "ecosystem" else 0
+
+
+def xml_text(element: ET.Element, names: set[str]) -> str:
+    return strip_tags(xml_text_raw(element, names))
+
+
+def xml_text_raw(element: ET.Element, names: set[str]) -> str:
+    for child in list(element):
+        name = child.tag.rsplit("}", 1)[-1].lower()
+        if name in names and child.text:
+            return child.text
+    return ""
+
+
+
+def source_context_terms(raw_html: str, categories: list[str]) -> str:
+    terms: list[str] = []
+
+    def add(value: str) -> None:
+        normalized = html.unescape(value).strip().lower()
+        if not normalized:
+            return
+        normalized = normalized.replace("_", "-")
+        for part in _compiled_rule(r"[,;/|]+", 0).split(normalized, 0):
+            part = part.strip()
+            if not part or part == "news":
+                continue
+            plain = part.replace("-", " ")
+            if plain not in terms:
+                terms.append(plain)
+
+    for category in categories:
+        add(category)
+    for match in _compiled_rule(r"""data-layer-postcategory\s*=\s*['"]([^'"]+)['"]""", re.I).finditer(raw_html):
+        add(match.group(1))
+    return " ".join(terms)
+
+
+
+def atom_link(element: ET.Element) -> str:
+    for child in list(element):
+        name = child.tag.rsplit("}", 1)[-1].lower()
+        if name == "link":
+            href = child.attrib.get("href")
+            rel = child.attrib.get("rel", "alternate")
+            if href and rel == "alternate":
+                return href.strip()
+    return ""
+
+
+
+def parse_xml_feed(text: str, source: Source, feed_url: str) -> list[Candidate]:
+    candidates: list[Candidate] = []
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError:
+        return candidates
+
+    root_name = root.tag.rsplit("}", 1)[-1].lower()
+    if root_name == "opml":
+        return candidates
+
+    for item in root.iter():
+        name = item.tag.rsplit("}", 1)[-1].lower()
+        if name not in {"item", "entry"}:
+            continue
+        title = xml_text(item, {"title"})
+        link = xml_text(item, {"link"})
+        if not link:
+            link = atom_link(item)
+        raw_summary = xml_text_raw(item, {"description", "summary", "content", "encoded"})
+        summary = strip_tags(raw_summary)
+        published = xml_text(item, {"pubdate", "published", "updated", "dc:date"})
+        categories = [
+            strip_tags(child.text)
+            for child in list(item)
+            if child.tag.rsplit("}", 1)[-1].lower() == "category" and child.text
+        ]
+        context = source_context_terms(raw_summary, categories)
+        if title and link:
+            candidates.append(
+                Candidate(
+                    source=source.name,
+                    url=urllib.parse.urljoin(feed_url, link),
+                    title=title,
+                    summary=summary,
+                    feed_time_raw=published,
+                    discovered_from=feed_url,
+                    context=context,
+                )
+            )
+    return candidates
+
+
+
+def wordpress_rendered_text(value: Any) -> str:
+    if isinstance(value, dict):
+        for key in ("rendered", "document_title", "raw"):
+            rendered = value.get(key)
+            if isinstance(rendered, str) and rendered.strip():
+                return strip_tags(rendered)
+        return ""
+    if isinstance(value, str):
+        return strip_tags(value)
+    return ""
+
+
+
+def wordpress_utc_timestamp(value: Any) -> str:
+    if not isinstance(value, str):
+        return ""
+    cleaned = value.strip()
+    if not cleaned:
+        return ""
+    if _compiled_rule(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}", 0).fullmatch(cleaned):
+        return f"{cleaned}+00:00"
+    return cleaned
+
+
+
+def parse_wordpress_posts_api(text: str, source: Source, api_url: str) -> list[Candidate]:
+    candidates: list[Candidate] = []
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError:
+        return candidates
+    if not isinstance(payload, list):
+        return candidates
+
+    for item in payload:
+        if not isinstance(item, dict):
+            continue
+        link = item.get("link")
+        if not isinstance(link, str) or not link.strip():
+            continue
+        title = wordpress_rendered_text(item.get("title"))
+        summary = wordpress_rendered_text(item.get("excerpt"))
+        if not title:
+            continue
+        context_terms: list[str] = []
+        embedded = item.get("_embedded")
+        if isinstance(embedded, dict):
+            term_groups = embedded.get("wp:term")
+            if isinstance(term_groups, list):
+                for group in term_groups:
+                    if not isinstance(group, list):
+                        continue
+                    for term in group:
+                        if not isinstance(term, dict):
+                            continue
+                        for key in ("name", "slug"):
+                            value = term.get(key)
+                            if isinstance(value, str) and value.strip():
+                                context_terms.append(strip_tags(value).replace("-", " "))
+        feed_time_raw = wordpress_utc_timestamp(item.get("date_gmt")) or wordpress_utc_timestamp(
+            item.get("date")
+        )
+        candidates.append(
+            Candidate(
+                source=source.name,
+                url=urllib.parse.urljoin(api_url, html.unescape(link.strip())),
+                title=title,
+                summary=summary,
+                feed_time_raw=feed_time_raw,
+                discovered_from=api_url,
+                context=" ".join(dict.fromkeys(context_terms)),
+            )
+        )
+    return candidates
+
+
+
+def parse_opml_feed_urls(text: str, limit: int) -> list[str]:
+    try:
+        root = ET.fromstring(text)
+    except ET.ParseError:
+        return []
+    urls: list[str] = []
+    for outline in root.iter():
+        xml_url = outline.attrib.get("xmlUrl") or outline.attrib.get("xmlurl")
+        if xml_url and xml_url.startswith(("http://", "https://")) and xml_url not in urls:
+            urls.append(xml_url)
+    return urls[:limit]
+
+
+
+def same_domain(url: str, domains: tuple[str, ...]) -> bool:
+    if not domains:
+        return True
+    host = urllib.parse.urlparse(url).netloc.lower().split("@")[-1].split(":")[0]
+    return any(host == domain or host.endswith(f".{domain}") for domain in domains)
+
+
+
+def extract_ithome_listing_metadata(text: str, page_url: str, source: Source) -> dict[str, dict[str, str]]:
+    metadata: dict[str, dict[str, str]] = {}
+    for item_match in _compiled_rule(r"(?is)<li\b[^>]*>.*?</li>", 0).finditer(text):
+        item_html = item_match.group(0)
+        summary = ""
+        summary_match = _compiled_rule(r"""(?is)<div\b(?=[^>]*class\s*=\s*['"][^'"]*\bm\b[^'"]*['"])[^>]*>(.*?)</div>""", 0).search(item_html)
+        if summary_match:
+            summary = strip_tags(summary_match.group(1))
+        feed_time_raw = ""
+        time_match = _compiled_rule(r"""data-ot\s*=\s*['"]([^'"]+)['"]""", re.I).search(item_html)
+        if time_match:
+            feed_time_raw = html.unescape(time_match.group(1)).strip()
+        if not summary and not feed_time_raw:
+            continue
+        for link_match in _compiled_rule(r"(?is)<a\b([^>]+)>(.*?)</a>", 0).finditer(item_html):
+            attrs, label_html = link_match.groups()
+            href_match = _compiled_rule(r"""href\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
+            if not href_match:
+                continue
+            label = strip_tags(label_html)
+            if not label or len(label) < 8:
+                continue
+            url = urllib.parse.urljoin(page_url, html.unescape(href_match.group(1)))
+            if not url.startswith(("http://", "https://")):
+                continue
+            if not same_domain(url, source.domains):
+                continue
+            metadata[normalize_url(url)] = {"summary": summary, "feed_time_raw": feed_time_raw}
+    return metadata
+
+
+
+def normalize_url(url: str) -> str:
+    parsed = urllib.parse.urlsplit(url)
+    query = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+    query = [
+        (key, value)
+        for key, value in query
+        if not key.lower().startswith(("utm_", "fbclid", "gclid"))
+    ]
+    clean_query = urllib.parse.urlencode(query)
+    return urllib.parse.urlunsplit(
+        (
+            parsed.scheme.lower(),
+            parsed.netloc.lower(),
+            parsed.path.rstrip("/"),
+            clean_query,
+            "",
+        )
+    )
+
+
+def fetch_detail_page_texts(
+    candidates: list[Candidate],
+    cache_dir: Path,
+    diagnostics: dict[str, Any], *, fetch: Callable, max_workers: int,
+) -> list[str | None]:
+    if not candidates:
+        diagnostics["detail_fetch_workers"] = 0
+        diagnostics["detail_fetch_retry_count"] = 0
+        diagnostics["detail_fetch_retry_recovered"] = 0
+        return []
+    workers = min(max_workers, len(candidates))
+    diagnostics["detail_fetch_workers"] = workers
+    results: list[str | None] = [None] * len(candidates)
+
+    def fetch_one(
+        index: int,
+        candidate: Candidate,
+        retries: int | None,
+    ) -> tuple[int, str | None, list[dict[str, Any]]]:
+        local_diagnostics: dict[str, Any] = {"failed_fetches": []}
+        page_text = fetch(
+            candidate.url,
+            cache_dir,
+            local_diagnostics,
+            retries=retries,
+        )
+        return index, page_text, list(local_diagnostics.get("failed_fetches", []))
+
+    def run_pass(
+        indexes: list[int],
+        *,
+        retries: int | None,
+    ) -> dict[int, list[dict[str, Any]]]:
+        pass_failures: dict[int, list[dict[str, Any]]] = {}
+        if not indexes:
+            return pass_failures
+        pass_workers = min(max_workers, len(indexes))
+        if pass_workers <= 1:
+            for index in indexes:
+                candidate = candidates[index]
+                try:
+                    result_index, page_text, local_failures = fetch_one(
+                        index,
+                        candidate,
+                        retries,
+                    )
+                except Exception as exc:
+                    page_text = None
+                    result_index = index
+                    local_failures = [
+                        {
+                            "url": candidate.url,
+                            "error": f"{type(exc).__name__}: {exc}",
+                        }
+                    ]
+                results[result_index] = page_text
+                if page_text is None:
+                    pass_failures[result_index] = local_failures
+            return pass_failures
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=pass_workers) as executor:
+            future_map = {
+                executor.submit(fetch_one, index, candidates[index], retries): index
+                for index in indexes
+            }
+            for future in concurrent.futures.as_completed(future_map):
+                index = future_map[future]
+                try:
+                    result_index, page_text, local_failures = future.result()
+                except Exception as exc:
+                    candidate = candidates[index]
+                    result_index = index
+                    page_text = None
+                    local_failures = [
+                        {
+                            "url": candidate.url,
+                            "error": f"{type(exc).__name__}: {exc}",
+                        }
+                    ]
+                results[result_index] = page_text
+                if page_text is None:
+                    pass_failures[result_index] = local_failures
+        return pass_failures
+
+    first_failures = run_pass(list(range(len(candidates))), retries=None)
+    retry_indexes = sorted(first_failures)
+    diagnostics["detail_fetch_retry_count"] = len(retry_indexes)
+    retry_failures = run_pass(retry_indexes, retries=0)
+    recovered_indexes = [index for index in retry_indexes if results[index] is not None]
+    diagnostics["detail_fetch_retry_recovered"] = len(recovered_indexes)
+    if recovered_indexes:
+        diagnostics.setdefault("transient_detail_fetches", []).extend(
+            failure
+            for index in recovered_indexes
+            for failure in first_failures.get(index, [])
+        )
+    terminal_failures = [
+        failure
+        for index in retry_indexes
+        if results[index] is None
+        for failure in (
+            retry_failures.get(index)
+            or first_failures.get(index)
+            or [
+                {
+                    "url": candidates[index].url,
+                    "error": "detail fetch failed without an exception record",
+                }
+            ]
+        )
+    ]
+    diagnostics.setdefault("failed_fetches", []).extend(terminal_failures)
+    return results
+
+
+
+def collect_candidates_from_sources(
+    sources: list[Source],
+    cache_dir: Path,
+    diagnostics: dict[str, Any], *, collect: Callable, max_workers: int,
+    window_start_utc: datetime | None = None,
+) -> list[Candidate]:
+    """Discover independent sources concurrently while preserving source order."""
+    if not sources:
+        diagnostics["source_discovery_workers"] = 0
+        return []
+    workers = min(max_workers, len(sources))
+    diagnostics["source_discovery_workers"] = workers
+    options = {'window_start_utc': window_start_utc} if window_start_utc is not None else {}
+    if workers <= 1:
+        return [
+            candidate
+            for source in sources
+            for candidate in collect(source, cache_dir, diagnostics, **options)
+        ]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        per_source = executor.map(
+            lambda source: collect(source, cache_dir, diagnostics, **options),
+            sources,
+        )
+        return [candidate for candidates in per_source for candidate in candidates]

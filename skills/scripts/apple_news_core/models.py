@@ -26,6 +26,8 @@ class Candidate:
     feed_time_raw: str = ""
     discovered_from: str = ""
     context: str = ""
+    # Paragraph anchors can supply an excerpt, but cannot displace a headline.
+    title_is_excerpt: bool = False
 
 
 @dataclass
@@ -33,6 +35,7 @@ class Article:
     # Per-instance preparation only. Excluded from dataclass serialization,
     # equality and constructors; deepcopy preserves it, replace recomputes.
     _source_kind_snapshot: ClassVar[tuple[str, str, tuple[str, ...], str] | None] = None
+    _source_conditions: ClassVar[tuple[ArticleEvidence, tuple[BoundClaim, ...]] | None] = None
     source: str
     url: str
     title: str
@@ -135,11 +138,13 @@ class ArticleEvidence:
 
 @dataclass(frozen=True)
 class BoundClaim:
+    """A source-local relationship, not permission to include a news item."""
     subject: str
     action: str
     object: str
     # target, qualifier kind, normalized value, source unit id, start, end.
     # Each target owns its value; language and month sets are never crossed.
+    # Identity context may cite a source span that is not selected as a fact.
     qualifiers: tuple[tuple[str, str, str, str, int, int], ...]
     article_id: str
     unit_ids: tuple[str, ...]
@@ -148,6 +153,21 @@ class BoundClaim:
     parent_form: str
     category: str = ""
     event_kind: str = ""
+    subject_relation: str = ""
+    report_role: str = ""
+    polarity: str = ""
+    review_reason: str = ""
+
+
+@dataclass(frozen=True)
+class ClaimEligibility:
+    tier: str
+    category: str
+    reason: str
+
+    @property
+    def resolved(self) -> bool:
+        return bool(self.tier)
 
 
 @dataclass(frozen=True)
@@ -168,6 +188,8 @@ class ReconciliationProfile:
     event_kind_hint: str = ""
     ecosystem_reason: str = ""
     parent_source: ReconciliationProfile | None = None
+    eligibility: ClaimEligibility | None = None
+    review_reasons: tuple[str, ...] = ()
 
 
 

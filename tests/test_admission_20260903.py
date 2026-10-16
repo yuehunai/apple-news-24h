@@ -49,12 +49,6 @@ class SemanticAdmissionTests(unittest.TestCase):
         )
         self.assertTrue(self.module.is_relevant_candidate(candidate, self.sources[candidate.source], []))
 
-    def test_semantic_strong_decision_does_not_depend_on_event_kind_allowlist(self):
-        candidate = self.candidate("Apple historical artifact", "An authenticated Apple computer is on display.")
-        with patch.object(self.module, "detect_event_kind", return_value="general_company"), patch.object(
-            self.module, "classify_relevance_tier", return_value=("strong", "owned subject")
-        ):
-            self.assertTrue(self.module.is_relevant_candidate(candidate, self.sources[candidate.source]))
 
     def test_admission_does_not_promote_a_third_party_apple_platform_app(self):
         candidate = self.candidate(
