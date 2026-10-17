@@ -12,16 +12,16 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.1.0 - 2026-10-16
+### 2.1.1 - 2026-10-17
 
-- Improved bounded discovery on rolling MacRumors and IT之家 lists, including published pagination and recovery from transient empty pages, and supplemented MyDrivers category discovery; normalized duplicate links and strengthened title-and-lead admission for sparse Apple reports and device-market results without increasing collection budgets.
-- Improved publication-time selection using publisher-owned fields before dates in article prose; excluded modification/upload timestamps and inactive markup, and kept mixed date formats in document order when falling back to visible text.
-- Refactored collection and text/time utilities into their owning modules and separated source binding from eligibility for charts, device measurements, feature inventories, invitations and company-responsibility reports; retired competing decisions within those scopes while retaining unmigrated paths.
-- Improved cross-language grouping and software/hardware assignment around locally supported subjects, operations, stages and qualifiers; prevented comparison devices, shared topics, product inventories and background claims from merging distinct actions or creating unsupported events.
-- Improved fact coverage through nested lists, local prerequisites, measurement series and nonnumeric details; preserved source attribution, exact spans where available, and supporting facts from deferred sources without promoting their entire articles.
-- Added `collection_warnings` to ordinary JSON and file-output status when listing coverage remains unconfirmed; retained source evidence for reports that produce no event and exposed unresolved ownership or eligibility for review instead of silently assigning a weak tier in migrated scopes.
-- Updated the skill to use one evidence-to-draft workflow, resolve pronouns and conflicting source claims, and verify concrete operations and conditions; kept complete final-brief delivery and removed redundant checklist work, repeated reporting-status summaries and reader-inference advice.
-- Removed unused helpers and redundant test constructs while preserving real regression coverage; expanded the offline suite from 2,317 to 2,657 tests. Kept the standard-library runtime, existing CLI, nine primary sources, relevance tiers, two brief sections and explicit-only skill invocation.
+- Improved discovery by rejecting navigation and feed endpoints as article candidates across configured sources, and following MyDrivers category pagination within existing budgets; incomplete traversal retains a coverage warning.
+- Improved publication-time extraction using publisher metadata, publication/byline fields and standalone date lines; excluded prose event dates and modification/upload roles while retaining the dated-feed fallback when detail publication evidence is unavailable.
+- Improved local subject, action and condition binding for company visits and appointments, feature inventories, device measurements, official accessories, platform fees and auctions; prevented background, historical or denied claims from supplying another action's identity.
+- Improved retail grouping by distinguishing store maintenance, scheduled preorders, actual opening, demand statements and delivery observations; kept delivery dates, regions and observed stages bound to their own claims.
+- Improved relevance for regional Apple price reports without promoting third-party price changes; replaced the old headline-word-order decision with shared local actor binding and removed the obsolete store-maintenance append path.
+- Updated the skill to judge independently extracted actions by their own eligibility and category, and to distinguish reported datasets from separate forecast revisions or market actions without splitting on metrics or attribution alone.
+- Added regression coverage for source navigation, publication roles, category pagination, current action ownership, retail boundaries and price-report relevance.
+- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
 
@@ -116,7 +116,7 @@ Required flags ask for a decision, not automatic inclusion. `required_final_brie
 
 For source-bound reports, binding and news eligibility are separate decisions. App-publisher charts, device benchmarks, operating-feature inventories, media invitations and current company-responsibility interviews preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
 
-Version 2.1.0 keeps the existing CLI and relevance tiers while extending the evidence and review reporting introduced in 2.0.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
+Version 2.1.1 keeps the CLI, JSON fields and relevance tiers from 2.1.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
 
 Diagnostics for debugging source failures:
 

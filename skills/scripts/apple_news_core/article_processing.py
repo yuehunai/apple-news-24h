@@ -1109,6 +1109,96 @@ def _publication_visible_markup(text: str) -> str:
     return text
 
 
+PUBLICATION_DATE_PATTERNS = [
+    r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+    r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
+    r"Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4}(?:,)?\s+"
+    r"(?:at\s+)?\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?|AM|PM)?\s*"
+    r"(?:PST|PDT|PT|EST|EDT|ET|GMT|UTC|[+-]\d{2}:?\d{2})?",
+    r"(?:\d{4}\s*年\s*)?\d{1,2}\s*月\s*\d{1,2}\s*日\s*"
+    r"\d{1,2}[:：]\d{2}(?:[:：]\d{2})?",
+    r"\d{4}/\d{1,2}/\d{1,2}\s+"
+    r"\d{1,2}:\d{2}(?::\d{2})?",
+    r"\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}(?::\d{2})?"
+    r"(?:Z|[+-]\d{2}:?\d{2})?",
+]
+
+def publication_visible_fields(text: str) -> list[tuple[str, str]]:
+    """Read locally marked publication fields in document order."""
+    published_role = _compiled_markup_rule(r'(?:^|[^a-z])(?:datepublished|datecreated|published|pubdate|pubtime|byline|dateline|post-date|article-date)(?:$|[^a-z])', re.I)
+    excluded = _compiled_markup_rule(r'(?:^|[^a-z])(?:modified|updated|datemodified|uploaddate|related|recommendations|story-card|event-date|startdate|enddate)(?:$|[^a-z])', re.I)
+    label = _compiled_markup_rule(r'^\s*(?:published|posted)\b|^\s*(?:发布时间|发布日期|发布于|发表于)', re.I)
+    updated = _compiled_markup_rule(r'\b(?:last\s+)?updated\b|更新时间|最后更新|更新于', re.I)
+    dates = _compiled_markup_rule('(?:' + '|'.join(PUBLICATION_DATE_PATTERNS) + ')', re.I)
+    weekday = _compiled_markup_rule(r'^\s*(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)[,\s]+', re.I)
+
+    class PublicationParser(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.stack, self.fields = [], []
+            self.position = 0
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            attributes = ' '.join(attrs.get(key, '') for key in ('id', 'class', 'itemprop', 'property'))
+            parent = self.stack[-1] if self.stack else None
+            blocked = (tag in {'script', 'style', 'template', 'pre', 'code', 'nav', 'aside', 'footer'}
+                       or bool(excluded.search(attributes))
+                       or any(value.rstrip('/').rsplit('/', 1)[-1] == 'Event' for value in attrs.get('itemtype', '').split())
+                       or bool(parent and parent['blocked']))
+            marked = bool(published_role.search(attributes))
+            # Only a publication label/byline can own a nested time. A generic
+            # metadata container does not turn its article prose into a byline.
+            context = marked or bool(parent and (parent['context'] or parent['label']))
+            prose = tag in {'p', 'blockquote', 'li', 'a'} or bool(parent and parent['prose'])
+            if tag not in EvidenceTextExtractor.void_tags:
+                self.stack.append(dict(tag=tag, blocked=blocked, marked=marked, context=context, prose=prose,
+                    timestamp=attrs.get('datetime', '') if tag == 'time' else '', parts=[], children=False,
+                    label=False, position=self.position))
+                self.position += 1
+                if parent:
+                    parent['children'] = True
+
+        def handle_startendtag(self, tag, attrs):
+            self.handle_starttag(tag, attrs)
+            self.handle_endtag(tag)
+
+        def handle_data(self, data):
+            if self.stack and not self.stack[-1]['blocked']:
+                node = self.stack[-1]
+                if not node['parts'] and label.search(data):
+                    node['label'] = True
+                node['parts'].append(data)
+
+        def handle_endtag(self, tag):
+            index = next((i for i in range(len(self.stack) - 1, -1, -1) if self.stack[i]['tag'] == tag), None)
+            if index is None:
+                return
+            node = self.stack[index]
+            del self.stack[index:]
+            value = ' '.join(' '.join(node['parts']).split())
+            if node['blocked']:
+                return
+            if self.stack:
+                self.stack[-1]['parts'].append(value)
+            value = updated.split(value, maxsplit=1)[0].strip()
+            plain = weekday.sub('', value)
+            standalone = (not node['prose'] and not node['children'] and bool(dates.fullmatch(plain)))
+            time_field = node['tag'] == 'time' and (node['context'] or standalone)
+            if time_field or node['marked'] or node['label'] or standalone:
+                # Keep the first date of this publication field. A second date
+                # may describe an update or an event, not another publication.
+                match = dates.search(value)
+                if time_field and node['timestamp'] and (value or node['marked']):
+                    self.fields.append((node['position'], node['timestamp'], value))
+                elif match:
+                    self.fields.append((node['position'], '', match.group()))
+
+    parser = PublicationParser()
+    parser.feed(_publication_visible_markup(text)[:120_000])
+    return [(stamp, value) for _, stamp, value in sorted(parser.fields)]
+
+
 def extract_time_candidates(text: str, source_name: str = '') -> list[tuple[str, str]]:
     text = _publication_time_markup(text)
     candidates: list[tuple[str, str]] = []
@@ -1152,35 +1242,19 @@ def extract_time_candidates(text: str, source_name: str = '') -> list[tuple[str,
         if found:
             candidates.append((found, label))
 
-    text = _publication_visible_markup(text)
-    for match in _compiled_markup_rule(r"(?is)<time\b([^>]*)>(.*?)</time>", 0).finditer(text):
-        attrs, body = match.groups()
-        datetime_match = _compiled_markup_rule(r"""datetime\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
-        if datetime_match:
-            candidates.append((datetime_match.group(1), "time datetime"))
-        body_text = strip_tags(body)
-        if body_text:
-            candidates.append((body_text, "time text"))
-
-    text_only = strip_tags(text[:120_000])
-    date_patterns = [
-        r"(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
-        r"Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
-        r"Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4}(?:,)?\s+"
-        r"(?:at\s+)?\d{1,2}:\d{2}(?::\d{2})?\s*(?:a\.?m\.?|p\.?m\.?|AM|PM)?\s*"
-        r"(?:PST|PDT|PT|EST|EDT|ET|GMT|UTC|[+-]\d{2}:?\d{2})?",
-        r"(?:\d{4}\s*年\s*)?\d{1,2}\s*月\s*\d{1,2}\s*日\s*"
-        r"\d{1,2}[:：]\d{2}(?:[:：]\d{2})?",
-        r"\d{4}/\d{1,2}/\d{1,2}\s+"
-        r"\d{1,2}:\d{2}(?::\d{2})?",
-        r"\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}(?::\d{2})?"
-        r"(?:Z|[+-]\d{2}:?\d{2})?",
-    ]
+    fields = publication_visible_fields(text)
+    for timestamp, value in fields:
+        if timestamp:
+            candidates.append((timestamp, "time datetime"))
+            if value:
+                candidates.append((value, "time text"))
+    text_only = " ".join(value for _timestamp, value in fields)
     body_dates = sorted((match.start(), match.group(0))
-        for pattern in date_patterns
+        for pattern in PUBLICATION_DATE_PATTERNS
         for match in _compiled_markup_rule(pattern, re.I).finditer(text_only))
     for _, raw in body_dates:
-        candidates.append((raw, "body date pattern"))
+        if (raw, "body date pattern") not in candidates:
+            candidates.append((raw, "body date pattern"))
         if len(candidates) > 20:
             break
     return candidates
@@ -1231,14 +1305,11 @@ def extract_apple_newsroom_time_candidates(text: str) -> list[tuple[str, str, bo
         if cleaned:
             candidates.append((cleaned, "apple newsroom visible date", True))
 
-    for match in _compiled_markup_rule(r"(?is)<time\b([^>]*)>(.*?)</time>", 0).finditer(text):
-        attrs, body = match.groups()
-        datetime_match = _compiled_markup_rule(r"""datetime\s*=\s*['"]([^'"]+)['"]""", re.I).search(attrs)
-        if datetime_match:
-            candidates.append((datetime_match.group(1), "apple newsroom time datetime", True))
-        body_text = strip_tags(body)
-        if body_text:
-            candidates.append((body_text, "apple newsroom time text", True))
+    for timestamp, value in publication_visible_fields(text):
+        if timestamp:
+            candidates.append((timestamp, "apple newsroom time datetime", True))
+            if value:
+                candidates.append((value, "apple newsroom time text", True))
     return candidates
 
 

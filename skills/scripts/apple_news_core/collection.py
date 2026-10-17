@@ -272,6 +272,86 @@ def supplement_ithome_tag_candidates(
     return extra
 
 
+def supplement_mydrivers_category_candidates(
+    page_url: str, first_text: str | None, first_candidates: list[Candidate],
+    window_start: datetime | None, limit: int,
+    fetch_page: Callable[[str], str | None],
+    parse_page: Callable[[str, str], list[Candidate]],
+    parse_time: Callable[[str], datetime | None], diagnostics: dict[str, Any],
+) -> list[Candidate]:
+    """Follow a category's dated body list, not its rotating shared sidebar."""
+    parts = urllib.parse.urlsplit(page_url)
+    if (window_start is None or parts.hostname != 'news.mydrivers.com'
+            or parts.path not in {'/pingguo.html', '/jiadianshuma.html'}):
+        return []
+    selector = _compiled_rule(r'''<input\b[^>]*\bid=['"]hidcld['"][^>]*>''', re.I).search(first_text or '')
+    value = _compiled_rule(r'''\bvalue=['"](\d+)['"]''').search(selector.group()) if selector else None
+    listing = _compiled_rule(r'''<ul\b[^>]*\bid=['"]newsleft_1['"][^>]*>(.*?)</ul>''', re.I | re.S).search(first_text or '')
+    body = listing.group(1) if listing else ''
+    seen, extra, pages = {c.url for c in first_candidates}, [], 0
+    reason = 'request-failed' if first_text is None else 'pagination-unavailable'
+    while value and int(value.group(1)) > 0 and body:
+        rows, ids = [], []
+        cards = [card for card in _compiled_rule(r'<li\b[^>]*>.*?</li>', re.I | re.S).findall(body)
+                 if _compiled_rule(r'news_title_\d+').search(card)]
+        for card in cards:
+            heading = _compiled_rule(r'<h3\b[^>]*>.*?</h3>', re.I | re.S).search(card)
+            stamp = _compiled_rule(r'''<span\b[^>]*\bclass=['"]time['"][^>]*>(.*?)</span>''', re.I | re.S).search(card)
+            article_id = _compiled_rule(r'news_title_(\d+)').search(card)
+            links = parse_page(heading.group(), page_url) if heading else []
+            if links and article_id:
+                rows.append(replace(links[0], feed_time_raw=strip_tags(stamp.group(1)) if stamp else ''))
+                ids.append(article_id.group(1))
+        new = [c for c in rows if c.url not in seen]
+        if not rows or (pages and not new):
+            reason = 'empty-page' if not rows else 'no-progress'
+            break
+        complete = len(new) <= max(0, limit - len(seen))
+        for candidate in rows:
+            if candidate.url in seen or len(seen) < limit:
+                extra.append(candidate)
+                seen.add(candidate.url)
+        dates = [parse_time(c.feed_time_raw) for c in rows]
+        if (complete and len(rows) == len(cards) and all(d is not None and d.utcoffset() is not None for d in dates)
+                and all(a >= b for a, b in zip(dates, dates[1:])) and dates[-1] <= window_start):
+            reason = 'window-covered'
+            break
+        if not complete or len(seen) >= limit:
+            reason = 'candidate-budget'
+            break
+        category = int(value.group(1))
+        protocol = 'getdatelist20200820.aspx' if category > 1000 else 'getdatelist_search.aspx'
+        endpoint = 'https://blog.mydrivers.com/news/' + protocol + '?' + urllib.parse.urlencode({
+            'ac': category - 1000 if category > 1000 else category, 'timeks': '', 'timeend': '',
+            'page': pages + 2, 'minid': ids[-1], 'callback': 'NewsList'})
+        response = fetch_page(endpoint)
+        pages += 1
+        if response is None:
+            reason = 'request-failed'
+            break
+        wrapped = _compiled_rule(r'\s*NewsList\((.*)\);?\s*', re.S).fullmatch(response)
+        try:
+            payload = json.loads(wrapped.group(1))['data'][0] if wrapped else None
+            body = payload['html']
+            if not isinstance(body, str):
+                raise ValueError('invalid listing body')
+        except (ValueError, KeyError, TypeError, IndexError):
+            reason = 'invalid-response'
+            break
+        if not body.strip():
+            reason = 'empty-page'
+            break
+    diagnostics.setdefault('source_listing_pagination', {})[page_url] = {
+        'additional_pages': pages, 'additional_candidates': len(seen) - len({c.url for c in first_candidates}),
+        'stop_reason': reason,
+    }
+    if reason != 'window-covered':
+        diagnostics.setdefault('collection_warnings', []).append({
+            'source': '快科技', 'url': page_url, 'reason': reason, 'coverage': 'unconfirmed',
+        })
+    return extra
+
+
 def market_summary_needs_detail(title: str) -> bool:
     """Market reports may put Apple's observed result only in their body.
 
@@ -288,19 +368,27 @@ def market_summary_needs_detail(title: str) -> bool:
         and _compiled_rule(r'\b(?:shipments?|market\s+share|unit\s+sales)\b|出货(?:量)?|市场份额|市占', re.I).search(title)
         and _compiled_rule(r'(?<![a-z0-9])q[1-4](?!\d)|20\d{2}\s*q[1-4]|quarter|report|research|季度|报告|数据', re.I).search(title))
 
-def is_navigation_url(url: str) -> bool:
+def is_navigation_url(url: str, source: Source | None = None) -> bool:
     parts = urllib.parse.urlsplit(url)
-    return bool(re.search(r"/(?:tags?|categor(?:y|ies))(?:/|$)", parts.path, re.I)
-                or (parts.hostname or '').startswith('forums.'))
+    if (not parts.path.strip('/')
+            or re.search(r"/(?:tags?|categor(?:y|ies))(?:/|$)", parts.path, re.I)
+            or (parts.hostname or '').startswith('forums.')):
+        return True
+    if source is not None:
+        for entry in (*source.pages, *source.feeds, *source.wordpress_posts_apis):
+            listing = urllib.parse.urlsplit(entry)
+            if (parts.hostname, parts.path.rstrip('/')) == (listing.hostname, listing.path.rstrip('/')):
+                return True
+    return False
 
 
 def source_article_url_allowed(url: str, source: Source) -> bool:
     """Keep navigation out of article discovery, regardless of link label."""
-    if is_navigation_url(url):
+    if is_navigation_url(url, source):
         return False
+    parts = urllib.parse.urlsplit(url)
     if source.name != "Apple Newsroom":
         return True
-    parts = urllib.parse.urlsplit(url)
     return (
         parts.scheme in {"http", "https"}
         and parts.hostname in source.domains

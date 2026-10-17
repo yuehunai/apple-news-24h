@@ -1125,10 +1125,10 @@ class SourceBoundariesTests(unittest.TestCase):
         self.assertFalse(any(label == 'source publication field'
                              for _, label in self.m.extract_time_candidates(page, 'MacRumors')))
 
-    def test_unmarked_body_dates_keep_document_order_across_formats(self):
+    def test_visible_publication_line_excludes_body_event_dates(self):
         page = '<div>Published 2026/10/14 09:30:00</div><p>Apple sales start 10 月 15 日 20:00.</p>'
         body_dates = [raw for raw, label in self.m.extract_time_candidates(page) if label == 'body date pattern']
-        self.assertEqual(body_dates[:2], ['2026/10/14 09:30:00', '10 月 15 日 20:00'])
+        self.assertEqual(body_dates, ['2026/10/14 09:30:00'])
 
     def test_provider_publication_metadata_precedes_body_event_dates(self):
         rows=json.loads((Path(__file__).parent/'fixtures/20261015_publication_time.json').read_text())['sources']

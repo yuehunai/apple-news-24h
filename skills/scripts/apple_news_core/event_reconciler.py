@@ -7798,7 +7798,7 @@ def _primary_claim_projection(
         + r")\s+(\d{1,2})(?:st|nd|rd|th)?\b",
         preorder_date_scope,
     )
-    chinese_date = _compiled_rule(r"(?:预购|预售)[^。！？]{0,70}(\d{1,2})\s*月\s*(\d{1,2})\s*日|"
+    chinese_date = _compiled_rule(r"(?:预购|预售)[^。！？]{0,70}?(?<!\d)(\d{1,2})\s*月\s*(\d{1,2})\s*日|"
         r"(\d{1,2})\s*月\s*(\d{1,2})\s*日[^。！？]{0,70}(?:预购|预售)", 0).search(preorder_date_scope)
     iso_date = _compiled_rule(r"\bpre[- ]?orders?\b[^。.!?]{0,80}\b(?:20\d{2}-)?(\d{1,2})-(\d{1,2})\b", 0).search(preorder_date_scope)
     if english_date:
@@ -13248,8 +13248,6 @@ def build_reconciliation_profile(
         r"|(?:released|published)\s+by\s+apple\b|苹果(?:正式|今日|现已)?(?:发布|推出)", 0).search(resource_scope))
     if _compiled_rule(r"design resources?|设计资源", 0).search(title_text) and first_party_resource_release:
         operation = "design-resource-publication"
-    elif _compiled_rule(r"(?:apple|online) store|苹果.{0,6}(?:商店|商城)|在线商店", 0).search(title_text) and _compiled_rule(r"offline|\bis down\b|clos(?:ed|es|ure)|下线|关闭|维护", 0).search(title_text):
-        operation = "online-store-temporary-closure"
     elif event_staff_support or event_preparation:
         operation = "staff-support-preparation"
     elif event_format_plan:
@@ -13258,7 +13256,6 @@ def build_reconciliation_profile(
         separation_keys.add(f"event-operation-action:{operation}")
         operation_subject = {
             "design-resource-publication": "apple-design-resources",
-            "online-store-temporary-closure": "apple-online-store",
             "staff-support-preparation": "apple-event-staff-support",
             "presentation-format-plan": "apple-event-presentation",
         }[operation]

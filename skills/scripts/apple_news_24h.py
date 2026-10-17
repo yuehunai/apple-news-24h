@@ -95,6 +95,7 @@ from apple_news_core.article_processing import (  # noqa: E402
 
 from apple_news_core.event_identity import (
     REGION_TERMS,  # noqa: E402
+    non_apple_price_followup,
     PRODUCT_PATTERNS,
     CROSS_PRODUCT_IDENTITY_FACETS,
     apple_silicon_generation_keys,
@@ -9179,7 +9180,7 @@ def is_relevant_candidate(
     source: Source,
     key_facts: list[str] | None = None,
 ) -> bool:
-    if collection.is_navigation_url(candidate.url):
+    if collection.is_navigation_url(candidate.url, source):
         return False
     if is_source_daily_brief_candidate(candidate, source):
         return False
@@ -18455,150 +18456,8 @@ def shared_specific_strategic_transaction(left: set[str], right: set[str]) -> bo
 
 
 def is_non_apple_price_followup_story(title: str, text: str) -> bool:
-    title_lower = title.lower()
-    if score_terms(
-        title_lower,
-        [
-            "price increase",
-            "price hike",
-            "raised prices",
-            "raises prices",
-            "hikes prices",
-            "more expensive",
-            "涨价",
-            "调价",
-            "上调",
-            "提高",
-            "提价",
-            "价格上调",
-            "售价上调",
-            "售价",
-        ],
-    ) <= 0:
-        return False
-    if score_terms(f"{title_lower} {text.lower()[:280]}", ["apple", "苹果"]) <= 0:
-        return False
-    if score_terms(
-        title_lower,
-        [
-            "apple product price",
-            "apple price increase",
-            "apple price increases",
-            "apple raises prices",
-            "apple raised prices",
-            "apple plans to raise",
-            "苹果产品涨价",
-            "苹果产品价格",
-            "苹果计划上调",
-            "苹果公司上调",
-            "苹果硬件售价",
-            "苹果产品售价",
-            "iphone 等苹果产品",
-            "ipad 和 mac",
-            "mac 和 ipad",
-        ],
-    ) > 0:
-        return False
-    third_party_subject_score = score_terms(
-        title_lower,
-        [
-            "microsoft",
-            "xbox",
-            "sony",
-            "playstation",
-            "nintendo",
-            "google",
-            "pixel",
-            "samsung",
-            "lg",
-            "meta",
-            "quest",
-            "tesla",
-            "dji",
-            "drone",
-            "drones",
-            "memory",
-            "storage",
-            "smartphone",
-            "phone maker",
-            "phone makers",
-            "微软",
-            "索尼",
-            "任天堂",
-            "谷歌",
-            "三星",
-            "lg",
-            "meta",
-            "特斯拉",
-            "大疆",
-            "无人机",
-            "手机",
-            "国产手机",
-            "内存",
-            "存储",
-            "厂商",
-        ],
-    )
-    if third_party_subject_score <= 0:
-        return False
-    apple_subject_positions = [
-        pos
-        for pos in [title_lower.find(term) for term in ["apple", "苹果", "iphone", "ipad", "mac", "macbook"]]
-        if pos >= 0
-    ]
-    third_party_positions = [
-        pos
-        for pos in [
-            title_lower.find(term)
-            for term in [
-                "xbox",
-                "microsoft",
-                "微软",
-                "sony",
-                "索尼",
-                "samsung",
-                "三星",
-                "google",
-                "谷歌",
-                "dji",
-                "大疆",
-                "无人机",
-                "国产手机",
-                "手机",
-                "内存",
-                "存储",
-            ]
-        ]
-        if pos >= 0
-    ]
-    followup_score = score_terms(
-        title_lower,
-        [
-            "following apple",
-            "after apple",
-            "in response to apple",
-            "as apple",
-            "joins apple",
-            "跟进苹果",
-            "紧随苹果",
-            "继苹果",
-            "在苹果",
-            "随着苹果",
-            "效仿苹果",
-        ],
-    )
-    if (
-        apple_subject_positions
-        and third_party_positions
-        and min(apple_subject_positions) < min(third_party_positions)
-        and followup_score <= 0
-    ):
-        return False
-    return followup_score > 0 or (
-        bool(apple_subject_positions)
-        and bool(third_party_positions)
-        and min(apple_subject_positions) > min(third_party_positions)
-    )
+    """Compatibility adapter; source identity owns the actor relation."""
+    return non_apple_price_followup(title, text)
 
 
 def is_non_apple_component_market_background_story(title: str, text: str) -> bool:
@@ -25111,6 +24970,12 @@ def collect_candidates(
             candidates.extend(collection.supplement_ithome_tag_candidates(
                 page_url, text, page_candidates, window_start_utc, MAX_PAGE_LINKS,
                 lambda url: fetch_url(url, cache_dir, diagnostics, method='POST'),
+                lambda body, url: parse_html_links(body, url, source),
+                lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
+        if source.name == '快科技':
+            candidates.extend(collection.supplement_mydrivers_category_candidates(
+                page_url, text, page_candidates, window_start_utc, MAX_PAGE_LINKS,
+                lambda url: fetch_url(url, cache_dir, diagnostics),
                 lambda body, url: parse_html_links(body, url, source),
                 lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
 

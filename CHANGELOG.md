@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.1.1 - 2026-10-17
+
+- Improved discovery by rejecting navigation and feed endpoints as article candidates across configured sources, and following MyDrivers category pagination within existing budgets; incomplete traversal retains a coverage warning.
+- Improved publication-time extraction using publisher metadata, publication/byline fields and standalone date lines; excluded prose event dates and modification/upload roles while retaining the dated-feed fallback when detail publication evidence is unavailable.
+- Improved local subject, action and condition binding for company visits and appointments, feature inventories, device measurements, official accessories, platform fees and auctions; prevented background, historical or denied claims from supplying another action's identity.
+- Improved retail grouping by distinguishing store maintenance, scheduled preorders, actual opening, demand statements and delivery observations; kept delivery dates, regions and observed stages bound to their own claims.
+- Improved relevance for regional Apple price reports without promoting third-party price changes; replaced the old headline-word-order decision with shared local actor binding and removed the obsolete store-maintenance append path.
+- Updated the skill to judge independently extracted actions by their own eligibility and category, and to distinguish reported datasets from separate forecast revisions or market actions without splitting on metrics or attribution alone.
+- Added regression coverage for source navigation, publication roles, category pagination, current action ownership, retail boundaries and price-report relevance.
+- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.1.0 - 2026-10-16
 
 - Improved bounded discovery on rolling MacRumors and IT之家 lists, including published pagination and recovery from transient empty pages, and supplemented MyDrivers category discovery; normalized duplicate links and strengthened title-and-lead admission for sparse Apple reports and device-market results without increasing collection budgets.
