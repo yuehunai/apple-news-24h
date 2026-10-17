@@ -42,7 +42,7 @@ from .event_identity import (
     source_hardware_project,
     source_operation_frame,
     source_market_measurement_frame,
-    is_joint_market_measurement,
+    source_market_statements,
     source_dated_launch_frame,
     source_editorial_outlook,
     source_editorial_evaluation,
@@ -8967,7 +8967,7 @@ def _primary_claim_projection(
 
     # Display ordering must not decide whether the source reported an Apple
     # measurement. The measured row may follow several market-context rows.
-    market_result_keys = _measured_apple_market_result_keys(title, lead, " ".join((evidence, *source_facts)))
+    market_result_keys = _measured_apple_market_result_keys(title, lead, " ".join((evidence, *source_facts)), include_forecasts=True)
     if market_result_keys:
         report = source_market_measurement_frame(title, lead, source_facts)
         if report and report.subject.endswith(':smartphone-shipments'):
@@ -8980,15 +8980,18 @@ def _primary_claim_projection(
                     if value:
                         separation.add(prefix + value)
         event_keys |= market_result_keys
-        separation.add("primary-claim-predicate:measured-apple-market-result")
+        observed_results = any(key.startswith('structured-market-result:') for key in market_result_keys)
+        if observed_results:
+            separation.add("primary-claim-predicate:measured-apple-market-result")
         market_scopes = {
             tuple(key.split(":")[1:4])
             for key in market_result_keys
-            if key.startswith("structured-market-result:")
+            if key.startswith(("structured-market-result:", "structured-market-forecast:"))
         }
         for key in market_result_keys:
             fields = key.split(":")
             if len(fields) == 6 and fields[4].startswith("apple-"):
+                separation.add('market-result-stage:' + ('forecast' if fields[0] == 'structured-market-forecast' else 'observed'))
                 separation.add("market-result-measure:" + fields[4].removeprefix("apple-") + ":" + fields[5])
                 separation.add("market-result-local-measure:" + fields[2] + ":" + fields[4].removeprefix("apple-") + ":" + fields[5])
                 year = _compiled_rule(r"(20\d{2})-q([1-4])", 0).match(fields[3])
@@ -9005,7 +9008,7 @@ def _primary_claim_projection(
                 f"{next(iter(market_firms))}:{next(iter(market_regions))}"
             )
         category_hint = "hardware_products"
-        trusted_direct_action = True
+        trusted_direct_action = trusted_direct_action or observed_results
 
     title_products = sorted(identity.title_products)
     production_subjects = list(title_products)
@@ -9983,8 +9986,9 @@ def _measured_apple_market_result_keys(
     title: str,
     lead: str,
     evidence: str,
+    *, include_forecasts: bool = False,
 ) -> set[str]:
-    """Project quantified Apple market results with their report context."""
+    """Serialize locally bound market statements without rejudging their role."""
     title_scope = _normalized(title)
     primary_lead = _primary_assertion_scope("", lead)[1]
     # A causal background clause does not own the current report's action.
@@ -10121,19 +10125,11 @@ def _measured_apple_market_result_keys(
         if not _contains(sentence, "apple", "iphone", "苹果"):
             continue
         percentages = set()
-        apple_clause = False
-        for clause in _compiled_rule(r"[,，、;；:：]|\bbecause\b|(?=\band (?:(?:lifting|increasing) (?:its|apple)|grew\b|rose\b|gained\b|increased\b|fell\b|declined\b|held\b|holds\b|had\b|accounted\b|accounts\b|represented\b|represents\b))", 0).split(sentence, 0):
-            owner = _compiled_rule(r"\b(?:apple|iphone|macs?)\b|苹果", re.I).search(clause)
-            if owner:
-                apple_clause = True
-                clause = clause[owner.start():]
-                if is_joint_market_measurement(clause):
-                    apple_clause = False
-                    continue
-            elif not (apple_clause and _compiled_rule(r"\s*(?:and (?:(?:lifting|increasing) (?:its|apple's)|grew|rose|gained|increased|fell|declined|held|holds|had|accounted|accounts|represented|represents)|its|market share|shipments|(?:online\s+)?sales\s+share|(?:线上)?销量份额|市场份额|份额|出货量)", re.I).match(clause)):
-                apple_clause = False
-            if not apple_clause:
+        owned_clauses = []
+        for raw, clause, role in source_market_statements(sentence):
+            if role != 'observed' and not (include_forecasts and role == 'forecast'):
                 continue
+            owned_clauses.append((raw, clause, role))
             values = [value.rstrip("0").rstrip(".") if "." in value else value
                       for value in _compiled_rule(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:%|percent(?:age)?(?:\s+points?)?)", 0).findall(clause)]
             if not values:
@@ -10151,30 +10147,29 @@ def _measured_apple_market_result_keys(
             else:
                 continue
             local_regions = frozenset(region for region, aliases in region_aliases if _contains(clause, *aliases)) or frozenset(current_regions)
-            percentages.add((metric + "-current", values[-1], local_regions))
+            percentages.add((role, metric + "-current", values[-1], local_regions))
             if len(values) >= 2 and _compiled_rule(r"\bfrom\b|从", re.I).search(clause):
-                percentages.add((metric + "-previous", values[0], local_regions))
-        all_owned_measures.update((metric, value) for metric, value, _regions in percentages)
-        first_place_result = bool(
-            _compiled_rule(r"\b(?:world(?:'s)?|global(?:ly)?)\s+(?:best[- ]selling|top[- ]selling)\b|"
+                percentages.add((role, metric + "-previous", values[0], local_regions))
+        all_owned_measures.update((metric, value) for role, metric, value, _regions in percentages if role == 'observed')
+        rank_roles = {
+            role for raw, clause, role in owned_clauses
+            if (_compiled_rule(r"\b(?:world(?:'s)?|global(?:ly)?)\s+(?:best[- ]selling|top[- ]selling)\b|"
                 r"\b(?:topped|led|leads|ranked first|ranks first|number one|no\.\s*1)\b|"
-                r"\bbestseller ranking puts (?:apple|iphone)\b.{0,30}\bfirst\b|"
-                r"(?:全球)?(?:最畅销|销量第一|排名第一|稳居第一|位居第一|登顶|霸榜)", 0).search(sentence)
-        )
+                r"(?:全球)?(?:最畅销|销量第一|排名第一|稳居第一|位居第一|登顶|霸榜)", 0).search(clause)
+                or _compiled_rule(r"\bbestseller ranking puts (?:apple|iphone)\b.{0,30}\bfirst\b", 0).search(raw))
+        }
         for region in current_regions:
-            for metric, percentage, measure_regions in percentages:
+            for role, metric, percentage, measure_regions in percentages:
                 if region not in measure_regions:
                     continue
+                prefix = 'structured-market-forecast' if role == 'forecast' else 'structured-market-result'
                 for period in {current_period or current_quarter} - {""}:
-                    for attribution in {firm, "observed-" + segment} if segment else {firm}:
-                        keys.add("structured-market-result:"
-                                 f"{attribution}:{region}:{period}:apple-{metric}:{percentage}")
-            if first_place_result:
+                    for attribution in {firm, role + "-" + segment} if segment else {firm}:
+                        keys.add(f"{prefix}:{attribution}:{region}:{period}:apple-{metric}:{percentage}")
+            for role in rank_roles:
+                prefix = 'structured-market-forecast' if role == 'forecast' else 'structured-market-result'
                 for period in {current_period or current_quarter} - {""}:
-                    keys.add(
-                        "structured-market-result:"
-                        f"{firm}:{region}:{period}:apple-rank:1"
-                    )
+                    keys.add(f"{prefix}:{firm}:{region}:{period}:apple-rank:1")
     if segment and len(all_owned_measures) >= 2 and len(current_regions) == 1:
         keys.add("structured-measure:apple-market:" + segment + ":" + next(iter(current_regions))
                  + ":measure-series:" + ",".join(metric + "=" + value for metric, value in sorted(all_owned_measures)))

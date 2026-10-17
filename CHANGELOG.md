@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## 2.1.2 - 2026-10-17
+
+- Improved market-result relevance by sharing source-bound observation, forecast, historical and denial qualifiers, including qualifiers before the vendor name; forecasts no longer become observed Apple results through grouping keys.
+- Improved grouping by separating forecast and observed market results while preserving independently eligible forecasts and their source attribution.
+- Improved local ownership across contrast clauses, causal asides and pronoun continuations; retained ranking context and comma-separated numeric values without borrowing another subject's measurements.
+- Updated market policy and added six regression tests for observation roles, local ownership and forecast boundaries; the full offline suite passes 2,698 tests with existing assertions preserved.
+- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.1.1 - 2026-10-17
 
 - Improved discovery by rejecting navigation and feed endpoints as article candidates across configured sources, and following MyDrivers category pagination within existing budgets; incomplete traversal retains a coverage warning.

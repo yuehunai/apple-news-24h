@@ -907,6 +907,7 @@ STRUCTURED_EVIDENCE_KEY_PREFIXES = (
     "structured-legal-settlement:",
     "structured-claim-status:",
     "structured-market-result:",
+    "structured-market-forecast:",
 )
 
 
@@ -1549,7 +1550,7 @@ def _explicit_separation_conflict(
         return {
             key.split(":", 4)[2]
             for key in profile.event_keys
-            if key.startswith("structured-market-result:")
+            if key.startswith(("structured-market-result:", "structured-market-forecast:"))
             and len(key.split(":", 4)) == 5
         }
 
@@ -2182,6 +2183,7 @@ def _event_key_namespace(key: str) -> str:
         "structured-legal-settlement:",
         "structured-claim-status:",
         "structured-market-result:",
+        "structured-market-forecast:",
         "structured-subject-product:",
         "structured-subject-action:",
         "structured-component:",
@@ -2537,7 +2539,7 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
                      for profile in (left, right)]
     if all(contract_ends) and contract_ends[0].isdisjoint(contract_ends[1]):
         return "conflict"
-    for prefix in ("market-result-year:", "market-result-quarter:", "camera-airpods-delay-year:"):
+    for prefix in ("market-result-stage:", "market-result-year:", "market-result-quarter:", "camera-airpods-delay-year:"):
         result_values = [{key for key in profile.separation_keys if key.startswith(prefix)} for profile in (left, right)]
         if all(result_values) and result_values[0].isdisjoint(result_values[1]):
             return "conflict"

@@ -12,15 +12,12 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.1.1 - 2026-10-17
+### 2.1.2 - 2026-10-17
 
-- Improved discovery by rejecting navigation and feed endpoints as article candidates across configured sources, and following MyDrivers category pagination within existing budgets; incomplete traversal retains a coverage warning.
-- Improved publication-time extraction using publisher metadata, publication/byline fields and standalone date lines; excluded prose event dates and modification/upload roles while retaining the dated-feed fallback when detail publication evidence is unavailable.
-- Improved local subject, action and condition binding for company visits and appointments, feature inventories, device measurements, official accessories, platform fees and auctions; prevented background, historical or denied claims from supplying another action's identity.
-- Improved retail grouping by distinguishing store maintenance, scheduled preorders, actual opening, demand statements and delivery observations; kept delivery dates, regions and observed stages bound to their own claims.
-- Improved relevance for regional Apple price reports without promoting third-party price changes; replaced the old headline-word-order decision with shared local actor binding and removed the obsolete store-maintenance append path.
-- Updated the skill to judge independently extracted actions by their own eligibility and category, and to distinguish reported datasets from separate forecast revisions or market actions without splitting on metrics or attribution alone.
-- Added regression coverage for source navigation, publication roles, category pagination, current action ownership, retail boundaries and price-report relevance.
+- Improved market-result relevance by sharing source-bound observation, forecast, historical and denial qualifiers, including qualifiers before the vendor name; forecasts no longer become observed Apple results through grouping keys.
+- Improved grouping by separating forecast and observed market results while preserving independently eligible forecasts and their source attribution.
+- Improved local ownership across contrast clauses, causal asides and pronoun continuations; retained ranking context and comma-separated numeric values without borrowing another subject's measurements.
+- Updated market policy and added six regression tests for observation roles, local ownership and forecast boundaries; the full offline suite passes 2,698 tests with existing assertions preserved.
 - Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does

@@ -11715,6 +11715,66 @@ def is_joint_market_measurement(clause: str) -> bool:
     return bool(_frame_search(r'\b(?:combined|together|collectively|jointly)\b|合计|合共|合拿|合占|共占|共同占', first))
 
 
+def source_market_statements(text: str):
+    """Yield local (source clause, owned clause, assertion role) market evidence.
+
+    Preserve introductory qualifiers across commas and keep a metric's owner
+    only through explicit continuations. Callers serialize observations and
+    forecasts separately; neither can infer a role after discarding the prefix.
+    """
+    noncurrent = _compiled_rule(
+        r'(?P<historical>for\s+comparison|previously|last\s+(?:year|quarter)|此前|去年|上季度|作为对比)|'
+        r'(?P<denied>\b(?:did|does|has|have|was|were|is|are)\s+not\s+(?:reach|hold|capture|ship|report|disclos|participat)|'
+        r'\bnot\s+(?:reported|disclosed)|no\s+apple\s+data|not\s+included|未(?:公布|披露|参与|纳入|达到|取得)|无苹果数据)|'
+        r'(?P<forecast>expected|expects?|forecast|predict|projected|likely\s+to|\b(?:will|would|could|may|might)\b|'
+        r'next\s+(?:quarter|year)|预计|预测|有望|明年|下季度)', re.I)
+    separator = _compiled_rule(
+        r'((?<!\d),|,(?!\d)|[，、;；:：]|然而|而|但(?!由于|因为|受)|\b(?:but\s+)?because\b|\b(?:while|whereas)\b|\bbut\b(?!\s+(?:because|due\s+to)\b))|'
+        r'(?=\band (?:(?:lifting|increasing) (?:its|apple)|grew\b|rose\b|gained\b|increased\b|fell\b|declined\b|held\b|holds\b|had\b|accounted\b|accounts\b|represented\b|represents\b))', re.I)
+    continuation = _compiled_rule(
+        r"\s*(?:and (?:(?:lifting|increasing) (?:its|apple's)|grew|rose|gained|increased|fell|declined|held|holds|had|accounted|accounts|represented|represents)|"
+        r"its|(?:quarterly |current )?(?:market share|shipments)|(?:online\s+)?sales\s+share|(?:其|它的|该公司的)?(?:季度|当季|整体|全球)?(?:线上)?(?:销量份额|市场份额|份额|出货量))", re.I)
+    value = _normalized(text)
+    for start, end in source_sentence_spans(value):
+        owner_bound = False
+        inherited_role = 'observed'
+        in_cause = False
+        for raw in separator.split(value[start:end]):
+            if not raw or not raw.strip():
+                continue
+            if separator.fullmatch(raw):
+                in_cause = raw.endswith('because')
+                if raw not in ',，、:：' and not in_cause:
+                    owner_bound = False
+                    inherited_role = 'observed'
+                continue
+            owner = _frame_search(r'(?<![a-z])(?:apple|iphones?|macs?)(?![a-z])|苹果', raw)
+            # A causal aside cannot supply its own subject's numbers to the
+            # parent, but the parent's pronoun can resume after the aside.
+            if in_cause and not owner:
+                continue
+            owned = raw[owner.start():] if owner else raw
+            current = _compiled_rule(r'compared\s+(?:with|to)|\b(?:up|down)\s+from\b|同比|较(?:去年|上季)', 0).split(owned)[0]
+            qualifier = noncurrent.search((raw[:owner.start()] if owner else '') + ' ' + current)
+            role = qualifier.lastgroup if qualifier else (inherited_role if not owner or not owner_bound else 'observed')
+            if not owner and owner_bound and _frame_search(r'^\s*(?:(?:but\s+)?(?:because|due\s+to)\b|(?:但)?(?:由于|因为|受))', raw):
+                continue
+            if not owner and not (owner_bound and continuation.match(raw)):
+                owner_bound = False
+                # A bare reporting qualifier governs the following clause;
+                # a complete other-vendor measurement does not.
+                inherited_role = (role if qualifier and not _frame_search(
+                    r'\d+(?:\.\d+)?\s*(?:%|percent|million|万|台)', raw) else 'observed')
+                continue
+            if is_joint_market_measurement(owned):
+                owner_bound = False
+                inherited_role = 'observed'
+                continue
+            owner_bound = True
+            inherited_role = role
+            yield raw, owned, role
+
+
 def source_market_measurement_frame(title: str, lead: str, passages: tuple[str, ...], *, published_year: str = '',
                                    measurement_passages: tuple[str, ...] | None = None) -> SourceActionFrame | None:
     """Bind a measured market, provider and period, with an actual Apple result.
@@ -11774,20 +11834,8 @@ def source_market_measurement_frame(title: str, lead: str, passages: tuple[str, 
     measurement_units = units if measurement_passages is None else tuple(_normalized(p) for p in measurement_passages)
     for unit in measurement_units:
         for start, end in source_sentence_spans(unit):
-            for clause in _compiled_rule(r'[;；]|\b(?:while|whereas)\b|\bbut\b(?!\s+(?:because|due\s+to)\b)|\band\s+(?=[a-z]+\s+(?:shipped|had|held|saw|captured))|而|但(?!由于|因为|受)', 0).split(unit[start:end]):
-                owner = s(r'(?<![a-z])apple(?![a-z])|苹果|\bmacs?\b', clause)
-                if not owner or s(r'for\s+comparison|last\s+year|previously|此前|去年|作为对比|'
-                                  r'expected|forecast|predict|预计|预测|有望', clause[:owner.start()]):
-                    continue
-                owned = clause[owner.start():]
-                if is_joint_market_measurement(owned):
-                    continue
-                # Values before Apple still belong to the preceding vendor.
-                # An explicit other market/period cannot borrow this headline.
-                current_measure = _compiled_rule(r'compared\s+(?:with|to)|\b(?:up|down)\s+from\b|同比|较(?:去年|上季)', 0).split(owned)[0]
-                if s(r'previously|last\s+(?:year|quarter)|此前|去年|上季度|'
-                     r'expected|forecast|predict|\b(?:will|would|could|may|might)\b|next\s+(?:quarter|year)|'
-                     r'预计|预测|有望|明年|下季度', current_measure):
+            for _raw, owned, role in source_market_statements(unit[start:end]):
+                if role != 'observed':
                     continue
                 explicit_sectors = {key for key, pattern in sectors if s(pattern, owned)}
                 explicit_period = quarter_of(owned)
@@ -11826,10 +11874,7 @@ def source_market_measurement_frame(title: str, lead: str, passages: tuple[str, 
                             chinese_owner = None
                     if not (english_owner or chinese_owner):
                         direction = None
-                observed_direction = bool(direction and not s(
-                    r'expected|forecast|predict|\b(?:will|would|could|may|might)\b|next\s+(?:quarter|year)|'
-                    r'not\s+(?:disclos\w*|report\w*)|预计|预测|有望|明年|下季度|未(?:公布|披露)', owned))
-                if table_row or (measure and (quantity or observed_direction)):
+                if table_row or (measure and (quantity or direction)):
                     apple_result = True
                     break
             if apple_result:
