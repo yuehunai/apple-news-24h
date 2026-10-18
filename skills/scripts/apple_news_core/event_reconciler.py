@@ -10502,48 +10502,10 @@ def _card_savings_rate_report(
 
 
 def _weekly_device_sales_subject(title: str, lead: str) -> str:
-    """Only the first owned sales measurement defines a weekly result."""
-    h = _normalized(title)
-    if not (_compiled_rule(r"^(?:(?:消息|报告|统计)(?:称|显示)|据[^，,:：]{1,35}[，,:：]|预计|预估|预测|(?:report|forecast):?\s*)?\s*(?:(?:苹果|apple)\s*)?iphone\s*\d+").search(h)
-            and _compiled_rule(r"sales|销量").search(h)):
-        return ""
-    for start, end in source_sentence_spans(lead):
-        sentence = _normalized(lead[start:end])
-        product = _compiled_rule(r"iphone\s*(\d+)\s*(pro(?:\s*max)?|plus|air)?").search(sentence)
-        quantity = _compiled_rule(r"(?:销量|sales)[^。.!?;；]{0,35}?(\d+(?:\.\d+)?)\s*(万|w|million|m)\b|"
-                                  r"(?:销量)[^。！？；]{0,35}?(\d+(?:\.\d+)?)\s*(万|w)").search(sentence)
-        if not product or not quantity:
-            continue
-        if _compiled_rule(r"\blast\s+(?:year|month|week)\b|\bpreviously\b|去年|上个月|上周|此前|回顾").search(sentence[:quantity.end()]):
-            return ""
-        week = _compiled_rule(r"(?<![a-z0-9])w(\d{1,2})(?!\d)|week\s+(\d{1,2})").search(sentence[:quantity.end()])
-        if not week:
-            return ""  # A later comparison cannot replace the primary result.
-        headline_week = _compiled_rule(r"(?<![a-z0-9])w(\d{1,2})(?!\d)|week\s+(\d{1,2})").search(h)
-        if headline_week and next(x for x in headline_week.groups() if x) != next(x for x in week.groups() if x):
-            return ""  # Another week's context cannot take the headline's stage.
-        scope = h + " " + sentence[:quantity.end()]
-        regions = {key for key, pattern in (("china",r"国内|中国|\bchina\b"),
-            ("us",r"美国|united states|\bus\b"),("global",r"全球|worldwide|global"))
-            if _compiled_rule(pattern).search(scope)}
-        if len(regions) != 1 or _compiled_rule(r"\b(?:not|never)\b|否认|没有|并未|未达").search(sentence[:quantity.start(1) if quantity.group(1) else quantity.start(3)]):
-            return ""
-        raw, unit = (quantity.group(1),quantity.group(2)) if quantity.group(1) else (quantity.group(3),quantity.group(4))
-        count = Decimal(raw) * (10000 if unit in {"万","w"} else 1000000)
-        year = _compiled_rule(r"(?<!\d)(20\d{2})(?:年|[- ]w)").search(scope)
-        stage_scope = sentence[:quantity.end()]
-        # A headline qualification belongs only to the matching measurement.
-        headline_value = _compiled_rule(r"(\d+(?:\.\d+)?)\s*(万|w|million|m)(?:台|\b)").search(h)
-        if not headline_value or Decimal(headline_value.group(1)) * (10000 if headline_value.group(2) in {"万","w"} else 1000000) == count:
-            stage_scope = h + " " + stage_scope
-        stage = "forecast" if _compiled_rule(r"预计|预估|预测|forecast|expect").search(stage_scope) else "observed"
-        cumulative = bool(_compiled_rule(r"累计|cumulative|to.date").search(stage_scope))
-        single_week = bool(_compiled_rule(r"单周|当周|本周|weekly|single.week").search(stage_scope))
-        if cumulative and single_week:
-            return ""  # Conflicting statistical scopes require source review.
-        metric = "cumulative" if cumulative else "single-week" if single_week else "unspecified"
-        return f"iphone-{product.group(1)}-{(product.group(2) or '').replace(' ', '-')}:sales:{next(iter(regions))}:{year.group(1) if year else ''}-w{next(x for x in week.groups() if x)}:{stage}:{metric}:{count.normalize():f}"
-    return ""
+    """Compatibility view of the source-owned weekly measurement."""
+    from .event_identity import source_weekly_device_measurement
+    frame = source_weekly_device_measurement(title, lead)
+    return ':'.join((frame.subject, frame.action, frame.period, frame.region, frame.year)) if frame else ''
 
 
 def _source_local_current_action(
@@ -10682,10 +10644,6 @@ def _source_local_current_action(
         return replace(result, boundary_keys=result.boundary_keys | {"content-title:" + subject},
                        separation_keys=result.separation_keys | {"content-title:" + subject, "content-action:" + action})
 
-    weekly_measure = _weekly_device_sales_subject(title, lead)
-    if weekly_measure:
-        return profile(weekly_measure, "weekly-unit-sales-report", category="hardware_products",
-                       kind="hardware_market", reason="source-owned product, region, week and sales quantity")
     operation = source_operation_frame(title, lead, source_facts, identity, source_units=source_units, published_year=published_year)
     if operation is not None and operation.bound_claim is not None:
         return bound_reconciliation_profile(operation.bound_claim)

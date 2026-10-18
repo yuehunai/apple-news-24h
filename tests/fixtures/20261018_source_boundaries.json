@@ -1,0 +1,2453 @@
+{
+  "cb7153d84b5995c3bed6c916": {
+    "evidence": {
+      "article_id": "cb7153d84b5995c3bed6c916",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple Retail Staff Told to Warn Against iPhone Duo Walk-In Purchases",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T21:30:45+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T21:30:45+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T21:30:45+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 17, 2026 2:30 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 17, 2026 2:30 pm PDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-10-17T21:30:45+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-17T21:30:45+00:00",
+      "raw_lead": "Some Apple retail employees have been told to warn customers against visiting to purchase an iPhone Duo without a pre-order on Friday, October 23. Apple Store employees told MacRumors that they have been advised that there will likely be no iPhone Duo stock available for walk-in purchases on launch day. Staff have been instructed to discourage customers without pre-orders from coming in expecting to buy the device, warning that they will be disappointed.",
+      "source": "MacRumors",
+      "title": "Apple Retail Staff Told to Warn Against iPhone Duo Walk-In Purchases",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Retail Staff Told to Warn Against iPhone Duo Walk-In Purchases",
+          "unit_id": "ec602ab4f88c1c227bb6689f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Some Apple retail employees have been told to warn customers against visiting to purchase an iPhone Duo without a pre-order on Friday, October 23.",
+          "unit_id": "be6b8992c71b0a020d95a0b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple Store employees told MacRumors that they have been advised that there will likely be no ‌iPhone Duo‌ stock available for walk-in purchases on launch day. Staff have been instructed to discourage customers without pre-orders from coming in expecting to buy the device, warning that they will be disappointed.",
+          "unit_id": "a3ebcd841cd8453fbe29938c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Apple's online store tells customers to check back on Saturday, October 24 for pickup availability. Pickup reservations were briefly available when pre-orders opened before the option was disabled.",
+          "unit_id": "b1ec3e7352278374597d0dd5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "The October 24 message does not guarantee stock will be available that day, and it remains unclear how firm the warning shared with employees is and whether it applies worldwide. If the guidance is firm and widely perpetuated, it closes off a potential route for customers hoping to bypass the device's lengthy online wait times, at least at the stores concerned.",
+          "unit_id": "42bc13302071f4cd8e7f0215"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Warnings about a constrained launch began well before Apple announced the ‌iPhone Duo‌. In early September, Nikkei Asia reported that production had reached only a few hundred devices per day in late August. Further production problems emerged in late September.",
+          "unit_id": "8a5aa9b0e3b5610ad147ab42"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Earlier this month, Bloomberg's Mark Gurman said Apple had at one point believed production constraints could push the start of sales into November. The company subsequently assembled enough inventory to proceed with the October 23 launch, although supply remained very limited.",
+          "unit_id": "9cd445bca78e282a11f24e15"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The extent of the shortage became apparent when pre-orders opened earlier this week. Delivery estimates moved beyond launch day within minutes, and within 30 minutes, all configurations in Apple's U.S. online store showed January 25 shipping estimates. The device is now effectively sold out for Christmas through Apple's online store.",
+          "unit_id": "45eaed3faf5a266c1e3054b2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Apple subsequently described demand as \"nothing short of extraordinary\" in a statement to the Financial Times, adding that it was working to get devices to customers as quickly as possible. Apple has not publicly specified whether any stores will have stock for launch-day walk-in purchases.",
+          "unit_id": "cc12e71b1d79949d3ccc4520"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "The ‌iPhone Duo‌ starts at $1,999 in the United States, with the first pre-order deliveries scheduled for October 23.",
+          "unit_id": "ece5adeff4e73e3e63d40cfa"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/17/staff-warn-against-iphone-duo-walk-ins/"
+    },
+    "recorded_extraction": [
+      "Apple Retail Staff Told to Warn Against iPhone Duo Walk-In Purchases",
+      "Some Apple retail employees have been told to warn customers against visiting to purchase an iPhone Duo without a pre-order on Friday, October 23. Apple Store employees told MacRumors that they have been advised that there will likely be no iPhone Duo stock available for walk-in purchases on launch day. Staff have been instructed to discourage customers without pre-orders from coming in expecting to buy the device, warning that they will be disappointed. Apple Store employees told MacRumors that they have been advised that there will likely be no ‌iPhone Duo‌ stock available for walk-in purchases on launch day. Staff have been instructed to discourage customers without pre-orders from coming in expecting to buy the device, warning that they will be disappointed. Apple's online store tells customers to check back on Saturday, October 24 for pickup availability. Pickup reservations were briefly available when pre-orders opened before the option was disabled. The October 24 message does not guarantee stock will be available that day, and it remains unclear how firm the warning shared with employees is and whether it applies worldwide. If the guidance is firm and widely perpetuated, it closes off a potential route for customers hoping to bypass the device's lengthy online wait times, at least at the stores concerned. Warnings about a constrained launch began well before Apple announced the ‌iPhone Duo‌. In early September, Nikkei Asia reported that production had reached only a few hundred devices per day in late August. Further production problems emerged in late September.",
+      [
+        "Some Apple retail employees have been told to warn customers against visiting to purchase an iPhone Duo without a pre-order on Friday, October 23.",
+        "Apple's online store tells customers to check back on Saturday, October 24 for pickup availability. Pickup reservations were briefly available when pre-orders opened before the option was disabled.",
+        "The October 24 message does not guarantee stock will be available that day, and it remains unclear how firm the warning shared with employees is and whether it applies worldwide. If the guidance is firm and widely perpetuated, it closes off a potential route for customers hoping to bypass the device's lengthy online wait times, at least at the stores concerned.",
+        "Earlier this month, Bloomberg's Mark Gurman said Apple had at one point believed production constraints could push the start of sales into November. The company subsequently assembled enough inventory to proceed with the October 23 launch, although supply remained very limited.",
+        "The extent of the shortage became apparent when pre-orders opened earlier this week. Delivery estimates moved beyond launch day within minutes, and within 30 minutes, all configurations in Apple's U.S. online store showed January 25 shipping estimates. The device is now effectively sold out for Christmas through Apple's online store.",
+        "The ‌iPhone Duo‌ starts at $1,999 in the United States, with the first pre-order deliveries scheduled for October 23."
+      ]
+    ]
+  },
+  "1829a2563633abdb30e09eee": {
+    "evidence": {
+      "article_id": "1829a2563633abdb30e09eee",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "iPhone Duo walk-in purchases might be challenging at launch, per report - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T22:21:41+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T22:21:41+00:00",
+          "source": "meta published"
+        }
+      ],
+      "published_raw": "2026-10-17T22:21:41+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-17T22:21:41+00:00",
+      "raw_lead": "According to a new report from MacRumors, Apple employees are being told to warn customers that iPhone Duo likely won’t...",
+      "source": "9to5Mac",
+      "title": "iPhone Duo walk-in purchases might be challenging at launch, per report - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "According to a new report from MacRumors, Apple employees are being told to warn customers that iPhone Duo likely won’t be available for purchase on launch day if you didn’t already place a pre-order.",
+          "unit_id": "1431a8b9907f3a7ddfb91630"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Right now, Apple’s website suggests that you can check back for iPhone Duo availability on October 24th. However, this isn’t a guarantee of any stock actually being available, per MacRumors:",
+          "unit_id": "4d5faf63f31fd89ee431fa7d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple Store employees told MacRumors that they have been advised that there will likely be no ‌iPhone Duo‌ stock available for walk-in purchases on launch day. Staff have been instructed to discourage customers without pre-orders from coming in expecting to buy the device, warning that they will be disappointed.",
+          "unit_id": "c283367eaceb13dc3d668fea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "This isn’t necessarily a surprise, given the fact that Apple stated yesterday that iPhone Duo demand is “extraordinary,” and we’ve long known that there were production constraints that’d lead to limited iPhone Duo supply around launch.",
+          "unit_id": "0fcb7394955573b2e598dafc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "However, this still serves as our first true sign that even if you line up at an Apple Store the night prior to the iPhone Duo launch, you might not actually end up getting a device. Some stores might receive no additional shipments beyond what was already pre-ordered.",
+          "unit_id": "18d21997ada9a466dfdb0401"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "As of now, iPhone Duo is sold out through January. If these supply constraints remain, it’ll probably be challenging to buy a device for the foreseeable future. Scalpers have also been charging absurd markups on iPhone Duo orders close to launch day.",
+          "unit_id": "75a9953bba0ce5ce4b26dca5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "If you truly want an iPhone Duo sooner than later, carriers and Best Buy seem to be a decent bet, at least in the US.",
+          "unit_id": "ffbc947b2ee393ca405aeafe"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/17/iphone-duo-walk-in-purchases-challenging-report/"
+    },
+    "recorded_extraction": [
+      "iPhone Duo walk-in purchases might be challenging at launch, per report - 9to5Mac",
+      "According to a new report from MacRumors, Apple employees are being told to warn customers that iPhone Duo likely won’t... According to a new report from MacRumors , Apple employees are being told to warn customers that iPhone Duo likely won’t be available for purchase on launch day if you didn’t already place a pre-order. Right now, Apple’s website suggests that you can check back for iPhone Duo availability on October 24th. However, this isn’t a guarantee of any stock actually being available, per MacRumors : Apple Store employees told MacRumors that they have been advised that there will likely be no ‌iPhone Duo‌ stock available for walk-in purchases on launch day. Staff have been instructed to discourage customers without pre-orders from coming in expecting to buy the device, warning that they will be disappointed. This isn’t necessarily a surprise, given the fact that Apple stated yesterday that iPhone Duo demand is “extraordinary,” and we’ve long known that there were production constraints that’d lead to limited iPhone Duo supply around launch.",
+      [
+        "Right now, Apple’s website suggests that you can check back for iPhone Duo availability on October 24th. However, this isn’t a guarantee of any stock actually being available, per MacRumors:"
+      ]
+    ]
+  },
+  "34e95498627bd49586965e37": {
+    "evidence": {
+      "article_id": "34e95498627bd49586965e37",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple’s HomeView is just the latest threat to online recipe writers",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T12:00:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T12:00:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T12:00:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 17, 2026, 12:00 PM UTC",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Oct 17, 2026, 12:00 PM UTC",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-10-17T12:00:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-17T12:00:00+00:00",
+      "raw_lead": "Big Tech is trying to fix online recipes all over again.",
+      "source": "The Verge",
+      "title": "Apple’s HomeView is just the latest threat to online recipe writers",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "jsonld:articleBody",
+          "text": "When Apple revealed the HomeView to the world, it did so with an unusual ad for the company: Instead of pristine, polished tech in immaculate rooms, it’s a three-minute look at the messy, frantic morning routine of a family of five. Apple’s new smart display sits in the center of the chaos on the kitchen table, helping the family check their calendars, send messages, and pull up a French toast recipe in seconds, with simple, step-by-step instructions.",
+          "unit_id": "50869fcfc1e4c6741e112c07"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "jsonld:articleBody",
+          "text": "The HomeView is just the latest in a long line of websites, browser extensions, and smart home gadgets with the same promise: that it can take an online recipe and strip it down to the essentials. Instead of scrolling a lengthy webpage that might range from helpful cooking instructions to seemingly irrelevant personal anecdotes, with the recipe itself way down at the bottom, you simply get ingredient lists, cooking instructions, and timers, all navigable hands-free with voice controls and Siri AI. No distractions, no unnecessary text, and no need to deal with a touchscreen while you’re wrist-deep in a chicken carcass. The appeal is obvious.",
+          "unit_id": "2ee6638cbb80fd51d51476ea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "jsonld:articleBody",
+          "text": "There’s only one group of people likely to object: the food writers who created those recipes in the first place. I would know, since I’m one of them — I have my own food newsletter where I occasionally publish recipes, so I have a little skin in the game. The problem is that converting a recipe into easy-to-follow instructions in Apple’s own format also strips it of its context, including the ads and affiliate links that many recipe writers rely on for their income. Recipes may often be free to read, but they’re not free to create, and solutions like Apple’s remove the main ways websites and writers recoup those costs. “Tools that just extract the recipe,” Eater senior reporter Bettina Makalintal says, “break apart that unspoken social contract with recipe developers and audiences.”",
+          "unit_id": "13db1d3407e405ec7f401c73"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: Apple pitches the HomeView as a hands-free cooking assistant. https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/Apple-HomeView-lifestyle-kitchen-261013.jpg?quality=90&strip=all]",
+          "unit_id": "39b6b66c40d447e988d1440b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "jsonld:articleBody",
+          "text": "The online recipe landscape is a diverse place. Behemoths like Allrecipes and NYT Cooking host tens of thousands of recipes each, some from professional chefs and others from home cooks. Countless dedicated food publications run original recipe content, and thousands of independent chefs produce their own, across blogs, newsletters, YouTube accounts, and TikTok pages. While much of the writing on a recipe page may get on budding cooks’ nerves — we’ve all heard the jokes about being forced to read someone’s grandma’s life story before getting to their cookie recipe — it’s there for a reason. For one thing, it’s usually the only part of a recipe that a writer can copyright — the rest is regarded as mere instructions. But that extra writing is also there because before it worked so hard to strip the text out, Big Tech insisted on it. “Recipe writers needed to pad out the text in a certain way so that their recipes would have a chance of coming up in a Google search,” Makalintal explains.",
+          "unit_id": "c898fe36a934eb38be95aa59"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "jsonld:articleBody",
+          "text": "The good news for recipe writers is that Apple’s approach guarantees at least one visit to their original web page. To load a recipe onto the HomeView screen you have to first open it either on your iPhone or through Safari on the HomeView itself, ensuring you’ll see its ads at least once. That’s welcome, but for website owners it’s still a lot less valuable than the repeated ad impressions that come from someone scrolling down the page and staying on it while they cook.",
+          "unit_id": "775b755a182ba49d318a26f9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "jsonld:articleBody",
+          "text": "\"“Nearly every food blog has a ‘jump to recipe’ button right up at the top, so you don’t actually have to scroll. So if you’re still out here complaining about these essays, you’re just an asshole.”\" - Jaya Saxena",
+          "unit_id": "f14d49fb0d4c5b5cae549969"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "jsonld:articleBody",
+          "text": "It’s not just bad for the writers, either — readers and home cooks may be missing out too. “The additional information around recipes can sometimes be really helpful when it comes to troubleshooting problems that could come up while cooking or addressing things like ingredient swaps,” says Makalintal. Apple’s simplified steps may make some recipes easier to follow, but others might become harder without crucial context included elsewhere on the page.",
+          "unit_id": "01b50f49b49372ee67ea021b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "jsonld:articleBody",
+          "text": "And as common as gripes about recipe intros are, they’ve long been easy to skip if you really insist. “Nearly every food blog has a ‘jump to recipe’ button right up at the top, so you don’t actually have to scroll,” says Jaya Saxena, one of the founder-owners of the food website Ravenous. “So if you’re still out here complaining about these essays, you’re just an asshole.”",
+          "unit_id": "8ce9deed54870ee96fec5085"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "jsonld:articleBody",
+          "text": "[Image: Amazon’s Echo Show devices have long had similar recipe features, but powered by partner publishers. https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/22324183/dseifert_210219_4433_0002.jpg?quality=90&strip=all]",
+          "unit_id": "109f799b02f11f0fb86ba3ad"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "jsonld:articleBody",
+          "text": "Apple is far from the first company to attempt to streamline online recipes. In 2021 startup Recipeasly promised to “fix” online recipes by removing the ads and “life stories.” It barely lasted a weekend before online backlash forced its founders to take it offline. Bigger tech companies have been able to plow through that resistance. Amazon’s Echo Show displays offer similar hands-free cooking features to the HomeView’s, though only with partner sites like Allrecipes or Epicurious. Google’s Nest Hubs used to as well, though Google ultimately removed the step-by-step recipe feature from its Nest Hubs in 2024, along with other “underutilized” features. Apple’s approach, which it says will work with any online recipe that uses Google’s search-friendly recipe formatting, is unique among the current smart home hubs. Perhaps most egregious of all, Google Search now uses Gemini AI to amalgamate online recipes, presenting a streamlined version right on the search page, saving users from ever needing to click through to the original sources at all.",
+          "unit_id": "ab92946dbca692a3284c12c8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "jsonld:articleBody",
+          "text": "Saxena says that for established writers, this is “more like a continuation of the threats they’ve already seen.” Unless Apple sells vast quantities of HomeView displays, its recipe function is still likely to be used by far fewer people than Google’s AI search recipes, let alone recipes from other AI assistants and tools, which are also more egregious in how they take advantage of online content. “I would put the threat level below AI summaries,” says Makalintal, because their “opaque” sourcing “really is erasing labor.”",
+          "unit_id": "4ec4525862f108e922f9ba3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "jsonld:articleBody",
+          "text": "Some major recipe platforms might be able to reduce the impact by getting on board. While the HomeView doesn’t have its own app store, it does support casting apps to the screen using the same tech as CarPlay. That means big apps like Allrecipes or NYT Cooking will have the option of presenting content on the HomeView on their own terms. Independent writers are unlikely to be able to do the same. For them, the choice remains as it has for some time: Stick it out with ever-diminishing Google traffic and ad revenue; take on more sponsored content and paid-for recipes with big brands; or move to a paywall or newsletter business model.",
+          "unit_id": "52793a9069756ada3f7d4485"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "jsonld:articleBody",
+          "text": "Smaller recipe developers are turning to Substack, says Makalintal, where it’s easy to lock recipes behind a paywall. I’m one of them — on my newsletter I restrict my recipes to paid subscribers, a reflection of the fact that they’re the most time-consuming articles I publish. I’ve asked Apple how the HomeView recipe tool will handle paywalled recipes, but at the time of publishing haven’t gotten an answer. But the move en masse to newsletter platforms “has led to some subscription fatigue among home cooks,” Makalintal says, and few cooks will start a paid subscription to access a single recipe, suggesting it’s not likely to support the whole industry.",
+          "unit_id": "1cba26e37d153284080ec814"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "jsonld:articleBody",
+          "text": "Some version of paid-for content may be the only answer going forward, though, for creators both big and small. Tech companies like Apple will have to grapple with how their tools work when access to free content gets trickier, and the rest of us may have to get used to paying for recipes again.",
+          "unit_id": "2d4698fd4062eed3fcfb17c4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "jsonld:articleBody",
+          "text": "“A good, creative recipe that has been tested to ensure it really works takes time and effort and money,” Saxena says. “It is a real skill to communicate how something is made when you’re not physically with that person, and buying all the ingredients needed to test things multiple times is expensive. People should probably be more comfortable paying for that.”",
+          "unit_id": "9cc38faba73e7f49a81b4a54"
+        },
+        {
+          "container_id": "caption",
+          "kind": "div",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Apple pitches the HomeView as a hands-free cooking assistant.",
+          "unit_id": "bf3742c665660d386146240c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "“Nearly every food blog has a ‘jump to recipe’ button right up at the top, so you don’t actually have to scroll. So if you’re still out here complaining about these essays, you’re just an asshole.”",
+          "unit_id": "69bd374f761e7463c8b5235e"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "— Jaya Saxena",
+          "unit_id": "6ef1d23a204ffe06f196e3ae"
+        },
+        {
+          "container_id": "caption",
+          "kind": "div",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Amazon’s Echo Show devices have long had similar recipe features, but powered by partner publishers.",
+          "unit_id": "fd97cb7dfbe29b2a924e6e0c"
+        }
+      ],
+      "url": "https://www.theverge.com/tech/1012820/apple-homeview-recipe-formatting"
+    },
+    "recorded_extraction": [
+      "Apple’s HomeView is just the latest threat to online recipe writers",
+      "When Apple revealed the HomeView to the world, it did so with an unusual ad for the company: Instead of pristine, polished tech in immaculate rooms, it’s a three-minute look at the messy, frantic morning routine of a family of five. Apple’s new smart display sits in the center of the chaos on the kitchen table, helping the family check their calendars, send messages, and pull up a French toast recipe in seconds, with simple, step-by-step instructions. The HomeView is just the latest in a long line of websites, browser extensions, and smart home gadgets with the same promise: that it can take an online recipe and strip it down to the essentials. Instead of scrolling a lengthy webpage that might range from helpful cooking instructions to seemingly irrelevant personal anecdotes, with the recipe itself way down at the bottom, you simply get ingredient lists, cooking instructions, and timers, all navigable hands-free with voice controls and Siri AI. No distractions, no unnecessary text, and no need to deal with a touchscreen while you’re wrist-deep in a chicken carcass.",
+      [
+        "Apple’s new smart display sits in the center of the chaos on the kitchen table, helping the family check their calendars, send messages, and pull up a French toast recipe in seconds, with simple, step-by-step instructions.",
+        "In 2021 startup Recipeasly promised to “fix” online recipes by removing the ads and “life stories.” It barely lasted a weekend before online backlash forced its founders to take it offline.",
+        "Google’s Nest Hubs used to as well, though Google ultimately removed the step-by-step recipe feature from its Nest Hubs in 2024, along with other “underutilized” features."
+      ]
+    ]
+  },
+  "5dbc3ee2490f1ba64b17d15c": {
+    "evidence": {
+      "article_id": "5dbc3ee2490f1ba64b17d15c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple Hires Former Meta Lawyer to Oversee Global Litigation",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T20:21:09+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T20:21:09+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T20:21:09+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 17, 2026 1:21 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 17, 2026 1:21 pm PDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-10-17T20:21:09+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-17T20:21:09+00:00",
+      "raw_lead": "Apple has hired former Meta lawyer Scott Tucker to lead its litigation team, according to Bloomberg's Mark Gurman. Tucker will become Apple's vice president of global litigation and financial services, a new position overseeing commercial lawsuits, patent disputes, and legal matters involving its financial products. He previously led litigation at Meta and held a senior legal role at Morgan Stanley. The move brings Tucker back together with Jennifer Newstead, Apple's general counsel.",
+      "source": "MacRumors",
+      "title": "Apple Hires Former Meta Lawyer to Oversee Global Litigation",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Hires Former Meta Lawyer to Oversee Global Litigation",
+          "unit_id": "0a298ec6ba547bee428f1c82"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple has hired former Meta lawyer Scott Tucker to lead its litigation team, according to Bloomberg's Mark Gurman.",
+          "unit_id": "1b4a961ac0527ac87356716f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Tucker will become Apple's vice president of global litigation and financial services, a new position overseeing commercial lawsuits, patent disputes, and legal matters involving its financial products. He previously led litigation at ‌Meta‌ and held a senior legal role at Morgan Stanley.",
+          "unit_id": "00b91d9cfc75d5e5ab3453d5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The move brings Tucker back together with Jennifer Newstead, Apple's general counsel. Newstead joined Apple's leadership in March after six years as ‌Meta‌'s top lawyer.",
+          "unit_id": "7662517842f737631bf997b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Heather Grenier, who currently oversees Apple's commercial and competition litigation, will report to Tucker instead of Newstead. She will remain on Newstead's leadership team. Apple is also expanding legal executive Kyle Andeer's responsibilities to include international legal matters, child safety, cybersecurity, and law enforcement.",
+          "unit_id": "9024b66d1f4e5dd12c892fd8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "The changes are part of a wider overhaul under Newstead, who now oversees both legal and government affairs. Apple announced plans to combine the teams alongside the retirements of Kate Adams and Lisa Jackson.",
+          "unit_id": "ffc231dc5f2da9b6ca290db0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "According to Gurman, some Apple executives believe the company should have performed better in court, particularly in App Store disputes. Its battle with Epic Games has forced changes to the rules for links to outside payment options and the fees Apple can charge.",
+          "unit_id": "d58882a7ce51fd0ac4f9c2cb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Apple also faces the U.S. government's antitrust lawsuit and privacy cases. Separately, it agreed to a $250 million settlement over delayed Siri features, with a final approval hearing scheduled for February 2027.",
+          "unit_id": "53fecb53fac628605e9b7161"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/17/apple-hires-former-meta-lawyer/"
+    },
+    "recorded_extraction": [
+      "Apple Hires Former Meta Lawyer to Oversee Global Litigation",
+      "Apple has hired former Meta lawyer Scott Tucker to lead its litigation team, according to Bloomberg's Mark Gurman. Tucker will become Apple's vice president of global litigation and financial services, a new position overseeing commercial lawsuits, patent disputes, and legal matters involving its financial products. He previously led litigation at Meta and held a senior legal role at Morgan Stanley. The move brings Tucker back together with Jennifer Newstead, Apple's general counsel. Apple has hired former Meta lawyer Scott Tucker to lead its litigation team, according to Bloomberg 's Mark Gurman . Tucker will become Apple's vice president of global litigation and financial services, a new position overseeing commercial lawsuits, patent disputes, and legal matters involving its financial products. He previously led litigation at ‌Meta‌ and held a senior legal role at Morgan Stanley. The move brings Tucker back together with Jennifer Newstead, Apple's general counsel. Newstead joined Apple's leadership in March after six years as ‌Meta‌'s top lawyer. Heather Grenier, who currently oversees Apple's commercial and competition litigation, will report to Tucker instead of Newstead. She will remain on Newstead's leadership team. Apple is also expanding legal executive Kyle Andeer's responsibilities to include international legal matters, child safety, cybersecurity, and law enforcement.",
+      [
+        "Heather Grenier, who currently oversees Apple's commercial and competition litigation, will report to Tucker instead of Newstead. She will remain on Newstead's leadership team. Apple is also expanding legal executive Kyle Andeer's responsibilities to include international legal matters, child safety, cybersecurity, and law enforcement.",
+        "Apple also faces the U.S. government's antitrust lawsuit and privacy cases. Separately, it agreed to a $250 million settlement over delayed Siri features, with a final approval hearing scheduled for February 2027."
+      ]
+    ]
+  },
+  "2837da11edb67a90a43215ba": {
+    "evidence": {
+      "article_id": "2837da11edb67a90a43215ba",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "消息称苹果要求零售店员工劝退无预约顾客：iPhone Duo 首发日基本不卖现货",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 8:25:46",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 8:25:46",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/18 8:25:46",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T00:25:46+00:00",
+      "raw_lead": "部分苹果直营店员工被要求劝阻未预约顾客在 10 月 23 日到店购买 iPhone Duo。预购火爆，官网发货已排到明年 1 月，线下自提名额也一度关闭。#iPhone Duo# #苹果#",
+      "source": "IT之家",
+      "title": "消息称苹果要求零售店员工劝退无预约顾客：iPhone Duo 首发日基本不卖现货",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 18 日消息，据 MacRumors 报道，苹果部分直营店员工接到通知：需提醒顾客 10 月 23 日周五发售当天，若无预约，不要专程到店购买 iPhone Duo。",
+          "unit_id": "0192d1014c4563444e195585"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "员工透露，公司明确告知：首发当日门店基本不会留给无预约顾客现货；工作人员需要主动劝阻没有预订单的到店客人，提醒他们此行大概率会空手而归。",
+          "unit_id": "8fa1621d3b9af57f00ee9f5e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "苹果线上商城提示顾客，可以在 10 月 24 日周六再查询门店自提名额。预购开启时，线下到店自提预约曾短暂开放，随后就被直接关闭。",
+          "unit_id": "8b2d32c11848f970b86c3c7f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "官方这条 10 月 24 日的提示，并不保证届时一定有货。目前还不清楚这项门店指引是否为全球统一执行。如果该要求严格落地，想买现货、绕开线上漫长排队周期的渠道就被堵死了（至少直营店如此）。",
+          "unit_id": "216382246c3a22b86d4d7651"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "IT之家注意到，早在 iPhone Duo 正式发布前，供应链产能紧张的消息就已传出。9 月初，《日经亚洲》报道，8 月底这款机型日产量仅几百台；9 月下旬又接连遭遇新的生产故障。",
+          "unit_id": "447c6cf4ecee42c17ad55d56"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "本月早些时候，彭博社记者马克・古尔曼爆料，苹果一度因为产能不足，不得不考虑把发售时间推迟到 11 月。后续苹果勉强凑齐首批库存，才保证 10 月 23 日如期开售，但整体供货量依然极度紧张。",
+          "unit_id": "6b0f0e80d9f4d03a24a29963"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "预购开启后，缺货问题彻底暴露：开售几分钟，发货时间就已经跳出首发日；仅仅 30 分钟，美国官网所有配置机型的发货日期全部排到次年 1 月 25 日。现在通过苹果官网下单，想要在圣诞节前拿到机器已经基本不可能。",
+          "unit_id": "9a7550ee5bbdc1c288ca473d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "苹果在接受《金融时报》采访时表示，市场热度“空前火爆”，同时正在尽全力加快发货。不过苹果始终没有公开说明，是否有门店会在首发日保留少量现货给散客。",
+          "unit_id": "3196f224afad7c78417122fb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "iPhone Duo 国行起售价 15,999 元，首批预约订单将于 10 月 23 日开始交付。",
+          "unit_id": "e01be4eb1f8a7abcab31bdf2"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "京东苹果 iPhone Duo 手机 15999 元起直达链接",
+          "unit_id": "b5d35d25255d05f1a95c7d97"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/437.htm"
+    },
+    "recorded_extraction": [
+      "消息称苹果要求零售店员工劝退无预约顾客：iPhone Duo 首发日基本不卖现货",
+      "部分苹果直营店员工被要求劝阻未预约顾客在 10 月 23 日到店购买 iPhone Duo。预购火爆，官网发货已排到明年 1 月，线下自提名额也一度关闭。#iPhone Duo# #苹果# IT之家 10 月 18 日消息，据 MacRumors 报道，苹果部分直营店员工接到通知：需提醒顾客 10 月 23 日周五发售当天，若无预约，不要专程到店购买 iPhone Duo 。 员工透露，公司明确告知：首发当日门店基本不会留给无预约顾客现货；工作人员需要主动劝阻没有预订单的到店客人，提醒他们此行大概率会空手而归。 苹果线上商城提示顾客，可以在 10 月 24 日周六再查询门店自提名额。预购开启时，线下到店自提预约曾短暂开放，随后就被直接关闭。 官方这条 10 月 24 日的提示，并不保证届时一定有货。目前还不清楚这项门店指引是否为全球统一执行。如果该要求严格落地，想买现货、绕开线上漫长排队周期的渠道就被堵死了（至少直营店如此）。",
+      [
+        "IT之家 10 月 18 日消息，据 MacRumors 报道，苹果部分直营店员工接到通知：需提醒顾客 10 月 23 日周五发售当天，若无预约，不要专程到店购买 iPhone Duo。",
+        "苹果线上商城提示顾客，可以在 10 月 24 日周六再查询门店自提名额。预购开启时，线下到店自提预约曾短暂开放，随后就被直接关闭。",
+        "官方这条 10 月 24 日的提示，并不保证届时一定有货。目前还不清楚这项门店指引是否为全球统一执行。如果该要求严格落地，想买现货、绕开线上漫长排队周期的渠道就被堵死了（至少直营店如此）。",
+        "IT之家注意到，早在 iPhone Duo 正式发布前，供应链产能紧张的消息就已传出。9 月初，《日经亚洲》报道，8 月底这款机型日产量仅几百台；9 月下旬又接连遭遇新的生产故障。",
+        "本月早些时候，彭博社记者马克・古尔曼爆料，苹果一度因为产能不足，不得不考虑把发售时间推迟到 11 月。后续苹果勉强凑齐首批库存，才保证 10 月 23 日如期开售，但整体供货量依然极度紧张。",
+        "预购开启后，缺货问题彻底暴露：开售几分钟，发货时间就已经跳出首发日；仅仅 30 分钟，美国官网所有配置机型的发货日期全部排到次年 1 月 25 日。现在通过苹果官网下单，想要在圣诞节前拿到机器已经基本不可能。",
+        "iPhone Duo 国行起售价 15,999 元，首批预约订单将于 10 月 23 日开始交付。"
+      ]
+    ]
+  },
+  "06e416080c042de6d9a7d542": {
+    "evidence": {
+      "article_id": "06e416080c042de6d9a7d542",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "预售秒罄！苹果门店回应iPhone Duo供应不足：到店时间预估三个月之后",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17 13:34:44.693",
+          "source": "source publication metadata"
+        }
+      ],
+      "published_raw": "2026-10-17 13:34:44.693",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-17T05:34:44.693000+00:00",
+      "raw_lead": "快科技10月17日消息，昨晚8点，苹果首款折叠屏iPhone Duo正式开启预售，各大平台几乎都在1分钟内全部售罄，苹果官网一度瘫痪，目前到货日期已经排到2027年1月底。据国内媒体报道，苹果北京三里",
+      "source": "快科技",
+      "title": "预售秒罄！苹果门店回应iPhone Duo供应不足：到店时间预估三个月之后",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月17日消息，昨晚8点，苹果首款折叠屏iPhone Duo正式开启预售，各大平台几乎都在1分钟内全部售罄，苹果官网一度瘫痪，目前到货日期已经排到2027年1月底。",
+          "unit_id": "b582186988ad3b1a72d197aa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据国内媒体报道，苹果北京三里屯Apple Store工作人员针对iPhone Duo是否供应不足回应称：\"苹果供应肯定没问题，只是iPhone Duo太火爆了，确实会比此前新品需求量大，现货到手慢\"。",
+          "unit_id": "9b2de6b8efe9e20c48b0ed89"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "至于门店何时会有现货，该工作人员表示目前门店iPhone 18 Pro Max现货到店约需两个月，而iPhone Duo火爆程度更甚，到店时间预估在三个月之后。",
+          "unit_id": "d567b4fbf6c18cf2e83da6c3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "iPhone Duo国行256GB版本起售价15999元，512GB版本17999元，1TB版本21499元，2TB顶配版本达到26499元，是苹果迄今为止售价最高的iPhone机型，10月23日首发日到店取货资格被秒空。",
+          "unit_id": "0647c30b79de385444e860b2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "首轮稀缺直接推高了第三方市场溢价，\"iPhone Duo预售溢价10000元\"一度冲上热搜，得物App显示多个版本预售成交价突破2万元，其中1TB黑色版本接近2.9万元，比发售价高出7143元，256GB黑色版本涨幅接近四成。",
+          "unit_id": "1b39434990e1ca0f8239eb80"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "二手与黄牛渠道也出现加价收机、加价转手的现象，不同容量加价幅度从数千元到上万元不等，本地代理商称想拿到首发当日的机器基本都要额外加价。",
+          "unit_id": "631d7de52f324806bea652a4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "根据行业分析，iPhone Duo至少要到11月供应才达到合理水平。",
+          "unit_id": "46c3146e912b2f256d508c14"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158242.htm"
+    },
+    "recorded_extraction": [
+      "预售秒罄！苹果门店回应iPhone Duo供应不足：到店时间预估三个月之后",
+      "快科技10月17日消息，昨晚8点，苹果首款折叠屏iPhone Duo正式开启预售，各大平台几乎都在1分钟内全部售罄，苹果官网一度瘫痪，目前到货日期已经排到2027年1月底。据国内媒体报道，苹果北京三里 快科技10月17日消息，昨晚8点，苹果首款折叠屏iPhone Duo正式开启预售，各大平台几乎都在1分钟内全部售罄，苹果官网一度瘫痪，目前到货日期已经排到2027年1月底。 据国内媒体报道，苹果北京三里屯Apple Store工作人员针对iPhone Duo是否供应不足回应称： \"苹果供应肯定没问题，只是iPhone Duo太火爆了，确实会比此前新品需求量大，现货到手慢\"。 至于门店何时会有现货，该工作人员表示目前门店iPhone 18 Pro Max现货到店约需两个月， 而iPhone Duo火爆程度更甚，到店时间预估在三个月之后。 iPhone Duo国行256GB版本起售价15999元，512GB版本17999元，1TB版本21499元，2TB顶配版本达到26499元，是苹果迄今为止售价最高的iPhone机型，10月23日首发日到店取货资格被秒空。",
+      [
+        "快科技10月17日消息，昨晚8点，苹果首款折叠屏iPhone Duo正式开启预售，各大平台几乎都在1分钟内全部售罄，苹果官网一度瘫痪，目前到货日期已经排到2027年1月底。",
+        "至于门店何时会有现货，该工作人员表示目前门店iPhone 18 Pro Max现货到店约需两个月，而iPhone Duo火爆程度更甚，到店时间预估在三个月之后。",
+        "iPhone Duo国行256GB版本起售价15999元，512GB版本17999元，1TB版本21499元，2TB顶配版本达到26499元，是苹果迄今为止售价最高的iPhone机型，10月23日首发日到店取货资格被秒空。",
+        "首轮稀缺直接推高了第三方市场溢价，\"iPhone Duo预售溢价10000元\"一度冲上热搜，得物App显示多个版本预售成交价突破2万元，其中1TB黑色版本接近2.9万元，比发售价高出7143元，256GB黑色版本涨幅接近四成。"
+      ]
+    ]
+  },
+  "29a1ee4e8b8b91776eb00c61": {
+    "evidence": {
+      "article_id": "29a1ee4e8b8b91776eb00c61",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果挖角Meta资深律师 重组法务团队应对全球诉讼挑战 - Apple 苹果 - cnBeta.COM",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月18日 04:37",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026年10月18日 04:37",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-17T20:37:00+00:00",
+      "raw_lead": "苹果公司近日从Meta招募资深律师斯科特·塔克（ScottTucker），负责领导公司诉讼业务。这一任命是苹果法务部门最新一轮重组的重要组成部分，也反映出公司正积极强化面对日益复杂的法律和监管挑战的能力。",
+      "source": "cnBeta",
+      "title": "苹果挖角Meta资深律师 重组法务团队应对全球诉讼挑战 - Apple 苹果 - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "苹果公司近日从Meta招募资深律师斯科特·塔克（Scott Tucker），负责领导公司诉讼业务。这一任命是苹果法务部门最新一轮重组的重要组成部分，也反映出公司正积极强化面对日益复杂的法律和监管挑战的能力。",
+          "unit_id": "cc62f25eed37c0daa4ad8ccb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "根据披露的信息，塔克将出任苹果新设立的“全球诉讼与金融服务副总裁”职位，负责监督商业诉讼、专利纠纷以及涉及苹果金融产品的各类法律事务。在加入苹果之前，塔克曾负责Meta的诉讼业务，并在摩根士丹利担任高级法律职务，拥有丰富的大型企业法律管理经验。",
+          "unit_id": "c5dd313751e0dae389d88465"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "此次任命也让塔克与苹果总法律顾问詹妮弗·纽斯特德（Jennifer Newstead）再度共事。纽斯特德于今年3月加入苹果高层管理团队，而在此之前，她曾在Meta担任首席法务官长达六年。",
+          "unit_id": "e2eea099a8b51c9cc29ff1e3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "随着组织架构调整，目前负责苹果商业诉讼和竞争诉讼事务的希瑟·格雷尼尔（Heather Grenier）未来将直接向塔克汇报，而不再直接向纽斯特德负责。不过，她仍将继续留在纽斯特德领导的管理团队之中。与此同时，苹果还扩大了法务高管凯尔·安迪尔（Kyle Andeer）的职责范围，新增国际法律事务、儿童安全、网络安全以及执法合作等领域。",
+          "unit_id": "616d8a4383bb3f7353811f60"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "此次人事调整属于纽斯特德主导的更大规模法务体系改革的一部分。目前，她已同时负责苹果的法律事务和政府事务部门。此前，苹果宣布将两个部门整合，并伴随着两位长期高管凯特·亚当斯（Kate Adams）和丽莎·杰克逊（Lisa Jackson）的退休安排推进组织重组。",
+          "unit_id": "70d33814273979f82ab7ee43"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "报道称，苹果内部部分高管认为，公司近年来在多项重要法律战中表现未达预期，尤其是在App Store相关争议案件上。苹果与《堡垒之夜》开发商Epic Games之间持续多年的诉讼，已经迫使苹果调整针对外部支付链接的管理规则，并改变部分应用商店收费方式。",
+          "unit_id": "7f4f59800076bceb0440803c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "除了应用商店争议外，苹果当前还面临美国政府发起的反垄断诉讼以及多项隐私相关案件。同时，公司此前还同意就Siri人工智能功能延期问题达成2.5亿美元和解协议，该协议预计将在2027年2月举行最终审批听证会。",
+          "unit_id": "42d5e160076565671c6bab28"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "分析人士认为，在监管审查不断加强、科技行业法律风险持续上升的背景下，苹果引入拥有Meta和华尔街背景的资深法务高管，显示出公司希望通过强化诉讼和合规能力，更积极地应对未来全球范围内的法律挑战。",
+          "unit_id": "2073e8ed7443258b970bf41c"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582700.htm"
+    },
+    "recorded_extraction": [
+      "苹果挖角Meta资深律师 重组法务团队应对全球诉讼挑战 - Apple 苹果 - cnBeta.COM",
+      "苹果公司近日从Meta招募资深律师斯科特·塔克（ScottTucker），负责领导公司诉讼业务。这一任命是苹果法务部门最新一轮重组的重要组成部分，也反映出公司正积极强化面对日益复杂的法律和监管挑战的能力。 苹果公司近日从Meta招募资深律师斯科特·塔克（Scott Tucker），负责领导公司诉讼业务。这一任命是苹果法务部门最新一轮重组的重要组成部分，也反映出公司正积极强化面对日益复杂的法律和监管挑战的能力。 根据披露的信息，塔克将出任苹果新设立的“全球诉讼与金融服务副总裁”职位，负责监督商业诉讼、专利纠纷以及涉及苹果金融产品的各类法律事务。在加入苹果之前，塔克曾负责Meta的诉讼业务，并在摩根士丹利担任高级法律职务，拥有丰富的大型企业法律管理经验。 此次任命也让塔克与苹果总法律顾问詹妮弗·纽斯特德（Jennifer Newstead）再度共事。纽斯特德于今年3月加入苹果高层管理团队，而在此之前，她曾在Meta担任首席法务官长达六年。 随着组织架构调整，目前负责苹果商业诉讼和竞争诉讼事务的希瑟·格雷尼尔（Heather Grenier）未来将直接向塔克汇报，而不再直接向纽斯特德负责。不过，她仍将继续留在纽斯特德领导的管理团队之中。与此同时，苹果还扩大了法务高管凯尔·安迪尔（Kyle Andeer）的职责范围，新增国际法律事务、儿童安全、网络安全以及执法合作等领域。",
+      [
+        "此次任命也让塔克与苹果总法律顾问詹妮弗·纽斯特德（Jennifer Newstead）再度共事。纽斯特德于今年3月加入苹果高层管理团队，而在此之前，她曾在Meta担任首席法务官长达六年。",
+        "随着组织架构调整，目前负责苹果商业诉讼和竞争诉讼事务的希瑟·格雷尼尔（Heather Grenier）未来将直接向塔克汇报，而不再直接向纽斯特德负责。不过，她仍将继续留在纽斯特德领导的管理团队之中。与此同时，苹果还扩大了法务高管凯尔·安迪尔（Kyle Andeer）的职责范围，新增国际法律事务、儿童安全、网络安全以及执法合作等领域。",
+        "除了应用商店争议外，苹果当前还面临美国政府发起的反垄断诉讼以及多项隐私相关案件。同时，公司此前还同意就Siri人工智能功能延期问题达成2.5亿美元和解协议，该协议预计将在2027年2月举行最终审批听证会。"
+      ]
+    ]
+  },
+  "edfc1b38292f6c2cfd38c2af": {
+    "evidence": {
+      "article_id": "edfc1b38292f6c2cfd38c2af",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "EE announces iPhone Handoff pricing details for UK customers - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T15:54:02+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T15:54:02+00:00",
+          "source": "meta published"
+        }
+      ],
+      "published_raw": "2026-10-17T15:54:02+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-17T15:54:02+00:00",
+      "raw_lead": "As part of its iPhone Duo preorder announcement, UK carrier EE has announced pricing details for iPhone Handoff – making...",
+      "source": "9to5Mac",
+      "title": "EE announces iPhone Handoff pricing details for UK customers - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "As part of its iPhone Duo preorder announcement, UK carrier EE has announced pricing details for iPhone Handoff – making it the first carrier in the UK to do so. Here are the details.",
+          "unit_id": "b64e1403792c7688bcb8fb3d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "At its September keynote, Apple announced iPhone Handoff, a feature that allows users to use their same eSIM across multiple iPhones. It requires support from carriers, and at the keynote, Apple announced T-Mobile, Verizon, EE, and Deutsche Telekom would support it. T-Mobile said it’d be available for $5/month as an add-on for your line, and Verizon just announced it’d be $10/month.",
+          "unit_id": "fb97b7f71bdd59d78a1cd27a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Now, EE is announcing that iPhone Handoff will be available for free as part of its Full Works Plus plan, and available for £5/month on its other plans:",
+          "unit_id": "1d276ae5ee6586508672594e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "iPhone Handoff allows customers to easily switch back and forth between two iPhone models with the same mobile number. It means customers can choose the iPhone that’s right for the moment, without worrying about missing a call, message or notification.",
+          "unit_id": "81a8cde32ed121d0864f9de6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Whether you’re heading to a festival, going for a run, tackling an all-day hike or simply travelling lighter, your contacts, calls and messages move seamlessly with you.",
+          "unit_id": "4d204de762879903f086cb98"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Included with EE’s Full Works Plus plan which includes Fast Lane, or available for £5 per month on a rolling contract, iPhone Handoff is coming soon and offers a level of flexibility and convenience that isn’t available anywhere else in the UK.",
+          "unit_id": "e728155ad54c6fe3825f4c78"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "It’s worth noting that it’s still “coming soon,” though Apple did announce that it’ll be available by the end of the year.",
+          "unit_id": "d328b5d70f8541c585ecc7dd"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/17/iphone-handoff-pricing-details-ee-uk/"
+    },
+    "recorded_extraction": [
+      "EE announces iPhone Handoff pricing details for UK customers - 9to5Mac",
+      "As part of its iPhone Duo preorder announcement, UK carrier EE has announced pricing details for iPhone Handoff – making... At its September keynote, Apple announced iPhone Handoff, a feature that allows users to use their same eSIM across multiple iPhones. It requires support from carriers, and at the keynote, Apple announced T-Mobile, Verizon, EE, and Deutsche Telekom would support it. T-Mobile said it’d be available for $5/month as an add-on for your line, and Verizon just announced it’d be $10/month . Now, EE is announcing that iPhone Handoff will be available for free as part of its Full Works Plus plan, and available for £5/month on its other plans: iPhone Handoff allows customers to easily switch back and forth between two iPhone models with the same mobile number. It means customers can choose the iPhone that’s right for the moment, without worrying about missing a call, message or notification. Whether you’re heading to a festival, going for a run, tackling an all-day hike or simply travelling lighter, your contacts, calls and messages move seamlessly with you.",
+      [
+        "At its September keynote, Apple announced iPhone Handoff, a feature that allows users to use their same eSIM across multiple iPhones. It requires support from carriers, and at the keynote, Apple announced T-Mobile, Verizon, EE, and Deutsche Telekom would support it. T-Mobile said it’d be available for $5/month as an add-on for your line, and Verizon just announced it’d be $10/month.",
+        "Now, EE is announcing that iPhone Handoff will be available for free as part of its Full Works Plus plan, and available for £5/month on its other plans:",
+        "iPhone Handoff allows customers to easily switch back and forth between two iPhone models with the same mobile number. It means customers can choose the iPhone that’s right for the moment, without worrying about missing a call, message or notification. Whether you’re heading to a festival, going for a run, tackling an all-day hike or simply travelling lighter, your contacts, calls and messages move seamlessly with you. Included with EE’s Full Works Plus plan which includes Fast Lane, or available for £5 per month on a rolling contract, iPhone Handoff is coming soon and offers a level of flexibility and convenience that isn’t available anywhere else in the UK."
+      ]
+    ]
+  },
+  "5146fd36019ddce01c16a766": {
+    "evidence": {
+      "article_id": "5146fd36019ddce01c16a766",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "消息称苹果 iPhone 18 Pro Max 手机刷新纪录：W41 单周单品国内激活近 90 万台",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 13:25:14",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 13:25:14",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/17 13:25:14",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-17T05:25:14+00:00",
+      "raw_lead": "博主 @数码闲聊站 今日透露，iPhone 18 Pro Max 又刷新纪录了，W41 单周单品激活近 90 万。",
+      "source": "IT之家",
+      "title": "消息称苹果 iPhone 18 Pro Max 手机刷新纪录：W41 单周单品国内激活近 90 万台",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 17 日消息，博主 @数码闲聊站 今日透露，iPhone 18 Pro Max 又刷新纪录了，W41（IT之家注：此处指 2026 年的第 41 个自然周，即 10 月 5 日至 10 月 11 日）单周单品激活近 90 万（此处及下文预计指国内激活量 / 销量）。",
+          "unit_id": "ceb15cf802baf4e5b4f759e8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "此外，iPhone 18 Pro 系列双杯累计销量目前已经超 400 万台。",
+          "unit_id": "93fa77682030c162e7d8afa8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "据IT之家此前报道，在 9 月 10 日的苹果 2026 年秋季发布会上，iPhone 18 Pro 系列正式发布，并于 9 月 18 日正式开售，18 Pro 和 18 Pro Max 起售价分别为 9999 元和 10999 元。",
+          "unit_id": "e8b9c9a1945afae184bf9905"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "iPhone 18 Pro 系列首发搭载 2 纳米制程工艺 A20 Pro 芯片，其封装方式借鉴了 M 系列芯片，性能和能效均创 iPhone 新高。两款机型均配备更小的灵动岛，全新 4800 万像素融合式主摄配备可变光圈。",
+          "unit_id": "b850bd5024630d568acaf3f4"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/272.htm"
+    },
+    "recorded_extraction": [
+      "消息称苹果 iPhone 18 Pro Max 手机刷新纪录：W41 单周单品国内激活近 90 万台",
+      "博主 @数码闲聊站 今日透露，iPhone 18 Pro Max 又刷新纪录了，W41 单周单品激活近 90 万。 IT之家 10 月 17 日消息，博主 @数码闲聊站 今日透露， iPhone 18 Pro Max 又刷新纪录了，W41（IT之家注：此处指 2026 年的第 41 个自然周，即 10 月 5 日至 10 月 11 日） 单周单品激活近 90 万 （此处及下文预计指国内激活量 / 销量）。 据IT之家此前报道，在 9 月 10 日的苹果 2026 年秋季发布会上， iPhone 18 Pro 系列正式发布 ，并于 9 月 18 日正式开售，18 Pro 和 18 Pro Max 起售价分别为 9999 元和 10999 元。 iPhone 18 Pro 系列首发搭载 2 纳米制程工艺 A20 Pro 芯片，其封装方式借鉴了 M 系列芯片，性能和能效均创 iPhone 新高。两款机型均配备更小的灵动岛，全新 4800 万像素融合式主摄配备可变光圈。",
+      [
+        "IT之家 10 月 17 日消息，博主 @数码闲聊站 今日透露，iPhone 18 Pro Max 又刷新纪录了，W41（IT之家注：此处指 2026 年的第 41 个自然周，即 10 月 5 日至 10 月 11 日）单周单品激活近 90 万（此处及下文预计指国内激活量 / 销量）。",
+        "此外，iPhone 18 Pro 系列双杯累计销量目前已经超 400 万台。",
+        "据IT之家此前报道，在 9 月 10 日的苹果 2026 年秋季发布会上，iPhone 18 Pro 系列正式发布，并于 9 月 18 日正式开售，18 Pro 和 18 Pro Max 起售价分别为 9999 元和 10999 元。",
+        "iPhone 18 Pro 系列首发搭载 2 纳米制程工艺 A20 Pro 芯片，其封装方式借鉴了 M 系列芯片，性能和能效均创 iPhone 新高。两款机型均配备更小的灵动岛，全新 4800 万像素融合式主摄配备可变光圈。"
+      ]
+    ]
+  },
+  "c177ad415beddb051d2a504f": {
+    "evidence": {
+      "article_id": "c177ad415beddb051d2a504f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果首款折叠屏iPhone Duo下周开售！WPS、腾讯WorkBuddy宣布提前适配",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 08:06:47.797",
+          "source": "source publication metadata"
+        }
+      ],
+      "published_raw": "2026-10-18 08:06:47.797",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T00:06:47.797000+00:00",
+      "raw_lead": "快科技10月18日消息，苹果首款折叠屏手机iPhone Duo将于10月23日正式开售，已经参与预购的消费者，最快当天就能拿到新机。日前，金山办公WPS、腾讯WorkBuddy相继宣布，已提前完成对iPhone Duo",
+      "source": "快科技",
+      "title": "苹果首款折叠屏iPhone Duo下周开售！WPS、腾讯WorkBuddy宣布提前适配",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月18日消息，苹果首款折叠屏手机iPhone Duo将于10月23日正式开售，已经参与预购的消费者，最快当天就能拿到新机。",
+          "unit_id": "3aeeff339b1cf485c74114ed"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "日前，金山办公WPS、腾讯WorkBuddy相继宣布，已提前完成对iPhone Duo的适配，针对折叠屏形态带来全新的办公体验。",
+          "unit_id": "61ca5b282fe2977bb99883b2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "其中，腾讯WorkBuddy公布了针对iPhone Duo的6种使用方式，充分利用折叠屏的内外屏切换、分屏及悬停等特性。",
+          "unit_id": "07ae588bf830250c4aefe01e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "具体如下：",
+          "unit_id": "25a43b416f08d9da7f654340"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "展开内屏：工作台一屏展开，手机体量，桌面级效率。",
+          "unit_id": "8f58350f0e098c7fb406d9aa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "外屏单手：一句话派活，后台自动跑。",
+          "unit_id": "be30a46538aa7106a53a07a2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "内屏分栏：左边跟AI聊需求，右边报告直接成稿。",
+          "unit_id": "eae07f9ed6507da2c99d8e39"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "跨App拖拽：资料直接拖进对话，AI立刻接手。",
+          "unit_id": "14efcac0aea4aa2386992b72"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "半折悬停：上屏呈现下屏操控，边录边转不遗漏。",
+          "unit_id": "2be7e64fd85f3505c9e0eeb5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "帐篷模式：桌面一支，解放双手看产出。",
+          "unit_id": "6327c0c8c14c053c9d941e93"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "WPS Office for iPhone Duo也针对折叠屏进行了专门优化。",
+          "unit_id": "8097d9e140e3f83da23bc05c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "其中，横屏状态下可获得更宽阔的表格视野，竖屏状态下则更适合阅读长篇文档，同时还带来了全新布局的伴随式AI功能。",
+          "unit_id": "58e047a79cef8299080c92b6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "据了解，iPhone Duo配备5.4英寸外屏，展开后是一块7.6英寸超视网膜XDR显示屏。",
+          "unit_id": "9ac5de9ced87ddf7043c72c3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "核心配置上，新机搭载苹果A20 Pro芯片，配备12GB内存，以及苹果新一代C2蜂窝调制解调器。",
+          "unit_id": "93bbbf94e3de4833ba53418e"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158325.htm"
+    },
+    "recorded_extraction": [
+      "苹果首款折叠屏iPhone Duo下周开售！WPS、腾讯WorkBuddy宣布提前适配",
+      "快科技10月18日消息，苹果首款折叠屏手机iPhone Duo将于10月23日正式开售，已经参与预购的消费者，最快当天就能拿到新机。日前，金山办公WPS、腾讯WorkBuddy相继宣布，已提前完成对iPhone Duo 快科技10月18日消息，苹果首款折叠屏手机iPhone Duo将于10月23日正式开售，已经参与预购的消费者，最快当天就能拿到新机。 日前， 金山办公WPS、腾讯WorkBuddy相继宣布，已提前完成对iPhone Duo的适配，针对折叠屏形态带来全新的办公体验。 其中，腾讯WorkBuddy公布了针对iPhone Duo的6种使用方式，充分利用折叠屏的内外屏切换、分屏及悬停等特性。",
+      [
+        "快科技10月18日消息，苹果首款折叠屏手机iPhone Duo将于10月23日正式开售，已经参与预购的消费者，最快当天就能拿到新机。",
+        "其中，腾讯WorkBuddy公布了针对iPhone Duo的6种使用方式，充分利用折叠屏的内外屏切换、分屏及悬停等特性。",
+        "其中，横屏状态下可获得更宽阔的表格视野，竖屏状态下则更适合阅读长篇文档，同时还带来了全新布局的伴随式AI功能。",
+        "据了解，iPhone Duo配备5.4英寸外屏，展开后是一块7.6英寸超视网膜XDR显示屏。",
+        "核心配置上，新机搭载苹果A20 Pro芯片，配备12GB内存，以及苹果新一代C2蜂窝调制解调器。"
+      ]
+    ]
+  },
+  "c70f405123c5f1c33a5cd7f1": {
+    "evidence": {
+      "article_id": "c70f405123c5f1c33a5cd7f1",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果零售员工被要求劝阻顾客现场抢购 iPhone Duo 首发库存或极度紧张 - Apple iPhone - cnBeta.COM",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月18日 06:16",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026年10月18日 06:16",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-17T22:16:00+00:00",
+      "raw_lead": "随着苹果即将于10月23日正式发售新款折叠屏手机iPhoneDuo，多名苹果零售店员工透露，公司已告知门店工作人员提醒消费者，如果没有提前完成预订，不要抱着首发当天到店直接购买的期望前往门店。",
+      "source": "cnBeta",
+      "title": "苹果零售员工被要求劝阻顾客现场抢购 iPhone Duo 首发库存或极度紧张 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "随着苹果即将于10月23日正式发售新款折叠屏手机 iPhone Duo，多名苹果零售店员工透露，公司已告知门店工作人员提醒消费者，如果没有提前完成预订，不要抱着首发当天到店直接购买的期望前往门店。",
+          "unit_id": "74ea26af2b841c560c8a2f74"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据悉，苹果零售员工收到的内部指引显示，部分门店预计在发售首日几乎不会有可供现场购买的 iPhone Duo 库存。员工被要求提前向未预订的顾客说明情况，以避免消费者到店后因无法购买而感到失望。",
+          "unit_id": "f39a2e17200d2df3501cd550"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "目前，苹果官网向用户显示，可在10月24日再次查看门店自提服务的可用情况。事实上，在预购开启初期，苹果曾短暂开放过门店取货预约功能，但随后该选项被取消。",
+          "unit_id": "94a08ddf6b56e4e23bb0ae9d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "不过，官网显示的10月24日检查库存提示并不意味着当天一定会有现货供应。目前尚不清楚苹果向员工传达的相关警告是否属于全球统一政策，也不确定执行范围是否覆盖所有地区门店。如果该指引得到广泛落实，那么希望通过首发当天到店购买来绕过漫长线上等待时间的消费者，可能将失去这一途径。",
+          "unit_id": "8f6c737c06d76564908a7a9b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "事实上，外界对于 iPhone Duo 供应紧张的担忧早在产品发布前便已出现。今年9月初，媒体报道称该机在8月底时的日产量仅达到数百台。到了9月底，产业链又传出新的生产问题，进一步加剧了市场对供货能力的担忧。",
+          "unit_id": "3dba6e3302660093916dccc4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "本月早些时候，彭博社记者马克·古尔曼表示，苹果曾一度担心产能受限可能导致产品销售时间推迟至11月。虽然公司最终准备了足够库存，使其能够按计划于10月23日上市，但整体供应规模依然十分有限。",
+          "unit_id": "98bbeefc695eabb1a8984454"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "供货压力在预购开启后迅速显现。预订开放仅数分钟后，交货时间便开始延后；约30分钟后，美国苹果在线商店中的所有配置版本均显示预计要到2027年1月25日才能发货。按照当前情况来看，通过苹果官方渠道购买 iPhone Duo 的消费者已基本无法在圣诞节前收到设备。",
+          "unit_id": "cbcc416fcaf590edd998dfc8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "面对火爆需求，苹果随后向英国《金融时报》表示，市场反响“异常热烈”，并称公司正尽最大努力尽快将产品交付给消费者。不过，苹果至今尚未公开说明是否会有门店在首发当天提供可供现场购买的库存。",
+          "unit_id": "66e8f7df0e45665e015a250e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "iPhone Duo 在美国市场的起售价为1999美元，首批预购用户预计将于10月23日开始收到新机。",
+          "unit_id": "36287119bda54cc060bcef74"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582702.htm"
+    },
+    "recorded_extraction": [
+      "苹果零售员工被要求劝阻顾客现场抢购 iPhone Duo 首发库存或极度紧张 - Apple iPhone - cnBeta.COM",
+      "随着苹果即将于10月23日正式发售新款折叠屏手机iPhoneDuo，多名苹果零售店员工透露，公司已告知门店工作人员提醒消费者，如果没有提前完成预订，不要抱着首发当天到店直接购买的期望前往门店。 随着苹果即将于10月23日正式发售新款折叠屏手机 iPhone Duo，多名苹果零售店员工透露，公司已告知门店工作人员提醒消费者，如果没有提前完成预订，不要抱着首发当天到店直接购买的期望前往门店。 据悉，苹果零售员工收到的内部指引显示，部分门店预计在发售首日几乎不会有可供现场购买的 iPhone Duo 库存。员工被要求提前向未预订的顾客说明情况，以避免消费者到店后因无法购买而感到失望。 目前，苹果官网向用户显示，可在10月24日再次查看门店自提服务的可用情况。事实上，在预购开启初期，苹果曾短暂开放过门店取货预约功能，但随后该选项被取消。 不过，官网显示的10月24日检查库存提示并不意味着当天一定会有现货供应。目前尚不清楚苹果向员工传达的相关警告是否属于全球统一政策，也不确定执行范围是否覆盖所有地区门店。如果该指引得到广泛落实，那么希望通过首发当天到店购买来绕过漫长线上等待时间的消费者，可能将失去这一途径。",
+      [
+        "随着苹果即将于10月23日正式发售新款折叠屏手机 iPhone Duo，多名苹果零售店员工透露，公司已告知门店工作人员提醒消费者，如果没有提前完成预订，不要抱着首发当天到店直接购买的期望前往门店。",
+        "目前，苹果官网向用户显示，可在10月24日再次查看门店自提服务的可用情况。事实上，在预购开启初期，苹果曾短暂开放过门店取货预约功能，但随后该选项被取消。",
+        "不过，官网显示的10月24日检查库存提示并不意味着当天一定会有现货供应。目前尚不清楚苹果向员工传达的相关警告是否属于全球统一政策，也不确定执行范围是否覆盖所有地区门店。如果该指引得到广泛落实，那么希望通过首发当天到店购买来绕过漫长线上等待时间的消费者，可能将失去这一途径。",
+        "事实上，外界对于 iPhone Duo 供应紧张的担忧早在产品发布前便已出现。今年9月初，媒体报道称该机在8月底时的日产量仅达到数百台。到了9月底，产业链又传出新的生产问题，进一步加剧了市场对供货能力的担忧。",
+        "本月早些时候，彭博社记者马克·古尔曼表示，苹果曾一度担心产能受限可能导致产品销售时间推迟至11月。虽然公司最终准备了足够库存，使其能够按计划于10月23日上市，但整体供应规模依然十分有限。",
+        "供货压力在预购开启后迅速显现。预订开放仅数分钟后，交货时间便开始延后；约30分钟后，美国苹果在线商店中的所有配置版本均显示预计要到2027年1月25日才能发货。按照当前情况来看，通过苹果官方渠道购买 iPhone Duo 的消费者已基本无法在圣诞节前收到设备。",
+        "iPhone Duo 在美国市场的起售价为1999美元，首批预购用户预计将于10月23日开始收到新机。"
+      ]
+    ]
+  },
+  "008bdaac0eaa570ef95da197": {
+    "evidence": {
+      "article_id": "008bdaac0eaa570ef95da197",
+      "confidence": "detail",
+      "content_form": "tutorial",
+      "discovery_lead": "",
+      "discovery_title": "PSA: Apple’s official silicone iPhone Duo case will require adhesive to stick - 9to5Mac",
+      "embedded_references": [
+        {
+          "body_element_index": 16,
+          "html_tag": "<a href=\"https://x.com/ParkerOrtolani/status/2111168342526443596?ref_src=twsrc%5Etfw\">",
+          "object_id": "2111168342526443596",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/ParkerOrtolani/status/2111168342526443596?ref_src=twsrc%5Etfw"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T13:45:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T13:45:00+00:00",
+          "source": "meta published"
+        }
+      ],
+      "published_raw": "2026-10-17T13:45:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-17T13:45:00+00:00",
+      "raw_lead": "iPhone Duo is just about a week away from launching, and now that preorders have opened, Apple’s official iPhone Duo...",
+      "source": "9to5Mac",
+      "title": "PSA: Apple’s official silicone iPhone Duo case will require adhesive to stick - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo is just about a week away from launching, and now that preorders have opened, Apple’s official iPhone Duo accessories have started to hit stores for early purchases. After purchasing, some users have noticed that the silicone case has a little bit of a caveat.",
+          "unit_id": "5d42e3befbf41f7767f18480"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple designed two cases for iPhone Duo: a $79 silicone case, and a $129 folio case. This concern is about the former.",
+          "unit_id": "28fe40105f4c76eb8898bf45"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "With the silicone case for iPhone Duo, you’ll actually need to expose adhesive on the case for it to stick to your iPhone. Apple decided to opt for adhesives rather than using magnets. Presumably, the case would fall off if you don’t use the adhesive. This isn’t a new concept for foldable cases.",
+          "unit_id": "baafcbe882e6056c2f62ab3d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "both sides too pic.twitter.com/t9aWxm8B8A",
+          "unit_id": "b1922b3bd404d9cba85148eb"
+        },
+        {
+          "container_id": "",
+          "kind": "blockquote",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "— Parker Ortolani (@ParkerOrtolani) October 16, 2026",
+          "unit_id": "74758bb16952798a7a11782e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "The unfortunate thing about this is that you likely can’t swap cases or go caseless as easily, and even if you do, the adhesive wouldn’t be as effective after you take it off.",
+          "unit_id": "ecf46390771c56363f0dccea"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "View all comments",
+          "unit_id": "c3bbd0961d8c50ad97d9a916"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "This isn’t a super major deal, but something to keep in mind if you’re going to purchase Apple’s official silicone case for iPhone Duo. On the other hand, Apple’s folio with kickstand does seem to be rather nice, though it does carry a premium price tag.",
+          "unit_id": "4e7bc39f7943512658f3529a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "If you aren’t interested in Apple’s official cases, some good options include Spigen’s Ultra Hybrid Pro and ESR’s Classic Hybrid with kickstand.",
+          "unit_id": "d909ee639d7c70b0e593ca7c"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/17/iphone-duo-silicone-case-adhesive-psa/"
+    },
+    "recorded_extraction": [
+      "PSA: Apple’s official silicone iPhone Duo case will require adhesive to stick - 9to5Mac",
+      "iPhone Duo is just about a week away from launching, and now that preorders have opened, Apple’s official iPhone Duo... iPhone Duo is just about a week away from launching, and now that preorders have opened, Apple’s official iPhone Duo accessories have started to hit stores for early purchases. After purchasing, some users have noticed that the silicone case has a little bit of a caveat. Apple designed two cases for iPhone Duo: a $79 silicone case , and a $129 folio case . This concern is about the former. With the silicone case for iPhone Duo, you’ll actually need to expose adhesive on the case for it to stick to your iPhone. Apple decided to opt for adhesives rather than using magnets. Presumably, the case would fall off if you don’t use the adhesive. This isn’t a new concept for foldable cases. The unfortunate thing about this is that you likely can’t swap cases or go caseless as easily, and even if you do, the adhesive wouldn’t be as effective after you take it off.",
+      [
+        "Apple designed two cases for iPhone Duo: a $79 silicone case, and a $129 folio case. This concern is about the former.",
+        "With the silicone case for iPhone Duo, you’ll actually need to expose adhesive on the case for it to stick to your iPhone. Apple decided to opt for adhesives rather than using magnets. Presumably, the case would fall off if you don’t use the adhesive. This isn’t a new concept for foldable cases.",
+        "both sides too pic.twitter.com/t9aWxm8B8A— Parker Ortolani (@ParkerOrtolani) October 16, 2026"
+      ]
+    ]
+  },
+  "2b0b8455ebdae69c102ca1f7": {
+    "evidence": {
+      "article_id": "2b0b8455ebdae69c102ca1f7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "iPhone 18 Pro Max国内单周激活量近90万 刷新记录 - Apple iPhone - cnBeta.COM",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月17日 17:25",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026年10月17日 17:25",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-17T09:25:00+00:00",
+      "raw_lead": "据博主数码闲聊站消息，iPhone18ProMax刷新记录，2026年第41周（10月5日-10月11日）国内单周激活近90万台。此外，iPhone18Pro系列双杯累计销量目前已经超过400万台。",
+      "source": "cnBeta",
+      "title": "iPhone 18 Pro Max国内单周激活量近90万 刷新记录 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "据博主数码闲聊站消息，iPhone 18 Pro Max 刷新记录，2026 年第 41 周（10 月 5 日 - 10 月 11 日）国内单周激活近 90 万台。此外，iPhone 18 Pro系列双杯累计销量目前已经超过400万台。",
+          "unit_id": "29ee548b0162b7805b23a416"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "从产品结构来看，大屏、大内存配置的iPhone 18 Pro Max占据绝对主力，出货量占比超过全系列总量的50%，消费者选择顶配版本的意愿强于往年新品发布周期。",
+          "unit_id": "aabef19b25670cdc48226ca8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "根据安兔兔公布的9月iOS设备好评TOP10榜单，iPhone 18 Pro Max好评率99.02%，直接拿下榜单第1名，也是里面唯一突破99%的设备，优势非常明显，说明新机的综合体验得到首批用户认可。",
+          "unit_id": "0b3416e2c07d5acff4826799"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "另外，近期发布的安卓旗舰机型因关键零部件成本上升普遍提价，万元价位段内安卓顶配与iPhone Pro系列的价格差距明显收窄，客观上强化了苹果高端机型的价值感知。",
+          "unit_id": "22358c6a6476c0891af894f5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "相当一部分原本倾向安卓顶配的用户转向新款iPhone，叠加高端消费群体对价格变动敏感度较低，共同支撑了持续激活量。",
+          "unit_id": "3057c1972320c1bf1daaa50a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "值得注意的是，iPhone 18 Pro系列近期还参与了双11促销活动，全系可销售最高800元的综合补贴优惠，入手价格明显降低，会进一步激发销量。",
+          "unit_id": "894cd3f67133e781bfd687a4"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582658.htm"
+    },
+    "recorded_extraction": [
+      "iPhone 18 Pro Max国内单周激活量近90万 刷新记录 - Apple iPhone - cnBeta.COM",
+      "据博主数码闲聊站消息，iPhone18ProMax刷新记录，2026年第41周（10月5日-10月11日）国内单周激活近90万台。此外，iPhone18Pro系列双杯累计销量目前已经超过400万台。 据博主数码闲聊站消息，iPhone 18 Pro Max 刷新记录，2026 年第 41 周（10 月 5 日 - 10 月 11 日）国内单周激活近 90 万台。此外，iPhone 18 Pro系列双杯累计销量目前已经超过400万台。 从产品结构来看，大屏、大内存配置的iPhone 18 Pro Max占据绝对主力，出货量占比超过全系列总量的50%，消费者选择顶配版本的意愿强于往年新品发布周期。 根据安兔兔公布的9月iOS设备好评TOP10榜单，iPhone 18 Pro Max好评率99.02%，直接拿下榜单第1名，也是里面唯一突破99%的设备，优势非常明显，说明新机的综合体验得到首批用户认可。 另外，近期发布的安卓旗舰机型因关键零部件成本上升普遍提价，万元价位段内安卓顶配与iPhone Pro系列的价格差距明显收窄，客观上强化了苹果高端机型的价值感知。",
+      [
+        "据博主数码闲聊站消息，iPhone 18 Pro Max 刷新记录，2026 年第 41 周（10 月 5 日 - 10 月 11 日）国内单周激活近 90 万台。此外，iPhone 18 Pro系列双杯累计销量目前已经超过400万台。",
+        "从产品结构来看，大屏、大内存配置的iPhone 18 Pro Max占据绝对主力，出货量占比超过全系列总量的50%，消费者选择顶配版本的意愿强于往年新品发布周期。",
+        "根据安兔兔公布的9月iOS设备好评TOP10榜单，iPhone 18 Pro Max好评率99.02%，直接拿下榜单第1名，也是里面唯一突破99%的设备，优势非常明显，说明新机的综合体验得到首批用户认可。",
+        "值得注意的是，iPhone 18 Pro系列近期还参与了双11促销活动，全系可销售最高800元的综合补贴优惠，入手价格明显降低，会进一步激发销量。"
+      ]
+    ]
+  },
+  "56cebd75cd3697db30297ad3": {
+    "evidence": {
+      "article_id": "56cebd75cd3697db30297ad3",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple @ Work: How I'm preparing my fleet for Rosetta's removal in macOS 27 - 9to5Mac",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T13:00:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17T13:00:00+00:00",
+          "source": "meta published"
+        }
+      ],
+      "published_raw": "2026-10-17T13:00:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-17T13:00:00+00:00",
+      "raw_lead": "Rosetta is removed in macOS 27, and here is the script I'm using to handle it, and why some vendors are making this harder than it should be.",
+      "source": "9to5Mac",
+      "title": "Apple @ Work: How I'm preparing my fleet for Rosetta's removal in macOS 27 - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "When installing macOS 27 (Golden Gate), Rosetta is automatically removed. If you manage a fleet with any legacy Intel-only software still in use, you need a plan in place before your users start experiencing issues. Here is what I’m doing, and I have some thoughts on vendors who are waiting until the last minute to deploy Apple Silicon-native tools.",
+          "unit_id": "9cae1d72d2f2612dd1e6003b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "About Apple @ Work: Bradley Chambers has been an Apple IT admin since 2009. Through his experience deploying and managing firewalls, switches, a mobile device management system, enterprise grade WiFi, 1000s of Macs, and 1000s of iPads, Bradley will highlight ways in which Apple IT managers deploy Apple devices, build networks to support them, train users, share stories from the trenches of IT management, and ways Apple could improve its products for IT departments.",
+          "unit_id": "b5164d815b8c40e7967b6297"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The silent failure problem",
+          "unit_id": "fcb9d5ba3cfc3bb7683dc52c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "One thing I need to clarify is that macOS 27 removes it, but macOS 28 will no longer support it. For traditional apps, macOS 27 will prompt the user to reinstall it with an easy-to-follow GUI prompt. That’s actually the workable scenario, because at least the user knows something is wrong, and macOS reinstalls it. The tools I’m worried about are the ones that won’t do that. I have a handful of menu bar utilities from vendors who haven’t shipped a native Apple Silicon build yet, and in my testing this summer, they are just silently failing. There’s no error prompt. It just fails to work. That makes auditing your fleet before macOS 27 rolls out more important than it might seem at first glance.",
+          "unit_id": "7c3c7246a5895c595ed572f4"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "What I’m doing in my device management system",
+          "unit_id": "016697962a76132b12dfd0e7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "My short-term fix is to automatically push a Rosetta reinstallation script to every Mac that joins my macOS 27 Dynamic Device Group. In Mosyle, the setup is really straightforward. You create a new script profile, name it something obvious like “Rosetta Install macOS 27,” and enter the following command in the script tab:",
+          "unit_id": "b4c50000209577040028b9e7"
+        },
+        {
+          "container_id": "",
+          "kind": "pre",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "softwareupdate --install-rosetta --agree-to-license",
+          "unit_id": "d4527d787d8140507c42ed20"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Under Execution Settings, pick your preferred trigger, then assign the profile to your macOS 27 Dynamic Device Group and save. When a device appears in that group, Mosyle automatically pushes the script, and Rosetta (hopefully) gets installed before the user ever runs into a problem. It’s not a permanent fix, but it buys time while I work on the real solution: getting vendors to ship native builds.",
+          "unit_id": "3d22d39af97c179198035bc6"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "On the vendors",
+          "unit_id": "12ff72a17f2db2ab4c543b0c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "I want to be direct about this. Apple Silicon shipped in late 2020. We are now in late 2026. Any vendor still telling customers that a native Apple Silicon build is “on the roadmap” before Rosetta stops working in macOS 28 has had five-plus years to solve this problem and has chosen not to. That is not a resource issue or a technical challenge at this point. It is a prioritization choice, and one that falls squarely on the IT teams managing their software. Even if these vendors ship Apple Silicon-native versions before macOS 28, the shipping delay makes me question their commitment to macOS.",
+          "unit_id": "2350a6e71741cc657444a039"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Wrap up",
+          "unit_id": "bdcc5650d87b6d6a27014479"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "If you haven’t audited your fleet for Rosetta-dependent software yet, do it now while there’s still time to either push a script workaround or have the harder vendor conversations before users start running into problems. Most enterprise fleets are likely doing a 90 day block on Golden Gate for final testing/QA, so now is the time to work on your final plan. The script fix in Mosyle takes about five minutes to set up. Vendor conversations will take longer, and migrating to new solutions will take a bit longer.",
+          "unit_id": "ec3d931f84cd21d4775392c6"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/17/how-im-preparing-my-fleet-for-rosettas-removal-in-macos-27/"
+    },
+    "recorded_extraction": [
+      "Apple @ Work: How I'm preparing my fleet for Rosetta's removal in macOS 27 - 9to5Mac",
+      "Rosetta is removed in macOS 27, and here is the script I'm using to handle it, and why some vendors are making this harder than it should be. When installing macOS 27 (Golden Gate), Rosetta is automatically removed. If you manage a fleet with any legacy Intel-only software still in use, you need a plan in place before your users start experiencing issues. Here is what I’m doing, and I have some thoughts on vendors who are waiting until the last minute to deploy Apple Silicon-native tools. One thing I need to clarify is that macOS 27 removes it, but macOS 28 will no longer support it. For traditional apps, macOS 27 will prompt the user to reinstall it with an easy-to-follow GUI prompt. That’s actually the workable scenario, because at least the user knows something is wrong, and macOS reinstalls it. The tools I’m worried about are the ones that won’t do that. I have a handful of menu bar utilities from vendors who haven’t shipped a native Apple Silicon build yet, and in my testing this summer, they are just silently failing. There’s no error prompt. It just fails to work. That makes auditing your fleet before macOS 27 rolls out more important than it might seem at first glance. I want to be direct about this. Apple Silicon shipped in late 2020. We are now in late 2026. Any vendor still telling customers that a native Apple Silicon build is “on the roadmap” before Rosetta stops working in macOS 28 has had five-plus years to solve this problem and has chosen not to. That is not a resource issue or a technical challenge at this point. It is a prioritization choice, and one that falls squarely on the IT teams managing their software. Even if these vendors ship Apple Silicon-native versions before macOS 28, the shipping delay makes me question their commitment to macOS.",
+      [
+        "When installing macOS 27 (Golden Gate), Rosetta is automatically removed. If you manage a fleet with any legacy Intel-only software still in use, you need a plan in place before your users start experiencing issues. Here is what I’m doing, and I have some thoughts on vendors who are waiting until the last minute to deploy Apple Silicon-native tools.",
+        "One thing I need to clarify is that macOS 27 removes it, but macOS 28 will no longer support it.",
+        "For traditional apps, macOS 27 will prompt the user to reinstall it with an easy-to-follow GUI prompt.",
+        "That makes auditing your fleet before macOS 27 rolls out more important than it might seem at first glance.",
+        "I want to be direct about this. Apple Silicon shipped in late 2020. We are now in late 2026. Any vendor still telling customers that a native Apple Silicon build is “on the roadmap” before Rosetta stops working in macOS 28 has had five-plus years to solve this problem and has chosen not to. That is not a resource issue or a technical challenge at this point. It is a prioritization choice, and one that falls squarely on the IT teams managing their software. Even if these vendors ship Apple Silicon-native versions before macOS 28, the shipping delay makes me question their commitment to macOS."
+      ]
+    ]
+  },
+  "6a7db36a4b8f1fba416bb99c": {
+    "evidence": {
+      "article_id": "6a7db36a4b8f1fba416bb99c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "制造商 Elevation Lab 宣布下架苹果 AirTag 消音工具，公开致歉承认“产品可能被用于秘密跟踪他人”",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 16:13:55",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 16:13:55",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/17 16:13:55",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-17T08:13:55+00:00",
+      "raw_lead": "这款工具可破坏 AirTag 扬声器实现消音，原本宣称用于防盗追踪，后被质疑可被不法分子用于秘密跟踪，厂商现已下架产品并公开致歉。#AirTag隐私安全#",
+      "source": "IT之家",
+      "title": "制造商 Elevation Lab 宣布下架苹果 AirTag 消音工具，公开致歉承认“产品可能被用于秘密跟踪他人”",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 17 日消息，据外媒 Appleinsider 报道，配件厂商 Elevation Lab 发布公告，宣布下架旗下 AirTag 消音工具 AirTag Silencer，并就产品可能被用于跟踪他人一事公开道歉。",
+          "unit_id": "bfab4caf568a9f38a1e5acd5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据介绍，AirTag Silencer 旨在让用户永久摧毁苹果 AirTag 内置的扬声器，使其不会发出任何声音。使用时，用户需要先取出 AirTag 电池，再将追踪器放入专用固定模具，随后用锤子将一根销钉直接打入扬声器。Elevation Lab 声称，这种方式可以让扬声器彻底失效，同时不损坏追踪器的其他组件。",
+          "unit_id": "dc1ea5477d4c55e156156795"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Elevation Lab 在推出这款工具时，声称这是为了防止窃贼在失窃物品被找回之前发现并拆除 AirTag，例如用户可以将消音后的 AirTag 放在自行车上，以降低追踪器发出声音、被窃贼发现的风险。但尽管如此，Elevation Lab 还是招致了业界广泛的批判。",
+          "unit_id": "d56fcb3acb9b183185313ff4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "面对相关质疑，Elevation Lab 现已将产品从官网下架，并发布道歉声明。公司表示，团队成员希望将消音后的 AirTag 用于防盗追踪，但最终意识到，它也可能被心怀不轨的人利用，使无法收到手机提醒的人更难察觉自己正被跟踪。Elevation Lab 还称，未来将利用相关专利，阻止其他厂商制造类似产品。",
+          "unit_id": "dfea9b3b89fc093ad762a133"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/327.htm"
+    },
+    "recorded_extraction": [
+      "制造商 Elevation Lab 宣布下架苹果 AirTag 消音工具，公开致歉承认“产品可能被用于秘密跟踪他人”",
+      "这款工具可破坏 AirTag 扬声器实现消音，原本宣称用于防盗追踪，后被质疑可被不法分子用于秘密跟踪，厂商现已下架产品并公开致歉。#AirTag隐私安全# IT之家 10 月 17 日消息，据外媒 Appleinsider 报道，配件厂商 Elevation Lab 发布公告，宣布下架旗下 AirTag 消音工具 AirTag Silencer，并就产品可能被用于跟踪他人一事公开道歉。 据介绍，AirTag Silencer 旨在让用户永久摧毁苹果 AirTag 内置的扬声器，使其不会发出任何声音。使用时，用户需要先取出 AirTag 电池，再将追踪器放入专用固定模具，随后用锤子将一根销钉直接打入扬声器。Elevation Lab 声称，这种方式可以让扬声器彻底失效，同时不损坏追踪器的其他组件。 Elevation Lab 在推出这款工具时，声称这是为了防止窃贼在失窃物品被找回之前发现并拆除 AirTag，例如用户可以将消音后的 AirTag 放在自行车上，以降低追踪器发出声音、被窃贼发现的风险。但尽管如此，Elevation Lab 还是招致了业界广泛的批判。 面对相关质疑，Elevation Lab 现已将产品从官网下架，并发布道歉声明。公司表示，团队成员希望将消音后的 AirTag 用于防盗追踪，但最终意识到，它也可能被心怀不轨的人利用，使无法收到手机提醒的人更难察觉自己正被跟踪。Elevation Lab 还称，未来将利用相关专利，阻止其他厂商制造类似产品。",
+      [
+        "IT之家 10 月 17 日消息，据外媒 Appleinsider 报道，配件厂商 Elevation Lab 发布公告，宣布下架旗下 AirTag 消音工具 AirTag Silencer，并就产品可能被用于跟踪他人一事公开道歉。"
+      ]
+    ]
+  },
+  "a3049ddd120fe6a9c3877bb6": {
+    "evidence": {
+      "article_id": "a3049ddd120fe6a9c3877bb6",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "半夜排队也买不到！iPhone Duo首发不支持线下抢购现货",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17 11:13:44.733",
+          "source": "source publication metadata"
+        }
+      ],
+      "published_raw": "2026-10-17 11:13:44.733",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-17T03:13:44.733000+00:00",
+      "raw_lead": "快科技10月17日消息，马克·古尔曼（Mark Gurman）今天在X平台连续发文表示，苹果明显是在供应量尚未充足的情况下\"过早\"推出iPhone Duo，目的可能是抢先把产品推向市场。古尔",
+      "source": "快科技",
+      "title": "半夜排队也买不到！iPhone Duo首发不支持线下抢购现货",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月17日消息，马克·古尔曼（Mark Gurman）今天在X平台连续发文表示，苹果明显是在供应量尚未充足的情况下\"过早\"推出iPhone Duo，目的可能是抢先把产品推向市场。",
+          "unit_id": "e295d04dc6ae26aa01f7f194"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "古尔曼特别注意到苹果官方声明重点强调\"线上\"渠道将继续接受订单，却没有明确说明实体店的现货供应，由此推测Duo发售后顾客可以到线下Apple Store体验产品，但恐怕很难在首发日直接在线下买到新机。",
+          "unit_id": "7e0ac39fdf1db81c30264fee"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "他甚至预计部分门店在首发当天的展示样机数量，会超过可供出售的库存数量。",
+          "unit_id": "e9fc665252ac3f3f3b4bb082"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "近期也有Apple Store工作人员表示，线下门店不支持直接进店购买，必须先在线上完成下单付款，抢购成功后再到门店取机。",
+          "unit_id": "bf62e73e2d7549bd5d9523b9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "目前苹果官网显示的iPhone Duo订单的交付时间已排到2027年，苹果回应称这款首款可折叠iPhone的需求\"空前高涨\"，公司正努力尽快把产品送到消费者手中。",
+          "unit_id": "3330a36a46b7062cd31d437b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "iPhone Duo是苹果首款折叠屏手机，采用类似华为Pura X Pro Max的阔折叠方案，外屏为5.4英寸，展开后内屏为7.6英寸，而且内屏首次采用屏下摄像头技术，正面无任何开孔。",
+          "unit_id": "625d59e3fad8c2153e0b71b5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "核心配置上，iPhone Duo搭载台积电2nm工艺的A20 Pro芯片，配备12GB运行内存及新一代C2调制解调器，相比C1X速度提升50%，能耗降低15%。",
+          "unit_id": "370236ab4383e94533519c61"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "影像方面，该机配备双4800万像素摄像头，支持2倍光学品质变焦。机身重量为254克，采用钛金属边框与超瓷晶面板，支持侧边Touch ID解锁，没有Face ID。",
+          "unit_id": "2a61fe451efaa670357bd501"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158225.htm"
+    },
+    "recorded_extraction": [
+      "半夜排队也买不到！iPhone Duo首发不支持线下抢购现货",
+      "快科技10月17日消息，马克·古尔曼（Mark Gurman）今天在X平台连续发文表示，苹果明显是在供应量尚未充足的情况下\"过早\"推出iPhone Duo，目的可能是抢先把产品推向市场。古尔 快科技10月17日消息，马克·古尔曼（Mark Gurman）今天在X平台连续发文表示，苹果明显是在供应量尚未充足的情况下\"过早\"推出iPhone Duo，目的可能是抢先把产品推向市场。 古尔曼特别注意到苹果官方声明重点强调\"线上\"渠道将继续接受订单，却没有明确说明实体店的现货供应， 由此推测Duo发售后顾客可以到线下Apple Store体验产品，但恐怕很难在首发日直接在线下买到新机。 近期也有Apple Store工作人员表示，线下门店不支持直接进店购买，必须先在线上完成下单付款，抢购成功后再到门店取机。 目前苹果官网显示的iPhone Duo订单的交付时间已排到2027年，苹果回应称这款首款可折叠iPhone的需求\"空前高涨\"，公司正努力尽快把产品送到消费者手中。",
+      [
+        "快科技10月17日消息，马克·古尔曼（Mark Gurman）今天在X平台连续发文表示，苹果明显是在供应量尚未充足的情况下\"过早\"推出iPhone Duo，目的可能是抢先把产品推向市场。",
+        "近期也有Apple Store工作人员表示，线下门店不支持直接进店购买，必须先在线上完成下单付款，抢购成功后再到门店取机。",
+        "目前苹果官网显示的iPhone Duo订单的交付时间已排到2027年，苹果回应称这款首款可折叠iPhone的需求\"空前高涨\"，公司正努力尽快把产品送到消费者手中。",
+        "iPhone Duo是苹果首款折叠屏手机，采用类似华为Pura X Pro Max的阔折叠方案，外屏为5.4英寸，展开后内屏为7.6英寸，而且内屏首次采用屏下摄像头技术，正面无任何开孔。",
+        "核心配置上，iPhone Duo搭载台积电2nm工艺的A20 Pro芯片，配备12GB运行内存及新一代C2调制解调器，相比C1X速度提升50%，能耗降低15%。",
+        "影像方面，该机配备双4800万像素摄像头，支持2倍光学品质变焦。机身重量为254克，采用钛金属边框与超瓷晶面板，支持侧边Touch ID解锁，没有Face ID。"
+      ]
+    ]
+  },
+  "2396005dec8e220b371c2576": {
+    "evidence": {
+      "article_id": "2396005dec8e220b371c2576",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "苹果称iPhone Duo需求“非比寻常” 官网交付时间已排至2027年 - Apple iPhone - cnBeta.COM",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月17日 13:55",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026年10月17日 13:55",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-17T05:55:00+00:00",
+      "raw_lead": "苹果表示，首款折叠屏手机iPhoneDuo的预购需求“非比寻常”，公司正努力尽快将产品交到消费者手中。预购于美国太平洋时间10月16日凌晨5时开启，开售后数分钟内，苹果官网显示的交付日期便从10月23日逐步延后；至当天凌晨5时30分左右，预计送达时间已排到2027年1月25日。",
+      "source": "cnBeta",
+      "title": "苹果称iPhone Duo需求“非比寻常” 官网交付时间已排至2027年 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "苹果表示，首款折叠屏手机iPhone Duo的预购需求“非比寻常”，公司正努力尽快将产品交到消费者手中。预购于美国太平洋时间10月16日凌晨5时开启，开售后数分钟内，苹果官网显示的交付日期便从10月23日逐步延后；至当天凌晨5时30分左右，预计送达时间已排到2027年1月25日。",
+          "unit_id": "ed78b81bb387127f842ba321"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "截至报道发布时，消费者已无法通过苹果官网下单并在2026年内收到iPhone Duo，新订单预计要等到2027年初。苹果尚未公布预购数量、首批库存规模或各配置的销售情况，因此“需求非比寻常”是公司对市场反应的描述，并未伴随具体销量数据。",
+          "unit_id": "b8b79544d04f8a668075be15"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "苹果没有说明交付延迟究竟有多少源于需求旺盛、多少与供应受限有关。此前有供应链报道指该机在量产爬坡阶段遇到挑战，包括组装良率以及可折叠屏幕和铰链部件供应等问题；这些情况尚未得到苹果确认，也意味着目前的长等待时间不能单独作为销量规模的证明。苹果以往在部分新品上市初期曾提前消化积压订单，但此次能否提前发货仍不确定。",
+          "unit_id": "1cd5c96115c182b76316022d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "苹果尚未确认10月23日正式发售时是否会有门店现货。官网提示用户可在10月24日再次查询门店取货库存，显示上市初期或会有少量库存供店内提货，但数量和具体地点仍未明确。",
+          "unit_id": "6670c50d5824547d6d7578c4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "iPhone Duo提供256GB、512GB、1TB和2TB四种容量，美国售价从1999美元起，最高配置为3199美元。苹果称，公司正加紧供货；但在正式上市和更多库存信息公布前，仍有不少消费者可能需要等待数月。",
+          "unit_id": "680f884ed73e5ce05d700502"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582578.htm"
+    },
+    "recorded_extraction": [
+      "苹果称iPhone Duo需求“非比寻常” 官网交付时间已排至2027年 - Apple iPhone - cnBeta.COM",
+      "苹果表示，首款折叠屏手机iPhoneDuo的预购需求“非比寻常”，公司正努力尽快将产品交到消费者手中。预购于美国太平洋时间10月16日凌晨5时开启，开售后数分钟内，苹果官网显示的交付日期便从10月23日逐步延后；至当天凌晨5时30分左右，预计送达时间已排到2027年1月25日。 苹果表示，首款折叠屏手机iPhone Duo的预购需求“非比寻常”，公司正努力尽快将产品交到消费者手中。预购于美国太平洋时间10月16日凌晨5时开启，开售后数分钟内，苹果官网显示的交付日期便从10月23日逐步延后；至当天凌晨5时30分左右，预计送达时间已排到2027年1月25日。 截至报道发布时，消费者已无法通过苹果官网下单并在2026年内收到iPhone Duo，新订单预计要等到2027年初。苹果尚未公布预购数量、首批库存规模或各配置的销售情况，因此“需求非比寻常”是公司对市场反应的描述，并未伴随具体销量数据。 苹果没有说明交付延迟究竟有多少源于需求旺盛、多少与供应受限有关。此前有供应链报道指该机在量产爬坡阶段遇到挑战，包括组装良率以及可折叠屏幕和铰链部件供应等问题；这些情况尚未得到苹果确认，也意味着目前的长等待时间不能单独作为销量规模的证明。苹果以往在部分新品上市初期曾提前消化积压订单，但此次能否提前发货仍不确定。 苹果尚未确认10月23日正式发售时是否会有门店现货。官网提示用户可在10月24日再次查询门店取货库存，显示上市初期或会有少量库存供店内提货，但数量和具体地点仍未明确。",
+      [
+        "苹果表示，首款折叠屏手机iPhone Duo的预购需求“非比寻常”，公司正努力尽快将产品交到消费者手中。预购于美国太平洋时间10月16日凌晨5时开启，开售后数分钟内，苹果官网显示的交付日期便从10月23日逐步延后；至当天凌晨5时30分左右，预计送达时间已排到2027年1月25日。",
+        "截至报道发布时，消费者已无法通过苹果官网下单并在2026年内收到iPhone Duo，新订单预计要等到2027年初。苹果尚未公布预购数量、首批库存规模或各配置的销售情况，因此“需求非比寻常”是公司对市场反应的描述，并未伴随具体销量数据。",
+        "苹果没有说明交付延迟究竟有多少源于需求旺盛、多少与供应受限有关。此前有供应链报道指该机在量产爬坡阶段遇到挑战，包括组装良率以及可折叠屏幕和铰链部件供应等问题；这些情况尚未得到苹果确认，也意味着目前的长等待时间不能单独作为销量规模的证明。苹果以往在部分新品上市初期曾提前消化积压订单，但此次能否提前发货仍不确定。",
+        "苹果尚未确认10月23日正式发售时是否会有门店现货。官网提示用户可在10月24日再次查询门店取货库存，显示上市初期或会有少量库存供店内提货，但数量和具体地点仍未明确。",
+        "iPhone Duo提供256GB、512GB、1TB和2TB四种容量，美国售价从1999美元起，最高配置为3199美元。苹果称，公司正加紧供货；但在正式上市和更多库存信息公布前，仍有不少消费者可能需要等待数月。"
+      ]
+    ]
+  },
+  "cdad5bfb207abb340b5b96a5": {
+    "evidence": {
+      "article_id": "cdad5bfb207abb340b5b96a5",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "腾讯 WorkBuddy 已提前适配苹果首款折叠屏手机 iPhone Duo",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 15:12:49",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 15:12:49",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/17 15:12:49",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-17T07:12:49+00:00",
+      "raw_lead": "腾讯 WorkBuddy 宣布已提前适配 iPhone Duo，并公布六种适配打开方式，涵盖内屏分栏、跨 App 拖拽、帐篷模式等场景。##腾讯WorkBuddy## #iPhoneDuo#",
+      "source": "IT之家",
+      "title": "腾讯 WorkBuddy 已提前适配苹果首款折叠屏手机 iPhone Duo",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 17 日消息，腾讯 WorkBuddy 昨日宣布，已提前适配苹果 iPhone Duo 折叠屏手机，并公布 6 种打开方式。",
+          "unit_id": "92b476fc84fafe123aae5835"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "展开内屏：工作台一屏展开，手机体量，桌面级效率",
+          "unit_id": "7c7d6e53d6bcedfecb84f00d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "外屏单手：一句话派活，后台自动跑",
+          "unit_id": "e1a053b150640cc6987f038e"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "内屏分栏：左边跟 AI 聊需求，右边报告直接成稿",
+          "unit_id": "a3a96082f7fcbe01afb7dda0"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "跨 App 拖拽：资料直接拖进对话，AI 立刻接手",
+          "unit_id": "b3fb1f11e5ac4bfb62773d3c"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "半折悬停：上屏呈现下屏操控，边录边转不遗漏",
+          "unit_id": "be465d6e9f13a6f1cced4992"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "帐篷模式：桌面一支，解放双手看产出",
+          "unit_id": "d2336c58046d419e17454272"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "IT之家注意到，苹果首款折叠屏手机 iPhone Duo 于 10 月 16 日开启预购，国行定价 15999 元起。手机内屏规格为 7.6 英寸 1878 x 2670 分辨率 120Hz（采用屏下摄像头），外屏规格为 5.4 英寸 1398 x 2034 分辨率 120Hz，两块屏幕均支持全天候显示，以及最高 3000 尼特的户外峰值亮度。",
+          "unit_id": "f46cd3eb47fed102f2d582a1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "该机搭载 A20 Pro 处理器，拥有大尺寸 VC 均热板，号称相对 iPhone 17 Pro 持续性能提升 35%。软件方面，该机充分利用大屏空间，主屏幕上的程序坞采用竖向布局，控制项放在了方便拇指操作的位置。手机支持同时操作两个应用，支持半折叠使用，可秒变日历、闹钟、桌面音箱。",
+          "unit_id": "265275ead2db19d078d8c465"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/306.htm"
+    },
+    "recorded_extraction": [
+      "腾讯 WorkBuddy 已提前适配苹果首款折叠屏手机 iPhone Duo",
+      "腾讯 WorkBuddy 宣布已提前适配 iPhone Duo，并公布六种适配打开方式，涵盖内屏分栏、跨 App 拖拽、帐篷模式等场景。##腾讯WorkBuddy## #iPhoneDuo# IT之家 10 月 17 日消息，腾讯 WorkBuddy 昨日宣布，已提前适配苹果 iPhone Duo 折叠屏手机，并公布 6 种打开方式。 IT之家注意到，苹果首款折叠屏手机 iPhone Duo 于 10 月 16 日开启预购， 国行定价 15999 元起 。手机内屏规格为 7.6 英寸 1878 x 2670 分辨率 120Hz（采用屏下摄像头），外屏规格为 5.4 英寸 1398 x 2034 分辨率 120Hz，两块屏幕均支持全天候显示，以及最高 3000 尼特的户外峰值亮度。 该机搭载 A20 Pro 处理器，拥有大尺寸 VC 均热板，号称相对 iPhone 17 Pro 持续性能提升 35%。软件方面，该机充分利用大屏空间，主屏幕上的程序坞采用竖向布局，控制项放在了方便拇指操作的位置。手机支持同时操作两个应用，支持半折叠使用，可秒变日历、闹钟、桌面音箱。",
+      [
+        "IT之家 10 月 17 日消息，腾讯 WorkBuddy 昨日宣布，已提前适配苹果 iPhone Duo 折叠屏手机，并公布 6 种打开方式。",
+        "IT之家注意到，苹果首款折叠屏手机 iPhone Duo 于 10 月 16 日开启预购，国行定价 15999 元起。手机内屏规格为 7.6 英寸 1878 x 2670 分辨率 120Hz（采用屏下摄像头），外屏规格为 5.4 英寸 1398 x 2034 分辨率 120Hz，两块屏幕均支持全天候显示，以及最高 3000 尼特的户外峰值亮度。",
+        "该机搭载 A20 Pro 处理器，拥有大尺寸 VC 均热板，号称相对 iPhone 17 Pro 持续性能提升 35%。软件方面，该机充分利用大屏空间，主屏幕上的程序坞采用竖向布局，控制项放在了方便拇指操作的位置。手机支持同时操作两个应用，支持半折叠使用，可秒变日历、闹钟、桌面音箱。"
+      ]
+    ]
+  },
+  "a37042a1a6144a07e0cb555a": {
+    "evidence": {
+      "article_id": "a37042a1a6144a07e0cb555a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "古尔曼称苹果首款折叠 iPhone Duo 需求“空前”，首销线下恐难直接买下",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 10:38:06",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/17 10:38:06",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/17 10:38:06",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-17T02:38:06+00:00",
+      "raw_lead": "彭博社记者马克 · 古尔曼（Mark Gurman）今天（10 月 17 日）在 X 平台连续发文称，苹果明显是在供应量尚未充足的情况下“过早”推出首款折叠屏手机 iPhone Duo，目的可能是抢先将其推向市场。",
+      "source": "IT之家",
+      "title": "古尔曼称苹果首款折叠 iPhone Duo 需求“空前”，首销线下恐难直接买下",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 17 日消息，彭博社记者马克 · 古尔曼（Mark Gurman）今天（10 月 17 日）在 X 平台连续发文称，苹果明显是在供应量尚未充足的情况下“过早”推出首款折叠屏手机 iPhone Duo，目的可能是抢先将其推向市场。",
+          "unit_id": "d751fbd47d789b0372397254"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "古尔曼特别指出在苹果的官方声明中，重点强调“线上”渠道将继续接受订单，却未明确说明实体店的现货供应，推测 iPhone Duo 发售后，顾客可以到线下 Apple Store 体验该产品，但恐怕很难在首发日直接线下买到新机。IT之家附上相关截图如下：",
+          "unit_id": "3c67bd86db0c610690ef8dfd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "他还预计，部分门店在首发当天的展示样机数量，甚至可能超过可供出售的库存数量。此前彭博社报道称，在预购热潮之下，iPhone Duo 的部分订单交付时间已滑入 2027 年；苹果则回应称，这款首款可折叠 iPhone 的需求“空前高涨”，公司正努力尽快将其送到消费者手中。",
+          "unit_id": "601f624eba9e41a58e720f4c"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/247.htm"
+    },
+    "recorded_extraction": [
+      "古尔曼称苹果首款折叠 iPhone Duo 需求“空前”，首销线下恐难直接买下",
+      "彭博社记者马克 · 古尔曼（Mark Gurman）今天（10 月 17 日）在 X 平台连续发文称，苹果明显是在供应量尚未充足的情况下“过早”推出首款折叠屏手机 iPhone Duo，目的可能是抢先将其推向市场。 IT之家 10 月 17 日消息，彭博社记者马克 · 古尔曼（Mark Gurman）今天（10 月 17 日）在 X 平台连续发文称，苹果明显是在供应量尚未充足的情况下“过早”推出首款折叠屏手机 iPhone Duo ，目的可能是抢先将其推向市场。 古尔曼特别指出在苹果的官方声明中，重点强调“线上”渠道将继续接受订单，却未明确说明实体店的现货供应，推测 iPhone Duo 发售后， 顾客可以到线下 Apple Store 体验该产品，但恐怕很难在首发日直接线下买到新机。 IT之家附上相关截图如下： 他还预计，部分门店在首发当天的展示样机数量，甚至可能超过可供出售的库存数量。此前彭博社报道称，在预购热潮之下，iPhone Duo 的部分订单交付时间已滑入 2027 年；苹果则回应称， 这款首款可折叠 iPhone 的需求“空前高涨”，公司正努力尽快将其送到消费者手中。",
+      [
+        "IT之家 10 月 17 日消息，彭博社记者马克 · 古尔曼（Mark Gurman）今天（10 月 17 日）在 X 平台连续发文称，苹果明显是在供应量尚未充足的情况下“过早”推出首款折叠屏手机 iPhone Duo，目的可能是抢先将其推向市场。",
+        "他还预计，部分门店在首发当天的展示样机数量，甚至可能超过可供出售的库存数量。此前彭博社报道称，在预购热潮之下，iPhone Duo 的部分订单交付时间已滑入 2027 年；苹果则回应称，这款首款可折叠 iPhone 的需求“空前高涨”，公司正努力尽快将其送到消费者手中。"
+      ]
+    ]
+  },
+  "6cb87779debbe19417f62ee3": {
+    "evidence": {
+      "article_id": "6cb87779debbe19417f62ee3",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "WPS 官宣「抢鲜」适配 iPhone Duo，支持伴随式 AI 全新布局",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 7:36:49",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 7:36:49",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/18 7:36:49",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-17T23:36:49+00:00",
+      "raw_lead": "金山办公 WPS 官方微博宣布，WPS 已「抢鲜」适配 iPhone Duo。据介绍，WPS Office for iPhone Duo 支持横屏看表格视野更开阔、竖屏看文章长文更好读、伴随式 AI 全新布局等功能。#WPS##iPhone Duo##AI办公#",
+      "source": "IT之家",
+      "title": "WPS 官宣「抢鲜」适配 iPhone Duo，支持伴随式 AI 全新布局",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 18 日消息，金山办公 WPS 官方微博宣布，WPS 已「抢鲜」适配 iPhone Duo。官方宣称“手机新形态，办公也有新玩法”。",
+          "unit_id": "82cfd0212c6f64018bb411e4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据介绍，WPS Office for iPhone Duo 支持横屏看表格视野更开阔、竖屏看文章长文更好读、伴随式 AI 全新布局等特性和功能。",
+          "unit_id": "57e427de990fe13c48345901"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "IT之家注意到，苹果首款折叠屏手机 iPhone Duo 于 10 月 16 日开启预购，国行定价 15999 元起。手机内屏规格为 7.6 英寸 1878 x 2670 分辨率 120Hz（采用屏下摄像头），外屏规格为 5.4 英寸 1398 x 2034 分辨率 120Hz，两块屏幕均支持全天候显示，以及最高 3000 尼特的户外峰值亮度。",
+          "unit_id": "66b5cbed4d3ac7f6caacdae0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "该机搭载 A20 Pro 处理器，拥有大尺寸 VC 均热板，号称相对 iPhone 17 Pro 持续性能提升 35%。软件方面，该机充分利用大屏空间，主屏幕上的程序坞采用竖向布局，控制项放在了方便拇指操作的位置。手机支持同时操作两个应用，支持半折叠使用，可秒变日历、闹钟、桌面音箱。",
+          "unit_id": "e806f1d890ac16b3937748a9"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/421.htm"
+    },
+    "recorded_extraction": [
+      "WPS 官宣「抢鲜」适配 iPhone Duo，支持伴随式 AI 全新布局",
+      "金山办公 WPS 官方微博宣布，WPS 已「抢鲜」适配 iPhone Duo。据介绍，WPS Office for iPhone Duo 支持横屏看表格视野更开阔、竖屏看文章长文更好读、伴随式 AI 全新布局等功能。#WPS##iPhone Duo##AI办公# IT之家 10 月 18 日消息，金山办公 WPS 官方微博宣布， WPS 已「抢鲜」适配 iPhone Duo 。官方宣称“手机新形态，办公也有新玩法”。 据介绍，WPS Office for iPhone Duo 支持横屏看表格视野更开阔、竖屏看文章长文更好读、伴随式 AI 全新布局等特性和功能。 IT之家注意到，苹果首款折叠屏手机 iPhone Duo 于 10 月 16 日开启预购，国行定价 15999 元起。手机内屏规格为 7.6 英寸 1878 x 2670 分辨率 120Hz（采用屏下摄像头），外屏规格为 5.4 英寸 1398 x 2034 分辨率 120Hz，两块屏幕均支持全天候显示，以及最高 3000 尼特的户外峰值亮度。 该机搭载 A20 Pro 处理器，拥有大尺寸 VC 均热板，号称相对 iPhone 17 Pro 持续性能提升 35%。软件方面，该机充分利用大屏空间，主屏幕上的程序坞采用竖向布局，控制项放在了方便拇指操作的位置。手机支持同时操作两个应用，支持半折叠使用，可秒变日历、闹钟、桌面音箱。",
+      [
+        "IT之家 10 月 18 日消息，金山办公 WPS 官方微博宣布，WPS 已「抢鲜」适配 iPhone Duo。官方宣称“手机新形态，办公也有新玩法”。",
+        "据介绍，WPS Office for iPhone Duo 支持横屏看表格视野更开阔、竖屏看文章长文更好读、伴随式 AI 全新布局等特性和功能。",
+        "IT之家注意到，苹果首款折叠屏手机 iPhone Duo 于 10 月 16 日开启预购，国行定价 15999 元起。手机内屏规格为 7.6 英寸 1878 x 2670 分辨率 120Hz（采用屏下摄像头），外屏规格为 5.4 英寸 1398 x 2034 分辨率 120Hz，两块屏幕均支持全天候显示，以及最高 3000 尼特的户外峰值亮度。",
+        "该机搭载 A20 Pro 处理器，拥有大尺寸 VC 均热板，号称相对 iPhone 17 Pro 持续性能提升 35%。软件方面，该机充分利用大屏空间，主屏幕上的程序坞采用竖向布局，控制项放在了方便拇指操作的位置。手机支持同时操作两个应用，支持半折叠使用，可秒变日历、闹钟、桌面音箱。"
+      ]
+    ]
+  },
+  "d10bc9862e6352e346faa017": {
+    "evidence": {
+      "article_id": "d10bc9862e6352e346faa017",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "刷新记录！iPhone 18 Pro Max国内单周激活量近90万：全系销量超400万",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17 13:55:13.637",
+          "source": "source publication metadata"
+        }
+      ],
+      "published_raw": "2026-10-17 13:55:13.637",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-17T05:55:13.637000+00:00",
+      "raw_lead": "快科技10月17日消息，据博主数码闲聊站透露，iPhone 18 Pro Max再度刷新纪录，在2026年第41周（10月5日至10月11日）单周单品国内激活接近90万台。此外，iPhone 18 Pro系列双杯累计销量目前已经",
+      "source": "快科技",
+      "title": "刷新记录！iPhone 18 Pro Max国内单周激活量近90万：全系销量超400万",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月17日消息，据博主数码闲聊站透露，iPhone 18 Pro Max再度刷新纪录，在2026年第41周（10月5日至10月11日）单周单品国内激活接近90万台。",
+          "unit_id": "722ed78ed1a285ec6f0c9a2a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "此外，iPhone 18 Pro系列双杯累计销量目前已经超过400万台。",
+          "unit_id": "7f1e503be68408b6b82e0086"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "从产品结构来看，大屏、大内存配置的iPhone 18 Pro Max占据绝对主力，出货量占比超过全系列总量的50%，消费者选择顶配版本的意愿强于往年新品发布周期。",
+          "unit_id": "d44a8651e4bb0551906a6ba4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "根据安兔兔公布的9月iOS设备好评TOP10榜单，iPhone 18 Pro Max好评率99.02%，直接拿下榜单第1名，也是里面唯一突破99%的设备，优势非常明显，说明新机的综合体验得到首批用户认可。",
+          "unit_id": "b154c87943f84fda76271598"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "另外，近期发布的安卓旗舰机型因关键零部件成本上升普遍提价，万元价位段内安卓顶配与iPhone Pro系列的价格差距明显收窄，客观上强化了苹果高端机型的价值感知。",
+          "unit_id": "600bfbd292347988d31b9a3d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "相当一部分原本倾向安卓顶配的用户转向新款iPhone，叠加高端消费群体对价格变动敏感度较低，共同支撑了持续激活量。",
+          "unit_id": "042848e9f5744d85070879ac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "值得注意的是，iPhone 18 Pro系列近期还参与了双11促销活动，全系可销售最高800元的综合补贴优惠，入手价格明显降低，会进一步激发销量。",
+          "unit_id": "ee28d763e88e2e6b530120f3"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158245.htm"
+    },
+    "recorded_extraction": [
+      "刷新记录！iPhone 18 Pro Max国内单周激活量近90万：全系销量超400万",
+      "快科技10月17日消息，据博主数码闲聊站透露，iPhone 18 Pro Max再度刷新纪录，在2026年第41周（10月5日至10月11日）单周单品国内激活接近90万台。此外，iPhone 18 Pro系列双杯累计销量目前已经 快科技10月17日消息，据博主数码闲聊站透露，iPhone 18 Pro Max再度刷新纪录，在2026年第41周（10月5日至10月11日）单周单品国内激活接近90万台。 从产品结构来看，大屏、大内存配置的iPhone 18 Pro Max占据绝对主力，出货量占比超过全系列总量的50%，消费者选择顶配版本的意愿强于往年新品发布周期。 根据安兔兔公布的9月iOS设备好评TOP10榜单，iPhone 18 Pro Max好评率99.02%，直接拿下榜单第1名， 也是里面唯一突破99%的设备，优势非常明显，说明新机的综合体验得到首批用户认可。 另外，近期发布的安卓旗舰机型因关键零部件成本上升普遍提价，万元价位段内安卓顶配与iPhone Pro系列的价格差距明显收窄，客观上强化了苹果高端机型的价值感知。",
+      [
+        "快科技10月17日消息，据博主数码闲聊站透露，iPhone 18 Pro Max再度刷新纪录，在2026年第41周（10月5日至10月11日）单周单品国内激活接近90万台。",
+        "此外，iPhone 18 Pro系列双杯累计销量目前已经超过400万台。",
+        "从产品结构来看，大屏、大内存配置的iPhone 18 Pro Max占据绝对主力，出货量占比超过全系列总量的50%，消费者选择顶配版本的意愿强于往年新品发布周期。",
+        "根据安兔兔公布的9月iOS设备好评TOP10榜单，iPhone 18 Pro Max好评率99.02%，直接拿下榜单第1名，也是里面唯一突破99%的设备，优势非常明显，说明新机的综合体验得到首批用户认可。",
+        "值得注意的是，iPhone 18 Pro系列近期还参与了双11促销活动，全系可销售最高800元的综合补贴优惠，入手价格明显降低，会进一步激发销量。"
+      ]
+    ]
+  },
+  "a69bb1833b1f75f8c7165951": {
+    "evidence": {
+      "article_id": "a69bb1833b1f75f8c7165951",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "库克又来中国了！卸任CEO后首访：最触动他的竟是中国人对的AI热情",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17 15:44:30.917",
+          "source": "source publication metadata"
+        }
+      ],
+      "published_raw": "2026-10-17 15:44:30.917",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-17T07:44:30.917000+00:00",
+      "raw_lead": "快科技10月16日消息，近日，全球财富管理论坛·2026上海苏河湾大会在上海展览中心举行。美国苹果公司执行董事长、清华大学经管学院顾问委员会主席蒂姆·库克与全球财富管理论坛执委",
+      "source": "快科技",
+      "title": "库克又来中国了！卸任CEO后首访：最触动他的竟是中国人对的AI热情",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月16日消息，近日，全球财富管理论坛·2026上海苏河湾大会在上海展览中心举行。美国苹果公司执行董事长、清华大学经管学院顾问委员会主席蒂姆·库克与全球财富管理论坛执委会主席、清华大学经管学院院长白重恩进行了一场国际对话，话题聚焦“直面人类与AI共处的新世界”。",
+          "unit_id": "eeeb065085e03d387103ac87"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "库克在对话中表示，这次中国之行让他真切感受到了中国的活力与蓬勃的生机。在他看来，这里的人们对于未来的乐观情绪正处于前所未有的高点。他注意到，几乎所有人都在积极拥抱AI，不仅仅是计算机科学家这样的专业人士，而是每一个普通人都在投身其中，这种普遍的乐观精神让他深受触动。",
+          "unit_id": "b75a7210406d74ab103569b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "白重恩围绕“AI+人类背景下的世界”主题提问，在全球变革时刻，人工智能方法如何反映“将科技融入人性”的哲学。库克回应表示，技术应该服务于人类，而不是相反。他还谈到，AI正在降低创造门槛，应用开发将迎来更多机会。",
+          "unit_id": "b11d80462bb80a7aca1bd48c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "这是库克卸任苹果CEO后的首次访华。今年9月1日，库克正式卸任苹果CEO，结束15年任职期，由约翰·特努斯接任，库克转任执行董事长。此次访华是他以新身份的首次中国之行，行程覆盖广东、北京、上海三地。",
+          "unit_id": "7e49af7698adbb3785e000aa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "10月10日，库克首站抵达广州，现身广州兰圃探班青年导演古天鸡与咏春拳传承人戴子龙的拍摄现场，体验使用iPhone 18 Pro拍摄的咏春短片制作。库克在社交平台发文称，第一次透过iPhone 18 Pro镜头感受咏春的魅力，真是难忘的体验。此后库克前往北京，出席清华大学经济管理学院顾问委员会2026年会议，并会见国务院副总理何立峰。10月16日至17日，库克转赴上海出席苏河湾大会。",
+          "unit_id": "06ed64f30554cfb574c23f6a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "库克在对话中提到，自己经常来中国，已经快30年了，第一次还是1997年，当时就非常喜欢中国人民和中国文化，每次来都能学到新的东西。从2011年8月接任CEO到2026年9月卸任，15年间库克访华约20次，平均每年一到两次，是来华次数最多的美国大型科技企业CEO之一。",
+          "unit_id": "a6580f8898dde18d86338d3b"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158256.htm"
+    },
+    "recorded_extraction": [
+      "库克又来中国了！卸任CEO后首访：最触动他的竟是中国人对的AI热情",
+      "快科技10月16日消息，近日，全球财富管理论坛·2026上海苏河湾大会在上海展览中心举行。美国苹果公司执行董事长、清华大学经管学院顾问委员会主席蒂姆·库克与全球财富管理论坛执委 快科技10月16日消息，近日，全球财富管理论坛·2026上海苏河湾大会在上海展览中心举行。美国苹果公司执行董事长、清华大学经管学院顾问委员会主席蒂姆·库克与全球财富管理论坛执委会主席、清华大学经管学院院长白重恩进行了一场国际对话，话题聚焦“直面人类与AI共处的新世界”。 库克在对话中表示，这次中国之行让他真切感受到了中国的活力与蓬勃的生机。在他看来，这里的人们对于未来的乐观情绪正处于前所未有的高点。 他注意到，几乎所有人都在积极拥抱AI，不仅仅是计算机科学家这样的专业人士，而是每一个普通人都在投身其中，这种普遍的乐观精神让他深受触动。 白重恩围绕“AI+人类背景下的世界”主题提问，在全球变革时刻，人工智能方法如何反映“将科技融入人性”的哲学。 库克回应表示，技术应该服务于人类，而不是相反。他还谈到，AI正在降低创造门槛，应用开发将迎来更多机会。 这是库克卸任苹果CEO后的首次访华。今年9月1日，库克正式卸任苹果CEO，结束15年任职期，由约翰·特努斯接任，库克转任执行董事长。此次访华是他以新身份的首次中国之行，行程覆盖广东、北京、上海三地。",
+      [
+        "快科技10月16日消息，近日，全球财富管理论坛·2026上海苏河湾大会在上海展览中心举行。美国苹果公司执行董事长、清华大学经管学院顾问委员会主席蒂姆·库克与全球财富管理论坛执委会主席、清华大学经管学院院长白重恩进行了一场国际对话，话题聚焦“直面人类与AI共处的新世界”。",
+        "这是库克卸任苹果CEO后的首次访华。今年9月1日，库克正式卸任苹果CEO，结束15年任职期，由约翰·特努斯接任，库克转任执行董事长。此次访华是他以新身份的首次中国之行，行程覆盖广东、北京、上海三地。",
+        "10月10日，库克首站抵达广州，现身广州兰圃探班青年导演古天鸡与咏春拳传承人戴子龙的拍摄现场，体验使用iPhone 18 Pro拍摄的咏春短片制作。库克在社交平台发文称，第一次透过iPhone 18 Pro镜头感受咏春的魅力，真是难忘的体验。此后库克前往北京，出席清华大学经济管理学院顾问委员会2026年会议，并会见国务院副总理何立峰。10月16日至17日，库克转赴上海出席苏河湾大会。",
+        "库克在对话中提到，自己经常来中国，已经快30年了，第一次还是1997年，当时就非常喜欢中国人民和中国文化，每次来都能学到新的东西。从2011年8月接任CEO到2026年9月卸任，15年间库克访华约20次，平均每年一到两次，是来华次数最多的美国大型科技企业CEO之一。"
+      ]
+    ]
+  },
+  "4f19a23fcf1f3506b6260d7f": {
+    "evidence": {
+      "article_id": "4f19a23fcf1f3506b6260d7f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "599元！iPhone Duo保护壳用胶固定 博主：没想到苹果这么敷衍",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-17 19:37:19.000",
+          "source": "source publication metadata"
+        }
+      ],
+      "published_raw": "2026-10-17 19:37:19.000",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-17T11:37:19+00:00",
+      "raw_lead": "快科技10月17日消息，苹果为iPhone Duo打造了一款保护壳，定价为599元。据媒体报道，这款保护壳并未采用常规的卡扣或磁吸方式固定，而是使用胶条进行固定。曝光的图片显示，iPhone Duo保护壳上",
+      "source": "快科技",
+      "title": "599元！iPhone Duo保护壳用胶固定 博主：没想到苹果这么敷衍",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月17日消息，苹果为iPhone Duo打造了一款保护壳，定价为599元。据媒体报道，这款保护壳并未采用常规的卡扣或磁吸方式固定，而是使用胶条进行固定。",
+          "unit_id": "b6601cb073d048022b51687e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "曝光的图片显示，iPhone Duo保护壳上的胶条是一次性的。用户下一次想换壳或者换手机时，胶条便不再具备粘性，可能需要重新购买保护壳，这样的设计也让不少用户感到意外。",
+          "unit_id": "2f300e6a5b0bf2594ab9244d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "该消息一出便引发热议。有博主认为，苹果这么做多少有些敷衍，599元的保护壳不值这个价。毕竟在这一价位上，消费者通常会对配件的重复使用性和安装体验有更高期待。",
+          "unit_id": "f4d02247ea7838f17fc7d90f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "目前，这款保护壳已经上市开卖，提供海军蓝色和沙砾色两种颜色，不过，iPhone Duo手机本身还未开售。",
+          "unit_id": "11a2d06c4a466944a8ff0cf1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "该机将在10月23日首销，由于供不应求，iPhone Duo的发货时间已经排到明年1月份，首发阶段的供需矛盾依然突出。",
+          "unit_id": "f627c7c09776f890459afbfa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在硬件配置上，这款新机采用内折方案。展开后的屏幕尺寸为7.6英寸，外屏尺寸为5.4英寸。核心搭载A20 Pro芯片，整机重量为254克，配备4800万像素双摄，仅支持eSIM网络。",
+          "unit_id": "7cfd3c42391becd8f2725f13"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "存储方面共提供四种版本，其中256GB售价15999元，顶配2TB版本定价26499元，仅提供夜空色和星光白两款配色。受制造工艺制约，iPhone Duo整机良率偏低，这也使得黄牛渠道溢价销售的情况较为明显。",
+          "unit_id": "e3df0cf0d82c9a1e273c4d75"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "一位消费者表示，现在加价三五千，等于给黄牛打工。按往年规律，最多等一两个月，价格和品控都会更稳。分析师也预判，双11前后溢价会明显回落，两三个月后首发尝鲜需求基本消化完毕。对于不急于首发的用户来说，观望一段时间或许是更理性的选择。",
+          "unit_id": "6b0e52ffa6516eecce0ffa9b"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158289.htm"
+    },
+    "recorded_extraction": [
+      "599元！iPhone Duo保护壳用胶固定 博主：没想到苹果这么敷衍",
+      "快科技10月17日消息，苹果为iPhone Duo打造了一款保护壳，定价为599元。据媒体报道，这款保护壳并未采用常规的卡扣或磁吸方式固定，而是使用胶条进行固定。曝光的图片显示，iPhone Duo保护壳上 快科技10月17日消息， 苹果为iPhone Duo打造了一款保护壳，定价为599元。据媒体报道，这款保护壳并未采用常规的卡扣或磁吸方式固定，而是使用胶条进行固定。 曝光的图片显示，iPhone Duo保护壳上的胶条是一次性的。用户下一次想换壳或者换手机时，胶条便不再具备粘性，可能需要重新购买保护壳， 这样的设计也让不少用户感到意外。 该消息一出便引发热议。有博主认为，苹果这么做多少有些敷衍，599元的保护壳不值这个价。毕竟在这一价位上，消费者通常会对配件的重复使用性和安装体验有更高期待。 在硬件配置上，这款新机采用内折方案。展开后的屏幕尺寸为7.6英寸，外屏尺寸为5.4英寸。核心搭载A20 Pro芯片，整机重量为254克，配备4800万像素双摄，仅支持eSIM网络。",
+      [
+        "快科技10月17日消息，苹果为iPhone Duo打造了一款保护壳，定价为599元。据媒体报道，这款保护壳并未采用常规的卡扣或磁吸方式固定，而是使用胶条进行固定。",
+        "该消息一出便引发热议。有博主认为，苹果这么做多少有些敷衍，599元的保护壳不值这个价。毕竟在这一价位上，消费者通常会对配件的重复使用性和安装体验有更高期待。",
+        "该机将在10月23日首销，由于供不应求，iPhone Duo的发货时间已经排到明年1月份，首发阶段的供需矛盾依然突出。",
+        "在硬件配置上，这款新机采用内折方案。展开后的屏幕尺寸为7.6英寸，外屏尺寸为5.4英寸。核心搭载A20 Pro芯片，整机重量为254克，配备4800万像素双摄，仅支持eSIM网络。",
+        "存储方面共提供四种版本，其中256GB售价15999元，顶配2TB版本定价26499元，仅提供夜空色和星光白两款配色。受制造工艺制约，iPhone Duo整机良率偏低，这也使得黄牛渠道溢价销售的情况较为明显。",
+        "一位消费者表示，现在加价三五千，等于给黄牛打工。按往年规律，最多等一两个月，价格和品控都会更稳。分析师也预判，双11前后溢价会明显回落，两三个月后首发尝鲜需求基本消化完毕。对于不急于首发的用户来说，观望一段时间或许是更理性的选择。"
+      ]
+    ]
+  }
+}

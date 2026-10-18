@@ -12,12 +12,14 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.1.2 - 2026-10-17
+### 2.1.3 - 2026-10-18
 
-- Improved market-result relevance by sharing source-bound observation, forecast, historical and denial qualifiers, including qualifiers before the vendor name; forecasts no longer become observed Apple results through grouping keys.
-- Improved grouping by separating forecast and observed market results while preserving independently eligible forecasts and their source attribution.
-- Improved local ownership across contrast clauses, causal asides and pronoun continuations; retained ranking context and comma-separated numeric values without borrowing another subject's measurements.
-- Updated market policy and added six regression tests for observation roles, local ownership and forecast boundaries; the full offline suite passes 2,698 tests with existing assertions preserved.
+- Improved preorder grouping for internal walk-in instructions and attributed stock forecasts while keeping Apple's demand statements, delivery observations, production reports and resale measurements tied to their own actions.
+- Unified weekly device-sales identity in one source-bound implementation; normalized device names, quantities and week notation while preserving region, reporting period, cumulative versus weekly scope, forecast stage and separate reports.
+- Improved carrier pricing ownership for provider-specific currencies, monthly charges and plan-based free access without borrowing another carrier's background price.
+- Improved first-party accessory construction and local operating-condition coverage in mixed articles; kept third-party app adaptations, accessory-tool withdrawals and personal deployment tutorials from becoming Apple announcements.
+- Improved company-event classification for current executive appearances and legal appointments, preventing biographical leadership changes or litigation background from overriding the reported action.
+- Updated the reporting policy and added 17 regression tests; the full offline suite passes 2,715 tests with existing assertions preserved.
 - Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
