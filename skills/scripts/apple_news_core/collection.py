@@ -1,6 +1,7 @@
 """Collection transport, cache, and detail recall; no final event decisions."""
 from __future__ import annotations
 from dataclasses import replace
+from functools import lru_cache
 import html
 import concurrent.futures
 from html.parser import HTMLParser
@@ -11,6 +12,7 @@ from contextlib import contextmanager
 import json
 import re
 import shutil
+import ssl
 import time
 import urllib.parse
 import xml.etree.ElementTree as ET
@@ -387,6 +389,12 @@ def source_article_url_allowed(url: str, source: Source) -> bool:
     if is_navigation_url(url, source):
         return False
     parts = urllib.parse.urlsplit(url)
+    if source.name == "AppleInsider":
+        # Product hubs and price catalogues are navigation; nested reviews and
+        # tips remain article candidates regardless of their eventual tier.
+        if parts.hostname == 'prices.appleinsider.com' or _compiled_rule(
+                r'/inside(?:/[^/]+(?:/(?:videos|reviews|best|vs))?)?/?$', re.I).fullmatch(parts.path):
+            return False
     if source.name != "Apple Newsroom":
         return True
     return (
@@ -620,6 +628,14 @@ def decode_response(raw: bytes, content_type: str | None) -> str:
     return raw.decode("utf-8", errors="replace")
 
 
+@lru_cache(maxsize=1)
+def _https_context() -> ssl.SSLContext:
+    """Declare urllib's HTTP protocol consistently across Python versions."""
+    context = ssl.create_default_context()
+    context.set_alpn_protocols(["http/1.1"])
+    return context
+
+
 def fetch_url(
     url: str,
     cache_dir: Path,
@@ -639,7 +655,7 @@ def fetch_url(
         try:
             req = urllib.request.Request(url, headers={"User-Agent": settings.user_agent},
                 data=b'' if method == 'POST' else None, method=method)
-            with urllib.request.urlopen(req, timeout=timeout) as response:
+            with urllib.request.urlopen(req, timeout=timeout, context=_https_context()) as response:
                 raw = response.read(settings.max_response_bytes)
                 text = decode_response(raw, response.headers.get("content-type"))
                 payload = {

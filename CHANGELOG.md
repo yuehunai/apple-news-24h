@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.1.4 - 2026-10-19
+
+- Improved HTTPS compatibility by explicitly negotiating HTTP/1.1 with certificate verification intact; excluded AppleInsider product hubs and price catalogues from article budgets while retaining nested review and tips articles.
+- Improved resale grouping around the reported participant, order batch and locally attributed totals or deposits; kept independent quotations, buying and selling sides, costs, completed sales and forecasts distinct.
+- Improved quote continuation across adjacent source paragraphs and reconciliation of complete republications across different paragraph layouts, preserving sample, delivery and configuration conditions instead of merging on shared prices.
+- Improved source-bound coverage of platform support matrices, first-party app capabilities and official accessory construction, preserving version, device and operating restrictions while leaving commentary and background outside independent claims.
+- Improved device-provisioning and release-plan boundaries using local model, region, activation and date-role evidence; kept configuration background from overriding other actions, model generations from matching as typos, and explicit denials distinct from affirmative reports.
+- Updated the skill to require independent eligibility before turning a review fragment into a separate item; cited earlier reporting may support an existing action without becoming a new current report.
+- Added regression coverage for source discovery, verified HTTPS transport, resale ownership and republication, capability conditions, action boundaries and source attribution, preserving existing assertions.
+- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.1.3 - 2026-10-18
 
 - Improved preorder grouping for internal walk-in instructions and attributed stock forecasts while keeping Apple's demand statements, delivery observations, production reports and resale measurements tied to their own actions.

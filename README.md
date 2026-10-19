@@ -12,14 +12,15 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.1.3 - 2026-10-18
+### 2.1.4 - 2026-10-19
 
-- Improved preorder grouping for internal walk-in instructions and attributed stock forecasts while keeping Apple's demand statements, delivery observations, production reports and resale measurements tied to their own actions.
-- Unified weekly device-sales identity in one source-bound implementation; normalized device names, quantities and week notation while preserving region, reporting period, cumulative versus weekly scope, forecast stage and separate reports.
-- Improved carrier pricing ownership for provider-specific currencies, monthly charges and plan-based free access without borrowing another carrier's background price.
-- Improved first-party accessory construction and local operating-condition coverage in mixed articles; kept third-party app adaptations, accessory-tool withdrawals and personal deployment tutorials from becoming Apple announcements.
-- Improved company-event classification for current executive appearances and legal appointments, preventing biographical leadership changes or litigation background from overriding the reported action.
-- Updated the reporting policy and added 17 regression tests; the full offline suite passes 2,715 tests with existing assertions preserved.
+- Improved HTTPS compatibility by explicitly negotiating HTTP/1.1 with certificate verification intact; excluded AppleInsider product hubs and price catalogues from article budgets while retaining nested review and tips articles.
+- Improved resale grouping around the reported participant, order batch and locally attributed totals or deposits; kept independent quotations, buying and selling sides, costs, completed sales and forecasts distinct.
+- Improved quote continuation across adjacent source paragraphs and reconciliation of complete republications across different paragraph layouts, preserving sample, delivery and configuration conditions instead of merging on shared prices.
+- Improved source-bound coverage of platform support matrices, first-party app capabilities and official accessory construction, preserving version, device and operating restrictions while leaving commentary and background outside independent claims.
+- Improved device-provisioning and release-plan boundaries using local model, region, activation and date-role evidence; kept configuration background from overriding other actions, model generations from matching as typos, and explicit denials distinct from affirmative reports.
+- Updated the skill to require independent eligibility before turning a review fragment into a separate item; cited earlier reporting may support an existing action without becoming a new current report.
+- Added regression coverage for source discovery, verified HTTPS transport, resale ownership and republication, capability conditions, action boundaries and source attribution, preserving existing assertions.
 - Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does

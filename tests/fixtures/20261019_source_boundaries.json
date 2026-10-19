@@ -1,0 +1,3711 @@
+{
+  "05fc730cc4ec514728753974": {
+    "evidence": {
+      "article_id": "05fc730cc4ec514728753974",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 18 日消息，安全公司趋势科技发文，透露随着苹果 iPhone Duo 预购火热，目前市面上出现多个山寨苹果网站，这些网站打着所谓“限量抢先购”话术吸引消费者点击，以此进行钓鱼攻击。 IT之家参考通报获悉，相应网站会先识别访客使用的系统版本，如果发现用户设备系统存在已知安全漏洞，就可能进一步利用漏洞发动攻击。这意味着即使用户只是点击进入网站，没有输入任何信息、下载运行任何脚本，也有可能导致用户设备遭到黑客控制。 对此，该公司建议用户通过苹果官网或可信赖的销售渠道购买产品，同时及时更新手机操作系统和 App，降低遭遇网络诈骗及漏洞攻击的风险。 山寨网站以 \" 限量抢先购 \" 吸引用户，访客设备若有安全漏洞，不点链接不输信息也可能被黑客控制。专家建议从正规渠道购买并及时更新系统。#网络安全# #苹果#",
+      "discovery_title": "安全公司趋势科技：警惕山寨苹果 iPhone Duo 预购网站，暗藏黑客钓鱼攻击风险",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 22:05:49",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 22:05:49",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 14:05:49 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/18 22:05:49",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T14:05:49+00:00",
+      "raw_lead": "山寨网站以 限量抢先购 吸引用户，访客设备若有安全漏洞，不点链接不输信息也可能被黑客控制。专家建议从正规渠道购买并及时更新系统。#网络安全# #苹果#",
+      "source": "IT之家",
+      "title": "安全公司趋势科技：警惕山寨苹果 iPhone Duo 预购网站，暗藏黑客钓鱼攻击风险",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 18 日消息，安全公司趋势科技发文，透露随着苹果 iPhone Duo 预购火热，目前市面上出现多个山寨苹果网站，这些网站打着所谓“限量抢先购”话术吸引消费者点击，以此进行钓鱼攻击。",
+          "unit_id": "0fc3373da2ef148d47412b98"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家参考通报获悉，相应网站会先识别访客使用的系统版本，如果发现用户设备系统存在已知安全漏洞，就可能进一步利用漏洞发动攻击。这意味着即使用户只是点击进入网站，没有输入任何信息、下载运行任何脚本，也有可能导致用户设备遭到黑客控制。",
+          "unit_id": "b13d62eb025f97893b7fadc2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "对此，该公司建议用户通过苹果官网或可信赖的销售渠道购买产品，同时及时更新手机操作系统和 App，降低遭遇网络诈骗及漏洞攻击的风险。",
+          "unit_id": "d53a5baf386180ed038d2098"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/599.htm"
+    },
+    "recorded_extraction": [
+      "安全公司趋势科技：警惕山寨苹果 iPhone Duo 预购网站，暗藏黑客钓鱼攻击风险",
+      "山寨网站以 限量抢先购 吸引用户，访客设备若有安全漏洞，不点链接不输信息也可能被黑客控制。专家建议从正规渠道购买并及时更新系统。#网络安全# #苹果# IT之家 10 月 18 日消息，安全公司趋势科技发文，透露随着苹果 iPhone Duo 预购火热，目前市面上出现多个山寨苹果网站，这些网站打着所谓“限量抢先购”话术吸引消费者点击，以此进行钓鱼攻击。 IT之家参考通报获悉，相应网站会先识别访客使用的系统版本，如果发现用户设备系统存在已知安全漏洞，就可能进一步利用漏洞发动攻击。这意味着即使用户只是点击进入网站，没有输入任何信息、下载运行任何脚本，也有可能导致用户设备遭到黑客控制。 对此，该公司建议用户通过苹果官网或可信赖的销售渠道购买产品，同时及时更新手机操作系统和 App，降低遭遇网络诈骗及漏洞攻击的风险。",
+      [
+        "IT之家 10 月 18 日消息，安全公司趋势科技发文，透露随着苹果 iPhone Duo 预购火热，目前市面上出现多个山寨苹果网站，这些网站打着所谓“限量抢先购”话术吸引消费者点击，以此进行钓鱼攻击。"
+      ]
+    ]
+  },
+  "0bcdafd2201e1b4537d753d4": {
+    "evidence": {
+      "article_id": "0bcdafd2201e1b4537d753d4",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "华为鸿蒙星河互联 AirPods 适配型号公布，覆盖初代至 Max 等主流机型",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 14:05:31",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 14:05:31",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/18 14:05:31",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T06:05:31+00:00",
+      "raw_lead": "华为官网现公布了鸿蒙星河互联 AirPods 适配机型。据介绍，当前支持与 AirPods 4、AirPods Pro 3、AirPods 3、AirPods Pro 2、AirPods 2、AirPods Pro 1、AirPods 1、AirPods Max、AirPods 5 等主流型号 AirPods 进行互联。#华为鸿蒙星河互联# #AirPods#",
+      "source": "IT之家",
+      "title": "华为鸿蒙星河互联 AirPods 适配型号公布，覆盖初代至 Max 等主流机型",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 18 日消息，在今年 9 月 7 日的 HarmonyOS 7 | HUAWEI Mate XT 2 及全场景新品发布会上，华为终端 BG CEO 何刚宣布，华为鸿蒙星河互联升级，支持连接苹果 AirPods 无线耳机。",
+          "unit_id": "bf261d876880460ecc84748d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家注意到，华为官网现公布了鸿蒙星河互联 AirPods 适配机型。据介绍，当前支持与 AirPods 4、AirPods Pro 3、AirPods 3、AirPods Pro 2、AirPods 2、AirPods Pro 1、AirPods 1、AirPods Max、AirPods 5 等主流型号 AirPods 进行互联。",
+          "unit_id": "dca859ddcd2f14924e663082"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "华为手机升级 HarmonyOS 7.0 及以上版本与 AirPods 连接后，可实现 AirPods 连接提醒及电量显示功能，具体如下：",
+          "unit_id": "ac7fac363e046a56b619afbf"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "连接提醒",
+          "unit_id": "26e73b17f606dbb4758f4df0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "华为手机与 AirPods 首次配对成功后，后续 AirPods 每次开盖再次连接时，华为手机都会通过实况窗自动弹出连接提醒。",
+          "unit_id": "743ec91ace0bb7706c39187c"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "电量显示",
+          "unit_id": "8d93642a4e9e5fc014bf1792"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "日常使用中，华为手机与 AirPods 连接后，可通过状态栏的“蓝牙”图标，或负一屏的“设备电量”卡片查看 AirPods 剩余电量。负一屏“设备电量”卡片 Airpods 电量显示规则如下：",
+          "unit_id": "fe0be5e69056c0b13cfc06b0"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "双耳佩戴（耳机盒关盖）：显示左、右耳电量。",
+          "unit_id": "a8b939a85db13da07fabe4ef"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "单耳佩戴（耳机盒关盖）：仅显示当前佩戴的单耳电量。",
+          "unit_id": "1c17fd6afd12965742b7eb53"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "耳机入盒（耳机盒开盖）：显示左耳、右耳及耳机盒的电量。",
+          "unit_id": "15c542d032bcb46eb5ff1c3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "需要注意的是，华为手机升级至 HarmonyOS 7.0 及以上版本后连接 AirPods，支持使用新功能。其它华为设备（如平板、PC）仅支持普通的蓝牙耳机功能。",
+          "unit_id": "21b7d257ce7820cdc02a9262"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "另外，AirPods 当前不支持与苹果之外的设备进行自动回连。用户需要进入华为手机设置 > 星闪和蓝牙（或蓝牙），在已配对设备列表中点击对应 AirPods 名称进行手动连接。",
+          "unit_id": "45fda33c5fe2aae86c35a86a"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/489.htm"
+    },
+    "recorded_extraction": [
+      "华为鸿蒙星河互联 AirPods 适配型号公布，覆盖初代至 Max 等主流机型",
+      "华为官网现公布了鸿蒙星河互联 AirPods 适配机型。据介绍，当前支持与 AirPods 4、AirPods Pro 3、AirPods 3、AirPods Pro 2、AirPods 2、AirPods Pro 1、AirPods 1、AirPods Max、AirPods 5 等主流型号 AirPods 进行互联。#华为鸿蒙星河互联# #AirPods# IT之家 10 月 18 日消息，在今年 9 月 7 日的 HarmonyOS 7 | HUAWEI Mate XT 2 及全场景新品发布会上，华为终端 BG CEO 何刚宣布，华为 鸿蒙 星河互联升级，支持连接苹果 AirPods 无线耳机。 IT之家注意到，华为官网现公布了鸿蒙星河互联 AirPods 适配机型。据介绍，当前支持与 AirPods 4、AirPods Pro 3、AirPods 3、AirPods Pro 2、AirPods 2、AirPods Pro 1、AirPods 1、AirPods Max、AirPods 5 等主流型号 AirPods 进行互联。 华为手机升级 HarmonyOS 7.0 及以上版本与 AirPods 连接后， 可实现 AirPods 连接提醒及电量显示功能 ，具体如下： 华为手机与 AirPods 首次配对成功后，后续 AirPods 每次开盖再次连接时，华为手机都会通过实况窗自动弹出连接提醒。",
+      [
+        "IT之家 10 月 18 日消息，在今年 9 月 7 日的 HarmonyOS 7 | HUAWEI Mate XT 2 及全场景新品发布会上，华为终端 BG CEO 何刚宣布，华为鸿蒙星河互联升级，支持连接苹果 AirPods 无线耳机。",
+        "IT之家注意到，华为官网现公布了鸿蒙星河互联 AirPods 适配机型。据介绍，当前支持与 AirPods 4、AirPods Pro 3、AirPods 3、AirPods Pro 2、AirPods 2、AirPods Pro 1、AirPods 1、AirPods Max、AirPods 5 等主流型号 AirPods 进行互联。",
+        "华为手机升级 HarmonyOS 7.0 及以上版本与 AirPods 连接后，可实现 AirPods 连接提醒及电量显示功能，具体如下：",
+        "需要注意的是，华为手机升级至 HarmonyOS 7.0 及以上版本后连接 AirPods，支持使用新功能。其它华为设备（如平板、PC）仅支持普通的蓝牙耳机功能。",
+        "另外，AirPods 当前不支持与苹果之外的设备进行自动回连。用户需要进入华为手机设置 > 星闪和蓝牙（或蓝牙），在已配对设备列表中点击对应 AirPods 名称进行手动连接。"
+      ]
+    ]
+  },
+  "0f4351d2ed565c4752f4e49c": {
+    "evidence": {
+      "article_id": "0f4351d2ed565c4752f4e49c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Despite knowing that the iPhone Duo would face \"severe supply constraints\" due to manufacturing challenges, Apple chose to begin iPhone Duo pre-orders on Friday instead of waiting until it had more inventory ready, according to Bloomberg 's Mark Gurman. In his Power On newsletter today, he called this decision a \"major mistake.\" \"Let me cut to the chase: Apple made a major mistake here,\" he said. \"The company knew there would be severe supply constraints but went ahead with the launch anyway, apparently prioritizing a desire to get the device on the market early in its fiscal first quarter over satisfying demand. That will disappoint many of the early adopters most eager to buy it.\" Apple originally planned to launch the iPhone Duo in the U.S. and China only before expanding the device to other countries later, according to Gurman, but the company ultimately decided to start pre-orders in more than 70 countries simultaneously. Less than 30 minutes after pre-orders began, Apple's estimated shipping dates for the iPhone Duo slipped to around January 25 in most countries. Apple typically underpromises and overdelivers with its delivery dates, though, so hopefully some customers will end up having their shipping estimates bumped up at least slightly. Related Roundup: iPhone Duo Tag: Mark Gurman Buyer's Guide: iPhone Duo (Buy Now) Related Forum: iPhone This article, \" Mark Gurman: Apple Made 'Major Mistake' With iPhone Duo Pre-Orders \" first appeared on MacRumors.com Discuss this article in our forums In his Power On newsletter today, he called this decision a \"major mistake.\"",
+      "discovery_title": "Mark Gurman: Apple Made 'Major Mistake' With iPhone Duo Pre-Orders",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:33:37+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:33:37+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:33:37+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sunday October 18, 2026 7:33 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 18, 2026 7:33 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 14:33:47 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T14:33:37+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T14:33:37+00:00",
+      "raw_lead": "Despite knowing that the iPhone Duo would face \"severe supply constraints\" due to manufacturing challenges, Apple chose to begin iPhone Duo pre-orders on Friday instead of waiting until it had more inventory ready, according to Bloomberg's Mark Gurman. In his Power On newsletter today, he called this decision a \"major mistake\". \"Let me cut to the chase: Apple made a major mistake here,\" he said.",
+      "source": "MacRumors",
+      "title": "Mark Gurman: Apple Made 'Major Mistake' With iPhone Duo Pre-Orders",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Mark Gurman: Apple Made 'Major Mistake' With iPhone Duo Pre-Orders",
+          "unit_id": "a7fb48ba8d3e215a7df3ba8b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Despite knowing that the iPhone Duo would face \"severe supply constraints\" due to manufacturing challenges, Apple chose to begin iPhone Duo pre-orders on Friday instead of waiting until it had more inventory ready, according to Bloomberg's Mark Gurman. In his Power On newsletter today, he called this decision a \"major mistake.\"",
+          "unit_id": "94d4326c3ad399c88a1ee57b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "\"Let me cut to the chase: Apple made a major mistake here,\" he said. \"The company knew there would be severe supply constraints but went ahead with the launch anyway, apparently prioritizing a desire to get the device on the market early in its fiscal first quarter over satisfying demand. That will disappoint many of the early adopters most eager to buy it.\"",
+          "unit_id": "36e5cf6a420d95fcef53b5b5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Apple originally planned to launch the iPhone Duo in the U.S. and China only before expanding the device to other countries later, according to Gurman, but the company ultimately decided to start pre-orders in more than 70 countries simultaneously.",
+          "unit_id": "d2682876a233aad5f0f80370"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Less than 30 minutes after pre-orders began, Apple's estimated shipping dates for the iPhone Duo slipped to around January 25 in most countries. Apple typically underpromises and overdelivers with its delivery dates, though, so hopefully some customers will end up having their shipping estimates bumped up at least slightly.",
+          "unit_id": "258ebde8c1ab76cc0ddc402b"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/18/gurman-says-iphone-duo-preorders-major-mistake/"
+    },
+    "recorded_extraction": [
+      "Mark Gurman: Apple Made 'Major Mistake' With iPhone Duo Pre-Orders",
+      "Despite knowing that the iPhone Duo would face \"severe supply constraints\" due to manufacturing challenges, Apple chose to begin iPhone Duo pre-orders on Friday instead of waiting until it had more inventory ready, according to Bloomberg's Mark Gurman. In his Power On newsletter today, he called this decision a \"major mistake\". \"Let me cut to the chase: Apple made a major mistake here,\" he said. \"Let me cut to the chase: Apple made a major mistake here,\" he said. \"The company knew there would be severe supply constraints but went ahead with the launch anyway, apparently prioritizing a desire to get the device on the market early in its fiscal first quarter over satisfying demand. That will disappoint many of the early adopters most eager to buy it.\" Apple originally planned to launch the iPhone Duo in the U.S. and China only before expanding the device to other countries later, according to Gurman, but the company ultimately decided to start pre-orders in more than 70 countries simultaneously. Less than 30 minutes after pre-orders began, Apple's estimated shipping dates for the iPhone Duo slipped to around January 25 in most countries. Apple typically underpromises and overdelivers with its delivery dates, though, so hopefully some customers will end up having their shipping estimates bumped up at least slightly.",
+      [
+        "Apple originally planned to launch the iPhone Duo in the U.S. and China only before expanding the device to other countries later, according to Gurman, but the company ultimately decided to start pre-orders in more than 70 countries simultaneously.",
+        "Less than 30 minutes after pre-orders began, Apple's estimated shipping dates for the iPhone Duo slipped to around January 25 in most countries. Apple typically underpromises and overdelivers with its delivery dates, though, so hopefully some customers will end up having their shipping estimates bumped up at least slightly."
+      ]
+    ]
+  },
+  "115ce9f5de914e1a20acc927": {
+    "evidence": {
+      "article_id": "115ce9f5de914e1a20acc927",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 19 日消息，彭博社的马克 · 古尔曼（Mark Gurman）称，苹果大概率会在 11 月 6 日周五发售多款新品，包括搭载 OLED 屏幕的 MacBook Pro、配备 M6 芯片的 14 英寸 MacBook Pro 与 iMac，以及 / 或一款搭载 OLED 屏幕的 iPad mini 8。 这批产品预计在 10 月 27 日周二或是 10 月 28 日周三正式发布。 IT之家注意到，如果这一时间安排属实，苹果将连续四个周五发售新品，其余产品的发售日期已经确定： 10 月 23 日周五：iPhone Duo 10 月 30 日周五：HomePod mini 2 11 月 6 日周五：OLED 版 MacBook Pro、M6 芯片款 14 英寸 MacBook Pro 与 iMac，以及 / 或第八代 iPad mini 11 月 13 日周五：HomeView 与第四代 Apple TV 4K 据马克 · 古尔曼透露，苹果或将于 10 月 27 日或 28 日发布多款新品，并从 10 月 23 日起连续四个周五开售，包括 iPhone Duo、HomePod mini 2 及 OLED 版 MacBook Pro 等。#苹果新品# 据马克 · 古尔曼透露，苹果或将于 10 月 27 日或 28 日发布多款新品，并从 10 月 23 日起连续四个周五开售，包括 iPhone Duo、HomePod mini 2 及 OLED 版 MacBook Pro 等。#苹果新品#",
+      "discovery_title": "古尔曼：苹果本月底发布 OLED MacBook Pro、M6 设备及 iPad mini 8，11 月 6 日上市",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/19 6:52:20",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/19 6:52:20",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 22:52:20 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/19 6:52:20",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T22:52:20+00:00",
+      "raw_lead": "据马克 · 古尔曼透露，苹果或将于 10 月 27 日或 28 日发布多款新品，并从 10 月 23 日起连续四个周五开售，包括 iPhone Duo、HomePod mini 2 及 OLED 版 MacBook Pro 等。#苹果新品#",
+      "source": "IT之家",
+      "title": "古尔曼：苹果本月底发布 OLED MacBook Pro、M6 设备及 iPad mini 8，11 月 6 日上市",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 19 日消息，彭博社的马克 · 古尔曼（Mark Gurman）称，苹果大概率会在 11 月 6 日周五发售多款新品，包括搭载 OLED 屏幕的 MacBook Pro、配备 M6 芯片的 14 英寸 MacBook Pro 与 iMac，以及 / 或一款搭载 OLED 屏幕的 iPad mini 8。",
+          "unit_id": "0660656631f6816e02f45fff"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这批产品预计在 10 月 27 日周二或是 10 月 28 日周三正式发布。",
+          "unit_id": "45d0ed821df9eaf227f55cb8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "IT之家注意到，如果这一时间安排属实，苹果将连续四个周五发售新品，其余产品的发售日期已经确定：",
+          "unit_id": "1b7155858130cce14a215750"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "10 月 23 日周五：iPhone Duo",
+          "unit_id": "cf5189da6fc9a3355ffa6f0a"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "10 月 30 日周五：HomePod mini 2",
+          "unit_id": "d5114c7f311b8a2a8fca5185"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "11 月 6 日周五：OLED 版 MacBook Pro、M6 芯片款 14 英寸 MacBook Pro 与 iMac，以及 / 或第八代 iPad mini",
+          "unit_id": "0f086b4f050feb21ea28c162"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "11 月 13 日周五：HomeView 与第四代 Apple TV 4K",
+          "unit_id": "97ea6332cb220b1b73ca6832"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/621.htm"
+    },
+    "recorded_extraction": [
+      "古尔曼：苹果本月底发布 OLED MacBook Pro、M6 设备及 iPad mini 8，11 月 6 日上市",
+      "据马克 · 古尔曼透露，苹果或将于 10 月 27 日或 28 日发布多款新品，并从 10 月 23 日起连续四个周五开售，包括 iPhone Duo、HomePod mini 2 及 OLED 版 MacBook Pro 等。#苹果新品# IT之家 10 月 19 日消息，彭博社的马克 · 古尔曼（Mark Gurman）称，苹果大概率会在 11 月 6 日周五发售多款新品，包括搭载 OLED 屏幕的 MacBook Pro、配备 M6 芯片的 14 英寸 MacBook Pro 与 iMac，以及 / 或一款搭载 OLED 屏幕的 iPad mini 8 。 11 月 6 日周五：OLED 版 MacBook Pro、M6 芯片款 14 英寸 MacBook Pro 与 iMac，以及 / 或第八代 iPad mini",
+      [
+        "IT之家 10 月 19 日消息，彭博社的马克 · 古尔曼（Mark Gurman）称，苹果大概率会在 11 月 6 日周五发售多款新品，包括搭载 OLED 屏幕的 MacBook Pro、配备 M6 芯片的 14 英寸 MacBook Pro 与 iMac，以及 / 或一款搭载 OLED 屏幕的 iPad mini 8。",
+        "这批产品预计在 10 月 27 日周二或是 10 月 28 日周三正式发布。",
+        "11 月 6 日周五：OLED 版 MacBook Pro、M6 芯片款 14 英寸 MacBook Pro 与 iMac，以及 / 或第八代 iPad mini"
+      ]
+    ]
+  },
+  "119511938aedb378c6473408": {
+    "evidence": {
+      "article_id": "119511938aedb378c6473408",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，据媒体报道，苹果首款折叠屏iPhone Duo 近日刚开启预售，首发溢价行情快速降温，不少提前囤货的手机商家遭遇订单压价，陷入亏本风险。 郑州手机经销商许山提前锁定50台首批货源，这批机器总货款接近百万元，合计999950元。 他已经向上游支付了25000元订金，原本计划转手卖给同行赚取差价。按照最初约定，每台能赚取2000元利润，50台合计可赚10万元。 然而行情急转直下，原定收货的下家一夜之内两次下调接货报价，10月17日上午给出的3500价格已经低于许山原价加4000元进货成本。 按照最新报价，这批货全部出手将直接亏损2.5万元。进退两难之下，许山只能暂停收货，不再补齐尾款，转而拆分订单向多位老客户询价，分批寻找新买家，尽量降低损失。 与此同时，普通抢购用户也遭遇溢价缩水。有消费者抢到新机，原本打算加价6000元转手，结果二手收货商最高只给到加价3000元，首发万元溢价的行情也落空。 业内人士分析，折叠屏新机产能爬坡速度超出预期，市场溢价窗口期大幅缩短，盲目囤货的黄牛将面临较大亏损风险。 此前在10月16日晚8点，苹果首款折叠屏手机iPhone Duo开启预售，首发当日到店取货库存已售罄，部分线上订单配送时间已推迟至明年1月下旬。",
+      "discovery_title": "商家称囤50台iPhone Duo面临亏本 近百万元订单遭压价",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 08:27:04.143",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 08:27:04",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 08:27:04.143",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-19T00:27:04.143000+00:00",
+      "raw_lead": "快科技10月19日消息，据媒体报道，苹果首款折叠屏iPhone Duo 近日刚开启预售，首发溢价行情快速降温，不少提前囤货的手机商家遭遇订单压价，陷入亏本风险。郑州手机经销商许山提前锁定50台首批",
+      "source": "快科技",
+      "title": "商家称囤50台iPhone Duo面临亏本 近百万元订单遭压价",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，据媒体报道，苹果首款折叠屏iPhone Duo 近日刚开启预售，首发溢价行情快速降温，不少提前囤货的手机商家遭遇订单压价，陷入亏本风险。",
+          "unit_id": "db13157838b53a5e73038b1f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "郑州手机经销商许山提前锁定50台首批货源，这批机器总货款接近百万元，合计999950元。",
+          "unit_id": "f48aeae9701ea7942614f9d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "他已经向上游支付了25000元订金，原本计划转手卖给同行赚取差价。按照最初约定，每台能赚取2000元利润，50台合计可赚10万元。",
+          "unit_id": "3c31e2f22cc1443b4f8ff369"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "然而行情急转直下，原定收货的下家一夜之内两次下调接货报价，10月17日上午给出的3500价格已经低于许山原价加4000元进货成本。",
+          "unit_id": "525c17f34007cb16e18dbe8b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "按照最新报价，这批货全部出手将直接亏损2.5万元。进退两难之下，许山只能暂停收货，不再补齐尾款，转而拆分订单向多位老客户询价，分批寻找新买家，尽量降低损失。",
+          "unit_id": "88f61d1b79a54630da5d09f1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "与此同时，普通抢购用户也遭遇溢价缩水。有消费者抢到新机，原本打算加价6000元转手，结果二手收货商最高只给到加价3000元，首发万元溢价的行情也落空。",
+          "unit_id": "25fcda84c86e82fc386f4c42"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "业内人士分析，折叠屏新机产能爬坡速度超出预期，市场溢价窗口期大幅缩短，盲目囤货的黄牛将面临较大亏损风险。",
+          "unit_id": "36b0f978a1243f38787088d0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "此前在10月16日晚8点，苹果首款折叠屏手机iPhone Duo开启预售，首发当日到店取货库存已售罄，部分线上订单配送时间已推迟至明年1月下旬。",
+          "unit_id": "0dfa8218acd995a1d22d0b83"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158434.htm"
+    },
+    "recorded_extraction": [
+      "商家称囤50台iPhone Duo面临亏本 近百万元订单遭压价",
+      "快科技10月19日消息，据媒体报道，苹果首款折叠屏iPhone Duo 近日刚开启预售，首发溢价行情快速降温，不少提前囤货的手机商家遭遇订单压价，陷入亏本风险。郑州手机经销商许山提前锁定50台首批 快科技10月19日消息，据媒体报道，苹果首款折叠屏iPhone Duo 近日刚开启预售，首发溢价行情快速降温，不少提前囤货的手机商家遭遇订单压价，陷入亏本风险。 他已经向上游支付了25000元订金，原本计划转手卖给同行赚取差价。按照最初约定，每台能赚取2000元利润，50台合计可赚10万元。 然而行情急转直下，原定收货的下家一夜之内两次下调接货报价，10月17日上午给出的3500价格已经低于许山原价加4000元进货成本。 按照最新报价，这批货全部出手将直接亏损2.5万元。进退两难之下，许山只能暂停收货，不再补齐尾款，转而拆分订单向多位老客户询价，分批寻找新买家，尽量降低损失。",
+      [
+        "快科技10月19日消息，据媒体报道，苹果首款折叠屏iPhone Duo 近日刚开启预售，首发溢价行情快速降温，不少提前囤货的手机商家遭遇订单压价，陷入亏本风险。",
+        "郑州手机经销商许山提前锁定50台首批货源，这批机器总货款接近百万元，合计999950元。",
+        "他已经向上游支付了25000元订金，原本计划转手卖给同行赚取差价。按照最初约定，每台能赚取2000元利润，50台合计可赚10万元。",
+        "然而行情急转直下，原定收货的下家一夜之内两次下调接货报价，10月17日上午给出的3500价格已经低于许山原价加4000元进货成本。",
+        "按照最新报价，这批货全部出手将直接亏损2.5万元。进退两难之下，许山只能暂停收货，不再补齐尾款，转而拆分订单向多位老客户询价，分批寻找新买家，尽量降低损失。",
+        "与此同时，普通抢购用户也遭遇溢价缩水。有消费者抢到新机，原本打算加价6000元转手，结果二手收货商最高只给到加价3000元，首发万元溢价的行情也落空。",
+        "此前在10月16日晚8点，苹果首款折叠屏手机iPhone Duo开启预售，首发当日到店取货库存已售罄，部分线上订单配送时间已推迟至明年1月下旬。"
+      ]
+    ]
+  },
+  "1403c420f57cb3c09ac94c71": {
+    "evidence": {
+      "article_id": "1403c420f57cb3c09ac94c71",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月18日消息， 华为智慧屏推送秋季重磅系统更新，一共带来6项实用升级。 这次更新优化了整机内存，调整预加载机制。以前开机或者切换应用偶尔卡顿，更新之后操作会流畅很多，打开软件、切换页面响应更快。 新增iOS设备快捷投屏功能。 苹果手机用户安装小柚投屏，直接从iPhone或者iPad控制中心点开屏幕镜像，就能一键投到智慧屏上。 语音控制定时关机也做了优化。直接喊小艺，说两分钟后关机这类指令，电视就会按你设定的时间自动关机。晚上追剧犯困，不用起身找遥控器，动口就能设置，对懒人很友好。 照片墙新增光影画框，艺术廊还支持边框编辑。光影画框会跟着时间变化效果，艺术廊里有多款边框样式，拍立得、简约、复古风格随便挑。家里的照片放上去，电视直接变身装饰画，氛围感拉满。 一遥两控功能升级，也是这次更新的重点。同一个智慧屏遥控器，不光能控制智慧屏，还能操控机顶盒、游戏主机这类外接设备。 实现一遥两控的前提是智慧屏和外接设备都打开CEC控制开关，不用在多个遥控器之间来回换，桌面不用堆一堆遥控。 快科技10月18日消息，华为智慧屏推送秋季重磅系统更新，一共带来6项实用升级。",
+      "discovery_title": "华为智慧屏6大升级：一遥两控 遥控器可操控盒子、游戏机",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 13:27:24.277",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 13:27:24",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18 13:27:24.277",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T05:27:24.277000+00:00",
+      "raw_lead": "快科技10月18日消息，华为智慧屏推送秋季重磅系统更新，一共带来6项实用升级。这次更新优化了整机内存，调整预加载机制。以前开机或者切换应用偶尔卡顿，更新之后操作会流畅很多，打开软件、切",
+      "source": "快科技",
+      "title": "华为智慧屏6大升级：一遥两控 遥控器可操控盒子、游戏机",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月18日消息，华为智慧屏推送秋季重磅系统更新，一共带来6项实用升级。",
+          "unit_id": "6946b1316b8b928b153fece5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这次更新优化了整机内存，调整预加载机制。以前开机或者切换应用偶尔卡顿，更新之后操作会流畅很多，打开软件、切换页面响应更快。",
+          "unit_id": "517fdb57d335f7c95bfd0eb3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "新增iOS设备快捷投屏功能。苹果手机用户安装小柚投屏，直接从iPhone或者iPad控制中心点开屏幕镜像，就能一键投到智慧屏上。",
+          "unit_id": "9901a25e6b980c0e6029ee5b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "语音控制定时关机也做了优化。直接喊小艺，说两分钟后关机这类指令，电视就会按你设定的时间自动关机。晚上追剧犯困，不用起身找遥控器，动口就能设置，对懒人很友好。",
+          "unit_id": "fb55eb09d8408fc90a30bc72"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "照片墙新增光影画框，艺术廊还支持边框编辑。光影画框会跟着时间变化效果，艺术廊里有多款边框样式，拍立得、简约、复古风格随便挑。家里的照片放上去，电视直接变身装饰画，氛围感拉满。",
+          "unit_id": "9827838c30dc5ba1f4d4c561"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "一遥两控功能升级，也是这次更新的重点。同一个智慧屏遥控器，不光能控制智慧屏，还能操控机顶盒、游戏主机这类外接设备。",
+          "unit_id": "1182f86abdd66215659df3e7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "实现一遥两控的前提是智慧屏和外接设备都打开CEC控制开关，不用在多个遥控器之间来回换，桌面不用堆一堆遥控。",
+          "unit_id": "2dc6bba69ebb42d87129d735"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "还有新增嵌入式专项调音。很多家庭会把智慧屏嵌进电视墙里，嵌入之后声音容易闷。这个功能专门适配嵌入式安装，调完后人声更通透，低音不会浑浊，音质表现更好。",
+          "unit_id": "cf04d351f4680b27bf5c38bd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "升级方式有两种，可以手动去设置页面里找系统软件更新，检查新版本安装。也可以开启自动更新，待机或者开机的时候，智慧屏会自己检测新版本，后台下载升级包，关机的时候自动安装。",
+          "unit_id": "8bea733ec5d92756338b1b92"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "这波升级没有堆花哨的功能，全是平时看电视能用到的体验改进。苹果用户投屏、多设备遥控器、嵌入式音质，还有照片墙美化，覆盖了不同用户的需求。",
+          "unit_id": "f1c53166c7d5684ebce20095"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158359.htm"
+    },
+    "recorded_extraction": [
+      "华为智慧屏6大升级：一遥两控 遥控器可操控盒子、游戏机",
+      "快科技10月18日消息，华为智慧屏推送秋季重磅系统更新，一共带来6项实用升级。这次更新优化了整机内存，调整预加载机制。以前开机或者切换应用偶尔卡顿，更新之后操作会流畅很多，打开软件、切 这次更新优化了整机内存，调整预加载机制。以前开机或者切换应用偶尔卡顿，更新之后操作会流畅很多，打开软件、切换页面响应更快。 新增iOS设备快捷投屏功能。 苹果手机用户安装小柚投屏，直接从iPhone或者iPad控制中心点开屏幕镜像，就能一键投到智慧屏上。 语音控制定时关机也做了优化。直接喊小艺，说两分钟后关机这类指令，电视就会按你设定的时间自动关机。晚上追剧犯困，不用起身找遥控器，动口就能设置，对懒人很友好。 照片墙新增光影画框，艺术廊还支持边框编辑。光影画框会跟着时间变化效果，艺术廊里有多款边框样式，拍立得、简约、复古风格随便挑。家里的照片放上去，电视直接变身装饰画，氛围感拉满。",
+      [
+        "快科技10月18日消息，华为智慧屏推送秋季重磅系统更新，一共带来6项实用升级。",
+        "新增iOS设备快捷投屏功能。苹果手机用户安装小柚投屏，直接从iPhone或者iPad控制中心点开屏幕镜像，就能一键投到智慧屏上。",
+        "一遥两控功能升级，也是这次更新的重点。同一个智慧屏遥控器，不光能控制智慧屏，还能操控机顶盒、游戏主机这类外接设备。",
+        "还有新增嵌入式专项调音。很多家庭会把智慧屏嵌进电视墙里，嵌入之后声音容易闷。这个功能专门适配嵌入式安装，调完后人声更通透，低音不会浑浊，音质表现更好。",
+        "这波升级没有堆花哨的功能，全是平时看电视能用到的体验改进。苹果用户投屏、多设备遥控器、嵌入式音质，还有照片墙美化，覆盖了不同用户的需求。"
+      ]
+    ]
+  },
+  "1b76cc0332c69ee57d4de2c0": {
+    "evidence": {
+      "article_id": "1b76cc0332c69ee57d4de2c0",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，博主RD观测披露的数据显示，截至2026年W40周，华为Pura X Max系列销量已经突破百万台大关。 其中，Pura X Max销量约52.9万台，Pura X Max典藏版销量约49.31万台，两个版本合计约102.21万台。 从销量结构来看，标准版与典藏版贡献较为均衡，也说明这一阔折叠形态在高端市场中已经获得了一定认可。 这款设备于今年4月份发布，是行业首款大阔折机型，起售价为10999元。上市之后，Pura X Max迅速成为热销品。华为常务董事、终端BG董事长余承东曾表示，在阔折叠iPhone Duo发布后一周内，Pura X Max销量增长了76%。 在硬件参数方面，Pura X Max内屏为7.7英寸，外屏为5.4英寸，支持1至120Hz自适应刷新率。核心搭载麒麟9030 Pro芯片，内置5300mAh电池，整机重量约229g。这样的尺寸和重量组合，在展开大屏体验与日常便携之间取得了一定平衡。 相比传统方形折叠屏，华为Pura X Max的大阔折形态在观影时黑边更少，展开后接近小平板观感，并支持分屏多任务办公。外屏同样采用阔型设计，日常不用展开也能高效刷信息流，提升了碎片化场景下的使用效率。 在结构上，该机采用玄武水滴铰链与玄武折叠架构，抗摔耐用性进一步提升。鸿蒙系统搭载伴随式AI，主流应用也已经适配华为的阔屏布局，为日常使用和跨场景体验提供了更完整的软件支持。 另外，这款阔折叠支持华为手写笔M-Pen 3 Mini。小巧笔身可收纳于手机壳，无论是在华为笔记App写下灵光一闪的点子、玩转AI生图，还是在天生会画App尽兴创作，种种奇思妙想都能落笔成真，兼顾了便携性与大屏生产力。 在华为的带动下，多家品牌开始评估阔屏形态，部分机型已经立项研发。随着更多厂商加入，阔屏赛道也有望迎来更丰富的产品选择。",
+      "discovery_title": "华为Pura X Max销量突破百万大关：iPhone Duo发布后华为销量大涨",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 06:55:24.107",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 06:55:24",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 06:55:24.107",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T22:55:24.107000+00:00",
+      "raw_lead": "快科技10月19日消息，博主RD观测披露的数据显示，截至2026年W40周，华为Pura X Max系列销量已经突破百万台大关。其中，Pura X Max销量约52.9万台，Pura X Max典藏版销量约49.31万台，两个版本",
+      "source": "快科技",
+      "title": "华为Pura X Max销量突破百万大关：iPhone Duo发布后华为销量大涨",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，博主RD观测披露的数据显示，截至2026年W40周，华为Pura X Max系列销量已经突破百万台大关。",
+          "unit_id": "b9320da6c957eb58362e9d8a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "其中，Pura X Max销量约52.9万台，Pura X Max典藏版销量约49.31万台，两个版本合计约102.21万台。从销量结构来看，标准版与典藏版贡献较为均衡，也说明这一阔折叠形态在高端市场中已经获得了一定认可。",
+          "unit_id": "74d26ecfc41044aab033d08c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "这款设备于今年4月份发布，是行业首款大阔折机型，起售价为10999元。上市之后，Pura X Max迅速成为热销品。华为常务董事、终端BG董事长余承东曾表示，在阔折叠iPhone Duo发布后一周内，Pura X Max销量增长了76%。",
+          "unit_id": "c82ebf22edd0259be16040b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "在硬件参数方面，Pura X Max内屏为7.7英寸，外屏为5.4英寸，支持1至120Hz自适应刷新率。核心搭载麒麟9030 Pro芯片，内置5300mAh电池，整机重量约229g。这样的尺寸和重量组合，在展开大屏体验与日常便携之间取得了一定平衡。",
+          "unit_id": "61a4ab1dc636c9fe057f3e68"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "相比传统方形折叠屏，华为Pura X Max的大阔折形态在观影时黑边更少，展开后接近小平板观感，并支持分屏多任务办公。外屏同样采用阔型设计，日常不用展开也能高效刷信息流，提升了碎片化场景下的使用效率。",
+          "unit_id": "2d8459a49661be4da79d8041"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在结构上，该机采用玄武水滴铰链与玄武折叠架构，抗摔耐用性进一步提升。鸿蒙系统搭载伴随式AI，主流应用也已经适配华为的阔屏布局，为日常使用和跨场景体验提供了更完整的软件支持。",
+          "unit_id": "d29dc2b4052ad443310fd512"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "另外，这款阔折叠支持华为手写笔M-Pen 3 Mini。小巧笔身可收纳于手机壳，无论是在华为笔记App写下灵光一闪的点子、玩转AI生图，还是在天生会画App尽兴创作，种种奇思妙想都能落笔成真，兼顾了便携性与大屏生产力。",
+          "unit_id": "550a55b96a40d6574d9ac44c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "在华为的带动下，多家品牌开始评估阔屏形态，部分机型已经立项研发。随着更多厂商加入，阔屏赛道也有望迎来更丰富的产品选择。",
+          "unit_id": "6be332b4561e487954e19d5c"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158420.htm"
+    },
+    "recorded_extraction": [
+      "华为Pura X Max销量突破百万大关：iPhone Duo发布后华为销量大涨",
+      "快科技10月19日消息，博主RD观测披露的数据显示，截至2026年W40周，华为Pura X Max系列销量已经突破百万台大关。其中，Pura X Max销量约52.9万台，Pura X Max典藏版销量约49.31万台，两个版本 快科技10月19日消息，博主RD观测披露的数据显示，截至2026年W40周，华为Pura X Max系列销量已经突破百万台大关。 其中，Pura X Max销量约52.9万台，Pura X Max典藏版销量约49.31万台，两个版本合计约102.21万台。 从销量结构来看，标准版与典藏版贡献较为均衡，也说明这一阔折叠形态在高端市场中已经获得了一定认可。 这款设备于今年4月份发布，是行业首款大阔折机型，起售价为10999元。上市之后，Pura X Max迅速成为热销品。华为常务董事、终端BG董事长余承东曾表示，在阔折叠iPhone Duo发布后一周内，Pura X Max销量增长了76%。 在硬件参数方面，Pura X Max内屏为7.7英寸，外屏为5.4英寸，支持1至120Hz自适应刷新率。核心搭载麒麟9030 Pro芯片，内置5300mAh电池，整机重量约229g。这样的尺寸和重量组合，在展开大屏体验与日常便携之间取得了一定平衡。",
+      [
+        "快科技10月19日消息，博主RD观测披露的数据显示，截至2026年W40周，华为Pura X Max系列销量已经突破百万台大关。",
+        "其中，Pura X Max销量约52.9万台，Pura X Max典藏版销量约49.31万台，两个版本合计约102.21万台。从销量结构来看，标准版与典藏版贡献较为均衡，也说明这一阔折叠形态在高端市场中已经获得了一定认可。",
+        "这款设备于今年4月份发布，是行业首款大阔折机型，起售价为10999元。上市之后，Pura X Max迅速成为热销品。华为常务董事、终端BG董事长余承东曾表示，在阔折叠iPhone Duo发布后一周内，Pura X Max销量增长了76%。",
+        "在硬件参数方面，Pura X Max内屏为7.7英寸，外屏为5.4英寸，支持1至120Hz自适应刷新率。核心搭载麒麟9030 Pro芯片，内置5300mAh电池，整机重量约229g。这样的尺寸和重量组合，在展开大屏体验与日常便携之间取得了一定平衡。",
+        "在结构上，该机采用玄武水滴铰链与玄武折叠架构，抗摔耐用性进一步提升。鸿蒙系统搭载伴随式AI，主流应用也已经适配华为的阔屏布局，为日常使用和跨场景体验提供了更完整的软件支持。",
+        "另外，这款阔折叠支持华为手写笔M-Pen 3 Mini。小巧笔身可收纳于手机壳，无论是在华为笔记App写下灵光一闪的点子、玩转AI生图，还是在天生会画App尽兴创作，种种奇思妙想都能落笔成真，兼顾了便携性与大屏生产力。"
+      ]
+    ]
+  },
+  "2531043a72618eecbb980d5b": {
+    "evidence": {
+      "article_id": "2531043a72618eecbb980d5b",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。 根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。 由此可见，首发阶段的供需矛盾仍然十分突出。 博主科技新一表示，今年iPhone Duo单价较高，黄牛压货的成本也很高。只要大家第一天都不买黄牛的货，第二天黄牛的价格就会崩盘。因此，他号召大家抵制黄牛，避免为短期溢价买单。 有黄牛在接受采访时称，iPhone Duo到底值什么价，要等到真正发售之后才能判断。到时如果有用户觉得用着还行，价格相对会比较坚挺；如果用户觉得一般，那么溢价很快就会崩塌。换句话说，iPhone Duo的溢价能否维持，最终仍取决于首批用户的真实反馈。 虽然尚不清楚苹果备了多少货，但多国苹果商店均显示，现在下单要等到明年1月底才能拿到新手机。科技博主马克·古尔曼指出，苹果明知iPhone Duo折叠屏手机面临严重的供应短缺，却依然开启预购，而不是等到备货更加充足时再启动预购。 他认为，苹果犯了一个重大错误，在产能尚未爬坡到位的情况下贸然开售，虽然能维持热度，但容易让等待的用户感到失望。 根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元",
+      "discovery_title": "博主号召大家抵制黄牛：iPhone Duo溢价别接盘 黄牛价格就崩",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 11:32:26.323",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 11:32:26",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 11:32:26.323",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-19T03:32:26.323000+00:00",
+      "raw_lead": "快科技10月19日消息，iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元",
+      "source": "快科技",
+      "title": "博主号召大家抵制黄牛：iPhone Duo溢价别接盘 黄牛价格就崩",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。",
+          "unit_id": "5064fc35a055388fc59c8fa4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。由此可见，首发阶段的供需矛盾仍然十分突出。",
+          "unit_id": "14fab5e1b9dd594df5ba40ba"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "博主科技新一表示，今年iPhone Duo单价较高，黄牛压货的成本也很高。只要大家第一天都不买黄牛的货，第二天黄牛的价格就会崩盘。因此，他号召大家抵制黄牛，避免为短期溢价买单。",
+          "unit_id": "32202edb0d22c39a8bb0a19a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "有黄牛在接受采访时称，iPhone Duo到底值什么价，要等到真正发售之后才能判断。到时如果有用户觉得用着还行，价格相对会比较坚挺；如果用户觉得一般，那么溢价很快就会崩塌。换句话说，iPhone Duo的溢价能否维持，最终仍取决于首批用户的真实反馈。",
+          "unit_id": "063254cc5f60f1e621b21196"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "虽然尚不清楚苹果备了多少货，但多国苹果商店均显示，现在下单要等到明年1月底才能拿到新手机。科技博主马克·古尔曼指出，苹果明知iPhone Duo折叠屏手机面临严重的供应短缺，却依然开启预购，而不是等到备货更加充足时再启动预购。",
+          "unit_id": "eb96bc30d4a30e70fd17d6b9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "他认为，苹果犯了一个重大错误，在产能尚未爬坡到位的情况下贸然开售，虽然能维持热度，但容易让等待的用户感到失望。",
+          "unit_id": "4403c5d1e0c06a1092beb343"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158510.htm"
+    },
+    "recorded_extraction": [
+      "博主号召大家抵制黄牛：iPhone Duo溢价别接盘 黄牛价格就崩",
+      "快科技10月19日消息，iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元",
+      [
+        "快科技10月19日消息，iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。",
+        "根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。由此可见，首发阶段的供需矛盾仍然十分突出。",
+        "博主科技新一表示，今年iPhone Duo单价较高，黄牛压货的成本也很高。只要大家第一天都不买黄牛的货，第二天黄牛的价格就会崩盘。因此，他号召大家抵制黄牛，避免为短期溢价买单。",
+        "有黄牛在接受采访时称，iPhone Duo到底值什么价，要等到真正发售之后才能判断。到时如果有用户觉得用着还行，价格相对会比较坚挺；如果用户觉得一般，那么溢价很快就会崩塌。换句话说，iPhone Duo的溢价能否维持，最终仍取决于首批用户的真实反馈。",
+        "虽然尚不清楚苹果备了多少货，但多国苹果商店均显示，现在下单要等到明年1月底才能拿到新手机。科技博主马克·古尔曼指出，苹果明知iPhone Duo折叠屏手机面临严重的供应短缺，却依然开启预购，而不是等到备货更加充足时再启动预购。",
+        "他认为，苹果犯了一个重大错误，在产能尚未爬坡到位的情况下贸然开售，虽然能维持热度，但容易让等待的用户感到失望。"
+      ]
+    ]
+  },
+  "3d3f16834e98ba095389e63b": {
+    "evidence": {
+      "article_id": "3d3f16834e98ba095389e63b",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼在最新一期《Power On》通讯中透露，苹果明知 iPhone Duo 折叠屏手机面临严重的供应短缺， 却仍然决定本周五开启预购 ，而不是等到备货更加充足时再启动预购。 古尔曼表示： 我就直说了： 苹果这次犯了一个重大错误 。他们明明知道供应严重受限，却坚持按计划推出 iPhone Duo。比起满足市场需求，苹果更希望在第一财季初期让这款设备上市。 这将让许多希望首批购买的用户感到失望 。 IT之家注意到，古尔曼还透露，苹果最初仅计划在美国和中国推出 iPhone Duo，然后再扩展至其他国家或地区。但最终，苹果选择在全球 70 多个国家或地区同步开启预购。 10 月 16 日预售开启不到 30 分钟，全球多地的 iPhone Duo 预计发货日期就已经排到 1 月 25 日左右。不过苹果通常会在交付日期上采取相对保守的预估策略，实际情况往往会好于预期。 古尔曼在《Power On》中批评苹果决策失误，iPhone Duo 折叠屏全球 70 多国同步预购开启不到 30 分钟，多地发货日期已排到明年 1 月。##iPhoneDuo## #苹果#",
+      "discovery_title": "古尔曼：苹果明知 iPhone Duo 折叠屏手机供应不足，却坚持周五启动预售",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 23:01:01",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 23:01:01",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 15:01:01 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/18 23:01:01",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T15:01:01+00:00",
+      "raw_lead": "古尔曼在《Power On》中批评苹果决策失误，iPhone Duo 折叠屏全球 70 多国同步预购开启不到 30 分钟，多地发货日期已排到明年 1 月。##iPhoneDuo## #苹果#",
+      "source": "IT之家",
+      "title": "古尔曼：苹果明知 iPhone Duo 折叠屏手机供应不足，却坚持周五启动预售",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼在最新一期《Power On》通讯中透露，苹果明知 iPhone Duo 折叠屏手机面临严重的供应短缺，却仍然决定本周五开启预购，而不是等到备货更加充足时再启动预购。",
+          "unit_id": "57295cae4baf9350aeeca211"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "古尔曼表示：",
+          "unit_id": "21f69f582e45d21a3ae435b8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "我就直说了：苹果这次犯了一个重大错误。他们明明知道供应严重受限，却坚持按计划推出 iPhone Duo。比起满足市场需求，苹果更希望在第一财季初期让这款设备上市。这将让许多希望首批购买的用户感到失望。",
+          "unit_id": "5746d4c841cb3a06cecc65ff"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "IT之家注意到，古尔曼还透露，苹果最初仅计划在美国和中国推出 iPhone Duo，然后再扩展至其他国家或地区。但最终，苹果选择在全球 70 多个国家或地区同步开启预购。",
+          "unit_id": "3f3d9c752dc79725abeddb25"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "10 月 16 日预售开启不到 30 分钟，全球多地的 iPhone Duo 预计发货日期就已经排到 1 月 25 日左右。不过苹果通常会在交付日期上采取相对保守的预估策略，实际情况往往会好于预期。",
+          "unit_id": "2611600e64bbe9341c9810fe"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/613.htm"
+    },
+    "recorded_extraction": [
+      "古尔曼：苹果明知 iPhone Duo 折叠屏手机供应不足，却坚持周五启动预售",
+      "古尔曼在《Power On》中批评苹果决策失误，iPhone Duo 折叠屏全球 70 多国同步预购开启不到 30 分钟，多地发货日期已排到明年 1 月。##iPhoneDuo## #苹果# IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼在最新一期《Power On》通讯中透露，苹果明知 iPhone Duo 折叠屏手机面临严重的供应短缺， 却仍然决定本周五开启预购 ，而不是等到备货更加充足时再启动预购。 我就直说了： 苹果这次犯了一个重大错误 。他们明明知道供应严重受限，却坚持按计划推出 iPhone Duo。比起满足市场需求，苹果更希望在第一财季初期让这款设备上市。 这将让许多希望首批购买的用户感到失望 。 IT之家注意到，古尔曼还透露，苹果最初仅计划在美国和中国推出 iPhone Duo，然后再扩展至其他国家或地区。但最终，苹果选择在全球 70 多个国家或地区同步开启预购。 10 月 16 日预售开启不到 30 分钟，全球多地的 iPhone Duo 预计发货日期就已经排到 1 月 25 日左右。不过苹果通常会在交付日期上采取相对保守的预估策略，实际情况往往会好于预期。",
+      [
+        "IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼在最新一期《Power On》通讯中透露，苹果明知 iPhone Duo 折叠屏手机面临严重的供应短缺，却仍然决定本周五开启预购，而不是等到备货更加充足时再启动预购。",
+        "我就直说了：苹果这次犯了一个重大错误。他们明明知道供应严重受限，却坚持按计划推出 iPhone Duo。比起满足市场需求，苹果更希望在第一财季初期让这款设备上市。这将让许多希望首批购买的用户感到失望。",
+        "IT之家注意到，古尔曼还透露，苹果最初仅计划在美国和中国推出 iPhone Duo，然后再扩展至其他国家或地区。但最终，苹果选择在全球 70 多个国家或地区同步开启预购。",
+        "10 月 16 日预售开启不到 30 分钟，全球多地的 iPhone Duo 预计发货日期就已经排到 1 月 25 日左右。不过苹果通常会在交付日期上采取相对保守的预估策略，实际情况往往会好于预期。"
+      ]
+    ]
+  },
+  "46cdfb7057869dd460ea1f8f": {
+    "evidence": {
+      "article_id": "46cdfb7057869dd460ea1f8f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月18日消息， 近期，彭博社知名记者马克・古尔曼直言，苹果在iPhone Duo项目上犯了一个重大错误。 供应链供货缺口早已被内部充分掌握，但企业依旧坚持按原定时间表开启预售，没有等到产能爬坡完成再投放市场。 按照苹果最初的方案，这款折叠机型会先在美国、中国两大市场首发，后续再逐步铺开海外渠道。为了抢占上市节点，苹果临时调整计划，直接在全球七十多个国家和地区同步开启预订，进一步放大了供货压力。 预售市场的表现印证了产能短板。新机预售开启仅半小时，全球各地订单的发货时间就顺延至次年1月下旬，大量想要入手首发机型的消费者只能长期等待。 古尔曼分析，苹果做出仓促开售的决定，核心目标是让新品在第一财季初期顺利面市，优先保障财报节奏，却忽略了市场实际承载能力，直接造成大量首批用户落空。 虽然苹果对发货日期的预估一向偏保守，实际交付速度大概率会优于页面显示，但首发货源严重不足已经成为既定事实。 业内普遍认为，这款折叠手机要等到11月之后，才能迎来相对充足的供货规模，短期现货紧张的局面很难快速扭转。 快科技10月18日消息，近期，彭博社知名记者马克・古尔曼直言，苹果在iPhone Duo项目上犯了一个重大错误。",
+      "discovery_title": "犯大错！古尔曼：苹果明知iPhone Duo供货紧张仍强行开售",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 23:17:11.813",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 23:17:11",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18 23:17:11.813",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T15:17:11.813000+00:00",
+      "raw_lead": "快科技10月18日消息，近期，彭博社知名记者马克・古尔曼直言，苹果在iPhone Duo项目上犯了一个重大错误。供应链供货缺口早已被内部充分掌握，但企业依旧坚持按原定时间表开启预售，没有",
+      "source": "快科技",
+      "title": "犯大错！古尔曼：苹果明知iPhone Duo供货紧张仍强行开售",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月18日消息，近期，彭博社知名记者马克・古尔曼直言，苹果在iPhone Duo项目上犯了一个重大错误。",
+          "unit_id": "3381f6d8026439811fcc1712"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "供应链供货缺口早已被内部充分掌握，但企业依旧坚持按原定时间表开启预售，没有等到产能爬坡完成再投放市场。",
+          "unit_id": "89dcb55f74e48f7707a23b37"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "按照苹果最初的方案，这款折叠机型会先在美国、中国两大市场首发，后续再逐步铺开海外渠道。为了抢占上市节点，苹果临时调整计划，直接在全球七十多个国家和地区同步开启预订，进一步放大了供货压力。",
+          "unit_id": "7efaca188aad52fd2af26cba"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "预售市场的表现印证了产能短板。新机预售开启仅半小时，全球各地订单的发货时间就顺延至次年1月下旬，大量想要入手首发机型的消费者只能长期等待。",
+          "unit_id": "0afeb6f9a20ac33df643231f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "古尔曼分析，苹果做出仓促开售的决定，核心目标是让新品在第一财季初期顺利面市，优先保障财报节奏，却忽略了市场实际承载能力，直接造成大量首批用户落空。",
+          "unit_id": "6fc8d81d41766f3e2628f868"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "虽然苹果对发货日期的预估一向偏保守，实际交付速度大概率会优于页面显示，但首发货源严重不足已经成为既定事实。",
+          "unit_id": "ab1095181e1fb7e7cb508265"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "业内普遍认为，这款折叠手机要等到11月之后，才能迎来相对充足的供货规模，短期现货紧张的局面很难快速扭转。",
+          "unit_id": "eb988af0c5d5995c6cadc0ca"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158410.htm"
+    },
+    "recorded_extraction": [
+      "犯大错！古尔曼：苹果明知iPhone Duo供货紧张仍强行开售",
+      "快科技10月18日消息，近期，彭博社知名记者马克・古尔曼直言，苹果在iPhone Duo项目上犯了一个重大错误。供应链供货缺口早已被内部充分掌握，但企业依旧坚持按原定时间表开启预售，没有 按照苹果最初的方案，这款折叠机型会先在美国、中国两大市场首发，后续再逐步铺开海外渠道。为了抢占上市节点，苹果临时调整计划，直接在全球七十多个国家和地区同步开启预订，进一步放大了供货压力。 预售市场的表现印证了产能短板。新机预售开启仅半小时，全球各地订单的发货时间就顺延至次年1月下旬，大量想要入手首发机型的消费者只能长期等待。 古尔曼分析，苹果做出仓促开售的决定，核心目标是让新品在第一财季初期顺利面市，优先保障财报节奏，却忽略了市场实际承载能力，直接造成大量首批用户落空。",
+      [
+        "快科技10月18日消息，近期，彭博社知名记者马克・古尔曼直言，苹果在iPhone Duo项目上犯了一个重大错误。",
+        "预售市场的表现印证了产能短板。新机预售开启仅半小时，全球各地订单的发货时间就顺延至次年1月下旬，大量想要入手首发机型的消费者只能长期等待。",
+        "业内普遍认为，这款折叠手机要等到11月之后，才能迎来相对充足的供货规模，短期现货紧张的局面很难快速扭转。"
+      ]
+    ]
+  },
+  "57b464efceca043a1fae7b81": {
+    "evidence": {
+      "article_id": "57b464efceca043a1fae7b81",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple on Friday published an EU energy label for the iPhone Duo that reveals the device has a total battery capacity of 4,883 mAh. The document appears to confirm a previous leak that showed the iPhone Duo has 2,962 mAh and 1,921 mAh battery cells totaling 4,883 mAh. iPhone Duo is an eSIM-only device, so this battery capacity figure should apply worldwide, as there is no version of the device with a physical SIM card tray that would have a slightly smaller battery. For comparison, iFixit found the eSIM-only iPhone 18 Pro has a 4,288 mAh battery capacity, and the eSIM-only iPhone 18 Pro Max has a 5,567 mAh battery. Related Roundup: iPhone Duo Buyer's Guide: iPhone Duo (Buy Now) Related Forum: iPhone This article, \" Apple Reveals iPhone Duo's Battery Capacity \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple Reveals iPhone Duo's Battery Capacity",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T15:06:57+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T15:06:57+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T15:06:57+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sunday October 18, 2026 8:06 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 18, 2026 8:06 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 15:07:06 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T15:06:57+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T15:06:57+00:00",
+      "raw_lead": "Apple on Friday published an EU energy label for the iPhone Duo that reveals the device has a total battery capacity of 4,883 mAh. The document appears to confirm a previous leak that showed the iPhone Duo has 2,962 mAh and 1,921 mAh battery cells totaling 4,883 mAh. iPhone Duo is an eSIM-only device, so this battery capacity figure should apply worldwide, as there is no version of the device with a physical SIM card tray that would have a slightly smaller battery.",
+      "source": "MacRumors",
+      "title": "Apple Reveals iPhone Duo's Battery Capacity",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Reveals iPhone Duo's Battery Capacity",
+          "unit_id": "b1da2c1d8440529d19c9f03d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple on Friday published an EU energy label for the iPhone Duo that reveals the device has a total battery capacity of 4,883 mAh.",
+          "unit_id": "8662efb063fc8f4f6a32fcf1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The document appears to confirm a previous leak that showed the iPhone Duo has 2,962 mAh and 1,921 mAh battery cells totaling 4,883 mAh. iPhone Duo is an eSIM-only device, so this battery capacity figure should apply worldwide, as there is no version of the device with a physical SIM card tray that would have a slightly smaller battery.",
+          "unit_id": "c7fe9cd14c9393085b998753"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "For comparison, iFixit found the eSIM-only iPhone 18 Pro has a 4,288 mAh battery capacity, and the eSIM-only iPhone 18 Pro Max has a 5,567 mAh battery.",
+          "unit_id": "338451b6238f6be233508c0d"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/18/iphone-duo-battery-capacity/"
+    },
+    "recorded_extraction": [
+      "Apple Reveals iPhone Duo's Battery Capacity",
+      "Apple on Friday published an EU energy label for the iPhone Duo that reveals the device has a total battery capacity of 4,883 mAh. The document appears to confirm a previous leak that showed the iPhone Duo has 2,962 mAh and 1,921 mAh battery cells totaling 4,883 mAh. iPhone Duo is an eSIM-only device, so this battery capacity figure should apply worldwide, as there is no version of the device with a physical SIM card tray that would have a slightly smaller battery. The document appears to confirm a previous leak that showed the iPhone Duo has 2,962 mAh and 1,921 mAh battery cells totaling 4,883 mAh. iPhone Duo is an eSIM-only device, so this battery capacity figure should apply worldwide, as there is no version of the device with a physical SIM card tray that would have a slightly smaller battery. For comparison, iFixit found the eSIM-only iPhone 18 Pro has a 4,288 mAh battery capacity, and the eSIM-only iPhone 18 Pro Max has a 5,567 mAh battery.",
+      [
+        "Apple on Friday published an EU energy label for the iPhone Duo that reveals the device has a total battery capacity of 4,883 mAh.",
+        "For comparison, iFixit found the eSIM-only iPhone 18 Pro has a 4,288 mAh battery capacity, and the eSIM-only iPhone 18 Pro Max has a 5,567 mAh battery."
+      ]
+    ]
+  },
+  "631eda2e2a446117527e5074": {
+    "evidence": {
+      "article_id": "631eda2e2a446117527e5074",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，对于那些不追求第一时间拿到首批iPhone Duo的普通用户来说，等苹果整体产能拉上来之后再入手，能省下非常可观的一笔费用。 近日有记者走访数码流通渠道，采访了杭州某经营多年的线下数码店老板汪先生。汪先生直言目前iPhone Duo首批现货的溢价已经突破万元，真心建议普通消费者别加价入手。 他坦言现在大部分普通人的工资已经很久没上涨，数码产品的售价却一路飙升，这个阶段一定要捂紧自己的钱包。 等后续官方供货量充足，现货的溢价空间会以非常快的速度回落，晚买一周，省下的钱可能抵得上普通人整整一个月的工资，不是大家买不起新机，而是钱要花在刀刃上，没必要为了抢首发付出不必要的溢价。 在这波首批现货正式发货之前，就有不少参与线上抢购的网友想着靠倒卖新机赚一笔，有人抢到首批订单之后立刻挂上二手平台，原本准备加价6000元转卖变现，接连问过三家线下收货商之后，他拿到的最高报价居然只有3000元。 就连以往敢大量囤货的线下收货商现在都不敢盲目接盘，郑州的手机商家许山之前提前订下五十台首批新机，约定的总货款接近百万元，本来打算批量出给相熟的同行。 原本约定23日才能交付的货，收购方居然在一夜之间两次下调接货报价，最后报价直接跌到了许山的购入成本价以下。他已经向上游卖家付了订金，当下决定暂停收货，先为这五十台新机重新寻找合适的买家。 许山给记者算了一笔账，这五十台新机的约定购入总额为999950元，他已经支付的订金合计25000元。如果下家按照最开始协商好的报价接走全部机器，每台能赚差价2000元，五十台的总差价足足有十万元。 近日有记者走访数码流通渠道，采访了杭州某经营",
+      "discovery_title": "黄牛加价6千卖没人要只是开始！iPhone Duo晚买一周可省一月工资",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 09:01:06.647",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 09:01:06",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 09:01:06.647",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-19T01:01:06.647000+00:00",
+      "raw_lead": "快科技10月19日消息，对于那些不追求第一时间拿到首批iPhone Duo的普通用户来说，等苹果整体产能拉上来之后再入手，能省下非常可观的一笔费用。近日有记者走访数码流通渠道，采访了杭州某经营",
+      "source": "快科技",
+      "title": "黄牛加价6千卖没人要只是开始！iPhone Duo晚买一周可省一月工资",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，对于那些不追求第一时间拿到首批iPhone Duo的普通用户来说，等苹果整体产能拉上来之后再入手，能省下非常可观的一笔费用。",
+          "unit_id": "e054c5a809a7216c2895e267"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "近日有记者走访数码流通渠道，采访了杭州某经营多年的线下数码店老板汪先生。汪先生直言目前iPhone Duo首批现货的溢价已经突破万元，真心建议普通消费者别加价入手。",
+          "unit_id": "eb52f03680bc9405631d1956"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "他坦言现在大部分普通人的工资已经很久没上涨，数码产品的售价却一路飙升，这个阶段一定要捂紧自己的钱包。",
+          "unit_id": "25e6ff93d7822f6f1838a137"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "等后续官方供货量充足，现货的溢价空间会以非常快的速度回落，晚买一周，省下的钱可能抵得上普通人整整一个月的工资，不是大家买不起新机，而是钱要花在刀刃上，没必要为了抢首发付出不必要的溢价。",
+          "unit_id": "c14190cd91bfa90c5854521e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "在这波首批现货正式发货之前，就有不少参与线上抢购的网友想着靠倒卖新机赚一笔，有人抢到首批订单之后立刻挂上二手平台，原本准备加价6000元转卖变现，接连问过三家线下收货商之后，他拿到的最高报价居然只有3000元。",
+          "unit_id": "0ed93a296c551a3bf8ae5fe0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "就连以往敢大量囤货的线下收货商现在都不敢盲目接盘，郑州的手机商家许山之前提前订下五十台首批新机，约定的总货款接近百万元，本来打算批量出给相熟的同行。",
+          "unit_id": "60513b4dc9091e5a891c111b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "原本约定23日才能交付的货，收购方居然在一夜之间两次下调接货报价，最后报价直接跌到了许山的购入成本价以下。他已经向上游卖家付了订金，当下决定暂停收货，先为这五十台新机重新寻找合适的买家。",
+          "unit_id": "93e40f92de2161f28898e829"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "许山给记者算了一笔账，这五十台新机的约定购入总额为999950元，他已经支付的订金合计25000元。如果下家按照最开始协商好的报价接走全部机器，每台能赚差价2000元，五十台的总差价足足有十万元。",
+          "unit_id": "a99b68fcb6dd95695f46f603"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158440.htm"
+    },
+    "recorded_extraction": [
+      "黄牛加价6千卖没人要只是开始！iPhone Duo晚买一周可省一月工资",
+      "快科技10月19日消息，对于那些不追求第一时间拿到首批iPhone Duo的普通用户来说，等苹果整体产能拉上来之后再入手，能省下非常可观的一笔费用。近日有记者走访数码流通渠道，采访了杭州某经营 快科技10月19日消息，对于那些不追求第一时间拿到首批iPhone Duo的普通用户来说，等苹果整体产能拉上来之后再入手，能省下非常可观的一笔费用。 近日有记者走访数码流通渠道，采访了杭州某经营多年的线下数码店老板汪先生。汪先生直言目前iPhone Duo首批现货的溢价已经突破万元，真心建议普通消费者别加价入手。 等后续官方供货量充足，现货的溢价空间会以非常快的速度回落，晚买一周，省下的钱可能抵得上普通人整整一个月的工资，不是大家买不起新机，而是钱要花在刀刃上，没必要为了抢首发付出不必要的溢价。 在这波首批现货正式发货之前，就有不少参与线上抢购的网友想着靠倒卖新机赚一笔，有人抢到首批订单之后立刻挂上二手平台，原本准备加价6000元转卖变现，接连问过三家线下收货商之后，他拿到的最高报价居然只有3000元。",
+      [
+        "快科技10月19日消息，对于那些不追求第一时间拿到首批iPhone Duo的普通用户来说，等苹果整体产能拉上来之后再入手，能省下非常可观的一笔费用。",
+        "在这波首批现货正式发货之前，就有不少参与线上抢购的网友想着靠倒卖新机赚一笔，有人抢到首批订单之后立刻挂上二手平台，原本准备加价6000元转卖变现，接连问过三家线下收货商之后，他拿到的最高报价居然只有3000元。",
+        "原本约定23日才能交付的货，收购方居然在一夜之间两次下调接货报价，最后报价直接跌到了许山的购入成本价以下。他已经向上游卖家付了订金，当下决定暂停收货，先为这五十台新机重新寻找合适的买家。",
+        "许山给记者算了一笔账，这五十台新机的约定购入总额为999950元，他已经支付的订金合计25000元。如果下家按照最开始协商好的报价接走全部机器，每台能赚差价2000元，五十台的总差价足足有十万元。"
+      ]
+    ]
+  },
+  "63f21895d958021a309f0641": {
+    "evidence": {
+      "article_id": "63f21895d958021a309f0641",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。 eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。 有博主发文提醒，当你花了将近2万块钱买了iPhone Duo后会发现，这款手机没有实体SIM卡槽。国行版最多可以存储2张eSIM号码，而且开卡需要前往线下营业厅办理。 如果是商务人士出国使用，还必须删掉一张国内的eSIM号码，才能写入目的地的eSIM。 回国后，又要去营业厅恢复国内eSIM。整个流程相对繁琐，对于频繁出国的用户来说尤其不便。该博主认为，iPhone Duo尝鲜还是可以的，但当作主力机感觉还是差点儿意思。 还有网友提醒，如果iPhone Duo维修返厂，用户在使用备用机时可能还需要补办实体卡，等iPhone Duo维修完成后再跑营业厅写入eSIM。这一来一回，额外的时间成本不容忽视。 目前来看，对于异地经常出差、频繁换机的人群来说，纯eSIM方案会带来大量麻烦。虽然国产手机也支持eSIM，但都保留了实体SIM卡槽选项，让用户可以根据自身需求灵活选择。这种兼顾新旧方案的做法，在现阶段显然更符合多数人的使用习惯。 eSIM是一种将实",
+      "discovery_title": "iPhone Duo仅支持eSIM被劝退 博主：出国就得删掉国内号码",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 09:39:43.393",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 09:39:43",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 09:39:43.393",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-19T01:39:43.393000+00:00",
+      "raw_lead": "快科技10月19日消息，去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。eSIM是一种将实",
+      "source": "快科技",
+      "title": "iPhone Duo仅支持eSIM被劝退 博主：出国就得删掉国内号码",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。",
+          "unit_id": "1ba9671fac95b6a78dfc9ead"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。",
+          "unit_id": "8b001806a99189a6f9829ded"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "有博主发文提醒，当你花了将近2万块钱买了iPhone Duo后会发现，这款手机没有实体SIM卡槽。国行版最多可以存储2张eSIM号码，而且开卡需要前往线下营业厅办理。",
+          "unit_id": "3982f48d8fe1b936f16eced4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "如果是商务人士出国使用，还必须删掉一张国内的eSIM号码，才能写入目的地的eSIM。回国后，又要去营业厅恢复国内eSIM。整个流程相对繁琐，对于频繁出国的用户来说尤其不便。该博主认为，iPhone Duo尝鲜还是可以的，但当作主力机感觉还是差点儿意思。",
+          "unit_id": "530ee4955833f85e3e76553e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "还有网友提醒，如果iPhone Duo维修返厂，用户在使用备用机时可能还需要补办实体卡，等iPhone Duo维修完成后再跑营业厅写入eSIM。这一来一回，额外的时间成本不容忽视。",
+          "unit_id": "71508b1ee84b637bb1943600"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "目前来看，对于异地经常出差、频繁换机的人群来说，纯eSIM方案会带来大量麻烦。虽然国产手机也支持eSIM，但都保留了实体SIM卡槽选项，让用户可以根据自身需求灵活选择。这种兼顾新旧方案的做法，在现阶段显然更符合多数人的使用习惯。",
+          "unit_id": "646ef0988e7a631be9448f77"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158457.htm"
+    },
+    "recorded_extraction": [
+      "iPhone Duo仅支持eSIM被劝退 博主：出国就得删掉国内号码",
+      "快科技10月19日消息，去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。eSIM是一种将实",
+      [
+        "快科技10月19日消息，去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。",
+        "eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。",
+        "有博主发文提醒，当你花了将近2万块钱买了iPhone Duo后会发现，这款手机没有实体SIM卡槽。国行版最多可以存储2张eSIM号码，而且开卡需要前往线下营业厅办理。",
+        "如果是商务人士出国使用，还必须删掉一张国内的eSIM号码，才能写入目的地的eSIM。回国后，又要去营业厅恢复国内eSIM。整个流程相对繁琐，对于频繁出国的用户来说尤其不便。该博主认为，iPhone Duo尝鲜还是可以的，但当作主力机感觉还是差点儿意思。",
+        "还有网友提醒，如果iPhone Duo维修返厂，用户在使用备用机时可能还需要补办实体卡，等iPhone Duo维修完成后再跑营业厅写入eSIM。这一来一回，额外的时间成本不容忽视。",
+        "目前来看，对于异地经常出差、频繁换机的人群来说，纯eSIM方案会带来大量麻烦。虽然国产手机也支持eSIM，但都保留了实体SIM卡槽选项，让用户可以根据自身需求灵活选择。这种兼顾新旧方案的做法，在现阶段显然更符合多数人的使用习惯。"
+      ]
+    ]
+  },
+  "6d3b855a91e87413468db0c4": {
+    "evidence": {
+      "article_id": "6d3b855a91e87413468db0c4",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "据报道，10月16日晚，苹果首款折叠屏手机iPhone Duo开启预购。 此前，网上已有首发加价上万元的报价。郑州的陈灿烂参加抢购，拿到首批订单后挂上二手平台，准备加价6000元转卖。问过三家收货商，他拿到的最高报价只有3000元。 收货商也在反复问价。郑州手机商家许山提前订下五十台，约定货款接近百万元，准备卖给一名同行。 货要等23日才能交付，对方在一夜间两次降低接货报价，最后报到了许山的购入价以下。他已经向卖家付了订金，决定暂停收货，先为这五十台寻找买家。 许山介绍，五十台的约定购入总额为999950元，已经支付的订金合计25000元。如果下家按最初的报价接走，每台差价2000元，五十台差价十万元。",
+      "discovery_title": "商家囤50台iPhone Duo面临亏本 加价6千卖没人要",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 23:22:43.723",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 23:22:43",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18 23:22:43.723",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T15:22:43.723000+00:00",
+      "raw_lead": "据报道，10月16日晚，苹果首款折叠屏手机iPhone Duo开启预购。此前，网上已有首发加价上万元的报价。郑州的陈灿烂参加抢购，拿到首批订单后挂上二手平台，准备加价6000元转卖。问过三家收货商",
+      "source": "快科技",
+      "title": "商家囤50台iPhone Duo面临亏本 加价6千卖没人要",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "据报道，10月16日晚，苹果首款折叠屏手机iPhone Duo开启预购。",
+          "unit_id": "e266b9b793441a7c531bd620"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "此前，网上已有首发加价上万元的报价。郑州的陈灿烂参加抢购，拿到首批订单后挂上二手平台，准备加价6000元转卖。问过三家收货商，他拿到的最高报价只有3000元。",
+          "unit_id": "0e1389510c52296a3897ee4a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "收货商也在反复问价。郑州手机商家许山提前订下五十台，约定货款接近百万元，准备卖给一名同行。",
+          "unit_id": "1c31e7f0496209d6018d322d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "货要等23日才能交付，对方在一夜间两次降低接货报价，最后报到了许山的购入价以下。他已经向卖家付了订金，决定暂停收货，先为这五十台寻找买家。",
+          "unit_id": "8c20b2d7a13b0012857767f7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "许山介绍，五十台的约定购入总额为999950元，已经支付的订金合计25000元。如果下家按最初的报价接走，每台差价2000元，五十台差价十万元。",
+          "unit_id": "1b40c721f8a7dbdc422701f9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "责任编辑：知敏",
+          "unit_id": "c434ce7e875592689d316505"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "文章内容举报",
+          "unit_id": "037b5c14064fff54c77491fc"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158412.htm"
+    },
+    "recorded_extraction": [
+      "商家囤50台iPhone Duo面临亏本 加价6千卖没人要",
+      "据报道，10月16日晚，苹果首款折叠屏手机iPhone Duo开启预购。此前，网上已有首发加价上万元的报价。郑州的陈灿烂参加抢购，拿到首批订单后挂上二手平台，准备加价6000元转卖。问过三家收货商 此前，网上已有首发加价上万元的报价。郑州的陈灿烂参加抢购，拿到首批订单后挂上二手平台，准备加价6000元转卖。问过三家收货商，他拿到的最高报价只有3000元。 货要等23日才能交付，对方在一夜间两次降低接货报价，最后报到了许山的购入价以下。他已经向卖家付了订金，决定暂停收货，先为这五十台寻找买家。 许山介绍，五十台的约定购入总额为999950元，已经支付的订金合计25000元。如果下家按最初的报价接走，每台差价2000元，五十台差价十万元。",
+      [
+        "据报道，10月16日晚，苹果首款折叠屏手机iPhone Duo开启预购。",
+        "此前，网上已有首发加价上万元的报价。郑州的陈灿烂参加抢购，拿到首批订单后挂上二手平台，准备加价6000元转卖。问过三家收货商，他拿到的最高报价只有3000元。",
+        "货要等23日才能交付，对方在一夜间两次降低接货报价，最后报到了许山的购入价以下。他已经向卖家付了订金，决定暂停收货，先为这五十台寻找买家。",
+        "许山介绍，五十台的约定购入总额为999950元，已经支付的订金合计25000元。如果下家按最初的报价接走，每台差价2000元，五十台差价十万元。"
+      ]
+    ]
+  },
+  "752e2d0226e4afcf83ce6a04": {
+    "evidence": {
+      "article_id": "752e2d0226e4afcf83ce6a04",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "苹果公司近日公布的欧盟产品信息文件揭示了首款折叠屏手机 iPhone Duo 的电池容量。这款设备配备总容量为4883mAh的电池，由两块电芯组合而成，容量分别为2962mAh和1921mAh。相关信息此前已在网络上出现，此次欧盟产品信息文件的发布进一步证实了这一数据。 阅读全文",
+      "discovery_title": "苹果首次公布折叠屏iPhone Duo电池容量：4883mAh 由两块电池组成",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月19日 00:34",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 16:34:22 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月19日 00:34",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-18T16:34:00+00:00",
+      "raw_lead": "苹果公司近日公布的欧盟产品信息文件揭示了首款折叠屏手机iPhoneDuo的电池容量。这款设备配备总容量为4883mAh的电池，由两块电芯组合而成，容量分别为2962mAh和1921mAh。相关信息此前已在网络上出现，此次欧盟产品信息文件的发布进一步证实了这一数据。",
+      "source": "cnBeta",
+      "title": "苹果首次公布折叠屏iPhone Duo电池容量：4883mAh 由两块电池组成 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "苹果公司近日公布的欧盟产品信息文件揭示了首款折叠屏手机 iPhone Duo 的电池容量。这款设备配备总容量为4883mAh的电池，由两块电芯组合而成，容量分别为2962mAh和1921mAh。相关信息此前已在网络上出现，此次欧盟产品信息文件的发布进一步证实了这一数据。",
+          "unit_id": "dd79bcfcb99ce2b3352cd327"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据MacRumors于10月18日报道，苹果于10月16日公布了iPhone Duo的欧盟能源标签及相关产品信息。文件显示，该设备的额定电池容量为4883mAh。苹果通常不会在官方产品规格中直接公布iPhone电池的毫安时容量，因此这类监管文件成为外界了解其实际电池规格的重要渠道。",
+          "unit_id": "4b0b0bd7530576fe79cc3416"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "此前，有关iPhone Duo电池容量的泄露信息指出，该设备采用两块独立电芯，容量分别为2962mAh和1921mAh，合计4883mAh。此次公布的官方产品信息与此前的爆料一致。",
+          "unit_id": "81e8859af865bf11f68adfbf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "由于iPhone Duo采用纯eSIM设计，不配备实体SIM卡槽，因此不同地区版本不需要为了容纳SIM卡槽而调整内部空间。MacRumors据此认为，4883mAh这一容量数据应适用于全球版本，而不会像部分传统iPhone那样，因实体SIM卡槽版本与纯eSIM版本的内部布局差异而出现电池容量区别。",
+          "unit_id": "4349212d1a24391b98e32935"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "从容量对比来看，iPhone Duo的电池容量介于iPhone 18 Pro和iPhone 18 Pro Max之间。根据iFixit此前拆解获得的数据，纯eSIM版iPhone 18 Pro的电池容量为4288mAh，iPhone 18 Pro Max则达到5567mAh。相比之下，iPhone Duo比iPhone 18 Pro多出595mAh，但比iPhone 18 Pro Max少684mAh。",
+          "unit_id": "e83e4bf3b50f0dcac030998c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "对于一款采用书本式折叠设计的手机而言，4883mAh的容量反映了苹果在机身厚度、铰链结构、屏幕尺寸和电池空间之间所作的取舍。折叠屏手机需要将内部空间分配给两块显示屏、铰链、主板、摄像头及其他组件，同时还必须在展开和折叠状态下维持合理的机身厚度。与传统直板手机相比，这种结构设计会给电池布局带来更多限制。",
+          "unit_id": "98488e86a3f4cc2d9447ba03"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "iPhone Duo采用双电池系统，两块电芯分别位于机身的两个部分。苹果此前表示，iOS会将这两块电池作为一个整体进行管理，而不是让用户分别操作。采用两块电池有助于适应折叠机身的内部空间布局，但这并不意味着两块电池的容量相同，也不能仅凭电芯数量判断整机的续航表现。",
+          "unit_id": "4ea95c9e064f7b4a628c51a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "苹果公布的续航数据也显示，使用哪块屏幕会显著影响电池表现。根据苹果此前公布的规格，iPhone Duo在展开状态下使用7.6英寸内屏播放视频，最长续航时间为31小时；仅使用5.4英寸外屏播放视频时，最长可达44小时。按照苹果定义的典型使用场景，设备的续航时间最长为24小时。该典型使用场景假设用户均衡使用内外两块屏幕，同时进行消息收发、拍照、音乐播放、社交应用、视频流媒体、游戏、网页浏览和导航等操作。",
+          "unit_id": "7441f8ae213f1168aaccb012"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "这意味着，虽然iPhone Duo的电池容量低于iPhone 18 Pro Max，但实际续航差异并不能简单通过毫安时数字推算。屏幕尺寸、显示技术、处理器能效、调制解调器功耗以及用户使用哪块屏幕的时间比例，都会影响最终表现。",
+          "unit_id": "402199c2c074cd5c40f6d1ee"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "苹果表示，iPhone Duo采用新一代A20 Pro芯片和C2调制解调器，并通过双电池设计及纯eSIM结构优化内部空间和能效。设备还支持有线快速充电，使用功率达到或超过60W的USB-C电源适配器时，约20分钟即可将电量充至50%。无线充电方面，该机支持MagSafe和Qi2，最高无线充电功率为25W。",
+          "unit_id": "b0901142aa71b467c2c8eba1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "不过，电池容量并不能单独说明电池的耐用程度。欧盟产品信息文件还涉及电池循环耐久性等信息，但这些实验室指标与用户日常使用中的实际续航并不完全相同。对于采用双电池结构的折叠手机而言，两块电芯在长期使用后的衰减情况、系统如何管理电池健康，以及维修时如何更换电池，也都是值得关注的问题。",
+          "unit_id": "ebb77488ead27c1c2f3041a8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "此次容量信息的公布，使外界对苹果首款折叠屏手机的硬件配置有了更清晰的认识。4883mAh并非目前智能手机市场中最大的电池容量，但考虑到iPhone Duo需要在折叠结构中容纳两块屏幕和复杂的铰链机构，这一数字仍需结合机身设计和实际续航表现综合判断。",
+          "unit_id": "5139e1b37766e95b86238025"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "iPhone Duo预计将于10月23日正式上市。随着设备开始交付用户，后续拆解和实际续航测试有望进一步揭示双电池系统的内部结构、充电管理方式及长期使用表现。",
+          "unit_id": "8d5d04c032fd568fe5bb17c2"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582786.htm"
+    },
+    "recorded_extraction": [
+      "苹果首次公布折叠屏iPhone Duo电池容量：4883mAh 由两块电池组成 - Apple iPhone - cnBeta.COM",
+      "苹果公司近日公布的欧盟产品信息文件揭示了首款折叠屏手机iPhoneDuo的电池容量。这款设备配备总容量为4883mAh的电池，由两块电芯组合而成，容量分别为2962mAh和1921mAh。相关信息此前已在网络上出现，此次欧盟产品信息文件的发布进一步证实了这一数据。 苹果公司近日公布的欧盟产品信息文件揭示了首款折叠屏手机 iPhone Duo 的电池容量。这款设备配备总容量为4883mAh的电池，由两块电芯组合而成，容量分别为2962mAh和1921mAh。相关信息此前已在网络上出现，此次欧盟产品信息文件的发布进一步证实了这一数据。 据MacRumors于10月18日报道，苹果于10月16日公布了iPhone Duo的欧盟能源标签及相关产品信息。文件显示，该设备的额定电池容量为4883mAh。苹果通常不会在官方产品规格中直接公布iPhone电池的毫安时容量，因此这类监管文件成为外界了解其实际电池规格的重要渠道。 此前，有关iPhone Duo电池容量的泄露信息指出，该设备采用两块独立电芯，容量分别为2962mAh和1921mAh，合计4883mAh。此次公布的官方产品信息与此前的爆料一致。 由于iPhone Duo采用纯eSIM设计，不配备实体SIM卡槽，因此不同地区版本不需要为了容纳SIM卡槽而调整内部空间。MacRumors据此认为，4883mAh这一容量数据应适用于全球版本，而不会像部分传统iPhone那样，因实体SIM卡槽版本与纯eSIM版本的内部布局差异而出现电池容量区别。",
+      [
+        "苹果公司近日公布的欧盟产品信息文件揭示了首款折叠屏手机 iPhone Duo 的电池容量。这款设备配备总容量为4883mAh的电池，由两块电芯组合而成，容量分别为2962mAh和1921mAh。相关信息此前已在网络上出现，此次欧盟产品信息文件的发布进一步证实了这一数据。",
+        "据MacRumors于10月18日报道，苹果于10月16日公布了iPhone Duo的欧盟能源标签及相关产品信息。文件显示，该设备的额定电池容量为4883mAh。苹果通常不会在官方产品规格中直接公布iPhone电池的毫安时容量，因此这类监管文件成为外界了解其实际电池规格的重要渠道。",
+        "此前，有关iPhone Duo电池容量的泄露信息指出，该设备采用两块独立电芯，容量分别为2962mAh和1921mAh，合计4883mAh。此次公布的官方产品信息与此前的爆料一致。",
+        "由于iPhone Duo采用纯eSIM设计，不配备实体SIM卡槽，因此不同地区版本不需要为了容纳SIM卡槽而调整内部空间。MacRumors据此认为，4883mAh这一容量数据应适用于全球版本，而不会像部分传统iPhone那样，因实体SIM卡槽版本与纯eSIM版本的内部布局差异而出现电池容量区别。",
+        "从容量对比来看，iPhone Duo的电池容量介于iPhone 18 Pro和iPhone 18 Pro Max之间。根据iFixit此前拆解获得的数据，纯eSIM版iPhone 18 Pro的电池容量为4288mAh，iPhone 18 Pro Max则达到5567mAh。相比之下，iPhone Duo比iPhone 18 Pro多出595mAh，但比iPhone 18 Pro Max少684mAh。",
+        "对于一款采用书本式折叠设计的手机而言，4883mAh的容量反映了苹果在机身厚度、铰链结构、屏幕尺寸和电池空间之间所作的取舍。折叠屏手机需要将内部空间分配给两块显示屏、铰链、主板、摄像头及其他组件，同时还必须在展开和折叠状态下维持合理的机身厚度。与传统直板手机相比，这种结构设计会给电池布局带来更多限制。",
+        "苹果公布的续航数据也显示，使用哪块屏幕会显著影响电池表现。根据苹果此前公布的规格，iPhone Duo在展开状态下使用7.6英寸内屏播放视频，最长续航时间为31小时；仅使用5.4英寸外屏播放视频时，最长可达44小时。按照苹果定义的典型使用场景，设备的续航时间最长为24小时。该典型使用场景假设用户均衡使用内外两块屏幕，同时进行消息收发、拍照、音乐播放、社交应用、视频流媒体、游戏、网页浏览和导航等操作。",
+        "这意味着，虽然iPhone Duo的电池容量低于iPhone 18 Pro Max，但实际续航差异并不能简单通过毫安时数字推算。屏幕尺寸、显示技术、处理器能效、调制解调器功耗以及用户使用哪块屏幕的时间比例，都会影响最终表现。",
+        "苹果表示，iPhone Duo采用新一代A20 Pro芯片和C2调制解调器，并通过双电池设计及纯eSIM结构优化内部空间和能效。设备还支持有线快速充电，使用功率达到或超过60W的USB-C电源适配器时，约20分钟即可将电量充至50%。无线充电方面，该机支持MagSafe和Qi2，最高无线充电功率为25W。",
+        "此次容量信息的公布，使外界对苹果首款折叠屏手机的硬件配置有了更清晰的认识。4883mAh并非目前智能手机市场中最大的电池容量，但考虑到iPhone Duo需要在折叠结构中容纳两块屏幕和复杂的铰链机构，这一数字仍需结合机身设计和实际续航表现综合判断。",
+        "iPhone Duo预计将于10月23日正式上市。随着设备开始交付用户，后续拆解和实际续航测试有望进一步揭示双电池系统的内部结构、充电管理方式及长期使用表现。"
+      ]
+    ]
+  },
+  "783c0edd47d7cd5ad8c8e71c": {
+    "evidence": {
+      "article_id": "783c0edd47d7cd5ad8c8e71c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Husk 2.0 通过自研翻译层绕过完整安卓系统模拟，已兼容超 150 款应用，支持多款主流游戏引擎，甚至能运行《GTA：圣安地列斯》，目前仅适合技术爱好者尝鲜。#开源项目# #iPhone#",
+      "discovery_title": "开源项目 Husk 2.0 公布：利用自研翻译层让苹果 iPhone 运行 Android 游戏，兼容超 150 款应用",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 19:06:57",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 19:06:57",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T19:06:57.8200000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/18 19:06:57",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T11:06:57+00:00",
+      "raw_lead": "Husk 2.0 通过自研翻译层绕过完整安卓系统模拟，已兼容超 150 款应用，支持多款主流游戏引擎，甚至能运行《GTA：圣安地列斯》，目前仅适合技术爱好者尝鲜。#开源项目# #iPhone#",
+      "source": "IT之家",
+      "title": "开源项目 Husk 2.0 公布：利用自研翻译层让苹果 iPhone 运行 Android 游戏，兼容超 150 款应用",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 18 日消息，独立开发者 Leviidev 近期公布了 Husk 2.0 开源项目，利用自研翻译层，让部分 Android 应用自带的 64 位原生代码能够直接在 iPhone 处理器上运行，相应项目无需越狱 iPhone，支持 iOS 16 及以上系统，目前已兼容超过 150 款应用。",
+          "unit_id": "16e354c7ec5df39a16848641"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家获悉，Husk 2.0 与传统 Android 模拟器有所不同。以 QEMU 等方案为例，传统模拟器通常需要模拟完整的 Android 系统，包括启动系统、加载内核和运行系统服务。而 Husk 则通过翻译层绕过完整系统环境，将游戏的 DEX 文件及 .so 动态库加载到普通 iOS 应用进程中，再由自身提供游戏所需的 Android 运行环境。",
+          "unit_id": "da024776090eed264c9862d6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "具体而言，Husk 会提供 C 函数库、游戏调用的 Java 接口，并通过 ANGLE 将 OpenGL ES 图形调用转换为适用于苹果平台的图形接口，同时借助 MoltenVK 实现 Vulkan 支持。此外，该项目还处理了音频、触控和手柄输入等功能。由于兼容的原生代码能够直接在实体 CPU 上执行，因此不必承担完整系统模拟带来的额外开销，部分游戏可以在数秒内启动。",
+          "unit_id": "ef63f66ea2c2a1d8bbad1230"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "为实现上述功能，Husk 自行构建了一套 Android 运行环境，包括编译为 iOS 版本的 Android Runtime（ART）、将 Android bionic 函数库接口映射至 iOS 系统层，以及自研的 .so 动态库加载器。通过这些组件，Husk 在 iOS 应用与 Android 软件之间建立了一层兼容环境。",
+          "unit_id": "22712a238b2993320d356328"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "在兼容性方面，Husk 2.0 支持 iOS 16 及以上版本，可导入 APK、XAPK、APKM 和 APKS 格式的安装包，也能处理 Google Play 商店使用的分割安装包。项目支持 Unity、Unreal Engine 4、Godot 3 和 Godot 4 等游戏引擎，同时兼容 cocos2d-x、SDL2 和 SDL3，甚至能够运行经典游戏《GTA：圣安地列斯》。",
+          "unit_id": "13d7a0302f207065bdc6efa2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "不过，“免越狱”安装并不意味着安装过程简单。Husk 依赖即时编译（JIT）功能，而 iOS 对 JIT 权限有严格限制，通常需要通过调试器等方式授予。在用户成功启用相应功能后，需要通过侧载方式部署 Husk，同时目前 Husk 一次只能运行一款应用，用户切换游戏时需要完全关闭并重新启动 Husk，本身具有一定门槛，仅适合爱好者尝鲜体验，IT之家附 GitHub 项目地址（https://github.com/Leviidev/Husk）。",
+          "unit_id": "651d90b4231a075282b61167"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/576.htm"
+    },
+    "recorded_extraction": [
+      "开源项目 Husk 2.0 公布：利用自研翻译层让苹果 iPhone 运行 Android 游戏，兼容超 150 款应用",
+      "Husk 2.0 通过自研翻译层绕过完整安卓系统模拟，已兼容超 150 款应用，支持多款主流游戏引擎，甚至能运行《GTA：圣安地列斯》，目前仅适合技术爱好者尝鲜。#开源项目# #iPhone# IT之家 10 月 18 日消息，独立开发者 Leviidev 近期公布了 Husk 2.0 开源项目，利用自研翻译层，让部分 Android 应用自带的 64 位原生代码能够直接在 iPhone 处理器上运行，相应项目无需越狱 iPhone，支持 iOS 16 及以上系统，目前已兼容超过 150 款应用。 IT之家获悉，Husk 2.0 与传统 Android 模拟器有所不同。以 QEMU 等方案为例，传统模拟器通常需要模拟完整的 Android 系统，包括启动系统、加载内核和运行系统服务。而 Husk 则通过翻译层绕过完整系统环境，将游戏的 DEX 文件及 .so 动态库加载到普通 iOS 应用进程中，再由自身提供游戏所需的 Android 运行环境。 具体而言，Husk 会提供 C 函数库、游戏调用的 Java 接口，并通过 ANGLE 将 OpenGL ES 图形调用转换为适用于苹果平台的图形接口，同时借助 MoltenVK 实现 Vulkan 支持。此外，该项目还处理了音频、触控和手柄输入等功能。由于兼容的原生代码能够直接在实体 CPU 上执行，因此不必承担完整系统模拟带来的额外开销，部分游戏可以在数秒内启动。 为实现上述功能，Husk 自行构建了一套 Android 运行环境，包括编译为 iOS 版本的 Android Runtime（ART）、将 Android bionic 函数库接口映射至 iOS 系统层，以及自研的 .so 动态库加载器。通过这些组件，Husk 在 iOS 应用与 Android 软件之间建立了一层兼容环境。",
+      [
+        "IT之家 10 月 18 日消息，独立开发者 Leviidev 近期公布了 Husk 2.0 开源项目，利用自研翻译层，让部分 Android 应用自带的 64 位原生代码能够直接在 iPhone 处理器上运行，相应项目无需越狱 iPhone，支持 iOS 16 及以上系统，目前已兼容超过 150 款应用。",
+        "IT之家获悉，Husk 2.0 与传统 Android 模拟器有所不同。以 QEMU 等方案为例，传统模拟器通常需要模拟完整的 Android 系统，包括启动系统、加载内核和运行系统服务。而 Husk 则通过翻译层绕过完整系统环境，将游戏的 DEX 文件及.so 动态库加载到普通 iOS 应用进程中，再由自身提供游戏所需的 Android 运行环境。",
+        "具体而言，Husk 会提供 C 函数库、游戏调用的 Java 接口，并通过 ANGLE 将 OpenGL ES 图形调用转换为适用于苹果平台的图形接口，同时借助 MoltenVK 实现 Vulkan 支持。此外，该项目还处理了音频、触控和手柄输入等功能。由于兼容的原生代码能够直接在实体 CPU 上执行，因此不必承担完整系统模拟带来的额外开销，部分游戏可以在数秒内启动。",
+        "为实现上述功能，Husk 自行构建了一套 Android 运行环境，包括编译为 iOS 版本的 Android Runtime（ART）、将 Android bionic 函数库接口映射至 iOS 系统层，以及自研的.so 动态库加载器。通过这些组件，Husk 在 iOS 应用与 Android 软件之间建立了一层兼容环境。",
+        "在兼容性方面，Husk 2.0 支持 iOS 16 及以上版本，可导入 APK、XAPK、APKM 和 APKS 格式的安装包，也能处理 Google Play 商店使用的分割安装包。项目支持 Unity、Unreal Engine 4、Godot 3 和 Godot 4 等游戏引擎，同时兼容 cocos2d-x、SDL2 和 SDL3，甚至能够运行经典游戏《GTA：圣安地列斯》。",
+        "不过，“免越狱”安装并不意味着安装过程简单。Husk 依赖即时编译（JIT）功能，而 iOS 对 JIT 权限有严格限制，通常需要通过调试器等方式授予。在用户成功启用相应功能后，需要通过侧载方式部署 Husk，同时目前 Husk 一次只能运行一款应用，用户切换游戏时需要完全关闭并重新启动 Husk，本身具有一定门槛，仅适合爱好者尝鲜体验，IT之家附 GitHub 项目地址（https://github.com/Leviidev/Husk）。"
+      ]
+    ]
+  },
+  "7bd24d65fcd7746160d44dc7": {
+    "evidence": {
+      "article_id": "7bd24d65fcd7746160d44dc7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "9to5Mac is brought to you by Tello Mobile. Switching to Tello Mobile can bring the cost of your plan down to as little as $5 a month, or an unlimited plan for just $25 a month, all on America’s largest 5G network. See all of the available plans at tello.com. You might not think about it often, but the Phone app on your iPhone keeps getting more powerful. Here are two features you can use today, plus one coming next month in iOS 27. more… Switching to Tello Mobile can bring the cost of your plan down…",
+      "discovery_title": "Apple keeps making the Phone app better; here’s how",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T21:19:49+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T21:19:49+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 21:19:49 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T21:19:49+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T21:19:49+00:00",
+      "raw_lead": "Hold Assist and Call Screening are available today, with Call Context arriving in iOS 27. Here's how each one works.",
+      "source": "9to5Mac",
+      "title": "Three Phone app features worth turning on right now - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "9to5Mac is brought to you by Tello Mobile. Switching to Tello Mobile can bring the cost of your plan down to as little as $5 a month, or an unlimited plan for just $25 a month, all on America’s largest 5G network. See all of the available plans at tello.com.",
+          "unit_id": "017db7026c7cc16bfc14010e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "You might not think about it often, but the Phone app on your iPhone keeps getting more powerful. Here are two features you can use today, plus one coming next month in iOS 27.",
+          "unit_id": "82ae5efc139005368db168e2"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Hold Assist",
+          "unit_id": "9ee21a6c8a5015fb02ce3303"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "With iOS 26 last year, Apple added a new feature called Hold Assist to the Phone app. When you’re on a call, the feature can detect when you’ve been placed on hold. Then you’ll see a pop-up you can tap to enable Hold Assist.",
+          "unit_id": "4605462e71dd0815c7c4a4af"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "When the person on the other end of the call returns, your iPhone will notify you.",
+          "unit_id": "24f6c271119c4cd573c5924e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Here’s how Apple describes Hold Assist: “Automatically detect when you are placed on hold, so you can step away. iPhone will then notify you when it’s time to pick up.”",
+          "unit_id": "170d766486299b4d9f56c1e2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "You can enable Hold Assist by going to the Settings app, scrolling down to Apps, then choosing Phone. In this menu, you’ll see a toggle: “Hold Assist Detection” that you can turn on.",
+          "unit_id": "34f859a0b96141874a8daf96"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Call Screening",
+          "unit_id": "72b0cc9289925363b4b16623"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Call Screening is another new feature in the Phone app, introduced as part of iOS 26 last year. Here’s how Apple describes it: “Calls from unsaved numbers will be asked for more information before iPhone rings.”",
+          "unit_id": "412e3d8d39640b5ac1a9f873"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "When someone from an unsaved number calls you, Call Screening kicks in and asks who they are and why they are calling. You can then view their explanation right on your iPhone’s Lock Screen and choose to answer or send them to voicemail.",
+          "unit_id": "a3a63127b5907eb142c5e08b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "In an age of ever-increasing spam calls, Call Screening is a must-enable feature. You can find it in Settings ⇾ Apps ⇾ Phone.",
+          "unit_id": "ddef0c83344c4cf5d1ba6a0e"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Call Context",
+          "unit_id": "61272626547a451ada454de9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "Finally, Call Context is a new feature coming to the Phone app with iOS 27. It’s an Apple Intelligence feature that proactively surfaces relevant information when you call a business.",
+          "unit_id": "487eeda37a0dcc48fd12b039"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "For example, if you call an airline to change your flight, Call Context will automatically find your confirmation code in Mail and show it on the screen while you’re on the call. If you call a company about a recent order you placed, it will proactively surface the order number and other relevant details.",
+          "unit_id": "ae354140639d9bd8d00368d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Call Context is a well-done feature that uses AI to proactively help you during what is often a frustrating process. It also does so with privacy in mind, and only looks at who you’re calling, not what you’re saying, to show the necessary information.",
+          "unit_id": "c50b875077cb17260d49e14d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Call Context is available on iPhone 15 Pro and later.",
+          "unit_id": "69ae66d1ea01cea0f35e7ab7"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Wrap up",
+          "unit_id": "5ae962f7cd42e2c609fbb254"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "I try to avoid using the Phone app at all costs, but unfortunately it’s a necessary evil. These new Phone app features at least make the experience more enjoyable. In particular, I’m a huge fan of Call Screening. I get an absurd number of spam calls every day, and Call Screening really helps me preserve my sanity.",
+          "unit_id": "c1db9e5c93c7a4e253040b8d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "What are your favorite Phone app features? Do you use any of the new options? Let us know down in the comments.",
+          "unit_id": "cc4671791c4f1429ed3cef35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "9to5Mac is brought to you by Tello Mobile. Switching to Tello Mobile can bring the cost of your plan down to as little as $5 a month, or an unlimited plan for just $25 a month, all on America’s largest 5G network. See all of the available plans at tello.com.",
+          "unit_id": "642e4d74fe1a048e7f17e2ba"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/18/apple-keeps-making-the-phone-app-better-heres-how/"
+    },
+    "recorded_extraction": [
+      "Three Phone app features worth turning on right now - 9to5Mac",
+      "Hold Assist and Call Screening are available today, with Call Context arriving in iOS 27. Here's how each one works. 9to5Mac is brought to you by Tello Mobile. Switching to Tello Mobile can bring the cost of your plan down to as little as $5 a month, or an unlimited plan for just $25 a month, all on America’s largest 5G network. See all of the available plans at tello.com . You might not think about it often, but the Phone app on your iPhone keeps getting more powerful. Here are two features you can use today, plus one coming next month in iOS 27. With iOS 26 last year, Apple added a new feature called Hold Assist to the Phone app. When you’re on a call, the feature can detect when you’ve been placed on hold. Then you’ll see a pop-up you can tap to enable Hold Assist. When the person on the other end of the call returns, your iPhone will notify you.",
+      [
+        "9to5Mac is brought to you by Tello Mobile. Switching to Tello Mobile can bring the cost of your plan down to as little as $5 a month, or an unlimited plan for just $25 a month, all on America’s largest 5G network. See all of the available plans at tello.com.",
+        "You might not think about it often, but the Phone app on your iPhone keeps getting more powerful. Here are two features you can use today, plus one coming next month in iOS 27.",
+        "With iOS 26 last year, Apple added a new feature called Hold Assist to the Phone app. When you’re on a call, the feature can detect when you’ve been placed on hold. Then you’ll see a pop-up you can tap to enable Hold Assist.",
+        "Call Screening is another new feature in the Phone app, introduced as part of iOS 26 last year. Here’s how Apple describes it: “Calls from unsaved numbers will be asked for more information before iPhone rings.”",
+        "Finally, Call Context is a new feature coming to the Phone app with iOS 27. It’s an Apple Intelligence feature that proactively surfaces relevant information when you call a business.",
+        "Call Context is a well-done feature that uses AI to proactively help you during what is often a frustrating process. It also does so with privacy in mind, and only looks at who you’re calling, not what you’re saying, to show the necessary information.",
+        "Call Context is available on iPhone 15 Pro and later."
+      ]
+    ]
+  },
+  "7c0b590e03959464e20e71ee": {
+    "evidence": {
+      "article_id": "7c0b590e03959464e20e71ee",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple Watch Series 12 has been a marvel of an upgrade, at least for me. I’ve written about it WHOOP. That said, in my past month testing it, there’s one WHOOP feature I’ve found myself missing. more… I’ve written about it many…",
+      "discovery_title": "Apple Watch Series 12 is excellent, but I find myself missing this one software feature",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T17:56:43+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T17:56:43+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 17:56:43 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T17:56:43+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T17:56:43+00:00",
+      "raw_lead": "Apple Watch Series 12 has been a marvel of an upgrade, at least for me. I’ve written about it many...",
+      "source": "9to5Mac",
+      "title": "Apple Watch Series 12 is excellent, but I find myself missing this one software feature - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Watch Series 12 has been a marvel of an upgrade, at least for me. I’ve written about it many times, and personally – I have found that the Apple Watch Series 12 is a competent replacement for the WHOOP. That said, in my past month testing it, there’s one WHOOP feature I’ve found myself missing.",
+          "unit_id": "ad0f7ee321e933b0f760e0a1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Yes, I know – the Series 12 is old news, and there are much cooler things to think about, like iPhone Duo and HomeView. That said, the Apple Watch Series 12 was quite charming to me, primarily because it felt like a little bit of a surprise.",
+          "unit_id": "d0ab9a3612bbd3b0da0c1238"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "We knew we’d be getting an always-on heart rate monitor, and we knew Apple was working on a new Health app, though we didn’t know when it would ship. Seeing the two together actually felt like quite a novel launch. That’s besides the point, though. Let’s talk about the redesigned Health app and what I feel it’s missing.",
+          "unit_id": "662a435fc4ead0ae51a437c5"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "New Health app",
+          "unit_id": "096ce566864907c51b05b45a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Frankly, Apple did a lot really well here. For one, there’s the fact that the interface actually feels easy to read and navigate. On top of that, the new features like Readiness and Health Age make it feel like a much more meaningful app. Plus, existing features like Vitals and Sleep being integrated means I’ll actually go look at it daily.",
+          "unit_id": "5532373b9f3be16cb0590a33"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "This Health app isn’t shipping yet. It was available in iOS 27.2 for a little while, but has since been removed. Apple says it’ll come back in a later iOS beta prior to releasing it later this year. In all likelihood, this means iOS 27.3, which should enter beta before the end of the month and ship before the end of December.",
+          "unit_id": "37ff3f4c609398bd82146ecf"
+        },
+        {
+          "container_id": "",
+          "kind": "h3",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "What I’d like to see",
+          "unit_id": "d760f9e283428e07a3f94088"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "For me, and this is more of a small personal preference than a true flaw with the app or how it’s designed, I’d really like to see Apple copy WHOOP’s approach to measuring days: sleep.",
+          "unit_id": "3997bc7fcab93fb801457fd6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "With WHOOP, your days aren’t measured on a fixed 24 hour clock, they’re based on when you go to sleep. That means if you do a workout past midnight, it still counts for the existing day. Or, if you were out late at night, your walk home counts towards the day that you started on, rather than counting towards the next day. I personally prefer this concept of tracking fitness goals.",
+          "unit_id": "92513230e6a19adec969246d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Of course, it could be an option, though I do think fixing peoples “days” to their sleep is a little more sensible than basing it on a normal clock, especially when it comes to tracking exercise.",
+          "unit_id": "8755a1f8715fb75e2b1b6b38"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "What do you think of this concept? How do you feel about the new Apple Health app? Let us know in the comments.",
+          "unit_id": "1d0f93bb5e47a495be9f110c"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/18/apple-redesigned-health-app-one-suggestion-series-12/"
+    },
+    "recorded_extraction": [
+      "Apple Watch Series 12 is excellent, but I find myself missing this one software feature - 9to5Mac",
+      "Apple Watch Series 12 has been a marvel of an upgrade, at least for me. I’ve written about it many... Apple Watch Series 12 has been a marvel of an upgrade, at least for me. I’ve written about it many times , and personally – I have found that the Apple Watch Series 12 is a competent replacement for the WHOOP . That said, in my past month testing it, there’s one WHOOP feature I’ve found myself missing. Yes, I know – the Series 12 is old news, and there are much cooler things to think about, like iPhone Duo and HomeView . That said, the Apple Watch Series 12 was quite charming to me, primarily because it felt like a little bit of a surprise. We knew we’d be getting an always-on heart rate monitor, and we knew Apple was working on a new Health app, though we didn’t know when it would ship. Seeing the two together actually felt like quite a novel launch. That’s besides the point, though. Let’s talk about the redesigned Health app and what I feel it’s missing. Frankly, Apple did a lot really well here. For one, there’s the fact that the interface actually feels easy to read and navigate. On top of that, the new features like Readiness and Health Age make it feel like a much more meaningful app. Plus, existing features like Vitals and Sleep being integrated means I’ll actually go look at it daily.",
+      [
+        "Apple Watch Series 12 has been a marvel of an upgrade, at least for me. I’ve written about it many times, and personally – I have found that the Apple Watch Series 12 is a competent replacement for the WHOOP. That said, in my past month testing it, there’s one WHOOP feature I’ve found myself missing.",
+        "Yes, I know – the Series 12 is old news, and there are much cooler things to think about, like iPhone Duo and HomeView. That said, the Apple Watch Series 12 was quite charming to me, primarily because it felt like a little bit of a surprise.",
+        "We knew we’d be getting an always-on heart rate monitor, and we knew Apple was working on a new Health app, though we didn’t know when it would ship. Seeing the two together actually felt like quite a novel launch. That’s besides the point, though. Let’s talk about the redesigned Health app and what I feel it’s missing.",
+        "Frankly, Apple did a lot really well here. For one, there’s the fact that the interface actually feels easy to read and navigate. On top of that, the new features like Readiness and Health Age make it feel like a much more meaningful app. Plus, existing features like Vitals and Sleep being integrated means I’ll actually go look at it daily.",
+        "This Health app isn’t shipping yet. It was available in iOS 27.2 for a little while, but has since been removed. Apple says it’ll come back in a later iOS beta prior to releasing it later this year. In all likelihood, this means iOS 27.3, which should enter beta before the end of the month and ship before the end of December.",
+        "With WHOOP, your days aren’t measured on a fixed 24 hour clock, they’re based on when you go to sleep. That means if you do a workout past midnight, it still counts for the existing day. Or, if you were out late at night, your walk home counts towards the day that you started on, rather than counting towards the next day. I personally prefer this concept of tracking fitness goals."
+      ]
+    ]
+  },
+  "8ca10352205ea32d34cce694": {
+    "evidence": {
+      "article_id": "8ca10352205ea32d34cce694",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "3 倍防爆抗指纹，小蚩 iPhone 11~17 系列康宁钢化膜 7.8 元无尘仓秒贴（可选升级 AR 增透抗反射）",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 13:21:06",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 13:21:06",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/18 13:21:06",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T05:21:06+00:00",
+      "raw_lead": "天猫【小蚩旗舰店】",
+      "source": "IT之家",
+      "title": "3 倍防爆抗指纹，小蚩 iPhone 11~17 系列康宁钢化膜 7.8 元无尘仓秒贴（可选升级 AR 增透抗反射）",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "天猫【小蚩旗舰店】",
+          "unit_id": "47e2c75aa7301b5e10d86a56"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "3 倍防爆抗指纹，小蚩 iPhone 11~17 系列康宁钢化膜报价 16.8 元，限时限量 9 元券，实付 7.8 元包邮。",
+          "unit_id": "1beaf8524459cff3e3a93b36"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "注：iPhone 18 系列和 iPhone 17 系列尺寸规格完全一致，理论上钢化膜可以通用。",
+          "unit_id": "a9c07dd46f1168df31f77e17"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "天猫 3 倍防爆抗指纹，小蚩 iPhone 11~17 系列康宁钢化膜券后 7.8 元领 9 元券",
+          "unit_id": "f66335da6d89a9344947fe95"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "超清版 1 片此价，可选 2 片、3 片套装；此外还可升级 AR 增透抗反射版。",
+          "unit_id": "66735f1ca086ca34367b5a79"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "▼ 其他活动商品：",
+          "unit_id": "96e6323b0335ac3601a273bb"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "天猫裸机手感，小蚩 iPhone 12~17 系列 MagSafe 磁吸手机壳券后 12.8 元领 30 元券",
+          "unit_id": "50591334e75e6172a2d9cda2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "京东 11.11 无门槛红包 面额至高 26888 元，每天抽 3 次：点此抽红包。",
+          "unit_id": "07cda275e16479432f265e3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "淘宝 11.11 无门槛红包 面额至高 26888 元，每天抽 1 次：点此抽红包。",
+          "unit_id": "5b1d0e4b41d4913f2694b986"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "欢迎下载最会买 App - 好货好价，高额返利，1 毛钱也能提现！",
+          "unit_id": "15a1bedda12f85dbbc53f3e9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "扫描二维码或点击此处下载最新版（自动识别平台）。",
+          "unit_id": "37d37bf4f863f136ace3a09a"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "【广告】",
+          "unit_id": "f4ab0d88456ba9b9c2eb1bfc"
+        }
+      ],
+      "url": "https://lapin.ithome.com/html/digi/1014486.htm"
+    },
+    "recorded_extraction": [
+      "3 倍防爆抗指纹，小蚩 iPhone 11~17 系列康宁钢化膜 7.8 元无尘仓秒贴（可选升级 AR 增透抗反射）",
+      "3 倍防爆抗指纹，小蚩 iPhone 11~17 系列康宁钢化膜报价 16.8 元，限时限量 9 元券，实付 7.8 元包邮。",
+      [
+        "3 倍防爆抗指纹，小蚩 iPhone 11~17 系列康宁钢化膜报价 16.8 元，限时限量 9 元券，实付 7.8 元包邮。",
+        "注：iPhone 18 系列和 iPhone 17 系列尺寸规格完全一致，理论上钢化膜可以通用。",
+        "超清版 1 片此价，可选 2 片、3 片套装；此外还可升级 AR 增透抗反射版。",
+        "京东 11.11 无门槛红包 面额至高 26888 元，每天抽 3 次：点此抽红包。",
+        "淘宝 11.11 无门槛红包 面额至高 26888 元，每天抽 1 次：点此抽红包。"
+      ]
+    ]
+  },
+  "97063d5a9c210de20c7c593a": {
+    "evidence": {
+      "article_id": "97063d5a9c210de20c7c593a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "iPhone Duo于本周五开启预售，开售瞬间，官网和电商平台便被挤爆，首批货源迅速被抢购一空。 尽管该机仅支持eSIM，且没有Face ID、没有长焦镜头，但iPhone Duo依然点燃了消费者的热情，首发阶段的抢购氛围十分火爆。 阅读全文",
+      "discovery_title": "iPhone Duo溢价暴跌 从5.8万跌至3000元",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月18日 14:33",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 06:33:08 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月18日 14:33",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-18T06:33:00+00:00",
+      "raw_lead": "iPhoneDuo于本周五开启预售，开售瞬间，官网和电商平台便被挤爆，首批货源迅速被抢购一空。尽管该机仅支持eSIM，且没有FaceID、没有长焦镜头，但iPhoneDuo依然点燃了消费者的热情，首发阶段的抢购氛围十分火爆。",
+      "source": "cnBeta",
+      "title": "iPhone Duo溢价暴跌 从5.8万跌至3000元 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo于本周五开启预售，开售瞬间，官网和电商平台便被挤爆，首批货源迅速被抢购一空。尽管该机仅支持eSIM，且没有Face ID、没有长焦镜头，但iPhone Duo依然点燃了消费者的热情，首发阶段的抢购氛围十分火爆。",
+          "unit_id": "24f9ed75b90ade8815e9f07c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "早在一个月前，得物平台上的iPhone Duo预售订单就已开始报价。9月11日，定价21499元的1TB版本一度溢价至79999元，溢价超过5.8万元。当时市场对这款苹果首款折叠屏的期待值可见一斑。",
+          "unit_id": "71271370bc66dd4e02c458fd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "如今，iPhone Duo在第三方渠道的报价已大幅下跌。多位黄牛在二手交易平台上只加价3000元，并承诺首销当天就能拿货。从早期近6万元的夸张溢价，到如今加价3000元，价格回落幅度相当明显。",
+          "unit_id": "baea423047149c76f42e65ef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "尽管黄牛价格已经大幅回落，但不少网友仍建议消费者没必要从黄牛手里拿货。当前价格只是短期供需失衡造成的溢价，随着产线良率稳步提升，iPhone Duo产能会持续爬坡，一两个月后预计货源充足，价格也有望进一步回归理性。",
+          "unit_id": "7475fa3fd9ea33968bec744c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "有观望者说得很直白：现在加价三五千，等于给黄牛打工。对于一台存在明显取舍的初代折叠屏，耐心等待官方供货，远比加价更划算。",
+          "unit_id": "497bd81bb227b6978361e865"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "目前官方渠道仍可正常排队预订，只是发货延后。多等待一段时间，就能省下数千元溢价，还能享受完整官方保修。早拿到手仅换来短期体验，付出额外成本并不划算。目前iPhone Duo发货时间已排至1月份，起售价为15999元。",
+          "unit_id": "14993ef099105b605b7dee3f"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582744.htm"
+    },
+    "recorded_extraction": [
+      "iPhone Duo溢价暴跌 从5.8万跌至3000元 - Apple iPhone - cnBeta.COM",
+      "iPhoneDuo于本周五开启预售，开售瞬间，官网和电商平台便被挤爆，首批货源迅速被抢购一空。尽管该机仅支持eSIM，且没有FaceID、没有长焦镜头，但iPhoneDuo依然点燃了消费者的热情，首发阶段的抢购氛围十分火爆。 iPhone Duo于本周五开启预售，开售瞬间，官网和电商平台便被挤爆，首批货源迅速被抢购一空。 尽管该机仅支持eSIM，且没有Face ID、没有长焦镜头，但iPhone Duo依然点燃了消费者的热情，首发阶段的抢购氛围十分火爆。 早在一个月前，得物平台上的iPhone Duo预售订单就已开始报价。9月11日，定价21499元的1TB版本一度溢价至79999元，溢价超过5.8万元。当时市场对这款苹果首款折叠屏的期待值可见一斑。 如今，iPhone Duo在第三方渠道的报价已大幅下跌。多位黄牛在二手交易平台上只加价3000元，并承诺首销当天就能拿货。从早期近6万元的夸张溢价，到如今加价3000元，价格回落幅度相当明显。 尽管黄牛价格已经大幅回落，但不少网友仍建议消费者没必要从黄牛手里拿货。当前价格只是短期供需失衡造成的溢价，随着产线良率稳步提升，iPhone Duo产能会持续爬坡，一两个月后预计货源充足，价格也有望进一步回归理性。",
+      [
+        "iPhone Duo于本周五开启预售，开售瞬间，官网和电商平台便被挤爆，首批货源迅速被抢购一空。尽管该机仅支持eSIM，且没有Face ID、没有长焦镜头，但iPhone Duo依然点燃了消费者的热情，首发阶段的抢购氛围十分火爆。",
+        "早在一个月前，得物平台上的iPhone Duo预售订单就已开始报价。9月11日，定价21499元的1TB版本一度溢价至79999元，溢价超过5.8万元。当时市场对这款苹果首款折叠屏的期待值可见一斑。",
+        "如今，iPhone Duo在第三方渠道的报价已大幅下跌。多位黄牛在二手交易平台上只加价3000元，并承诺首销当天就能拿货。从早期近6万元的夸张溢价，到如今加价3000元，价格回落幅度相当明显。",
+        "目前官方渠道仍可正常排队预订，只是发货延后。多等待一段时间，就能省下数千元溢价，还能享受完整官方保修。早拿到手仅换来短期体验，付出额外成本并不划算。目前iPhone Duo发货时间已排至1月份，起售价为15999元。"
+      ]
+    ]
+  },
+  "97ecd4764a2811753923f72a": {
+    "evidence": {
+      "article_id": "97ecd4764a2811753923f72a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，苹果公司近日对外公布的欧盟产品合规信息文件，正式披露了旗下首款折叠屏手机iPhone Duo的官方电池容量参数。 这款折叠屏设备采用双电芯组合设计，总电池容量为4883mAh，两块独立电芯的容量分别为2962mAh和1921mAh，刚好适配折叠屏特殊的内部堆叠结构。 其实相关电池参数的爆料此前就已经在数码社区广泛流传，这次欧盟官方产品信息文件的正式公示，相当于官方出面实锤了这组流传已久的数据，不存在任何参数偏差。 早先坊间泄露的iPhone Duo电池信息就明确提到 ，这款机型采用两块完全独立的电芯设计，两块电芯容量分别为2962mAh和1921mAh，合计总容量4883mAh，这次公示的官方产品信息和此前的民间爆料数据完全吻合，没有出入。 由于iPhone Duo全系列采用纯eSIM设计，整机没有配备实体SIM卡槽，因此不同国家和地区的版本完全不需要为了容纳SIM卡槽调整内部空间布局，整机内部堆叠方案全球统一。 按照外媒的测算分析，4883mAh这一电池容量参数适用于所有全球发售版本，不会像过往部分传统直板iPhone那样，因为实体SIM卡槽版本和纯eSIM版本的内部布局差异，出现不同地区版本电池容量不一样的情况。 从现有苹果全系列机型的容量横向对比来看，iPhone Duo的电池容量刚好介于iPhone 18 Pro和iPhone 18 Pro Max之间。根据知名拆解机构iFixit此前拆机获得的精确数据，纯eSIM版iPhone 18 Pro的电池容量为4288mAh，顶配的iPhone 18 Pro Max电池容量则达到5567mAh。 这么算下来，iPhone Duo的电池容量比iPhone 18 Pro多出了595mAh，但比超大杯的iPhone 18 Pro Max少了684mAh，考虑到折叠屏两块屏幕的耗电需求，很多人起初并不看好它的日常续航表现。",
+      "discovery_title": "苹果公布折叠屏iPhone Duo电池容量：4883mAh 由两块电池组成",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 06:34:05.377",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 06:34:05",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 06:34:05.377",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T22:34:05.377000+00:00",
+      "raw_lead": "快科技10月19日消息，苹果公司近日对外公布的欧盟产品合规信息文件，正式披露了旗下首款折叠屏手机iPhone Duo的官方电池容量参数。这款折叠屏设备采用双电芯组合设计，总电池容量为4883mAh，两",
+      "source": "快科技",
+      "title": "苹果公布折叠屏iPhone Duo电池容量：4883mAh 由两块电池组成",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，苹果公司近日对外公布的欧盟产品合规信息文件，正式披露了旗下首款折叠屏手机iPhone Duo的官方电池容量参数。",
+          "unit_id": "aacf14b2bddc657aa2c0f02d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这款折叠屏设备采用双电芯组合设计，总电池容量为4883mAh，两块独立电芯的容量分别为2962mAh和1921mAh，刚好适配折叠屏特殊的内部堆叠结构。",
+          "unit_id": "35620f53581afc826d9738f9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "其实相关电池参数的爆料此前就已经在数码社区广泛流传，这次欧盟官方产品信息文件的正式公示，相当于官方出面实锤了这组流传已久的数据，不存在任何参数偏差。",
+          "unit_id": "eee321b76bde1b5f9b15efc4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "早先坊间泄露的iPhone Duo电池信息就明确提到，这款机型采用两块完全独立的电芯设计，两块电芯容量分别为2962mAh和1921mAh，合计总容量4883mAh，这次公示的官方产品信息和此前的民间爆料数据完全吻合，没有出入。",
+          "unit_id": "96bba8483e60162d878c4e76"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "由于iPhone Duo全系列采用纯eSIM设计，整机没有配备实体SIM卡槽，因此不同国家和地区的版本完全不需要为了容纳SIM卡槽调整内部空间布局，整机内部堆叠方案全球统一。",
+          "unit_id": "0a1999640b985649111b71ef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "按照外媒的测算分析，4883mAh这一电池容量参数适用于所有全球发售版本，不会像过往部分传统直板iPhone那样，因为实体SIM卡槽版本和纯eSIM版本的内部布局差异，出现不同地区版本电池容量不一样的情况。",
+          "unit_id": "1d67bf520971f6f75361a038"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "从现有苹果全系列机型的容量横向对比来看，iPhone Duo的电池容量刚好介于iPhone 18 Pro和iPhone 18 Pro Max之间。根据知名拆解机构iFixit此前拆机获得的精确数据，纯eSIM版iPhone 18 Pro的电池容量为4288mAh，顶配的iPhone 18 Pro Max电池容量则达到5567mAh。",
+          "unit_id": "795276a986c422d47c6938bc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "这么算下来，iPhone Duo的电池容量比iPhone 18 Pro多出了595mAh，但比超大杯的iPhone 18 Pro Max少了684mAh，考虑到折叠屏两块屏幕的耗电需求，很多人起初并不看好它的日常续航表现。",
+          "unit_id": "7cfa369f73c620a1fcf8a6d6"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158417.htm"
+    },
+    "recorded_extraction": [
+      "苹果公布折叠屏iPhone Duo电池容量：4883mAh 由两块电池组成",
+      "快科技10月19日消息，苹果公司近日对外公布的欧盟产品合规信息文件，正式披露了旗下首款折叠屏手机iPhone Duo的官方电池容量参数。这款折叠屏设备采用双电芯组合设计，总电池容量为4883mAh，两 快科技10月19日消息，苹果公司近日对外公布的欧盟产品合规信息文件，正式披露了旗下首款折叠屏手机iPhone Duo的官方电池容量参数。 这款折叠屏设备采用双电芯组合设计，总电池容量为4883mAh，两块独立电芯的容量分别为2962mAh和1921mAh，刚好适配折叠屏特殊的内部堆叠结构。 其实相关电池参数的爆料此前就已经在数码社区广泛流传，这次欧盟官方产品信息文件的正式公示，相当于官方出面实锤了这组流传已久的数据，不存在任何参数偏差。 早先坊间泄露的iPhone Duo电池信息就明确提到 ，这款机型采用两块完全独立的电芯设计，两块电芯容量分别为2962mAh和1921mAh，合计总容量4883mAh，这次公示的官方产品信息和此前的民间爆料数据完全吻合，没有出入。",
+      [
+        "快科技10月19日消息，苹果公司近日对外公布的欧盟产品合规信息文件，正式披露了旗下首款折叠屏手机iPhone Duo的官方电池容量参数。",
+        "这款折叠屏设备采用双电芯组合设计，总电池容量为4883mAh，两块独立电芯的容量分别为2962mAh和1921mAh，刚好适配折叠屏特殊的内部堆叠结构。",
+        "早先坊间泄露的iPhone Duo电池信息就明确提到，这款机型采用两块完全独立的电芯设计，两块电芯容量分别为2962mAh和1921mAh，合计总容量4883mAh，这次公示的官方产品信息和此前的民间爆料数据完全吻合，没有出入。",
+        "按照外媒的测算分析，4883mAh这一电池容量参数适用于所有全球发售版本，不会像过往部分传统直板iPhone那样，因为实体SIM卡槽版本和纯eSIM版本的内部布局差异，出现不同地区版本电池容量不一样的情况。",
+        "从现有苹果全系列机型的容量横向对比来看，iPhone Duo的电池容量刚好介于iPhone 18 Pro和iPhone 18 Pro Max之间。根据知名拆解机构iFixit此前拆机获得的精确数据，纯eSIM版iPhone 18 Pro的电池容量为4288mAh，顶配的iPhone 18 Pro Max电池容量则达到5567mAh。",
+        "这么算下来，iPhone Duo的电池容量比iPhone 18 Pro多出了595mAh，但比超大杯的iPhone 18 Pro Max少了684mAh，考虑到折叠屏两块屏幕的耗电需求，很多人起初并不看好它的日常续航表现。"
+      ]
+    ]
+  },
+  "99e14c474a3158c29fea91a0": {
+    "evidence": {
+      "article_id": "99e14c474a3158c29fea91a0",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，据MacRumors报道， 苹果将跳过M6 Pro、M6 Max与M6 Ultra芯片，集中资源开发支持人工智能运算的M7系列。 这也意味着，即将推出的OLED版MacBook Pro仍将沿用M5系列芯片，高阶机型要等到2027年底才会升级至M7 Pro与M7 Max。 记者Mark Gurman周四在播客节目中重申，苹果的M6芯片系列“差不多到此为止”。 苹果已在Mac mini搭载M6，也计划推出配备M6的iMac与入门款14英寸MacBook Pro，但没有打算制造性能更高的M6 Pro、M6 Max或M6 Ultra。 因此，高阶Mac的芯片将从M5系列直接跳到M7系列。即将推出的OLED版MacBook Pro仍将使用今年3月问世的M5 Pro与M5 Max，与目前机型相同，换上新屏幕时并不会同步升级芯片。 依Gurman的说法，搭载M7芯片的新版入门款MacBook Pro将于2027年推出，高阶触控屏版MacBook Pro则要到2027年底才会搭载M7 Pro与M7 Max。 至于性能更高的M7 Ultra，预计要到2028年上半年才问世。因此，Mac Studio在2027年推出新机的可能性不高。 快科技10月19日消息，据MacRumors报道，苹果将跳过M6 Pro、M6 Max与M6 Ultra芯片，集中资源开发支持人工智能运算的M7系列。 这也意味着，即将推出的OLED版MacBook Pro仍将沿用M5系列芯片，高阶",
+      "discovery_title": "苹果芯片布局曝光：将跳票高阶M6 直接研发M7系列",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 09:08:46.753",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 09:08:46",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 09:08:46.753",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-19T01:08:46.753000+00:00",
+      "raw_lead": "快科技10月19日消息，据MacRumors报道，苹果将跳过M6 Pro、M6 Max与M6 Ultra芯片，集中资源开发支持人工智能运算的M7系列。这也意味着，即将推出的OLED版MacBook Pro仍将沿用M5系列芯片，高阶",
+      "source": "快科技",
+      "title": "苹果芯片布局曝光：将跳票高阶M6 直接研发M7系列",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，据MacRumors报道，苹果将跳过M6 Pro、M6 Max与M6 Ultra芯片，集中资源开发支持人工智能运算的M7系列。",
+          "unit_id": "f74ec36da3ccb83526a0c2cf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这也意味着，即将推出的OLED版MacBook Pro仍将沿用M5系列芯片，高阶机型要等到2027年底才会升级至M7 Pro与M7 Max。",
+          "unit_id": "1f245ee7ed222ced88ea23f2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "记者Mark Gurman周四在播客节目中重申，苹果的M6芯片系列“差不多到此为止”。苹果已在Mac mini搭载M6，也计划推出配备M6的iMac与入门款14英寸MacBook Pro，但没有打算制造性能更高的M6 Pro、M6 Max或M6 Ultra。",
+          "unit_id": "85146b9e84eadfef4d8c3aa0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "因此，高阶Mac的芯片将从M5系列直接跳到M7系列。即将推出的OLED版MacBook Pro仍将使用今年3月问世的M5 Pro与M5 Max，与目前机型相同，换上新屏幕时并不会同步升级芯片。",
+          "unit_id": "14409c7e80c3243a70c980fb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "依Gurman的说法，搭载M7芯片的新版入门款MacBook Pro将于2027年推出，高阶触控屏版MacBook Pro则要到2027年底才会搭载M7 Pro与M7 Max。",
+          "unit_id": "e3198d70b8465f3f090fb719"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "至于性能更高的M7 Ultra，预计要到2028年上半年才问世。因此，Mac Studio在2027年推出新机的可能性不高。",
+          "unit_id": "76513bdb6539d05f5a8a48a9"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158443.htm"
+    },
+    "recorded_extraction": [
+      "苹果芯片布局曝光：将跳票高阶M6 直接研发M7系列",
+      "快科技10月19日消息，据MacRumors报道，苹果将跳过M6 Pro、M6 Max与M6 Ultra芯片，集中资源开发支持人工智能运算的M7系列。这也意味着，即将推出的OLED版MacBook Pro仍将沿用M5系列芯片，高阶 快科技10月19日消息，据MacRumors报道， 苹果将跳过M6 Pro、M6 Max与M6 Ultra芯片，集中资源开发支持人工智能运算的M7系列。 这也意味着，即将推出的OLED版MacBook Pro仍将沿用M5系列芯片，高阶机型要等到2027年底才会升级至M7 Pro与M7 Max。 记者Mark Gurman周四在播客节目中重申，苹果的M6芯片系列“差不多到此为止”。 苹果已在Mac mini搭载M6，也计划推出配备M6的iMac与入门款14英寸MacBook Pro，但没有打算制造性能更高的M6 Pro、M6 Max或M6 Ultra。 因此，高阶Mac的芯片将从M5系列直接跳到M7系列。即将推出的OLED版MacBook Pro仍将使用今年3月问世的M5 Pro与M5 Max，与目前机型相同，换上新屏幕时并不会同步升级芯片。",
+      [
+        "快科技10月19日消息，据MacRumors报道，苹果将跳过M6 Pro、M6 Max与M6 Ultra芯片，集中资源开发支持人工智能运算的M7系列。",
+        "记者Mark Gurman周四在播客节目中重申，苹果的M6芯片系列“差不多到此为止”。苹果已在Mac mini搭载M6，也计划推出配备M6的iMac与入门款14英寸MacBook Pro，但没有打算制造性能更高的M6 Pro、M6 Max或M6 Ultra。"
+      ]
+    ]
+  },
+  "9a22181d0cb56675600888a5": {
+    "evidence": {
+      "article_id": "9a22181d0cb56675600888a5",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple just announced its long awaited smart home display: HomeView, and it’s available for $299. That said, the product has been in development for quite some time, being held back by all of the delays with developing a smarter Siri. Now that it’s on the market, some customers have had concern about the fact that you have to move the HomeView around yourself if its on a table with multiple people surrounding it. According to the Power On newsletter, it might not be too long before Apple has a solution. more… That said, the product has…",
+      "discovery_title": "Apple’s next HomeView could debut as soon as next year with a robotic arm: report",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:17:21+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:17:21+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 14:17:21 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T14:17:21+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T14:17:21+00:00",
+      "raw_lead": "Apple just announced its long awaited smart home display: HomeView, and it’s available for $299. That said, the product has...",
+      "source": "9to5Mac",
+      "title": "Apple's next HomeView could debut as soon as next year with a robotic arm: report - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple just announced its long awaited smart home display: HomeView, and it’s available for $299. That said, the product has been in development for quite some time, being held back by all of the delays with developing a smarter Siri.",
+          "unit_id": "8582f5e413e63060e68af65b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Now that it’s on the market, some customers have had concern about the fact that you have to move the HomeView around yourself if its on a table with multiple people surrounding it. According to the Power On newsletter, it might not be too long before Apple has a solution.",
+          "unit_id": "3f0b544d6f6c024a993c0420"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "We’ve known that Apple has been working on robotic products of sorts for quite some time, but now we have a clear release window. According to Bloomberg’s Mark Gurman, the company might debut a better HomeView, perhaps HomeView Pro – as soon as next year:",
+          "unit_id": "a9e281be4b63e69c3bc348bd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The good news is that Apple is on track to solve that problem with a souped-up version of the HomeView planned for release in 2027 or 2028. Code-named J595, this version looks like the current HomeView but has a roughly 9-inch screen (up from 7 inches) and a motorized robotic arm that lets the display swivel a full 360 degrees. Using voice recognition, the machine is designed to identify who’s speaking and automatically turn toward that person.",
+          "unit_id": "1c31fc8d5a53780c094f1e47"
+        },
+        {
+          "container_id": "",
+          "kind": "text",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "View all comments",
+          "unit_id": "4732128fbf161d84aa712476"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "This version will have a larger display, and be capable of turning full-circle, rather than just a little bit of tilt. This won’t replace the HomeView, and will instead serve as a higher end model in the lineup. So, don’t expect it at the same $299 price point.",
+          "unit_id": "d2e70d419d7433f5205b9d95"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple reportedly also plans to use voice recognition to figure out how to pivot the robotic arm towards the right person. Think about the Center Stage camera on some newer Apple products, but leveled up.",
+          "unit_id": "99779b15048f121fdaa3b41f"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/18/apples-next-homeview-could-debut-as-soon-as-next-year-with-a-robotic-arm-report/"
+    },
+    "recorded_extraction": [
+      "Apple's next HomeView could debut as soon as next year with a robotic arm: report - 9to5Mac",
+      "Apple just announced its long awaited smart home display: HomeView, and it’s available for $299. That said, the product has... Apple just announced its long awaited smart home display: HomeView , and it’s available for $299. That said, the product has been in development for quite some time, being held back by all of the delays with developing a smarter Siri. Now that it’s on the market, some customers have had concern about the fact that you have to move the HomeView around yourself if its on a table with multiple people surrounding it. According to the Power On newsletter , it might not be too long before Apple has a solution. We’ve known that Apple has been working on robotic products of sorts for quite some time, but now we have a clear release window. According to Bloomberg’s Mark Gurman , the company might debut a better HomeView , perhaps HomeView Pro – as soon as next year: The good news is that Apple is on track to solve that problem with a souped-up version of the HomeView planned for release in 2027 or 2028. Code-named J595, this version looks like the current HomeView but has a roughly 9-inch screen (up from 7 inches) and a motorized robotic arm that lets the display swivel a full 360 degrees. Using voice recognition, the machine is designed to identify who’s speaking and automatically turn toward that person.",
+      [
+        "Apple just announced its long awaited smart home display: HomeView, and it’s available for $299. That said, the product has been in development for quite some time, being held back by all of the delays with developing a smarter Siri.",
+        "The good news is that Apple is on track to solve that problem with a souped-up version of the HomeView planned for release in 2027 or 2028. Code-named J595, this version looks like the current HomeView but has a roughly 9-inch screen (up from 7 inches) and a motorized robotic arm that lets the display swivel a full 360 degrees. Using voice recognition, the machine is designed to identify who’s speaking and automatically turn toward that person.",
+        "This version will have a larger display, and be capable of turning full-circle, rather than just a little bit of tilt. This won’t replace the HomeView, and will instead serve as a higher end model in the lineup. So, don’t expect it at the same $299 price point."
+      ]
+    ]
+  },
+  "cfb1322b2d3937355a4aa946": {
+    "evidence": {
+      "article_id": "cfb1322b2d3937355a4aa946",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 19 日消息，苹果于当地时间周五发布了 iPhone Duo 的欧盟能效标签，文件显示这款设备的电池总容量为 4883 毫安时。 这份文件似乎证实了此前的一则爆料：iPhone Duo 配备两块电池电芯，容量分别为 2962 毫安时与 1921 毫安时，合计 4883 毫安时。IT之家注意到，iPhone Duo 仅支持 eSIM，没有实体 SIM 卡槽，因此这一电池容量数值适用于全球所有版本，不会出现部分机型因预留实体卡槽而压缩电池体积、容量略小的情况。 作为对比，iFixit 拆解发现，仅支持 eSIM 的 iPhone 18 Pro 电池容量为 4288 毫安时，同样只支持 eSIM 的 iPhone 18 Pro Max 电池容量则为 5567 毫安时。 这款新机采用双电芯设计，仅支持 eSIM，因此电池容量全球统一，不会因实体卡槽缩水。对比 iPhone 18 Pro 的 4288mAh，Duo 续航表现值得关注。",
+      "discovery_title": "苹果发布 iPhone Duo 欧盟能效标签：电池总容量 4883mAh",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/19 6:43:51",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/19 6:43:51",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 22:43:51 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/19 6:43:51",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T22:43:51+00:00",
+      "raw_lead": "这款新机采用双电芯设计，仅支持 eSIM，因此电池容量全球统一，不会因实体卡槽缩水。对比 iPhone 18 Pro 的 4288mAh，Duo 续航表现值得关注。",
+      "source": "IT之家",
+      "title": "苹果发布 iPhone Duo 欧盟能效标签：电池总容量 4883mAh",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 19 日消息，苹果于当地时间周五发布了 iPhone Duo 的欧盟能效标签，文件显示这款设备的电池总容量为 4883 毫安时。",
+          "unit_id": "be8b09a220e445b4e3b18685"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这份文件似乎证实了此前的一则爆料：iPhone Duo 配备两块电池电芯，容量分别为 2962 毫安时与 1921 毫安时，合计 4883 毫安时。IT之家注意到，iPhone Duo 仅支持 eSIM，没有实体 SIM 卡槽，因此这一电池容量数值适用于全球所有版本，不会出现部分机型因预留实体卡槽而压缩电池体积、容量略小的情况。",
+          "unit_id": "86b15c493644da9ac7384cd6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "作为对比，iFixit 拆解发现，仅支持 eSIM 的 iPhone 18 Pro 电池容量为 4288 毫安时，同样只支持 eSIM 的 iPhone 18 Pro Max 电池容量则为 5567 毫安时。",
+          "unit_id": "1e60c2b7c41eee629b9675cc"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/620.htm"
+    },
+    "recorded_extraction": [
+      "苹果发布 iPhone Duo 欧盟能效标签：电池总容量 4883mAh",
+      "这款新机采用双电芯设计，仅支持 eSIM，因此电池容量全球统一，不会因实体卡槽缩水。对比 iPhone 18 Pro 的 4288mAh，Duo 续航表现值得关注。 IT之家 10 月 19 日消息，苹果于当地时间周五发布了 iPhone Duo 的欧盟能效标签，文件显示这款设备的电池总容量为 4883 毫安时。 这份文件似乎证实了此前的一则爆料： iPhone Duo 配备两块电池电芯，容量分别为 2962 毫安时与 1921 毫安时，合计 4883 毫安时。IT之家注意到，iPhone Duo 仅支持 eSIM，没有实体 SIM 卡槽，因此这一电池容量数值适用于全球所有版本，不会出现部分机型因预留实体卡槽而压缩电池体积、容量略小的情况。 作为对比，iFixit 拆解发现，仅支持 eSIM 的 iPhone 18 Pro 电池容量为 4288 毫安时，同样只支持 eSIM 的 iPhone 18 Pro Max 电池容量则为 5567 毫安时。",
+      [
+        "IT之家 10 月 19 日消息，苹果于当地时间周五发布了 iPhone Duo 的欧盟能效标签，文件显示这款设备的电池总容量为 4883 毫安时。",
+        "这份文件似乎证实了此前的一则爆料：iPhone Duo 配备两块电池电芯，容量分别为 2962 毫安时与 1921 毫安时，合计 4883 毫安时。IT之家注意到，iPhone Duo 仅支持 eSIM，没有实体 SIM 卡槽，因此这一电池容量数值适用于全球所有版本，不会出现部分机型因预留实体卡槽而压缩电池体积、容量略小的情况。",
+        "作为对比，iFixit 拆解发现，仅支持 eSIM 的 iPhone 18 Pro 电池容量为 4288 毫安时，同样只支持 eSIM 的 iPhone 18 Pro Max 电池容量则为 5567 毫安时。"
+      ]
+    ]
+  },
+  "d131977fc1d53b8ed7d7a4e5": {
+    "evidence": {
+      "article_id": "d131977fc1d53b8ed7d7a4e5",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "据彭博社记者马克·古尔曼最新披露，尽管苹果早已知晓由于制造环节面临挑战，iPhone Duo 将遭遇“严重的供应限制”，但公司仍选择按计划于上周五开启新机预订，而没有等到库存准备更加充分后再推向市场。古尔曼在最新一期《Power On》通讯中直言，这一决定属于一次“重大失误”。 阅读全文",
+      "discovery_title": "古尔曼批评苹果提前开放iPhone Duo预订：明知产能受限仍仓促上市",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月18日 22:49",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 14:49:41 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月18日 22:49",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-18T14:49:00+00:00",
+      "raw_lead": "据彭博社记者马克·古尔曼最新披露，尽管苹果早已知晓由于制造环节面临挑战，iPhoneDuo将遭遇“严重的供应限制”，但公司仍选择按计划于上周五开启新机预订，而没有等到库存准备更加充分后再推向市场。古尔曼在最新一期《PowerOn》通讯中直言，这一决定属于一次“重大失误”。",
+      "source": "cnBeta",
+      "title": "古尔曼批评苹果提前开放iPhone Duo预订：明知产能受限仍仓促上市 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "据彭博社记者马克·古尔曼最新披露，尽管苹果早已知晓由于制造环节面临挑战，iPhone Duo 将遭遇“严重的供应限制”，但公司仍选择按计划于上周五开启新机预订，而没有等到库存准备更加充分后再推向市场。古尔曼在最新一期《Power On》通讯中直言，这一决定属于一次“重大失误”。",
+          "unit_id": "89a990f4546a98b6714d6fd4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "古尔曼表示，苹果显然清楚新机供应将十分紧张，却依然推进发布计划。他认为，公司似乎更看重能够在新财年第一财季尽早将产品推向市场，而非优先满足消费者需求。这样的安排将让许多最热衷于购买该产品的早期用户感到失望。",
+          "unit_id": "1888da75c7e1dbfd45394450"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "根据古尔曼透露的信息，苹果最初曾计划仅在美国和中国率先推出 iPhone Duo，随后再逐步扩展至其他市场。然而，苹果最终改变策略，选择在全球超过 70 个国家和地区同步启动预订。",
+          "unit_id": "4cff2431a10cf534beec5434"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "市场对此次新品的需求远超供应能力。报道称，在预订开启后不到 30 分钟，苹果官网显示的大多数地区 iPhone Duo 发货时间便迅速推迟至约 2027 年 1 月 25 日。",
+          "unit_id": "e14e51279d3f212fe09d8820"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "不过，报道也指出，苹果以往在产品发货时间预估方面往往会采取相对保守的策略，实际交付速度有时快于最初公布的时间表。因此，部分消费者未来仍有可能获得较当前预计时间更早的发货安排。",
+          "unit_id": "eca1864b08ffd65d2180b5ed"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582774.htm"
+    },
+    "recorded_extraction": [
+      "古尔曼批评苹果提前开放iPhone Duo预订：明知产能受限仍仓促上市 - Apple iPhone - cnBeta.COM",
+      "据彭博社记者马克·古尔曼最新披露，尽管苹果早已知晓由于制造环节面临挑战，iPhoneDuo将遭遇“严重的供应限制”，但公司仍选择按计划于上周五开启新机预订，而没有等到库存准备更加充分后再推向市场。古尔曼在最新一期《PowerOn》通讯中直言，这一决定属于一次“重大失误”。 据彭博社记者马克·古尔曼最新披露，尽管苹果早已知晓由于制造环节面临挑战，iPhone Duo 将遭遇“严重的供应限制”，但公司仍选择按计划于上周五开启新机预订，而没有等到库存准备更加充分后再推向市场。古尔曼在最新一期《Power On》通讯中直言，这一决定属于一次“重大失误”。 古尔曼表示，苹果显然清楚新机供应将十分紧张，却依然推进发布计划。他认为，公司似乎更看重能够在新财年第一财季尽早将产品推向市场，而非优先满足消费者需求。这样的安排将让许多最热衷于购买该产品的早期用户感到失望。 根据古尔曼透露的信息，苹果最初曾计划仅在美国和中国率先推出 iPhone Duo，随后再逐步扩展至其他市场。然而，苹果最终改变策略，选择在全球超过 70 个国家和地区同步启动预订。 市场对此次新品的需求远超供应能力。报道称，在预订开启后不到 30 分钟，苹果官网显示的大多数地区 iPhone Duo 发货时间便迅速推迟至约 2027 年 1 月 25 日。",
+      [
+        "根据古尔曼透露的信息，苹果最初曾计划仅在美国和中国率先推出 iPhone Duo，随后再逐步扩展至其他市场。然而，苹果最终改变策略，选择在全球超过 70 个国家和地区同步启动预订。",
+        "市场对此次新品的需求远超供应能力。报道称，在预订开启后不到 30 分钟，苹果官网显示的大多数地区 iPhone Duo 发货时间便迅速推迟至约 2027 年 1 月 25 日。"
+      ]
+    ]
+  },
+  "d59ada0eff79b90521b257b9": {
+    "evidence": {
+      "article_id": "d59ada0eff79b90521b257b9",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月19日消息，苹果首款折叠屏iPhone Duo已经成为高溢价的“数码硬通货”。由于首批货源紧张、市场需求旺盛，这款新机在首发阶段迅速展现出较强的溢价能力。 据媒体报道，一位山西消费者在苹果官网上花17999元抢到了一台512GB星光白色款iPhone Duo。由于这台手机可以在10月23日到手，该消费者选择加价5000元转手。 在二手交易平台上，一台512GB版本的iPhone Duo首发报价达到25500元，溢价超过7000元。从这些报价来看，iPhone Duo在首发阶段的价格已经明显偏离官方定价。 种种迹象表明，iPhone Duo已经成为苹果的“电子茅台”。不少黄牛在收购首发iPhone Duo，希望从中赚取差价。一位商家表示，估计发售第一天会溢价大几千，后面还要看市场行情和客户反应。 截至目前，苹果官网iPhone Duo的发货时间已经排到明年1月份。受产能影响，iPhone Duo供不应求的局面短期内难以缓解。 此前调研机构Counterpoint Research预测，iPhone Duo今年出货量为600万台。如果产能爬坡不顺利，年末实际出货量仍可能低于这一水平。 供应端的紧张，也在一定程度上支撑了二手市场的溢价预期。 在硬件配置上，iPhone Duo内屏尺寸为7.6英寸，外屏尺寸为5.4英寸。核心搭载A20 Pro芯片，整机重量为254克，配备4800万像素双摄，仅支持eSIM网络。 据媒体报道，一位",
+      "discovery_title": "苹果版电子茅台！第一批抢到iPhone Duo的人已加价5000元转卖",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 07:50:58.430",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19 07:50:58",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19 07:50:58.430",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T23:50:58.430000+00:00",
+      "raw_lead": "快科技10月19日消息，苹果首款折叠屏iPhone Duo已经成为高溢价的“数码硬通货”。由于首批货源紧张、市场需求旺盛，这款新机在首发阶段迅速展现出较强的溢价能力。据媒体报道，一位",
+      "source": "快科技",
+      "title": "苹果版电子茅台！第一批抢到iPhone Duo的人已加价5000元转卖",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月19日消息，苹果首款折叠屏iPhone Duo已经成为高溢价的“数码硬通货”。由于首批货源紧张、市场需求旺盛，这款新机在首发阶段迅速展现出较强的溢价能力。",
+          "unit_id": "0aa3f4d02e4abab2265aa584"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据媒体报道，一位山西消费者在苹果官网上花17999元抢到了一台512GB星光白色款iPhone Duo。由于这台手机可以在10月23日到手，该消费者选择加价5000元转手。",
+          "unit_id": "bf8424ff28ee5df1d842f752"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在二手交易平台上，一台512GB版本的iPhone Duo首发报价达到25500元，溢价超过7000元。从这些报价来看，iPhone Duo在首发阶段的价格已经明显偏离官方定价。",
+          "unit_id": "abe506f9c53d86fdc8aed4d0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "种种迹象表明，iPhone Duo已经成为苹果的“电子茅台”。不少黄牛在收购首发iPhone Duo，希望从中赚取差价。一位商家表示，估计发售第一天会溢价大几千，后面还要看市场行情和客户反应。",
+          "unit_id": "b9c7e73e3cfd2e9056505c24"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "截至目前，苹果官网iPhone Duo的发货时间已经排到明年1月份。受产能影响，iPhone Duo供不应求的局面短期内难以缓解。",
+          "unit_id": "8d4af6840e170e7a07d6ee2a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "此前调研机构Counterpoint Research预测，iPhone Duo今年出货量为600万台。如果产能爬坡不顺利，年末实际出货量仍可能低于这一水平。供应端的紧张，也在一定程度上支撑了二手市场的溢价预期。",
+          "unit_id": "93802b4a93b218c5b5b9b3bc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "在硬件配置上，iPhone Duo内屏尺寸为7.6英寸，外屏尺寸为5.4英寸。核心搭载A20 Pro芯片，整机重量为254克，配备4800万像素双摄，仅支持eSIM网络。",
+          "unit_id": "a87f6fd6e2cc3875e14d091c"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158427.htm"
+    },
+    "recorded_extraction": [
+      "苹果版电子茅台！第一批抢到iPhone Duo的人已加价5000元转卖",
+      "快科技10月19日消息，苹果首款折叠屏iPhone Duo已经成为高溢价的“数码硬通货”。由于首批货源紧张、市场需求旺盛，这款新机在首发阶段迅速展现出较强的溢价能力。据媒体报道，一位 快科技10月19日消息，苹果首款折叠屏iPhone Duo已经成为高溢价的“数码硬通货”。由于首批货源紧张、市场需求旺盛，这款新机在首发阶段迅速展现出较强的溢价能力。 据媒体报道，一位山西消费者在苹果官网上花17999元抢到了一台512GB星光白色款iPhone Duo。由于这台手机可以在10月23日到手，该消费者选择加价5000元转手。 在二手交易平台上，一台512GB版本的iPhone Duo首发报价达到25500元，溢价超过7000元。从这些报价来看，iPhone Duo在首发阶段的价格已经明显偏离官方定价。 种种迹象表明，iPhone Duo已经成为苹果的“电子茅台”。不少黄牛在收购首发iPhone Duo，希望从中赚取差价。一位商家表示，估计发售第一天会溢价大几千，后面还要看市场行情和客户反应。",
+      [
+        "快科技10月19日消息，苹果首款折叠屏iPhone Duo已经成为高溢价的“数码硬通货”。由于首批货源紧张、市场需求旺盛，这款新机在首发阶段迅速展现出较强的溢价能力。",
+        "据媒体报道，一位山西消费者在苹果官网上花17999元抢到了一台512GB星光白色款iPhone Duo。由于这台手机可以在10月23日到手，该消费者选择加价5000元转手。",
+        "在二手交易平台上，一台512GB版本的iPhone Duo首发报价达到25500元，溢价超过7000元。从这些报价来看，iPhone Duo在首发阶段的价格已经明显偏离官方定价。",
+        "截至目前，苹果官网iPhone Duo的发货时间已经排到明年1月份。受产能影响，iPhone Duo供不应求的局面短期内难以缓解。",
+        "此前调研机构Counterpoint Research预测，iPhone Duo今年出货量为600万台。如果产能爬坡不顺利，年末实际出货量仍可能低于这一水平。供应端的紧张，也在一定程度上支撑了二手市场的溢价预期。",
+        "在硬件配置上，iPhone Duo内屏尺寸为7.6英寸，外屏尺寸为5.4英寸。核心搭载A20 Pro芯片，整机重量为254克，配备4800万像素双摄，仅支持eSIM网络。"
+      ]
+    ]
+  },
+  "d66be57ff452ae3e4bb82ede": {
+    "evidence": {
+      "article_id": "d66be57ff452ae3e4bb82ede",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月18日消息，一位做苹果配件14年的数码博主“Kang”，直接给苹果这款定价599元的iPhone Duo官方手机壳打出垃圾评级，他觉得这款产品问题太多，苹果甚至不如不做。 这款手机壳",
+      "discovery_title": "从业14年老配件博主怒喷：苹果599元官方手机壳就是垃圾",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 16:22:35.000",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18 16:22",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18 16:22:35.000",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-18T08:22:35+00:00",
+      "raw_lead": "快科技10月18日消息，一位做苹果配件14年的数码博主“Kang”，直接给苹果这款定价599元的iPhone Duo官方手机壳打出垃圾评级，他觉得这款产品问题太多，苹果甚至不如不做。这款手机壳",
+      "source": "快科技",
+      "title": "从业14年老配件博主怒喷：苹果599元官方手机壳就是垃圾",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月18日消息，一位做苹果配件14年的数码博主“Kang”，直接给苹果这款定价599元的iPhone Duo官方手机壳打出垃圾评级，他觉得这款产品问题太多，苹果甚至不如不做。",
+          "unit_id": "8255a49cc5f6a3079f2ba5ae"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "这款手机壳主体是PC聚碳酸酯材质，外层喷手感漆，靠贴胶固定。博主说，做环保PC材料没有什么技术门槛，环保手感漆也不存在高额附加成本。",
+          "unit_id": "5231f2d5f1046c4414871053"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "但售价599元的壳，里面没有配备备用贴胶。手机是亮面钛金属，壳内框不是全胶，一旦进灰，边缘就会持续摩擦，很容易划伤手机边框。在他看来，这种设计属于消极的产品策略，靠售后换新来解决缺陷。",
+          "unit_id": "45dcb9d7f07a4db675e2c199"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "它还违背苹果自家配件设计文档。苹果原本要求手机壳不能挡住侧边返回滑动区域，这款壳却挡住了。",
+          "unit_id": "2d917f8d3945b00639d69cb0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "苹果的解决办法是在系统设置增加开关，给屏幕加上黑边来实现返回操作，博主评价这相当于修改规则来适配产品缺陷。",
+          "unit_id": "0841548f680a1f0982c714e9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "固定方案也有隐患，扣位设计不完善，贴胶又不是全胶。手机跌落的时候，前框有直接飞出去的概率。不仅防护不到位，某些角度落地还会增加机身侧面受力，同时还额外增加重量。",
+          "unit_id": "d39fe99cda145a4873e08377"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "按键设计同样被吐槽。电源键因为集成指纹，不做包裹可以理解。但壳的厚度完全可以做出相机按键保护，官方却直接做成镂空。",
+          "unit_id": "fd3732faed847bfe858ac083"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "相机按键维修报价在8000元往上，裸露设计很容易磕碰损坏。博主表示，第三方厂商资源有限这么做能理解，苹果官方这么做就是偷懒。",
+          "unit_id": "b61b0c2ca49f2df35c4e6cf0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "博主也说了自己的观点，这款壳如果不带前框，卖199元还算不错。但定价599元，又是苹果官方出品，这个表现完全不能接受。",
+          "unit_id": "d954290b4d3fc34cf2a91738"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "当然这只是这位从业多年配件博主的个人看法。苹果官方这款高价壳，争议点集中在贴胶结构、防护缺陷、系统妥协适配这几处。打算入手的用户，要提前看懂它的设计短板，谨慎选择。",
+          "unit_id": "c8fa2f73adee622efb6c99e4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Kang",
+          "unit_id": "7e43bf3d5b8001e696aa2e84"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1158/1158370.htm"
+    },
+    "recorded_extraction": [
+      "从业14年老配件博主怒喷：苹果599元官方手机壳就是垃圾",
+      "快科技10月18日消息，一位做苹果配件14年的数码博主“Kang”，直接给苹果这款定价599元的iPhone Duo官方手机壳打出垃圾评级，他觉得这款产品问题太多，苹果甚至不如不做。这款手机壳 快科技10月18日消息，一位做苹果配件14年的数码博主“Kang”，直接给苹果这款定价599元的iPhone Duo官方手机壳打出垃圾评级，他觉得这款产品问题太多，苹果甚至不如不做。 这款手机壳主体是PC聚碳酸酯材质，外层喷手感漆，靠贴胶固定。 博主说，做环保PC材料没有什么技术门槛，环保手感漆也不存在高额附加成本。 但售价599元的壳，里面没有配备备用贴胶。 手机是亮面钛金属，壳内框不是全胶，一旦进灰，边缘就会持续摩擦，很容易划伤手机边框。 在他看来，这种设计属于消极的产品策略，靠售后换新来解决缺陷。 固定方案也有隐患，扣位设计不完善，贴胶又不是全胶。 手机跌落的时候，前框有直接飞出去的概率。不仅防护不到位，某些角度落地还会增加机身侧面受力，同时还额外增加重量。",
+      [
+        "快科技10月18日消息，一位做苹果配件14年的数码博主“Kang”，直接给苹果这款定价599元的iPhone Duo官方手机壳打出垃圾评级，他觉得这款产品问题太多，苹果甚至不如不做。",
+        "但售价599元的壳，里面没有配备备用贴胶。手机是亮面钛金属，壳内框不是全胶，一旦进灰，边缘就会持续摩擦，很容易划伤手机边框。在他看来，这种设计属于消极的产品策略，靠售后换新来解决缺陷。",
+        "相机按键维修报价在8000元往上，裸露设计很容易磕碰损坏。博主表示，第三方厂商资源有限这么做能理解，苹果官方这么做就是偷懒。",
+        "博主也说了自己的观点，这款壳如果不带前框，卖199元还算不错。但定价599元，又是苹果官方出品，这个表现完全不能接受。"
+      ]
+    ]
+  },
+  "d8fd01b163d499e106acc70a": {
+    "evidence": {
+      "article_id": "d8fd01b163d499e106acc70a",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple likely plans to release MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8 with an OLED display on Friday, November 6, according to Bloomberg 's Mark Gurman. The devices are expected to be announced on Tuesday, October 27 or Wednesday, October 28. If this timeframe proves to be accurate, then Apple will be releasing new products for the next four Fridays, with the other dates already announced. Friday, October 23: iPhone Duo Friday, October 30: HomePod mini 2 Friday, November 6: MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8 Friday, November 13: HomeView and Apple TV 4K (4th generation) Related Roundups: Apple TV, HomePod mini 2, Apple HomeView, iMac, iPad mini, MacBook Pro Buyer's Guide: Apple TV (Buy Now), HomePod Mini (Buy Now), HomeView (Buy Now), iMac (Don't Buy), iPad Mini (Don't Buy), MacBook Pro (Caution) Related Forums: Apple TV and Home Theater, HomePod, HomeView, CarPlay – Home & Auto Tech, iMac, iPad, MacBook Pro This article, \" Apple Expected to Release New Products on Next Four Fridays \" first appeared on MacRumors.com Discuss this article in our forums Apple Expected to Release New Products on Next Four Fridays",
+      "discovery_title": "Apple Expected to Release New Products on Next Four Fridays",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T18:01:43+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T18:01:43+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T18:01:43+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sunday October 18, 2026 11:01 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 18, 2026 11:01 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 18:01:53 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T18:01:43+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T18:01:43+00:00",
+      "raw_lead": "Apple likely plans to release MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8 with an OLED display on Friday, November 6, according to Bloomberg's Mark Gurman. The devices are expected to be announced on Tuesday, October 27 or Wednesday, October 28. If this timeframe proves to be accurate, then Apple will be releasing new products for the next four Fridays, with the other dates already announced.",
+      "source": "MacRumors",
+      "title": "Apple Expected to Release New Products on Next Four Fridays",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Expected to Release New Products on Next Four Fridays",
+          "unit_id": "7bd4c293edccde478091776f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple likely plans to release MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8 with an OLED display on Friday, November 6, according to Bloomberg's Mark Gurman.",
+          "unit_id": "7d069a262cfc438db5c72dd4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The devices are expected to be announced on Tuesday, October 27 or Wednesday, October 28.",
+          "unit_id": "cac0ee3a89ab6ea912c49307"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "If this timeframe proves to be accurate, then Apple will be releasing new products for the next four Fridays, with the other dates already announced.",
+          "unit_id": "8f26cf17a4e0f35ac2f04f5f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Friday, October 23: iPhone Duo",
+          "unit_id": "bbe5a574c715e6f0ac5f925e"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Friday, October 30: HomePod mini 2",
+          "unit_id": "356d444f1172612ac4c28e2d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Friday, November 6: MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8",
+          "unit_id": "f2e64e0f8e3e578672c1f15a"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Friday, November 13: HomeView and Apple TV 4K (4th generation)",
+          "unit_id": "e1d90d585e9eee61c2338f64"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/18/apple-product-releases-next-four-fridays/"
+    },
+    "recorded_extraction": [
+      "Apple Expected to Release New Products on Next Four Fridays",
+      "Apple likely plans to release MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8 with an OLED display on Friday, November 6, according to Bloomberg's Mark Gurman. The devices are expected to be announced on Tuesday, October 27 or Wednesday, October 28. If this timeframe proves to be accurate, then Apple will be releasing new products for the next four Fridays, with the other dates already announced. The devices are expected to be announced on Tuesday, October 27 or Wednesday, October 28 . If this timeframe proves to be accurate, then Apple will be releasing new products for the next four Fridays, with the other dates already announced.",
+      [
+        "Apple likely plans to release MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8 with an OLED display on Friday, November 6, according to Bloomberg's Mark Gurman.",
+        "If this timeframe proves to be accurate, then Apple will be releasing new products for the next four Fridays, with the other dates already announced.",
+        "Friday, October 23: iPhone Duo",
+        "Friday, October 30: HomePod mini 2",
+        "Friday, November 6: MacBook Pro models with OLED displays, 14-inch MacBook Pro and iMac models with M6 chips, and/or an iPad mini 8"
+      ]
+    ]
+  },
+  "debcdb0be4b6357601c99ee2": {
+    "evidence": {
+      "article_id": "debcdb0be4b6357601c99ee2",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼今天在最新一期《Power On》通讯中透露，苹果计划推出一款配备电动机械臂的 HomeView 智能家庭中枢， 最快 2027 年发布 。 据介绍，这款产品将搭载电动机械臂， 能够围绕底座旋转 360 度 ， 并通过语音识别自动转向说话的人 。新款 HomeView 预计将配备 9 英寸屏幕，可能会更像一款陪伴型产品。 IT之家从原报道获悉，这款产品并非 HomeView 的直接继任机型，而是定位更高端的版本，其代号为 J595。古尔曼透露，该产品上市时可能会采用新名称，也可能只是在 HomeView 后面加上“Max”或“Ultra”等后缀。 事实上，苹果在机械臂方面的布局已有数年历史。2024 年曾有传闻称，苹果计划把造车项目的机器人技术延续到家庭领域。而在 2024 年 8 月有报道称，苹果正开发家用机器人，其设计类似 iPad+ 机械臂。 彭博社古尔曼爆料称，苹果正开发代号 J595 的高端 HomeView，配备可 360 度旋转电动机械臂，能自动转向说话者，预计配 9 英寸屏。##苹果## #智能家居#",
+      "discovery_title": "古尔曼：苹果计划为 HomeView 智能家庭中枢配备电动机械臂，最早 2027 年推出",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 22:44:29",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/18 22:44:29",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 14:44:29 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/18 22:44:29",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-18T14:44:29+00:00",
+      "raw_lead": "彭博社古尔曼爆料称，苹果正开发代号 J595 的高端 HomeView，配备可 360 度旋转电动机械臂，能自动转向说话者，预计配 9 英寸屏。##苹果## #智能家居#",
+      "source": "IT之家",
+      "title": "古尔曼：苹果计划为 HomeView 智能家庭中枢配备电动机械臂，最早 2027 年推出",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼今天在最新一期《Power On》通讯中透露，苹果计划推出一款配备电动机械臂的 HomeView 智能家庭中枢，最快 2027 年发布。",
+          "unit_id": "09822ce4ab4a8868c5f4753b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "据介绍，这款产品将搭载电动机械臂，能够围绕底座旋转 360 度，并通过语音识别自动转向说话的人。新款 HomeView 预计将配备 9 英寸屏幕，可能会更像一款陪伴型产品。",
+          "unit_id": "c262d674c9adbbcb50246cdc"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "IT之家从原报道获悉，这款产品并非 HomeView 的直接继任机型，而是定位更高端的版本，其代号为 J595。古尔曼透露，该产品上市时可能会采用新名称，也可能只是在 HomeView 后面加上“Max”或“Ultra”等后缀。",
+          "unit_id": "db5fee47b7b00a6a655f9197"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "事实上，苹果在机械臂方面的布局已有数年历史。2024 年曾有传闻称，苹果计划把造车项目的机器人技术延续到家庭领域。而在 2024 年 8 月有报道称，苹果正开发家用机器人，其设计类似 iPad+ 机械臂。",
+          "unit_id": "f17c538e9a3431c048cced2d"
+        }
+      ],
+      "url": "https://www.ithome.com/1/014/611.htm"
+    },
+    "recorded_extraction": [
+      "古尔曼：苹果计划为 HomeView 智能家庭中枢配备电动机械臂，最早 2027 年推出",
+      "彭博社古尔曼爆料称，苹果正开发代号 J595 的高端 HomeView，配备可 360 度旋转电动机械臂，能自动转向说话者，预计配 9 英寸屏。##苹果## #智能家居# IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼今天在最新一期《Power On》通讯中透露，苹果计划推出一款配备电动机械臂的 HomeView 智能家庭中枢， 最快 2027 年发布 。 据介绍，这款产品将搭载电动机械臂， 能够围绕底座旋转 360 度 ， 并通过语音识别自动转向说话的人 。新款 HomeView 预计将配备 9 英寸屏幕，可能会更像一款陪伴型产品。 IT之家从原报道获悉，这款产品并非 HomeView 的直接继任机型，而是定位更高端的版本，其代号为 J595。古尔曼透露，该产品上市时可能会采用新名称，也可能只是在 HomeView 后面加上“Max”或“Ultra”等后缀。 事实上，苹果在机械臂方面的布局已有数年历史。2024 年曾有传闻称，苹果计划把造车项目的机器人技术延续到家庭领域。而在 2024 年 8 月有报道称，苹果正开发家用机器人，其设计类似 iPad + 机械臂。",
+      [
+        "IT之家 10 月 18 日消息，彭博社记者马克 · 古尔曼今天在最新一期《Power On》通讯中透露，苹果计划推出一款配备电动机械臂的 HomeView 智能家庭中枢，最快 2027 年发布。",
+        "据介绍，这款产品将搭载电动机械臂，能够围绕底座旋转 360 度，并通过语音识别自动转向说话的人。新款 HomeView 预计将配备 9 英寸屏幕，可能会更像一款陪伴型产品。",
+        "IT之家从原报道获悉，这款产品并非 HomeView 的直接继任机型，而是定位更高端的版本，其代号为 J595。古尔曼透露，该产品上市时可能会采用新名称，也可能只是在 HomeView 后面加上“Max”或“Ultra”等后缀。",
+        "事实上，苹果在机械臂方面的布局已有数年历史。2024 年曾有传闻称，苹果计划把造车项目的机器人技术延续到家庭领域。而在 2024 年 8 月有报道称，苹果正开发家用机器人，其设计类似 iPad+ 机械臂。"
+      ]
+    ]
+  },
+  "e73e4830a32d627f0ea77cc9": {
+    "evidence": {
+      "article_id": "e73e4830a32d627f0ea77cc9",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple plans to release a higher-end version of its new HomeView smart home hub with a larger 9-inch screen that can swivel a full 360 degrees on a robotic arm, according to Bloomberg 's Mark Gurman. He expects the device to launch in 2027 or 2028. Gurman floated the names HomeView Max, HomeView Ultra, or HomeView 360 for the device, but these are just speculative names for now. The current tabletop version of the HomeView has a fixed 7-inch screen. Related Roundup: Apple HomeView Tag: Mark Gurman Buyer's Guide: HomeView (Buy Now) Related Forum: HomePod, HomeView, CarPlay – Home & Auto Tech This article, \" Apple Planning 'HomeView Max' With 9-Inch, 360-Degree Screen \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "Apple Planning 'HomeView Max' With 9-Inch, 360-Degree Screen",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:54:23+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:54:23+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:54:23+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sunday October 18, 2026 7:54 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 18, 2026 7:54 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 14:54:31 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T14:54:23+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T14:54:23+00:00",
+      "raw_lead": "Apple plans to release a higher-end version of its new HomeView smart home hub with a larger 9-inch screen that can swivel a full 360 degrees on a robotic arm, according to Bloomberg's Mark Gurman. He expects the device to launch in 2027 or 2028. Gurman floated the names HomeView Max, HomeView Ultra, or HomeView 360 for the device, but these are just speculative names for now.",
+      "source": "MacRumors",
+      "title": "Apple Planning 'HomeView Max' With 9-Inch, 360-Degree Screen",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple Planning 'HomeView Max' With 9-Inch, 360-Degree Screen",
+          "unit_id": "f9031385317f3372c74c415c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple plans to release a higher-end version of its new HomeView smart home hub with a larger 9-inch screen that can swivel a full 360 degrees on a robotic arm, according to Bloomberg's Mark Gurman. He expects the device to launch in 2027 or 2028.",
+          "unit_id": "e9f67590c715b29cef6ba8f3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Gurman floated the names HomeView Max, HomeView Ultra, or HomeView 360 for the device, but these are just speculative names for now. The current tabletop version of the HomeView has a fixed 7-inch screen.",
+          "unit_id": "69b7162f3a169b58f6710dd6"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/18/apple-rumored-to-launch-homeview-max/"
+    },
+    "recorded_extraction": [
+      "Apple Planning 'HomeView Max' With 9-Inch, 360-Degree Screen",
+      "Apple plans to release a higher-end version of its new HomeView smart home hub with a larger 9-inch screen that can swivel a full 360 degrees on a robotic arm, according to Bloomberg's Mark Gurman. He expects the device to launch in 2027 or 2028. Gurman floated the names HomeView Max, HomeView Ultra, or HomeView 360 for the device, but these are just speculative names for now. Gurman floated the names HomeView Max, HomeView Ultra, or HomeView 360 for the device, but these are just speculative names for now. The current tabletop version of the HomeView has a fixed 7-inch screen.",
+      [
+        "Gurman floated the names HomeView Max, HomeView Ultra, or HomeView 360 for the device, but these are just speculative names for now. The current tabletop version of the HomeView has a fixed 7-inch screen."
+      ]
+    ]
+  },
+  "eb2b88db5eca84d0e0648001": {
+    "evidence": {
+      "article_id": "eb2b88db5eca84d0e0648001",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。 阅读全文",
+      "discovery_title": "iPhone Duo仅支持eSIM被劝退 博主：出国就得删掉国内号码",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月19日 13:19",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon, 19 Oct 2026 05:19:10 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月19日 13:19",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-19T05:19:00+00:00",
+      "raw_lead": "去年苹果推出的iPhoneAir仅支持eSIM，同期的iPhone17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhoneDuo同样采用纯eSIM设计，相关话题再次引发热议。eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。",
+      "source": "cnBeta",
+      "title": "iPhone Duo仅支持eSIM被劝退 博主：出国就得删掉国内号码 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。",
+          "unit_id": "0f6338d0a3ac05b4b43efb53"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "有博主发文提醒，当你花了将近2万块钱买了iPhone Duo后会发现，这款手机没有实体SIM卡槽。国行版最多可以存储2张eSIM号码，而且开卡需要前往线下营业厅办理。",
+          "unit_id": "e5e2c22b17ec6081df3000fd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "如果是商务人士出国使用，还必须删掉一张国内的eSIM号码，才能写入目的地的eSIM。回国后，又要去营业厅恢复国内eSIM。整个流程相对繁琐，对于频繁出国的用户来说尤其不便。该博主认为，iPhone Duo尝鲜还是可以的，但当作主力机感觉还是差点儿意思。",
+          "unit_id": "ba39b5bf648da9cea3c53266"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "还有网友提醒，如果iPhone Duo维修返厂，用户在使用备用机时可能还需要补办实体卡，等iPhone Duo维修完成后再跑营业厅写入eSIM。这一来一回，额外的时间成本不容忽视。",
+          "unit_id": "3bf530f2d1e57bbbbf39e3e2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "目前来看，对于异地经常出差、频繁换机的人群来说，纯eSIM方案会带来大量麻烦。虽然国产手机也支持eSIM，但都保留了实体SIM卡槽选项，让用户可以根据自身需求灵活选择。这种兼顾新旧方案的做法，在现阶段显然更符合多数人的使用习惯。",
+          "unit_id": "ce04a7338375e5d2e3ecd88c"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582860.htm"
+    },
+    "recorded_extraction": [
+      "iPhone Duo仅支持eSIM被劝退 博主：出国就得删掉国内号码 - Apple iPhone - cnBeta.COM",
+      "去年苹果推出的iPhoneAir仅支持eSIM，同期的iPhone17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhoneDuo同样采用纯eSIM设计，相关话题再次引发热议。eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。",
+      [
+        "去年苹果推出的iPhone Air仅支持eSIM，同期的iPhone 17系列则保留了实体卡槽。而今年苹果首款折叠屏iPhone Duo同样采用纯eSIM设计，相关话题再次引发热议。eSIM是一种将实体SIM卡功能集成到手机芯片中的技术。用户无需插入和更换实体SIM卡，即可办理入网、换卡、补卡、停机或复机、销号及携号转网等业务。从技术角度看，eSIM让手机内部空间利用更高效，也减少了卡槽开孔。",
+        "有博主发文提醒，当你花了将近2万块钱买了iPhone Duo后会发现，这款手机没有实体SIM卡槽。国行版最多可以存储2张eSIM号码，而且开卡需要前往线下营业厅办理。",
+        "如果是商务人士出国使用，还必须删掉一张国内的eSIM号码，才能写入目的地的eSIM。回国后，又要去营业厅恢复国内eSIM。整个流程相对繁琐，对于频繁出国的用户来说尤其不便。该博主认为，iPhone Duo尝鲜还是可以的，但当作主力机感觉还是差点儿意思。",
+        "还有网友提醒，如果iPhone Duo维修返厂，用户在使用备用机时可能还需要补办实体卡，等iPhone Duo维修完成后再跑营业厅写入eSIM。这一来一回，额外的时间成本不容忽视。",
+        "目前来看，对于异地经常出差、频繁换机的人群来说，纯eSIM方案会带来大量麻烦。虽然国产手机也支持eSIM，但都保留了实体SIM卡槽选项，让用户可以根据自身需求灵活选择。这种兼顾新旧方案的做法，在现阶段显然更符合多数人的使用习惯。"
+      ]
+    ]
+  },
+  "ecb3cad4e5864f5590c277a5": {
+    "evidence": {
+      "article_id": "ecb3cad4e5864f5590c277a5",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "After pre-orders for iPhone Duo opened, Apple uploaded an EU regulatory document that finally revealed the true battery capacity for iPhone Duo: 4883mAh. Here’s how that compares to other iPhones. more…",
+      "discovery_title": "Here’s how iPhone Duo’s battery capacity compares to other iPhones",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19T01:32:09+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-19T01:32:09+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon, 19 Oct 2026 01:32:09 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-19T01:32:09+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-19T01:32:09+00:00",
+      "raw_lead": "After pre-orders for iPhone Duo opened, Apple uploaded an EU regulatory document that finally revealed the true battery capacity for...",
+      "source": "9to5Mac",
+      "title": "Here’s how iPhone Duo’s battery capacity compares to other iPhones - 9to5Mac",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "After pre-orders for iPhone Duo opened, Apple uploaded an EU regulatory document that finally revealed the true battery capacity for iPhone Duo: 4883mAh. Here’s how that compares to other iPhones.",
+          "unit_id": "091e0496def2c797bb5ff526"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "4883mAh definitely falls towards the high-end of the battery spectrum, though it’s by no means the best.",
+          "unit_id": "9a3618e84ab7e06083481ee0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "iPhone Duo features two battery cells: one 2962mAh and another 1921mAh cell, totaling 4883mAh. This places it pretty much exactly in between the iPhone 18 Pro and iPhone 18 Pro Max, which offer 4288mAh and 5567mAh batteries, respectively.",
+          "unit_id": "5fa761af2569f8913d6a7e55"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "iPhone Duo battery comparison",
+          "unit_id": "1e0bab44fc26569f37c575b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Compared to the rest of the recent iPhone lineup (eSIM versions, which feature larger battery cells than the physical SIM versions), here’s where iPhone Duo ranks:",
+          "unit_id": "97e2dfeeaadd06c9d98618bb"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Capacity | Difference | Video Playback Hours (from Apple)",
+          "unit_id": "a01461382a31d56e3f9987a5"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "iPhone 18 Pro Max | 5567mAh | +14% | 45 hours",
+          "unit_id": "e146dce69219d1b7938c5104"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "iPhone 17 Pro Max | 5088mAh | +4% | 39 hours",
+          "unit_id": "1c80b23805144006c684020d"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "iPhone Duo | 4883mAh | – | 44 hours on outer display 31 hours on inner display",
+          "unit_id": "4e36d88bde0e52c3adbea657"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "iPhone 16 Pro Max | 4685mAh | -4% | 33 hours",
+          "unit_id": "118477154ccdd81dc44bd9b0"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "iPhone 18 Pro | 4288mAh | -12% | 36 hours",
+          "unit_id": "420fed15dd3678745fe45bb7"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "iPhone 17 Pro | 4252mAh | -13% | 33 hours",
+          "unit_id": "1f4a0ee3378af9506cce7441"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "iPhone 17e | 4005mAh | -18% | 26 hours",
+          "unit_id": "0121978b42f50ea35b28c117"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "iPhone 17 | 3692mAh | -24% | 30 hours",
+          "unit_id": "3f903b03670e278660891f4c"
+        },
+        {
+          "container_id": "table:1",
+          "kind": "tr",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "iPhone Air | 3149mAh | -36% | 27 hours",
+          "unit_id": "65280d071c5fd343becdfd39"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "Overall, iPhone Duo has one of the largest battery capacities in an iPhone, only being bested by the two most recent Pro Max iPhones. Compared to anything else, the Duo will have a physically larger battery – though it’s worth noting that you’ll get less battery life if you use the larger inside display very frequently.",
+          "unit_id": "cc0f4004f87dbe921595245e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Are you buying an iPhone Duo? Are you excited to receive yours, or did you also have an unfortunate pre-order experience? Let us know in the comments.",
+          "unit_id": "3f8a0bfa88b496eecf1ca244"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/10/18/iphone-duo-battery-capacity-comparison/"
+    },
+    "recorded_extraction": [
+      "Here’s how iPhone Duo’s battery capacity compares to other iPhones - 9to5Mac",
+      "After pre-orders for iPhone Duo opened, Apple uploaded an EU regulatory document that finally revealed the true battery capacity for... 4883mAh definitely falls towards the high-end of the battery spectrum, though it’s by no means the best. iPhone Duo features two battery cells: one 2962mAh and another 1921mAh cell, totaling 4883mAh. This places it pretty much exactly in between the iPhone 18 Pro and iPhone 18 Pro Max, which offer 4288mAh and 5567mAh batteries, respectively. Compared to the rest of the recent iPhone lineup (eSIM versions, which feature larger battery cells than the physical SIM versions), here’s where iPhone Duo ranks: Overall, iPhone Duo has one of the largest battery capacities in an iPhone, only being bested by the two most recent Pro Max iPhones. Compared to anything else, the Duo will have a physically larger battery – though it’s worth noting that you’ll get less battery life if you use the larger inside display very frequently.",
+      [
+        "After pre-orders for iPhone Duo opened, Apple uploaded an EU regulatory document that finally revealed the true battery capacity for iPhone Duo: 4883mAh. Here’s how that compares to other iPhones.",
+        "4883mAh definitely falls towards the high-end of the battery spectrum, though it’s by no means the best.",
+        "iPhone Duo features two battery cells: one 2962mAh and another 1921mAh cell, totaling 4883mAh. This places it pretty much exactly in between the iPhone 18 Pro and iPhone 18 Pro Max, which offer 4288mAh and 5567mAh batteries, respectively.",
+        "Compared to the rest of the recent iPhone lineup (eSIM versions, which feature larger battery cells than the physical SIM versions), here’s where iPhone Duo ranks:",
+        "Capacity | Difference | Video Playback Hours (from Apple)",
+        "iPhone 18 Pro Max | 5567mAh | +14% | 45 hours",
+        "iPhone 17 Pro Max | 5088mAh | +4% | 39 hours",
+        "iPhone Duo | 4883mAh | – | 44 hours on outer display 31 hours on inner display",
+        "iPhone 16 Pro Max | 4685mAh | -4% | 33 hours",
+        "iPhone 18 Pro | 4288mAh | -12% | 36 hours",
+        "iPhone 17 Pro | 4252mAh | -13% | 33 hours",
+        "iPhone 17e | 4005mAh | -18% | 26 hours",
+        "iPhone 17 | 3692mAh | -24% | 30 hours",
+        "iPhone Air | 3149mAh | -36% | 27 hours"
+      ]
+    ]
+  },
+  "ed92526f5b42303c70833c85": {
+    "evidence": {
+      "article_id": "ed92526f5b42303c70833c85",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Future versions of the HomeView are being looked at by Apple, with a version using a larger display and a robotic arm potentially arriving as soon as 2027. This is not what the HomeView on a robotic arm will look like Apple's first-generation releases are often competent but gain significant improvements for the second generation. For the HomeView, the next version could get some big upgrades, including a robot arm. According to Mark Gurman's \"Power On\" newsletter for Bloomberg, Apple is planning to super-size the HomeView with a motorized arm. It will be capable of spinning 360 degrees around the base, and will automatically turn to face the speaker thanks to voice recognition. Continue Reading on AppleInsider | Discuss on our Forums",
+      "discovery_title": "HomeView follow-up with robot arm rumored to ship in 2027",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-18T14:16:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 18 Oct 2026 14:30:39 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-18T14:16:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-18T14:16:00+00:00",
+      "raw_lead": "Future versions of the HomeView are being looked at by Apple, with a version using a larger display and a robotic arm potentially arriving as soon as 2027.",
+      "source": "AppleInsider",
+      "title": "HomeView follow-up with robot arm rumored to ship in 2027",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Future versions of the HomeView are being looked at by Apple, with a version using a larger display and a robotic arm potentially arriving as soon as 2027.",
+          "unit_id": "513af520be121516e1303c5e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple's first-generation releases are often competent but gain significant improvements for the second generation. For the HomeView, the next version could get some big upgrades, including a robot arm.",
+          "unit_id": "11280261264aeb46b997349b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "According to Mark Gurman's \"Power On\" newsletter for Bloomberg, Apple is planning to super-size the HomeView with a motorized arm. It will be capable of spinning 360 degrees around the base, and will automatically turn to face the speaker thanks to voice recognition.",
+          "unit_id": "096380087b1606892887f288"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "The use of the arm, along with a larger 9-inch display, may make the device more like a companion of sorts. All because it will move around in reaction to the presence of users, rather than requiring users to orient to the HomeView's static display.",
+          "unit_id": "54ae597e70f6db31c11efb85"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "This model is not believed to be a direct successor to the HomeView, but one that provides a more premum experience. While the codename is J595, the final product name could range from an entirely new name to simply adding a suffix like \"Max\" or \"Ultra\" to \"HomeView.\"",
+          "unit_id": "de0bc225efae939cc5810f58"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "As for when it should arrive, Gurman writes that it is planned for release in 2027 or 2028.",
+          "unit_id": "42345d39dec73f4d1280e5a8"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Sounds familiar",
+          "unit_id": "341b91d888b105c0d9cb37ca"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The robot arm version of HomeView isn't an entirely new development for the product. Really, it's something that has been rumored about for a few years.",
+          "unit_id": "bf1b48a4f5f65d7a1b442a2f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Following the failure of the Apple Car project, reports from 2024 indicated that the robotic elements would live on elsewhere in the Apple empire. Specifically, shifting into the home.",
+          "unit_id": "1dbab587bd6e82860763aaf0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "This included an August 2024 report of a home robot that effectively combined an iPad-like display with a robot arm. Not too dissimilar to what was written about today.",
+          "unit_id": "d437727ba41d9d5a04eee8b8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "At the time, the expectations for the device, with the same J595 codename, was to release it in 2026 or 2027, with a price tag around $1,000.",
+          "unit_id": "b8b9f8159266e1248525c584"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "In February 2025, Apple demonstrated one concept of robot arm-based computing, thanks to a robot lamp with character. Reminiscent of Luxo Jr., Pixar's mascot, a video from Apple Machine Learning Research showed how it would use a movement system called ELEGNT to interact with a person in an expressive way.",
+          "unit_id": "31007e3f4b1bece1550c6630"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/10/18/homeview-follow-up-with-robot-arm-rumored-to-ship-in-2027?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "HomeView follow-up with robot arm rumored to ship in 2027",
+      "Future versions of the HomeView are being looked at by Apple, with a version using a larger display and a robotic arm potentially arriving as soon as 2027. Apple's first-generation releases are often competent but gain significant improvements for the second generation. For the HomeView, the next version could get some big upgrades, including a robot arm. According to Mark Gurman's \"Power On\" newsletter for Bloomberg , Apple is planning to super-size the HomeView with a motorized arm. It will be capable of spinning 360 degrees around the base, and will automatically turn to face the speaker thanks to voice recognition. The use of the arm, along with a larger 9-inch display, may make the device more like a companion of sorts. All because it will move around in reaction to the presence of users, rather than requiring users to orient to the HomeView's static display. This model is not believed to be a direct successor to the HomeView, but one that provides a more premum experience. While the codename is J595, the final product name could range from an entirely new name to simply adding a suffix like \"Max\" or \"Ultra\" to \"HomeView.\"",
+      [
+        "Future versions of the HomeView are being looked at by Apple, with a version using a larger display and a robotic arm potentially arriving as soon as 2027.",
+        "Apple's first-generation releases are often competent but gain significant improvements for the second generation. For the HomeView, the next version could get some big upgrades, including a robot arm.",
+        "According to Mark Gurman's \"Power On\" newsletter for Bloomberg, Apple is planning to super-size the HomeView with a motorized arm. It will be capable of spinning 360 degrees around the base, and will automatically turn to face the speaker thanks to voice recognition.",
+        "The use of the arm, along with a larger 9-inch display, may make the device more like a companion of sorts. All because it will move around in reaction to the presence of users, rather than requiring users to orient to the HomeView's static display.",
+        "This model is not believed to be a direct successor to the HomeView, but one that provides a more premum experience. While the codename is J595, the final product name could range from an entirely new name to simply adding a suffix like \"Max\" or \"Ultra\" to \"HomeView.\"",
+        "As for when it should arrive, Gurman writes that it is planned for release in 2027 or 2028.",
+        "Following the failure of the Apple Car project, reports from 2024 indicated that the robotic elements would live on elsewhere in the Apple empire. Specifically, shifting into the home.",
+        "This included an August 2024 report of a home robot that effectively combined an iPad-like display with a robot arm. Not too dissimilar to what was written about today.",
+        "At the time, the expectations for the device, with the same J595 codename, was to release it in 2026 or 2027, with a price tag around $1,000.",
+        "In February 2025, Apple demonstrated one concept of robot arm-based computing, thanks to a robot lamp with character. Reminiscent of Luxo Jr., Pixar's mascot, a video from Apple Machine Learning Research showed how it would use a movement system called ELEGNT to interact with a person in an expressive way."
+      ]
+    ]
+  },
+  "fb949829bf98fc5d1a421d86": {
+    "evidence": {
+      "article_id": "fb949829bf98fc5d1a421d86",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。 根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。 由此可见，首发阶段的供需矛盾仍然十分突出。 阅读全文",
+      "discovery_title": "博主号召大家抵制黄牛：iPhone Duo溢价别接盘 黄牛价格就崩",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月19日 13:27",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Mon, 19 Oct 2026 05:27:02 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月19日 13:27",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-19T05:27:00+00:00",
+      "raw_lead": "iPhoneDuo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。根据到货日期和存储空间的不同，全新未拆封的iPhoneDuo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。由此可见，首发阶段的供需矛盾仍然十分突出。",
+      "source": "cnBeta",
+      "title": "博主号召大家抵制黄牛：iPhone Duo溢价别接盘 黄牛价格就崩 - Apple iPhone - cnBeta.COM",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。由此可见，首发阶段的供需矛盾仍然十分突出。",
+          "unit_id": "0013435c634aa159efad5bfb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "博主科技新一表示，今年iPhone Duo单价较高，黄牛压货的成本也很高。只要大家第一天都不买黄牛的货，第二天黄牛的价格就会崩盘。因此，他号召大家抵制黄牛，避免为短期溢价买单。",
+          "unit_id": "01e3a518fef0bcf402700531"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "有黄牛在接受采访时称，iPhone Duo到底值什么价，要等到真正发售之后才能判断。到时如果有用户觉得用着还行，价格相对会比较坚挺；如果用户觉得一般，那么溢价很快就会崩塌。换句话说，iPhone Duo的溢价能否维持，最终仍取决于首批用户的真实反馈。",
+          "unit_id": "3c003c0963f31c10bdc6ade0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "虽然尚不清楚苹果备了多少货，但多国Apple Store均显示，现在下单要等到明年1月底才能拿到新手机。科技博主马克·古尔曼指出，苹果明知iPhone Duo折叠屏手机面临严重的供应短缺，却依然开启预购，而不是等到备货更加充足时再启动预购。",
+          "unit_id": "cb53558e758fe77eeaf2c45a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "他认为，苹果犯了一个重大错误，在产能尚未爬坡到位的情况下贸然开售，虽然能维持热度，但容易让等待的用户感到失望。",
+          "unit_id": "5396cbc45fa0350752d4257f"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1582870.htm"
+    },
+    "recorded_extraction": [
+      "博主号召大家抵制黄牛：iPhone Duo溢价别接盘 黄牛价格就崩 - Apple iPhone - cnBeta.COM",
+      "iPhoneDuo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。根据到货日期和存储空间的不同，全新未拆封的iPhoneDuo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。由此可见，首发阶段的供需矛盾仍然十分突出。",
+      [
+        "iPhone Duo从预售至今，市场热度依旧不减。由于供不应求，该机在二手交易平台上的价格明显上涨。根据到货日期和存储空间的不同，全新未拆封的iPhone Duo普遍被加价2000元至3000元不等。如果用户想在发售日当天拿到现货，往往还需要付出更高的价格。由此可见，首发阶段的供需矛盾仍然十分突出。",
+        "博主科技新一表示，今年iPhone Duo单价较高，黄牛压货的成本也很高。只要大家第一天都不买黄牛的货，第二天黄牛的价格就会崩盘。因此，他号召大家抵制黄牛，避免为短期溢价买单。",
+        "有黄牛在接受采访时称，iPhone Duo到底值什么价，要等到真正发售之后才能判断。到时如果有用户觉得用着还行，价格相对会比较坚挺；如果用户觉得一般，那么溢价很快就会崩塌。换句话说，iPhone Duo的溢价能否维持，最终仍取决于首批用户的真实反馈。",
+        "虽然尚不清楚苹果备了多少货，但多国Apple Store均显示，现在下单要等到明年1月底才能拿到新手机。科技博主马克·古尔曼指出，苹果明知iPhone Duo折叠屏手机面临严重的供应短缺，却依然开启预购，而不是等到备货更加充足时再启动预购。",
+        "他认为，苹果犯了一个重大错误，在产能尚未爬坡到位的情况下贸然开售，虽然能维持热度，但容易让等待的用户感到失望。"
+      ]
+    ]
+  }
+}

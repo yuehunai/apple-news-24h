@@ -113,10 +113,16 @@ FIRST_PARTY_SERVICE_PRODUCTS = {
 }
 
 
+_SUBJECT_NUMBERS = re.compile(r"\d+")
+
+
 def _one_edit_apart(left: str, right: str) -> bool:
     if left == right:
         return True
     if min(len(left), len(right)) < 8 or abs(len(left) - len(right)) > 1:
+        return False
+    # Digits identify model generations, not spelling variations.
+    if _SUBJECT_NUMBERS.findall(left) != _SUBJECT_NUMBERS.findall(right):
         return False
     if len(left) == len(right):
         return sum(a != b for a, b in zip(left, right)) == 1
@@ -259,6 +265,21 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
             return "conflict"
         if left.report_role and right.report_role and left.report_role != right.report_role:
             return "conflict"
+        if left.action == 'resale-quote-report':
+            if left.article_id and left.article_id == right.article_id:
+                return 'match'
+            records = [tuple(q[2] for q in claim.qualifiers if q[1] == 'observation-sentence')
+                       for claim in (left, right)]
+            return 'match' if records[0] and records[0] == records[1] else 'unknown'
+        if left.action == 'resale-order-report':
+            records = [{kind: {q[2] for q in c.qualifiers if q[1] == kind}
+                        for kind in {q[1] for q in c.qualifiers}} for c in (left, right)]
+            if any(len(values) != 1 for record in records for values in record.values()):
+                return 'unknown'
+            shared = records[0].keys() & records[1].keys()
+            if any(records[0][key] != records[1][key] for key in shared):
+                return 'conflict'
+            return 'match' if 'report-party' in shared and shared & {'order-total', 'order-deposit'} else 'unknown'
         if left.action == 'leadership-report':
             # The same speaker, publisher and topic do not identify an
             # interview instance. Keep qualification independent of pairing.
@@ -1173,11 +1194,11 @@ def _direct_title_action_conflict(
     left: ReconciliationProfile,
     right: ReconciliationProfile,
 ) -> bool:
-    """Split a concrete capability report from a generic launch report.
+    """Keep explicit denials and distinct product operations separate.
 
     Action vocabularies vary heavily across sources and languages, so disjoint
-    action labels alone are never a conflict.  The only safe asymmetric case is
-    when one title asserts a changed product object while the other reports only
+    action labels alone are never a conflict. An explicit denial differs from
+    affirmation. Otherwise, one title must assert a changed object while the other reports only
     the product lifecycle, and no precise identity key proves they are the same
     event.
     """
@@ -1190,8 +1211,13 @@ def _direct_title_action_conflict(
         or right_identity.scope != "apple-direct"
         or left_identity.content_form != "news"
         or right_identity.content_form != "news"
-        or left.exact_facets & right.exact_facets
     ):
+        return False
+    if (("claim-polarity:explicit-denial" in left_identity.title_components)
+            != ("claim-polarity:explicit-denial" in right_identity.title_components)
+            and _primary_title_subjects(left_identity) & _primary_title_subjects(right_identity)):
+        return True
+    if left.exact_facets & right.exact_facets:
         return False
     if identity_pair_decision(left_identity, right_identity) == "match":
         return False
