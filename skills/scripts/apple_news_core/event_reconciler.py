@@ -21,6 +21,7 @@ from .event_identity import (
     REGION_TERMS,
     is_personal_product_complaint,
     is_os_release_announcement,
+    source_acquisition_frame,
     is_weekly_editorial_recap,
     source_design_oversight,
     source_free_race_stream,
@@ -3349,6 +3350,8 @@ def _versioned_os_feature_report(text: str, identity: EventIdentity) -> bool:
     lead = text.split(". ", 1)[1] if ". " in text else ""
     if _third_party_app_availability_without_platform_change(title, lead):
         return False
+    if is_os_release_announcement(title):
+        return True
     proposal_pattern = (
         r"\b(?:i|we)\s+(?:would|should|wish(?:ed)?\s+(?:apple\s+)?would)\s+"
         r"(?:change|add|remove|redesign|fix|improve)\b|"
@@ -3498,7 +3501,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
     if operation:
         subject, predicate = operation
         return f"apple-os-feature-scope:{subject}:{predicate}"
-    if not _versioned_os_feature_report(text, identity):
+    if not is_os_release_announcement(title) and not _versioned_os_feature_report(text, identity):
         return ""
     text_parts = text.split(". ", 1)
     title = text_parts[0]
@@ -3507,7 +3510,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
         current_public_os_release(title, lead)
         or (not identity.title_actions and _lead_asserts_first_party_release(lead))
     )
-    release_title = _contains(
+    release_title = is_os_release_announcement(title) or _contains(
         title,
         "release",
         "released",
@@ -5083,8 +5086,14 @@ def _apple_event_occurrence_keys(title: str, lead: str) -> set[str]:
         or _apple_event_invitation_interpretation_context(title, lead)
     ):
         return set()
-    scope = _normalized(f"{title} {lead[:700]}")
-    month_days: set[tuple[int, int]] = set()
+    scope = _normalized(title) + '\n' + _normalized(lead[:700])
+    month_days: set[tuple[int, int, str]] = set()
+    def local_zone(start: int) -> str:
+        prefix = _compiled_rule(r'[。.!?\n（）()]', 0).split(scope[:start])[-1][-45:]
+        markers = list(_compiled_rule(r'北京时间|beijing time|美国(?:当地)?(?:东部|太平洋)?时间|当地时间|local time|pacific time', 0).finditer(prefix))
+        if not markers:
+            return 'unspecified'
+        return 'beijing' if markers[-1].group() in {'北京时间', 'beijing time'} else 'event-local'
     month_numbers = {
         "january": 1, "february": 2, "march": 3, "april": 4,
         "may": 5, "june": 6, "july": 7, "august": 8,
@@ -5100,23 +5109,25 @@ def _apple_event_occurrence_keys(title: str, lead: str) -> set[str]:
         scope,
     ):
         values = [value for value in match.groups() if value]
-        month_days.add((month_numbers[values[0]], int(values[1])))
+        group = 1 if match.group(1) else 3
+        month_days.add((month_numbers[values[0]], int(values[1]), local_zone(match.start(group))))
     chinese_date = r"(?<!\d)(\d{1,2})\s*月\s*(\d{1,2})\s*日"
     for match in re.finditer(
-        rf"(?:(?:发布会|特别活动).{{0,70}}{chinese_date}|"
-        rf"{chinese_date}.{{0,70}}(?:发布会|特别活动))",
+        rf"(?:(?:发布会|(?:新品|产品|特别)(?:发布)?活动).{{0,70}}{chinese_date}|"
+        rf"{chinese_date}.{{0,70}}(?:发布会|(?:新品|产品|特别)(?:发布)?活动))",
         scope,
     ):
         values = [value for value in match.groups() if value]
-        month_days.add((int(values[0]), int(values[1])))
+        group = 1 if match.group(1) else 3
+        month_days.add((int(values[0]), int(values[1]), local_zone(match.start(group))))
 
     keys: set[str] = set()
-    zone = "beijing" if "北京时间" in scope or "beijing time" in scope else (
-        "event-local" if _contains(scope, "当地时间", "local time", "apple park", "pacific time") else "unspecified")
     years = set(_compiled_rule(r"(20\d{2})\s*年\s*\d{1,2}\s*月", 0).findall(scope))
     years.update(match.group(3) for match in re.finditer(english_date + r"\s*,?\s+(20\d{2})\b", scope))
     keys.update("apple-event-year:" + year for year in years)
-    for month, day in month_days:
+    for month, day, zone in month_days:
+        if zone == 'unspecified' and any(m == month and d == day and z != 'unspecified' for m, d, z in month_days):
+            continue
         try:
             calendar_day = date(2000, month, day)
         except ValueError:
@@ -5226,8 +5237,7 @@ def _editorial_or_third_party_claim_reason(
         return "editorial product review without a new Apple action"
     product_comparison = bool(
         _compiled_rule(r"\bvs\.?\b|\bversus\b|(?:对比|横评)", 0).search(title_text)
-        and _compiled_rule(r"\b(?:iphone|ipad|mac(?:book| mini| studio| pro)?|airpods|apple watch)\b|"
-            r"(?:苹果)?(?:手机|平板|电脑|耳机|手表)", 0).search(title_text)
+        and identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
         and not _compiled_rule(r"\b(?:lawsuit|court|judge|settlement|sues?|filings?|report|study|"
             r"leaks?|reveals?|discloses?|regulatory)\b|"
             r"(?:诉讼|法院|法官|和解|起诉|文件|报告|研究|泄露|曝光|披露|监管)", 0).search(title_text)
@@ -6175,11 +6185,10 @@ def _primary_report_claim(title: str, lead: str, identity: EventIdentity) -> tup
     if identity.content_form != "news":
         return None
     joined_company = bool(_compiled_rule(r"\b(?:joins?|joining) apple(?=[,.;:]|$)|加入苹果(?=[，,。]|$)", 0).search(headline))
-    acquired_company = bool(_compiled_rule(r"\bacquired by apple\b|\bafter apple(?:'s)? acquisition\b|被苹果收购", 0).search(headline))
     relationship_scope = f"{headline}. {_short_lead_scope(lead, sentences=1, limit=500)}"
     joint_participation = bool(_compiled_rule(r"\b(?:coalition|consortium|standards group|working group|alongside)\b|"
         r"\bownership remains independent\b|(?:联盟|工作组|标准组织|所有权保持独立)", 0).search(relationship_scope))
-    ownership_transfer = acquired_company or (joined_company and not joint_participation)
+    ownership_transfer = joined_company and not joint_participation
     uncertain_transfer = bool(_compiled_rule(r"\b(?:not|never|won['’]t|may|could|might)\s+(?:join|be acquired)\b|不会加入|可能加入", 0).search(headline))
     if ownership_transfer and not uncertain_transfer:
         names = {match.group(0).strip() for match in _compiled_rule(r"(?<![A-Za-z0-9])[A-Z][A-Za-z0-9.+-]*(?:\s+[A-Z][A-Za-z0-9.+-]*){1,5}", 0).finditer(title)
@@ -7121,6 +7130,7 @@ def _primary_claim_projection(
         )
 
     executive_subject = ""
+    executive_pattern = ""
     for subject, pattern in (
         ("john-ternus", r"\b(?:john\s+)?ternus\b|特努斯"),
         ("doug-brooks", r"\bdoug\s+brooks\b|道格[·・.\s]*布鲁克斯"),
@@ -7129,6 +7139,7 @@ def _primary_claim_projection(
     ):
         if re.search(pattern, f"{full_title_text} {_normalized(lead)[:500]}", re.I):
             executive_subject = subject
+            executive_pattern = pattern
             break
     mac_demand_scope = f"{full_title_text}. {_short_lead_scope(lead, sentences=2, limit=900)}"
     if (executive_subject and _compiled_rule(r"mac\s*mini", re.I).search(full_title_text)
@@ -7175,9 +7186,15 @@ def _primary_claim_projection(
     executive_strategy_statement = bool(
         executive_subject
         and executive_strategy_area
+        and any(_compiled_rule(executive_pattern, re.I).search(clause)
+        and _compiled_rule(r'\bapple\s+tv\b|(?:苹果\s*)?娱乐业务|流媒体业务', re.I).search(clause)
+        and source_predicate_role(clause) == 'current'
+        and not _compiled_rule(r'then.ceo|former|years?\s+ago|当时|前任|去年', re.I).search(clause)
         and _compiled_rule(r"\b(?:said|says|plans?|will|continue(?:s|d)?|build(?:s|ing)?\s+on|"
             r"grow(?:s|ing)?|future\s+is\s+safe)\b|"
-            r"(?:表示|称|计划|将|继续|推动|发展|增长)", re.I).search(claim_evidence)
+            r"(?:表示|称|计划|将|继续|推动|发展|增长)", re.I).search(clause)
+        for text in (title, lead, *source_facts) for a, b in source_sentence_spans(text)
+        for clause in (text[a:b],))
     )
     if executive_strategy_statement:
         add_claim(
@@ -8688,27 +8705,9 @@ def _primary_claim_projection(
                               qualifier=f"cells-{cell_key}-total-{total.group(1)}", category="hardware_products")
                     separation |= {"battery-cell-capacities:" + cell_key, "battery-total-capacity:" + total.group(1)}
 
-    acquisition_title = bool(_compiled_rule(r"^apple\b.{0,35}\bacquir(?:e|es|ed|ing)\b|\bacquired by apple\b|^苹果.{0,20}收购|被苹果收购", 0).search(title_text))
-    if acquisition_title:
-        asset_transfer = _compiled_rule("^apple\\s+(?:has\\s+)?(?:acquired|bought|purchased)\\s+(?:(?:part|some)\\s+of\\s+)?(?:(?P<owner>[a-z][a-z0-9.+-]*)(?:['’]s)?\\s+assets|(?:the\\s+)?assets\\s+(?:from|of)\\s+(?P<from>[a-z][a-z0-9.+-]*))\\b", re.I).match(primary_lead)
-        if (asset_transfer and not _compiled_rule('\\b(?:may|might|could|not|never|last year|last month|previously|earlier)\\b|此前|去年|否认|考虑', re.I).search(f'{title_text}. {primary_lead}')):
-            owner = asset_transfer.group('owner') or asset_transfer.group('from')
-            add_claim("apple-assets-" + owner.lower(), "ownership-transfer", category="software_systems")
-        app_name = _compiled_rule(r"\bapp\s+['\"‘“]([^'\"’”]{2,60})['\"’”]|应用\s*([A-Za-z][A-Za-z0-9.+-]*)", re.I).search(title)
-        if app_name:
-            target = next(value for value in app_name.groups() if value)
-        else:
-            latest_app = _compiled_rule(r"\bthe latest\s*[—–-]\s*([A-Z][A-Za-z0-9.+ -]{1,45}?)\s*[—–-]", 0).search(lead)
-            named_tool = _compiled_rule(r"\b(?:app|application|tool)\s+(?:called|named)\s+([A-Z][A-Za-z0-9+-]*(?:[ \t]+[A-Z][A-Za-z0-9+-]*){0,3})\b", 0).search(lead)
-            target = latest_app.group(1) if latest_app else named_tool.group(1) if named_tool else ""
-        if target:
-            app = _compiled_rule(r"[^a-z0-9]+", 0).sub("-", target.lower(), 0).strip("-")
-            stage = ("denial" if _compiled_rule(r"denies?|not acquire|否认|不会收购", 0).search(title_text)
-                     else "negotiation" if _compiled_rule(r"talks|negotiat|洽谈|商谈", 0).search(title_text)
-                     else "proposal" if _compiled_rule(r"may|could|plans? to|考虑|计划", 0).search(title_text)
-                     else "announcement")
-            add_claim("apple-app-" + app, "acquisition-" + stage, category="software_systems")
-            separation.update({"app-acquisition-target:" + app, "app-acquisition-stage:" + stage})
+    acquisition = source_acquisition_frame(title, lead)
+    if acquisition is not None:
+        add_claim(acquisition.subject, acquisition.action, category=acquisition.category)
 
     # A named threat is the affected macOS incident object, not the reporter
     # or an incidental product in a later background sentence.
@@ -9312,7 +9311,7 @@ def _primary_claim_projection(
 
     if (
         not mac_intel_support_removal
-        and not (acquisition_title and _compiled_rule(r"app store.{0,30}(?:该应用|the app|this app)", 0).search(title_text))
+        and not (acquisition is not None and _compiled_rule(r"app store.{0,30}(?:该应用|the app|this app)", 0).search(title_text))
         and _contains(text, "app store", "应用商店")
         and _contains(
             title_text,
@@ -10617,19 +10616,20 @@ def _source_local_current_action(
     # Bind a demonstration's own target; later project history cannot demote
     # an Apple release, and an OS name does not identify its host hardware.
     if (identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS
-            and has(r'porting\s+project|retro.{0,35}project|移植项目|复古.{0,20}项目', opening[:500])):
-        first_end = next(source_sentence_spans(opening), (0, len(opening)))[1]
-        port_claim = opening[:first_end]
+            and has(r'port|移植|刷入|启动', headline + ' ' + opening[:500])):
+        intro = _normalized(source_units[0]) if source_units else opening
+        first_end = next(source_sentence_spans(intro), (0, len(intro)))[1]
+        port_claim = intro[:first_end]
         port_target = _compiled_rule(
             r'在([^。；;，,]{2,65}?)上(?:成功)?运行\s*(?:苹果\s*)?(?:ios|ipados|macos|watchos|tvos|visionos)|'
             r'\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*(?:\d+(?:\.\d+)*)?\s*'
-            r'(?:support\s+)?(?:on\s+|to\s+|移植到|运行在)([^。；;.!?]{2,65})', re.I).search(port_claim)
+            r'(?:support\s+)?(?:on\s+|to\s+|移植到|运行在)([^。；;.!?]{2,65})|'
+            r'(?:让|将(?:一部)?)([^。；;，,]{2,65}?)(?:手机)?(?:刷入|启动|运行)\s*ios\s*\d', re.I).search(port_claim)
         target = next((v for v in port_target.groups() if v), '') if port_target else ''
         if (target and identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS
                 and not has(r'\b(?:iphone|ipad|mac|macbook|imac|vision\s*pro|apple\s*watch|apple\s*silicon)\b|苹果\s*m\d|苹果硬件', target)
-                and has(r'\b(?:developer|hobbyist|enthusiast)\b|开发者|爱好者', port_claim)
-                and has(r'porting\s+project|retro.{0,35}project|移植项目|复古.{0,20}项目', port_claim)
-                and has(r'demonstrat|showcas|展示|演示|成果|成功运行', port_claim)
+                and has(r'\b(?:developer|hobbyist|enthusiast)\b|开发者|爱好者|网友', port_claim)
+                and has(r'demonstrat|showcas|展示|演示|成果|成功', port_claim)
                 and not has(r'^(?:apple|苹果).{0,25}(?:releas|launch|发布|推出)', port_claim)):
             return profile(f"third-party:software-port:{headline}", "current-demonstration",
                            tier="weak", kind="third_party_ecosystem",
@@ -10648,18 +10648,16 @@ def _source_local_current_action(
     if operation is not None and operation.bound_claim is not None:
         return bound_reconciliation_profile(operation.bound_claim)
     if operation is not None:
-        if operation.action in {'launch-date-confirmation', 'launch-date-report'}:
+        if (operation.action in {'launch-date-confirmation', 'launch-date-report'}
+                and not (operation.action == 'launch-date-confirmation' and operation.subject == 'apple:product-launch-campaign'
+                         and has(r'\bevent\b|\bexperience\b|发布会|特别活动|官宣', headline))):
             # Calendar evidence supplements an owned launch, never replaces
             # an existing concrete participation, retail or platform action.
             specific = _title_owned_action_profile(title, lead, evidence, identity)
             if specific is not None:
                 return specific
             exact_claims = _primary_claim_projection(title, lead, identity, regions, evidence, source_facts=source_facts)[0]
-            if exact_claims and not all(key.endswith((':product-launch', ':reported-launch-window', ':event-schedule-announcement', ':schedule-forecast')) for key in exact_claims):
-                operation = None
-            elif _apple_event_campaign_title_context(title):
-                # Established announcement/asset aliases can carry sparse
-                # identity through a dated source; retain that shared path.
+            if exact_claims and not all(key.endswith((':product-launch', ':reported-launch-window', ':event-schedule-announcement', ':schedule-forecast')) or ':generation-product-refresh:' in key for key in exact_claims):
                 operation = None
     if (operation is not None and operation.action == "market-measurement-report"
             and operation.subject.endswith(":smartphone-shipments")):
@@ -10728,6 +10726,10 @@ def _source_local_current_action(
                 calendar = {f'apple-event-occurrence:{int(month):02d}-{int(day):02d}',
                             f'apple-event-calendar:unspecified:{int(month):02d}-{int(day):02d}'}
             additions = calendar | ({campaign_key} if campaign_key else set())
+            if operation.subject == 'apple:product-launch-campaign':
+                result = replace(result,
+                    event_keys=frozenset(), boundary_keys=frozenset(),
+                    separation_keys=frozenset({'primary-claim-subject:apple-event-campaign', 'source-local-action-authority'}))
             result = replace(result, event_keys=result.event_keys | additions,
                 boundary_keys=result.boundary_keys | additions,
                 separation_keys=result.separation_keys | calendar | {'source-launch-stage:' + operation.action})

@@ -12,15 +12,15 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.1.4 - 2026-10-19
+### 2.1.5 - 2026-10-20
 
-- Improved HTTPS compatibility by explicitly negotiating HTTP/1.1 with certificate verification intact; excluded AppleInsider product hubs and price catalogues from article budgets while retaining nested review and tips articles.
-- Improved resale grouping around the reported participant, order batch and locally attributed totals or deposits; kept independent quotations, buying and selling sides, costs, completed sales and forecasts distinct.
-- Improved quote continuation across adjacent source paragraphs and reconciliation of complete republications across different paragraph layouts, preserving sample, delivery and configuration conditions instead of merging on shared prices.
-- Improved source-bound coverage of platform support matrices, first-party app capabilities and official accessory construction, preserving version, device and operating restrictions while leaving commentary and background outside independent claims.
-- Improved device-provisioning and release-plan boundaries using local model, region, activation and date-role evidence; kept configuration background from overriding other actions, model generations from matching as typos, and explicit denials distinct from affirmative reports.
-- Updated the skill to require independent eligibility before turning a review fragment into a separate item; cited earlier reporting may support an existing action without becoming a new current report.
-- Added regression coverage for source discovery, verified HTTPS transport, resale ownership and republication, capability conditions, action boundaries and source attribution, preserving existing assertions.
+- Improved release grouping with source-bound OS versions, release stages and RC numbers; kept named HomePod capabilities and their device/version conditions distinct from the release wave.
+- Improved section and relevance decisions for physical repairs, hardware readiness, developer documentation and platform interoperability; kept third-party device ports and personal-use stories outside independent Apple news.
+- Unified acquisition identity around the acquired counterparty and disclosure stage, removing duplicate title-based decisions; bound service-strategy statements to the actual current speaker rather than nearby quotations or historical remarks.
+- Improved event-date and timezone ownership, incident locations and dates, and legal-action boundaries; prevented product inventories, comparison models and publication dates from replacing the reported action.
+- Improved recognition of locally reported Apple market results without borrowing competitor measurements or treating a combined vendor total as Apple's own result.
+- Improved resale-order binding so adverbs do not become participant names and recalled orders do not become new events; preserved explicitly linked current progress and stopped attribution at another participant.
+- Added regression coverage for mixed-source actions, release candidates, categories, acquisition targets, current attribution and historical-order boundaries, preserving existing assertions.
 - Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
@@ -116,7 +116,7 @@ Required flags ask for a decision, not automatic inclusion. `required_final_brie
 
 For source-bound reports, binding and news eligibility are separate decisions. App-publisher charts, device benchmarks, operating-feature inventories, media invitations and current company-responsibility interviews preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
 
-Version 2.1.1 keeps the CLI, JSON fields and relevance tiers from 2.1.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
+Version 2.1.5 keeps the CLI, JSON fields and relevance tiers from 2.1.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
 
 Diagnostics for debugging source failures:
 

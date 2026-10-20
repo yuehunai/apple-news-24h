@@ -26514,12 +26514,6 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         and _compiled_rule(r"\b(?:qlc|tlc|nand)\b", re.I).search(source_opening)
         and _compiled_rule(r"(?:缓存耗尽|持续写入|使用率|sustained\s+write|cache\s+exhaust)", re.I).search(source_opening)
     )
-    current_device_issue_with_limited_service_reply = bool(
-        _compiled_rule(r"(?:用户|网友)[^。.!?]{0,85}(?:反馈|报告|吐槽)", 0).search(source_opening)
-        and _compiled_rule(r"(?:照片|相机)[^。.!?]{0,45}(?:绿斑|绿色斑块|异常成像)", 0).search(source_opening)
-        and _compiled_rule(r"苹果客服[^。.!?]{0,100}(?:未|没有)[^。.!?]{0,40}(?:大规模|集中上报)", 0).search(source_opening)
-        and _compiled_rule(r"(?:单独|具体设备)[^。.!?]{0,30}(?:判断|分析)", 0).search(source_opening)
-    )
     third_party_game_launch = is_third_party_game_or_cross_platform_launch_story(article.title, support_text)
     software_support = [reason for supported, reason in (
         (current_camera_software_expansion, "current first-party camera software support expansion to older iPhones"),
@@ -26578,7 +26572,6 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
     ) if supported]
     hardware_support = [reason for supported, reason in (
         (current_independent_device_measurement, "current independent measurement of named iPhone storage configuration"),
-        (current_device_issue_with_limited_service_reply, "current named-device user reports with limited Apple service response"),
         (is_official_apple_education_promotion_story(article.title, support_text), "current official Apple education promotion"),
         (is_hardware_focused_apple_legal_story(article.title, support_text), "Apple physical hardware design or trade-secret legal proceeding"),
         (is_material_apple_stock_move_story(article.title, support_text), "reported material Apple stock or market-value change"),
@@ -26719,10 +26712,6 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
              or any(key.startswith("primary-claim:apple:") for key in profile.event_keys))
     ):
         profile = replace(profile, trusted_direct_action=True, promotion_reason="; ".join(hardware_support), category_hint="hardware_products")
-    if current_device_issue_with_limited_service_reply:
-        # Quoted users' experience does not turn the current device report and
-        # attributed service response into an author-only analysis.
-        profile = replace(profile, hard_boundary="", defer_reason="")
     if current_independent_device_measurement:
         # The source itself reports a current measured result. Generic
         # hands-on form cannot erase that underlying assertion.

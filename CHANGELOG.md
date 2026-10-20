@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.1.5 - 2026-10-20
+
+- Improved release grouping with source-bound OS versions, release stages and RC numbers; kept named HomePod capabilities and their device/version conditions distinct from the release wave.
+- Improved section and relevance decisions for physical repairs, hardware readiness, developer documentation and platform interoperability; kept third-party device ports and personal-use stories outside independent Apple news.
+- Unified acquisition identity around the acquired counterparty and disclosure stage, removing duplicate title-based decisions; bound service-strategy statements to the actual current speaker rather than nearby quotations or historical remarks.
+- Improved event-date and timezone ownership, incident locations and dates, and legal-action boundaries; prevented product inventories, comparison models and publication dates from replacing the reported action.
+- Improved recognition of locally reported Apple market results without borrowing competitor measurements or treating a combined vendor total as Apple's own result.
+- Improved resale-order binding so adverbs do not become participant names and recalled orders do not become new events; preserved explicitly linked current progress and stopped attribution at another participant.
+- Added regression coverage for mixed-source actions, release candidates, categories, acquisition targets, current attribution and historical-order boundaries, preserving existing assertions.
+- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.1.4 - 2026-10-19
 
 - Improved HTTPS compatibility by explicitly negotiating HTTP/1.1 with certificate verification intact; excluded AppleInsider product hubs and price catalogues from article budgets while retaining nested review and tips articles.
