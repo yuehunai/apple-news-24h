@@ -166,6 +166,29 @@ class SourceBoundaryTests(unittest.TestCase):
                 events = self.m.cluster_articles([article_for(self.m, title, bad)])
                 self.assertEqual(events[0].relevance_tier, 'weak')
 
+    def test_component_purchases_do_not_become_company_negotiations(self):
+        from apple_news_core.event_identity import source_acquisition_frame
+        for component in ('Memory Chips', 'Display Panels', 'Camera Sensors',
+                          'DRAM Chips', 'OLED Display Panels', 'Advanced Camera Sensors'):
+            for verb in ('buy', 'acquire'):
+                with self.subTest(component=component, verb=verb):
+                    self.assertIsNone(source_acquisition_frame(
+                        f'Apple in Talks to {verb.title()} {component} From Acme',
+                        f'Apple is in talks to {verb} {component.lower()} from Acme for its devices.'))
+        for company in ('Acme', 'Memory Labs', 'Acme Semiconductor'):
+            with self.subTest(company=company):
+                frame = source_acquisition_frame(
+                    f'Apple in talks to buy {company} from ParentCo',
+                    f'Apple is in talks to buy {company} from ParentCo.')
+                self.assertEqual(frame.action, 'acquisition-negotiation')
+                self.assertEqual(frame.subject, 'apple-acquisition:' + company.lower().replace(' ', '-'))
+        for company, deal in (('Acme Sensors', 'an acquisition'), ('Acme Chips', 'a merger')):
+            with self.subTest(company=company):
+                frame = source_acquisition_frame('Why Apple keeps acquiring startups',
+                    f'Apple and {company} are negotiating {deal}, according to a new report.')
+                self.assertEqual(frame.action, 'acquisition-negotiation')
+                self.assertEqual(frame.subject, 'apple-acquisition:' + company.lower().replace(' ', '-'))
+
     def test_self_service_parts_are_one_store_extension_not_device_roadmaps(self):
         ids = self.ids('a5dd3', 'e2d1d5', '3072a', '5a9b0', '8bbf40')
         for order in (ids, list(reversed(ids))):

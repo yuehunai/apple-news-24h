@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented here.
 
+## 2.1.7 - 2026-10-21
+
+- Improved the distinction between component procurement and company acquisition talks, restoring cross-language grouping for memory-supplier reports.
+- Improved acquisition-target binding by separating the seller from the acquired party and preserving named companies participating in explicit acquisition or merger negotiations.
+- Added regression coverage for capitalized and qualified component names, seller attribution and company participants; preserved existing supply-chain assertions and historical or denied-claim boundaries.
+- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.1.6 - 2026-10-21
 
 - Improved source-owned relevance and section decisions for current first-party capabilities, payment-bank enrollment and platform interoperability; kept tutorials, ordinary apps, accessories and competitor background from supplying Apple actions.

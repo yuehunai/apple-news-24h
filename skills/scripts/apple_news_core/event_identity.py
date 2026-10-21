@@ -9701,12 +9701,19 @@ def source_acquisition_frame(title: str, lead: str) -> SourceActionFrame | None:
             + proper + r')|(?i:\bApple\s+and)\s+(' + proper
             + r')\s+(?i:are\s+negotiating\s+(?:an?\s+)?(?:acquisition|merger))', 0).search(value)
         if negotiation:
+            obj = _compiled_rule(r'\s+from\b', re.I).split(
+                next(part for part in negotiation.groups() if part), 1)[0]
+            # Headline capitalization does not turn a component into a company.
+            component = negotiation.group(1) is not None and (
+                s(r'\b(?:chips?|panels?|sensors?|cells?|processors?)$', obj)
+                or any(obj.lower() == alias for _, aliases in _SUPPLIER_COMPONENT_CLASSES
+                       for alias in aliases))
             clauses = [(a, b) for a, b in source_clause_spans(value)
                        if a < negotiation.end() and b > negotiation.start()]
             left, right = clauses[0][0], clauses[-1][1]
-            if (source_predicate_role(value[left:negotiation.end()]) == 'current'
+            if (not component and source_predicate_role(value[left:negotiation.end()]) == 'current'
                     and not source_denies_action('', value[left:right], r'in\s+talks|negotiat\w*|acquir\w*')):
-                target = next(part for part in negotiation.groups() if part)
+                target = obj
                 break
         negotiation = None
         passive = _compiled_rule('(' + proper + r')\s+(?i:(?:was\s+)?acquired\s+by\s+Apple)', 0).search(value)

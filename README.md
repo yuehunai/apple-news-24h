@@ -12,15 +12,11 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.1.6 - 2026-10-21
+### 2.1.7 - 2026-10-21
 
-- Improved source-owned relevance and section decisions for current first-party capabilities, payment-bank enrollment and platform interoperability; kept tutorials, ordinary apps, accessories and competitor background from supplying Apple actions.
-- Improved grouping of same-version feature inventories, repair-parts catalogue expansions, manufacturing partnership batches, named vacancies and design exhibitions, preserving local models, generations, stages and source attribution.
-- Improved regulatory-access boundaries across languages, separating consultations from company responses and retaining jurisdiction, deadlines and proposal stages; unresolved regulatory claims no longer fall back to hardware specifications.
-- Improved recognition of reported device workloads, delivery-wait measurements and bounded joint market rankings; preserved observers, configurations, channels and qualifiers without borrowing forecasts, historical claims or competitor results.
-- Added required review coverage for nonnumeric minimum and preferred qualifications, preserving source passages and attribution alongside device, version and operating conditions.
-- Unified acquisition analysis and named negotiation handling in the source-bound decision path, retiring a broad legacy promotion; clarified that commentary recalling an earlier disclosure does not establish a new disclosure.
-- Added 45 regression tests and real-source fixtures for grouping, relevance, section assignment, qualification coverage and neighboring historical, denied or unrelated claims, preserving existing assertions.
+- Improved the distinction between component procurement and company acquisition talks, restoring cross-language grouping for memory-supplier reports.
+- Improved acquisition-target binding by separating the seller from the acquired party and preserving named companies participating in explicit acquisition or merger negotiations.
+- Added regression coverage for capitalized and qualified component names, seller attribution and company participants; preserved existing supply-chain assertions and historical or denied-claim boundaries.
 - Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
@@ -116,7 +112,7 @@ Required flags ask for a decision, not automatic inclusion. `required_final_brie
 
 For source-bound reports, binding and news eligibility are separate decisions. App-publisher charts, device benchmarks, operating-feature inventories, media invitations, regulatory-access proposals and current company-responsibility interviews preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
 
-Version 2.1.6 keeps the CLI, JSON fields and relevance tiers from 2.1.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
+Version 2.1.7 keeps the CLI, JSON fields and relevance tiers from 2.1.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
 
 Diagnostics for debugging source failures:
 
