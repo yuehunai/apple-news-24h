@@ -10696,6 +10696,9 @@ def _source_local_current_action(
                        reason=("third-party source-owned action" if operation.subject.startswith("third-party:")
                                else "source-local " + operation.action if operation.tier == "weak"
                                else "source-owned operation and functional category"))
+        if not operation.category:
+            result = replace(result, review_reasons=(
+                "Functional category unresolved in this source; verify the action's technical object before assigning the final section. The displayed category is provisional.",))
         if operation.subject.startswith('apple-immersive:content:') and operation.action == 'premiere-schedule':
             work = operation.subject.removeprefix('apple-immersive:content:').replace('-', ' ')
             schedule = {'content-primary-premiere'}

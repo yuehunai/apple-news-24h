@@ -9304,6 +9304,7 @@ def is_relevant_candidate(
         return True
     if candidate_tier == "strong" and (
         has_report_evidence
+        or profile.trusted_direct_action
         or candidate_event_kind in {
             "app_store_trust",
             "company_org",
@@ -12895,14 +12896,13 @@ def is_apple_named_software_control_scope_story(title: str, text: str) -> bool:
 
 
 def is_direct_iphone_hardware_spec_rumor_story(title: str, text: str) -> bool:
+    from apple_news_core.event_identity import current_iphone_report_passages
     if is_apple_platform_media_format_compatibility_story(title, text):
         return False
     if is_apple_named_software_control_scope_story(title, text):
         return False
     # Explicit contextual specifications are not the source's reported action.
-    current_text = " ".join(sentence for sentence in _compiled_rule(r"(?<=[.!?。！？])\s*", 0).split(text, 0)
-        if not _compiled_rule(r"\s*(?:作为背景|背景资料|背景介绍|(?:as|for)\s+(?:background|context)\b|"
-                        r"by way of background\b)", re.I).match(sentence))
+    current_text = " ".join(current_iphone_report_passages(title, text))
     lower = f"{title} {current_text}".lower()
     title_lower = title.lower()
     if not has_direct_iphone_product_title_subject(title):
@@ -26559,7 +26559,6 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
                             r".{0,130}\b(?:record|high)\b", re.I).search(article.summary[:300])),
          "source-reported Apple shares reached a new valuation record"),
         (is_direct_apple_financial_results_story(article.title, article.summary), "reported Apple fiscal results"),
-        (is_apple_strategic_transaction_story(" ".join([article.title, article.summary])), "Apple strategic transaction or partnership"),
         (is_apple_executive_government_meeting_story(article.title, support_text), "Apple executive government meeting"),
         (is_apple_executive_event_attendance_story(article.title, support_text), "Apple executive conference attendance"),
         (is_apple_company_org_change_story(title_and_lead_scope(article.title, article.summary, limit=1000)), "Apple company leadership or organization change"),
@@ -27778,6 +27777,14 @@ def prepare_source_local_report_evidence(evidence: ArticleEvidence, displayed: s
     return tuple(pending)
 
 
+def is_source_navigation_or_credit(value: str) -> bool:
+    """Share source navigation and credit filtering across fact preparation."""
+    return bool(_compiled_rule(r"\b(?:image|photo|graphic|screenshot)\s+(?:credits?|source)\s*[:：]|"
+        r"^(?:(?:you\s+can\s+)?(?:check\s+out|read\s+more|learn\s+more|"
+        r"see\s+more|stay\s+tuned)|be\s+sure\s+to)\b|"
+        r"^it\s+can\s+be\s+hard\s+to\b|(?:图片|图像|照片)来源[:：]", re.I).search(value))
+
+
 def prepare_source_condition_evidence(article: Article, identity_for_article=None) -> tuple[tuple[PreparedFact, ...], tuple[PreparedFact, ...]]:
     """Recover conditions while tracking the immediately active source topic."""
     evidence = article.evidence
@@ -27810,6 +27817,18 @@ def prepare_source_condition_evidence(article: Article, identity_for_article=Non
             current_section = unit.text
         if whole_source_media_marker(unit.text):
             continue
+        # Eligibility terms need not contain numbers or name a device. Keep
+        # their original owner and timing for review, not automatic assignment.
+        if (unit.kind in {"p", "blockquote"} and unit.container_id != "caption"
+                and clean_fact_text(unit.text) not in displayed
+                and not is_source_navigation_or_credit(unit.text)
+                and _compiled_rule(r"\b(?:minimum|required|preferred)\s+qualifications?\b|"
+                    r"最低(?:任职)?资格|任职资格|应聘资格|优先条件", re.I).search(unit.text)):
+            unresolved.append(PreparedFact(unit.text, unit.text.casefold(),
+                roles=frozenset({"unprocessed-source-qualification"}),
+                origins=((article.source, article.url, evidence.article_id,
+                          unit.unit_id, 0, len(unit.text)),),
+                reason="Explicit minimum or preferred eligibility terms omitted from the shortlist; verify the local subject and timing and retain applicable conditions"))
         # An employee announcement may quote its exact allowance in ordinary
         # paragraphs. Preserve the local schedule and team exceptions together;
         # a display shortlist must not replace a day count with "same time off".
@@ -28374,10 +28393,6 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
         + r"|\b(?:finds?|retrieves?)\b(?:\s+\S+){1,18}", re.I)
     # Credit lines, navigation, and evaluative prose can contain the same
     # product and modal verbs as a real operating condition.
-    source_chrome = _compiled_rule(r"\b(?:image|photo|graphic|screenshot)\s+(?:credits?|source)\s*[:：]|"
-        r"^(?:(?:you\s+can\s+)?(?:check\s+out|read\s+more|learn\s+more|"
-        r"see\s+more|stay\s+tuned)|be\s+sure\s+to)\b|"
-        r"^it\s+can\s+be\s+hard\s+to\b|(?:图片|图像|照片)来源[:：]", re.I)
     author_judgment = _compiled_rule(r"\b(?:worth(?!\s+(?:noting|remembering|mentioning))|worthwhile|"
         r"obvious(?:ly)?|impressive|unfit|great|excellent|useful|handy|insane|painful|"
         r"my\s+(?:favorite|view)|i\s+(?:think|believe)|"
@@ -28661,7 +28676,7 @@ def source_supporting_facts(article: Article, retained: Sequence[PreparedFact], 
             addressed_imperative = bool(len(sentence) < 45 and _compiled_rule(r"^[A-Z][a-z]+\s+(?:the\s+)?[a-z]+,\s+[A-Z][a-z]+[.!]$", 0).match(sentence))
             bound_condition = any(key == unit.unit_id and left < stop and start < right
                                   for key, left, right in condition_spans)
-            invalid = bool(bound_condition or start >= end_limit or source_chrome.search(sentence)
+            invalid = bool(bound_condition or start >= end_limit or is_source_navigation_or_credit(sentence)
                 or historic_context or failed_proposal_context or separate_stage_context
                 or (sentence.rstrip().endswith((":", "：")) and start == 0)
                 or editorial or generic_second_person or addressed_imperative

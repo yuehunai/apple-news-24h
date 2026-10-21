@@ -265,10 +265,10 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
             return "conflict"
         if left.report_role and right.report_role and left.report_role != right.report_role:
             return "conflict"
-        if left.action == 'resale-quote-report':
+        if left.action in {'resale-quote-report', 'delivery-wait-report'}:
             if left.article_id and left.article_id == right.article_id:
                 return 'match'
-            records = [tuple(q[2] for q in claim.qualifiers if q[1] == 'observation-sentence')
+            records = [tuple(dict.fromkeys(q[2] for q in claim.qualifiers if q[1] == 'observation-sentence'))
                        for claim in (left, right)]
             return 'match' if records[0] and records[0] == records[1] else 'unknown'
         if left.action == 'resale-order-report':
@@ -298,8 +298,8 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
                 return "unknown"
         # A source-local object/action binding is positive evidence. Qualifiers
         # that both sources specify must not contradict it.
-        left_values = {(q[0], q[1]): q[2] for q in left.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day"} and q[2] != "unspecified"}
-        right_values = {(q[0], q[1]): q[2] for q in right.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day"} and q[2] != "unspecified"}
+        left_values = {(q[0], q[1]): q[2] for q in left.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day", "consultation-year", "consultation-month", "consultation-day"} and q[2] != "unspecified"}
+        right_values = {(q[0], q[1]): q[2] for q in right.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day", "consultation-year", "consultation-month", "consultation-day"} and q[2] != "unspecified"}
         if any(left_values[key] != right_values[key] for key in left_values.keys() & right_values.keys()):
             return "conflict"
         if left.action == 'cpu-benchmark-report':

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.1.6 - 2026-10-21
+
+- Improved source-owned relevance and section decisions for current first-party capabilities, payment-bank enrollment and platform interoperability; kept tutorials, ordinary apps, accessories and competitor background from supplying Apple actions.
+- Improved grouping of same-version feature inventories, repair-parts catalogue expansions, manufacturing partnership batches, named vacancies and design exhibitions, preserving local models, generations, stages and source attribution.
+- Improved regulatory-access boundaries across languages, separating consultations from company responses and retaining jurisdiction, deadlines and proposal stages; unresolved regulatory claims no longer fall back to hardware specifications.
+- Improved recognition of reported device workloads, delivery-wait measurements and bounded joint market rankings; preserved observers, configurations, channels and qualifiers without borrowing forecasts, historical claims or competitor results.
+- Added required review coverage for nonnumeric minimum and preferred qualifications, preserving source passages and attribution alongside device, version and operating conditions.
+- Unified acquisition analysis and named negotiation handling in the source-bound decision path, retiring a broad legacy promotion; clarified that commentary recalling an earlier disclosure does not establish a new disclosure.
+- Added 45 regression tests and real-source fixtures for grouping, relevance, section assignment, qualification coverage and neighboring historical, denied or unrelated claims, preserving existing assertions.
+- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.1.5 - 2026-10-20
 
 - Improved release grouping with source-bound OS versions, release stages and RC numbers; kept named HomePod capabilities and their device/version conditions distinct from the release wave.
