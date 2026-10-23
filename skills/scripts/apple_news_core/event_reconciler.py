@@ -4677,23 +4677,37 @@ def _hardware_roadmap_primary_claim(
                              or source_denies_action("", development_lead, r"include\w*|incorporat\w*|test\w*|have|gain|配备|测试|加入"))):
                     continue
                 return development_product, "component-development-" + next(iter(components)), "preproduction"
-    larger_model = r"(?:\b(?:larger|bigger)\s+|更大(?:尺寸)?的?\s*)" + model_pattern
-    model_display = (model_pattern + r"(?:\s+(?:will|could|may)\s+(?:have|gain)\s+|(?:将|有望)(?:配备|采用))"
-                     r"(?:larger\s+(?:screen|display)|更大(?:的)?(?:内屏|外屏|屏幕))")
+    display_model = model_pattern
+    if product == "foldable-iphone":
+        display_model = r"(?:" + model_pattern + r"|foldable\s+iphone|折叠(?:屏)?\s*iphone)"
+        owned_lead = (same_generation and not (named_iphone_models(development_lead) - models)
+            and _compiled_rule(display_model, re.I).search(development_lead))
+    larger_model = r"(?:\b(?:larger|bigger)\s+|更大(?:尺寸)?的?\s*)" + display_model
+    display_object = r"(?:larger\s+(?:(?:inner|outer)\s+(?:and\s+(?:inner|outer)\s+)?)?(?:screen|display)s?|更大(?:的)?(?:内屏|外屏|屏幕))"
+    model_display = (display_model + r"['’]?"
+        r"(?:\s+(?:(?:will|could|may)\s+(?:have|gain)|rumou?red\s+to\s+feature)\s+|(?:将|有望)(?:配备|采用))"
+        + display_object)
+    apple_plan = (r"\bapple\s+(?:is\s+)?(?:(?:reportedly|apparently)\s+)?"
+        r"(?:planning|plans?|considering)\s+(?:a\s+)?")
+    generation_modifier = r"(?:(?:first|second|third|fourth|fifth|\d+(?:st|nd|rd|th)?)[ -]generation\s+)?"
+    planned_display = (apple_plan + generation_modifier + display_model
+        + r"(?:\s+for\s+20\d{2})?\s+with\s+" + display_object + "|"
+        + r"苹果\s*" + display_model
+        + r"\s*(?:[一二三四五六七八九十\d]+年路线图)?(?:已经)?(?:规划|计划)"
+        r"(?:到第[一二三四五六七八九十\d]+代)?[，,]\s*"
+        r"(?:内外屏|内屏|外屏|屏幕)(?:将|计划)(?:进一步)?(?:增大|扩大)")
     owned_display = _compiled_rule(larger_model + "|" + model_display, re.I).search(title_text)
-    if not owned_display:
+    if not owned_display and owned_lead:
         owned_display = _compiled_rule(
-            r"(?:\bapple\s+(?:is\s+)?(?:(?:reportedly|apparently)\s+)?"
-            r"(?:planning|plans?|considering)\s+(?:a\s+)?|"
-            r"苹果(?:公司)?(?:正在|正)?(?:规划|计划|考虑))" + larger_model, re.I
-        ).search(development_lead)
+            r"(?:" + apple_plan + r"|苹果(?:公司)?(?:正在|正)?(?:规划|计划|考虑))"
+            + larger_model + "|" + planned_display, re.I).search(development_lead)
     display_denied = (owned_lead
-        and _compiled_rule(r"\b(?:screen|display)s?\b|内屏|外屏|屏幕", re.I).search(development_lead)
+        and _compiled_rule(r"\b(?:screen|display)s?\b|内外屏|内屏|外屏|屏幕|扩屏", re.I).search(development_lead)
         and (source_predicate_role(development_lead) == "background"
              or source_denies_action("", development_lead, r"plan\w*|consider\w*|enlarg\w*|have|gain|规划|计划|考虑|扩屏")))
     if (current_development and owned_display and not display_denied
-            and _compiled_rule(r"\b(?:future|considering|plans?|in\s+the\s+works)\b|规划|计划|更大尺寸", re.I).search(claim_scope)
-            and _compiled_rule(r"\b(?:screen|display)s?\b|内屏|外屏|屏幕", re.I).search(claim_scope)):
+            and _compiled_rule(r"\b(?:future|considering|plans?|planning|in\s+the\s+works)\b|规划|计划|更大尺寸", re.I).search(claim_scope)
+            and _compiled_rule(r"\b(?:screen|display)s?\b|内外屏|内屏|外屏|屏幕", re.I).search(claim_scope)):
         return development_product, "display-enlargement-planning", "preproduction"
 
     window_lead = _short_lead_scope(lead, sentences=1, limit=420)
@@ -10193,7 +10207,7 @@ def _measured_apple_market_result_keys(
         if sentence_regions:
             current_regions = sentence_regions
         year, quarter = source_market_quarter(sentence, published_year)
-        if quarter:
+        if quarter and not current_period:
             current_quarter = quarter
             if year:
                 current_period = year + "-" + quarter
@@ -10210,28 +10224,34 @@ def _measured_apple_market_result_keys(
             continue
         percentages = set()
         owned_clauses = []
+        metric_scope = ""
         for raw, clause, role in source_market_statements(sentence):
+            if _compiled_rule(r"share|shipments?|shipped|sales|revenue|份额|出货|销量|营收|收入|占|(?<![a-z])(?:apple|iphones?|macs?)(?![a-z])|苹果", re.I).search(clause):
+                metric_scope = clause
             if role != 'observed' and not (include_forecasts and role == 'forecast'):
                 continue
-            local_year, local_quarter = source_market_quarter(raw, published_year)
+            period_scope = _compiled_rule(
+                r'(?:%|percent)\s+from\b|compared\s+(?:with|to)|\b(?:up|down)\s+from\b|较(?:去年|上季)', re.I).split(raw, 1)[0]
+            local_year, local_quarter = source_market_quarter(period_scope, published_year)
             local_period = (local_year + '-' + local_quarter if local_year and local_quarter
                 else local_quarter if local_quarter and local_quarter != current_quarter
                 else current_period or current_quarter)
             owned_clauses.append((raw, clause, role, local_period))
-            current, previous = _market_percentage_roles(clause)
-            if not current:
-                continue
-            metric_scope = clause if _compiled_rule(r"share|shipments?|sales|revenue|份额|出货|销量|营收|收入|占", re.I).search(clause) else sentence
+            # Bare percentage continuations inherit only their owned metric,
+            # never an earlier market-share mention elsewhere in the sentence.
             share_relation = bool(_compiled_rule(r"\baccount(?:s|ed)?\s+for\b|\bshipp?(?:ed|s)?\s+\d+(?:\.\d+)?\s*(?:%|percent)\s+of\b|\b(?:gained|rose|increased|up)\b.{0,28}\bpoints?\s+to\s+\d|份额|占", re.I).search(clause))
             if share_relation or _compiled_rule(r"share|份额|占", re.I).search(metric_scope):
                 metric = "share"
-            elif _compiled_rule(r"shipments?|出货", re.I).search(metric_scope):
+            elif _compiled_rule(r"shipments?|shipped|出货", re.I).search(metric_scope):
                 metric = "shipment-change"
-            elif _compiled_rule(r"revenue|营收|收入", re.I).search(metric_scope):
-                metric = "revenue-change"
             elif _compiled_rule(r"sales|销量", re.I).search(metric_scope):
                 metric = "sales-change"
             else:
+                continue
+            if local_year and local_quarter:
+                current_period, current_quarter = local_period, local_quarter
+            current, previous = _market_percentage_roles(clause)
+            if not current:
                 continue
             local_regions = frozenset(region for region, aliases in region_aliases if _contains(clause, *aliases)) or frozenset(current_regions)
             percentages.add((role, metric + "-current", current, local_regions, local_period))

@@ -5,7 +5,7 @@ All notable changes to this project will be documented here.
 ## 2.2.0 - 2026-10-23
 
 - Improved detail admission for market reports and compound listings, and removed publisher/category suffixes only when page markup confirms them, preserving substantive headlines.
-- Improved source-bound ownership and grouping for market datasets, device tests, legal actions, app releases and hardware disclosures; preserved observers, periods, models, versions, stages, negation and local attribution across languages.
+- Improved source-bound ownership and grouping for market datasets, device tests, legal actions, app releases, hardware disclosures and prototype tests, including complementary report metrics and locally stated display, audio and accessory conditions; preserved observers, periods, models, versions, stages, negation and local attribution across languages.
 - Improved retail and service boundaries for preorders, shipments, deliveries, inventory, queue observations and resale quotations; classified device activation by the actual operator and service while preserving current versus planned availability.
 - Improved `evidence_dispositions` and required review coverage for captured passages outside displayed summaries and selected facts, including unprojected sources; kept reported technical explanations and operating conditions distinct from publisher deductions.
 - Improved event ID generation to distinguish separately bound actions sharing a source URL or display title; retained claim identity and source-linked facts when resolving mixed reports.

@@ -124,9 +124,12 @@ class AugustTenthTitleFactSignatureTests(unittest.TestCase):
 
         self.assertEqual(
             sorted(len(group) for group in groups),
-            [3, 3, 3],
+            [1, 2, 3, 3],
             title_sets(groups),
         )
+        # A shared generation is a bound, not evidence of a shared action.
+        self.assertIn({third_generation_fold[i].title for i in (0, 2)}, title_sets(groups))
+        self.assertIn({third_generation_fold[1].title}, title_sets(groups))
 
     def test_watch_redesign_and_ceramic_case_split_then_merge_by_concrete_fact(self):
         redesign = [

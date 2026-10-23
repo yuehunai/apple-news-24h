@@ -2597,7 +2597,7 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
         market_measures.append(measures)
     if all(market_measures):
         shared_metrics = market_measures[0].keys() & market_measures[1].keys()
-        if not shared_metrics or any(market_measures[0][metric].isdisjoint(market_measures[1][metric]) for metric in shared_metrics):
+        if any(market_measures[0][metric].isdisjoint(market_measures[1][metric]) for metric in shared_metrics):
             return "conflict"
     leak_actions = [{key for key in profile.separation_keys if key.startswith("source-leak-action:")}
                     for profile in (left, right)]
@@ -2700,6 +2700,10 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
         return "conflict"
     if _explicit_identity_conflict(left, right) and not (authoritative or evidence or release):
         return "conflict"
+    if all(market_measures) and not (market_measures[0].keys() & market_measures[1].keys()):
+        # Complementary dimensions are not contradictory, but the generic
+        # provider/period key alone cannot establish a shared report.
+        return "unknown"
     # A missing release version cannot select one of several supported trains.
     # This is uncertainty, not contradictory source evidence; retain both items.
     for sparse, numbered in ((left, right), (right, left)):

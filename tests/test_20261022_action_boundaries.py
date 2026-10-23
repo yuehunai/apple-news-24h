@@ -2706,3 +2706,152 @@ class ActionBoundaryTests(unittest.TestCase):
                      observation.replace('were low-res', 'will be low-res')):
             with self.subTest(text=text):
                 self.assertFalse(bind_attributed_device_tests(self.evidence(title,opening,text)))
+
+
+    def test_supply_estimates_preserve_macbook_variant(self):
+        from apple_news_core.event_identity import source_product_supply_constraint
+        for heading in ('Air', 'Pro'):
+            for body in ('Air', 'Pro'):
+                with self.subTest(heading=heading, body=body):
+                    self.assertEqual(source_product_supply_constraint(
+                        'MacBook ' + heading + ' shortages: where to buy one right now',
+                        'MacBook ' + body + ' shipping estimates at Apple have slipped amid supply constraints.'),
+                        heading == body)
+
+    def test_expansion_plan_requires_apple_owned_predicate(self):
+        from apple_news_core.event_reconciler import hardware_roadmap_primary_claim as claim
+        title = 'iPhone Ultra 3 roadmap report'
+        report = 'Apple is reportedly planning a third-generation foldable iPhone for 2028 with larger inner and outer displays.'
+        self.assertEqual(claim(title, report)[1], 'display-enlargement-planning')
+        for lead in (report.replace('Apple', 'Orion'), report.replace('Apple', 'An analyst'),
+                     report.replace('planning', 'not planning'), 'Last year, ' + report,
+                     report.replace('Apple is reportedly planning', 'Apple says Orion is planning')):
+            with self.subTest(lead=lead):
+                self.assertIsNone(claim(title, lead))
+        self.assertIsNone(claim("Foldable 'iPhone Ultra 3' Rumored to Feature Larger Displays",
+            '苹果折叠 iPhone 三年路线图已经规划到第三代，并未计划扩屏。'))
+
+    def test_vendor_official_shop_does_not_own_apple_phone_action(self):
+        for vendor in ('Orion', 'Orion官方', 'Orion官方旗舰店'):
+            title = vendor + ' iPhone 11~17 系列康宁钢化膜 7.8 元无尘仓秒贴'
+            report = article_for(self.m, title, '第三方保护膜限时限量领券包邮。')
+            self.assertEqual(self.m.article_reconciliation_profile(report).relevance_tier, 'weak')
+
+    def test_case_material_denial_is_not_observed_construction(self):
+        from apple_news_core.event_identity import bind_accessory_construction as bind
+        title = '苹果 iPhone 23 官方手机壳材料报告'
+        for body in ('苹果否认这款手机壳主体是PC聚碳酸酯材质。',
+                     '这款手机壳主体是PC聚碳酸酯材质的说法不实。'):
+            self.assertIsNone(bind(self.evidence(title, body)))
+        for body in ('这款手机壳主体是PC聚碳酸酯材质，靠贴胶固定。',
+                     '这款手机壳不采用全胶固定结构。'):
+            self.assertIsNotNone(bind(self.evidence(title, body)))
+
+
+    def test_market_change_continuation_keeps_subject_and_role(self):
+        from apple_news_core.event_identity import source_market_statements
+        for text in ('Apple shipped 5.9 million Macs, down 11.3% from 6.7 million a year ago.',
+                     '苹果出货590万台，同比下降11.3%，市场份额为9.5%。'):
+            rows = list(source_market_statements(text))
+            self.assertTrue(any('11.3%' in clause and role == 'observed' for _, clause, role in rows))
+        for text in ('Apple shipped 5.9 million Macs, Samsung shipped 7 million phones, down 11.3%.',
+                     '苹果出货590万台，三星出货700万台，同比下降11.3%。',
+                     'Last year Apple shipped 5.9 million Macs, down 11.3%.',
+                     'Apple will ship 5.9 million Macs, down 11.3%.',
+                     'Apple did not ship 5.9 million Macs, down 11.3%.',
+                     '苹果出货590万台，同比增长11.3%为预测值。',
+                     '苹果出货590万台，同比下降11.3%是去年的数据。'):
+            rows = list(source_market_statements(text))
+            self.assertFalse(any('11.3%' in clause and role == 'observed' for _, clause, role in rows), text)
+
+    def test_market_continuation_does_not_borrow_financial_metrics_or_comparison_years(self):
+        from apple_news_core.event_identity import source_market_statements
+        from apple_news_core.event_reconciler import _measured_apple_market_result_keys
+        for text in (
+                'Apple market share rose. Apple reported revenue of $60 billion, up 21.7% from Q3 2027.',
+                '苹果市场份额上升。苹果营收为600亿美元，同比增长21.7%。'):
+            self.assertFalse(any('21.7%' in clause for _, clause, _ in source_market_statements(text)))
+        title = 'Counterpoint: global smartphone shipments in Q3 2028'
+        lead = 'Apple held 22% market share in Q3 2028.'
+        evidence = ('Samsung held 23% in Q3 2027. Apple market share reached 22%. '
+                    'Apple reported revenue of $60 billion, up 21.7% from Q3 2027.')
+        keys = _measured_apple_market_result_keys(title, lead, evidence)
+        self.assertTrue(any(':2028-q3:apple-share-current:22' in key for key in keys))
+        self.assertFalse(any(':2027-q3:' in key or ':21.7' in key for key in keys))
+        for title in ('IDC Apple global PC shipments report for 2028',
+                      'IDC Apple global PC shipments report for Q2 2028'):
+            for lead in ('Apple shipped 5.9 million Macs in Q3 2028, down 11.3%.',
+                         'Apple shipped 5.9 million Macs in Q3 2028, down 11.3% from Q3 2027.'):
+                keys = _measured_apple_market_result_keys(title, lead, '')
+                self.assertTrue(any(':2028-q3:apple-shipment-change-current:11.3' in key for key in keys))
+                self.assertFalse(any(':2027-q3:' in key or ':2028-q2:' in key or ':2028:' in key for key in keys))
+
+    def test_hardware_prototype_testing_keeps_apple_owner_and_device_object(self):
+        from apple_news_core.event_identity import source_internal_testing_frame
+        title = '消息称苹果正在推进折叠 iPad，设计参考其他品牌'
+        lead = '博主发文透露苹果公司目前正在测试“折叠巨大平板”，设计参考另一品牌的折叠电脑。'
+        frame = source_internal_testing_frame(title, lead)
+        self.assertIsNotNone(frame)
+        self.assertEqual((frame.subject, frame.action, frame.category),
+                         ('ipad:foldable', 'hardware-prototype-testing', 'hardware_products'))
+        profile = self.m.article_reconciliation_profile(article_for(self.m, title, lead))
+        self.assertEqual((profile.relevance_tier, profile.category_hint), ('strong', 'hardware_products'))
+        for bad in ('记者目前正在测试折叠平板。',
+                    '苹果供应商目前正在测试折叠平板。',
+                    '苹果公司去年正在测试折叠平板。',
+                    '苹果公司计划测试折叠平板。',
+                    '苹果公司并未测试折叠平板。',
+                    '并非苹果公司目前正在测试折叠平板，而是供应商。',
+                    '苹果公司目前正在测试三星的新款折叠平板。',
+                    '苹果公司正在测试折叠手机。',
+                    '苹果公司正在测试新款 iPad 应用。'):
+            self.assertIsNone(source_internal_testing_frame(title, bad), bad)
+        for name in ('MacBook', 'AirPods'):
+            frame = source_internal_testing_frame(f'Apple testing a new {name} prototype',
+                f'A report says Apple is currently testing a new {name} prototype.')
+            self.assertIsNotNone(frame, name)
+            self.assertEqual(frame.category, 'hardware_products')
+        self.assertIsNone(source_internal_testing_frame('苹果否认正在测试折叠 iPad', lead))
+        frame = source_internal_testing_frame('Apple testing a new iPad',
+            'Apple is currently testing a new iPad inspired by a foldable Samsung tablet.')
+        self.assertIsNotNone(frame)
+        self.assertEqual(frame.subject, 'ipad')
+        frame = source_internal_testing_frame('Apple testing a new iPad',
+            'Apple is currently testing a new iPad compared with a foldable Samsung tablet.')
+        self.assertIsNotNone(frame)
+        self.assertEqual(frame.subject, 'ipad')
+        for title, lead in (
+                ('Apple testing a new iPad Pro prototype', 'Apple is currently testing a new iPad mini prototype.'),
+                ('Apple testing a new iPad 12 prototype', 'Apple is currently testing a new iPad 11 prototype.'),
+                ('苹果否认正在测试折叠 iPad', '苹果公司目前正在测试折叠平板。'),
+                ('苹果正在测试折叠 iPad', '并非苹果公司目前正在测试折叠平板，而是供应商。')):
+            profile = self.m.source_text_profile(title, lead, [], 'MacRumors')
+            self.assertTrue(profile.bound_claim.review_reason)
+            self.assertFalse(profile.trusted_direct_action)
+        from apple_news_core.event_identity import bind_hardware_prototype_testing
+        for title, lead in (
+                ('Apple developing a new iPad Pro', 'Apple plans to launch a new iPad Pro next year.'),
+                ('苹果推进 Vision Pro 新款原型方案', '苹果推进新款设计概念，Meta正在测试新的原型。'),
+                ('苹果推进 Vision Pro 新款原型方案', '苹果推进新款设计概念，苹果去年正在测试旧原型。'),
+                ('苹果推进 Vision Pro 新款原型方案', '苹果正在推进新款原型的四种设计方案。'),
+                ('苹果折叠屏iPhone正在测试手写笔', '苹果正在测试折叠 iPhone 专用触控笔。'),
+                ('古尔曼：苹果正测试第二代 iPhone Duo 原型机，配备面容 ID',
+                 '苹果内部正在测试的第二代 iPhone Duo 原型机已配备面容 ID。')):
+            self.assertIsNone(bind_hardware_prototype_testing(self.evidence(title, lead)))
+        frame = source_internal_testing_frame('Apple testing a new iPad 12 prototype',
+            'Apple is currently testing a new iPad 12 prototype.')
+        self.assertEqual(frame.subject, 'ipad-12')
+
+    def test_captured_prototype_report_keeps_competitor_and_history_unassigned(self):
+        self.rows = json.loads((Path(__file__).parent / 'fixtures/20261023_hardware_prototype.json').read_text())
+        sid = next(iter(self.rows))
+        events, values = self.cluster_sources(sid)
+        self.assertEqual([(e.relevance_tier, e.category) for e in events], [('strong', 'hardware_products')])
+        public = '\n'.join(values[0]['key_facts'] + values[0].get('must_include_facts', []))
+        self.assertIn('正在测试', public)
+        self.assertNotIn('24999', public)
+        self.assertNotIn('2028', public)
+        article = self.source_articles(sid)[0]
+        _, remainder, _ = self.m.project_article_evidence(article.evidence)
+        self.assertTrue(remainder)
+        self.assertEqual([s['url'] for s in values[0]['sources']], [self.rows[sid]['evidence']['url']])
