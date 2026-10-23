@@ -21,7 +21,7 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 - Improved event ID generation to distinguish separately bound actions sharing a source URL or display title; retained claim identity and source-linked facts when resolving mixed reports.
 - Refactored migrated ownership and relevance decisions into shared source-binding paths and removed competing legacy decisions; skipped unused legacy support calculations after an authoritative source action is established, retaining unmigrated behavior.
 - Updated the skill to collect fresh evidence on each invocation, resolve boundaries from `claims`, draft from source-linked propositions and preserve each supported URL; clarified regional-price review and tightened constraints against repeated reporting-status and editorial wrap-up text in finished briefs.
-- Added regression fixtures and tests for ownership, grouping, sections, evidence coverage and neighboring negative cases. Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+- Added regression fixtures and tests for ownership, grouping, sections, evidence coverage and neighboring negative cases; pinned CI to Ubuntu 24.04 for Python 3.9–3.13 coverage. Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
 
