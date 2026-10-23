@@ -171,11 +171,31 @@ def meta_content(text: str, names: list[str]) -> str:
 
 def extract_title(text: str, fallback: str) -> str:
     title = meta_content(text, ["og:title", "twitter:title"])
-    if title:
-        return strip_tags(title)
     h1 = _compiled_markup_rule(r"(?is)<h1[^>]*>(.*?)</h1>", 0).search(text)
-    if h1:
-        return strip_tags(h1.group(1))
+    headline = strip_tags(h1.group(1)) if h1 else ""
+    if title:
+        title = strip_tags(title)
+        publisher = strip_tags(meta_content(text, ["og:site_name"]))
+        # Confirm every suffix with publisher/category markup; an intermediate
+        # subtitle may carry facts even when the final segment is the publisher.
+        if headline and publisher and title.startswith(headline):
+            suffix = title[len(headline):]
+            delimiter = r"\s+[-–—|]\s+"
+            if (_compiled_markup_rule(delimiter).match(suffix)
+                    and _compiled_markup_rule(delimiter + re.escape(publisher) + r"\s*$", re.I).search(suffix)):
+                categories = {meta_content(text, ["article:section"]).casefold()}
+                for match in _compiled_markup_rule(
+                        r'''(?is)<(?:div|nav|span)\b[^>]*class=["'][^"']*\b(?:topic|category|breadcrumb)\b[^"']*["'][^>]*>(.*?)</(?:div|nav|span)>''').finditer(text):
+                    block = match.group(1)
+                    categories.add(strip_tags(block).casefold())
+                    categories.update(strip_tags(value).casefold() for value in
+                        _compiled_markup_rule(r'''(?is)<img\b[^>]*title=["']([^"']+)["']''').findall(block))
+                parts = _compiled_markup_rule(delimiter).split(suffix)[1:-1]
+                if all(part.casefold() in categories for part in parts):
+                    return headline
+        return title
+    if headline:
+        return headline
     title_tag = _compiled_markup_rule(r"(?is)<title[^>]*>(.*?)</title>", 0).search(text)
     if title_tag:
         return strip_tags(title_tag.group(1))

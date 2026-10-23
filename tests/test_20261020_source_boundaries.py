@@ -111,14 +111,25 @@ class SourceBoundaryTests(unittest.TestCase):
 
     def test_same_transactions_documents_and_hardware_readiness_merge(self):
         for prefixes in (('e1d05', 'b591', '29f9', '9756'), ('ecb3', '6eb94'),
-                         ('1fda', 'cb39'), ('d7fd', '95f4'), ('a145', '70f5'),
-                         ('a156', 'c82a')):
+                         ('1fda', 'cb39'), ('d7fd', '95f4'), ('a145', '70f5')):
             with self.subTest(sources=prefixes):
                 ids = self.ids(*prefixes)
                 events, _ = self.cluster_sources(*ids)
                 self.assertEqual(len(events), 1)
                 self.assertEqual(self.source_ids(events[0]), set(ids))
                 self.assertEqual(events[0].relevance_tier, 'strong')
+
+    def test_separate_facilities_keep_each_incident_and_all_sources(self):
+        # These reports describe two attacks hours apart; the shared protest
+        # does not replace the facility boundary in news_policy.md.
+        ids = self.ids('a156', 'c82a')
+        for order in (ids, ids[::-1]):
+            events, _ = self.cluster_sources(*order)
+            self.assertEqual(len(events), 2)
+            self.assertEqual({a.bound_claim.subject for e in events for a in e.articles},
+                             {'apple-store:bordeaux', 'apple-store:lille'})
+            self.assertTrue(all(self.source_ids(e) == set(ids) for e in events))
+            self.assertTrue(all(e.relevance_tier == 'strong' for e in events))
 
     def test_local_apple_market_results_do_not_require_apple_headline(self):
         for prefixes in (('3d496', 'ce3d'), ('3b74', '722c')):

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.2.0 - 2026-10-23
+
+- Improved detail admission for market reports and compound listings, and removed publisher/category suffixes only when page markup confirms them, preserving substantive headlines.
+- Improved source-bound ownership and grouping for market datasets, device tests, legal actions, app releases and hardware disclosures; preserved observers, periods, models, versions, stages, negation and local attribution across languages.
+- Improved retail and service boundaries for preorders, shipments, deliveries, inventory, queue observations and resale quotations; classified device activation by the actual operator and service while preserving current versus planned availability.
+- Improved `evidence_dispositions` and required review coverage for captured passages outside displayed summaries and selected facts, including unprojected sources; kept reported technical explanations and operating conditions distinct from publisher deductions.
+- Improved event ID generation to distinguish separately bound actions sharing a source URL or display title; retained claim identity and source-linked facts when resolving mixed reports.
+- Refactored migrated ownership and relevance decisions into shared source-binding paths and removed competing legacy decisions; skipped unused legacy support calculations after an authoritative source action is established, retaining unmigrated behavior.
+- Updated the skill to collect fresh evidence on each invocation, resolve boundaries from `claims`, draft from source-linked propositions and preserve each supported URL; clarified regional-price review and tightened constraints against repeated reporting-status and editorial wrap-up text in finished briefs.
+- Added regression fixtures and tests for ownership, grouping, sections, evidence coverage and neighboring negative cases. Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.1.7 - 2026-10-21
 
 - Improved the distinction between component procurement and company acquisition talks, restoring cross-language grouping for memory-supplier reports.

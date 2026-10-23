@@ -232,3 +232,5 @@ class EventFactPlan:
     facts: tuple[PreparedFact, ...]
     required: tuple[PreparedFact, ...] = ()
     unprocessed: tuple[PreparedFact, ...] = ()
+    # Only source sentences actually displayed in the assembled summary.
+    summary_sources: tuple[tuple[str, str, str], ...] = ()

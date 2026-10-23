@@ -366,9 +366,8 @@ def market_summary_needs_detail(title: str) -> bool:
     if (_compiled_rule(r'美股|美国股市|\b(?:s&p\s*500|nasdaq|dow\s+jones|wall\s+street)\b', re.I).search(title)
             and _compiled_rule(r'收[涨跌盘]|齐[涨跌]|指数.{0,12}(?:涨|跌)|\b(?:close[sd]?|rose|fell|slumps?|rall(?:y|ies))\b', re.I).search(title)):
         return True
-    return bool(_compiled_rule(r'\b(?:pc|personal computers?|smartphones?|tablets?|wearables?)\b|个人电脑|(?:智能)?手机(?:市场)?|平板电脑|可穿戴', re.I).search(title)
-        and _compiled_rule(r'\b(?:shipments?|market\s+share|unit\s+sales)\b|出货(?:量)?|市场份额|市占', re.I).search(title)
-        and _compiled_rule(r'(?<![a-z0-9])q[1-4](?!\d)|20\d{2}\s*q[1-4]|quarter|report|research|季度|报告|数据', re.I).search(title))
+    return bool(_compiled_rule(r'(?<![a-z0-9])(?:pc|personal computers?|smartphones?|tablets?|wearables?)(?![a-z0-9])|个人电脑|(?:智能)?手机(?:市场)?|平板电脑|可穿戴', re.I).search(title)
+        and _compiled_rule(r'\b(?:shipments?|market\s+share|unit\s+sales)\b|出货(?:量)?|市场份额|市占', re.I).search(title))
 
 def is_navigation_url(url: str, source: Source | None = None) -> bool:
     parts = urllib.parse.urlsplit(url)

@@ -298,11 +298,32 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
                 return "unknown"
         # A source-local object/action binding is positive evidence. Qualifiers
         # that both sources specify must not contradict it.
-        left_values = {(q[0], q[1]): q[2] for q in left.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day", "consultation-year", "consultation-month", "consultation-day"} and q[2] != "unspecified"}
-        right_values = {(q[0], q[1]): q[2] for q in right.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day", "consultation-year", "consultation-month", "consultation-day"} and q[2] != "unspecified"}
+        left_values = {(q[0], q[1]): q[2] for q in left.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day", "consultation-year", "consultation-month", "consultation-day", "incident-year", "incident-month", "incident-day", "test-duration"} and q[2] != "unspecified"}
+        right_values = {(q[0], q[1]): q[2] for q in right.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day", "consultation-year", "consultation-month", "consultation-day", "incident-year", "incident-month", "incident-day", "test-duration"} and q[2] != "unspecified"}
         if any(left_values[key] != right_values[key] for key in left_values.keys() & right_values.keys()):
             return "conflict"
-        if left.action == 'cpu-benchmark-report':
+        if left.action == 'local-model-measurement':
+            contexts = [{q[:3] for q in claim.qualifiers
+                         if q[1] in {'measurement-context', 'observation-source'}}
+                        for claim in (left, right)]
+            if not contexts[0] or contexts[0] != contexts[1]:
+                return 'unknown'
+        if left.action == 'market-forecast-report':
+            providers = [{q[2] for q in claim.qualifiers if q[1] == 'forecast-provider'} for claim in (left,right)]
+            if providers[0] and providers[1] and providers[0] != providers[1]:
+                return 'conflict'
+            records = [{q[2] for q in claim.qualifiers if q[1] == 'forecast-record'} for claim in (left, right)]
+            if not records[0].intersection(records[1]):
+                return 'unknown'
+        if left.action == 'retail-queue-observation':
+            days = [{q[2] for q in claim.qualifiers if q[1] == 'queue-launch-day'} for claim in (left, right)]
+            if days[0] and days[1] and not days[0].intersection(days[1]):
+                return 'conflict'
+            for kind in ('queue-count', 'queue-position-offer-cny', 'queue-overnight', 'queue-location'):
+                values = [{q[2] for q in claim.qualifiers if q[1] == kind} for claim in (left, right)]
+                if not values[0].intersection(values[1]):
+                    return 'unknown'
+        if left.action in {'cpu-benchmark-report', 'device-test-report', 'local-model-measurement', 'component-output-observation'}:
             dates = [{q[1:3] for q in claim.qualifiers if q[1].startswith('observation-')} for claim in (left, right)]
             records = [{q[2] for q in claim.qualifiers if q[1] == 'measurement-record'} for claim in (left, right)]
             if not (dates[0] and dates[0] == dates[1]) and not records[0].intersection(records[1]):
@@ -1523,20 +1544,6 @@ def _explicit_separation_conflict(
     }
     if shared_product_roadmaps:
         return False
-    left_foldable_generations = {
-        key
-        for key in left.separation_keys
-        if key.startswith("title-fact:future-generation-roadmap:foldable-iphone:")
-    }
-    right_foldable_generations = {
-        key
-        for key in right.separation_keys
-        if key.startswith("title-fact:future-generation-roadmap:foldable-iphone:")
-    }
-    if left_foldable_generations != right_foldable_generations and (
-        left_foldable_generations or right_foldable_generations
-    ):
-        return True
     for disclosure, other in ((left, right), (right, left)):
         if (
             "primary-claim-predicate:finish-lineup-disclosure" in disclosure.separation_keys

@@ -12,12 +12,16 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.1.7 - 2026-10-21
+### 2.2.0 - 2026-10-23
 
-- Improved the distinction between component procurement and company acquisition talks, restoring cross-language grouping for memory-supplier reports.
-- Improved acquisition-target binding by separating the seller from the acquired party and preserving named companies participating in explicit acquisition or merger negotiations.
-- Added regression coverage for capitalized and qualified component names, seller attribution and company participants; preserved existing supply-chain assertions and historical or denied-claim boundaries.
-- Kept the standard-library runtime, CLI, JSON schema, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
+- Improved detail admission for market reports and compound listings, and removed publisher/category suffixes only when page markup confirms them, preserving substantive headlines.
+- Improved source-bound ownership and grouping for market datasets, device tests, legal actions, app releases and hardware disclosures; preserved observers, periods, models, versions, stages, negation and local attribution across languages.
+- Improved retail and service boundaries for preorders, shipments, deliveries, inventory, queue observations and resale quotations; classified device activation by the actual operator and service while preserving current versus planned availability.
+- Improved `evidence_dispositions` and required review coverage for captured passages outside displayed summaries and selected facts, including unprojected sources; kept reported technical explanations and operating conditions distinct from publisher deductions.
+- Improved event ID generation to distinguish separately bound actions sharing a source URL or display title; retained claim identity and source-linked facts when resolving mixed reports.
+- Refactored migrated ownership and relevance decisions into shared source-binding paths and removed competing legacy decisions; skipped unused legacy support calculations after an authoritative source action is established, retaining unmigrated behavior.
+- Updated the skill to collect fresh evidence on each invocation, resolve boundaries from `claims`, draft from source-linked propositions and preserve each supported URL; clarified regional-price review and tightened constraints against repeated reporting-status and editorial wrap-up text in finished briefs.
+- Added regression fixtures and tests for ownership, grouping, sections, evidence coverage and neighboring negative cases. Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
 
@@ -103,6 +107,7 @@ JSON also exposes evidence for attribution and coverage review:
 
 | Field | Purpose |
 | --- | --- |
+| `events[].claims`, `deferred_events[].claims` | Where present, source-bound subjects, actions, objects, qualifiers and evidence spans; use these before display titles when resolving boundaries. |
 | `source_evidence` | Captured source units and publication evidence, linked by `evidence_id`; retained even when an unresolved source produces no event. |
 | `fact_sources[].origins` | Source support and, when available, exact unit spans for each event fact. |
 | `evidence_dispositions` | Recorded destinations of projected or unresolved source material. |
@@ -110,9 +115,11 @@ JSON also exposes evidence for attribution and coverage review:
 
 Required flags ask for a decision, not automatic inclusion. `required_final_brief_titles`, `final_brief_markdown`, and an adjacent `*.brief.md` are coverage scaffolds, not the finished brief. Write from source-supported summaries and facts, checking independent actions, material qualifications and each bullet's supporting URLs.
 
-For source-bound reports, binding and news eligibility are separate decisions. App-publisher charts, device benchmarks, operating-feature inventories, media invitations, regulatory-access proposals and current company-responsibility interviews preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
+For source-bound reports, binding and news eligibility are separate decisions. Migrated report families, including app-publisher charts, device benchmarks, operating-feature inventories, media invitations, regulatory-access proposals and locally bound market or retail actions, preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
 
-Version 2.1.7 keeps the CLI, JSON fields and relevance tiers from 2.1.0. Consumers should tolerate additional fields; corrected grouping can change event membership, IDs and classifications.
+For sources represented in an event or deferred candidate, captured passages not covered by displayed summaries, selected facts or explicit exclusions remain available for review. This can increase review material without adding events; it does not establish complete site coverage.
+
+Version 2.2.0 retains the existing CLI, JSON fields and relevance tiers. Event IDs now incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
 
 Diagnostics for debugging source failures:
 

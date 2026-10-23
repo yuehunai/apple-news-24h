@@ -20,6 +20,7 @@ from .models import PreparedFact, SourceFactView, EventFactPlan
 from .event_identity import (
     REGION_TERMS,
     is_personal_product_complaint,
+    is_retail_promotion,
     is_os_release_announcement,
     source_acquisition_frame,
     is_weekly_editorial_recap,
@@ -41,8 +42,11 @@ from .event_identity import (
     source_store_sales_measure,
     source_device_workload_measure,
     source_hardware_project,
+    foldable_iphone_generation_subject,
+    named_iphone_models,
     source_operation_frame,
     source_market_measurement_frame,
+    source_market_quarter,
     source_market_statements,
     source_dated_launch_frame,
     source_editorial_outlook,
@@ -53,6 +57,8 @@ from .event_identity import (
     first_party_hardware_implementation,
     OS_COMPONENT_PATTERNS,
     source_sentence_spans,
+    source_clause_spans,
+    source_chip_technical_disclosures,
     source_primary_assertion,
     source_predicate_role,
     source_product_lifecycle_assertion,
@@ -648,7 +654,13 @@ def _reported_hardware_launch_subjects(
 
 def _short_lead_scope(lead: str, *, sentences: int = 2, limit: int = 900) -> str:
     """Return a bounded lead window for high-specificity typed assertions."""
-    parts = _compiled_rule(r"(?:[。！？]|(?<=[.!?])\s+)", 0).split(_normalized(lead), sentences)
+    normalized = _normalized(lead)
+    teaser, separator, continuation = normalized.partition("... ")
+    if (separator and len(teaser.split()) >= 5
+            and _compiled_rule(r"\s+([,;:])").sub(r"\1", continuation).startswith(
+                _compiled_rule(r"\s+([,;:])").sub(r"\1", teaser))):
+        normalized = continuation  # The complete opening replaces its repeated truncated deck.
+    parts = _compiled_rule(r"(?:[。！？]|(?<=[.!?])\s+)", 0).split(normalized, sentences)
     return " ".join(part for part in parts[:sentences] if part).strip()[:limit]
 
 
@@ -1025,27 +1037,6 @@ def _title_fact_signatures(title: str, lead: str) -> set[str]:
                 signatures.add(f"finish-set:foldable-iphone:{','.join(sorted(finishes))}")
                 break
 
-        roadmap_context = bool(
-            _compiled_rule(r"\b(?:roadmap|planning|plans?|planned|generation|20\d{2})\b|"
-                r"路线图|规划|计划|第[二三23]代|第\s*[23]\s*代", 0).search(text)
-        )
-        if roadmap_context:
-            for generation, pattern in (
-                (
-                    "g2",
-                    r"\b(?:second|2nd)[ -]generation\b|\bsecond[ -]gen\b|"
-                    r"\b(?:iphone\s+(?:fold|ultra)\s*2)\b|(?:第二代|第\s*2\s*代)",
-                ),
-                (
-                    "g3",
-                    r"\b(?:third|3rd)[ -]generation\b|\bthird[ -]gen\b|"
-                    r"\b(?:iphone\s+(?:fold|ultra)\s*3)\b|(?:第三代|第\s*3\s*代)",
-                ),
-            ):
-                if re.search(pattern, text):
-                    signatures.add(
-                        f"future-generation-roadmap:foldable-iphone:{generation}"
-                    )
 
     apple_watch = bool(_compiled_rule(r"(?<![a-z0-9])apple\s*watch\b|苹果\s*watch", 0).search(text))
     if apple_watch and _compiled_rule(r"\bceramic\b|陶瓷", 0).search(text):
@@ -1531,31 +1522,31 @@ def _hardware_accessory_evaluation_claim(
         r"(?:过时|复古|停产).{0,18}(?:产品)?(?:名单|列表)|"
         r"(?:列入|进入).{0,20}(?:过时|复古|停产)(?:产品)?(?:名单|列表)", re.I).search(_normalized(title)):
         return None
-    products = identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS
+    products = identity.title_products & _bounded_evidence_products(title) & _HARDWARE_FIRST_PARTY_PRODUCTS
     if len(products) != 1:
         return None
-    text = f"{_normalized(title)}. {_normalized(lead)[:700]}"
-    accessory = ""
-    for name, pattern in (
-        ("stylus", r"\b(?:apple\s+pencil|stylus|digital\s+pen)\b|(?:触控笔|手写笔)"),
-        ("keyboard", r"\b(?:magic\s+keyboard|keyboard)\b|(?:妙控键盘|键盘)"),
-        ("controller", r"\b(?:game\s+controller|controller)\b|(?:游戏手柄|控制器)"),
-    ):
-        if re.search(pattern, text, re.I):
-            accessory = name
-            break
-    if not accessory:
-        return None
-    evaluation = bool(
-        _compiled_rule(r"\b(?:test(?:ed|ing)?|prototype|consider(?:ed|ing)?|evaluate(?:d|s|ing)?|"
+    evaluation = (
+        r"\b(?:test(?:ed|ing)?|prototype|consider(?:ed|ing)?|evaluate(?:d|s|ing)?|"
             r"support(?:ed|s|ing)?|compatib(?:le|ility)|not\s+expected\s+to\s+(?:ship|launch)|"
             r"won['’]t\s+(?:ship|launch|support)|will\s+not\s+(?:ship|launch|support))\b|"
-            r"(?:测试|原型|考虑|评估|支持|兼容|不会|不太可能|无缘).{0,24}"
-            r"(?:量产|推出|发布|上市|支持|兼容)?", re.I).search(text)
+            r"(?:测试|原型|考虑|评估|支持|兼容|不会|不太可能|无缘)"
     )
-    if not evaluation:
-        return None
-    return next(iter(products)), accessory
+    # Product, accessory and evaluation must share their own assertion. A
+    # keyboard in an OS port's working-device inventory is not this relation.
+    for text in (_normalized(title), _normalized(lead)[:700]):
+        for start, end in source_clause_spans(text):
+            sentence = text[start:end]
+            if not products & _bounded_evidence_products(sentence):
+                continue
+            for name, pattern in (
+                ("stylus", r"\b(?:apple\s+pencil|stylus|digital\s+pen)\b|触控笔|手写笔"),
+                ("keyboard", r"\b(?:magic\s+keyboard|keyboard)\b|妙控键盘|键盘"),
+                ("controller", r"\b(?:game\s+controller|controller)\b|游戏手柄|控制器"),
+            ):
+                if (re.search(pattern, sentence, re.I)
+                        and re.search(evaluation, sentence, re.I)):
+                    return next(iter(products)), name
+    return None
 
 
 def _embedded_current_preview_subject(title, lead, references):
@@ -4545,11 +4536,15 @@ def _roadmap_action_clause(title: str) -> str:
     canonical = _canonical_title(title)
     action = _compiled_rule(r"\b(?:cancel(?:s|ed|led|lation)?|scrap(?:s|ped)?|abandon(?:s|ed)?|"
         r"call(?:s|ed|ing)?\s+off|delay(?:s|ed)?|retain(?:s|ed)?|keep(?:s|ing)?|"
-        r"launch(?:es|ed|ing)?|release(?:s|d|ing)?|introduc(?:e|es|ed|ing))\b|"
-        r"(?:取消|搁置|终止|放弃|砍掉|叫停|延期|保留|维持|推出|发布|引入)", re.I).search(canonical)
+        r"launch(?:es|ed|ing)?|release(?:s|d|ing)?|introduc(?:e|es|ed|ing)|green\s+light|go-ahead)\b|"
+        r"(?:取消|搁置|终止|放弃|砍掉|叫停|延期|保留|维持|推出|发布|引入|获准开发|正式立项)", re.I).search(canonical)
     if not action:
         return canonical
     trailing = canonical[action.end() :]
+    if _compiled_rule(r'green\s+light|go-ahead|获准开发|正式立项', re.I).fullmatch(action.group()):
+        boundary = _compiled_rule(r'[,，]', 0).search(trailing)
+        if boundary:
+            return canonical[:action.end() + boundary.start()].strip()
     boundary = _compiled_rule(r",\s+(?:which|previously|historically|while|whereas|although|but)\b|"
         r"[,，]\s*(?:此前|过去|而|但|其中|后者|前者)", re.I).search(trailing)
     if not boundary:
@@ -4626,6 +4621,80 @@ def _hardware_roadmap_primary_claim(
     claim_scope = f"{title_text}. {_short_lead_scope(lead, sentences=1, limit=420)}"
     periods = _compiled_rule(r"(?<!\d)(20\d{2})(?!\d)", 0).findall(claim_scope)
     period = periods[0] if periods else "unspecified"
+
+    # Bind the changed component to the model's own development predicate.
+    models = named_iphone_models(title_text) if product in {"iphone", "foldable-iphone"} else set()
+    development_product = next(iter(models)) if len(models) == 1 else product
+    model_pattern = re.escape(development_product).replace(r"\-", r"\s*")
+    if development_product in {"iphone-duo", "iphone-fold", "iphone-ultra"}:
+        model_pattern += r"(?:\s*[1-9]\d?)?"
+    model_pattern = r"(?<![a-z0-9])" + model_pattern + r"(?![a-z0-9])"
+    current_development = not _compiled_rule(
+        r"\b(?:last\s+year|previously|cancel\w*|denies?|not|never|releas\w*|launch\w*|ships?)\b|"
+        r"去年|此前|取消|否认|并未|没有|量产上市|正式发布", re.I).search(title_text)
+    component_relations = (
+        model_pattern + r"\s+prototypes?\s+(?:with|include\w*|incorporat\w*)\s+([^.!?。,;]{2,70})",
+        model_pattern + r"\s+will\s+(?:have|gain)\s+([^.!?。,;]{2,70})",
+        model_pattern + r"\s*原型机(?:已|曝光|[:,，：\s])*(?:配备|测试)([^。！？,，;；]{2,50})",
+        r"测试([^。！？,，;；]{2,50})原型(?:机)?\s*(?:或|可能)?用于(?:第[一二三123]代)?\s*" + model_pattern,
+    )
+    development_lead = _short_lead_scope(lead, sentences=1, limit=420)
+    title_generation = foldable_iphone_generation_subject(title_text)
+    lead_generation = foldable_iphone_generation_subject(development_lead)
+    same_generation = title_generation == lead_generation or lead_generation == "foldable-iphone"
+    owned_lead = same_generation and _compiled_rule(model_pattern, re.I).search(development_lead)
+    approval = (model_pattern + r'\s*(?:(?:has|been|already|officially)\s+)*'
+        r'(?:gets?\s+(?:the\s+)?green\s+light|(?:given\s+)?go-ahead|获准开发|正式立项)')
+    approval_blocked = False
+    if _compiled_rule(approval, re.I).search(title_text):
+        for text in (title_text, development_lead):
+            for a, b in source_clause_spans(text):
+                clause = text[a:b]
+                local_models = named_iphone_models(clause)
+                local_generation = foldable_iphone_generation_subject(clause)
+                if (local_models and local_models != models) or (
+                        title_generation != 'foldable-iphone' and local_generation != 'foldable-iphone'
+                        and title_generation != local_generation):
+                    continue
+                owns = (local_models == models if models else bool(_compiled_rule(model_pattern, re.I).search(clause)))
+                if not local_models and product in _bounded_evidence_products(clause):
+                    owns = True
+                reference = _compiled_rule(r'^\s*apple\s+denies?\s+(?:(?:the|this)\s+)?approval[.!?\s]*$', re.I).match(clause)
+                if (owns or reference) and _compiled_rule(r'green\s+light|go-ahead|approv\w*|获准|立项', re.I).search(clause):
+                    approval_blocked |= (source_predicate_role(clause) != 'current'
+                        or source_denies_action('', clause, r'gets?|given|approv\w*|获准|立项'))
+    if _compiled_rule(approval, re.I).search(title_text) and not approval_blocked:
+        return development_product, 'project-development-approval', 'preproduction'
+    if current_development:
+        for pattern in component_relations:
+            relation = _compiled_rule(pattern, re.I).search(title_text)
+            if relation is None:
+                continue
+            components = primary_assertion_components(relation.group(1))
+            if len(components) == 1:
+                if (owned_lead and components & primary_assertion_components(development_lead)
+                        and (source_predicate_role(development_lead) == "background"
+                             or source_denies_action("", development_lead, r"include\w*|incorporat\w*|test\w*|have|gain|配备|测试|加入"))):
+                    continue
+                return development_product, "component-development-" + next(iter(components)), "preproduction"
+    larger_model = r"(?:\b(?:larger|bigger)\s+|更大(?:尺寸)?的?\s*)" + model_pattern
+    model_display = (model_pattern + r"(?:\s+(?:will|could|may)\s+(?:have|gain)\s+|(?:将|有望)(?:配备|采用))"
+                     r"(?:larger\s+(?:screen|display)|更大(?:的)?(?:内屏|外屏|屏幕))")
+    owned_display = _compiled_rule(larger_model + "|" + model_display, re.I).search(title_text)
+    if not owned_display:
+        owned_display = _compiled_rule(
+            r"(?:\bapple\s+(?:is\s+)?(?:(?:reportedly|apparently)\s+)?"
+            r"(?:planning|plans?|considering)\s+(?:a\s+)?|"
+            r"苹果(?:公司)?(?:正在|正)?(?:规划|计划|考虑))" + larger_model, re.I
+        ).search(development_lead)
+    display_denied = (owned_lead
+        and _compiled_rule(r"\b(?:screen|display)s?\b|内屏|外屏|屏幕", re.I).search(development_lead)
+        and (source_predicate_role(development_lead) == "background"
+             or source_denies_action("", development_lead, r"plan\w*|consider\w*|enlarg\w*|have|gain|规划|计划|考虑|扩屏")))
+    if (current_development and owned_display and not display_denied
+            and _compiled_rule(r"\b(?:future|considering|plans?|in\s+the\s+works)\b|规划|计划|更大尺寸", re.I).search(claim_scope)
+            and _compiled_rule(r"\b(?:screen|display)s?\b|内屏|外屏|屏幕", re.I).search(claim_scope)):
+        return development_product, "display-enlargement-planning", "preproduction"
 
     window_lead = _short_lead_scope(lead, sentences=1, limit=420)
     window_lead_products = _bounded_evidence_products(window_lead) & supported_hardware_products
@@ -7762,7 +7831,7 @@ def _primary_claim_projection(
             add_claim(
                 f"apple-disaster-relief-{region}",
                 "donation",
-                category="software_systems",
+                category="hardware_products",
                 trusted=True,
             )
 
@@ -8982,30 +9051,7 @@ def _primary_claim_projection(
         observed_results = any(key.startswith('structured-market-result:') for key in market_result_keys)
         if observed_results:
             separation.add("primary-claim-predicate:measured-apple-market-result")
-        market_scopes = {
-            tuple(key.split(":")[1:4])
-            for key in market_result_keys
-            if key.startswith(("structured-market-result:", "structured-market-forecast:"))
-        }
-        for key in market_result_keys:
-            fields = key.split(":")
-            if len(fields) == 6 and fields[4].startswith("apple-"):
-                separation.add('market-result-stage:' + ('forecast' if fields[0] == 'structured-market-forecast' else 'observed'))
-                separation.add("market-result-measure:" + fields[4].removeprefix("apple-") + ":" + fields[5])
-                separation.add("market-result-local-measure:" + fields[2] + ":" + fields[4].removeprefix("apple-") + ":" + fields[5])
-                year = _compiled_rule(r"(20\d{2})-q([1-4])", 0).match(fields[3])
-                if year:
-                    separation.add("market-result-year:" + year.group(1))
-                    separation.add("market-result-quarter:q" + year.group(2))
-                elif _compiled_rule(r"q[1-4]", 0).fullmatch(fields[3]):
-                    separation.add("market-result-quarter:" + fields[3])
-        market_regions = {region for _firm, region, _period in market_scopes}
-        market_firms = {firm for firm, _region, _period in market_scopes}
-        if len(market_regions) == 1 and len(market_firms) == 1:
-            separation.add(
-                "market-report-scope:"
-                f"{next(iter(market_firms))}:{next(iter(market_regions))}"
-            )
+        separation |= _market_result_separation_keys(market_result_keys)
         category_hint = "hardware_products"
         trusted_direct_action = trusted_direct_action or observed_results
 
@@ -9981,11 +10027,72 @@ def _product_anniversary_milestone(title: str) -> tuple[str, str] | None:
     return product, years
 
 
+def _market_result_separation_keys(market_result_keys: set[str]) -> set[str]:
+    """Preserve metric roles and report scope for every market profile path."""
+    separation: set[str] = set()
+    market_scopes = {
+        tuple(key.split(":")[1:4])
+        for key in market_result_keys
+        if key.startswith(("structured-market-result:", "structured-market-forecast:"))
+    }
+    for key in market_result_keys:
+        fields = key.split(":")
+        if len(fields) == 6 and fields[4].startswith("apple-"):
+            separation.add('market-result-stage:' + ('forecast' if fields[0] == 'structured-market-forecast' else 'observed'))
+            separation.add("market-result-measure:" + fields[4].removeprefix("apple-") + ":" + fields[5])
+            separation.add("market-result-local-measure:" + fields[2] + ":" + fields[4].removeprefix("apple-") + ":" + fields[5])
+            year = _compiled_rule(r"(20\d{2})-q([1-4])", 0).match(fields[3])
+            if year:
+                separation.add("market-result-year:" + year.group(1))
+                separation.add("market-result-quarter:q" + year.group(2))
+            elif _compiled_rule(r"q[1-4]", 0).fullmatch(fields[3]):
+                separation.add("market-result-quarter:" + fields[3])
+    market_regions = {region for _firm, region, _period in market_scopes}
+    market_firms = {firm for firm, _region, _period in market_scopes}
+    if len(market_regions) == 1 and len(market_firms) == 1:
+        separation.add(
+            "market-report-scope:"
+            f"{next(iter(market_firms))}:{next(iter(market_regions))}"
+        )
+    return separation
+
+
+def _market_percentage_roles(clause: str) -> tuple[str, str]:
+    """Return current/previous values only when their relation is stated."""
+    matches = list(_compiled_rule(
+        r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:%|percent(?:age)?(?:\s+points?)?)", re.I).finditer(clause))
+    def value(match):
+        raw = match.group(1)
+        return raw.rstrip("0").rstrip(".") if "." in raw else raw
+    if len(matches) == 1:
+        prefix = clause[:matches[0].start()]
+        if _compiled_rule(r'\b(?:over|more than|exceed(?:s|ed)?|cross(?:es|ed)?)\s*$|(?:超过|突破)\s*$', re.I).search(prefix):
+            return '', ''
+        return value(matches[0]), ''
+    if len(matches) != 2:
+        return '', ''
+    first, second = matches
+    prefix, relation = clause[:first.start()], clause[first.end():second.start()]
+    if (_compiled_rule(r"\bfrom\s*$|[从由]\s*$", re.I).search(prefix)
+            and _compiled_rule(r"\bto\s*$|[至到]\s*$", re.I).search(relation)):
+        return value(second), value(first)
+    if _compiled_rule(r"\bfrom\s*$|此前(?:为|是)?\s*$|原为\s*$", re.I).search(relation):
+        return value(first), value(second)
+    if _compiled_rule(r'\breaching\s*$|(?:达到|升至|降至)\s*$', re.I).search(relation):
+        return value(second), ''
+    # A change in percentage points is not the previous market share.
+    if (_compiled_rule(r"points?\s*$", re.I).search(first.group(0))
+            and _compiled_rule(r"^\s+to\s*$", re.I).fullmatch(relation)
+            or _compiled_rule(r"points?\s+to\s*$|个百分点.*[至到]\s*$", re.I).search(relation)):
+        return value(second), ''
+    return '', ''
+
+
 def _measured_apple_market_result_keys(
     title: str,
     lead: str,
     evidence: str,
-    *, include_forecasts: bool = False,
+    *, include_forecasts: bool = False, published_year: str = "",
 ) -> set[str]:
     """Serialize locally bound market statements without rejudging their role."""
     title_scope = _normalized(title)
@@ -10085,33 +10192,11 @@ def _measured_apple_market_result_keys(
         }
         if sentence_regions:
             current_regions = sentence_regions
-        period_match = _compiled_rule(r"(?<!\d)(20\d{2})\s*(?:年\s*)?[- ]?q([1-4])(?!\d)", 0).search(sentence)
-        if not period_match:
-            period_match = _compiled_rule(r"(?<!\d)q([1-4])\s*(20\d{2})(?!\d)", 0).search(sentence)
-            if period_match:
-                current_quarter = f"q{period_match.group(1)}"
-                current_period = f"{period_match.group(2)}-q{period_match.group(1)}"
-        else:
-            current_quarter = f"q{period_match.group(2)}"
-            current_period = f"{period_match.group(1)}-q{period_match.group(2)}"
-        if not period_match:
-            quarter_match = _compiled_rule(r"\b(first|second|third|fourth) quarter\b|第?([一二三四1234])季度", 0).search(sentence)
-            year_match = _compiled_rule(r"(?<!\d)(20\d{2})(?!\d)", 0).search(sentence)
-            if quarter_match:
-                quarter_map = {
-                    "first": "1", "second": "2", "third": "3", "fourth": "4",
-                    "一": "1", "二": "2", "三": "3", "四": "4",
-                }
-                raw_quarter = quarter_match.group(1) or quarter_match.group(2)
-                current_quarter = f"q{quarter_map.get(raw_quarter, raw_quarter)}"
-                if year_match:
-                    current_period = f"{year_match.group(1)}-{current_quarter}"
-            else:
-                compact_quarter = _compiled_rule(r"(?<!\d)q([1-4])(?!\d)", 0).search(sentence)
-                if compact_quarter:
-                    current_quarter = f"q{compact_quarter.group(1)}"
-                    if year_match:
-                        current_period = f"{year_match.group(1)}-{current_quarter}"
+        year, quarter = source_market_quarter(sentence, published_year)
+        if quarter:
+            current_quarter = quarter
+            if year:
+                current_period = year + "-" + quarter
         if not current_quarter:
             year_only = _compiled_rule(r"(?<!\d)(20\d{2})(?!\d)", 0).search(sentence)
             if year_only:
@@ -10128,13 +10213,16 @@ def _measured_apple_market_result_keys(
         for raw, clause, role in source_market_statements(sentence):
             if role != 'observed' and not (include_forecasts and role == 'forecast'):
                 continue
-            owned_clauses.append((raw, clause, role))
-            values = [value.rstrip("0").rstrip(".") if "." in value else value
-                      for value in _compiled_rule(r"(?<![\d.])(\d+(?:\.\d+)?)\s*(?:%|percent(?:age)?(?:\s+points?)?)", 0).findall(clause)]
-            if not values:
+            local_year, local_quarter = source_market_quarter(raw, published_year)
+            local_period = (local_year + '-' + local_quarter if local_year and local_quarter
+                else local_quarter if local_quarter and local_quarter != current_quarter
+                else current_period or current_quarter)
+            owned_clauses.append((raw, clause, role, local_period))
+            current, previous = _market_percentage_roles(clause)
+            if not current:
                 continue
             metric_scope = clause if _compiled_rule(r"share|shipments?|sales|revenue|份额|出货|销量|营收|收入|占", re.I).search(clause) else sentence
-            share_relation = bool(_compiled_rule(r"\baccount(?:s|ed)?\s+for\b|\b(?:gained|rose|increased|up)\b.{0,28}\bpoints?\s+to\s+\d|份额|占", re.I).search(clause))
+            share_relation = bool(_compiled_rule(r"\baccount(?:s|ed)?\s+for\b|\bshipp?(?:ed|s)?\s+\d+(?:\.\d+)?\s*(?:%|percent)\s+of\b|\b(?:gained|rose|increased|up)\b.{0,28}\bpoints?\s+to\s+\d|份额|占", re.I).search(clause))
             if share_relation or _compiled_rule(r"share|份额|占", re.I).search(metric_scope):
                 metric = "share"
             elif _compiled_rule(r"shipments?|出货", re.I).search(metric_scope):
@@ -10146,28 +10234,28 @@ def _measured_apple_market_result_keys(
             else:
                 continue
             local_regions = frozenset(region for region, aliases in region_aliases if _contains(clause, *aliases)) or frozenset(current_regions)
-            percentages.add((role, metric + "-current", values[-1], local_regions))
-            if len(values) >= 2 and _compiled_rule(r"\bfrom\b|从", re.I).search(clause):
-                percentages.add((role, metric + "-previous", values[0], local_regions))
-        all_owned_measures.update((metric, value) for role, metric, value, _regions in percentages if role == 'observed')
+            percentages.add((role, metric + "-current", current, local_regions, local_period))
+            if previous:
+                percentages.add((role, metric + "-previous", previous, local_regions, local_period))
+        all_owned_measures.update((metric, value) for role, metric, value, _regions, _period in percentages if role == 'observed')
         rank_roles = {
-            role for raw, clause, role in owned_clauses
+            (role, period) for raw, clause, role, period in owned_clauses
             if (_compiled_rule(r"\b(?:world(?:'s)?|global(?:ly)?)\s+(?:best[- ]selling|top[- ]selling)\b|"
                 r"\b(?:topped|led|leads|ranked first|ranks first|number one|no\.\s*1)\b|"
                 r"(?:全球)?(?:最畅销|销量第一|排名第一|稳居第一|位居第一|登顶|霸榜)", 0).search(clause)
                 or _compiled_rule(r"\bbestseller ranking puts (?:apple|iphone)\b.{0,30}\bfirst\b", 0).search(raw))
         }
         for region in current_regions:
-            for role, metric, percentage, measure_regions in percentages:
+            for role, metric, percentage, measure_regions, measure_period in percentages:
                 if region not in measure_regions:
                     continue
                 prefix = 'structured-market-forecast' if role == 'forecast' else 'structured-market-result'
-                for period in {current_period or current_quarter} - {""}:
+                for period in {measure_period} - {""}:
                     for attribution in {firm, role + "-" + segment} if segment else {firm}:
                         keys.add(f"{prefix}:{attribution}:{region}:{period}:apple-{metric}:{percentage}")
-            for role in rank_roles:
+            for role, rank_period in rank_roles:
                 prefix = 'structured-market-forecast' if role == 'forecast' else 'structured-market-result'
-                for period in {current_period or current_quarter} - {""}:
+                for period in {rank_period} - {""}:
                     keys.add(f"{prefix}:{firm}:{region}:{period}:apple-rank:1")
     if segment and len(all_owned_measures) >= 2 and len(current_regions) == 1:
         keys.add("structured-measure:apple-market:" + segment + ":" + next(iter(current_regions))
@@ -10608,7 +10696,8 @@ def _source_local_current_action(
                 and _title_owned_action_profile(title, lead, evidence, identity) is None)
             or source_editorial_outlook(title, lead, source_units or source_facts)):
         return profile(f"editorial:{headline}", "publisher-source-form", tier="weak",
-                       category="hardware_products", kind="general_company",
+                       category="software_systems" if identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS else "hardware_products",
+                       kind="general_company",
                        content_form=identity.content_form,
                        reason="publisher selection or opinion without its own current Apple action",
                        weak_boundary="source-local-editorial-form")
@@ -10696,6 +10785,11 @@ def _source_local_current_action(
                        reason=("third-party source-owned action" if operation.subject.startswith("third-party:")
                                else "source-local " + operation.action if operation.tier == "weak"
                                else "source-owned operation and functional category"))
+        if operation.action == 'market-measurement-report':
+            measured = _measured_apple_market_result_keys(
+                title, lead, " ".join((evidence, *source_facts)), published_year=published_year)
+            result = replace(result, event_keys=result.event_keys | measured,
+                separation_keys=result.separation_keys | _market_result_separation_keys(measured))
         if not operation.category:
             result = replace(result, review_reasons=(
                 "Functional category unresolved in this source; verify the action's technical object before assigning the final section. The displayed category is provisional.",))
@@ -10811,13 +10905,11 @@ def _source_local_current_action(
 
     # Discounts can describe an official catalog or education-program action.
     # Leave those established identities to the normal action policy.
-    retail_deal = (identity.content_form == "deal"
-                   and "official-refurbished-catalog" not in identity.title_components
-                   and "apple-education-promotion" not in identity.facets)
-    if is_personal_product_complaint(title) or retail_deal or is_weekly_editorial_recap(lead):
+    retail_deal = is_retail_promotion(identity)
+    if is_personal_product_complaint(title, lead) or retail_deal or is_weekly_editorial_recap(lead):
         return profile(f"editorial:{headline}", "publisher-source-form", tier="weak",
                        category="hardware_products" if identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS else "software_systems",
-                       kind="general_company", content_form=identity.content_form,
+                       kind="third_party_ecosystem" if retail_deal else "general_company", content_form=identity.content_form,
                        reason="source-owned retail promotion, personal complaint or weekly recap",
                        weak_boundary="source-local-editorial-form")
     design_role = source_design_oversight(title, lead, evidence)
@@ -11440,6 +11532,29 @@ def build_reconciliation_profile(
     published_year: str = "",
 ) -> ReconciliationProfile:
     regions = tuple(regions)
+    profile = source_action_reconciliation_profile(
+        title=title, lead=lead, identity=identity, regions=regions,
+        event_kind=event_kind, evidence=evidence, source_facts=source_facts,
+        source_units=source_units, name_aliases=name_aliases, published_year=published_year)
+    if profile is not None:
+        return profile
+    return build_legacy_reconciliation_profile(
+        title=title, lead=lead, identity=identity, exact_facets=exact_facets,
+        regions=regions, relevance_tier=relevance_tier, relevance_reason=relevance_reason,
+        trusted_direct_action=trusted_direct_action, event_kind=event_kind,
+        evidence=evidence, embedded_references=embedded_references,
+        source_facts=source_facts, source_units=source_units,
+        name_aliases=name_aliases, published_year=published_year)
+
+
+def source_action_reconciliation_profile(
+    *, title: str, lead: str, identity: EventIdentity,
+    regions: Iterable[str] = (), event_kind: str = "", evidence: str = "",
+    source_facts: tuple[str, ...] = (), source_units: tuple[str, ...] = (),
+    name_aliases: Mapping[str, str] | None = None, published_year: str = "",
+) -> ReconciliationProfile | None:
+    """Run the existing ordered source rules before legacy support is needed."""
+    regions = tuple(regions)
     card_rate = _card_savings_rate_report(title, lead, source_facts)
     if card_rate is not None:
         if card_rate[0] == "historical":
@@ -11482,9 +11597,29 @@ def build_reconciliation_profile(
             defer_reason="third-party accessory; platform name is compatibility context",
             hard_boundary="third-party-platform-accessory",
         )
-    source_action = _source_local_current_action(title, lead, source_facts, identity, name_aliases, regions, evidence, source_units, published_year)
-    if source_action is not None:
-        return source_action
+    return _source_local_current_action(title, lead, source_facts, identity, name_aliases, regions, evidence, source_units, published_year)
+
+
+def build_legacy_reconciliation_profile(
+    *,
+    title: str,
+    lead: str,
+    identity: EventIdentity,
+    exact_facets: Iterable[str],
+    regions: Iterable[str],
+    relevance_tier: str = "strong",
+    relevance_reason: str = "",
+    trusted_direct_action: bool = False,
+    event_kind: str = "",
+    evidence: str = "",
+    embedded_references: tuple = (),
+    source_facts: tuple[str, ...] = (),
+    source_units: tuple[str, ...] = (),
+    name_aliases: Mapping[str, str] | None = None,
+    published_year: str = "",
+) -> ReconciliationProfile:
+    """Unmigrated continuation after the ordered source rules found no profile."""
+    regions = tuple(regions)
     named_action = _source_owned_named_action(title, lead)
     if named_action is not None:
         subject, predicate = named_action
@@ -12358,42 +12493,8 @@ def build_reconciliation_profile(
             boundary_keys.add(legal_component_key)
             separation_keys.add(f"legal-component:{component}")
 
-    chip_disclosure_lead = _normalized(lead)[:520]
-    chip_disclosure_scope = f"{title_text}. {chip_disclosure_lead}"
-    title_chip_disclosure_names = {
-        _compiled_rule(r"\s+", 0).sub("-", match.lower(), 0)
-        for match in _compiled_rule(r"(?<![a-z0-9])a\d{1,2}(?:\s+pro)?(?![a-z0-9])", 0).findall(title_text)
-    }
-    lead_chip_disclosure_names = {
-        _compiled_rule(r"\s+", 0).sub("-", match.lower(), 0)
-        for match in _compiled_rule(r"(?<![a-z0-9])a\d{1,2}(?:\s+pro)?(?![a-z0-9])", 0).findall(chip_disclosure_lead)
-    }
-    chip_disclosure_names = set(title_chip_disclosure_names)
-    title_owns_unnamed_apple_chip = bool(
-        identity.scope == "apple-direct"
-        and identity.title_products & {"iphone", "ipad"}
-        and _compiled_rule(r"\bchip\b|芯片", 0).search(title_text)
-    )
-    title_owns_named_apple_chip = bool(
-        title_chip_disclosure_names
-        and _compiled_rule(r"^(?:(?:apple|苹果)\s*)?a\d{1,2}(?:\s+pro)?\b", re.I).match(title_text)
-    )
-    if title_owns_unnamed_apple_chip:
-        chip_disclosure_names.update(lead_chip_disclosure_names)
-    for generic_name in tuple(chip_disclosure_names):
-        if "-" not in generic_name and f"{generic_name}-pro" in lead_chip_disclosure_names:
-            chip_disclosure_names.discard(generic_name)
-            chip_disclosure_names.add(f"{generic_name}-pro")
-    apple_chip_technical_disclosure = bool(
-        chip_disclosure_names
-        and (identity.scope == "apple-direct" or title_owns_named_apple_chip)
-        and bool(title_chip_disclosure_names or title_owns_unnamed_apple_chip)
-        and _compiled_rule(r"\b(?:chip|solder(?:ing)?\s+(?:map|diagram)|die\s+shot|leak(?:ed)?|"
-            r"gpu\s+cores?|memory\s+(?:bus|interface)|faster\s+ram)\b|"
-            r"(?:芯片|焊点图|焊盘图|曝光|泄露|gpu|内存总线|内存接口)", 0).search(chip_disclosure_scope)
-        and _compiled_rule(r"\b(?:leak(?:er|ed)?|claims?|report(?:ed)?|reveals?|shows?|hints?)\b|"
-            r"(?:爆料|曝光|泄露|消息称|报道称|显示|表明)", 0).search(chip_disclosure_scope)
-    )
+    chip_disclosure_names = source_chip_technical_disclosures(title, lead)
+    apple_chip_technical_disclosure = bool(chip_disclosure_names)
     if apple_chip_technical_disclosure:
         for chip_name in chip_disclosure_names:
             chip_key = (
@@ -12539,6 +12640,13 @@ def build_reconciliation_profile(
         separation_keys.add(f"title-fact:{document_lifecycle_key}")
         separation_keys.add("action:first-party-document-lifecycle")
         category_hint = "software_systems"
+
+    generation = foldable_iphone_generation_subject(title_text)
+    if generation == "foldable-iphone":
+        _, primary_scope = _primary_assertion_scope(title_text, lead)
+        generation = foldable_iphone_generation_subject(primary_scope)
+    if generation != "foldable-iphone":
+        separation_keys.add("source-model-generation:" + generation)
 
     for signature in _title_fact_signatures(title_text, lead):
         key = f"title-fact:{signature}"
@@ -13833,7 +13941,9 @@ def _source_reconciliation_outcome(profile: ReconciliationProfile) -> tuple[str,
         and any(not key.startswith("structured-canonical-title:") for key in profile.event_keys))
     if (identity is not None and identity.scope == "apple-direct" and identity.content_form == "news"
             and (identity.action_owner in {"apple", "apple-target"} or identity.title_actions or legacy_news_signal)):
-        reason = "source-backed Apple lawsuit or court action" if "legal" in identity.actions else "title-owned Apple news action"
+        reason = ("source-backed Apple lawsuit or court action" if "legal" in identity.actions
+                  else "title-owned Apple chip process news action" if "apple-chip-process-roadmap" in identity.facets
+                  else "title-owned Apple news action")
         return "strong", reason, category
     return "weak", "no source-backed independent Apple action", category
 
@@ -14130,7 +14240,7 @@ def resolve_event_outcome(profiles: Sequence[ReconciliationProfile]) -> tuple[st
 
 
 def _fact_needs_preservation(fact: PreparedFact) -> bool:
-    return fact.owned or bool(fact.roles & {"source-measurement", "source-condition", "source-projection-fact", "source-structured-evidence"})
+    return fact.owned or bool(fact.roles & {"source-measurement", "source-numeric-detail", "source-condition", "source-projection-fact", "source-structured-evidence"})
 
 
 def reconcile_fact_views(views: Sequence[SourceFactView], *, base_limit: int, official_limit: int) -> tuple[PreparedFact, ...]:
@@ -14366,4 +14476,5 @@ def resolve_event_fact_plan(views: Sequence[SourceFactView], *, relevance_tier: 
                   or not any(other is not fact and covered(fact, other)
                              and (other.text != fact.text or other_index < index)
                              for other_index, other in enumerate(unresolved))]
-    return EventFactPlan(title, summary, selected, tuple(required), tuple(unresolved))
+    return EventFactPlan(title, summary, selected, tuple(required), tuple(unresolved),
+                         tuple(displayed_source_sentences))

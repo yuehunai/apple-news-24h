@@ -1508,6 +1508,7 @@ def project_hardware_roadmap(
             iphone_labels = {
                 "anniversary-iphone": "Apple anniversary iPhone design update",
                 "foldable-iphone": "Apple iPhone Ultra roadmap update",
+                "foldable-iphone-g1": "Apple iPhone Ultra roadmap update",
                 "foldable-iphone-g2": "Apple second-generation foldable iPhone roadmap update",
                 "foldable-iphone-g3": "Apple third-generation foldable iPhone roadmap update",
             }
