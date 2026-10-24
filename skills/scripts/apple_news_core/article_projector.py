@@ -14,7 +14,7 @@ import re
 import unicodedata
 from typing import Iterable, Sequence
 
-from .event_identity import _compiled_rule, disclosed_device_subjects, high_confidence_direct_apple_action, iphone_report_subjects, EventIdentity, build_event_identity, bind_article_claims, rollout_language_names, source_sentence_spans, is_os_release_announcement, source_disclosure_bundle, source_editorial_outlook, source_dated_launch_frame, source_leadership_interview_frame, source_operation_frame, source_executive_government_frame, source_executive_people, source_denies_action, source_device_operation_frame, source_editorial_evaluation, source_apple_invitation_fact
+from .event_identity import _identity_preparation_scope, _compiled_rule, disclosed_device_subjects, high_confidence_direct_apple_action, iphone_report_subjects, EventIdentity, build_event_identity, bind_article_claims, rollout_language_names, source_sentence_spans, is_os_release_announcement, source_disclosure_bundle, source_editorial_outlook, source_dated_launch_frame, source_leadership_interview_frame, source_operation_frame, source_executive_government_frame, source_executive_people, source_denies_action, source_device_operation_frame, source_editorial_evaluation, source_apple_invitation_fact
 from .models import ArticleEvidence, BoundClaim
 from .event_identity import bind_source_report
 from .article_processing import editorial_list_unit_ids, release_history_unit_ids, inline_media_marker_spans, clean_sentence, clean_fact_text, score_terms, add_unique_text, roundup_title_from_item
@@ -361,6 +361,7 @@ def project_content_source_sections(
 
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def project_article_evidence(evidence: ArticleEvidence, *, claims: tuple[BoundClaim, ...] | None = None) -> tuple[tuple[ClaimProjection, ...], tuple[tuple[str, int, int], ...], tuple[tuple[str, int, int, str], ...]]:
     """Return owned projections and the exact unprocessed source unit ids."""
     units = {unit.unit_id: unit for unit in evidence.units}
@@ -1147,6 +1148,7 @@ from .event_identity import (MULTI_PRODUCT_HARDWARE_SUBJECTS, multi_product_hard
     foldable_iphone_generation_subject, apple_silicon_generation_keys)
 from .event_reconciler import hardware_roadmap_primary_claim, is_multi_year_apple_product_wave
 
+@_identity_preparation_scope(reuse_existing=True)
 def project_hardware_roadmap(
     title: str,
     summary: str,
@@ -2051,6 +2053,7 @@ def project_executive_visit_actions(title: str, summary: str, evidence: ArticleE
     return variants
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def project_compound_article(title: str, summary: str, key_facts: list[str], *,
         identity: EventIdentity, headline_identity: EventIdentity, fact_identities: Iterable[EventIdentity],
         release_clauses: Sequence[tuple[str, EventIdentity]], release_facts: Iterable[tuple[str, EventIdentity]],

@@ -1,0 +1,704 @@
+{
+  "45d2d353978010e4c697fac2": {
+    "article_id": "45d2d353978010e4c697fac2",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "快科技10月24日消息，Valve日前发布了最新的Steam客户端测试版，对远程畅玩功能进行了一次大幅改版，新增了一批功能和选项。 其中最受关注的，是重新启用了Steam Deck OLED在串流游戏时的HDR支持，距离该功能被禁用已经过去一个多月。 今年10月初，Valve曾在推出全新大屏幕模式更新时，悄然禁用了Steam Deck OLED的串流HDR，官方始终没有说明具体原因。 此前已有不少用户报告串流HDR存在bug和各种问题，而从这次更新日志的措辞来看，Valve显然是利用这段时间对Steam Deck OLED的HDR支持进行了一次整体重做，而不是简单地把开关恢复原状。 回归之后的HDR也带来了更灵活的设置。新版客户端提供了两种模式可供切换：自动模式只在检测到HDR内容时才启用HDR，始终开启模式则更进一步，即便观看的是SDR内容，也允许屏幕以更高的亮度显示。 这次改版还把HDR串流的覆盖范围扩大到了更多平台。现在在Windows上串流时、通过Pipewire在Linux桌面上串流、从macOS发起串流，以及用Steam Link把画面串流到运行Android 15及更新系统的安卓设备时，都可以启用HDR。 目前这些改动仅面向测试版用户，Valve尚未公布正式版的推送时间。 对习惯拿着Steam Deck OLED串流玩HDR游戏的玩家来说，功能回归自然是件好事，至于实际效果和稳定性如何，还要等更多用户升级之后进一步验证。",
+    "discovery_title": "悄悄下线一个多月！Steam Deck OLED串流HDR回归：还加了常开模式",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-24 09:27:10.963",
+        "source": "source publication metadata"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-24 09:27:10",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-10-24 09:27:10.963",
+    "published_source": "source publication metadata",
+    "published_utc": "2026-10-24T01:27:10.963000+00:00",
+    "raw_lead": "快科技10月24日消息，Valve日前发布了最新的Steam客户端测试版，对远程畅玩功能进行了一次大幅改版，新增了一批功能和选项。其中最受关注的，是重新启用了Steam Deck OLED在串流游戏时的HDR支",
+    "source": "快科技",
+    "title": "悄悄下线一个多月！Steam Deck OLED串流HDR回归：还加了常开模式",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "快科技10月24日消息，Valve日前发布了最新的Steam客户端测试版，对远程畅玩功能进行了一次大幅改版，新增了一批功能和选项。",
+        "unit_id": "0a43541df94ee9bea162edb4"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "其中最受关注的，是重新启用了Steam Deck OLED在串流游戏时的HDR支持，距离该功能被禁用已经过去一个多月。",
+        "unit_id": "9f057cc95d1b5d134272be5a"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "今年10月初，Valve曾在推出全新大屏幕模式更新时，悄然禁用了Steam Deck OLED的串流HDR，官方始终没有说明具体原因。",
+        "unit_id": "2d39bab21f000751737e6cc2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "此前已有不少用户报告串流HDR存在bug和各种问题，而从这次更新日志的措辞来看，Valve显然是利用这段时间对Steam Deck OLED的HDR支持进行了一次整体重做，而不是简单地把开关恢复原状。",
+        "unit_id": "1be625125b87b9c6da654400"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "回归之后的HDR也带来了更灵活的设置。新版客户端提供了两种模式可供切换：自动模式只在检测到HDR内容时才启用HDR，始终开启模式则更进一步，即便观看的是SDR内容，也允许屏幕以更高的亮度显示。",
+        "unit_id": "e0ce022830e252c3ab5aea9e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "这次改版还把HDR串流的覆盖范围扩大到了更多平台。现在在Windows上串流时、通过Pipewire在Linux桌面上串流、从macOS发起串流，以及用Steam Link把画面串流到运行Android 15及更新系统的安卓设备时，都可以启用HDR。",
+        "unit_id": "37240b57ccdd27ce47877146"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "目前这些改动仅面向测试版用户，Valve尚未公布正式版的推送时间。对习惯拿着Steam Deck OLED串流玩HDR游戏的玩家来说，功能回归自然是件好事，至于实际效果和稳定性如何，还要等更多用户升级之后进一步验证。",
+        "unit_id": "3a62fa38e69e4b8a2053aa9a"
+      }
+    ],
+    "url": "https://news.mydrivers.com/1/1160/1160155.htm"
+  },
+  "98b7b0a250d66c5d6aac479b": {
+    "article_id": "98b7b0a250d66c5d6aac479b",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "IT之家 10 月 24 日消息，微软昨日（10 月 23 日）发布公告，邀请 Experimental 频道的 Windows Insider 项目成员，测试适用于 Windows 11 的预览版更新。 IT之家援引博文介绍，本次更新适用于 Experimental 频道 3 个版本： 26H2 版本更新后版本号升至 Build 26340.9767 26H1 版本更新后版本号升至 Build 28120.3302 未来平台版本更新后版本号升至 Build 29695.1001 在更新内容方面，以下是适用于 Windows 11 Build 26340.9767 的更新日志： 一、Windows 预览体验计划 在 Windows 预览体验计划设置页面中，新增了按“启用状态”筛选 Feature flags（功能标志）的能力，方便更清晰地查看哪些实验性功能已开启或关闭。 二、快速设置 2.1、移动设备控制 快速设置中正在逐步推出全新的“移动设备”体验，让你无需离开当前 Windows 工作流程，就能快速操作手机，例如让手机响铃。 连接受支持的 Android 手机后，可一键执行常见操作：在会议前开启“勿扰模式”、切换手机铃声模式，以及播放提示音以查找附近的手机。 这一入口位于你本来就常用来进行快速系统操作的“快速设置”中，让电脑与手机在日常使用中配合得更顺畅。 具体能力会因手机平台和设备配置而不同：初期为 Android 手机提供最完整的控制选项；iPhone 则先提供较有限、以状态查看为主的体验。 2.2、使用方法 从任务栏打开“快速设置”，找到“移动设备”。若手机已连接，会显示电池状态和可用控制项；若尚未连接，Windows 会引导你完成设置。 在快速设置中显示移动设备的用户界面体验。 在快速设置中显示移动设备控件的用户界面，用于管理已连接的安卓手机。 三、内置网络测速 Windows 现在能更快、更方便地检查网络连接性能。Insider 可以直接在“快速设置”中运行网速测试并查看结果，无需跳转到浏览器。 可通过以下入口启动测试：快速设置中新增的“测速”卡片、Wi‑Fi 或蜂窝网络弹出面板，或右键点击系统托盘网络图标后选择“测试网速”。 测试运行时，快速设置会显示进度及结果，包括下载速度、上传速度和 ping 延迟，帮助你快速判断当前网络表现。 四、放大镜 在设置 > 辅助功能 > 放大镜中新增了“放大镜键盘快捷方式”开关，可选择按下 Windows 徽标键 + 加号 (+) 是否启动放大镜。 该快捷方式默认保持开启，因此除非你主动更改，否则行为不变。若放大镜经常意外启动，或快捷键与其他应用、键盘布局冲突，可以关闭它；你仍可从“设置”打开放大镜，也可随时重新启用快捷键。 五、Windows 中的 Microsoft 365 订阅 新增内联管理体验，让 Microsoft 365 订阅用户能更方便地在 Windows 内管理订阅。 已关闭“定期计费”的订阅者，现在可以直接在 Windows 设置中重新开启，无需前往单独网页。 入口位于 Windows 设置的主页、帐户页面，或“开始”菜单中的“启用定期计费”/“设置定期计费”。 六、文件管理器 改进了导航至加载较慢位置（例如网络驱动器）时的进度提示，让用户更容易看出内容正在加载中。 七、讲述人 讲述人的数学内容朗读功能新增支持以下语言：希腊语、匈牙利语、印尼语、挪威语（书面挪威语）、波兰语、俄语、瑞典语和越南语。 八、小组件 小组件选择器现在采用标准 Windows 对话框外框，标题栏支持浅色与深色模式。 同时移除了此前为图标预留的空白区域，界面更整洁。 九、任务栏修复 修复了上一次更新中，登录后 explorer.exe 无法加载的问题；该问题会导致任务栏以及其他依赖资源管理器的界面元素无法显示。 十、Windows 登录修复 修复了上一次更新导致部分 Insider 在登录屏幕上错误看到“密码错误”提示的问题，即使输入的密码实际正确也会出现该提示。",
+    "discovery_title": "微软 Win11 26H2 发布 26340.9767 预览版：增强实验性功能体验、升级网络测速",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026/10/24 13:26:41",
+        "source": "source publication field"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026/10/24 13:26:41",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Sat, 24 Oct 2026 05:26:41 GMT",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026/10/24 13:26:41",
+    "published_source": "source publication field",
+    "published_utc": "2026-10-24T05:26:41+00:00",
+    "raw_lead": "微软昨日（10 月 23 日）发布公告，邀请 Experimental 频道的 Windows Insider 项目成员，测试适用于 Windows 11 的预览版更新。",
+    "source": "IT之家",
+    "title": "微软 Win11 26H2 发布 26340.9767 预览版：增强实验性功能体验、升级网络测速",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "IT之家 10 月 24 日消息，微软昨日（10 月 23 日）发布公告，邀请 Experimental 频道的 Windows Insider 项目成员，测试适用于 Windows 11 的预览版更新。",
+        "unit_id": "78d175552de871ade79cc84f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "IT之家援引博文介绍，本次更新适用于 Experimental 频道 3 个版本：",
+        "unit_id": "fab1409353bfa4f0abed1e04"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "26H2 版本更新后版本号升至 Build 26340.9767",
+        "unit_id": "d45438cf09826307ec248ed3"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "26H1 版本更新后版本号升至 Build 28120.3302",
+        "unit_id": "dd1b2df1591c78116557ba7f"
+      },
+      {
+        "container_id": "",
+        "kind": "li",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "未来平台版本更新后版本号升至 Build 29695.1001",
+        "unit_id": "bca977549a569112dd49417f"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "在更新内容方面，以下是适用于 Windows 11 Build 26340.9767 的更新日志：",
+        "unit_id": "92ac62a722d303d738d5068e"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "一、Windows 预览体验计划",
+        "unit_id": "e709848b1fad31b0510b633b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "在 Windows 预览体验计划设置页面中，新增了按“启用状态”筛选 Feature flags（功能标志）的能力，方便更清晰地查看哪些实验性功能已开启或关闭。",
+        "unit_id": "4818d1c30ea4541e10ca9029"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "二、快速设置",
+        "unit_id": "49c42fef48ca0ce59d294086"
+      },
+      {
+        "container_id": "",
+        "kind": "h3",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "2.1、移动设备控制",
+        "unit_id": "e7a96762450dfc34d21f298c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 10,
+        "origin": "html",
+        "text": "快速设置中正在逐步推出全新的“移动设备”体验，让你无需离开当前 Windows 工作流程，就能快速操作手机，例如让手机响铃。",
+        "unit_id": "135c2d7292478559140cafc6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 11,
+        "origin": "html",
+        "text": "连接受支持的 Android 手机后，可一键执行常见操作：在会议前开启“勿扰模式”、切换手机铃声模式，以及播放提示音以查找附近的手机。",
+        "unit_id": "a47c80fbe3c0992eafc15333"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 12,
+        "origin": "html",
+        "text": "这一入口位于你本来就常用来进行快速系统操作的“快速设置”中，让电脑与手机在日常使用中配合得更顺畅。",
+        "unit_id": "80e0019fe5164f9b0bb420fe"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 13,
+        "origin": "html",
+        "text": "具体能力会因手机平台和设备配置而不同：初期为 Android 手机提供最完整的控制选项；iPhone 则先提供较有限、以状态查看为主的体验。",
+        "unit_id": "5f447e1a3f10b8f7e1f0b272"
+      },
+      {
+        "container_id": "",
+        "kind": "h3",
+        "ordinal": 14,
+        "origin": "html",
+        "text": "2.2、使用方法",
+        "unit_id": "42c15eaf8e8dc0c41414b749"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 15,
+        "origin": "html",
+        "text": "从任务栏打开“快速设置”，找到“移动设备”。若手机已连接，会显示电池状态和可用控制项；若尚未连接，Windows 会引导你完成设置。",
+        "unit_id": "c4f635bb10e5760895c57fda"
+      },
+      {
+        "container_id": "caption",
+        "kind": "text",
+        "ordinal": 16,
+        "origin": "html",
+        "text": "在快速设置中显示移动设备的用户界面体验。",
+        "unit_id": "d24174335abee7989d1ab061"
+      },
+      {
+        "container_id": "caption",
+        "kind": "text",
+        "ordinal": 17,
+        "origin": "html",
+        "text": "在快速设置中显示移动设备控件的用户界面，用于管理已连接的安卓手机。",
+        "unit_id": "59f0d882bb3936cdc027fb5e"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 18,
+        "origin": "html",
+        "text": "三、内置网络测速",
+        "unit_id": "929bdfc12c9a1a630e0e1cb7"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 19,
+        "origin": "html",
+        "text": "Windows 现在能更快、更方便地检查网络连接性能。Insider 可以直接在“快速设置”中运行网速测试并查看结果，无需跳转到浏览器。",
+        "unit_id": "ee82fb67424ec63f2b152206"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 20,
+        "origin": "html",
+        "text": "可通过以下入口启动测试：快速设置中新增的“测速”卡片、Wi‑Fi 或蜂窝网络弹出面板，或右键点击系统托盘网络图标后选择“测试网速”。",
+        "unit_id": "444956515b7d3dcf9bf2f8a5"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 21,
+        "origin": "html",
+        "text": "测试运行时，快速设置会显示进度及结果，包括下载速度、上传速度和 ping 延迟，帮助你快速判断当前网络表现。",
+        "unit_id": "6532ddb33a0735c6cbdf89a3"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 22,
+        "origin": "html",
+        "text": "四、放大镜",
+        "unit_id": "fd7e7979ef421ee02a18573d"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 23,
+        "origin": "html",
+        "text": "在设置 > 辅助功能 > 放大镜中新增了“放大镜键盘快捷方式”开关，可选择按下 Windows 徽标键 + 加号 (+) 是否启动放大镜。",
+        "unit_id": "5b525dfaeee48bee3d13d350"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 24,
+        "origin": "html",
+        "text": "该快捷方式默认保持开启，因此除非你主动更改，否则行为不变。若放大镜经常意外启动，或快捷键与其他应用、键盘布局冲突，可以关闭它；你仍可从“设置”打开放大镜，也可随时重新启用快捷键。",
+        "unit_id": "20d2c07ae69890131b4ebbd5"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 25,
+        "origin": "html",
+        "text": "五、Windows 中的 Microsoft 365 订阅",
+        "unit_id": "2660b5b482c19a5907b41ce0"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 26,
+        "origin": "html",
+        "text": "新增内联管理体验，让 Microsoft 365 订阅用户能更方便地在 Windows 内管理订阅。",
+        "unit_id": "69db17052206f8cebb9266f8"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 27,
+        "origin": "html",
+        "text": "已关闭“定期计费”的订阅者，现在可以直接在 Windows 设置中重新开启，无需前往单独网页。",
+        "unit_id": "00a99794ee1ff2d26d3f1a49"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 28,
+        "origin": "html",
+        "text": "入口位于 Windows 设置的主页、帐户页面，或“开始”菜单中的“启用定期计费”/“设置定期计费”。",
+        "unit_id": "09aa0ee21c8e8a1d516d4f07"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 29,
+        "origin": "html",
+        "text": "六、文件管理器",
+        "unit_id": "c32c6e66c061a7f885f2b7fd"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 30,
+        "origin": "html",
+        "text": "改进了导航至加载较慢位置（例如网络驱动器）时的进度提示，让用户更容易看出内容正在加载中。",
+        "unit_id": "9d89df5f19bcac0374491f4b"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 31,
+        "origin": "html",
+        "text": "七、讲述人",
+        "unit_id": "1f39f9df059bf81cadaee12e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 32,
+        "origin": "html",
+        "text": "讲述人的数学内容朗读功能新增支持以下语言：希腊语、匈牙利语、印尼语、挪威语（书面挪威语）、波兰语、俄语、瑞典语和越南语。",
+        "unit_id": "e5b8774d9ee0d3c9003de1a4"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 33,
+        "origin": "html",
+        "text": "八、小组件",
+        "unit_id": "0611d41b2d2ef8d289523999"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 34,
+        "origin": "html",
+        "text": "小组件选择器现在采用标准 Windows 对话框外框，标题栏支持浅色与深色模式。",
+        "unit_id": "05524b2cd7037c23500a9bca"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 35,
+        "origin": "html",
+        "text": "同时移除了此前为图标预留的空白区域，界面更整洁。",
+        "unit_id": "0d3dee4a8fe2b975df010f27"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 36,
+        "origin": "html",
+        "text": "九、任务栏修复",
+        "unit_id": "71401bcc64df98b1b40e054e"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 37,
+        "origin": "html",
+        "text": "修复了上一次更新中，登录后 explorer.exe 无法加载的问题；该问题会导致任务栏以及其他依赖资源管理器的界面元素无法显示。",
+        "unit_id": "908121ab35d84cdca2f55e25"
+      },
+      {
+        "container_id": "",
+        "kind": "h2",
+        "ordinal": 38,
+        "origin": "html",
+        "text": "十、Windows 登录修复",
+        "unit_id": "871cc2b09b2bfb40b028e7f1"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 39,
+        "origin": "html",
+        "text": "修复了上一次更新导致部分 Insider 在登录屏幕上错误看到“密码错误”提示的问题，即使输入的密码实际正确也会出现该提示。",
+        "unit_id": "9de393008045258c5cf3cb91"
+      }
+    ],
+    "url": "https://www.ithome.com/1/017/367.htm"
+  },
+  "b8e1687ac1d119842c690cb4": {
+    "article_id": "b8e1687ac1d119842c690cb4",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "When we published our review of the iPhone Duo, I got a lot of hopeful questions from my fellow Mini fans who took note of the cover screen's Mini-ish 5.4-inch size. \"Is this… a small phone that turns into a tablet?\" they asked. And I'm sorry to be the bearer of bad news, but no. […] This isn’t the iPhone Mini successor we’ve been dreaming of.﻿ This isn’t the iPhone Mini successor we’ve been dreaming of.﻿",
+    "discovery_title": "No, the iPhone Duo isn’t a small phone",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-23T10:00:00+00:00",
+        "source": "json-ld datePublished"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-23T10:00:00+00:00",
+        "source": "meta published"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-23T10:00:00+00:00",
+        "source": "time datetime"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Oct 23, 2026, 10:00 AM UTC",
+        "source": "time text"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Oct 23, 2026, 10:00 AM UTC",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026-10-22T19:48:51-04:00",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026-10-23T10:00:00+00:00",
+    "published_source": "json-ld datePublished",
+    "published_utc": "2026-10-23T10:00:00+00:00",
+    "raw_lead": "Bring back the Mini, you cowards.",
+    "source": "The Verge",
+    "title": "No, the iPhone Duo isn’t a small phone",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "jsonld:articleBody",
+        "text": "When we published our review of the iPhone Duo, I got a lot of hopeful questions from my fellow Mini fans who took note of the cover screen’s Mini-ish 5.4-inch size. “Is this… a small phone that turns into a tablet?” they asked. And I’m sorry to be the bearer of bad news, but no. The Duo is not the small phone we’ve been looking for.",
+        "unit_id": "6aa90e44790ed0ec0d517991"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "jsonld:articleBody",
+        "text": "I wish it was. I like a small phone. I own an iPhone 13 Mini that I refuse to surrender, even though it barely lasts a full day.",
+        "unit_id": "80dc7313a175322df7feb0b2"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "jsonld:articleBody",
+        "text": "But the Duo is thick and heavy. You will feel its weight every time you read an email, scroll Instagram, or put it in your pocket. It is a dense phone, and after a week with the Duo, my 13 Mini feels almost comically light. Like, can this be a real phone? Surely not.",
+        "unit_id": "6f9746bf704cfb5f80076fdc"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 3,
+        "origin": "jsonld:articleBody",
+        "text": "[Image: Thanks to its wider format, the Duo gives you a bigger keyboard compared to the Mini. https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/DSC04352_processed.jpg?quality=90&strip=all]",
+        "unit_id": "ac21af956bdfea4ee0906cda"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "jsonld:articleBody",
+        "text": "The Duo’s front panel is also quite a bit wider than the 13 Mini — 84.1mm compared to 64.2mm — which makes it much harder to reach your thumb all the way across like you can with the Mini. The Duo tries to compensate for this by putting controls on the right side, which helps a bit. As reported by Wired, Apple is also planning to add its reachability feature to the Duo later this year to help out in those moments. But inevitably there’s something I need to tap that’s out of one-handed reach on the Duo, and the illusion of using a small phone is gone. On the other hand, you get a much larger onscreen keyboard with the Duo; the Mini’s feels cramped by comparison.",
+        "unit_id": "db20e9046e1b9c4257e3ce15"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 5,
+        "origin": "jsonld:articleBody",
+        "text": "It comes down to this: Liking a small phone isn’t the same thing as liking a small screen. Sure, all things being equal, a big screen is nicer for a lot of stuff. But I’ll put up with a tiny screen to enjoy the benefits of a phone so small I can forget it’s in my pocket. It’s a tradeoff. The iPhone Duo offers a different set of tradeoffs. Put up with the small screen on the outside, and you’ll be rewarded with a really big screen whenever you need it. And that small screen is attached to a big, heavy phone.",
+        "unit_id": "630936b0b0c52bc259337c9c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "jsonld:articleBody",
+        "text": "[Image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/DSC04358_processed.jpg?quality=90&strip=all]",
+        "unit_id": "f1a749ae020e85cb35698b53"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 7,
+        "origin": "jsonld:articleBody",
+        "text": "[Image: https://platform.theverge.com/wp-content/uploads/sites/2/2026/10/DSC04357_processed.jpg?quality=90&strip=all]",
+        "unit_id": "9691be84b0f00202c44bd5e6"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "jsonld:articleBody",
+        "text": "This sounds like I hated using the Duo, but I didn’t. I just had to calibrate my expectations. I think you’ll be disappointed by the Duo if you expect a small phone that expands into an iPad Mini. But if you go in expecting a small-screen experience you can tolerate in order to get a much bigger screen whenever you want, you’ll have the right idea about the Duo.",
+        "unit_id": "ddba31f64e7840f9c18d2476"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 9,
+        "origin": "jsonld:articleBody",
+        "text": "Photography by Allison Johnson / The Verge",
+        "unit_id": "5d8b95d3c9bee476c40b6fb1"
+      },
+      {
+        "container_id": "caption",
+        "kind": "div",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "Thanks to its wider format, the Duo gives you a bigger keyboard compared to the Mini.",
+        "unit_id": "21ce6cd57db05706017d7224"
+      },
+      {
+        "container_id": "",
+        "kind": "div",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "1/2The iPhone Duo is harder to operate one-handed.",
+        "unit_id": "c2bda5c904d75d6e8e5ef972"
+      }
+    ],
+    "url": "https://www.theverge.com/tech/1017090/iphone-duo-screen-size-mini"
+  },
+  "c7f763a50728b2dfe628ec72": {
+    "article_id": "c7f763a50728b2dfe628ec72",
+    "confidence": "detail",
+    "content_form": "news",
+    "discovery_lead": "IT之家 10 月 24 日消息，博主 @数码闲聊站 今日发文，曝光了 11 月的新机，包括： OPPO Reno 17 系列、vivo S70 系列、荣耀 700 系列和华为 nova 17 系列 。 博主透露，随着上述新机的发布，预计将看到小屏、中屏、大屏、原生背屏、2 亿云台影像、旗舰级潜望长焦、外挂增距镜等规格配置。 综合IT之家此前报道，博主 @智慧皮卡丘 发文称，某厂中端影像机开案大小屏，屏幕尺寸各不相同，有 AI 按键，暂定下个月发布。这款手机主打潮流外观和 2 亿像素影像，视频实况和修图有新玩法。从博主文中的 Tag 来看， 这款手机预计归属 OPPO Reno 17 系列 。 ▲ IT之家开箱：OPPO Reno16 Pro 怦然星动图赏 博主 @数码闲聊站 在今年 7 月曾透露，某厂 S 在评估目前同档最强潜望镜 + 增距镜。结合该博主此前的爆料习惯， 预计为 vivo S70 系列 。vivo 于今年 4 月发布增距镜 G2 / G2 Ultra 等影像配件产品，不过仅适配 vivo X300 Ultra 等旗舰产品，建议零售价 999 元起。 ▲ IT之家图赏：vivo S60 手机「星星海」上手实拍 该博主今日还透露，荣耀 700 系列手机有“3 杯”（即三个型号，分别对应不同价格配置档位），内部代号 Flora， 工程机配备 6.57 英寸 1.5K 中屏，极窄四等边，1.72 英寸原生背屏 （Pro 版本），200Mp 常规大底影像，Pro 有一颗 50Mp 潜望长焦，系列最大电池 9000mAh±。 ▲ IT之家开箱：荣耀 600 Pro「青苹果」图赏 关于 nova 17 系列手机暂未有更多信息曝光，但华为 nova 中端线已被曝正在评估阔直板机型。 全球首款阔直板手机 —— 华为 Pura X View 已于 9 月 7 日正式上市 ，其采用 16:9.5 比例面板设计、搭载麒麟 9030S 处理器，定价 5999 元起。 ▲ IT之家开箱：华为 nova 16 Pro 手机美图",
+    "discovery_title": "中端大战将启：曝 OPPO Reno 17、vivo S70、荣耀 700、华为 nova 17 系列手机将于 11 月集中发布",
+    "embedded_references": [],
+    "extraction_path": "detail",
+    "publication_candidates": [
+      {
+        "allows_date_only": false,
+        "raw": "2026/10/24 14:58:28",
+        "source": "source publication field"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "2026/10/24 14:58:28",
+        "source": "body date pattern"
+      },
+      {
+        "allows_date_only": false,
+        "raw": "Sat, 24 Oct 2026 06:58:28 GMT",
+        "source": "discovery feed"
+      }
+    ],
+    "published_raw": "2026/10/24 14:58:28",
+    "published_source": "source publication field",
+    "published_utc": "2026-10-24T06:58:28+00:00",
+    "raw_lead": "博主 @数码闲聊站 今日发文，曝光了 11 月的新机，包括：OPPO Reno 17 系列、vivo S70 系列、荣耀 700 系列和华为 nova 17 系列。博主透露，随着上述新机的发布，预计将看到小屏、中屏、大屏、原生背屏、2 亿云台影像、旗舰级潜望长焦、外挂增距镜等规格配置。",
+    "source": "IT之家",
+    "title": "中端大战将启：曝 OPPO Reno 17、vivo S70、荣耀 700、华为 nova 17 系列手机将于 11 月集中发布",
+    "units": [
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 0,
+        "origin": "html",
+        "text": "IT之家 10 月 24 日消息，博主 @数码闲聊站 今日发文，曝光了 11 月的新机，包括：OPPO Reno 17 系列、vivo S70 系列、荣耀 700 系列和华为 nova 17 系列。",
+        "unit_id": "104b4d299693cfed00bda57c"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 1,
+        "origin": "html",
+        "text": "博主透露，随着上述新机的发布，预计将看到小屏、中屏、大屏、原生背屏、2 亿云台影像、旗舰级潜望长焦、外挂增距镜等规格配置。",
+        "unit_id": "89e22d5e351e82fdeaf93dda"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 2,
+        "origin": "html",
+        "text": "综合IT之家此前报道，博主 @智慧皮卡丘 发文称，某厂中端影像机开案大小屏，屏幕尺寸各不相同，有 AI 按键，暂定下个月发布。这款手机主打潮流外观和 2 亿像素影像，视频实况和修图有新玩法。从博主文中的 Tag 来看，这款手机预计归属 OPPO Reno 17 系列。",
+        "unit_id": "67edf072a9abbfe5c611fb68"
+      },
+      {
+        "container_id": "caption",
+        "kind": "text",
+        "ordinal": 3,
+        "origin": "html",
+        "text": "▲ IT之家开箱：OPPO Reno16 Pro 怦然星动图赏",
+        "unit_id": "214f323a5c40995ecaf6b86b"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 4,
+        "origin": "html",
+        "text": "博主 @数码闲聊站 在今年 7 月曾透露，某厂 S 在评估目前同档最强潜望镜 + 增距镜。结合该博主此前的爆料习惯，预计为 vivo S70 系列。vivo 于今年 4 月发布增距镜 G2 / G2 Ultra 等影像配件产品，不过仅适配 vivo X300 Ultra 等旗舰产品，建议零售价 999 元起。",
+        "unit_id": "ecb69caeb7985f50d8e4f3ce"
+      },
+      {
+        "container_id": "caption",
+        "kind": "text",
+        "ordinal": 5,
+        "origin": "html",
+        "text": "▲ IT之家图赏：vivo S60 手机「星星海」上手实拍",
+        "unit_id": "3e131e161997f2cc6902e761"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 6,
+        "origin": "html",
+        "text": "该博主今日还透露，荣耀 700 系列手机有“3 杯”（即三个型号，分别对应不同价格配置档位），内部代号 Flora，工程机配备 6.57 英寸 1.5K 中屏，极窄四等边，1.72 英寸原生背屏（Pro 版本），200Mp 常规大底影像，Pro 有一颗 50Mp 潜望长焦，系列最大电池 9000mAh±。",
+        "unit_id": "13092e7a5a73a7d7109e78fc"
+      },
+      {
+        "container_id": "caption",
+        "kind": "text",
+        "ordinal": 7,
+        "origin": "html",
+        "text": "▲ IT之家开箱：荣耀 600 Pro「青苹果」图赏",
+        "unit_id": "a6f3562113175911704caf23"
+      },
+      {
+        "container_id": "",
+        "kind": "p",
+        "ordinal": 8,
+        "origin": "html",
+        "text": "关于 nova 17 系列手机暂未有更多信息曝光，但华为 nova 中端线已被曝正在评估阔直板机型。全球首款阔直板手机 —— 华为 Pura X View 已于 9 月 7 日正式上市，其采用 16:9.5 比例面板设计、搭载麒麟 9030S 处理器，定价 5999 元起。",
+        "unit_id": "cdeccf9efd1793830e6116d7"
+      },
+      {
+        "container_id": "caption",
+        "kind": "text",
+        "ordinal": 9,
+        "origin": "html",
+        "text": "▲ IT之家开箱：华为 nova 16 Pro 手机美图",
+        "unit_id": "1a2f9ee6f242665bdf8d26c2"
+      }
+    ],
+    "url": "https://www.ithome.com/1/017/389.htm"
+  }
+}

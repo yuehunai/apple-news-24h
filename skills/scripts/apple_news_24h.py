@@ -1544,9 +1544,7 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
     candidates: list[Candidate] = []
     paragraphs = iter(_compiled_rule(r"(?is)<p\b([^>]*)>.*?</p\s*>", 0).finditer(text))
     paragraph = next(paragraphs, None)
-    listing_metadata = (
-        extract_ithome_listing_metadata(text, page_url, source) if source.name == "IT之家" else {}
-    )
+    listing_metadata = collection.extract_listing_metadata(text, page_url, source)
     for match in _compiled_rule(r"(?is)<a\b([^>]+)>(.*?)</a>", 0).finditer(text):
         attrs, label_html = match.groups()
         while paragraph is not None and paragraph.end() <= match.start():
@@ -1576,6 +1574,7 @@ def parse_html_links(text: str, page_url: str, source: Source) -> list[Candidate
                 title=label,
                 summary=merge_candidate_text(metadata.get("summary", ""), label if is_excerpt else ""),
                 feed_time_raw=metadata.get("feed_time_raw", ""),
+                publication_time_raw=metadata.get("publication_time_raw", ""),
                 discovered_from=page_url,
                 context=source_context_terms(attrs, []),
                 title_is_excerpt=is_excerpt,
@@ -6553,8 +6552,6 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
             "促销",
             "降价",
             "立减",
-            "到手",
-            "换新",
             "再来",
             "百亿补贴",
         ],
@@ -6601,6 +6598,10 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
             "到手价",
         ],
     ) > 0
+    if title_has_price and lead_has_promotion and _compiled_rule(
+        r'(?:券后|领券|补贴后)\s*(?:到手)?\s*\d|到手(?:价)?\s*\d[\d,.]*\s*元', 0
+    ).search(retail_title_lower):
+        return True
     if title_discount_score <= 0 and not (
         retailer_in_title and title_has_price and lead_has_promotion
     ) and not source_retail_invitation(title, text):
@@ -6649,7 +6650,6 @@ def is_routine_retail_discount_story(title: str, text: str) -> bool:
             "国补",
             "补贴",
             "优惠券",
-            "换新",
         ],
     ) > 0
 
@@ -8655,6 +8655,7 @@ def merge_two_candidates(existing: Candidate, incoming: Candidate) -> Candidate:
         discovered_from=discovered_from,
         context=merge_candidate_context(existing.context, incoming.context),
         title_is_excerpt=title_is_excerpt,
+        publication_time_raw=existing.publication_time_raw or incoming.publication_time_raw,
     )
 
 
@@ -8905,7 +8906,9 @@ def is_relevant_candidate(
     classification_facts = [candidate.context, *(key_facts or [])]
     candidate_event_kind = detect_event_kind(candidate.title, candidate.summary, classification_facts)
     if collection.sparse_apple_subject_needs_detail(
-        semantic_identity, has_lead=bool(candidate.summary.strip()), event_kind=candidate_event_kind, title=candidate.title
+        semantic_identity, has_lead=bool(candidate.summary.strip()), event_kind=candidate_event_kind, title=candidate.title,
+        has_publication_time=bool(key_facts is None and candidate.publication_time_raw
+            and parse_datetime_value(candidate.publication_time_raw, source.default_tz) is not None),
     ):
         return True
     profile = source_text_profile(candidate.title, candidate.summary, classification_facts, candidate.source)
@@ -9801,6 +9804,7 @@ def source_release_projection_inputs(title: str, summary: str, key_facts: list[s
     return prepared_clauses, ((fact, title_led_identity(fact, "")) for fact in facts)
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def compound_article_variants(title: str, summary: str, key_facts: list[str], *,
                               evidence: ArticleEvidence | None = None) -> list[tuple[str, str, list[str]]]:
     identity = title_led_identity(title, summary)
@@ -23105,6 +23109,7 @@ def title_led_identity(title: str, summary: str):
     return cached_title_led_identity(title, summary[:520])
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def detect_event_kind(title: str, summary: str, key_facts: list[str] | None = None) -> str:
     facts = " ".join(key_facts or [])
     text = f"{title} {summary} {facts}"
@@ -24233,6 +24238,7 @@ def is_repackaged_multi_action_apple_analysis(title: str, text: str) -> bool:
     return prior_action_groups >= 2
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def source_text_profile(title: str, summary: str, key_facts: list[str], source_name: str, *, source_title: str = "", _source_kind_snapshot: tuple[str, str, tuple[str, ...], str] | None = None) -> ReconciliationProfile:
     # Legacy text APIs do not carry publication metadata. The sentinel is
     # internal to this adapter and is never emitted or used to infer identity.
@@ -24287,25 +24293,32 @@ def collect_candidates(
     source: Source,
     cache_dir: Path,
     diagnostics: dict[str, Any], *, window_start_utc: datetime | None = None,
+    window_end_utc: datetime | None = None,
 ) -> list[Candidate]:
+    def fetch(url, **options):
+        return collection.fetch_discovery_pages([url],
+            lambda value: fetch_url(value, cache_dir, diagnostics, **options))[0]
+
     candidates: list[Candidate] = []
     source_success = False
 
     for feed_url in source.feeds:
-        text = fetch_url(feed_url, cache_dir, diagnostics)
+        text = fetch(feed_url)
         if text is None:
             continue
         source_success = True
         if feed_url.lower().endswith(".opml") or "<opml" in text[:500].lower():
-            for nested_url in parse_opml_feed_urls(text):
-                nested_text = fetch_url(nested_url, cache_dir, diagnostics)
+            nested_urls = parse_opml_feed_urls(text)
+            responses = collection.fetch_discovery_pages(nested_urls,
+                lambda url: fetch_url(url, cache_dir, diagnostics))
+            for nested_url, nested_text in zip(nested_urls, responses):
                 if nested_text:
                     candidates.extend(parse_xml_feed(nested_text, source, nested_url))
             continue
         candidates.extend(parse_xml_feed(text, source, feed_url))
 
     for api_url in source.wordpress_posts_apis:
-        text = fetch_url(api_url, cache_dir, diagnostics, timeout=max(FETCH_TIMEOUT, 15.0), retries=0)
+        text = fetch(api_url, timeout=max(FETCH_TIMEOUT, 15.0), retries=0)
         if text is None:
             continue
         source_success = True
@@ -24315,29 +24328,44 @@ def collect_candidates(
         candidates.extend(api_candidates)
 
     for page_url in source.pages:
-        text = fetch_url(page_url, cache_dir, diagnostics)
+        text = fetch(page_url)
         if text is not None:
             source_success = True
         page_candidates = parse_html_links(text, page_url, source) if text is not None else []
+        if source.name == 'IT之家' and text is not None and not page_candidates:
+            # A successful HTTP response is not proof of a usable listing.
+            text = fetch(page_url)
+            page_candidates = parse_html_links(text, page_url, source) if text is not None else []
+        if source.name == 'IT之家' and not page_candidates and '/tags/' not in page_url:
+            diagnostics.setdefault('collection_warnings', []).append({
+                'source': source.name, 'url': page_url, 'reason': 'empty-listing', 'coverage': 'unconfirmed'})
         candidates.extend(page_candidates)
         if source.name == 'MacRumors':
             candidates.extend(collection.supplement_macrumors_index_candidates(
                 page_url, text, page_candidates, window_start_utc, MAX_PAGE_LINKS,
-                lambda url: fetch_url(url, cache_dir, diagnostics),
+                lambda url: fetch(url),
                 lambda body, url: parse_html_links(body, url, source),
                 lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
         if source.name == 'IT之家':
             candidates.extend(collection.supplement_ithome_tag_candidates(
                 page_url, text, page_candidates, window_start_utc, MAX_PAGE_LINKS,
-                lambda url: fetch_url(url, cache_dir, diagnostics, method='POST'),
+                lambda url: fetch(url, method='POST'),
                 lambda body, url: parse_html_links(body, url, source),
                 lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
         if source.name == '快科技':
             candidates.extend(collection.supplement_mydrivers_category_candidates(
                 page_url, text, page_candidates, window_start_utc, MAX_PAGE_LINKS,
-                lambda url: fetch_url(url, cache_dir, diagnostics),
+                lambda url: fetch(url),
                 lambda body, url: parse_html_links(body, url, source),
                 lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
+
+    if (source.name == 'IT之家' and window_start_utc is not None
+            and any(w.get('source') == source.name for w in diagnostics.get('collection_warnings', []))):
+        candidates.extend(collection.recover_ithome_calendar_candidates(
+            window_start_utc, MAX_PAGE_LINKS, lambda url: fetch(url),
+            lambda body, url: parse_html_links(body, url, source),
+            lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics, window_end=window_end_utc))
+        source_success |= diagnostics.get('ithome_calendar_recovery', {}).get('stop_reason') == 'window-covered'
 
     if not source_success:
         diagnostics.setdefault("failed_sources", []).append(source.name)
@@ -24362,10 +24390,11 @@ def collect_candidates(
 
 def collect_candidates_from_sources(sources: list[Source], cache_dir: Path,
                                     diagnostics: dict[str, Any], *,
-                                    window_start_utc: datetime | None = None) -> list[Candidate]:
+                                    window_start_utc: datetime | None = None,
+                                    window_end_utc: datetime | None = None) -> list[Candidate]:
     return collection.collect_candidates_from_sources(sources, cache_dir, diagnostics,
         collect=collect_candidates, max_workers=DEFAULT_SOURCE_DISCOVERY_WORKERS,
-        window_start_utc=window_start_utc)
+        window_start_utc=window_start_utc, window_end_utc=window_end_utc)
 
 
 def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]:
@@ -25817,6 +25846,7 @@ def prepare_article_source(article: Article) -> None:
                 article.summary = projection.summary
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def article_reconciliation_profile(article: Article, *, _source_kind_snapshot: tuple[str, str, tuple[str, ...], str] | None = None) -> ReconciliationProfile:
     prepare_article_source(article)
     if article.bound_claim is not None:
@@ -25894,7 +25924,6 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         and _compiled_rule(r"\b(?:qlc|tlc|nand)\b", re.I).search(source_opening)
         and _compiled_rule(r"(?:缓存耗尽|持续写入|使用率|sustained\s+write|cache\s+exhaust)", re.I).search(source_opening)
     )
-    third_party_game_launch = is_third_party_game_or_cross_platform_launch_story(article.title, support_text)
     software_support = [reason for supported, reason in (
         (current_camera_software_expansion, "current first-party camera software support expansion to older iPhones"),
         (is_apple_intelligence_china_regulatory_rollout_story(article.title, article.title), "Apple Intelligence regional regulatory clearance or rollout report"),
@@ -25924,8 +25953,6 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         (is_messages_platform_candidate(support_text), "Apple Messages platform agent capability"),
         (is_apple_books_or_store_platform_trust_story(article.title, support_text), "first-party store platform trust issue"),
         (identity.content_form not in {"tutorial", "buying_advice"} and is_service_content_story(title_and_lead_scope(article.title, article.summary, limit=1000), source_title=article.title), "first-party service content release or production"),
-        (identity.scope == "apple-direct" and not third_party_game_launch
-         and is_title_primary_software_system_story(article.title, support_text), "title-primary operating-system support or release change"),
         (is_apple_wallet_feature_story(support_text), "Apple Wallet feature or car key support"),
         (bool(_compiled_rule(r"\b(?:siri|iphone)\b", re.I).search(article.title)
               and _compiled_rule(r"\bsettlement\s+website\s+is\s+now\s+live\b", re.I).search(source_opening)
@@ -26059,7 +26086,6 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         # Generic OS context can establish relevance, but cannot replace a
         # more specific primary product/action category already in the profile.
         generic_software_support = {
-            "title-primary operating-system support or release change",
             "direct first-party operating-system or built-in service feature change",
         }
         software_category = (
@@ -27109,7 +27135,7 @@ def evidence_review_item(evidence: ArticleEvidence, spans, reason: str, source_f
 
 
 def add_source_remainder_reviews(events, evidence_by_id, reviews, dispositions):
-    """A fact shortlist cannot silently dispose of the rest of its source."""
+    """Every captured source retains a disposition, with or without an event."""
     displayed = {}
     by_source = {}
     for event in events:
@@ -27132,10 +27158,6 @@ def add_source_remainder_reviews(events, evidence_by_id, reviews, dispositions):
 
     by_id = {review['evidence_id']: review for review in reviews}
     for article_id, evidence in evidence_by_id.items():
-        represented = article_id in displayed
-        history_units = release_history_unit_ids(evidence) if not represented else frozenset()
-        if not represented and not history_units:
-            continue
         spans = displayed.get(article_id, set())
         disposition = dispositions.setdefault(article_id, {"assigned": [], "unprocessed": [],
             "excluded": []})
@@ -27147,14 +27169,11 @@ def add_source_remainder_reviews(events, evidence_by_id, reviews, dispositions):
         covered = [*disposition["assigned"], *disposition["unprocessed"],
                    *((item["unit_id"], item["start"], item["end"]) for item in disposition["excluded"])]
         remaining, exclusions = source_evidence_remainder(evidence, covered)
-        if not represented:
-            remaining = ()
-            exclusions = [span for span in exclusions if span[0] in history_units]
         existing_exclusions = {(item['unit_id'], item['start'], item['end']) for item in disposition['excluded']}
         disposition['excluded'].extend({'unit_id': key, 'start': start, 'end': end, 'reason': reason}
             for key, start, end, reason in exclusions if (key, start, end) not in existing_exclusions)
         disposition['unprocessed'] = sorted(set(map(tuple, disposition['unprocessed'])) | set(remaining))
-        disposition['coverage'] = 'captured-source-spans' if represented else 'flagged-source-evidence-spans-only'
+        disposition['coverage'] = 'captured-source-spans'
         if remaining:
             addition = evidence_review_item(evidence, remaining,
                 'Captured source text not represented in the final facts or summary; resolve each material passage with its local context')
@@ -28348,6 +28367,7 @@ def source_market_headline_has_uncovered_measurement(article: Article, retained:
     return False
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def prepare_source_fact_view(article: Article) -> SourceFactView:
     """Prepare source-local evidence; the reconciler owns cross-source selection."""
     history_units = release_history_unit_ids(article.evidence) if article.evidence is not None else frozenset()
@@ -28959,6 +28979,7 @@ def split_mixed_topic_events(events: list[Event]) -> list[Event]:
     return split_events
 
 
+@_identity_preparation_scope(reuse_existing=True)
 def cluster_articles(articles: list[Article]) -> list[Event]:
     assign_projection_parent_keys(articles)
     profiles = {
@@ -29281,7 +29302,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     sources = build_sources(now_local)
     sources_by_name = {source.name: source for source in sources}
-    candidates = collect_candidates_from_sources(sources, cache_dir, diagnostics, window_start_utc=window_start_utc)
+    candidates = collect_candidates_from_sources(sources, cache_dir, diagnostics, window_start_utc=window_start_utc, window_end_utc=now_utc)
 
     deduped_candidates: list[Candidate] = []
     seen_urls: set[str] = set()
@@ -29531,12 +29552,6 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         for fact in event.fact_plan.unprocessed if event.fact_plan is not None else ():
             for _source, _url, article_id, _unit_id, _start, _end in fact.origins:
                 pending_reviews.setdefault(article_id, []).append(fact)
-    represented_sources = {article.evidence.article_id for article in articles if article.evidence is not None}
-    for article_id, evidence in evidence_by_id.items():
-        if article_id not in represented_sources:
-            pending = prepare_source_local_report_evidence(evidence)
-            if pending:
-                pending_reviews.setdefault(article_id, []).extend(pending)
     for article_id, facts in pending_reviews.items():
         evidence = evidence_by_id[article_id]
         spans = sorted({(key, start, end) for fact in facts

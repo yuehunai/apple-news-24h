@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.2.1 - 2026-10-24
+
+- Improved source-bound relevance and grouping for carrier activation, software fixes and built-in feature trials, version revisions and device modifications; removed a broad legacy software promotion and kept historical, denied and unrelated claims separate.
+- Improved section assignment for physical tools and third-party hardware work without borrowing software or Apple ownership from nearby platform references.
+- Improved required review coverage for captured source passages even when no event or deferred candidate is produced; removed the old whitelist gate without automatically promoting review material.
+- Improved preservation of listing descriptions and publication evidence, distinguishing published timestamps from updates when admitting detail pages.
+- Added bounded IT Home date-directory recovery for incomplete or empty listings and one retry for an empty homepage parse; retained unresolved coverage warnings and recovered-listing diagnostics.
+- Improved discovery throughput by fetching MyDrivers subfeeds through existing workers and reducing repeated immutable source-identity analysis within a processing operation, without increasing collection budgets or concurrency.
+- Updated and shortened the skill to deliver the complete brief, resolve each material proposition with its source, preserve scope and conditions, and omit editorial wrap-ups; clarified partner interoperability, whole inferred propositions and independent actions in media roundups.
+- Added 42 regression tests and real-source fixtures while retaining existing test IDs. Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.2.0 - 2026-10-23
 
 - Improved detail admission for market reports and compound listings, and removed publisher/category suffixes only when page markup confirms them, preserving substantive headlines.

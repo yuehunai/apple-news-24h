@@ -1,0 +1,15 @@
+{
+  "captured_from": "https://www.theverge.com/tech",
+  "fetched_at": "2026-10-24T06:46:41.931891+00:00",
+  "article": {
+    "__typename": "PostResourceType",
+    "resourceType": "post",
+    "permalink": "https://www.theverge.com/tech/1017157/iphone-duo-tips-touch-id-magsafe",
+    "title": "Our best tips for using the iPhone Duo",
+    "publishedAt": "2026-10-23T14:00:00+00:00",
+    "dek": {
+      "html": "New moves for a new kind of iPhone."
+    }
+  },
+  "field_selection": "Publisher article-list fields only; unmodified values from the captured object."
+}

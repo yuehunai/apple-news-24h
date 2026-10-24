@@ -28,6 +28,8 @@ class Candidate:
     context: str = ""
     # Paragraph anchors can supply an excerpt, but cannot displace a headline.
     title_is_excerpt: bool = False
+    # Explicit source publication field; feed_time_raw may instead be updated.
+    publication_time_raw: str = ""
 
 
 @dataclass

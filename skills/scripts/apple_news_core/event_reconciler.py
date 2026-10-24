@@ -43,6 +43,7 @@ from .event_identity import (
     source_device_workload_measure,
     source_hardware_project,
     foldable_iphone_generation_subject,
+    source_fact_changes_generation,
     named_iphone_models,
     source_operation_frame,
     source_market_measurement_frame,
@@ -14187,6 +14188,25 @@ def resolve_sparse_release_profiles(profiles: dict[int, ReconciliationProfile]) 
             supported.setdefault((platform, stage), set()).update(version for version, candidate_stage in waves(profile) if candidate_stage == stage)
     resolved = dict(profiles)
     for key, profile in profiles.items():
+        revised = [(version, stage) for version, stage in waves(profile) if stage == 'rc-revised']
+        if len(revised) == 1:
+            version = revised[0][0]
+            platforms = {platform for platform, stage in signatures(profile) if stage == 'rc-revised'}
+            builds = {c for c in profile.identity.components if c.startswith('os-release-build:')}
+            stages = {stage for other in profiles.values() for platform, stage in signatures(other)
+                      if platform in platforms and stage.startswith('rc-') and stage[3:].isdigit()
+                      and (version, stage) in waves(other)
+                      and not (builds and (other_builds := {c for c in other.identity.components if c.startswith('os-release-build:')})
+                               and builds != other_builds)}
+            if len(stages) == 1:
+                stage = next(iter(stages))
+                # Retain the source's unspecified revision; only the unique
+                # same-platform/version peer supplies its matching identity.
+                convert = lambda keys: frozenset(k.replace(':rc-revised', ':' + stage) for k in keys)
+                resolved[key] = replace(profile, event_keys=convert(profile.event_keys),
+                    boundary_keys=convert(profile.boundary_keys), separation_keys=convert(profile.separation_keys),
+                    identity=replace(profile.identity, components=convert(profile.identity.components)))
+            continue
         if waves(profile):
             continue
         scope = signatures(profile)
@@ -14376,6 +14396,24 @@ def resolve_event_fact_plan(views: Sequence[SourceFactView], *, relevance_tier: 
     """Finalize fact/display choices from source views; assembly only copies them."""
     if not views:
         return EventFactPlan("", "", ())
+    scoped_views = []
+    for view in views:
+        if view.owned or foldable_iphone_generation_subject(view.display_title) == 'foldable-iphone':
+            scoped_views.append(view)
+            continue
+        unassigned, fields = [], {}
+        for field in ('normal', 'structured', 'price', 'responses', 'required_actions'):
+            kept = []
+            for fact in getattr(view, field):
+                if source_fact_changes_generation(view.display_title, fact.text):
+                    if not any(fact.text == old.text for old in unassigned):
+                        unassigned.append(replace(fact, owned=False, roles=frozenset({'unprocessed-source-action'}),
+                            reason='This source names a separate generation development action; assign it independently of the parent event'))
+                else:
+                    kept.append(fact)
+            fields[field] = tuple(kept)
+        scoped_views.append(replace(view, **fields, unprocessed=view.unprocessed + tuple(unassigned)))
+    views = scoped_views
     selected = reconcile_fact_views(views, base_limit=base_limit, official_limit=official_limit)
     ordered = sorted(views, key=lambda view: (view.source_priority, view.published_utc))
     title = ordered[0].display_title

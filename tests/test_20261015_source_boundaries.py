@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -370,8 +371,16 @@ class SourceBoundariesTests(unittest.TestCase):
         self.assertTrue(review['required'])
         self.assertEqual(review['source_urls'], [captured['url']])
         expected = next(unit['text'] for unit in captured['units'] if '收盘市值首次站上' in unit['text'])
-        self.assertEqual([unit['text'] for unit in review['unprocessed_evidence']], [expected])
-        self.assertTrue(result['evidence_dispositions'][review['evidence_id']]['unprocessed'])
+        self.assertEqual([unit['text'] for unit in review['unprocessed_evidence']].count(expected), 1)
+        disposition = result['evidence_dispositions'][review['evidence_id']]
+        self.assertTrue(disposition['unprocessed'])
+        # A non-Apple parent still needs explicit destinations for its remaining
+        # captured text; requiring review does not create a news event.
+        source = result['source_evidence'][review['evidence_id']]
+        evidence = SimpleNamespace(units=tuple(SimpleNamespace(**unit) for unit in source['units']))
+        m.validate_source_span_dispositions(evidence, disposition['assigned'],
+            disposition['unprocessed'], [(item['unit_id'], item['start'], item['end'], item['reason'])
+                for item in disposition['excluded']])
 
     def test_closing_value_relation_keeps_its_local_owner_and_observation(self):
         from apple_news_core.event_identity import source_closing_market_value_frame

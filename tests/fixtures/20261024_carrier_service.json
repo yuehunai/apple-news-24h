@@ -1,0 +1,59 @@
+{
+  "article_id": "a77e669b45b2969ee6bf8d3e",
+  "confidence": "detail",
+  "content_form": "news",
+  "discovery_lead": "IT之家 10 月 24 日消息，中国联通发文，称目前联通已在苹果 Apple Store 直营店、APR 苹果授权店等多家门店安排千余名驻店员，协助用户现场开通 eSIM，全程仅需约 3 分钟。 除了联通以外，参考IT之家昨日报道，有消息称移动、电信工作人员也在苹果 Apple Store 直营店内驻守，为现场取货的顾客现场办理 eSIM 激活业务，免去以往购机后再单独前往运营商营业厅开通的环节。 而对于新上市的 Apple Watch Series 12、Apple Watch Ultra 4 等机型，用户可以通过手机上的 Watch App 线上自助办理一号双终端业务，让手表与手机共享同一号码和套餐资源。 中国联通在苹果直营店及授权店安排千余名驻店员，用户购机后可现场开通 eSIM，全程约 3 分钟。移动、电信也被曝在苹果直营店驻守。新款 Apple Watch 可通过 Watch App 线上自助办理一号双终端。#苹果eSIM# #中国联通#",
+  "discovery_title": "中国联通：已在苹果直营店 / 授权店安排千余名驻店员，协助 iPhone Duo 购机用户现场开通 eSIM",
+  "embedded_references": [],
+  "extraction_path": "detail",
+  "publication_candidates": [
+    {
+      "allows_date_only": false,
+      "raw": "2026/10/24 15:14:58",
+      "source": "source publication field"
+    },
+    {
+      "allows_date_only": false,
+      "raw": "2026/10/24 15:14:58",
+      "source": "body date pattern"
+    },
+    {
+      "allows_date_only": false,
+      "raw": "Sat, 24 Oct 2026 07:14:58 GMT",
+      "source": "discovery feed"
+    }
+  ],
+  "published_raw": "2026/10/24 15:14:58",
+  "published_source": "source publication field",
+  "published_utc": "2026-10-24T07:14:58+00:00",
+  "raw_lead": "中国联通在苹果直营店及授权店安排千余名驻店员，用户购机后可现场开通 eSIM，全程约 3 分钟。移动、电信也被曝在苹果直营店驻守。新款 Apple Watch 可通过 Watch App 线上自助办理一号双终端。#苹果eSIM# #中国联通#",
+  "source": "IT之家",
+  "title": "中国联通：已在苹果直营店 / 授权店安排千余名驻店员，协助 iPhone Duo 购机用户现场开通 eSIM",
+  "units": [
+    {
+      "container_id": "",
+      "kind": "p",
+      "ordinal": 0,
+      "origin": "html",
+      "text": "IT之家 10 月 24 日消息，中国联通发文，称目前联通已在苹果 Apple Store 直营店、APR 苹果授权店等多家门店安排千余名驻店员，协助用户现场开通 eSIM，全程仅需约 3 分钟。",
+      "unit_id": "cb0e401407ad1477f990ee8d"
+    },
+    {
+      "container_id": "",
+      "kind": "p",
+      "ordinal": 1,
+      "origin": "html",
+      "text": "除了联通以外，参考IT之家昨日报道，有消息称移动、电信工作人员也在苹果 Apple Store 直营店内驻守，为现场取货的顾客现场办理 eSIM 激活业务，免去以往购机后再单独前往运营商营业厅开通的环节。",
+      "unit_id": "08f0f6cacab1faa449c7be1d"
+    },
+    {
+      "container_id": "",
+      "kind": "p",
+      "ordinal": 2,
+      "origin": "html",
+      "text": "而对于新上市的 Apple Watch Series 12、Apple Watch Ultra 4 等机型，用户可以通过手机上的 Watch App 线上自助办理一号双终端业务，让手表与手机共享同一号码和套餐资源。",
+      "unit_id": "5535fa8925a7855c48cf17ba"
+    }
+  ],
+  "url": "https://www.ithome.com/1/017/397.htm"
+}

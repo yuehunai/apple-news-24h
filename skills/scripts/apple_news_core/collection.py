@@ -9,6 +9,7 @@ import hashlib
 import os
 import tempfile
 from contextlib import contextmanager
+from contextvars import ContextVar
 import json
 import re
 import shutil
@@ -17,7 +18,7 @@ import time
 import urllib.parse
 import xml.etree.ElementTree as ET
 import urllib.request
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
 from .article_processing import strip_tags
@@ -128,7 +129,8 @@ def supplement_macrumors_index_candidates(
                     parser.feed(card.group()[owned.start():])
                     summary = parser.summary
                 rows.append(replace(links[0], summary=summary,
-                                    feed_time_raw=html.unescape(stamp.group(1)) if stamp else ''))
+                                    feed_time_raw=html.unescape(stamp.group(1)) if stamp else '',
+                                    publication_time_raw=html.unescape(stamp.group(1)) if stamp else ''))
         if not rows:
             reason = 'empty-page'
             break
@@ -274,6 +276,74 @@ def supplement_ithome_tag_candidates(
     return extra
 
 
+def recover_ithome_calendar_candidates(
+    window_start: datetime, limit: int, fetch_page: Callable[[str], str | None],
+    parse_page: Callable[[str, str], list[Candidate]],
+    parse_time: Callable[[str], datetime | None], diagnostics: dict[str, Any],
+    *, window_end: datetime | None = None,
+) -> list[Candidate]:
+    """Recover an unconfirmed tag/home listing via the site's dated calendar.
+
+    The default calendar contains only the latest rows. Follow its published
+    date URL template, consume consecutive complete dated pages and require
+    chronological timestamps reaching the window start. Never infer coverage
+    from an empty response, an unrelated old link, or a truncated budget.
+    """
+    root = 'https://www.ithome.com/list/'
+    index = fetch_page(root)
+    date = _compiled_rule(r'var\s+date\s*=\s*[\x27"](\d{4}-\d{2}-\d{2})[\x27"]').search(index or '')
+    protocol = _compiled_rule(r'_LISTPAGE_URL_REG_\s*=\s*[\x27"]\$Y-\$M-\$D\.html[\x27"]').search(index or '')
+    day = datetime.strptime(date.group(1), '%Y-%m-%d').date() if date and protocol else None
+    result, seen, pages, reason = [], set(), 0, 'pagination-unavailable'
+    if day is not None and (window_end is None
+            or day != window_end.astimezone(timezone(timedelta(hours=8))).date()):
+        day, reason = None, 'stale-calendar-index'
+    while day is not None:
+        url = root + day.isoformat() + '.html'
+        body = fetch_page(url)
+        pages += 1
+        listing = _compiled_rule(r'<ul\b[^>]*class=[\x27"]datel[\x27"][^>]*>(.*?)</ul>', re.S).search(body or '')
+        cards = _compiled_rule(r'<li\b[^>]*>.*?</li>', re.S).findall(listing.group(1)) if listing else []
+        if not cards:
+            reason = 'request-failed' if body is None else 'empty-page'
+            break
+        dates, rows = [], []
+        for card in cards:
+            stamp = _compiled_rule(r'data-ot=[\x27"]([^\x27"]+)[\x27"]').search(card)
+            value = parse_time(stamp.group(1)) if stamp else None
+            if value is None or value.utcoffset() is None or value.date() != day:
+                reason = 'invalid-date'
+                break
+            dates.append(value)
+            if value > window_start:
+                rows.extend(replace(c, feed_time_raw=stamp.group(1), publication_time_raw=stamp.group(1))
+                            for c in parse_page(card, url))
+        if len(dates) != len(cards) or any(a < b for a, b in zip(dates, dates[1:])):
+            reason = 'invalid-date-order'
+            break
+        new = [c for c in rows if c.url not in seen]
+        if len(seen) + len({c.url for c in new}) > limit:
+            reason = 'candidate-budget'
+            break
+        for candidate in new:
+            if candidate.url not in seen:
+                seen.add(candidate.url)
+                result.append(candidate)
+        if dates[-1] <= window_start:
+            reason = 'window-covered'
+            break
+        day -= timedelta(days=1)
+    diagnostics['ithome_calendar_recovery'] = {
+        'pages': pages, 'candidates': len(result), 'stop_reason': reason,
+    }
+    if reason == 'window-covered':
+        warnings = diagnostics.get('collection_warnings', [])
+        recovered = [w for w in warnings if w.get('source') == 'IT之家']
+        diagnostics.setdefault('recovered_listing_warnings', []).extend(recovered)
+        diagnostics['collection_warnings'] = [w for w in warnings if w.get('source') != 'IT之家']
+    return result
+
+
 def supplement_mydrivers_category_candidates(
     page_url: str, first_text: str | None, first_candidates: list[Candidate],
     window_start: datetime | None, limit: int,
@@ -302,7 +372,8 @@ def supplement_mydrivers_category_candidates(
             article_id = _compiled_rule(r'news_title_(\d+)').search(card)
             links = parse_page(heading.group(), page_url) if heading else []
             if links and article_id:
-                rows.append(replace(links[0], feed_time_raw=strip_tags(stamp.group(1)) if stamp else ''))
+                rows.append(replace(links[0], feed_time_raw=strip_tags(stamp.group(1)) if stamp else '',
+                                    publication_time_raw=strip_tags(stamp.group(1)) if stamp else ''))
                 ids.append(article_id.group(1))
         new = [c for c in rows if c.url not in seen]
         if not rows or (pages and not new):
@@ -698,16 +769,20 @@ def direct_apple_report_needs_detail(identity, *, has_lead: bool) -> bool:
                 and (has_lead or identity.title_actions))
 
 
-def sparse_apple_subject_needs_detail(identity, *, has_lead: bool, event_kind: str, title: str = "") -> bool:
-    """An explicit sparse Apple title is collection evidence, not a news verdict."""
+def sparse_apple_subject_needs_detail(identity, *, has_lead: bool, event_kind: str,
+                                      title: str = "", has_publication_time: bool = False) -> bool:
+    """Recall a sparse Apple article without using its date as a news verdict."""
     title_text = title.strip()
-    if title_text.casefold() in {'apple', '苹果', '苹果公司'} or re.search(r"(?:之家|指南|技巧|教程)$|\b(?:guide|tips|cases)\b|"
+    if title_text.casefold() in {'apple', '苹果', '苹果公司'} or re.search(r"之家$|\bcases\b|"
                  r"\b(?:vs\.?|versus)\b|"
                  r"^(?:how to|hard reset|force restart)\b|"
                  r"[:：]\s*(?:record|apply|reset|restart|enable|disable|customize)\b", title_text, re.I):
         # These phrases describe navigation or instructions, not a missing lead
         # for a particular newly reported action. Other admission evidence is
         # evaluated by the caller; this only withholds the sparse-topic escape.
+        return False
+    if not has_publication_time and re.search(
+            r"(?:指南|技巧|教程)$|\b(?:guide|tips)\b", title_text, re.I):
         return False
     if title and identity is not None and any(
         re.fullmatch(r"(?:(?:the|apple)\s+|苹果\s*)?" + re.escape(alias)
@@ -727,7 +802,8 @@ def sparse_apple_subject_needs_detail(identity, *, has_lead: bool, event_kind: s
               r'(?:third[ -]party\s+apps?\b|第三方(?:应用|app))', re.I).search(title_text)
         for product, aliases in PRODUCT_PATTERNS if product in identity.title_products
         for alias in aliases))
-    return bool(not has_lead and identity is not None and identity.scope == "apple-direct"
+    return bool((not has_lead or has_publication_time)
+                and identity is not None and identity.scope == "apple-direct"
                 and identity.content_form == "news"
                 and identity.action_owner in {"unknown", "apple", "apple-target"}
                 and (event_kind != "third_party_ecosystem" or device_host))
@@ -877,6 +953,7 @@ def parse_xml_feed(text: str, source: Source, feed_url: str) -> list[Candidate]:
                     title=title,
                     summary=summary,
                     feed_time_raw=published,
+                    publication_time_raw=xml_text(item, {"pubdate", "published"}),
                     discovered_from=feed_url,
                     context=context,
                 )
@@ -954,6 +1031,7 @@ def parse_wordpress_posts_api(text: str, source: Source, api_url: str) -> list[C
                 title=title,
                 summary=summary,
                 feed_time_raw=feed_time_raw,
+                publication_time_raw=feed_time_raw,
                 discovered_from=api_url,
                 context=" ".join(dict.fromkeys(context_terms)),
             )
@@ -984,6 +1062,50 @@ def same_domain(url: str, domains: tuple[str, ...]) -> bool:
 
 
 
+def extract_listing_metadata(text: str, page_url: str, source: Source) -> dict[str, dict[str, str]]:
+    if source.name == 'IT之家':
+        return extract_ithome_listing_metadata(text, page_url, source)
+    if source.name != 'The Verge':
+        return {}
+    match = _compiled_rule(r'''<script\b[^>]*\bid\s*=\s*['"]__NEXT_DATA__['"][^>]*>(.*?)</script\s*>''', re.I | re.S).search(text)
+    if not match:
+        return {}
+    try:
+        state = json.loads(match.group(1))
+    except ValueError:
+        return {}
+    for key in ('props', 'pageProps', 'hydration', 'responses'):
+        if not isinstance(state, dict):
+            return {}
+        state = state.get(key)
+    if not isinstance(state, list):
+        return {}
+    metadata = {}
+    for response in state:
+        rows = response
+        for key in ('data', 'node', 'categoryLayoutPosts', 'nodes'):
+            rows = rows.get(key) if isinstance(rows, dict) else None
+        if not isinstance(rows, list):
+            continue
+        for row in rows:
+            if not isinstance(row, dict) or row.get('__typename') != 'PostResourceType':
+                continue
+            url = row.get('permalink')
+            if not isinstance(url, str) or not url.startswith(('http://', 'https://')) or not same_domain(url, source.domains):
+                continue
+            dek = row.get('dek')
+            summary = dek.get('html') if isinstance(dek, dict) else None
+            published = row.get('publishedAt')
+            # Only this article's publication field may guide discovery.
+            # Related posts and modification times cannot fill missing data.
+            metadata[normalize_url(url)] = {
+                'summary': strip_tags(summary) if isinstance(summary, str) else '',
+                'feed_time_raw': published if isinstance(published, str) else '',
+                'publication_time_raw': published if isinstance(published, str) else '',
+            }
+    return metadata
+
+
 def extract_ithome_listing_metadata(text: str, page_url: str, source: Source) -> dict[str, dict[str, str]]:
     metadata: dict[str, dict[str, str]] = {}
     for item_match in _compiled_rule(r"(?is)<li\b[^>]*>.*?</li>", 0).finditer(text):
@@ -1011,7 +1133,8 @@ def extract_ithome_listing_metadata(text: str, page_url: str, source: Source) ->
                 continue
             if not same_domain(url, source.domains):
                 continue
-            metadata[normalize_url(url)] = {"summary": summary, "feed_time_raw": feed_time_raw}
+            metadata[normalize_url(url)] = {"summary": summary, "feed_time_raw": feed_time_raw,
+                                            "publication_time_raw": feed_time_raw}
     return metadata
 
 
@@ -1152,11 +1275,21 @@ def fetch_detail_page_texts(
 
 
 
+_discovery_executor = ContextVar('discovery_executor', default=None)
+
+
+def fetch_discovery_pages(urls, fetch: Callable) -> list:
+    """Share the run's network slots, including nested feeds, in input order."""
+    executor = _discovery_executor.get()
+    return list(executor.map(fetch, urls)) if executor is not None else [fetch(url) for url in urls]
+
+
 def collect_candidates_from_sources(
     sources: list[Source],
     cache_dir: Path,
     diagnostics: dict[str, Any], *, collect: Callable, max_workers: int,
     window_start_utc: datetime | None = None,
+    window_end_utc: datetime | None = None,
 ) -> list[Candidate]:
     """Discover independent sources concurrently while preserving source order."""
     if not sources:
@@ -1165,15 +1298,24 @@ def collect_candidates_from_sources(
     workers = min(max_workers, len(sources))
     diagnostics["source_discovery_workers"] = workers
     options = {'window_start_utc': window_start_utc} if window_start_utc is not None else {}
+    if window_end_utc is not None:
+        options['window_end_utc'] = window_end_utc
     if workers <= 1:
         return [
             candidate
             for source in sources
             for candidate in collect(source, cache_dir, diagnostics, **options)
         ]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as transport, \
+            concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        def discover(source):
+            token = _discovery_executor.set(transport)
+            try:
+                return collect(source, cache_dir, diagnostics, **options)
+            finally:
+                _discovery_executor.reset(token)
         per_source = executor.map(
-            lambda source: collect(source, cache_dir, diagnostics, **options),
+            discover,
             sources,
         )
         return [candidate for candidates in per_source for candidate in candidates]
