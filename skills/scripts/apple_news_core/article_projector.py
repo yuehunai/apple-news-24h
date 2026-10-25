@@ -383,7 +383,7 @@ def project_article_evidence(evidence: ArticleEvidence, *, claims: tuple[BoundCl
                     evidence_spans=claim.evidence_spans + tuple((unit.unit_id, 0, len(unit.text)) for unit in following))
         facts = tuple(units[key].text[start:end] for key, start, end in claim.evidence_spans)
         summary = facts[0] if facts else ""
-        title = evidence.title if not facts or claim.action in {"document-publication", "plan-launch", "feature-rollout", "web-exploit-campaign", "cpu-benchmark-report", "platform-capability-inventory-report", "app-capability-inventory-report", "app-publisher-chart-report", "media-invitation", "leadership-report"} else summary
+        title = evidence.title if not facts or claim.action in {"document-publication", "plan-launch", "feature-rollout", "web-exploit-campaign", "cpu-benchmark-report", "platform-capability-inventory-report", "app-capability-inventory-report", "app-publisher-chart-report", "media-invitation", "leadership-report", "resale-quote-report"} else summary
         if claim.action == 'reported-launch-plan':
             title = claim.subject.replace('-', ' ') + ' launch report'
         projections.append(ClaimProjection(title, summary, facts,

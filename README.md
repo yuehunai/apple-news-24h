@@ -12,16 +12,16 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.2.1 - 2026-10-24
+### 2.3.0 - 2026-10-25
 
-- Improved source-bound relevance and grouping for carrier activation, software fixes and built-in feature trials, version revisions and device modifications; removed a broad legacy software promotion and kept historical, denied and unrelated claims separate.
-- Improved section assignment for physical tools and third-party hardware work without borrowing software or Apple ownership from nearby platform references.
-- Improved required review coverage for captured source passages even when no event or deferred candidate is produced; removed the old whitelist gate without automatically promoting review material.
-- Improved preservation of listing descriptions and publication evidence, distinguishing published timestamps from updates when admitting detail pages.
-- Added bounded IT Home date-directory recovery for incomplete or empty listings and one retry for an empty homepage parse; retained unresolved coverage warnings and recovered-listing diagnostics.
-- Improved discovery throughput by fetching MyDrivers subfeeds through existing workers and reducing repeated immutable source-identity analysis within a processing operation, without increasing collection budgets or concurrency.
-- Updated and shortened the skill to deliver the complete brief, resolve each material proposition with its source, preserve scope and conditions, and omit editorial wrap-ups; clarified partner interoperability, whole inferred propositions and independent actions in media roundups.
-- Added 42 regression tests and real-source fixtures while retaining existing test IDs. Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, relevance tiers, two brief sections and explicit-only skill invocation.
+- Updated the skill and split the policy into focused eligibility, grouping, evidence/writing and collection references, reducing their combined text by about 86% and routing each workflow stage to the relevant document.
+- Improved review scaffolds so required source fragments do not default to separate bullets; incidental passages support independently eligible reports, while coherent investigations stay together and focused short reports remain eligible.
+- Improved source-owned relevance and categories for built-in operating capabilities, durability and repair observations, court remedies, prototype testing and chip-architecture decisions; kept retail offers, outside commentary and ordinary app adaptations from becoming independent Apple news.
+- Improved resale quotation binding and fact retention across paragraphs, preserving complete prices, current versus historical scope and local observers without borrowing another participant's statements.
+- Improved teardown grouping using complete publisher sets and device identities across languages; removed a legacy name truncation that could override confirmed identities while retaining region and component distinctions.
+- Improved copyright-appeal grouping through explicit name and work aliases, current court dispositions and local attribution; preserved separate plaintiffs, works, courts and procedural stages, including denied or unresolved claims.
+- Added 19 regression tests and real-source fixtures with existing assertions preserved; the full offline suite passes 3,054 tests, with independent review, fresh live comparison and a clean skill invocation completed.
+- Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets and concurrency, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
 
@@ -113,13 +113,13 @@ JSON also exposes evidence for attribution and coverage review:
 | `evidence_dispositions` | Recorded destinations of projected or unresolved source material. |
 | `final_brief_queue` | Event candidates and unresolved fragments requiring a decision. `capture_status: discovery-only` flags a source for which full text was unavailable; it does not promote the item. |
 
-Required flags ask for a decision, not automatic inclusion. `required_final_brief_titles`, `final_brief_markdown`, and an adjacent `*.brief.md` are coverage scaffolds, not the finished brief. Write from source-supported summaries and facts, checking independent actions, material qualifications and each bullet's supporting URLs.
+Required flags ask for a decision, not automatic inclusion. Source-fragment entries in `required_final_brief_titles` now set `separate_bullet_by_default: false`; each fragment still requires review, and a new bullet needs an independently eligible reporting subject. `required_final_brief_titles`, `final_brief_markdown`, and an adjacent `*.brief.md` are coverage scaffolds, not the finished brief. Write from source-supported summaries and facts, checking independent actions, material qualifications and each bullet's supporting URLs.
 
 For source-bound reports, binding and news eligibility are separate decisions. Migrated report families, including app-publisher charts, device benchmarks, operating-feature inventories, media invitations, regulatory-access proposals and locally bound market or retail actions, preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
 
 Passages in `source_evidence` not covered by displayed summaries, selected facts or explicit exclusions remain available for review, even when their source produces no event or deferred candidate. This can increase review material without adding events; it does not establish complete site coverage. For incomplete IT Home listings, the crawler can traverse public date directories within the existing budget; recovered listing failures remain in diagnostics. Publisher indexes can still omit articles, so successful traversal does not guarantee complete discovery.
 
-Version 2.2.1 retains the existing CLI, JSON fields and relevance tiers. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
+Version 2.3.0 retains the existing CLI, JSON fields and relevance tiers. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
 
 Diagnostics for debugging source failures:
 
@@ -150,7 +150,7 @@ Network permission does not prevent a site from returning an access block or bro
 
 Primary sources include MacRumors, 9to5Mac, AppleInsider, The Verge, Apple Newsroom, IT之家, 爱范儿, 快科技, and cnBeta. Supplemental fallback sources include 新浪科技/财经, 网易科技, 36氪, and other mainstream Chinese technology pages when needed.
 
-See `skills/references/news_policy.md` for source URLs, default timezones, inclusion rules, exclusion rules, event merge rules, and fallback handling.
+The policy index at `skills/references/news_policy.md` links to four focused references: eligibility and categories, grouping, evidence and writing, and collection recovery. `SKILL.md` routes each stage directly to the needed reference; ordinary drafting does not require reading collection or implementation details. A source-bound fact or required review fragment does not by itself qualify as a separate news item.
 
 ## Tests
 

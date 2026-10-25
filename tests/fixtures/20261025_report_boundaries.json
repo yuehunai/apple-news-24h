@@ -1,0 +1,2523 @@
+{
+  "55f99cf9eb99d802f0d74e30": {
+    "evidence": {
+      "article_id": "55f99cf9eb99d802f0d74e30",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "The first iPhone Duo teardown videos have been shared by YouTube channels REWA Technology and Phone Repair Guru, providing us with a look inside the device. iPhone Duo has two battery cells that can be removed with electrically-activated adhesive. There is a larger battery with a 2,962 mAh (11.56 Wh) capacity and a smaller one that is rated at 1,921 mAh (7.5 Wh). Total battery capacity is 4,883 mAh. REWA Technology's video includes a labeled breakdown of the logic board, which contains Apple's A20 Pro chip, C2 cellular modem, and more. Phone Repair Guru revealed that the iPhone Duo's Touch ID button can technically be removed for repairs, but they said it is a difficult process. They also said that the device apparently has a completely modular USB-C charging port. iPhone Duo is an eSIM-only device worldwide.",
+      "discovery_title": "iPhone Duo Teardowns Reveal Two Batteries and More",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T15:02:56+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T15:02:56+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T15:02:56+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 24, 2026 8:02 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 24, 2026 8:02 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 24 Oct 2026 15:02:56 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24T15:02:56+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-24T15:02:56+00:00",
+      "raw_lead": "The first iPhone Duo teardown videos have been shared by YouTube channels REWA Technology and Phone Repair Guru, providing us with a look inside the device. iPhone Duo has two battery cells that can be removed with electrically-activated adhesive. There is a larger battery with a 2,962 mAh (11.56 Wh) capacity and a smaller one that is rated at 1,921 mAh (7.5 Wh). Total battery capacity is 4,883 mAh.",
+      "source": "MacRumors",
+      "title": "iPhone Duo Teardowns Reveal Two Batteries and More",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo Teardowns Reveal Two Batteries and More",
+          "unit_id": "eec8b514595b3386209568d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "The first iPhone Duo teardown videos have been shared by YouTube channels REWA Technology and Phone Repair Guru, providing us with a look inside the device.",
+          "unit_id": "a69abbbee1707db485e59462"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "iPhone Duo has two battery cells that can be removed with electrically-activated adhesive. There is a larger battery with a 2,962 mAh (11.56 Wh) capacity and a smaller one that is rated at 1,921 mAh (7.5 Wh). Total battery capacity is 4,883 mAh.",
+          "unit_id": "6c6bf6420795b622b287e552"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "REWA Technology's video includes a labeled breakdown of the logic board, which contains Apple's A20 Pro chip, C2 cellular modem, and more.",
+          "unit_id": "e92c90de8f472988501a9d56"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "iPhone Duo Teardown: Double Screens, Double Repair Risk?REWA Technology",
+          "unit_id": "557d1abce070da0c08acc432"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Watch on YouTube",
+          "unit_id": "2a8e5f511d8c56108d7759f2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Phone Repair Guru revealed that the iPhone Duo's Touch ID button can technically be removed for repairs, but they said it is a difficult process. They also said that the device apparently has a completely modular USB-C charging port.",
+          "unit_id": "e9351c360a389f6dd5031d1c"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Cancel Your Pre-Order... iPhone Duo TeardownPhone Repair Guru",
+          "unit_id": "611101a037c7b44c6ae361ad"
+        },
+        {
+          "container_id": "",
+          "kind": "div",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Watch on YouTube",
+          "unit_id": "cb27119b304afcbb21c718c3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "iPhone Duo is an eSIM-only device worldwide.",
+          "unit_id": "4a92823259bcf327fb8b14bf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "The repair website iFixit will likely publish a more comprehensive iPhone Duo teardown with detailed analysis in the coming days, so stay tuned for that.",
+          "unit_id": "98e35fafa620f949f8ea3d67"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "In related news, Apple has published its iPhone Duo repair manual.",
+          "unit_id": "0f44a03b4dcf8fbe77696e8c"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/24/iphone-duo-teardown-videos/"
+    },
+    "recorded_extraction": [
+      "iPhone Duo Teardowns Reveal Two Batteries and More",
+      "The first iPhone Duo teardown videos have been shared by YouTube channels REWA Technology and Phone Repair Guru, providing us with a look inside the device. iPhone Duo has two battery cells that can be removed with electrically-activated adhesive. There is a larger battery with a 2,962 mAh (11.56 Wh) capacity and a smaller one that is rated at 1,921 mAh (7.5 Wh). Total battery capacity is 4,883 mAh. The first iPhone Duo teardown videos have been shared by YouTube channels REWA Technology and Phone Repair Guru , providing us with a look inside the device. iPhone Duo has two battery cells that can be removed with electrically-activated adhesive. There is a larger battery with a 2,962 mAh (11.56 Wh) capacity and a smaller one that is rated at 1,921 mAh (7.5 Wh). Total battery capacity is 4,883 mAh . REWA Technology's video includes a labeled breakdown of the logic board, which contains Apple's A20 Pro chip, C2 cellular modem, and more. iPhone Duo Teardown: Double Screens, Double Repair Risk? REWA Technology Watch on YouTube Phone Repair Guru revealed that the iPhone Duo's Touch ID button can technically be removed for repairs, but they said it is a difficult process. They also said that the device apparently has a completely modular USB-C charging port.",
+      [
+        "REWA Technology's video includes a labeled breakdown of the logic board, which contains Apple's A20 Pro chip, C2 cellular modem, and more."
+      ]
+    ]
+  },
+  "b5edcffacbcd0cc789ae9640": {
+    "evidence": {
+      "article_id": "b5edcffacbcd0cc789ae9640",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "iPhone Duo uses a Touch ID sensor built into the side button for authentication. Some may feel this is a step backwards after almost a decade of Face ID on iPhones, but if you wear an Apple Watch, you can use it to unlock your iPhone Duo instead. This way, you don't need to touch the side button at all. It's the closest thing we have to a seamless Face ID experience on iPhone Duo ( at least for now ). The feature is called Unlock with Apple Watch. It's not new to iPhone, but it works reliably. Note that your Apple Watch needs to be a Series 9 or later, an Ultra 2 or later, or an SE 3. Here's how to turn on the feature and start using it. It's the closest thing we have to a seamless Face ID experience on iPhone Duo (at least for now).",
+      "discovery_title": "Skip the Touch ID Scan: Unlock iPhone Duo With Apple Watch",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T18:28:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T18:28:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T18:28:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 24, 2026 11:28 AM PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 24, 2026 11:28 AM PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 24 Oct 2026 18:28:00 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24T18:28:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-24T18:28:00+00:00",
+      "raw_lead": "iPhone Duo uses a Touch ID sensor built into the side button for authentication. Some may feel this is a step backwards after almost a decade of Face ID on iPhones, but if you wear an Apple Watch, you can use it to unlock your iPhone Duo instead. This way, you don't need to touch the side button at all. It's the closest thing we have to a seamless Face ID experience on iPhone Duo (at least for now). The feature is called Unlock with Apple Watch.",
+      "source": "MacRumors",
+      "title": "Skip the Touch ID Scan: Unlock iPhone Duo With Apple Watch",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo uses a Touch ID sensor built into the side button for authentication. Some may feel this is a step backwards after almost a decade of Face ID on iPhones, but if you wear an Apple Watch, you can use it to unlock your iPhone Duo instead. This way, you don't need to touch the side button at all. It's the closest thing we have to a seamless Face ID experience on iPhone Duo (at least for now).",
+          "unit_id": "9f34ed76e6542f8e721381cd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "The feature is called Unlock with Apple Watch. It's not new to iPhone, but it works reliably. Note that your Apple Watch needs to be a Series 9 or later, an Ultra 2 or later, or an SE 3. Here's how to turn on the feature and start using it.",
+          "unit_id": "cbde8ea11bc05e2651d834e5"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Turn On Unlock With Apple Watch",
+          "unit_id": "e4f8d09609def8fdea7244bb"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Open the Settings app on your iPhone Duo.",
+          "unit_id": "6b643ae0f7307a035057d636"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Tap Touch ID & Passcode, then enter your passcode.",
+          "unit_id": "49abf62365de6c02028c635f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Scroll down to \"Unlock with Nearby Devices.\"",
+          "unit_id": "a30b76aba427263cbc54e86d"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Toggle on the switch next to your Apple Watch. If you have more than one watch paired with your iPhone Duo, toggle it on for each one.",
+          "unit_id": "5e30cdf5620ae3e8bb4a53bb"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Unlock iPhone Duo With Your Watch",
+          "unit_id": "24052c5d3af4cdb8b38df935"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Make sure your Apple Watch is on your wrist and unlocked, and close to your iPhone Duo.",
+          "unit_id": "16a65b06d3148066446c9bcb"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Wake iPhone Duo by raising it or tapping the screen. (If it's closed, opening it also wakes it.)",
+          "unit_id": "5fbdba54013b3dadb45daf25"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "Swipe up from the bottom edge of the screen to dismiss the Lock Screen.",
+          "unit_id": "52b0adad806f79ea6793c52b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "From here on, your Apple Watch will handle the authentication – no fingerprint shenanigans required. The swipe up is still needed to get past the Lock Screen, but you can turn off this additional step in Settings.",
+          "unit_id": "2d57aa3423887b4b20950ffc"
+        }
+      ],
+      "url": "https://www.macrumors.com/how-to/unlock-iphone-duo-apple-watch/"
+    },
+    "recorded_extraction": [
+      "Skip the Touch ID Scan: Unlock iPhone Duo With Apple Watch",
+      "iPhone Duo uses a Touch ID sensor built into the side button for authentication. Some may feel this is a step backwards after almost a decade of Face ID on iPhones, but if you wear an Apple Watch, you can use it to unlock your iPhone Duo instead. This way, you don't need to touch the side button at all. It's the closest thing we have to a seamless Face ID experience on iPhone Duo (at least for now). The feature is called Unlock with Apple Watch. The feature is called Unlock with Apple Watch. It's not new to iPhone, but it works reliably. Note that your Apple Watch needs to be a Series 9 or later, an Ultra 2 or later, or an SE 3. Here's how to turn on the feature and start using it. From here on, your Apple Watch will handle the authentication – no fingerprint shenanigans required. The swipe up is still needed to get past the Lock Screen, but you can turn off this additional step in Settings .",
+      [
+        "Tap Touch ID & Passcode, then enter your passcode.",
+        "Scroll down to \"Unlock with Nearby Devices.\"",
+        "Toggle on the switch next to your Apple Watch. If you have more than one watch paired with your iPhone Duo, toggle it on for each one.",
+        "Make sure your Apple Watch is on your wrist and unlocked, and close to your iPhone Duo.",
+        "Wake iPhone Duo by raising it or tapping the screen. (If it's closed, opening it also wakes it.)",
+        "Swipe up from the bottom edge of the screen to dismiss the Lock Screen."
+      ]
+    ]
+  },
+  "bb90f77a40553e3ebe82c416": {
+    "evidence": {
+      "article_id": "bb90f77a40553e3ebe82c416",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Because of the iPhone Duo's foldable design, you tend to switch the orientation of the device more often than you would a regular iPhone. This makes the volume buttons shift positions a lot relative to your fingers, which can cause you to press volume up when you meant to press down, or vice versa. To prevent this, the iPhone Duo has an option in Settings which can dynamically remap the buttons as you rotate the device, so that the button on the top or right always turns the volume up, while the one on the bottom or left always turns it down. The system setting works by disabling the mechanism that keeps the volume controls in a fixed position whichever way you hold the phone. The following steps show you how it's done. Open the Settings app. Tap Sounds & Haptics. Turn off Fixed Position Volume Controls.",
+      "discovery_title": "Make iPhone Duo Volume Buttons Follow Screen Rotation",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T16:07:32+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T16:07:32+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T16:07:32+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 24, 2026 9:07 AM PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 24, 2026 9:07 AM PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 24 Oct 2026 16:07:36 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24T16:07:32+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-24T16:07:32+00:00",
+      "raw_lead": "Because of the iPhone Duo's foldable design, you tend to switch the orientation of the device more often than you would a regular iPhone. This makes the volume buttons shift positions a lot relative to your fingers, which can cause you to press volume up when you meant to press down, or vice versa.",
+      "source": "MacRumors",
+      "title": "Make iPhone Duo Volume Buttons Follow Screen Rotation",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Because of the iPhone Duo's foldable design, you tend to switch the orientation of the device more often than you would a regular iPhone. This makes the volume buttons shift positions a lot relative to your fingers, which can cause you to press volume up when you meant to press down, or vice versa.",
+          "unit_id": "d2da2059892d32d9dabef9d1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "To prevent this, the iPhone Duo has an option in Settings which can dynamically remap the buttons as you rotate the device, so that the button on the top or right always turns the volume up, while the one on the bottom or left always turns it down.",
+          "unit_id": "98810d129fcefc5b4d7b934f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The system setting works by disabling the mechanism that keeps the volume controls in a fixed position whichever way you hold the phone. The following steps show you how it's done.",
+          "unit_id": "a525de00d84041fc3ecd1d47"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Open the Settings app.",
+          "unit_id": "c3fc74c223e82b818a5cdce7"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Tap Sounds & Haptics.",
+          "unit_id": "e7e30d816f39c5ff980bb68a"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Turn off Fixed Position Volume Controls.",
+          "unit_id": "11eb29cf8a6d7570b54aec97"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "With the switch off, the volume buttons automatically adjust as you rotate your iPhone Duo, so volume up is always the button on the top or right, whichever way you're holding it. Turn the switch back on if you'd rather each button kept the same function in every orientation.",
+          "unit_id": "ee5a79ef9b94d3d03d0f7807"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "The only thing to note is that if Orientation Lock is on, then the volume button configuration will follow the orientation that your iPhone Duo is locked to, rather than the way you're holding it.",
+          "unit_id": "098049e6eb5d645abfa8610a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Apple's documentation suggests dynamic volume buttons is the default behavior, but this hasn't been the case on the few units we've tested so far.",
+          "unit_id": "12eff4edfcac98f4519ae5b4"
+        }
+      ],
+      "url": "https://www.macrumors.com/how-to/iphone-duo-volume-buttons-rotate-screen/"
+    },
+    "recorded_extraction": [
+      "Make iPhone Duo Volume Buttons Follow Screen Rotation",
+      "Because of the iPhone Duo's foldable design, you tend to switch the orientation of the device more often than you would a regular iPhone. This makes the volume buttons shift positions a lot relative to your fingers, which can cause you to press volume up when you meant to press down, or vice versa. To prevent this, the iPhone Duo has an option in Settings which can dynamically remap the buttons as you rotate the device, so that the button on the top or right always turns the volume up, while the one on the bottom or left always turns it down. The system setting works by disabling the mechanism that keeps the volume controls in a fixed position whichever way you hold the phone. The following steps show you how it's done. With the switch off, the volume buttons automatically adjust as you rotate your iPhone Duo, so volume up is always the button on the top or right, whichever way you're holding it. Turn the switch back on if you'd rather each button kept the same function in every orientation. The only thing to note is that if Orientation Lock is on, then the volume button configuration will follow the orientation that your iPhone Duo is locked to, rather than the way you're holding it.",
+      [
+        "Turn off Fixed Position Volume Controls."
+      ]
+    ]
+  },
+  "710407c4c496581b7a965ade": {
+    "evidence": {
+      "article_id": "710407c4c496581b7a965ade",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "iPhone Duo: Get Kids and Pets to Look at the Camera",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T19:42:26+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T19:42:26+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T19:42:26+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 24, 2026 12:42 PM PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 24, 2026 12:42 PM PDT",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026-10-24T19:42:26+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-24T19:42:26+00:00",
+      "raw_lead": "Trying to get a child or pet to look toward the lens when you're taking their picture can be a challenging experience. That's why on iPhone Duo, Apple includes a Kid Cue feature that plays a fun animation on the outer display. The idea is that your subject's attention is drawn to the camera. Meanwhile, you have a chance to frame the shot using the inner display. Kid Cue is exclusive to iPhone Duo, but it's not a completely novel feature.",
+      "source": "MacRumors",
+      "title": "iPhone Duo: Get Kids and Pets to Look at the Camera",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Trying to get a child or pet to look toward the lens when you're taking their picture can be a challenging experience. That's why on iPhone Duo, Apple includes a Kid Cue feature that plays a fun animation on the outer display. The idea is that your subject's attention is drawn to the camera. Meanwhile, you have a chance to frame the shot using the inner display.",
+          "unit_id": "d0398118171156736b27391c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Kid Cue is exclusive to ‌iPhone Duo‌, but it's not a completely novel feature. Google's Pixel 9 Pro Fold already has a \"Made You Look\" mode that works in largely the same way – playing a cute animation on the outer screen to capture a kid's attention while you frame the shot. But this is the first time Apple has applied the concept. Here's how it works.",
+          "unit_id": "d750efe25a325ce30100c0c6"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "How to Use Kid Cue on iPhone Duo",
+          "unit_id": "f9873133b36b26e198006bf2"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Unfold your ‌iPhone Duo‌ so you're looking at the inner display.",
+          "unit_id": "88c8be7ab0766fc01137f299"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Open the Camera app.",
+          "unit_id": "47ee90050afa36db6efef015"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Tap the \"Outer Display Options\" button (it looks like a column view icon) in the top-left corner.",
+          "unit_id": "5a6df5fbd0484cea932e4847"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Tap Kid Cue. The outer display will now play a Snoopy-themed animation to get your subject's attention.",
+          "unit_id": "3f9f2192fdd0d824e200e3bb"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Tap the shutter button to take a photo, or the Record button to shoot a video. (You can also press either volume button or click the Camera Control button.)",
+          "unit_id": "0ba1338a05da49e6d4e89f36"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "That's all there is to it. Bear in mind that your subject will be looking slightly off to the side, because the ‌iPhone Duo‌ uses the main camera lens (i.e. not the selfie camera). It's a tiny trade-off, but it's worth it if your subject is a bit, well, restless, shall we say.",
+          "unit_id": "3af89a928667cb7b86052b3e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Note that the same \"Outer Display Options\" button also offers Duo Preview, which shows your subject a mirrored live preview of the shot instead of an adorable animation.",
+          "unit_id": "90cd32e122884c7f124d66e1"
+        }
+      ],
+      "url": "https://www.macrumors.com/how-to/iphone-duo-use-kid-cue-take-photos/"
+    },
+    "recorded_extraction": [
+      "iPhone Duo: Get Kids and Pets to Look at the Camera",
+      "Trying to get a child or pet to look toward the lens when you're taking their picture can be a challenging experience. That's why on iPhone Duo, Apple includes a Kid Cue feature that plays a fun animation on the outer display. The idea is that your subject's attention is drawn to the camera. Meanwhile, you have a chance to frame the shot using the inner display. Kid Cue is exclusive to iPhone Duo, but it's not a completely novel feature. Kid Cue is exclusive to ‌iPhone Duo‌, but it's not a completely novel feature. Google's Pixel 9 Pro Fold already has a \"Made You Look\" mode that works in largely the same way – playing a cute animation on the outer screen to capture a kid's attention while you frame the shot. But this is the first time Apple has applied the concept. Here's how it works. That's all there is to it. Bear in mind that your subject will be looking slightly off to the side, because the ‌iPhone Duo‌ uses the main camera lens (i.e. not the selfie camera). It's a tiny trade-off, but it's worth it if your subject is a bit, well, restless, shall we say. Note that the same \"Outer Display Options\" button also offers Duo Preview, which shows your subject a mirrored live preview of the shot instead of an adorable animation.",
+      [
+        "Trying to get a child or pet to look toward the lens when you're taking their picture can be a challenging experience. That's why on iPhone Duo, Apple includes a Kid Cue feature that plays a fun animation on the outer display. The idea is that your subject's attention is drawn to the camera. Meanwhile, you have a chance to frame the shot using the inner display.",
+        "Unfold your ‌iPhone Duo‌ so you're looking at the inner display.",
+        "Tap Kid Cue. The outer display will now play a Snoopy-themed animation to get your subject's attention."
+      ]
+    ]
+  },
+  "3823bf06cc7e6e161f597d20": {
+    "evidence": {
+      "article_id": "3823bf06cc7e6e161f597d20",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 25 日消息，据多位博主、网友分享，腾讯《王者荣耀》和米哈游的《原神》这两款热门游戏暂未适配苹果最新折叠屏手机 iPhone Duo。 玩家使用该机内屏游玩上述两款游戏时，会出现无法全屏显示的问题 。 两款热门游戏没适配的情况也引发网友吐槽， 称内屏的黑边是“公摊广告位”、“公摊面积” 。 不过，iPhone Duo 用户在内屏游玩《王者荣耀》和《原神》时，可以选择将应用等比放大。虽然上下依旧会保留有黑边，但整体游玩体验会好上不少。 参考IT之家此前报道，事实上， 苹果 iPhone Duo 提供了 3 种兼容模式，可以让未适配应用也能运行 ： 面向 iOS 26 系统的应用采用默认兼容模式，系统将单一应用视图放入黑色背景包围的安全区域，从而保障在 iPhone Duo 上兼容运行旧应用。 面向 iOS 27 开发的应用仍会保留部分未使用空间。不过，这类应用比 iOS 27 之前的版本可利用更多 iPhone Duo 显示区域。 面向 iOS 27.1 开发的应用可进入完全兼容模式。苹果称，这类应用将完整利用 iPhone Duo 的显示屏。苹果自有应用，以及希望提供完整 iPhone Duo 体验的第三方应用，均可采用这一显示方式。 从目前多方分享的视频来看，腾讯《王者荣耀》和米哈游的《原神》仍采用面向 iOS 26 系统的默认兼容模式在 iPhone Duo 上运行，系统会将单一应用视图放入黑色背景包围的安全区域。 据多位博主、网友分享，腾讯《王者荣耀》和米哈游的《原神》这两款热门游戏暂未适配苹果最新折叠屏手机 iPhone Duo。玩家使用该机内屏游玩上述两款游戏时，会出现无法全屏显示的问题。该情况也迅速引发网友吐槽，称内屏的黑边是“公摊广告位”、“公摊面积”。",
+      "discovery_title": "苹果 iPhone Duo 内屏玩《王者荣耀》《原神》暂不支持全屏显示，大黑边被网友吐槽“公摊广告位”",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/25 8:25:16",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/25 8:25:16",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 25 Oct 2026 00:25:16 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/25 8:25:16",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-25T00:25:16+00:00",
+      "raw_lead": "据多位博主、网友分享，腾讯《王者荣耀》和米哈游的《原神》这两款热门游戏暂未适配苹果最新折叠屏手机 iPhone Duo。玩家使用该机内屏游玩上述两款游戏时，会出现无法全屏显示的问题。该情况也迅速引发网友吐槽，称内屏的黑边是“公摊广告位”、“公摊面积”。 #iPhoneDuo#",
+      "source": "IT之家",
+      "title": "苹果 iPhone Duo 内屏玩《王者荣耀》《原神》暂不支持全屏显示，大黑边被网友吐槽“公摊广告位”",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 25 日消息，据多位博主、网友分享，腾讯《王者荣耀》和米哈游的《原神》这两款热门游戏暂未适配苹果最新折叠屏手机 iPhone Duo。玩家使用该机内屏游玩上述两款游戏时，会出现无法全屏显示的问题。",
+          "unit_id": "58c94fc739d094c173dff0f3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "两款热门游戏没适配的情况也引发网友吐槽，称内屏的黑边是“公摊广告位”、“公摊面积”。",
+          "unit_id": "7fcf13fc1a3dd70d1768a422"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "不过，iPhone Duo 用户在内屏游玩《王者荣耀》和《原神》时，可以选择将应用等比放大。虽然上下依旧会保留有黑边，但整体游玩体验会好上不少。",
+          "unit_id": "061ac774517314f5d0fbebfa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "参考IT之家此前报道，事实上，苹果 iPhone Duo 提供了 3 种兼容模式，可以让未适配应用也能运行：",
+          "unit_id": "db2e08940f20d13f1c41f983"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "面向 iOS 26 系统的应用采用默认兼容模式，系统将单一应用视图放入黑色背景包围的安全区域，从而保障在 iPhone Duo 上兼容运行旧应用。",
+          "unit_id": "9a46873ae84b9a6acb1eafd4"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "面向 iOS 27 开发的应用仍会保留部分未使用空间。不过，这类应用比 iOS 27 之前的版本可利用更多 iPhone Duo 显示区域。",
+          "unit_id": "c637930ad74cb1609c9ac59b"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "面向 iOS 27.1 开发的应用可进入完全兼容模式。苹果称，这类应用将完整利用 iPhone Duo 的显示屏。苹果自有应用，以及希望提供完整 iPhone Duo 体验的第三方应用，均可采用这一显示方式。",
+          "unit_id": "6c1be2c8bbc374ce1c42fee6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "从目前多方分享的视频来看，腾讯《王者荣耀》和米哈游的《原神》仍采用面向 iOS 26 系统的默认兼容模式在 iPhone Duo 上运行，系统会将单一应用视图放入黑色背景包围的安全区域。而苹果目前已面向 iPhone Duo 推送了 iOS 27.1 更新，预计不久后更多应用会陆续适配完全兼容模式。",
+          "unit_id": "ff01f6cb8fe48b233ffec19f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "苹果首款折叠屏手机 iPhone Duo 已于 10 月 23 日发售，国行定价 15,999 元起。该机采用书本式内折设计，闭合时外屏为 5.4 英寸、展开后内屏为 7.6 英寸，搭载台积电 2nm 工艺的 A20 Pro 芯片，宣称持续性能较 iPhone 17 Pro 提升最多 35%。",
+          "unit_id": "f7e11998119d6bbdcb2c34d8"
+        }
+      ],
+      "url": "https://www.ithome.com/1/017/538.htm"
+    },
+    "recorded_extraction": [
+      "苹果 iPhone Duo 内屏玩《王者荣耀》《原神》暂不支持全屏显示，大黑边被网友吐槽“公摊广告位”",
+      "据多位博主、网友分享，腾讯《王者荣耀》和米哈游的《原神》这两款热门游戏暂未适配苹果最新折叠屏手机 iPhone Duo。玩家使用该机内屏游玩上述两款游戏时，会出现无法全屏显示的问题。该情况也迅速引发网友吐槽，称内屏的黑边是“公摊广告位”、“公摊面积”。 #iPhoneDuo# IT之家 10 月 25 日消息，据多位博主、网友分享，腾讯《王者荣耀》和米哈游的《原神》这两款热门游戏暂未适配苹果最新折叠屏手机 iPhone Duo 。 玩家使用该机内屏游玩上述两款游戏时，会出现无法全屏显示的问题 。 不过， iPhone Duo 用户在内屏游玩《王者荣耀》和《原神》时，可以选择将应用等比放大。虽然上下依旧会保留有黑边，但整体游玩体验会好上不少。 面向 iOS 26 系统的应用采用默认兼容模式，系统将单一应用视图放入黑色背景包围的安全区域，从而保障在 iPhone Duo 上兼容运行旧应用。 面向 iOS 27 开发的应用仍会保留部分未使用空间。不过，这类应用比 iOS 27 之前的版本可利用更多 iPhone Duo 显示区域。",
+      [
+        "IT之家 10 月 25 日消息，据多位博主、网友分享，腾讯《王者荣耀》和米哈游的《原神》这两款热门游戏暂未适配苹果最新折叠屏手机 iPhone Duo。玩家使用该机内屏游玩上述两款游戏时，会出现无法全屏显示的问题。",
+        "参考IT之家此前报道，事实上，苹果 iPhone Duo 提供了 3 种兼容模式，可以让未适配应用也能运行：",
+        "面向 iOS 26 系统的应用采用默认兼容模式，系统将单一应用视图放入黑色背景包围的安全区域，从而保障在 iPhone Duo 上兼容运行旧应用。面向 iOS 27 开发的应用仍会保留部分未使用空间。不过，这类应用比 iOS 27 之前的版本可利用更多 iPhone Duo 显示区域。面向 iOS 27.1 开发的应用可进入完全兼容模式。苹果称，这类应用将完整利用 iPhone Duo 的显示屏。苹果自有应用，以及希望提供完整 iPhone Duo 体验的第三方应用，均可采用这一显示方式。",
+        "从目前多方分享的视频来看，腾讯《王者荣耀》和米哈游的《原神》仍采用面向 iOS 26 系统的默认兼容模式在 iPhone Duo 上运行，系统会将单一应用视图放入黑色背景包围的安全区域。而苹果目前已面向 iPhone Duo 推送了 iOS 27.1 更新，预计不久后更多应用会陆续适配完全兼容模式。",
+        "苹果首款折叠屏手机 iPhone Duo 已于 10 月 23 日发售，国行定价 15,999 元起。该机采用书本式内折设计，闭合时外屏为 5.4 英寸、展开后内屏为 7.6 英寸，搭载台积电 2nm 工艺的 A20 Pro 芯片，宣称持续性能较 iPhone 17 Pro 提升最多 35%。"
+      ]
+    ]
+  },
+  "332ad1614621851acfaff51e": {
+    "evidence": {
+      "article_id": "332ad1614621851acfaff51e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo正式开售后，软件适配问题成为消费者关注的焦点，其中《王者荣耀》的游戏体验引发不少网友吐槽。 日前，多位博主和网友晒出使用iPhone Duo玩《王者荣耀》的视频。 从实测画面来看，使用iPhone Duo内屏运行《王者荣耀》时， 游戏无法全屏显示，仅支持等比例缩放，即使将画面放大，上下依然留有明显黑边，被网友调侃是“广告位招租”。 不仅如此，使用外屏玩《王者荣耀》同样存在适配问题，游戏画面无法铺满屏幕，上半部分留有大片黑边。 知名带货主播李佳琦也在直播中谈到了iPhone Duo的软件适配问题，直言“95%不适配”。 李佳琦吐槽道：“哇塞，我的《王者荣耀》打开这么一点，我的大拇指放上去都按不到按钮。” 李佳琦还建议暂时先别买iPhone Duo，不用急着第一波加价入手， 可以再等一等。 据了解，苹果在App Store中专门展示针对iPhone Duo完成优化的应用。 目前， 适配名单包括爱奇艺、腾讯视频、QQ音乐、QQ、DeepSeek、京东、WPS Office、高德地图、支付宝等、开心消消乐App。 日前，多位博主和网友晒出使用iPhone Duo玩",
+      "discovery_title": "iPhone Duo玩《王者荣耀》无法全屏！大黑边被吐槽广告位招租 李佳琦建议先别买",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25 07:03:11.603",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25 07:03:11",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-25 07:03:11.603",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-24T23:03:11.603000+00:00",
+      "raw_lead": "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo正式开售后，软件适配问题成为消费者关注的焦点，其中《王者荣耀》的游戏体验引发不少网友吐槽。日前，多位博主和网友晒出使用iPhone Duo玩",
+      "source": "快科技",
+      "title": "iPhone Duo玩《王者荣耀》无法全屏！大黑边被吐槽广告位招租 李佳琦建议先别买",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo正式开售后，软件适配问题成为消费者关注的焦点，其中《王者荣耀》的游戏体验引发不少网友吐槽。",
+          "unit_id": "21e623e79f6d18f1490d2e99"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "日前，多位博主和网友晒出使用iPhone Duo玩《王者荣耀》的视频。",
+          "unit_id": "3757892ac62440c2483fc5cf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "从实测画面来看，使用iPhone Duo内屏运行《王者荣耀》时，游戏无法全屏显示，仅支持等比例缩放，即使将画面放大，上下依然留有明显黑边，被网友调侃是“广告位招租”。",
+          "unit_id": "cd77bc917e893e63c5121b9b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "不仅如此，使用外屏玩《王者荣耀》同样存在适配问题，游戏画面无法铺满屏幕，上半部分留有大片黑边。",
+          "unit_id": "c1dd5655c7a3337095907d84"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "知名带货主播李佳琦也在直播中谈到了iPhone Duo的软件适配问题，直言“95%不适配”。",
+          "unit_id": "86bb2bb5afec791f94462586"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "李佳琦吐槽道：“哇塞，我的《王者荣耀》打开这么一点，我的大拇指放上去都按不到按钮。”",
+          "unit_id": "de72c3af37b620790b2afc0a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "李佳琦还建议暂时先别买iPhone Duo，不用急着第一波加价入手，可以再等一等。",
+          "unit_id": "89c56f675bfdf2e2dd20a63d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "据了解，苹果在App Store中专门展示针对iPhone Duo完成优化的应用。",
+          "unit_id": "390c1baea58e4b8ee3254f4f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "目前，适配名单包括爱奇艺、腾讯视频、QQ音乐、QQ、DeepSeek、京东、WPS Office、高德地图、支付宝等、开心消消乐App。",
+          "unit_id": "17e497305fa5b8588d227a2c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "不过，从首批用户的实际体验来看，iPhone Duo的软件生态仍有待完善，尤其是《王者荣耀》等热门游戏的适配问题，还需要后续版本更新解决。",
+          "unit_id": "ba1658726af3999d5e22b2a3"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160275.htm"
+    },
+    "recorded_extraction": [
+      "iPhone Duo玩《王者荣耀》无法全屏！大黑边被吐槽广告位招租 李佳琦建议先别买",
+      "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo正式开售后，软件适配问题成为消费者关注的焦点，其中《王者荣耀》的游戏体验引发不少网友吐槽。日前，多位博主和网友晒出使用iPhone Duo玩 快科技10月25日消息，苹果首款折叠屏手机iPhone Duo正式开售后，软件适配问题成为消费者关注的焦点，其中《王者荣耀》的游戏体验引发不少网友吐槽。 从实测画面来看，使用iPhone Duo内屏运行《王者荣耀》时， 游戏无法全屏显示，仅支持等比例缩放，即使将画面放大，上下依然留有明显黑边，被网友调侃是“广告位招租”。 目前， 适配名单包括爱奇艺、腾讯视频、QQ音乐、QQ、DeepSeek、京东、WPS Office、高德地图、支付宝等、开心消消乐App。 不过，从首批用户的实际体验来看，iPhone Duo的软件生态仍有待完善，尤其是《王者荣耀》等热门游戏的适配问题，还需要后续版本更新解决。",
+      [
+        "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo正式开售后，软件适配问题成为消费者关注的焦点，其中《王者荣耀》的游戏体验引发不少网友吐槽。",
+        "从实测画面来看，使用iPhone Duo内屏运行《王者荣耀》时，游戏无法全屏显示，仅支持等比例缩放，即使将画面放大，上下依然留有明显黑边，被网友调侃是“广告位招租”。",
+        "知名带货主播李佳琦也在直播中谈到了iPhone Duo的软件适配问题，直言“95%不适配”。"
+      ]
+    ]
+  },
+  "09322b2ff3e62223cf6fa781": {
+    "evidence": {
+      "article_id": "09322b2ff3e62223cf6fa781",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo开售后，部分用户反映新机出现屏幕亮线、开裂等问题，引发关注。 日前，怒喵科技创始人李楠发文，对iPhone Duo出现的屏幕问题发表了自己的看法。 李楠认为， 苹果折叠屏出现这么多显示高亮、屏幕裂开的问题，本质上还是苹果和供应链生疏了。 他表示，不像前些年，苹果的设计师、工程师吃住都在中国供应链上。 李楠指出， 工业设计看似天马行空，但最终要实现量产落地，供应链能力才是产品无法逃脱的地心引力。 在他看来，中国手机品牌已经推出多代折叠屏产品，对于设计调整可能带来的风险、需要作出的妥协以及工艺上的限制，都积累了丰富经验。 李楠认为，苹果这些年越来越疏远中国供应链，产线上的工艺、品质及结构工程师，可能已经没有足够机会与苹果团队充分交流。 他直言，折叠屏行业已经发展了这么多代，自己不相信苹果遇到的裂屏、亮线问题是中国供应链无法解决的。 日前，怒喵科技创始人李楠发文，对iPhone Duo出现的屏幕问题发表了自己的看",
+      "discovery_title": "李楠谈iPhone Duo屏幕开裂问题：本质是苹果和供应链生疏了",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25 09:21:30.803",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25 09:21:30",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-25 09:21:30.803",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-25T01:21:30.803000+00:00",
+      "raw_lead": "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo开售后，部分用户反映新机出现屏幕亮线、开裂等问题，引发关注。日前，怒喵科技创始人李楠发文，对iPhone Duo出现的屏幕问题发表了自己的看",
+      "source": "快科技",
+      "title": "李楠谈iPhone Duo屏幕开裂问题：本质是苹果和供应链生疏了",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo开售后，部分用户反映新机出现屏幕亮线、开裂等问题，引发关注。",
+          "unit_id": "1c12255028d8be00195b1b45"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "日前，怒喵科技创始人李楠发文，对iPhone Duo出现的屏幕问题发表了自己的看法。",
+          "unit_id": "687d60034801931afc6b58db"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "李楠认为，苹果折叠屏出现这么多显示高亮、屏幕裂开的问题，本质上还是苹果和供应链生疏了。",
+          "unit_id": "7d3aafad9ee584dabd20fbe5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "他表示，不像前些年，苹果的设计师、工程师吃住都在中国供应链上。",
+          "unit_id": "e9b0c902c044393025d3f685"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "李楠指出，工业设计看似天马行空，但最终要实现量产落地，供应链能力才是产品无法逃脱的地心引力。",
+          "unit_id": "c2c0a443c4adb8a7632491a6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在他看来，中国手机品牌已经推出多代折叠屏产品，对于设计调整可能带来的风险、需要作出的妥协以及工艺上的限制，都积累了丰富经验。",
+          "unit_id": "7ef55667b1703e7ffa7348c0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "李楠认为，苹果这些年越来越疏远中国供应链，产线上的工艺、品质及结构工程师，可能已经没有足够机会与苹果团队充分交流。",
+          "unit_id": "238348614803061684026f50"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "他直言，折叠屏行业已经发展了这么多代，自己不相信苹果遇到的裂屏、亮线问题是中国供应链无法解决的。",
+          "unit_id": "0a5c652b367a4452d69cab8f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "李楠进一步推测，相关风险很可能早就被预判到，但最终遭到苹果高层忽视。",
+          "unit_id": "f97889fc8157f14484ece662"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "据了解，此前海外论坛及小红书等平台已有多名用户反映，iPhone Duo存在开箱后屏幕出现亮线、开裂等情况。",
+          "unit_id": "c3ed50cfe06b7a8e3965dca5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "从网上流传的故障照片来看，问题主要集中在屏幕铰链对应区域，部分机型屏幕一侧出现明显的亮线。",
+          "unit_id": "62e609ef80a03b78aa2e5bb2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "目前，iPhone Duo出现上述屏幕问题的具体原因尚不明确，是否与产品设计、生产工艺或供应链有关，仍有待进一步调查确认。",
+          "unit_id": "079757839c44b87d823d1374"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160288.htm"
+    },
+    "recorded_extraction": [
+      "李楠谈iPhone Duo屏幕开裂问题：本质是苹果和供应链生疏了",
+      "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo开售后，部分用户反映新机出现屏幕亮线、开裂等问题，引发关注。日前，怒喵科技创始人李楠发文，对iPhone Duo出现的屏幕问题发表了自己的看 快科技10月25日消息，苹果首款折叠屏手机iPhone Duo开售后，部分用户反映新机出现屏幕亮线、开裂等问题，引发关注。 在他看来，中国手机品牌已经推出多代折叠屏产品，对于设计调整可能带来的风险、需要作出的妥协以及工艺上的限制，都积累了丰富经验。 目前，iPhone Duo出现上述屏幕问题的具体原因尚不明确，是否与产品设计、生产工艺或供应链有关，仍有待进一步调查确认。",
+      [
+        "快科技10月25日消息，苹果首款折叠屏手机iPhone Duo开售后，部分用户反映新机出现屏幕亮线、开裂等问题，引发关注。"
+      ]
+    ]
+  },
+  "85cd2d77e31f5a38815ce590": {
+    "evidence": {
+      "article_id": "85cd2d77e31f5a38815ce590",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "今日，苹果首款折叠屏手机iPhone Duo正式发售。财联社记者实探上海、广州两地的苹果直营店了解到，两地二手回收行情相近，当日溢价呈现高开回落、版本分化特征。 或为遏制囤货炒作，发售前苹果已在全球范围内开启限购。尽管iPhone Duo仅支持eSIM，且没有Face ID和长焦镜头配置，但抢购氛围仍较为火爆。据报道，二手交易平台上iPhone Duo多个版本的预售市场成交价突破2万元，其中1TB黑色版本一度溢价至7143元。 今日上午10点半左右，首发现场多名“黄牛”表示，目前iPhone Duo 1TB存储版本回收热度最高，早间溢价达2200元，现已回落至1600—1800元区间；512GB版本溢价从1100—1400元不等。 有黄牛直言，“256G撑死卖1000，赶紧卖”，给出的回收价普遍在800-900元，部分黄牛则直接拒收；2TB版本方面，有黄牛称暂无报价，亦有加价几百元回收。 Counterpoint Research 副总监 Liz Lee在接受财联社记者采访时表示，早期较高的溢价主要源于上市初期供应紧张和黄牛炒作，而近期溢价回落则是由于市场对供应情况的预期有所改善。 不过，市场机构关于iPhone Duo年末出货预期仍存在明显分歧，产能是当前主要制约因素。 财联社记者近日发布的《订货需等近两月！iPhone Duo预售秒售罄 产线协同爬坡制约初期供货》一文也提到，苹果为首款折叠屏手机制定的1000万台备货目标，受产线协同爬坡节奏影响。随着量产推进，市场预期明显收敛。 1TB溢价领跑，256GB与2TB行情分化 作为史上最贵的苹果手机，iPhone Duo推出256GB、512GB、1TB和2TB四个容量版本，中国区定价分别为15999元、17999元、21499元和26499元。10月16日20时预售开启后该机型迅速告罄,苹果官网一度无法访问。 或为遏制囤货炒作，发售前苹果",
+      "discovery_title": "iPhone Duo等货排至明年1月 黄牛加价预期却先松动了",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 22:40:09.377",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 22:40:09",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24 22:40:09.377",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-24T14:40:09.377000+00:00",
+      "raw_lead": "今日，苹果首款折叠屏手机iPhone Duo正式发售。财联社记者实探上海、广州两地的苹果直营店了解到，两地二手回收行情相近，当日溢价呈现高开回落、版本分化特征。或为遏制囤货炒作，发售前苹果",
+      "source": "快科技",
+      "title": "iPhone Duo等货排至明年1月 黄牛加价预期却先松动了",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "今日，苹果首款折叠屏手机iPhone Duo正式发售。财联社记者实探上海、广州两地的苹果直营店了解到，两地二手回收行情相近，当日溢价呈现高开回落、版本分化特征。",
+          "unit_id": "0e5d42d9d93af32574bae47a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "或为遏制囤货炒作，发售前苹果已在全球范围内开启限购。尽管iPhone Duo仅支持eSIM，且没有Face ID和长焦镜头配置，但抢购氛围仍较为火爆。据报道，二手交易平台上iPhone Duo多个版本的预售市场成交价突破2万元，其中1TB黑色版本一度溢价至7143元。",
+          "unit_id": "98904c81950f4a12901ff426"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "今日上午10点半左右，首发现场多名“黄牛”表示，目前iPhone Duo 1TB存储版本回收热度最高，早间溢价达2200元，现已回落至1600—1800元区间；512GB版本溢价从1100—1400元不等。",
+          "unit_id": "c056db7a8fa5c3d0dc459047"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "有黄牛直言，“256G撑死卖1000，赶紧卖”，给出的回收价普遍在800-900元，部分黄牛则直接拒收；2TB版本方面，有黄牛称暂无报价，亦有加价几百元回收。",
+          "unit_id": "221bfbfbaa408c8b5b0e3f4c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "Counterpoint Research 副总监 Liz Lee在接受财联社记者采访时表示，早期较高的溢价主要源于上市初期供应紧张和黄牛炒作，而近期溢价回落则是由于市场对供应情况的预期有所改善。",
+          "unit_id": "2202b6890d214baf41929133"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "不过，市场机构关于iPhone Duo年末出货预期仍存在明显分歧，产能是当前主要制约因素。",
+          "unit_id": "8a86c285a7565f9e7a6fbd95"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "财联社记者近日发布的《订货需等近两月！iPhone Duo预售秒售罄 产线协同爬坡制约初期供货》一文也提到，苹果为首款折叠屏手机制定的1000万台备货目标，受产线协同爬坡节奏影响。随着量产推进，市场预期明显收敛。",
+          "unit_id": "cb2036d5cea4dceeb7fb9229"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "1TB溢价领跑，256GB与2TB行情分化",
+          "unit_id": "b9279234a8dddaa7fa836f30"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "作为史上最贵的苹果手机，iPhone Duo推出256GB、512GB、1TB和2TB四个容量版本，中国区定价分别为15999元、17999元、21499元和26499元。10月16日20时预售开启后该机型迅速告罄,苹果官网一度无法访问。",
+          "unit_id": "e790f6e680fe20295f0ff6f7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "面对首发抢购热潮，苹果提前收紧销售规则。就在发售前两日，财联社记者注意到苹果中国官网设置限购，每位顾客仅可购买2部iPhone Duo新机，从源头压缩批量囤货空间。",
+          "unit_id": "28dd676a0e5ca6367691be61"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "首发当日各地的苹果直营店客流如何？财联社记者在上海Apple静安店看到，下沉式广场上，数个放大版折叠屏手机道具错落摆放，门外有不少顾客在排队等候取货。",
+          "unit_id": "44610076da19eac2781915a4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "“外面排队的都是已经付好款、抢到第一批的。”一位门店店员告诉财联社记者。对于当天新下单需要等待多久，该店员表示，预计要到明年1月23日左右才能拿到货。",
+          "unit_id": "b6eaa4300110435945aa1693"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "店内展示台旁也围着不少前来体验新机的消费者。一位抢到首批新机的消费者向财联社记者回忆，预售当天，自己“19点55分就开始不停地刷”。",
+          "unit_id": "92a691cd20c0251f51059bb4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "苹果手机首发当日的二手回收行情常被视作产品销情的“风向标”。门店外，不少“黄牛”已开始加价收货，不同存储版本的回收行情有所分化。",
+          "unit_id": "ec1260589fcda7d52916b66c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "上午9：50分左右，上海有黄牛表示，各版本普遍可加价1000元以上回收，溢价上限在2000元以内。至10：30左右，记者询问多名现场回收的“黄牛”了解到，部分版本溢价已有所回落，1TB版本目前较受欢迎，可加价1500-1800元左右；512版本加价1200元左右。",
+          "unit_id": "ee7010fa7cd5dcc07716f28f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "256版本行情则有所分化。“256GB不要，现在只要1TB，1TB可以加1800元左右收。”一名“黄牛”向财联社记者表示，自己更倾向于收购大容量版本。不过，现场亦有黄牛表示白色256GB版本可以加价800元回收。",
+          "unit_id": "2e7dcb306144cdb9e2d27cd0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "在广州天环广场苹果直营店，亦呈现类似场景。上午十时许，该店内有不少试机人群，“在线订单取货”队伍则排至店外，不过客量远不及iPhone 18 Pro系列首发当日，该店工作人员向财联社记者直言“因为货量没有 Pro那么多”。",
+          "unit_id": "8ad07b279fc19452d0c83c38"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "其称，目前店内iPhone Duo无现货，官方的预定等待时长排至2027年1月下旬。",
+          "unit_id": "185c1df357e67df48000c4e9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "二手回收方面，据现场多名“黄牛”反馈，iPhone Duo 1TB版本溢价最高，早间可加价至2200元回收，上午十点半左右溢价回落到1600-1800元区间；512GB白色版本受欢迎程度次之，溢价从1100元到1400元不等。",
+          "unit_id": "c54be7ad69e5eab79e8e16b6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "256G版本普遍加价900元，而有黄牛表示，“256G撑死卖1000，赶紧卖”。2TB版本方面，有黄牛称暂无报价，亦有加价几百元回收。",
+          "unit_id": "a2d80b78c706880fe019ee6f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "可以发现，iPhone Duo首发当天沪广两地产品溢价已较前期明显收窄，并有进一步走低迹象。",
+          "unit_id": "5a73281671bcb746133d2671"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "多位“黄牛”对后续报价均持谨慎态度，“下午估计更便宜了。”有黄牛对记者判断，随着当天提货的手机陆续流入市场，可供交易的货源增加，加价幅度可能进一步收窄，“货只会越来越多，市场供应足了，价格就会降”。",
+          "unit_id": "38afd4be0dba818dfe6ce1f7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "谈及对未来 iPhone Duo 溢价窗口期的预判，Liz Lee表示：“若iPhone Duo用户体验良好，有望保持强劲销售势头并推动折叠屏生态进一步完善。目前，折叠机在中国整体智能手机市场占比仍为个位数，未来增长空间仍较大。”",
+          "unit_id": "bf03e8a08a9e66c59d57ddac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 23,
+          "origin": "html",
+          "text": "据悉，当下苹果正面临其首款折叠iPhone严重的供应限制。",
+          "unit_id": "16067e09839515a4614d0159"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 24,
+          "origin": "html",
+          "text": "苹果公司10月20日宣布与多家美国企业建立或扩大合作伙伴关系，这些企业将为iPhone Duo提供关键材料及组件。其中，钛金属生产商Perryman Company将为包括iPhone Duo在内的苹果产品供应钛金属，苹果将在三年内为其提供至多1亿美元资金支持。",
+          "unit_id": "84d85dbfe82f2d27dbc968fb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 25,
+          "origin": "html",
+          "text": "摩根大通最新研报显示，受铰链、超薄玻璃等零部件产能瓶颈制约，预计苹果今年iPhone Duo出货量约800万至900万部，低于此前1000万部的预期目标。",
+          "unit_id": "c9a746da26471f9c3ab32503"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 26,
+          "origin": "html",
+          "text": "苹果入局折叠屏，增量几何？",
+          "unit_id": "daacf49486b7fde5aa28ba1b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 27,
+          "origin": "html",
+          "text": "苹果正式入局折叠赛道，推动新材料、精密零部件与整机结构设计迎来行业变革，折叠屏技术瓶颈突破、供应链增量释放与市场竞争格局重构，成为行业关注焦点。",
+          "unit_id": "6163d0cc8c7cfcdeab602133"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 28,
+          "origin": "html",
+          "text": "在这背后，一个值得关注的问题是：相比直板机，这些部件需要适应反复开合；而与市场主流折叠屏产品相比，苹果的变化主要体现在哪些方面？",
+          "unit_id": "918b4f75e7ea9c43e3dd607d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 29,
+          "origin": "html",
+          "text": "Liz Lee指出，“苹果较为突出的差异化设计包括纳米纹理内屏、旨在减轻折痕的定制化玻璃与胶层结构，以及钛金属机身和精密铰链设计。”",
+          "unit_id": "2b1ed9b1c845e520ff5314a5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 30,
+          "origin": "html",
+          "text": "不过，Liz Lee也强调，“这些更多属于工程层面的改进，而非重大的技术突破。”甚至在折叠 OLED 面板方面，苹果与部分主流安卓折叠屏手机采用的是同一家供应商的产品，但面板会根据各品牌厂商的具体需求进行定制。苹果更大的优势在于品牌、生态系统整合能力和软件体验。",
+          "unit_id": "6703bc8f495989a44efead79"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 31,
+          "origin": "html",
+          "text": "从行业背景看，经过多代迭代，当前折叠屏硬件技术已趋于成熟，显示屏耐用度、铰链设计、机身厚度及重量改善明显，折叠机型正从高端尝鲜阶段向主流消费市场渗透。",
+          "unit_id": "cf3e0562e9a33d9979fa1e78"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 32,
+          "origin": "html",
+          "text": "9月以来，折叠屏手机赛道迎来新一轮密集上新，华为Mate XT 2、小米首款“万元机”18 Fold相继发布。截至发稿，天猫官方认证的小米官方旗舰店显示，小米18 Fold销售量已超过2000台。",
+          "unit_id": "90f6babbdcc50809650221b7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 33,
+          "origin": "html",
+          "text": "既然国产折叠屏已经迭代数代，产品形态也覆盖了多种方案，苹果选择此时入局，究竟能为整个市场带来多少新增量？",
+          "unit_id": "9a59b82a01ea29e7efb688ef"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 34,
+          "origin": "html",
+          "text": "Liz Lee分析称，苹果的入场标志着折叠屏手机市场进入一个重要的转折点。三星和中国品牌多年来一直在推动该品类的发展，而苹果将凭借庞大的现有iPhone用户群体，把折叠屏手机带给更广泛的高端智能手机消费者。",
+          "unit_id": "ac68be5bb0cff9cedda4761c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 35,
+          "origin": "html",
+          "text": "“我们预计，苹果的入场将推动整个折叠屏市场扩容，而不仅仅是在不同品牌之间重新分配市场份额。我们预测，2026 年全球折叠屏手机出货量将增长24%，2027年将进一步增长37%；苹果在全球折叠屏手机市场的份额将在这两年分别达到约25%和40%。”Liz Lee表示。",
+          "unit_id": "f82b5f6155256f829c032358"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 36,
+          "origin": "html",
+          "text": "Liz Lee还认为，苹果的入场将加速折叠屏手机向更宽的书本式形态发展，并推动整个行业进一步加大投资和创新力度。",
+          "unit_id": "a2da368bb218a6a37f94f5f0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 37,
+          "origin": "html",
+          "text": "随着折叠屏市场不断扩大，中国供应商也将从中受益，尤其是涉及铰链组件、超薄玻璃加工和精密结构件的供应商。不过，具体受益程度仍将取决于各家供应商在产业链中的实际卡位与配套份额。",
+          "unit_id": "95ca61ea8d9777d2c99987b8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 38,
+          "origin": "html",
+          "text": "比如，精研科技折叠屏业务主要包括转轴用的MIM（金属注射成型）零件、折叠屏铰链组件两部分。公司方面在互动易上称，持续配合客户研发适配折叠屏铰链的高强度、高耐磨、轻量化金属材料及精密结构件。",
+          "unit_id": "863a83d0de3268a02a707b06"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 39,
+          "origin": "html",
+          "text": "领益智造在中报业绩说明会上透露，公司向重要客户供应新一代折叠屏终端核心精密件，涵盖铰链精密结构件、屏幕支撑板、超薄均热板及带法兰超薄不锈钢电池壳模组等，单机价值量数倍于直板机，第三、四季度正按规划推进量产爬坡及客户交付。",
+          "unit_id": "9e6c4b1ea3efc6f3d998d2b8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 40,
+          "origin": "html",
+          "text": "精密玻璃加工企业蓝思科技在8月23日接受机构调研时介绍，今年下半年开始，在大客户今年的折叠机项目上，公司供应UTG玻璃、CPI膜、UTG玻璃支撑板、3D玻璃盖板等，相关产品加工难度大，价值量大幅提升。",
+          "unit_id": "56860cb549272efff3b5aff9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 41,
+          "origin": "html",
+          "text": "而对于折叠屏手机而言，屏幕折痕、长期使用的耐用性、维修成本以及相对较高的制造成本，仍然是需要解决的关键问题。软件优化同样重要，因为用户需要切实感受到大屏带来的价值，而不仅仅是拥有更大的显示面积。",
+          "unit_id": "09f29ecfbb7d91cca2efc19a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 42,
+          "origin": "html",
+          "text": "在Liz Lee看来，下一阶段的发展重点已不再是证明折叠屏技术可行，而是提供更出色的日常使用体验，让消费者认为其较高的售价物有所值。",
+          "unit_id": "1dbed9f6b6f64daedcccc8b0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 43,
+          "origin": "html",
+          "text": "责任编辑：振亭",
+          "unit_id": "747c25ea25360c3b8e3e4131"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 44,
+          "origin": "html",
+          "text": "文章内容举报",
+          "unit_id": "69ab4ce419c7e5394c625b43"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160263.htm"
+    },
+    "recorded_extraction": [
+      "iPhone Duo等货排至明年1月 黄牛加价预期却先松动了",
+      "今日，苹果首款折叠屏手机iPhone Duo正式发售。财联社记者实探上海、广州两地的苹果直营店了解到，两地二手回收行情相近，当日溢价呈现高开回落、版本分化特征。或为遏制囤货炒作，发售前苹果 今日，苹果首款折叠屏手机iPhone Duo正式发售。财联社记者实探上海、广州两地的苹果直营店了解到，两地二手回收行情相近，当日溢价呈现高开回落、版本分化特征。 或为遏制囤货炒作，发售前苹果已在全球范围内开启限购。尽管iPhone Duo仅支持eSIM，且没有Face ID和长焦镜头配置，但抢购氛围仍较为火爆。据报道，二手交易平台上iPhone Duo多个版本的预售市场成交价突破2万元，其中1TB黑色版本一度溢价至7143元。 今日上午10点半左右，首发现场多名“黄牛”表示，目前iPhone Duo 1TB存储版本回收热度最高，早间溢价达2200元，现已回落至1600—1800元区间；512GB版本溢价从1100—1400元不等。 有黄牛直言，“256G撑死卖1000，赶紧卖”，给出的回收价普遍在800-900元，部分黄牛则直接拒收；2TB版本方面，有黄牛称暂无报价，亦有加价几百元回收。",
+      [
+        "或为遏制囤货炒作，发售前苹果已在全球范围内开启限购。尽管iPhone Duo仅支持eSIM，且没有Face ID和长焦镜头配置，但抢购氛围仍较为火爆。据报道，二手交易平台上iPhone Duo多个版本的预售市场成交价突破2万元，其中1TB黑色版本一度溢价至7143元。",
+        "今日上午10点半左右，首发现场多名“黄牛”表示，目前iPhone Duo 1TB存储版本回收热度最高，早间溢价达2200元，现已回落至1600—1800元区间；512GB版本溢价从1100—1400元不等。",
+        "有黄牛直言，“256G撑死卖1000，赶紧卖”，给出的回收价普遍在800-900元，部分黄牛则直接拒收；2TB版本方面，有黄牛称暂无报价，亦有加价几百元回收。",
+        "财联社记者近日发布的《订货需等近两月！iPhone Duo预售秒售罄 产线协同爬坡制约初期供货》一文也提到，苹果为首款折叠屏手机制定的1000万台备货目标，受产线协同爬坡节奏影响。随着量产推进，市场预期明显收敛。",
+        "作为史上最贵的苹果手机，iPhone Duo推出256GB、512GB、1TB和2TB四个容量版本，中国区定价分别为15999元、17999元、21499元和26499元。10月16日20时预售开启后该机型迅速告罄,苹果官网一度无法访问。",
+        "面对首发抢购热潮，苹果提前收紧销售规则。就在发售前两日，财联社记者注意到苹果中国官网设置限购，每位顾客仅可购买2部iPhone Duo新机，从源头压缩批量囤货空间。",
+        "“外面排队的都是已经付好款、抢到第一批的。”一位门店店员告诉财联社记者。对于当天新下单需要等待多久，该店员表示，预计要到明年1月23日左右才能拿到货。",
+        "店内展示台旁也围着不少前来体验新机的消费者。一位抢到首批新机的消费者向财联社记者回忆，预售当天，自己“19点55分就开始不停地刷”。",
+        "上午9：50分左右，上海有黄牛表示，各版本普遍可加价1000元以上回收，溢价上限在2000元以内。至10：30左右，记者询问多名现场回收的“黄牛”了解到，部分版本溢价已有所回落，1TB版本目前较受欢迎，可加价1500-1800元左右；512版本加价1200元左右。",
+        "256版本行情则有所分化。“256GB不要，现在只要1TB，1TB可以加1800元左右收。”一名“黄牛”向财联社记者表示，自己更倾向于收购大容量版本。不过，现场亦有黄牛表示白色256GB版本可以加价800元回收。",
+        "在广州天环广场苹果直营店，亦呈现类似场景。上午十时许，该店内有不少试机人群，“在线订单取货”队伍则排至店外，不过客量远不及iPhone 18 Pro系列首发当日，该店工作人员向财联社记者直言“因为货量没有 Pro那么多”。",
+        "其称，目前店内iPhone Duo无现货，官方的预定等待时长排至2027年1月下旬。",
+        "二手回收方面，据现场多名“黄牛”反馈，iPhone Duo 1TB版本溢价最高，早间可加价至2200元回收，上午十点半左右溢价回落到1600-1800元区间；512GB白色版本受欢迎程度次之，溢价从1100元到1400元不等。",
+        "256G版本普遍加价900元，而有黄牛表示，“256G撑死卖1000，赶紧卖”。2TB版本方面，有黄牛称暂无报价，亦有加价几百元回收。",
+        "苹果公司10月20日宣布与多家美国企业建立或扩大合作伙伴关系，这些企业将为iPhone Duo提供关键材料及组件。其中，钛金属生产商Perryman Company将为包括iPhone Duo在内的苹果产品供应钛金属，苹果将在三年内为其提供至多1亿美元资金支持。",
+        "摩根大通最新研报显示，受铰链、超薄玻璃等零部件产能瓶颈制约，预计苹果今年iPhone Duo出货量约800万至900万部，低于此前1000万部的预期目标。",
+        "Liz Lee指出，“苹果较为突出的差异化设计包括纳米纹理内屏、旨在减轻折痕的定制化玻璃与胶层结构，以及钛金属机身和精密铰链设计。”",
+        "9月以来，折叠屏手机赛道迎来新一轮密集上新，华为Mate XT 2、小米首款“万元机”18 Fold相继发布。截至发稿，天猫官方认证的小米官方旗舰店显示，小米18 Fold销售量已超过2000台。"
+      ]
+    ]
+  },
+  "76c31e9862ff594a7834a644": {
+    "evidence": {
+      "article_id": "76c31e9862ff594a7834a644",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月24日消息，网友发现，iPhone Duo已在拼多多百亿补贴频道上架，定价为15799元，比苹果官网便宜200元（快科技注：截至发稿前，iPhone Duo百亿补贴频道已售罄）。 评论区有网友表示，第一批加价入手的人应该后悔了。 iPhone Duo的溢价从预售期时的“疯狂”到发售时的“退烧”，本质上是一场对“稀缺预期”的快速修正。市场普遍预期苹果首款折叠屏良率低、备货少，黄牛因此敢于高价囤货，但现实走向了反面。 据报道，在首销当天，有黄牛对256GB及512GB版本iPhone Duo回收溢价报2000元至2500元。一名黄牛直言，溢价没有想象中那么高。 渠道方也表示，短期来看，iPhone Duo上市初期货源不会太过紧俏。供给预期的改变，直接影响了黄牛的回收报价和市场加价空间。 除了供给预期的改变外，首批评测的落地也在一定程度上动摇了普通消费者的支付意愿，最突出的争议是第三方应用适配严重滞后。 有博主实测25个常见应用后发现，约八成尚未完成折叠屏适配，展开后只能居中显示或等比放大，无法充分利用7.6英寸内屏。 此外，评测还指出机身更厚重（254克）、屏下前摄自拍涂抹感强等问题。当产品本身还带着明显的初代不成熟，消费者为“提前几周体验”而额外支付数千甚至上万元的意愿自然会迅速消退。 快科技10月24日消息，网友发现，iPhone Duo已在拼多多百亿补贴频道上架，定价为15799元，比苹果官网便宜200元（快科技注：截至发稿前，iPhone Duo百亿补贴频道已售罄）。评论区有网友表示，第一",
+      "discovery_title": "加价入手的人后悔了！iPhone Duo已破发：比官网还便宜200元",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 21:54:40.000",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 21:54:40",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24 21:54:40.000",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-24T13:54:40+00:00",
+      "raw_lead": "快科技10月24日消息，网友发现，iPhone Duo已在拼多多百亿补贴频道上架，定价为15799元，比苹果官网便宜200元（快科技注：截至发稿前，iPhone Duo百亿补贴频道已售罄）。评论区有网友表示，第一",
+      "source": "快科技",
+      "title": "加价入手的人后悔了！iPhone Duo已破发：比官网还便宜200元",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月24日消息，网友发现，iPhone Duo已在拼多多百亿补贴频道上架，定价为15799元，比苹果官网便宜200元（快科技注：截至发稿前，iPhone Duo百亿补贴频道已售罄）。评论区有网友表示，第一批加价入手的人应该后悔了。",
+          "unit_id": "78f5999139f3e458064647e0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "iPhone Duo的溢价从预售期时的“疯狂”到发售时的“退烧”，本质上是一场对“稀缺预期”的快速修正。市场普遍预期苹果首款折叠屏良率低、备货少，黄牛因此敢于高价囤货，但现实走向了反面。",
+          "unit_id": "88e7cf7af1963bfe3a317012"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "据报道，在首销当天，有黄牛对256GB及512GB版本iPhone Duo回收溢价报2000元至2500元。一名黄牛直言，溢价没有想象中那么高。",
+          "unit_id": "cae8435e8c180616b64e63ee"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "渠道方也表示，短期来看，iPhone Duo上市初期货源不会太过紧俏。供给预期的改变，直接影响了黄牛的回收报价和市场加价空间。",
+          "unit_id": "2493b8d97806f3a6bdc6f9a6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "除了供给预期的改变外，首批评测的落地也在一定程度上动摇了普通消费者的支付意愿，最突出的争议是第三方应用适配严重滞后。",
+          "unit_id": "72884e1aac21e44121f43872"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "有博主实测25个常见应用后发现，约八成尚未完成折叠屏适配，展开后只能居中显示或等比放大，无法充分利用7.6英寸内屏。",
+          "unit_id": "ae933dff9631762e2fe4fa1b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "此外，评测还指出机身更厚重（254克）、屏下前摄自拍涂抹感强等问题。当产品本身还带着明显的初代不成熟，消费者为“提前几周体验”而额外支付数千甚至上万元的意愿自然会迅速消退。",
+          "unit_id": "152f9f93de8b45d27ff29ff5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "对于多数用户而言，等待应用适配和产品迭代后再入手，或许是更理性的选择。",
+          "unit_id": "4962da44285516449816b2b0"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160259.htm"
+    },
+    "recorded_extraction": [
+      "加价入手的人后悔了！iPhone Duo已破发：比官网还便宜200元",
+      "快科技10月24日消息，网友发现，iPhone Duo已在拼多多百亿补贴频道上架，定价为15799元，比苹果官网便宜200元（快科技注：截至发稿前，iPhone Duo百亿补贴频道已售罄）。评论区有网友表示，第一 快科技10月24日消息，网友发现，iPhone Duo已在拼多多百亿补贴频道上架，定价为15799元，比苹果官网便宜200元（快科技注：截至发稿前，iPhone Duo百亿补贴频道已售罄）。 评论区有网友表示，第一批加价入手的人应该后悔了。 iPhone Duo的溢价从预售期时的“疯狂”到发售时的“退烧”，本质上是一场对“稀缺预期”的快速修正。市场普遍预期苹果首款折叠屏良率低、备货少，黄牛因此敢于高价囤货，但现实走向了反面。 据报道，在首销当天，有黄牛对256GB及512GB版本iPhone Duo回收溢价报2000元至2500元。一名黄牛直言，溢价没有想象中那么高。 渠道方也表示，短期来看，iPhone Duo上市初期货源不会太过紧俏。供给预期的改变，直接影响了黄牛的回收报价和市场加价空间。",
+      [
+        "快科技10月24日消息，网友发现，iPhone Duo已在拼多多百亿补贴频道上架，定价为15799元，比苹果官网便宜200元（快科技注：截至发稿前，iPhone Duo百亿补贴频道已售罄）。评论区有网友表示，第一批加价入手的人应该后悔了。",
+        "据报道，在首销当天，有黄牛对256GB及512GB版本iPhone Duo回收溢价报2000元至2500元。一名黄牛直言，溢价没有想象中那么高。",
+        "有博主实测25个常见应用后发现，约八成尚未完成折叠屏适配，展开后只能居中显示或等比放大，无法充分利用7.6英寸内屏。",
+        "此外，评测还指出机身更厚重（254克）、屏下前摄自拍涂抹感强等问题。当产品本身还带着明显的初代不成熟，消费者为“提前几周体验”而额外支付数千甚至上万元的意愿自然会迅速消退。"
+      ]
+    ]
+  },
+  "f6f08444781b82c7e79c08c6": {
+    "evidence": {
+      "article_id": "f6f08444781b82c7e79c08c6",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月24日消息，半导体芯片技术发展到现在，单靠摩尔定律提升密度已经很难了，3D堆叠（3D stacking）是一个新兴方向，不过手机芯片厂商似乎不看好这个路线，至少现在不会用。 来自台积电的芯片大V@aogT刚刚确认了这个消息， 表示没有手机厂商想要采用3D堆叠技术 ，谷歌、苹果的朋友已经明确了这一点，高通的情况不确定，但他的朋友们说没有听说过任何友商会采用逻辑3D堆叠技术。 此外，服务器芯片上也没有采用细间距混合键合技术，它们采用的是芯片到晶圆键合（die to wafer bond，D2W）技术。 唯一对这个技术有需求的是存储芯片上的逻辑电路， 但它们使用的是晶圆到晶圆（wafer to wafer，W2W）键合技术 ，更容易实现精细间距，甚至亚微米级别的混合间距。 他这个说法其实不让人意外，手机厂商对3D堆叠芯片技术不热衷也不是现在才有的，3D堆叠芯片虽然可以提高密度， 但对散热的要求也很高，同时还提高了芯片制造成本， 良率更难控制，整体的负面代价让手机厂商没必要现在就考虑这个技术。 在EUV技术还没到头的情况下，手机芯片选择继续打磨EUV工艺是划算的，苹果、谷歌及高通暂时不考虑3D堆叠技术生产手机芯片也没什么意外的。 不仅手机厂商对3D堆叠技术保守，甚至对未来的背面供电技术也很保守，台积电明年量产的A16工艺就是他们首次使用SRP超级电源轨技术的产物，而SPR就是台积电的BSDN背部供电的技术方案，跟Intel在18A工艺上使用的PowerVIA是相同的技术方向下的不同实现方案。 A16工艺首发产品就是NVIDIA下一代GPU架构Feymman， 这也是20年来NVIDIA再次首发台积电新工艺 ，上次还要追溯到55nm时代。 来自台积电的",
+      "discovery_title": "苹果、谷歌等手机芯片厂商不走3D堆叠技术：继续打磨EUV",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 20:59:08.440",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 20:59:08",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24 20:59:08.440",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-24T12:59:08.440000+00:00",
+      "raw_lead": "快科技10月24日消息，半导体芯片技术发展到现在，单靠摩尔定律提升密度已经很难了，3D堆叠（3D stacking）是一个新兴方向，不过手机芯片厂商似乎不看好这个路线，至少现在不会用。来自台积电的",
+      "source": "快科技",
+      "title": "苹果、谷歌等手机芯片厂商不走3D堆叠技术：继续打磨EUV",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月24日消息，半导体芯片技术发展到现在，单靠摩尔定律提升密度已经很难了，3D堆叠（3D stacking）是一个新兴方向，不过手机芯片厂商似乎不看好这个路线，至少现在不会用。",
+          "unit_id": "cd26369906dd5171f3a35291"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "来自台积电的芯片大V@aogT刚刚确认了这个消息，表示没有手机厂商想要采用3D堆叠技术，谷歌、苹果的朋友已经明确了这一点，高通的情况不确定，但他的朋友们说没有听说过任何友商会采用逻辑3D堆叠技术。",
+          "unit_id": "30c16dc0768b8bb10e337366"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "此外，服务器芯片上也没有采用细间距混合键合技术，它们采用的是芯片到晶圆键合（die to wafer bond，D2W）技术。",
+          "unit_id": "3ba86233548366972a485719"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "唯一对这个技术有需求的是存储芯片上的逻辑电路，但它们使用的是晶圆到晶圆（wafer to wafer，W2W）键合技术，更容易实现精细间距，甚至亚微米级别的混合间距。",
+          "unit_id": "a3d53aa34424cb92d351cb00"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "他这个说法其实不让人意外，手机厂商对3D堆叠芯片技术不热衷也不是现在才有的，3D堆叠芯片虽然可以提高密度，但对散热的要求也很高，同时还提高了芯片制造成本，良率更难控制，整体的负面代价让手机厂商没必要现在就考虑这个技术。",
+          "unit_id": "6b873a0919e0fe97f23c3263"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在EUV技术还没到头的情况下，手机芯片选择继续打磨EUV工艺是划算的，苹果、谷歌及高通暂时不考虑3D堆叠技术生产手机芯片也没什么意外的。",
+          "unit_id": "740760ef9ea98cf80168b4cf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "不仅手机厂商对3D堆叠技术保守，甚至对未来的背面供电技术也很保守，台积电明年量产的A16工艺就是他们首次使用SRP超级电源轨技术的产物，而SPR就是台积电的BSDN背部供电的技术方案，跟Intel在18A工艺上使用的PowerVIA是相同的技术方向下的不同实现方案。",
+          "unit_id": "8baf788b58c46af61f97163f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "A16工艺首发产品就是NVIDIA下一代GPU架构Feymman，这也是20年来NVIDIA再次首发台积电新工艺，上次还要追溯到55nm时代。",
+          "unit_id": "5f2e664eba8856f98a5a75e4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "NVIDIA能首发A16工艺还有个原因就是苹果不打算使用这代工艺，因为A16的SRP技术也偏向HPC技术，不太适合移动芯片，高通、苹果、联发科等公司应该会直接进入A14工艺节点。",
+          "unit_id": "e884242041df61462b32d14b"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160254.htm"
+    },
+    "recorded_extraction": [
+      "苹果、谷歌等手机芯片厂商不走3D堆叠技术：继续打磨EUV",
+      "快科技10月24日消息，半导体芯片技术发展到现在，单靠摩尔定律提升密度已经很难了，3D堆叠（3D stacking）是一个新兴方向，不过手机芯片厂商似乎不看好这个路线，至少现在不会用。来自台积电的 快科技10月24日消息，半导体芯片技术发展到现在，单靠摩尔定律提升密度已经很难了，3D堆叠（3D stacking）是一个新兴方向，不过手机芯片厂商似乎不看好这个路线，至少现在不会用。 来自台积电的芯片大V@aogT刚刚确认了这个消息， 表示没有手机厂商想要采用3D堆叠技术 ，谷歌、苹果的朋友已经明确了这一点，高通的情况不确定，但他的朋友们说没有听说过任何友商会采用逻辑3D堆叠技术。 此外，服务器芯片上也没有采用细间距混合键合技术，它们采用的是芯片到晶圆键合（die to wafer bond，D2W）技术。 唯一对这个技术有需求的是存储芯片上的逻辑电路， 但它们使用的是晶圆到晶圆（wafer to wafer，W2W）键合技术 ，更容易实现精细间距，甚至亚微米级别的混合间距。",
+      [
+        "快科技10月24日消息，半导体芯片技术发展到现在，单靠摩尔定律提升密度已经很难了，3D堆叠（3D stacking）是一个新兴方向，不过手机芯片厂商似乎不看好这个路线，至少现在不会用。",
+        "来自台积电的芯片大V@aogT刚刚确认了这个消息，表示没有手机厂商想要采用3D堆叠技术，谷歌、苹果的朋友已经明确了这一点，高通的情况不确定，但他的朋友们说没有听说过任何友商会采用逻辑3D堆叠技术。",
+        "此外，服务器芯片上也没有采用细间距混合键合技术，它们采用的是芯片到晶圆键合（die to wafer bond，D2W）技术。",
+        "唯一对这个技术有需求的是存储芯片上的逻辑电路，但它们使用的是晶圆到晶圆（wafer to wafer，W2W）键合技术，更容易实现精细间距，甚至亚微米级别的混合间距。",
+        "他这个说法其实不让人意外，手机厂商对3D堆叠芯片技术不热衷也不是现在才有的，3D堆叠芯片虽然可以提高密度，但对散热的要求也很高，同时还提高了芯片制造成本，良率更难控制，整体的负面代价让手机厂商没必要现在就考虑这个技术。",
+        "在EUV技术还没到头的情况下，手机芯片选择继续打磨EUV工艺是划算的，苹果、谷歌及高通暂时不考虑3D堆叠技术生产手机芯片也没什么意外的。",
+        "不仅手机厂商对3D堆叠技术保守，甚至对未来的背面供电技术也很保守，台积电明年量产的A16工艺就是他们首次使用SRP超级电源轨技术的产物，而SPR就是台积电的BSDN背部供电的技术方案，跟Intel在18A工艺上使用的PowerVIA是相同的技术方向下的不同实现方案。",
+        "A16工艺首发产品就是NVIDIA下一代GPU架构Feymman，这也是20年来NVIDIA再次首发台积电新工艺，上次还要追溯到55nm时代。",
+        "NVIDIA能首发A16工艺还有个原因就是苹果不打算使用这代工艺，因为A16的SRP技术也偏向HPC技术，不太适合移动芯片，高通、苹果、联发科等公司应该会直接进入A14工艺节点。"
+      ]
+    ]
+  },
+  "33be062962985651eeb385c0": {
+    "evidence": {
+      "article_id": "33be062962985651eeb385c0",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple's iPhone Duo has failed JerryRigEverything's latest durability test. Despite its IP68 dust-resistance rating, dust entered the hinge through several ingress points, overwhelming the magnets that hold the phone shut. The bend test then left a permanent green line across the inner display, before the screen became unresponsive. The outer screen with Ceramic Shield 2 scratched at level 7 on the Mohs scale, but the inner screen only managed level 2, although credit was given for its matte nano-texture coating making marks \"magically disappear.\" Alas, it wasn't enough to earn a pass. \"I've been testing these folding phones since the first generation seven years ago – most do survive,\" said Nelson. \"The iPhone Duo did not.\" Watch his full video here. Related Roundup: iPhone Duo Buyer's Guide: iPhone Duo (Buy Now) Related Forum: iPhone This article, \" iPhone Duo Fails JerryRigEverything's Dusty Durability Test \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "iPhone Duo Fails JerryRigEverything's Dusty Durability Test",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T18:27:42+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T18:27:42+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T18:27:42+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 24, 2026 11:27 am PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 24, 2026 11:27 am PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 24 Oct 2026 18:27:42 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24T18:27:42+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-24T18:27:42+00:00",
+      "raw_lead": "Apple's iPhone Duo has failed JerryRigEverything's latest durability test. Despite its IP68 dust-resistance rating, dust entered the hinge through several ingress points, overwhelming the magnets that hold the phone shut. The bend test then left a permanent green line across the inner display, before the screen became unresponsive.",
+      "source": "MacRumors",
+      "title": "iPhone Duo Fails JerryRigEverything's Dusty Durability Test",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "iPhone Duo Fails JerryRigEverything's Dusty Durability Test",
+          "unit_id": "36deaf058ac7df0d8335f5e1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple's iPhone Duo has failed JerryRigEverything's latest durability test. Despite its IP68 dust-resistance rating, dust entered the hinge through several ingress points, overwhelming the magnets that hold the phone shut. The bend test then left a permanent green line across the inner display, before the screen became unresponsive.",
+          "unit_id": "03f1d68b91e79e0e72e381b8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The outer screen with Ceramic Shield 2 scratched at level 7 on the Mohs scale, but the inner screen only managed level 2, although credit was given for its matte nano-texture coating making marks \"magically disappear.\" Alas, it wasn't enough to earn a pass. \"I've been testing these folding phones since the first generation seven years ago – most do survive,\" said Nelson. \"The iPhone Duo did not.\" Watch his full video here.",
+          "unit_id": "03f34c29e8292d918619b064"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/24/iphone-duo-fails-jerryrigeverything-test/"
+    },
+    "recorded_extraction": [
+      "iPhone Duo Fails JerryRigEverything's Dusty Durability Test",
+      "Apple's iPhone Duo has failed JerryRigEverything's latest durability test. Despite its IP68 dust-resistance rating, dust entered the hinge through several ingress points, overwhelming the magnets that hold the phone shut. The bend test then left a permanent green line across the inner display, before the screen became unresponsive. Apple's iPhone Duo has failed JerryRigEverything's latest durability test . Despite its IP68 dust-resistance rating, dust entered the hinge through several ingress points, overwhelming the magnets that hold the phone shut. The bend test then left a permanent green line across the inner display, before the screen became unresponsive. The outer screen with Ceramic Shield 2 scratched at level 7 on the Mohs scale, but the inner screen only managed level 2, although credit was given for its matte nano-texture coating making marks \"magically disappear.\" Alas, it wasn't enough to earn a pass. \"I've been testing these folding phones since the first generation seven years ago – most do survive,\" said Nelson. \"The iPhone Duo did not.\" Watch his full video here .",
+      [
+        "The outer screen with Ceramic Shield 2 scratched at level 7 on the Mohs scale, but the inner screen only managed level 2, although credit was given for its matte nano-texture coating making marks \"magically disappear.\" Alas, it wasn't enough to earn a pass. \"I've been testing these folding phones since the first generation seven years ago – most do survive,\" said Nelson. \"The iPhone Duo did not.\" Watch his full video here."
+      ]
+    ]
+  },
+  "b84ebffde786b65718670dde": {
+    "evidence": {
+      "article_id": "b84ebffde786b65718670dde",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "苹果首款折叠屏手机iPhone Duo上市后不久，多名科技YouTuber发布了极限耐久测试视频，其中部分测试显示设备在高强度弯折和暴力施压条件下出现了屏幕损坏，引发外界对这款产品耐用性的广泛讨论。不过，根据苹果零售渠道目前反馈的信息，实际用户群体中并未出现类似的大规模故障现象。 阅读全文",
+      "discovery_title": "YouTube博主掰断iPhone Duo引发讨论 苹果门店尚未出现大规模屏幕损坏潮",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年10月25日 00:01",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 24 Oct 2026 16:01:40 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年10月25日 00:01",
+      "published_source": "body date pattern",
+      "published_utc": "2026-10-24T16:01:00+00:00",
+      "raw_lead": "苹果首款折叠屏手机iPhoneDuo上市后不久，多名科技YouTuber发布了极限耐久测试视频，其中部分测试显示设备在高强度弯折和暴力施压条件下出现了屏幕损坏，引发外界对这款产品耐用性的广泛讨论。不过，根据苹果零售渠道目前反馈的信息，实际用户群体中并未出现类似的大规模故障现象。",
+      "source": "cnBeta",
+      "title": "YouTube博主掰断iPhone Duo引发讨论 苹果门店尚未出现大规模屏幕损坏潮",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "苹果首款折叠屏手机iPhone Duo上市后不久，多名科技YouTuber发布了极限耐久测试视频，其中部分测试显示设备在高强度弯折和暴力施压条件下出现了屏幕损坏，引发外界对这款产品耐用性的广泛讨论。不过，根据苹果零售渠道目前反馈的信息，实际用户群体中并未出现类似的大规模故障现象。",
+          "unit_id": "b5e1cd17917e8aeb8df1569f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "报道指出，多位知名科技内容创作者对iPhone Duo进行了拆解和破坏性测试。在部分视频中，设备在超出正常使用场景的外力条件下出现折叠屏破裂、机身变形或内部结构受损等情况。这些画面迅速在社交媒体传播，也让许多潜在消费者对折叠屏产品的可靠性产生疑虑。",
+          "unit_id": "50bbfcf8fd9bf5bc8b35fdfe"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "然而，与网络上引发关注的测试结果不同，来自苹果零售门店和维修渠道的反馈显示，上市初期的实际情况相对平静。多家苹果零售店员工表示，截至目前，他们尚未观察到大量用户因内屏损坏而前来寻求维修或更换服务的现象。",
+          "unit_id": "c30f31ae422b54afd9819e82"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "报道认为，这一差异并不令人意外。耐久测试通常会刻意将设备置于极端环境，例如施加远超日常使用强度的扭曲力、持续压力或其他人为破坏手段，其目的在于寻找产品的物理极限，而不是模拟普通消费者的正常使用方式。",
+          "unit_id": "fe452e3b2e74998f02f29497"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "与此同时，苹果在iPhone Duo的研发过程中针对折叠结构进行了大量工程优化。设备采用专门设计的铰链系统、强化玻璃材料以及多层屏幕结构，以提高长期开合过程中的稳定性和耐久性。苹果此前也曾表示，该产品经过了大规模开合循环测试，以确保能够满足日常使用需求。",
+          "unit_id": "58689f30d87a9e8ca3a12090"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "业内分析人士指出，折叠屏设备与传统直板手机相比本身结构更为复杂，因此消费者对其耐用性的关注也更高。在产品上市初期，任何极限测试结果都容易被放大讨论。但真正反映产品质量水平的往往是后续数月甚至数年的真实用户使用数据，而非个别破坏性实验。",
+          "unit_id": "8d774ec87bccae9361fa07b4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "目前来看，虽然部分博主成功在实验环境下将iPhone Duo损坏，但来自苹果门店的实际情况显示，首批用户尚未出现大范围屏幕故障或维修潮。随着更多设备进入市场以及使用时间延长，外界将能够更准确地评估苹果首款折叠屏产品的长期耐用性表现。",
+          "unit_id": "6ce17df6ea8f9f698c2b765c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "对于苹果而言，iPhone Duo不仅是进入折叠屏市场的重要一步，也是一场关于可靠性与消费者信心的长期考验。而截至目前，现实世界中的表现似乎比网络视频中的极限测试结果更加乐观。",
+          "unit_id": "c366a4ec77997b68fc50b264"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1583704.htm"
+    },
+    "recorded_extraction": [
+      "YouTube博主掰断iPhone Duo引发讨论 苹果门店尚未出现大规模屏幕损坏潮",
+      "苹果首款折叠屏手机iPhoneDuo上市后不久，多名科技YouTuber发布了极限耐久测试视频，其中部分测试显示设备在高强度弯折和暴力施压条件下出现了屏幕损坏，引发外界对这款产品耐用性的广泛讨论。不过，根据苹果零售渠道目前反馈的信息，实际用户群体中并未出现类似的大规模故障现象。 苹果首款折叠屏手机iPhone Duo上市后不久，多名科技YouTuber发布了极限耐久测试视频，其中部分测试显示设备在高强度弯折和暴力施压条件下出现了屏幕损坏，引发外界对这款产品耐用性的广泛讨论。不过，根据苹果零售渠道目前反馈的信息，实际用户群体中并未出现类似的大规模故障现象。 报道指出，多位知名科技内容创作者对iPhone Duo进行了拆解和破坏性测试。在部分视频中，设备在超出正常使用场景的外力条件下出现折叠屏破裂、机身变形或内部结构受损等情况。这些画面迅速在社交媒体传播，也让许多潜在消费者对折叠屏产品的可靠性产生疑虑。 然而，与网络上引发关注的测试结果不同，来自苹果零售门店和维修渠道的反馈显示，上市初期的实际情况相对平静。多家苹果零售店员工表示，截至目前，他们尚未观察到大量用户因内屏损坏而前来寻求维修或更换服务的现象。 报道认为，这一差异并不令人意外。耐久测试通常会刻意将设备置于极端环境，例如施加远超日常使用强度的扭曲力、持续压力或其他人为破坏手段，其目的在于寻找产品的物理极限，而不是模拟普通消费者的正常使用方式。",
+      []
+    ]
+  },
+  "eb3350ed984f76879c29a3a7": {
+    "evidence": {
+      "article_id": "eb3350ed984f76879c29a3a7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月24日消息，据当地报道，澳大利亚联邦法院10月22日作出救济裁定，法官Jonathan Beach下令苹果向其他应用商店开放iPhone，并允许用户直接从开发者网页下载应用、使用替代支付方式。 面向澳大利亚Apple账号用户的整改须在墨尔本时间2027年3月1日中午前完成，苹果可在2月1日至15日凭证据申请延期至5月3日。 这是苹果与《堡垒之夜》开发商Epic Games长达六年反垄断诉讼的最新进展，2025年8月法院已先行认定苹果在应用商店运营中违反《2010年竞争与消费者法》第46条、滥用市场支配地位。 裁定要求苹果允许全球开发者经第三方应用市场、开发者官网等App Store以外渠道向澳区用户分发、安装与更新应用，并按与官方商店大体相同的条件开放所需工具与API，不得对替代渠道收取阻碍性费用。 支付层面停止强制开发者使用苹果内购系统，允许接入第三方支付、在应用内提供跳转按钮或链接，替代渠道数字交易不得抽成。 官方商店内使用替代支付的费率也被设上限，苹果不得强制要求并行提供自家支付、不得审计替代交易，也不得对选择替代支付的开发者收取接近30%的高佣金。 法官Beach在公布判决理由时表示，苹果通过\"一张由条款和技术措施交织而成的复杂网络\"（an intricate web of terms and technical measures）违反了《竞争与消费者法》，并判令苹果承担Epic Games在这场历时数月庭审中85%的法律费用。 该判决意味着，全球最受欢迎的游戏之一《堡垒之夜》（Fortnite）即日起重返苹果澳大利亚应用商店，结束了长达六年的缺席。 面",
+      "discovery_title": "1500万用户赢了！苹果被强制要求修改应用商店规则：支持第三方侧载",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 13:42:50.863",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 13:42:50",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24 13:42:50.863",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-24T05:42:50.863000+00:00",
+      "raw_lead": "快科技10月24日消息，据当地报道，澳大利亚联邦法院10月22日作出救济裁定，法官Jonathan Beach下令苹果向其他应用商店开放iPhone，并允许用户直接从开发者网页下载应用、使用替代支付方式。面",
+      "source": "快科技",
+      "title": "1500万用户赢了！苹果被强制要求修改应用商店规则：支持第三方侧载",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月24日消息，据当地报道，澳大利亚联邦法院10月22日作出救济裁定，法官Jonathan Beach下令苹果向其他应用商店开放iPhone，并允许用户直接从开发者网页下载应用、使用替代支付方式。",
+          "unit_id": "f2daf97ff10a251981d15c8a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "面向澳大利亚Apple账号用户的整改须在墨尔本时间2027年3月1日中午前完成，苹果可在2月1日至15日凭证据申请延期至5月3日。",
+          "unit_id": "20b86132c070038948dcd0f5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "这是苹果与《堡垒之夜》开发商Epic Games长达六年反垄断诉讼的最新进展，2025年8月法院已先行认定苹果在应用商店运营中违反《2010年竞争与消费者法》第46条、滥用市场支配地位。",
+          "unit_id": "ebdadd0494e64a6417d78b46"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "裁定要求苹果允许全球开发者经第三方应用市场、开发者官网等App Store以外渠道向澳区用户分发、安装与更新应用，并按与官方商店大体相同的条件开放所需工具与API，不得对替代渠道收取阻碍性费用。",
+          "unit_id": "d31706ea6a7d1ff66b293252"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "支付层面停止强制开发者使用苹果内购系统，允许接入第三方支付、在应用内提供跳转按钮或链接，替代渠道数字交易不得抽成。",
+          "unit_id": "bf6c96d17541ab1dde01d548"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "官方商店内使用替代支付的费率也被设上限，苹果不得强制要求并行提供自家支付、不得审计替代交易，也不得对选择替代支付的开发者收取接近30%的高佣金。",
+          "unit_id": "9b30cd24448a8434b059f297"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "法官Beach在公布判决理由时表示，苹果通过\"一张由条款和技术措施交织而成的复杂网络\"（an intricate web of terms and technical measures）违反了《竞争与消费者法》，并判令苹果承担Epic Games在这场历时数月庭审中85%的法律费用。",
+          "unit_id": "ab2aa70409f19f4d59e2e2c0"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "该判决意味着，全球最受欢迎的游戏之一《堡垒之夜》（Fortnite）即日起重返苹果澳大利亚应用商店，结束了长达六年的缺席。",
+          "unit_id": "6ce435b5d95a49b08b0e32ca"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "苹果公司表示不认同法院的多项认定，并将寻求上诉。苹果一位发言人表示：我们将申请中止执行并提起上诉，以寻求一个既能尊重我们的知识产权、又能保护消费者和开发者对App Store所期待的安全可靠体验的解决方案。",
+          "unit_id": "22df036ec1fb21eacfb0b0aa"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160180.htm"
+    },
+    "recorded_extraction": [
+      "1500万用户赢了！苹果被强制要求修改应用商店规则：支持第三方侧载",
+      "快科技10月24日消息，据当地报道，澳大利亚联邦法院10月22日作出救济裁定，法官Jonathan Beach下令苹果向其他应用商店开放iPhone，并允许用户直接从开发者网页下载应用、使用替代支付方式。面 快科技10月24日消息，据当地报道，澳大利亚联邦法院10月22日作出救济裁定，法官Jonathan Beach下令苹果向其他应用商店开放iPhone，并允许用户直接从开发者网页下载应用、使用替代支付方式。 面向澳大利亚Apple账号用户的整改须在墨尔本时间2027年3月1日中午前完成，苹果可在2月1日至15日凭证据申请延期至5月3日。 这是苹果与《堡垒之夜》开发商Epic Games长达六年反垄断诉讼的最新进展，2025年8月法院已先行认定苹果在应用商店运营中违反《2010年竞争与消费者法》第46条、滥用市场支配地位。 裁定要求苹果允许全球开发者经第三方应用市场、开发者官网等App Store以外渠道向澳区用户分发、安装与更新应用，并按与官方商店大体相同的条件开放所需工具与API，不得对替代渠道收取阻碍性费用。",
+      [
+        "快科技10月24日消息，据当地报道，澳大利亚联邦法院10月22日作出救济裁定，法官Jonathan Beach下令苹果向其他应用商店开放iPhone，并允许用户直接从开发者网页下载应用、使用替代支付方式。",
+        "面向澳大利亚Apple账号用户的整改须在墨尔本时间2027年3月1日中午前完成，苹果可在2月1日至15日凭证据申请延期至5月3日。",
+        "这是苹果与《堡垒之夜》开发商Epic Games长达六年反垄断诉讼的最新进展，2025年8月法院已先行认定苹果在应用商店运营中违反《2010年竞争与消费者法》第46条、滥用市场支配地位。",
+        "官方商店内使用替代支付的费率也被设上限，苹果不得强制要求并行提供自家支付、不得审计替代交易，也不得对选择替代支付的开发者收取接近30%的高佣金。",
+        "法官Beach在公布判决理由时表示，苹果通过\"一张由条款和技术措施交织而成的复杂网络\"（an intricate web of terms and technical measures）违反了《竞争与消费者法》，并判令苹果承担Epic Games在这场历时数月庭审中85%的法律费用。"
+      ]
+    ]
+  },
+  "a2348cc9825ecf88fc57f654": {
+    "evidence": {
+      "article_id": "a2348cc9825ecf88fc57f654",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月24日消息， 苹果首款折叠屏iPhone Duo于本周五上市，起售价为15999元。和iPhone 18 Pro系列的首销情况有所不同，iPhone Duo首批备货量较少，溢价回落的速度也相当惊人。 iPhone Duo刚发布时，交易平台上就挂出了高价。当时1TB版本有商家报价79999元，溢价5.8万元；256GB版本报价达到59999元，溢价4.4万元。 不过，这样疯狂的走势仅维持了一个月。预售开启后，价格便开始一路走低，如今溢价已经滑落到3000元左右。首批备货偏少，原本容易放大市场紧张情绪，但随着预售推进和货源预期变化，价格很快出现了明显回调。 一位抢到首发的网友表示，真实用户没多少，都是黄牛，他的心态有点崩，部分版本的商家甚至放弃收购。从这一反馈也能看出，市场情绪已从最初的高价追捧迅速转向观望。 值得一提的是，iPhone Duo作为折叠屏手机，不少第三方应用尚未完成大屏适配，体验存在割裂。微信在此前的测评视频中曾出现不适配情况，界面周围出现大面积黑框，不过目前腾讯已经完成适配。 但相当一部分应用还没有适配好，仍需等待一段时间。软件生态能否及时跟上，仍会影响首批用户的实际体验。 另外，iPhone Duo仅支持eSIM，这在一定程度上限制了部分消费需求。 不过整体来看，凭借苹果的品牌号召力和市场热度，iPhone Duo在全球市场仍有望成为一代爆款。市场分析机构Counterpoint预计，iPhone Duo首年就能拿下全球折叠屏约25%的份额。 快科技10月24日消息，苹果首款折叠屏iPhone Duo于本周五上市，起售价为15999元。和iPhone 18 Pro系列的首销情况有所不同，iPhone Duo首批备货量较少，溢价回落的速度也相当惊人。",
+      "discovery_title": "第一批拿到iPhone Duo的人心态有点崩：真实用户没多少 都是黄牛",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 21:03:29.407",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24 21:03:29",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24 21:03:29.407",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-24T13:03:29.407000+00:00",
+      "raw_lead": "快科技10月24日消息，苹果首款折叠屏iPhone Duo于本周五上市，起售价为15999元。和iPhone 18 Pro系列的首销情况有所不同，iPhone Duo首批备货量较少，溢价回落的速度也相当惊人。iPhone Duo刚",
+      "source": "快科技",
+      "title": "第一批拿到iPhone Duo的人心态有点崩：真实用户没多少 都是黄牛",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月24日消息，苹果首款折叠屏iPhone Duo于本周五上市，起售价为15999元。和iPhone 18 Pro系列的首销情况有所不同，iPhone Duo首批备货量较少，溢价回落的速度也相当惊人。",
+          "unit_id": "b3def28568eaf1e47fd5e71f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "iPhone Duo刚发布时，交易平台上就挂出了高价。当时1TB版本有商家报价79999元，溢价5.8万元；256GB版本报价达到59999元，溢价4.4万元。",
+          "unit_id": "fbfe39f23daaae2d66569104"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "不过，这样疯狂的走势仅维持了一个月。预售开启后，价格便开始一路走低，如今溢价已经滑落到3000元左右。首批备货偏少，原本容易放大市场紧张情绪，但随着预售推进和货源预期变化，价格很快出现了明显回调。",
+          "unit_id": "9e631c6b5e0ad4756f53e75d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "一位抢到首发的网友表示，真实用户没多少，都是黄牛，他的心态有点崩，部分版本的商家甚至放弃收购。从这一反馈也能看出，市场情绪已从最初的高价追捧迅速转向观望。",
+          "unit_id": "bf190416c24b8ce9836f482c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "值得一提的是，iPhone Duo作为折叠屏手机，不少第三方应用尚未完成大屏适配，体验存在割裂。微信在此前的测评视频中曾出现不适配情况，界面周围出现大面积黑框，不过目前腾讯已经完成适配。",
+          "unit_id": "d7cfe177362e9407b1251526"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "但相当一部分应用还没有适配好，仍需等待一段时间。软件生态能否及时跟上，仍会影响首批用户的实际体验。另外，iPhone Duo仅支持eSIM，这在一定程度上限制了部分消费需求。",
+          "unit_id": "78ff93433af74737fa94a15f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "不过整体来看，凭借苹果的品牌号召力和市场热度，iPhone Duo在全球市场仍有望成为一代爆款。市场分析机构Counterpoint预计，iPhone Duo首年就能拿下全球折叠屏约25%的份额。",
+          "unit_id": "4539811778d306afe0268df0"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160255.htm"
+    },
+    "recorded_extraction": [
+      "第一批拿到iPhone Duo的人心态有点崩：真实用户没多少 都是黄牛",
+      "快科技10月24日消息，苹果首款折叠屏iPhone Duo于本周五上市，起售价为15999元。和iPhone 18 Pro系列的首销情况有所不同，iPhone Duo首批备货量较少，溢价回落的速度也相当惊人。iPhone Duo刚 快科技10月24日消息， 苹果首款折叠屏iPhone Duo于本周五上市，起售价为15999元。和iPhone 18 Pro系列的首销情况有所不同，iPhone Duo首批备货量较少，溢价回落的速度也相当惊人。 iPhone Duo刚发布时，交易平台上就挂出了高价。当时1TB版本有商家报价79999元，溢价5.8万元；256GB版本报价达到59999元，溢价4.4万元。 不过，这样疯狂的走势仅维持了一个月。预售开启后，价格便开始一路走低，如今溢价已经滑落到3000元左右。首批备货偏少，原本容易放大市场紧张情绪，但随着预售推进和货源预期变化，价格很快出现了明显回调。 一位抢到首发的网友表示，真实用户没多少，都是黄牛，他的心态有点崩，部分版本的商家甚至放弃收购。从这一反馈也能看出，市场情绪已从最初的高价追捧迅速转向观望。",
+      [
+        "快科技10月24日消息，苹果首款折叠屏iPhone Duo于本周五上市，起售价为15999元。和iPhone 18 Pro系列的首销情况有所不同，iPhone Duo首批备货量较少，溢价回落的速度也相当惊人。",
+        "iPhone Duo刚发布时，交易平台上就挂出了高价。当时1TB版本有商家报价79999元，溢价5.8万元；256GB版本报价达到59999元，溢价4.4万元。",
+        "不过，这样疯狂的走势仅维持了一个月。预售开启后，价格便开始一路走低，如今溢价已经滑落到3000元左右。首批备货偏少，原本容易放大市场紧张情绪，但随着预售推进和货源预期变化，价格很快出现了明显回调。",
+        "但相当一部分应用还没有适配好，仍需等待一段时间。软件生态能否及时跟上，仍会影响首批用户的实际体验。另外，iPhone Duo仅支持eSIM，这在一定程度上限制了部分消费需求。",
+        "不过整体来看，凭借苹果的品牌号召力和市场热度，iPhone Duo在全球市场仍有望成为一代爆款。市场分析机构Counterpoint预计，iPhone Duo首年就能拿下全球折叠屏约25%的份额。"
+      ]
+    ]
+  },
+  "1de18b3e588ee0b5d557cfd4": {
+    "evidence": {
+      "article_id": "1de18b3e588ee0b5d557cfd4",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "An iPhone Duo owner has shared a Touch ID tip on Reddit they claim is \"arguably better than Face ID.\" It involves registering the lowest part of your index finger instead of the pad of your fingertip. The poster says this segment rests naturally against the side button during pickup and unlocks the phone as you lift it, and it seems at least some users agree. The tip has since been shared on the MacRumors forums, where another Duo owner reports it working for them. That said, grip styles vary, and it's not guaranteed to work for everyone, but intrigued users can test the tip themselves by registering additional bits of digits via Settings ➝ Touch ID & Passcode. After all, more is generally better. Related Roundup: iPhone Duo Tag: Face ID Buyer's Guide: iPhone Duo (Buy Now) Related Forum: iPhone This article, \" 'Arguably Better Than Face ID': the iPhone Duo Touch ID Tip to Try \" first appeared on MacRumors.com Discuss this article in our forums",
+      "discovery_title": "'Arguably Better Than Face ID': the iPhone Duo Touch ID Tip to Try",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T23:48:55+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T23:48:55+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-24T23:48:55+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 24, 2026 4:48 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 24, 2026 4:48 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 24 Oct 2026 23:48:55 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-24T23:48:55+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-24T23:48:55+00:00",
+      "raw_lead": "An iPhone Duo owner has shared a Touch ID tip on Reddit they claim is \"arguably better than Face ID\". It involves registering the lowest part of your index finger instead of the pad of your fingertip. The poster says this segment rests naturally against the side button during pickup and unlocks the phone as you lift it, and it seems at least some users agree. The tip has since been shared on the MacRumors forums, where another Duo owner reports it working for them.",
+      "source": "MacRumors",
+      "title": "'Arguably Better Than Face ID': the iPhone Duo Touch ID Tip to Try",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "'Arguably Better Than Face ID': the iPhone Duo Touch ID Tip to Try",
+          "unit_id": "4cb163c07d92c61807eba96a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "An iPhone Duo owner has shared a Touch ID tip on Reddit they claim is \"arguably better than Face ID.\" It involves registering the lowest part of your index finger instead of the pad of your fingertip. The poster says this segment rests naturally against the side button during pickup and unlocks the phone as you lift it, and it seems at least some users agree.",
+          "unit_id": "6c867cf7260315b82b802849"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The tip has since been shared on the MacRumors forums, where another Duo owner reports it working for them. That said, grip styles vary, and it's not guaranteed to work for everyone, but intrigued users can test the tip themselves by registering additional bits of digits via Settings ➝ Touch ID & Passcode. After all, more is generally better.",
+          "unit_id": "e940a3f4b982efbe43f7b7db"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/24/better-than-face-id-iphone-duo-touch-id-tip/"
+    },
+    "recorded_extraction": [
+      "'Arguably Better Than Face ID': the iPhone Duo Touch ID Tip to Try",
+      "An iPhone Duo owner has shared a Touch ID tip on Reddit they claim is \"arguably better than Face ID\". It involves registering the lowest part of your index finger instead of the pad of your fingertip. The poster says this segment rests naturally against the side button during pickup and unlocks the phone as you lift it, and it seems at least some users agree. The tip has since been shared on the MacRumors forums, where another Duo owner reports it working for them. An iPhone Duo owner has shared a Touch ID tip on Reddit they claim is \"arguably better than Face ID.\" It involves registering the lowest part of your index finger instead of the pad of your fingertip. The poster says this segment rests naturally against the side button during pickup and unlocks the phone as you lift it, and it seems at least some users agree. The tip has since been shared on the MacRumors forums , where another Duo owner reports it working for them. That said, grip styles vary, and it's not guaranteed to work for everyone, but intrigued users can test the tip themselves by registering additional bits of digits via Settings ➝ Touch ID & Passcode. After all, more is generally better.",
+      []
+    ]
+  },
+  "ce6070b3ab6ba821f5cbc55e": {
+    "evidence": {
+      "article_id": "ce6070b3ab6ba821f5cbc55e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技10月25日消息，据Notebookcheck报道 ，苹果正在测试一款大尺寸折叠平板设备，其设计思路参考华为MateBook Fold。 报道称，在成功推出iPhone Duo后，苹果正加快布局更多折叠设备。尽管苹果在满足市场需求方面仍面临供应难题，但这款折叠手机的市场需求保持高位。 此次曝光的折叠平板被描述为“巨大的折叠平板”，设计上以华为于8月推出的MateBook Fold为参照。 记者郭明錤此前的预测显示，折叠iPad将于2028年面世，展开后屏幕对角线尺寸为18至20英寸，并将采用超薄玻璃盖板，由康宁独家供应，GIS负责切割、边缘加工与检测。 在iPhone Duo上，苹果已采用纳米纹理盖板，当折叠处出现磨损时可像保护膜一样撕下更换，类似方案有望应用于iPad Duo。 马克·古尔曼将该设备形容为“两块并排的iPad Mini”，暗示其采用类似iPhone Duo的书本式开合铰链设计。 郭明錤预计2028年出货量最高为100万台，这一数字表明苹果对这款折叠平板同样不追求高销量。此前iPhone Duo的产量也远未能满足庞大的市场需求。 价格方面， 如此大尺寸且配备脆弱折叠屏的平板，售价预计明显高于iPad Pro。作为参考，iPhone Duo在德国起售价为2299欧元，更大的屏幕尺寸将进一步推高成本。 快科技10月25日消息，据Notebookcheck报道，苹果正在测试一款大尺寸折叠平板设备，其设计思路参考华为MateBook Fold。",
+      "discovery_title": "看齐华为！苹果测试巨型折叠iPad 形态或参考MateBook Fold",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25 10:54:17.973",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25 10:54:17",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-25 10:54:17.973",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-10-25T02:54:17.973000+00:00",
+      "raw_lead": "快科技10月25日消息，据Notebookcheck报道，苹果正在测试一款大尺寸折叠平板设备，其设计思路参考华为MateBook Fold。报道称，在成功推出iPhone Duo后，苹果正加快布局更多折叠设备。尽管苹果",
+      "source": "快科技",
+      "title": "看齐华为！苹果测试巨型折叠iPad 形态或参考MateBook Fold",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技10月25日消息，据Notebookcheck报道，苹果正在测试一款大尺寸折叠平板设备，其设计思路参考华为MateBook Fold。",
+          "unit_id": "c80f8d33cc9c76aa1f705d84"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "报道称，在成功推出iPhone Duo后，苹果正加快布局更多折叠设备。尽管苹果在满足市场需求方面仍面临供应难题，但这款折叠手机的市场需求保持高位。",
+          "unit_id": "0ff2e2a6758c8f62909dfe05"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "此次曝光的折叠平板被描述为“巨大的折叠平板”，设计上以华为于8月推出的MateBook Fold为参照。",
+          "unit_id": "609643dc96e0d346ea50ec55"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "记者郭明錤此前的预测显示，折叠iPad将于2028年面世，展开后屏幕对角线尺寸为18至20英寸，并将采用超薄玻璃盖板，由康宁独家供应，GIS负责切割、边缘加工与检测。",
+          "unit_id": "df465975287d1a0867ec8dbb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "在iPhone Duo上，苹果已采用纳米纹理盖板，当折叠处出现磨损时可像保护膜一样撕下更换，类似方案有望应用于iPad Duo。",
+          "unit_id": "19e560231bae0c9218be23c1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "马克·古尔曼将该设备形容为“两块并排的iPad Mini”，暗示其采用类似iPhone Duo的书本式开合铰链设计。",
+          "unit_id": "c58b4b0224bc9742b49e5d37"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "郭明錤预计2028年出货量最高为100万台，这一数字表明苹果对这款折叠平板同样不追求高销量。此前iPhone Duo的产量也远未能满足庞大的市场需求。",
+          "unit_id": "0c45da04b6cf338d7a841223"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "价格方面，如此大尺寸且配备脆弱折叠屏的平板，售价预计明显高于iPad Pro。作为参考，iPhone Duo在德国起售价为2299欧元，更大的屏幕尺寸将进一步推高成本。",
+          "unit_id": "9f2dbd00656730f39d147797"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1160/1160294.htm"
+    },
+    "recorded_extraction": [
+      "看齐华为！苹果测试巨型折叠iPad 形态或参考MateBook Fold",
+      "快科技10月25日消息，据Notebookcheck报道，苹果正在测试一款大尺寸折叠平板设备，其设计思路参考华为MateBook Fold。报道称，在成功推出iPhone Duo后，苹果正加快布局更多折叠设备。尽管苹果 快科技10月25日消息，据Notebookcheck报道 ，苹果正在测试一款大尺寸折叠平板设备，其设计思路参考华为MateBook Fold。 报道称，在成功推出iPhone Duo后，苹果正加快布局更多折叠设备。尽管苹果在满足市场需求方面仍面临供应难题，但这款折叠手机的市场需求保持高位。 记者郭明錤此前的预测显示，折叠iPad将于2028年面世，展开后屏幕对角线尺寸为18至20英寸，并将采用超薄玻璃盖板，由康宁独家供应，GIS负责切割、边缘加工与检测。 在iPhone Duo上，苹果已采用纳米纹理盖板，当折叠处出现磨损时可像保护膜一样撕下更换，类似方案有望应用于iPad Duo。",
+      [
+        "快科技10月25日消息，据Notebookcheck报道，苹果正在测试一款大尺寸折叠平板设备，其设计思路参考华为MateBook Fold。",
+        "此次曝光的折叠平板被描述为“巨大的折叠平板”，设计上以华为于8月推出的MateBook Fold为参照。",
+        "记者郭明錤此前的预测显示，折叠iPad将于2028年面世，展开后屏幕对角线尺寸为18至20英寸，并将采用超薄玻璃盖板，由康宁独家供应，GIS负责切割、边缘加工与检测。",
+        "价格方面，如此大尺寸且配备脆弱折叠屏的平板，售价预计明显高于iPad Pro。作为参考，iPhone Duo在德国起售价为2299欧元，更大的屏幕尺寸将进一步推高成本。"
+      ]
+    ]
+  },
+  "5e7df390ec22179d1b6e50e7": {
+    "evidence": {
+      "article_id": "5e7df390ec22179d1b6e50e7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 10 月 25 日消息，YouTube 频道 REWA Technology 与 Phone Repair Guru 放出了首批 iPhone Duo 的拆机视频，让外界得以看清这款折叠机型的内部构造。 IT之家注意到，iPhone Duo 采用双电芯设计，两块电池都依靠电控胶拆卸： 大容量电池：2962 mAh（11.56 Wh） 小容量电池：1921 mAh（7.5 Wh） 总容量：4883 mAh REWA 的视频给出了主板元件标注：板载 A20 Pro 芯片 + C2 蜂窝基带等核心组件。 维修难点与模块化设计 1. Touch ID 按键：理论上可以单独拆下维修，但拆解难度很高； 2. USB‑C 充电口：采用完全模块化设计，接口可以单独更换，维修更友好； 3. 网络制式：全球版本全部仅支持 eSIM，无实体 SIM 卡槽。 维修网站 iFixit 会在未来几天发布更详尽的完整拆解与深度评测，值得持续关注。另外，苹果已经正式对外发布了 iPhone Duo 官方维修手册。 拆机显示其采用双电芯设计，总容量达 4883mAh，主板搭载 A20 Pro 芯片与 C2 基带。USB-C 口为模块化设计可单独更换，但 Touch ID 拆卸难度较高。此外，全球版本仅支持 eSIM，苹果已发布官方维修手册。#iPhone Duo# #iPhone Duo 拆解#",
+      "discovery_title": "苹果 iPhone Duo 拆解：双电池 4883mAh，无实体 SIM 卡槽",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/25 12:25:03",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/25 12:25:03",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 25 Oct 2026 04:25:03 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/10/25 12:25:03",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-25T04:25:03+00:00",
+      "raw_lead": "拆机显示其采用双电芯设计，总容量达 4883mAh，主板搭载 A20 Pro 芯片与 C2 基带。USB-C 口为模块化设计可单独更换，但 Touch ID 拆卸难度较高。此外，全球版本仅支持 eSIM，苹果已发布官方维修手册。#iPhone Duo# #iPhone Duo 拆解#",
+      "source": "IT之家",
+      "title": "苹果 iPhone Duo 拆解：双电池 4883mAh，无实体 SIM 卡槽",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 25 日消息，YouTube 频道 REWA Technology 与 Phone Repair Guru 放出了首批 iPhone Duo 的拆机视频，让外界得以看清这款折叠机型的内部构造。",
+          "unit_id": "89d079739f1f30f968a418cb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "IT之家注意到，iPhone Duo 采用双电芯设计，两块电池都依靠电控胶拆卸：",
+          "unit_id": "d688416224b0224c80572e88"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "大容量电池：2962 mAh（11.56 Wh）",
+          "unit_id": "9c62442362c78173d644c28f"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "小容量电池：1921 mAh（7.5 Wh）",
+          "unit_id": "f9ed8067f440c7c14f5da7bb"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "总容量：4883 mAh",
+          "unit_id": "cd3dae85ad891bf0e9b9cd9e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "REWA 的视频给出了主板元件标注：板载 A20 Pro 芯片 + C2 蜂窝基带等核心组件。",
+          "unit_id": "953d3f5d66a01f905ccc5035"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "维修难点与模块化设计",
+          "unit_id": "4ddc30990b624c11c131890f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "1. Touch ID 按键：理论上可以单独拆下维修，但拆解难度很高；",
+          "unit_id": "2cb512fc8cf6641c76c95192"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "2. USB‑C 充电口：采用完全模块化设计，接口可以单独更换，维修更友好；",
+          "unit_id": "f435a6930ea31b64373cdd35"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "3. 网络制式：全球版本全部仅支持 eSIM，无实体 SIM 卡槽。",
+          "unit_id": "c645dcce88d0e576269b0f48"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "维修网站 iFixit 会在未来几天发布更详尽的完整拆解与深度评测，值得持续关注。另外，苹果已经正式对外发布了 iPhone Duo 官方维修手册。",
+          "unit_id": "658d62026c2449bf00fbabf8"
+        }
+      ],
+      "url": "https://www.ithome.com/1/017/578.htm"
+    },
+    "recorded_extraction": [
+      "苹果 iPhone Duo 拆解：双电池 4883mAh，无实体 SIM 卡槽",
+      "IT之家 10 月 25 日消息，YouTube 频道 REWA Technology 与 Phone Repair Guru 放出了首批 iPhone Duo 的拆机视频，让外界得以看清这款折叠机型的内部构造。 IT之家注意到，iPhone Duo 采用双电芯设计，两块电池都依靠电控胶拆卸： 大容量电池：2962 mAh（11.56 Wh） 小容量电池：1921 mAh（7.5 Wh） 总容量：4883 mAh REWA 的视频给出了主板元件标注：板载 A20 Pro 芯片 + C2 蜂窝基带等核心组件。 维修难点与模块化设计 1. Touch ID 按键：理论上可以单独拆下维修，但拆解难度很高； 2. USB‑C 充电口：采用完全模块化设计，接口可以单独更换，维修更友好； 3. 网络制式：全球版本全部仅支持 eSIM，无实体 SIM 卡槽。 维修网站 iFixit 会在未来几天发布更详尽的完整拆解与深度评测，值得持续关注。另外，苹果已经正式对外发布了 iPhone Duo 官方维修手册。 拆机显示其采用双电芯设计，总容量达 4883mAh，主板搭载 A20 Pro 芯片与 C2 基带。USB-C 口为模块化设计可单独更换，但 Touch ID 拆卸难度较高。此外，全球版本仅支持 eSIM，苹果已发布官方维修手册。#iPhone Duo# #iPhone Duo 拆解#",
+      [
+        "IT之家 10 月 25 日消息，YouTube 频道 REWA Technology 与 Phone Repair Guru 放出了首批 iPhone Duo 的拆机视频，让外界得以看清这款折叠机型的内部构造。",
+        "IT之家注意到，iPhone Duo 采用双电芯设计，两块电池都依靠电控胶拆卸：",
+        "大容量电池：2962 mAh（11.56 Wh）",
+        "小容量电池：1921 mAh（7.5 Wh）",
+        "总容量：4883 mAh",
+        "REWA 的视频给出了主板元件标注：板载 A20 Pro 芯片 + C2 蜂窝基带等核心组件。",
+        "维修难点与模块化设计",
+        "1. Touch ID 按键：理论上可以单独拆下维修，但拆解难度很高；",
+        "2. USB‑C 充电口：采用完全模块化设计，接口可以单独更换，维修更友好；",
+        "3. 网络制式：全球版本全部仅支持 eSIM，无实体 SIM 卡槽。",
+        "维修网站 iFixit 会在未来几天发布更详尽的完整拆解与深度评测，值得持续关注。另外，苹果已经正式对外发布了 iPhone Duo 官方维修手册。"
+      ]
+    ]
+  },
+  "a5d791e653730902bb6a0add": {
+    "evidence": {
+      "article_id": "a5d791e653730902bb6a0add",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple and M. Night Shyamalan have won an appeal in the copyright dispute over Apple TV series \"Servant,\" with a federal appeals court upholding last year's jury verdict in their favor (via Reuters ). In its October 22 decision, the Ninth Circuit rejected filmmaker Francesca Gregorini's arguments that problems with the jury instructions and an unanswered question from jurors warranted overturning the result. Gregorini sued in January 2020, alleging that the first three episodes of \"Servant\" copied her 2013 film \"The Truth About Emanuel.\" Both stories involve a grieving mother who treats a doll as a living baby and a young caregiver. A jury unanimously ruled for Apple, Shyamalan, and the other defendants on January 24, 2025, according to the final judgment. The appeal focused on whether jurors received enough guidance to assess if the show's creators could have encountered Gregorini's film. The court found that the instructions were adequate and that the judge could accept the unanimous verdict before answering the jury's request for clarification. The lawsuit was initially dismissed in 2020, then revived on appeal in 2022 before proceeding to trial.",
+      "discovery_title": "Apple's 'Servant' Copyright Lawsuit Win Upheld on Appeal",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25T04:05:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25T04:05:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-10-25T04:05:00+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday October 24, 2026 9:05 pm PDT",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "October 24, 2026 9:05 pm PDT",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sun, 25 Oct 2026 04:05:09 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-10-25T04:05:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-10-25T04:05:00+00:00",
+      "raw_lead": "Apple and M. Night Shyamalan have won an appeal in the copyright dispute over Apple TV series \"Servant,\" with a federal appeals court upholding last year's jury verdict in their favor (via Reuters). In its October 22 decision, the Ninth Circuit rejected filmmaker Francesca Gregorini's arguments that problems with the jury instructions and an unanswered question from jurors warranted overturning the result.",
+      "source": "MacRumors",
+      "title": "Apple's 'Servant' Copyright Lawsuit Win Upheld on Appeal",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Apple's 'Servant' Copyright Lawsuit Win Upheld on Appeal",
+          "unit_id": "f191f49d5c89d2c26660d05f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "Apple and M. Night Shyamalan have won an appeal in the copyright dispute over Apple TV series \"Servant,\" with a federal appeals court upholding last year's jury verdict in their favor (via Reuters).",
+          "unit_id": "9f6e75b3bf66b4bc128fdab7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "In its October 22 decision, the Ninth Circuit rejected filmmaker Francesca Gregorini's arguments that problems with the jury instructions and an unanswered question from jurors warranted overturning the result.",
+          "unit_id": "5f197dfe176963cb64e669e1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Gregorini sued in January 2020, alleging that the first three episodes of \"Servant\" copied her 2013 film \"The Truth About Emanuel.\" Both stories involve a grieving mother who treats a doll as a living baby and a young caregiver. A jury unanimously ruled for Apple, Shyamalan, and the other defendants on January 24, 2025, according to the final judgment.",
+          "unit_id": "8ec50dfadd203035dc2ee20b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "The appeal focused on whether jurors received enough guidance to assess if the show's creators could have encountered Gregorini's film. The court found that the instructions were adequate and that the judge could accept the unanimous verdict before answering the jury's request for clarification.",
+          "unit_id": "74a01f583e8515545a4d6e3a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "The lawsuit was initially dismissed in 2020, then revived on appeal in 2022 before proceeding to trial. \"Servant\" stars Lauren Ambrose, Toby Kebbell, Nell Tiger Free, and Rupert Grint, with Shyamalan serving as an executive producer.",
+          "unit_id": "dcaaa0d359927ef84318d4d2"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/10/25/servant-lawsuit-win-upheld/"
+    },
+    "recorded_extraction": [
+      "Apple's 'Servant' Copyright Lawsuit Win Upheld on Appeal",
+      "Apple and M. Night Shyamalan have won an appeal in the copyright dispute over Apple TV series \"Servant,\" with a federal appeals court upholding last year's jury verdict in their favor (via Reuters ). In its October 22 decision, the Ninth Circuit rejected filmmaker Francesca Gregorini's arguments that problems with the jury instructions and an unanswered question from jurors warranted overturning the result. Gregorini sued in January 2020, alleging that the first three episodes of \"Servant\" copied her 2013 film \"The Truth About Emanuel.\" Both stories involve a grieving mother who treats a doll as a living baby and a young caregiver. A jury unanimously ruled for Apple, Shyamalan, and the other defendants on January 24, 2025, according to the final judgment. The appeal focused on whether jurors received enough guidance to assess if the show's creators could have encountered Gregorini's film. The court found that the instructions were adequate and that the judge could accept the unanimous verdict before answering the jury's request for clarification. The lawsuit was initially dismissed in 2020, then revived on appeal in 2022 before proceeding to trial.",
+      [
+        "Apple's 'Servant' Copyright Lawsuit Win Upheld on Appeal",
+        "Apple and M. Night Shyamalan have won an appeal in the copyright dispute over Apple TV series \"Servant,\" with a federal appeals court upholding last year's jury verdict in their favor (via Reuters).",
+        "In its October 22 decision, the Ninth Circuit rejected filmmaker Francesca Gregorini's arguments that problems with the jury instructions and an unanswered question from jurors warranted overturning the result.",
+        "Gregorini sued in January 2020, alleging that the first three episodes of \"Servant\" copied her 2013 film \"The Truth About Emanuel.\" Both stories involve a grieving mother who treats a doll as a living baby and a young caregiver. A jury unanimously ruled for Apple, Shyamalan, and the other defendants on January 24, 2025, according to the final judgment.",
+        "The appeal focused on whether jurors received enough guidance to assess if the show's creators could have encountered Gregorini's film. The court found that the instructions were adequate and that the judge could accept the unanimous verdict before answering the jury's request for clarification.",
+        "The lawsuit was initially dismissed in 2020, then revived on appeal in 2022 before proceeding to trial. \"Servant\" stars Lauren Ambrose, Toby Kebbell, Nell Tiger Free, and Rupert Grint, with Shyamalan serving as an executive producer."
+      ]
+    ]
+  },
+  "a0b86a689929f326995b7fbd": {
+    "evidence": {
+      "article_id": "a0b86a689929f326995b7fbd",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "",
+      "discovery_title": "Apple TV 剧集《灵异女仆》被指抄袭案尘埃落定，苹果胜诉",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/25 13:08:37",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/10/25 13:08:37",
+          "source": "body date pattern"
+        }
+      ],
+      "published_raw": "2026/10/25 13:08:37",
+      "published_source": "source publication field",
+      "published_utc": "2026-10-25T05:08:37+00:00",
+      "raw_lead": "美国联邦第九巡回上诉法院维持原判，驳回导演格雷戈里尼的侵权主张。这场持续多年的诉讼围绕《灵异女仆》是否抄袭其电影《伊曼纽尔的真相》展开，陪审团曾在 2025 年 1 月一致裁定不构成侵权。#苹果# #灵异女仆#",
+      "source": "IT之家",
+      "title": "Apple TV 剧集《灵异女仆》被指抄袭案尘埃落定，苹果胜诉",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 10 月 25 日消息，据路透社报道，苹果与 M· 奈特 · 沙马兰（M. Night Shyamalan）在 Apple TV 剧集《灵异女仆》（Servant）的版权诉讼上诉中胜诉，美国联邦第九巡回上诉法院维持了去年陪审团作出的有利于他们的裁决。",
+          "unit_id": "457540046f028cd30e60fd23"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "法院在 10 月 22 日出具裁定，驳回了导演弗朗西斯卡 · 格雷戈里尼（Francesca Gregorini）的主张。格雷戈里尼认为陪审团指引存在瑕疵、陪审团曾提出疑问却未得到解答，应当撤销原判。",
+          "unit_id": "e1c4ad0ff829a46d53769ec2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "格雷戈里尼在 2020 年 1 月提起诉讼，指控《灵异女仆》前三集抄袭她 2013 年的电影《伊曼纽尔的真相》（The Truth About Emanuel）。两部作品的核心设定相近：一名丧子的母亲把玩偶当成活着的婴儿，身边配有一名年轻看护者。根据最终判决书，2025 年 1 月 24 日，陪审团全体一致裁定苹果、沙马兰及其他被告不构成侵权。",
+          "unit_id": "2c70a3f5976ae054619537c5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "据IT之家了解，本次上诉的争议焦点是：陪审团是否获得足够指引，来判断剧集主创有没有机会接触到格雷戈里尼的这部电影。上诉法院认定，法官给出的指引充分；即便陪审团当时还有待澄清的疑问，法官也有权直接采纳这份一致裁决。",
+          "unit_id": "009202c22cdd840766020f07"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "这起案件一波三折：2020 年诉讼曾被驳回，2022 年上诉后案件发回重审，之后才进入陪审团庭审阶段。《灵异女仆》由劳伦 · 安布罗斯、托比 · 凯贝尔、内尔 · 泰格 · 弗里、鲁伯特 · 格林特主演，沙马兰担任执行制片人。",
+          "unit_id": "1eb8f11285dc7532cd8fd15d"
+        }
+      ],
+      "url": "https://www.ithome.com/1/017/583.htm"
+    },
+    "recorded_extraction": [
+      "Apple TV 剧集《灵异女仆》被指抄袭案尘埃落定，苹果胜诉",
+      "",
+      [
+        "IT之家 10 月 25 日消息，据路透社报道，苹果与 M· 奈特 · 沙马兰（M. Night Shyamalan）在 Apple TV 剧集《灵异女仆》（Servant）的版权诉讼上诉中胜诉，美国联邦第九巡回上诉法院维持了去年陪审团作出的有利于他们的裁决。",
+        "法院在 10 月 22 日出具裁定，驳回了导演弗朗西斯卡 · 格雷戈里尼（Francesca Gregorini）的主张。格雷戈里尼认为陪审团指引存在瑕疵、陪审团曾提出疑问却未得到解答，应当撤销原判。",
+        "格雷戈里尼在 2020 年 1 月提起诉讼，指控《灵异女仆》前三集抄袭她 2013 年的电影《伊曼纽尔的真相》（The Truth About Emanuel）。两部作品的核心设定相近：一名丧子的母亲把玩偶当成活着的婴儿，身边配有一名年轻看护者。根据最终判决书，2025 年 1 月 24 日，陪审团全体一致裁定苹果、沙马兰及其他被告不构成侵权。",
+        "据IT之家了解，本次上诉的争议焦点是：陪审团是否获得足够指引，来判断剧集主创有没有机会接触到格雷戈里尼的这部电影。上诉法院认定，法官给出的指引充分；即便陪审团当时还有待澄清的疑问，法官也有权直接采纳这份一致裁决。",
+        "这起案件一波三折：2020 年诉讼曾被驳回，2022 年上诉后案件发回重审，之后才进入陪审团庭审阶段。《灵异女仆》由劳伦 · 安布罗斯、托比 · 凯贝尔、内尔 · 泰格 · 弗里、鲁伯特 · 格林特主演，沙马兰担任执行制片人。"
+      ]
+    ]
+  }
+}

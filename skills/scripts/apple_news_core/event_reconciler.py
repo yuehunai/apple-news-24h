@@ -33,6 +33,7 @@ from .event_identity import (
     EVIDENCE_BACKED_COMPONENTS,
     COMPONENT_PATTERNS,
     EventIdentity,
+    SourceActionFrame,
     LEAD_IDENTITY_COMPONENTS,
     PRODUCT_PATTERNS,
     build_event_identity,
@@ -6709,6 +6710,7 @@ def _primary_claim_projection(
     evidence: str = "",
     embedded_references: tuple = (),
     source_facts: tuple[str, ...] = (),
+    teardown_operation: SourceActionFrame | None = None,
 ) -> tuple[set[str], set[str], set[str], str, bool]:
     """Return a title-led subject/predicate frame for sparse cross-source news.
 
@@ -6846,25 +6848,28 @@ def _primary_claim_projection(
     # The published teardown is the action; its battery, optics and repair
     # findings are complementary observations, not independent teardown IDs.
     teardown_scope = lead[:1800]
-    if tested_phone and _compiled_rule('teardown|tears? down|拆解', 0).search(title_text):
-        investigators = set()
-        for pattern in (
-            r"\b(?:repair outfit|teardown specialist)\s+([A-Za-z][A-Za-z0-9]+)\s+(?:took|takes)\s+(?:a\s+)?(?:very\s+)?close look\b",
-            r"\b([A-Za-z][A-Za-z0-9]+)\s+(?:(?:has|today|now)\s+)*(?:published|shares?|tears? down)\b|\b([A-Za-z][A-Za-z0-9]+)['’]s\s+(?:(?:latest|new|device|full)\s+)*teardown\b",
-            r"([A-Za-z][A-Za-z0-9]+)\s*(?=[^。.!?]{0,120}拆解)(?:(?:现已|近日|日前|今日)?(?:发布|公开|公布)(?:了)?|对|此次|拆解).{0,90}?(?:iphone|拆解)",
-        ):
-            investigators.update(v.casefold() for m in re.finditer(pattern, title + ". " + teardown_scope, re.I)
-                                 for v in m.groups() if v and v.casefold() not in {"apple", "the", "this", "a", "its"})
-        # A component-specific regional finding keeps its existing narrower
-        # relation; the whole-device report requires a source-local publication.
-        whole_device = _compiled_rule('(?:teardown\\s+(?:of\\s+)?(?:the\\s+)?iphone|iphone.{0,75}teardown|对iphone.{0,75}进行了拆解|iphone.{0,55}的(?:完整|详细|全面)?拆解)', 0).search(_normalized(teardown_scope))
-        whole_device = whole_device or _compiled_rule('teardown\\s+(?:shows?|reveals?|examines?)\\b[^。.!?]{0,170}\\biphone\\b|(?:close look|components inside)[^。.!?]{0,100}\\biphone\\b', re.I).search(teardown_scope)
-        if len(investigators) == 1 and whole_device and not _compiled_rule('modem|基带|调制解调器', 0).search(title_text):
-            model = _compiled_rule(r"\s+", 0).sub("-", tested_phone.group(1), 0).removesuffix("-max")
-            add_claim("iphone-" + model, "published-device-teardown",
-                      qualifier=next(iter(investigators)), category="hardware_products")
-            separation.add("teardown-publisher:" + next(iter(investigators)))
-            separation.add("teardown-model:iphone-" + model)
+    if tested_phone and (teardown_operation or _compiled_rule('teardown|tears? down|拆解|拆机', 0).search(title_text)):
+        if teardown_operation:
+            investigators = set(teardown_operation.subject.partition(':publishers:')[2].split('|'))
+            whole_device = True
+        else:
+            investigators = set()
+            for pattern in (
+                r"\b(?:repair outfit|teardown specialist)\s+([A-Za-z][A-Za-z0-9]+)\s+(?:took|takes)\s+(?:a\s+)?(?:very\s+)?close look\b",
+                r"\b([A-Za-z][A-Za-z0-9]+)\s+(?:(?:has|today|now)\s+)*(?:published|shares?|tears? down)\b|\b([A-Za-z][A-Za-z0-9]+)['’]s\s+(?:(?:latest|new|device|full)\s+)*teardown\b",
+                r"([A-Za-z][A-Za-z0-9]+)\s*(?=[^。.!?]{0,120}拆解)(?:(?:现已|近日|日前|今日)?(?:发布|公开|公布)(?:了)?|对|此次|拆解).{0,90}?(?:iphone|拆解)",
+            ):
+                investigators.update(v.casefold() for m in re.finditer(pattern, title + ". " + teardown_scope, re.I)
+                                     for v in m.groups() if v and v.casefold() not in {"apple", "the", "this", "a", "its"})
+            whole_device = _compiled_rule('(?:teardown\\s+(?:of\\s+)?(?:the\\s+)?iphone|iphone.{0,75}teardown|对iphone.{0,75}进行了拆解|iphone.{0,55}的(?:完整|详细|全面)?拆解)', 0).search(_normalized(teardown_scope))
+            whole_device = whole_device or _compiled_rule('teardown\\s+(?:shows?|reveals?|examines?)\\b[^。.!?]{0,170}\\biphone\\b|(?:close look|components inside)[^。.!?]{0,100}\\biphone\\b', re.I).search(teardown_scope)
+        if (teardown_operation or (len(investigators) == 1 and whole_device)) and not _compiled_rule('modem|基带|调制解调器', 0).search(title_text):
+            model = (teardown_operation.subject.partition(':publishers:')[0] if teardown_operation
+                     else "iphone-" + _compiled_rule(r"\s+", 0).sub("-", tested_phone.group(1), 0).removesuffix("-max"))
+            publishers = '|'.join(sorted(investigators))
+            add_claim(model, "published-device-teardown", qualifier=publishers, category="hardware_products")
+            separation.add("teardown-publisher:" + publishers)
+            separation.add("teardown-model:" + model)
 
     # Quantities belong to the locally stated production/sales object, not
     # every supplier, component or executive mentioned in later background.
@@ -6916,9 +6921,12 @@ def _primary_claim_projection(
 
     # A regional teardown's positive chip identification is not contradicted
     # by the complementary statement that a different chip is absent.
-    if tested_phone and _compiled_rule('teardown|拆解', 0).search(title_text):
-        institutions = _compiled_rule('(?:^|(?<=[.!?。]))\\s*([A-Z][A-Za-z0-9]+)\\s+(?:has\\s+)?(?:published|identified|examined|confirmed)\\b|(?:teardown[^。.!?]{0,100}\\bby\\s+|[Aa]ccording to (?:the )?)([A-Z][A-Za-z0-9]+)(?=\\s+(?:teardown|[, ]|the)|[, .])', 0).findall(lead)
-        institutions = {v.lower() for pair in institutions for v in pair if v and v not in {"Apple", "This", "It"}}
+    if tested_phone and (teardown_operation or _compiled_rule('teardown|拆解', 0).search(title_text)):
+        if teardown_operation:
+            institutions = {teardown_operation.subject.partition(':publishers:')[2]}
+        else:
+            institutions = _compiled_rule('(?:^|(?<=[.!?。]))\\s*([A-Z][A-Za-z0-9]+)\\s+(?:has\\s+)?(?:published|identified|examined|confirmed)\\b|(?:teardown[^。.!?]{0,100}\\bby\\s+|[Aa]ccording to (?:the )?)([A-Z][A-Za-z0-9]+)(?=\\s+(?:teardown|[, ]|the)|[, .])', 0).findall(lead)
+            institutions = {v.lower() for pair in institutions for v in pair if v and v not in {"Apple", "This", "It"}}
         chips = set(_compiled_rule('\\b((?:sdx|x)\\d{2,3}[a-z]?)\\b', 0).findall(claim_evidence))
         regional = set(regions) - {"multi-region"}
         if (len(institutions) == 1 and chips and len(regional) == 1
@@ -6926,7 +6934,9 @@ def _primary_claim_projection(
                 and _compiled_rule('qualcomm|高通', 0).search(claim_evidence)):
             # Identify the regional teardown finding, not a fabricated device
             # alias. Product names and package markings remain source details.
-            add_claim("iphone-" + _compiled_rule(r"\s+", 0).sub("-", tested_phone.group(1), 0),
+            model = (teardown_operation.subject.partition(':publishers:')[0] if teardown_operation
+                     else "iphone-" + _compiled_rule(r"\s+", 0).sub("-", tested_phone.group(1), 0))
+            add_claim(model,
                       "regional-modem-teardown", qualifier=next(iter(institutions)) + ":" + next(iter(regional)) + ":qualcomm",
                       category="hardware_products")
             for chip in chips:
@@ -10711,7 +10721,7 @@ def _source_local_current_action(
         and has(r"not\s+a\s+live\s+issue|could\s+start\s+to\s+hit|未来可能影响", ' '.join(source_units or source_facts))
         and not has(r"court|regulat|legislation|法院|法规", opening))
     if (publisher_selection or publisher_opinion or quoted_purchase_opinion or suggested_policy
-            or source_editorial_evaluation(title, lead)
+            or source_editorial_evaluation(title, ' '.join(source_units[:3]) if source_units else lead)
             or (identity.content_form == "podcast"
                 and not is_os_release_announcement(title)
                 and _title_owned_action_profile(title, lead, evidence, identity) is None)
@@ -10781,8 +10791,16 @@ def _source_local_current_action(
         # Generic device operations supplement the existing precise claim parser;
         # region, investigator, part code and before/after relations remain binding.
         if (operation.action == "device-teardown" or operation.action.startswith("production-")):
-            exact_claims = _primary_claim_projection(title, lead, identity, regions, evidence, source_facts=source_facts)[0]
-            if exact_claims:
+            teardown = operation if operation.action == 'device-teardown' and ':publishers:' in operation.subject else None
+            exact = _primary_claim_projection(title, lead, identity, regions, evidence,
+                source_facts=source_facts, teardown_operation=teardown)
+            if teardown and exact[0]:
+                return ReconciliationProfile(event_keys=frozenset(exact[0]), boundary_keys=frozenset(exact[1]),
+                    separation_keys=frozenset(exact[2]), category_hint=exact[3] or operation.category,
+                    identity=replace(identity, content_form='news'), relevance_tier=operation.tier,
+                    trusted_direct_action=exact[4], promotion_reason='source-owned teardown publications',
+                    event_kind_hint=operation.kind)
+            if exact[0]:
                 operation = None
         if (operation is not None and operation.subject == "apple-tv:weekly-viewership"
                 and _first_party_content_claim(title, lead, identity)):

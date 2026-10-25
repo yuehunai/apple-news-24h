@@ -209,9 +209,11 @@ FETCH_RETRIES = 1
 DEFAULT_CACHE_DIR = Path(tempfile.gettempdir()) / "apple-news-24h"
 CACHE_MARKER_FILENAME = ".apple-news-24h-cache"
 FINAL_BRIEF_ITEM_COVERAGE_RULE = (
-    "Every eligible JSON event ID is a separate required final-brief boundary unless source "
-    "review proves duplicate coverage of the same subject and action or a clear exclusion rule. "
-    "Sharing a source, report, roadmap, platform, or publication time is not duplicate-event proof."
+    "Review every event ID and required fragment; required means review, not publication. "
+    "A separate bullet needs an independently eligible reporting subject. Incidental background "
+    "may support another eligible report or be excluded, but does not create a separate bullet. "
+    "Preserve eligible event boundaries unless source evidence supports merging or splitting "
+    "under the skill's grouping policy."
 )
 FINAL_BRIEF_OMISSION_NOT_ALLOWED_FOR = [
     "single_source",
@@ -29120,8 +29122,8 @@ def required_final_brief_titles(queue: list[dict[str, Any]]) -> list[dict[str, A
             "index": item.get("index"),
             "event_id": item.get("id"),
             "required": item.get("required"),
-            "separate_bullet_by_default": True,
-            "coverage_rule": item.get("coverage_rule"),
+            "separate_bullet_by_default": not bool(item.get("evidence_id")),
+            "coverage_rule": item.get("coverage_rule", FINAL_BRIEF_ITEM_COVERAGE_RULE),
             "omission_not_allowed_for": item.get("omission_not_allowed_for", []),
             "category": item.get("category"),
             "title": item.get("title"),
@@ -29147,7 +29149,7 @@ def render_brief_scaffold(data: dict[str, Any]) -> str:
     lines: list[str] = [
         "# Apple 24H Brief Coverage Checklist",
         "",
-        "Use every item and event ID below as a separate required final-brief boundary unless source review proves duplicate coverage of the same subject and action.",
+        FINAL_BRIEF_ITEM_COVERAGE_RULE,
         "Do not combine separate event IDs merely because they share a source, report, roadmap, platform, product family, or publication time.",
         "Do not omit an item merely because it is single-source, speculative, lower-profile, competitor-adjacent, or less prominent than same-day major news.",
         "",
@@ -29696,7 +29698,7 @@ def main(argv: list[str] | None = None) -> int:
                     "required_final_brief_titles": data.get("required_final_brief_titles", []),
                     "format": args.format,
                     "output": str(output_path),
-                    "coverage_source": "Use required_final_brief_titles plus brief_output as the coverage checklist, then enrich from output events/key_facts; do not omit required items merely because they are single-source, speculative, lower-profile, or competitor-adjacent.",
+                    "coverage_source": "Use required_final_brief_titles and brief_output to track review, not publication. Resolve event and fragment eligibility and grouping under the skill policy before drafting from source evidence.",
                 }
                 if brief_output_path is not None:
                     status["brief_output"] = str(brief_output_path)

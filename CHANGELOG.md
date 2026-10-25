@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.3.0 - 2026-10-25
+
+- Updated the skill and split the policy into focused eligibility, grouping, evidence/writing and collection references, reducing their combined text by about 86% and routing each workflow stage to the relevant document.
+- Improved review scaffolds so required source fragments do not default to separate bullets; incidental passages support independently eligible reports, while coherent investigations stay together and focused short reports remain eligible.
+- Improved source-owned relevance and categories for built-in operating capabilities, durability and repair observations, court remedies, prototype testing and chip-architecture decisions; kept retail offers, outside commentary and ordinary app adaptations from becoming independent Apple news.
+- Improved resale quotation binding and fact retention across paragraphs, preserving complete prices, current versus historical scope and local observers without borrowing another participant's statements.
+- Improved teardown grouping using complete publisher sets and device identities across languages; removed a legacy name truncation that could override confirmed identities while retaining region and component distinctions.
+- Improved copyright-appeal grouping through explicit name and work aliases, current court dispositions and local attribution; preserved separate plaintiffs, works, courts and procedural stages, including denied or unresolved claims.
+- Added 19 regression tests and real-source fixtures with existing assertions preserved; the full offline suite passes 3,054 tests, with independent review, fresh live comparison and a clean skill invocation completed.
+- Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets and concurrency, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.2.1 - 2026-10-24
 
 - Improved source-bound relevance and grouping for carrier activation, software fixes and built-in feature trials, version revisions and device modifications; removed a broad legacy software promotion and kept historical, denied and unrelated claims separate.
