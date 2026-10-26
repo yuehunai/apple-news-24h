@@ -12,15 +12,15 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.3.0 - 2026-10-25
+### 2.3.1 - 2026-10-26
 
-- Updated the skill and split the policy into focused eligibility, grouping, evidence/writing and collection references, reducing their combined text by about 86% and routing each workflow stage to the relevant document.
-- Improved review scaffolds so required source fragments do not default to separate bullets; incidental passages support independently eligible reports, while coherent investigations stay together and focused short reports remain eligible.
-- Improved source-owned relevance and categories for built-in operating capabilities, durability and repair observations, court remedies, prototype testing and chip-architecture decisions; kept retail offers, outside commentary and ordinary app adaptations from becoming independent Apple news.
-- Improved resale quotation binding and fact retention across paragraphs, preserving complete prices, current versus historical scope and local observers without borrowing another participant's statements.
-- Improved teardown grouping using complete publisher sets and device identities across languages; removed a legacy name truncation that could override confirmed identities while retaining region and component distinctions.
-- Improved copyright-appeal grouping through explicit name and work aliases, current court dispositions and local attribution; preserved separate plaintiffs, works, courts and procedural stages, including denied or unresolved claims.
-- Added 19 regression tests and real-source fixtures with existing assertions preserved; the full offline suite passes 3,054 tests, with independent review, fresh live comparison and a clean skill invocation completed.
+- Improved detail admission for reported price movements even when a headline also mentions a subsidy, while keeping retail offers distinct from observed market prices.
+- Improved source-bound teardown and durability-test grouping across languages and device names, preserving observers, methods and current actions; prevented legacy repair classifications from overriding an established teardown action.
+- Improved relevance and sections for built-in capabilities, support documents, focused operating observations and device faults, while keeping unrelated hardware ports and general commentary outside independent Apple news.
+- Improved joint prototype identities and roadmap boundaries so concrete actions are not merged through a shared product family; distinguished current disclosures from historical reports, conditional speculation and absent or denied actions.
+- Improved supplier-response attribution to the actual speaker, product and current statement, preventing historical order adjustments from taking over the report and keeping an explicit denial distinct from no response.
+- Added a standard-library clause recorder for source-linked wording, references, revisions and final assembly; updated the skill to save each source's propositions before merging equivalents, without delegating semantic decisions to the tool.
+- Added 34 regression tests and real-source fixtures while preserving existing assertions; all 3,088 offline tests pass, and fresh same-window live comparison showed no collection-time regression.
 - Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets and concurrency, relevance tiers, two brief sections and explicit-only skill invocation.
 
 ## What It Does
@@ -42,6 +42,7 @@ The crawler separates collection, source evidence, event decisions, and output a
 - `skills/scripts/apple_news_core/collection.py` owns source definitions, URL normalization, HTTP/cache utilities, resource locks and concurrent discovery/detail scheduling; `article_processing.py` handles article text cleanup, timestamp parsing and captured evidence preparation. The CLI supplies fetch functions, budgets and the runtime clock.
 - `models.py` defines shared data. `event_identity.py` binds concrete subjects and actions to their source evidence, and `article_projector.py` separates supported claims while retaining unassigned source material.
 - `event_matcher.py` provides the common pair decision. `event_reconciler.py` forms groups and resolves relevance, category, and source-attributed fact plans. Output assembly consumes those decisions instead of running a second grouping or relevance engine.
+- `skills/scripts/brief_records.py` supports the skill's writing stage by saving Chinese clauses and source-unit references, retaining edit history and assembling checked clauses with their supporting links. It does not decide eligibility, grouping, semantic equivalence or factual completeness. Its usage is documented in `skills/references/brief-records.md`.
 - `tests/` covers discovery, time parsing, cache handling, event boundaries, fact attribution, and output. Fixed-input replay checks and live collection validation serve different purposes; saved pages do not prove current discovery or network health.
 
 ## What It Does Not Do
@@ -119,7 +120,7 @@ For source-bound reports, binding and news eligibility are separate decisions. M
 
 Passages in `source_evidence` not covered by displayed summaries, selected facts or explicit exclusions remain available for review, even when their source produces no event or deferred candidate. This can increase review material without adding events; it does not establish complete site coverage. For incomplete IT Home listings, the crawler can traverse public date directories within the existing budget; recovered listing failures remain in diagnostics. Publisher indexes can still omit articles, so successful traversal does not guarantee complete discovery.
 
-Version 2.3.0 retains the existing CLI, JSON fields and relevance tiers. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
+Version 2.3.1 retains the existing CLI, JSON fields and relevance tiers. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
 
 Diagnostics for debugging source failures:
 

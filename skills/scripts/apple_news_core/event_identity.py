@@ -2190,6 +2190,30 @@ def source_editorial_evaluation(title: str, lead: str) -> str:
     """Identify an evaluation's reporting role, not its background launch."""
     h, opening = _normalized(title), _normalized(lead)[:600]
     s = _frame_search
+    speaker = s(r'^(?P<name>[^：:，,。！？]{2,16}?)(?:谈|点评|评论|评价)', h)
+    judgment = (r'不便宜|不值得|不划算|浪费钱|值得(?:买|购买|入手)|'
+                r'(?:很|太|令人)(?:正常|失望|惊喜|满意)')
+    # Bind the speaker's reporting act, not an evaluative word in its result.
+    # A background official response cannot supply this speaker's observation.
+    if speaker and s(judgment, h):
+        quoted = s(r'(?:车评人|评论员|评论者|评测者|博主)\s*' + re.escape(speaker['name'])
+                   + r'(?:发文)?(?:表示|认为|称|说)[，,:：]?([^。！？]{1,180})', opening)
+        if quoted and s(judgment, quoted.group(1)):
+            observed = False
+            products = named_iphone_models(h) or _extract_patterns(h, PRODUCT_PATTERNS)
+            for start, end in source_sentence_spans(opening):
+                clause = opening[start:end]
+                act = s(re.escape(speaker['name']) + r'(?:近日|日前|已经|现已)?'
+                        r'(?:(?:实测|测试|测量|调查|拆解)(?:了)?(?P<observed>[^。！？，,;；]{1,60})|'
+                        r'(?:发布|分享)(?:了)?(?P<reported>[^。！？，,;；]{1,60}?)'
+                        r'(?:测试|实测|调查|拆解)(?:报告|视频))', clause)
+                subject = (act['observed'] or act['reported']) if act else ''
+                objects = named_iphone_models(subject) or _extract_patterns(subject, PRODUCT_PATTERNS)
+                if act and products & objects and _current_observation_action(clause, act):
+                    observed = True
+                    break
+            if not observed:
+                return 'analysis'
     if (s(r'本质(?:上)?(?:是|还是)|(?:root\s+)?cause|原因(?:在于|是)', h)
             and s(r'发表.{0,12}(?:看法|观点)|个人(?:看法|观点)|offers?\s+(?:his|her|their)\s+(?:view|opinion)', opening)
             and not s(r'^(?:苹果|apple)\s*(?:(?:公司|工程|硬件|软件|设计|技术|现任|首席|资深|高级)*'
@@ -8054,7 +8078,7 @@ def bind_resale_report(evidence: ArticleEvidence) -> tuple[BoundClaim, ...] | No
         # The retailer's restriction owns this report; resale prices may
         # explain its context but do not turn it into a dealer observation.
         return None
-    if not s(r'resale|resell|scalper|黄牛|溢价|二手|加价|囤.{0,12}台|订单.{0,8}压价', title):
+    if not s(r'resale|resell|scalper|黄牛|溢价|二手|加价|破发|跌破(?:首发|发售|上市)价|below\s+(?:its\s+)?(?:launch|retail)\s+price|囤.{0,12}台|订单.{0,8}压价', title):
         return None
     models = named_iphone_models(title)
     if len(models) != 1:
@@ -8117,6 +8141,21 @@ def bind_resale_report(evidence: ArticleEvidence) -> tuple[BoundClaim, ...] | No
             'hardware_products', 'hardware_market', 'apple-direct', 'independent', 'affirmed'))
     quotes = []
     current = False
+    # A qualitative price observation may precede a retailer's supporting
+    # offer. Bind the reported sample, not the mere presence of a discount.
+    direction = r'破发|跌破(?:首发|发售|上市)价|below\s+(?:its\s+)?(?:launch|retail)\s+price'
+    if s(direction, title):
+        for unit in body[:2]:
+            for a, b in source_sentence_spans(unit.text):
+                clause = unit.text[a:b]
+                observer = s(r'(?:综合|根据|据)[^。；]{0,35}(?:网友|消费者|商家|买家)[^。；]{0,12}(?:反馈|反映)|'
+                    r'(?:buyers?|consumers?|dealers?)\s+(?:report|reported|observed)', clause)
+                finding = s(direction, clause[observer.end():]) if observer else None
+                if (finding and named_iphone_models(clause) == {subject}
+                        and source_predicate_role(clause[:observer.end() + finding.end()]) == 'current'
+                        and not source_denies_action('', clause, direction)):
+                    quotes.append((unit.unit_id, a, b))
+                    current = True
     def current_quote(text):
         return bool(s(r'如今|目前|现在|现已|\b(?:now|currently)\b', text)) or not bool(
             s(r'早在|此前|去年|刚发布时|当时|一度|last\s+year|previously', text))
@@ -11169,7 +11208,8 @@ def source_denies_action(title: str, lead: str, predicate: str) -> bool:
     scope = source_primary_assertion(title, lead)
     return bool(_frame_search(r"\b(?:denies|denied|ruled\s+out|(?:is|are|was|were)\s+(?:false|untrue|not\s+true))\b|否认|不实", scope)
         or _frame_search(r"\b(?:not|never|cannot|can't|won't|unable\s+to)\s+(?:(?:yet|currently|been|be|being)\s+){0,3}(?:" + predicate + r")|"
-                        r"(?:并未|尚未|(?<!并非)(?<!不是)未|没有|不再|不会)(?:(?:将|把)[^。！？；，,;.!?但而]{1,100}?)?(?:" + predicate + r")", scope))
+                        r"(?:并未|尚未|(?<!并非)(?<!不是)未|没有|不再|不会|无法|不能|不可)"
+                        r"(?:(?:将|把|在)[^。！？；，,;.!?但而]{1,100}?)?(?:" + predicate + r")", scope))
 
 
 def source_software_capability_frame(title: str, lead: str, facts: tuple[str, ...]) -> SourceActionFrame | None:
@@ -11326,11 +11366,47 @@ def source_software_capability_frame(title: str, lead: str, facts: tuple[str, ..
                 ('edge-light', r'edge\s+light|边缘补光|边缘光')]
     for feature, pattern in features:
         if (len(models) == 1 and s(pattern, h)
-                and s(r'software|features?|accessibility|视频通话|软件|单手模式', local)
+                and s(r'software|features?|accessibility|视频通话|软件|单手模式|界面|模式', local)
                 and not s(r'wishlist|wish\s+list|should\s+add|希望|愿望|应该加入', h)):
-            planned = s(r'plans?\s+to|will\s+add|coming|今年晚些时候|将.{0,25}(?:加入|支持)', local)
+            planned = s(r'plans?\s+to|will\s+add|coming|正在?[^。]{0,20}开发|今年晚些时候|将.{0,25}(?:加入|支持)', local)
             return SourceActionFrame(next(iter(models)) + ':' + feature,
                 'software-feature-plan' if planned else 'software-capability-report', kind='os_app')
+    if (len(models) == 1 and s(r'automations?|快捷指令', h)
+            and s(r'open\s+or\s+close|opened\s+or\s+closed|展开.{0,8}折叠', local)
+            and s(r'can\s+run|trigger|触发|执行预设操作', opening)
+            and not s(r'wishlist|should|希望|建议|计划', h)):
+        execution = r'runs?|triggers?|执行|触发'
+        for clause in clauses:
+            if _normalized(clause).rstrip('.。') == h.rstrip('.。'):
+                continue
+            trigger = s(r'(?:' + execution + r')\s+(?:personal\s+)?(?:actions?|automations?)\s+when\s+'
+                r'(?:(?:the\s+device|it)\s+is\s+|you\s+)?(?:opened\s+or\s+closed|open\s+or\s+close)|'
+                r'展开(?:或|和)折叠时(?:就能|可以|可)?(?:自动)?(?:' + execution + r')', clause)
+            if (trigger and named_iphone_models(clause) == models
+                    and source_predicate_role(clause[:trigger.end()]) == 'current'
+                    and not source_denies_action('', clause, execution)
+                    and not s(r'计划|将|\bwill\b|去年|回顾|last\s+year|previously', clause)):
+                return SourceActionFrame(next(iter(models)) + ':fold-state-automation',
+                                         'software-capability-report', kind='os_app')
+    if (len(models) == 1 and s(r'safari', h) and s(r'layout|布局|显示方式', h)
+            and s(r'apple\s+is\s+(?:considering|working)|苹果正在研究', opening)
+            and not source_denies_action('', opening, r'consider|working|研究')):
+        return SourceActionFrame('safari:' + next(iter(models)) + ':layout',
+                                 'software-feature-plan', kind='os_app')
+    if s(r'macos', h) and s(r'touch|触控|触屏', h) and s(r'interface|界面', h):
+        for clause in clauses[:5]:
+            if (s(r'macos[^.!?。]{0,40}will\s+be\s+(?:tweaked|adjusted|updated)|苹果[^。]{0,30}(?:调整|修改)\s*macos', clause)
+                    and not source_denies_action('', clause, r'tweak|adjust|updat|调整|修改')):
+                return SourceActionFrame('macos:touch-interface', 'software-feature-plan', kind='os_app')
+    if len(models) == 1 and s(r'support\s+documents?|(?:支持|故障排查)文档', h):
+        topics = [name for name, pattern in (('hinge', r'hinge|铰链'), ('display', r'display|screen|屏幕'))
+                  if s(pattern, h)]
+        publication = s(r'(?:apple\s+(?:(?:has|now)\s+)*(?:published|released)|苹果(?:现已|已经|已)?(?:为[^。；]{0,40})?(?:发布|上线))'
+            r'[^。；]{0,75}(?:support\s+documents?|支持文档)', opening)
+        if (topics and publication and source_predicate_role(opening[:publication.end()]) == 'current'
+                and not source_denies_action('', opening[:publication.end()], r'publish|releas|发布|上线')):
+            return SourceActionFrame(next(iter(models)) + ':support:' + ':'.join(topics),
+                                     'document-publication', kind='service_policy')
     if (s(r'certificates?|证书', h)
             and s(r'(?:apple|苹果)[^。.!?]{0,50}(?:block\w*|revok\w*|封锁|屏蔽|撤销)', local)
             and not source_denies_action(title, lead, r'block\w*|revok\w*|封锁|屏蔽|撤销')):
@@ -11743,6 +11819,16 @@ def source_editorial_outlook(title: str, lead: str, passages: tuple[str, ...]) -
     """Read explicit recap/forecast form without treating old citations as news."""
     s = _frame_search
     h = _normalized(title)
+    # An attributed premise followed by the writer's inference and a
+    # conditional implementation is not a disclosure of that capability.
+    if s(r'有望|可能|是否|能否', h):
+        clauses = [_normalized(p[a:b]) for p in passages or (lead,)
+                   for a, b in source_sentence_spans(p)]
+        inference = any(s(r'^(?:同时|而)?(?:考虑到|鉴于)[^。！？]{1,160}'
+                          r'(?:因此|所以)[^。！？]{0,40}(?:耐人寻味|值得关注|推测)', c) for c in clauses)
+        conditional = any(s(r'^(?:如果|假如)[^。！？]{1,100}(?:预计|可能)', c) for c in clauses)
+        if inference and conditional and not source_current_disclosure_clauses(lead, passages):
+            return True
     discussion = any(s(r'^\s*on\s+this\s+episode\s+of\b|^(?:本期|这一期).{0,20}(?:节目|播客)', p) for p in passages[:3])
     if discussion and not s(r'^(?:apple|苹果).{0,30}(?:announc|releas|launch|宣布|发布|推出)', h):
         return True
@@ -11759,12 +11845,14 @@ def source_editorial_outlook(title: str, lead: str, passages: tuple[str, ...]) -
         # its subject, not another independently reported announcement.
         return True
     strategy = s(r'^how\s+apple\s+(?:can|could|should)\s+(?:win|succeed|compete|lead|improve)\b|苹果(?:如何|怎样)(?:才能|能够)?.{0,15}(?:成功|取胜|竞争|领先)', h)
-    if not strategy and not s(r'features?|changes?|when\s+to\s+expect|when.{0,50}(?:ship|launch|releas)|^remembering\b|功能|变化|前瞻|^回顾', h):
+    preview = s(r'(?:here[’\']s\s+)?what[’\']s\s+coming|what\s+to\s+expect|前瞻', h)
+    if not (strategy or preview) and not s(r'features?|changes?|when\s+to\s+expect|when.{0,50}(?:ship|launch|releas)|^remembering\b|功能|变化|前瞻|^回顾', h):
         return False
     if is_os_release_announcement(title):
         return False
     text = ' '.join((lead, *passages))
     recap = s(r'(?:here\s+is|here[’\']s).{0,20}recap.{0,50}rumou?r|looks?\s+back\s+at.{0,25}(?:old|past)\s+rumou?r|(?:回顾|汇总).{0,20}旧传闻', text)
+    recap = recap or (preview and s(r'rumou?rs?[^.!?。]{0,45}(?:heard|so\s+far)|(?:此前|已有).{0,15}传闻', text))
     older = sum(bool(s(r'(?:report|bloomberg|消息|报道).{0,35}(?:earlier\s+this\s+week|this\s+summer|last\s+month|上周|上月)', p)) for p in set(passages))
     forecast = (s(r'when\s+to\s+expect|when.{0,50}(?:ship|launch|releas)', h)
         and s(r'we[’\']re\s+expecting|most\s+likely|here[’\']s\s+when\s+to\s+expect|我们预计', text))
@@ -11778,18 +11866,30 @@ def source_editorial_outlook(title: str, lead: str, passages: tuple[str, ...]) -
     return True
 
 
+def _source_predicate_absent(prefix: str) -> bool:
+    """Read absence before a speech verb; a denial is itself a speech act."""
+    return bool(_frame_search(r'\b(?:not|never)\s+(?:(?:yet|today|now|publicly|officially)\s+)*$|'
+        r'(?:并未|尚未|没有|未|没能|无法)(?:公开|正式|明确|直接)?$', prefix))
+
+
 def source_current_disclosure_clauses(lead: str, passages: tuple[str, ...]) -> tuple[str, ...]:
     """Locate current attributed disclosures; their claims still need an owner."""
     result = []
+    predicate = (r'reveals?|says?|shows?|reports?|announced|confirmed|disclosed|released|launched|'
+                 r'denies|denied|报道|披露|证实|确认|否认|宣布|发布|推出')
     for p in (lead, *passages):
         for start, end in source_clause_spans(p):
             clause = p[start:end]
             if source_predicate_role(clause) != 'current':
                 continue
-            if _frame_search(r'(?:new|fresh)\s+(?:report|filing|disclosure).{0,70}(?:reveals?|says?|shows?)|'
-                 r'(?:today|now).{0,45}(?:reports?|announced|confirmed|disclosed|released|launched)|'
-                 r'(?:reports?|announced|confirmed|disclosed|released|launched).{0,75}(?:today|now)|'
-                 r'(?:今天|最新).{0,30}(?:报道|披露|证实|发布|推出)', clause):
+            signal = _frame_search(r'(?:(?:new|fresh)\s+(?:report|filing|disclosure).{0,70}?|'
+                 r'(?:today|now).{0,45}?|(?:今天|今日|最新).{0,30}?)'
+                 r'(?P<predicate>' + predicate + r')', clause) or _frame_search(
+                 r'(?P<predicate>' + predicate + r').{0,75}(?:today|now)', clause)
+            # Lack of confirmation is not a confirmation act. Negation in
+            # the reported claim, or an affirmative denial, remains evidence.
+            absent = signal and _source_predicate_absent(clause[:signal.start('predicate')])
+            if signal and not absent:
                 result.append(clause)
     return tuple(dict.fromkeys(result))
 
@@ -12702,6 +12802,39 @@ def source_market_report_frame(title: str, lead: str, passages: tuple[str, ...])
     weekly = source_weekly_device_measurement(title, lead, passages)
     if weekly is not None:
         return weekly
+    phone = s(r'iphone\s*(\d+|duo|air)(?![a-z0-9])(?:\s*(pro(?:\s*max)?|plus|air)(?![a-z0-9]))?', h)
+    response = s(r'回应|否认|没听说|respond(?:s|ed)?\b|deni(?:es|ed)\b|refut\w*', h)
+    orders = s(r'orders?|production|订单|加单|砍单|减产|零部件生产', h)
+    if phone and response and orders:
+        # A supplier's current statement owns this report. A later account of
+        # Apple's old order changes cannot turn that statement into the order.
+        model = 'iphone-' + phone.group(1) + (('-' + phone.group(2).replace(' ', '-')) if phone.group(2) else '')
+        speaker = h[:response.start()].strip(' ：:，,')
+        speaker = _compiled_rule(r'^(?:apple(?:[’\x27]s)?\s+supplier\s+|supplier\s+|苹果供应商|供应商)', re.I).sub('', speaker)
+        role = r'(?:接线工作人员|工作人员|发言人|负责人|人士|spokesperson|representative|officials?)'
+        speaker = _compiled_rule(r'\s*' + role + r'\s*$').sub('', speaker).strip()
+        texts = tuple(_normalized(p) for p in (passages or (lead,)) if _normalized(p) != h)
+        owned = tuple(texts[i][a:b] for i, a, b in current_device_text_spans(texts, model))
+        supplier = r'suppliers?|manufacturers?|供应商|供应链|制造商'
+        related = speaker and any(s(re.escape(speaker) + r'[^。.!?]{0,100}(?:' + supplier + r')|'
+            r'(?:' + supplier + r')[^。.!?]{0,100}' + re.escape(speaker), clause) for clause in owned)
+        speech = r'回应|表示|称|确认|证实|否认|respond(?:s|ed)?|said|says?|confirm\w*|deni(?:es|ed)'
+        bridge = r'(?:\s|的|' + role + r'|今日|今天|昨日|昨天|目前|已经|明确|尚未|没有|并未|计划|明天|将|'
+        bridge += r'\b(?:has|had|now|today|yesterday|not|never|will|plans?|to)\b)*'
+        if related:
+            for clause in owned:
+                statement = s(re.escape(speaker) + bridge + r'(?P<predicate>' + speech + r')', clause)
+                if not statement:
+                    continue
+                prefix = clause[:statement.start('predicate')]
+                if (source_predicate_role(prefix) != 'current'
+                        or s(r'计划|预计|将|\b(?:will|plans?)\b', statement.group())
+                        or _source_predicate_absent(prefix)):
+                    continue
+                obj = ('component-orders' if s(r'components?|零部件|元件', h)
+                       else 'assembly-orders' if s(r'assembly|whole.unit|整机|组装', h) else 'orders')
+                return frame(model + ':' + obj + ':respondent:' + speaker.replace(' ', '-'), 'supplier-response')
+        return None
     # A source can report one redistribution across several models. Bind the
     # complete set of model/direction pairs, not a reservation or price nearby.
     if (s(r'iphone', h) and s(r'orders?|加单|砍单|订单', h)
@@ -12732,15 +12865,12 @@ def source_market_report_frame(title: str, lead: str, passages: tuple[str, ...])
             and s(r'fall|fell|drop|rise|rose|gain|下跌|上涨', h)
             and not s(r'could|might|may|预测|可能', h)):
         return frame('apple:equity', 'trading-price-report')
-    phone = s(r'iphone\s*(\d+|duo|air)(?![a-z0-9])(?:\s*(pro(?:\s*max)?|plus|air)(?![a-z0-9]))?', h)
     if not phone:
         return None
     model = 'iphone-' + phone.group(1) + (('-' + phone.group(2).replace(' ', '-')) if phone.group(2) else '')
     first = opening[:next(source_sentence_spans(opening), (0, len(opening)))[1]]
     if s(r'refut|disput|质疑|驳斥', first) and not s(r'respond|回应|否认', h):
         return None  # A disputed claim in a feed excerpt is not this source's finding.
-    response = s(r'回应|否认|没听说|未.{0,8}变化|respond|deni(?:es|ed)|refut', h)
-    orders = s(r'orders?|production|订单|减产|零部件生产', h)
     # Bind the object of the owned order verb before reading its evidence.
     # Teaser prefixes can name a different model from the reported operation.
     owned_verb = s(r'apple\s+(?:(?:has|reportedly|allegedly|now|will)\s+)*(?:cuts?|reduc\w*|increas\w*|boost\w*)|苹果(?:(?:据报|据称|被曝|公司|方面|已经|大幅|正在|已|正|将)\s*)*(?:削减|减少|增加|增产|减产)', h)
@@ -12763,8 +12893,6 @@ def source_market_report_frame(title: str, lead: str, passages: tuple[str, ...])
         if s(r'components?|零部件|元件', clause):
             order_object_kind = 'component-orders'
             break
-    if orders and response:
-        return frame(model + ':' + order_object_kind, 'supplier-response')
     # A quantified target revision and an order increase describe the same
     # operation only with its own whole-device counts and reporting period.
     target = r'orders?|(?:shipment|production)\s+targets?|出货目标|产量目标|生产目标|产量规划'
@@ -13503,6 +13631,13 @@ _PROTOTYPE_TESTING_PREDICATE = (
 def _hardware_prototype_scope(title: str, lead: str) -> set[str]:
     # Own device prototype tests only; component and accessory evaluations keep
     # their existing, more specific action owners.
+    devices = hardware_action_subjects(title)
+    if len(devices) > 1 and _frame_search(r'planned|in\s+the\s+works|开发|研发', title):
+        testing = _frame_search(_PROTOTYPE_TESTING_PREDICATE, lead)
+        if (testing and source_predicate_role(lead[:testing.end()]) == 'current'
+                and _frame_search(r'\bnew\b|prototype|新款|原型', testing.group('object'))
+                and hardware_action_subjects(testing.group('object')) == devices):
+            return devices
     if (not _frame_search(r'\bnew\b|prototype|foldable|folding|新款|原型|折叠', title)
             or _frame_search(r'\b(?:apps?|software|features?|services?)\b|应用|软件|功能|服务', title)
             or primary_assertion_components(title)):
@@ -13516,7 +13651,6 @@ def _hardware_prototype_scope(title: str, lead: str) -> set[str]:
         if (not _frame_search(r'苹果(?:公司)?(?:目前|正在|正)*推进', title)
                 or testing is None or source_predicate_role(lead[:testing.end()]) != 'current'):
             return set()
-    devices = hardware_action_subjects(title)
     return devices if len(devices) == 1 else set()
 
 
@@ -13525,7 +13659,7 @@ def bind_hardware_prototype_testing(evidence: ArticleEvidence) -> tuple[BoundCla
     s = _frame_search
     title = evidence.title
     lead = evidence.raw_lead or next((u.text for u in evidence.units if u.kind == 'summary'), '')
-    devices = _hardware_prototype_scope(title, lead)
+    devices = _hardware_prototype_scope(title, '\n'.join(u.text for u in evidence.units[:3]) or lead)
     if not devices:
         return None
     unresolved = (BoundClaim('', 'hardware-prototype-testing', '', (), evidence.article_id,
@@ -13559,7 +13693,7 @@ def bind_hardware_prototype_testing(evidence: ArticleEvidence) -> tuple[BoundCla
             title_models, tested_models = source_device_test_objects(title), source_device_test_objects(target)
             if title_models and title_models != tested_models:
                 continue
-            subject = (next(iter(tested_models)) if len(tested_models) == 1 else next(iter(devices)))
+            subject = '|'.join(sorted(tested_models or devices))
             subject += ':foldable' if s(r'foldable|folding|折叠', target) else ''
             spans.setdefault(subject, []).append((unit.unit_id, start, end))
     return tuple(BoundClaim(subject, 'hardware-prototype-testing', 'prototype', (),
@@ -14511,6 +14645,29 @@ def _homepod_mac_audio_activation(assertion: str) -> SourceActionFrame | None:
     return None
 
 
+def _observation_operator(prefix: str) -> str:
+    """Read the named operator immediately before its test/publication verb."""
+    operator = _compiled_rule(r"([A-Za-z][A-Za-z0-9]*(?:\s+[A-Z][A-Za-z0-9]*){0,3})"
+        r"\s*(?:['’]s\s*|(?:has|have|today|now|recently|already)\s+|"
+        r"(?:在|于)?(?:近日|日前|现已|已经|今日|今天|昨日|昨天|此次|首先|"
+        r"(?:本|上|这)(?:周|星期)(?:末|[一二三四五六日天])?)(?:[（(][\d\s年月日/-]{1,24}[）)])?\s*)*$", 0).search(prefix)
+    name = operator.group(1).casefold() if operator else ''
+    return '' if name in {'apple', 'the', 'this', 'it', 'he', 'they', 'site', 'today', 'now', 'recently', 'already'} else name
+
+
+def _current_observation_action(clause: str, match) -> bool:
+    """Completion/publication, with modality and time attached to that action."""
+    prefix, suffix = clause[:match.end()], clause[match.end():]
+    if (source_predicate_role(prefix) != 'current'
+            or _frame_search(r'计划|打算|准备|拟|将|\b(?:plans?|intends?|will|aims?)\b', clause[:match.start()])
+            or source_denies_action('', prefix, re.escape(match.group()))):
+        return False
+    return not _frame_search(r'^\s*(?:的)?(?:计划|方案|请求|提议)|^\s+(?:plan|proposal|request)\b|'
+        r'^[\s,，]*(?:(?:其|该报告的)?(?:发布时间|测试时间|拆解时间)(?:为|是)|'
+        r'(?:(?:was|were)\s+)?(?:published|performed|conducted)\s+)?'
+        r'(?:last\s+(?:year|month|week)|previously|去年|此前)', suffix)
+
+
 def source_device_operation_frame(title: str, lead: str, facts: tuple[str, ...] = (), *, source_units: tuple[str, ...] = ()) -> SourceActionFrame | None:
     """Keep a named device's launch and focused reports with their own object.
 
@@ -14529,15 +14686,57 @@ def source_device_operation_frame(title: str, lead: str, facts: tuple[str, ...] 
     if s(r'\b(?:wish|concept)\b|概念|设想|希望', h):
         return None
     models = named_iphone_models(h)
+    if not models and s(r'iphone', h) and s(r'crack|开裂|内屏.{0,18}损坏', h):
+        report_opening = source_units[0] if source_units else lead
+        first = next(source_sentence_spans(report_opening), (0, len(report_opening)))
+        models = named_iphone_models(report_opening[first[0]:first[1]])
     if len(models) == 1:
         model = next(iter(models))
         device = re.escape(model).replace(r'\-', r'\s*')
-        if s(r'durability\s+test|耐久测试|耐用性测试', h):
+        if (s(r'crack|开裂|漏液|内屏.{0,18}损坏', h)
+                and not s(r'teardown|test|拆解|拆机|测试|客服|回应', h)):
+            for passage in source_units[:2] or (lead,):
+                reported = s(r'(?:owners?|users?)\s+are\s+reporting|(?:用户|网友)[^。；]{0,12}(?:反映|反馈|报告|发布视频称)', passage)
+                if (reported and named_iphone_models(passage) == {model}
+                        and source_predicate_role(passage[:reported.end()]) == 'current'
+                        and s(r'screens?[^.!?。]{0,50}(?:cracked|broken)|内屏[^。；]{0,30}(?:损坏|开裂|漏液)', passage)
+                        and not source_denies_action('', passage, r'crack|broken|损坏|开裂|漏液')):
+                    fault = 'display-leaking' if s(r'漏液', h) else 'display-cracking'
+                    return SourceActionFrame(model + ':' + fault, 'device-issue-report',
+                                             'hardware_products', 'hardware_market')
+        if s(r'(?:durability|dust|bend)\s+test|耐久测试|耐用性测试|防尘测试|弯折测试', h):
             experiment = s(device + r'\s+(?:has\s+)?(?:failed|passed)\s+'
                 r'([a-z][a-z0-9 -]{1,60})[’\x27]s\s+(?:latest\s+)?durability\s+test', opening)
             if experiment and source_predicate_role(opening[:experiment.end()]) == 'current':
                 return SourceActionFrame(model + ':durability:' + _subject_slug(experiment.group(1)),
                     'physical-test-report', 'hardware_products', 'hardware_market')
+            for passage in source_units or (lead, *facts):
+                for a, b in source_sentence_spans(passage):
+                    clause = passage[a:b]
+                    publication = s(r'(?:放出|发布|分享)(?:了)?\s*' + device
+                        + r'\s*的(耐用性|耐久|防尘|弯折)测试(?:视频|报告)', clause)
+                    observer = _observation_operator(clause[:publication.start()]) if publication else ''
+                    if observer and _current_observation_action(clause, publication):
+                        method = {'耐用性': 'durability', '耐久': 'durability', '防尘': 'dust', '弯折': 'bending'}[publication.group(1)]
+                        return SourceActionFrame(model + ':' + method + ':' + _subject_slug(observer),
+                            'physical-test-report', 'hardware_products', 'hardware_market')
+        if (s(r'dissect|cause|behind|故障原因|故障诱因', h)
+                and not s(r'teardown|tears?\s+down|拆解|拆机', h)):
+            previous_observer = ''
+            for passage in source_units[:6] or (lead, *facts):
+                tested = s(r'YouTuber\s+((?-i:[A-Za-z][A-Za-z0-9]*(?:\s+[A-Z][A-Za-z0-9]*){0,3}))'
+                    r'\s+was\s+able\s+to\s+reproduce[^.!?。]{0,100}durability\s+testing\s+of\s+(?:the\s+)?' + device, passage)
+                continuation = (previous_observer and s(r'^(?:During|In)\s+(?:his|her|their)\s+(?:own\s+)?testing', passage)
+                    and named_iphone_models(passage) == {model}
+                    and s(r'dirt|dust|folding|bend', passage)
+                    and source_predicate_role(passage) == 'current')
+                if ((tested and source_predicate_role(passage[:tested.end()]) == 'current') or continuation):
+                    observer = tested.group(1) if tested else previous_observer
+                    return SourceActionFrame(model + ':durability:' + _subject_slug(observer),
+                        'physical-test-report', 'hardware_products', 'hardware_market')
+                reference = s(r'video\s+by\s+YouTuber\s+((?-i:[A-Za-z][A-Za-z0-9]*(?:\s+[A-Z][A-Za-z0-9]*){0,3}))', passage)
+                previous_observer = (reference.group(1) if reference
+                    and not s(r'last\s+(?:year|month|week)|previously|去年|此前', passage) else '')
         if s(r'门店|stores?', h) and s(r'屏幕|display|screen', h):
             for passage in source_units or facts:
                 if (s(r'(?:苹果零售店|苹果门店|apple\s+stores?).{0,12}(?:员工|staff)', passage)
@@ -16911,17 +17110,22 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
             local_regions.add('china')
         region = ','.join(sorted(local_regions))
         return replace(frame(model + ':repair-fees', 'service-price-disclosure', kind='service_policy'), region=region)
-    if device and s(r"teardown|拆解|拆机|repairab|可维修", h):
+    if device and s(r"teardown|tears?\s+down|look\s+inside|拆解|拆机|repairab|可维修", h):
         device_name = re.escape(model).replace(r'\-', r'\s*')
         owner = (device_name
             + r'(?:手机|机身|设备)?(?=\s*[，。.!?：:;；]|\s*$|\s+(?:and|to|for|is|are|today|yesterday|revealing|showing)\b)')
         determiner = r'(?:(?:the|new|apple[’\x27]s)\s+)*'
         physical = (r'(?:took|takes?|taking)\s+apart\s+' + determiner + owner
+            + r'|(?:tears?\s+down|torn\s+open)\s+(?:(?:the|latest|new)\s+)*(?:' + owner + r'|iphone\b(?!\s*\d))'
             + r'|teardown\s+of\s+' + determiner + owner
             + r'|' + device_name + r'\s+teardown\s+(?:videos?|reports?)\s+(?:have\s+been|were|are)\s+(?:shared|published|released)\b'
             + r'|' + device_name + r'\s+teardowns?\s+(?:reveals?|shows?)\b'
             + r'|拆解(?:了)?\s*(?:这款|苹果)?\s*' + owner
-            + r'|(?:分享|发布|放出)(?:了)?(?:首批|首个|新的)?(?:苹果)?\s*' + device_name + r'\s*的(?:拆解|拆机)(?:报告|视频)')
+            + r'|完成(?:了)?对\s*(?:苹果)?(?:首款)?(?:折叠屏)?(?:手机)?\s*' + device_name
+            + r'\s*的(?:全面|完整|详细)?拆解'
+            + r'|对\s*(?:苹果)?(?:首款)?(?:折叠屏)?(?:手机)?\s*' + device_name
+            + r'\s*进行了(?:全面|完整|详细)?拆解'
+            + r'|(?:分享|发布|放出)(?:了)?(?:首批|首个|新的)?(?:苹果)?\s*' + device_name + r'\s*的(?:最新|完整|全面|详细)?(?:拆解|拆机)(?:报告|视频)')
         generic_teardown = None
         for passage in source_units or (lead, *facts):
             if _normalized(passage) == h:
@@ -16935,12 +17139,13 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
                 finding = reporter + r'\s+has\s+discovered\s+[^,.!?]{0,60}\bin\s+(?:the\s+)?' + owner
                 if any(s(finding, text[a:b]) and source_predicate_role(text[a:b]) == 'current'
                        for text in source_units or (lead, *facts) for a, b in source_sentence_spans(text)):
-                    generic_teardown = frame(model, "device-teardown", "hardware_products", "hardware_market")
+                    generic_teardown = frame(model + ":publishers:" + introduction.group(1),
+                        "device-teardown", "hardware_products", "hardware_market")
             for a, b in source_clause_spans(passage):
                 clause = passage[a:b]
                 physical_match = s(physical, clause)
-                if (physical_match and source_predicate_role(clause) == 'current'
-                        and not source_denies_action('', clause, r'took|takes?|taking|teardown|拆解|拆机|分享|发布|放出')):
+                if (physical_match and _current_observation_action(clause, physical_match)
+                        and not (named_iphone_models(clause) - {model})):
                     # The channels publishing this teardown identify the
                     # observation, not the outlet translating their findings.
                     publication = s(r'^\s+by\s+(?:the\s+)?(?:youtube\s+)?channels?\s+([^,.!?。！？]+)',
@@ -16955,6 +17160,11 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
                         if publishers:
                             subject += ':publishers:' + '|'.join(publishers)
                             return frame(subject, "device-teardown", "hardware_products", "hardware_market")
+                    publisher_prefix = _compiled_rule(r"(?:发布|分享|放出)(?:了)?(?:视频|报告)[，,]\s*$", 0).sub(
+                        "", clause[:physical_match.start()], count=1)
+                    observer = _observation_operator(publisher_prefix)
+                    if observer:
+                        return frame(model + ':publishers:' + observer, "device-teardown", "hardware_products", "hardware_market")
                     generic_teardown = frame(model, "device-teardown", "hardware_products", "hardware_market")
         if generic_teardown is not None:
             return generic_teardown

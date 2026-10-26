@@ -6848,7 +6848,7 @@ def _primary_claim_projection(
     # The published teardown is the action; its battery, optics and repair
     # findings are complementary observations, not independent teardown IDs.
     teardown_scope = lead[:1800]
-    if tested_phone and (teardown_operation or _compiled_rule('teardown|tears? down|拆解|拆机', 0).search(title_text)):
+    if teardown_operation or (tested_phone and _compiled_rule('teardown|tears? down|拆解|拆机', 0).search(title_text)):
         if teardown_operation:
             investigators = set(teardown_operation.subject.partition(':publishers:')[2].split('|'))
             whole_device = True
@@ -6921,7 +6921,7 @@ def _primary_claim_projection(
 
     # A regional teardown's positive chip identification is not contradicted
     # by the complementary statement that a different chip is absent.
-    if tested_phone and (teardown_operation or _compiled_rule('teardown|拆解', 0).search(title_text)):
+    if teardown_operation or (tested_phone and _compiled_rule('teardown|拆解', 0).search(title_text)):
         if teardown_operation:
             institutions = {teardown_operation.subject.partition(':publishers:')[2]}
         else:
@@ -10744,7 +10744,8 @@ def _source_local_current_action(
             r'在([^。；;，,]{2,65}?)上(?:成功)?运行\s*(?:苹果\s*)?(?:ios|ipados|macos|watchos|tvos|visionos)|'
             r'\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*(?:\d+(?:\.\d+)*)?\s*'
             r'(?:support\s+)?(?:on\s+|to\s+|移植到|运行在)([^。；;.!?]{2,65})|'
-            r'(?:让|将(?:一部)?)([^。；;，,]{2,65}?)(?:手机)?(?:刷入|启动|运行)\s*ios\s*\d', re.I).search(port_claim)
+            r'(?:令|让|为|将(?:一部)?)([^。；;，,]{2,65}?)(?:手机)?(?:刷入|启动|运行)\s*(?:苹果\s*)?'
+            r'(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s*/\s*(?:ios|ipados))?\s*\d', re.I).search(port_claim)
         target = next((v for v in port_target.groups() if v), '') if port_target else ''
         if (target and identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS
                 and not has(r'\b(?:iphone|ipad|mac|macbook|imac|vision\s*pro|apple\s*watch|apple\s*silicon)\b|苹果\s*m\d|苹果硬件', target)
@@ -10796,7 +10797,7 @@ def _source_local_current_action(
                 source_facts=source_facts, teardown_operation=teardown)
             if teardown and exact[0]:
                 return ReconciliationProfile(event_keys=frozenset(exact[0]), boundary_keys=frozenset(exact[1]),
-                    separation_keys=frozenset(exact[2]), category_hint=exact[3] or operation.category,
+                    separation_keys=frozenset(exact[2]) | {'source-local-action-authority'}, category_hint=exact[3] or operation.category,
                     identity=replace(identity, content_form='news'), relevance_tier=operation.tier,
                     trusted_direct_action=exact[4], promotion_reason='source-owned teardown publications',
                     event_kind_hint=operation.kind)

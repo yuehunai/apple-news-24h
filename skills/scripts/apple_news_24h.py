@@ -8888,7 +8888,8 @@ def is_relevant_candidate(
         return False
     strong_score = score_terms(text, STRONG_NEWS_ACTION_TERMS)
     exclude_score = score_terms(text, EXCLUDE_TERMS)
-    if is_routine_retail_discount_story(candidate.title, text):
+    if (is_routine_retail_discount_story(candidate.title, text)
+            and not (key_facts is None and collection.price_observation_needs_detail(candidate.title))):
         return False
     if high_confidence_direct_apple_action(semantic_identity):
         return True

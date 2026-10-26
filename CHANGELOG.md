@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.3.1 - 2026-10-26
+
+- Improved detail admission for reported price movements even when a headline also mentions a subsidy, while keeping retail offers distinct from observed market prices.
+- Improved source-bound teardown and durability-test grouping across languages and device names, preserving observers, methods and current actions; prevented legacy repair classifications from overriding an established teardown action.
+- Improved relevance and sections for built-in capabilities, support documents, focused operating observations and device faults, while keeping unrelated hardware ports and general commentary outside independent Apple news.
+- Improved joint prototype identities and roadmap boundaries so concrete actions are not merged through a shared product family; distinguished current disclosures from historical reports, conditional speculation and absent or denied actions.
+- Improved supplier-response attribution to the actual speaker, product and current statement, preventing historical order adjustments from taking over the report and keeping an explicit denial distinct from no response.
+- Added a standard-library clause recorder for source-linked wording, references, revisions and final assembly; updated the skill to save each source's propositions before merging equivalents, without delegating semantic decisions to the tool.
+- Added 34 regression tests and real-source fixtures while preserving existing assertions; all 3,088 offline tests pass, and fresh same-window live comparison showed no collection-time regression.
+- Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets and concurrency, relevance tiers, two brief sections and explicit-only skill invocation.
+
 ## 2.3.0 - 2026-10-25
 
 - Updated the skill and split the policy into focused eligibility, grouping, evidence/writing and collection references, reducing their combined text by about 86% and routing each workflow stage to the relevant document.

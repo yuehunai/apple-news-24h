@@ -31,7 +31,7 @@ One coherent report can contain several observations, products, conditions and a
 
 ## 3. Resolve and write
 
-Before drafting, read [evidence and writing](references/evidence-writing.md) once. Scan the event and queue index, then finish one to three reports at a time: summaries, facts, relevant source units and deferred support → short clause/reference records and omission reasons → checked Chinese paragraphs. Read shared sources once. Narrow reads by ID or field when output is truncated.
+Before drafting, read [evidence and writing](references/evidence-writing.md) once and use its bundled clause recorder. Scan the event and queue index, then finish one to three reports at a time: summaries, facts, relevant source units and deferred support → clause/reference records and omission reasons → checked Chinese paragraphs. Read shared sources once. Narrow reads by ID or field when output is truncated.
 
 Complete every event ID and every required material fragment. Review can result in support, an independently eligible report or exclusion; it is not a requirement to publish all captured text. Reopen live pages only when captured evidence is insufficient. Preserve important facts, conditions, source differences and all supporting URLs under their own attribution.
 

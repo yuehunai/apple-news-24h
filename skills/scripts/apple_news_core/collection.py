@@ -425,6 +425,12 @@ def supplement_mydrivers_category_candidates(
     return extra
 
 
+def price_observation_needs_detail(title: str) -> bool:
+    """A reported market direction needs a body check, even beside a subsidy."""
+    return bool(_compiled_rule(r'破发|跌破(?:首发|发售|上市)价|below\s+(?:its\s+)?(?:launch|retail)\s+price', re.I).search(title)
+                and not _compiled_rule(r'领券|到手价|券后|购买推荐|coupon|buying\s+guide', re.I).search(title))
+
+
 def market_summary_needs_detail(title: str) -> bool:
     """Market reports may put Apple's observed result only in their body.
 

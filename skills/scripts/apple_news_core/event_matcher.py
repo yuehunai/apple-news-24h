@@ -1542,7 +1542,11 @@ def _explicit_separation_conflict(
         for key in left.event_keys & right.event_keys
         if key.startswith("apple-roadmap:") and key.count(":") == 1
     }
-    if shared_product_roadmaps:
+    # A family roadmap key cannot erase the concrete operation already
+    # bound in both sources. Proven shared reports are handled above.
+    if shared_product_roadmaps and not all(
+            any(key.startswith('primary-claim-predicate:') for key in profile.separation_keys)
+            for profile in (left, right)):
         return False
     for disclosure, other in ((left, right), (right, left)):
         if (
