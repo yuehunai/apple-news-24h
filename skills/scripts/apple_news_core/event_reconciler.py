@@ -58,6 +58,7 @@ from .event_identity import (
     is_platform_compatible_accessory_title,
     first_party_hardware_implementation,
     OS_COMPONENT_PATTERNS,
+    software_components,
     source_sentence_spans,
     source_clause_spans,
     source_chip_technical_disclosures,
@@ -457,11 +458,6 @@ def _source_owned_named_action(title: str, lead: str) -> tuple[str, str] | None:
             and _compiled_rule(r"\b(?:restor(?:e|es|ed)|return(?:s|ed)?|comeback|bring(?:s|ing)?\s+back)\b|"
                                r"(?:回归|带回|重新带回)", re.I).search(claim)):
         return f"watchos-{watch_build.group(1)}-beta-{watch_build.group(2)}:app-switcher", "gesture-restoration"
-    ios_build = _compiled_rule(r"\bios\s*(\d+(?:\.\d+)?)\s*beta\s*(\d+)(?!\d)", re.I).search(claim)
-    if (ios_build and _compiled_rule(r"(?:运动传感器|运动数据|motion\s+(?:sensor\s+)?data)", re.I).search(claim)
-            and _compiled_rule(r"(?:限制|restrict|limit)", re.I).search(claim)
-            and _compiled_rule(r"app(?![a-z])|应用", re.I).search(claim)):
-        return f"ios-{ios_build.group(1)}-beta-{ios_build.group(2)}:app-motion-data", "permission-restriction"
 
     if (_compiled_rule(r"\btap\s+to\s+pay(?:\s+on\s+iphone)?\b|轻点收款|轻触收款", re.I).search(claim)
             and _compiled_rule(r"\b(?:expand(?:s|ed)?|additional|more\s+countries|now\s+available)\b|"
@@ -2096,7 +2092,7 @@ def _structured_assertion_keys(
         os_platforms.add("watchos")
     os_components = {
         component
-        for component in identity.components
+        for component in identity.title_components
         if component.startswith("os-component:")
     }
     if os_platforms and os_components and "feature-change" in identity.actions:
@@ -3488,6 +3484,29 @@ def _versioned_shared_resource_operation(title: str, lead: str) -> tuple[str, st
     return None
 
 
+def _release_subject_platforms(title: str, lead: str) -> tuple[str, ...]:
+    """Read coordinated release objects, not every platform in a sentence."""
+    platform = r'\b(?:ios|ipados|macos|watchos|tvos|visionos|homepod)\b'
+    item = platform + r'(?:\s+\d+(?:\.\d+)*)?'
+    objects = item + r'(?:\s*(?:,\s*(?:and\s+)?|and|/|与|和|及|、)\s*' + item + r')*'
+    def names_in(match, text):
+        if not match:
+            return ()
+        names = tuple(dict.fromkeys(_compiled_rule(platform).findall(_normalized(match.group()))))
+        if _compiled_rule(r'^\s+(?:will|would|may|might|could|coming|arrives?|(?:is|are)\s+(?:coming|planned|scheduled))\b|^\s*(?:将|计划)', re.I).search(text[match.end():]):
+            names = names[:-1]
+        return names
+    headline = _compiled_rule(objects, re.I).search(title)
+    if not headline:
+        return ()
+    names = names_in(headline, title)
+    if len(names) > 1:
+        opening = source_primary_assertion(title, lead)[len(_normalized(title)) + 2:]
+        released = _compiled_rule(r'(?:releas\w*|publish\w*|发布|推送)了?\s*(?:the\s+|new\s+)?(' + objects + ')', re.I).search(opening)
+        names = tuple(name for name in names if name in names_in(released, opening))
+    return names
+
+
 def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
     title, _, lead = text.partition(". ")
     operation = _versioned_shared_resource_operation(title, lead)
@@ -3510,6 +3529,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
         "now available",
         "are out now",
         "is out now",
+        "is out",
         "rolls out",
         "land",
         "lands",
@@ -3551,7 +3571,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
         if component.startswith("os-wave-platform:")
     )
     if not release_waves:
-        version_match = _compiled_rule(r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
+        version_match = _compiled_rule(r"\b(?:ios|ipados|macos|watchos|tvos|visionos|homepod)"
             r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+){0,2})\b", re.IGNORECASE).search(text)
         beta_match = _compiled_rule(r"\bbeta\s*(\d+)\b", 0).search(title)
         if version_match and release_title:
@@ -3561,20 +3581,19 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
         platform_wave = platform_release_waves[0].removeprefix("os-wave-platform:")
         return f"apple-os-platform-release-wave:{platform_wave}"
     if release_waves and (
-        (release_waves[0].endswith(":final") and release_title)
+        (release_title and (release_waves[0].endswith(":final") or is_os_release_announcement(title)))
         or (not concrete_title_components and not title_describes_feature)
     ):
         wave = release_waves[0].removeprefix("os-wave:")
         if wave.endswith(":final"):
-            os_family = sorted(
-                identity.title_products
-                & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
-            )[0]
-            platform_family = "mobile" if os_family in {"ios", "ipados"} else os_family
-            return f"apple-os-release-wave:{wave}:{platform_family}"
+            platforms = _release_subject_platforms(title, lead)
+            if not platforms:
+                return ""
+            os_family = platforms[0]
+            return f"apple-os-release-wave:{wave}:{os_family}"
         return f"apple-os-release-wave:{wave}"
     os_family = sorted(
-        identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
+        identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos", "homepod"}
     )[0]
     feature_wave = ""
     if release_waves:
@@ -3582,7 +3601,7 @@ def _versioned_os_feature_scope(text: str, identity: EventIdentity) -> str:
     elif platform_release_waves:
         feature_wave = platform_release_waves[0].removeprefix("os-wave-platform:")
     else:
-        version_match = _compiled_rule(r"\b(?:ios|ipados|macos|watchos|tvos|visionos)"
+        version_match = _compiled_rule(r"\b(?:ios|ipados|macos|watchos|tvos|visionos|homepod)"
             r"(?:\s+[a-z][a-z-]+){0,2}\s+(\d+(?:\.\d+){0,2})\b", re.IGNORECASE).search(title)
         beta_match = _compiled_rule(r"\bbeta\s*(\d+)\b", 0).search(title)
         if version_match:
@@ -4859,6 +4878,18 @@ def _first_party_content_claim(
 ) -> tuple[str, str] | None:
     """Return a named first-party content subject and its concrete action."""
     title_text = _canonical_title(title)
+    if _compiled_rule(r'headlin|perform|stage|演出|表演', re.I).search(title + ' ' + lead[:300]):
+        for text in (lead, evidence[:1600]):
+            for start, end in source_sentence_spans(text):
+                clause = text[start:end]
+                announcement = _compiled_rule(r'\b(?:apple(?:\s+music)?|[a-z][a-z ]{0,35}\s+and\s+apple\s+music)'
+                    r'(?:,\s*alongside\s+[^,]{1,60},|\s+and\s+[a-z][a-z ]{0,35}?)?\s+'
+                    r'(?:(?:has|have|today|now)\s+)*(?:announced|confirmed)\b', re.I).search(clause)
+                show = _compiled_rule(r'\bApple Music\s+((?:[A-Z0-9][A-Za-z0-9]*\s+){1,7}(?:Show|Concert|Festival))\b', 0).search(clause)
+                if (announcement and show and source_predicate_role(clause[:announcement.end()]) == 'current'
+                        and not _compiled_rule(r'^\s*(?:last\s+(?:year|month|week)|previously|years?\s+ago)\b', re.I).search(clause[announcement.end():])
+                        and _compiled_rule(r'will\s+(?:perform|headline)|将(?:担任|表演)', re.I).search(clause[announcement.end():])):
+                    return _compiled_rule(r'[^a-z0-9]+', 0).sub('-', show.group(1).casefold()).strip('-'), 'performance-lineup-announcement'
     owned_film_title = bool(_compiled_rule(r"\bapple's\s+(?:new\s+)?(?:film|movie|documentary|series)\b|"
         r"苹果.{0,8}(?:电影|影片|纪录片|剧集)", 0).search(title_text))
     if "apple-arcade" in identity.products:
@@ -6528,7 +6559,7 @@ def _repair_cost_estimate(
     evidence_scope = f"{title_scope}. {_normalized(lead)[:750]} {_normalized(evidence)[:1400]}"
     repair_action = bool(
         _compiled_rule(r"\b(?:repair|replacement|replace|service\s+fee)\b|"
-            r"(?:维修|更换|换屏|维修费用|维修费)", 0).search(evidence_scope)
+            r"(?:维修|更换|换屏|维修费用|维修费)", 0).search(title_scope)
     )
     if not repair_action:
         return None
@@ -10721,7 +10752,7 @@ def _source_local_current_action(
         and has(r"not\s+a\s+live\s+issue|could\s+start\s+to\s+hit|未来可能影响", ' '.join(source_units or source_facts))
         and not has(r"court|regulat|legislation|法院|法规", opening))
     if (publisher_selection or publisher_opinion or quoted_purchase_opinion or suggested_policy
-            or source_editorial_evaluation(title, ' '.join(source_units[:3]) if source_units else lead)
+            or source_editorial_evaluation(title, ' '.join(source_units)[:600] if source_units else lead)
             or (identity.content_form == "podcast"
                 and not is_os_release_announcement(title)
                 and _title_owned_action_profile(title, lead, evidence, identity) is None)
@@ -10757,6 +10788,9 @@ def _source_local_current_action(
                            reason="independent software-port demonstration on non-Apple hardware")
 
     content = _first_party_content_claim(title, lead, identity, evidence)
+    if content and content[1] == 'performance-lineup-announcement':
+        subject, action = content
+        return profile('apple-music-content:' + subject, action, kind='service_content')
     if (content and content[1] == "trailer"
             and not has(r"\b(?:trailer|teaser)\b|预告片", headline)
             and has(r"\bapple\s*tv\b.{0,35}\b(?:unveils?|announces?)\b", headline)):
@@ -10899,8 +10933,10 @@ def _source_local_current_action(
     )
     feature_components = []
     for scope in (headline, opening[:750]):
+        owned_components = software_components(scope)
         feature_components = [(scope.find(alias), name.removeprefix("os-component:"))
             for name, aliases in OS_COMPONENT_PATTERNS for alias in aliases if alias in scope
+            and name in owned_components
             and (name != "os-component:photo-face" or photo_face_current)]
         if feature_components:
             break
@@ -11490,12 +11526,6 @@ def _source_local_current_action(
         return profile(f"homepod-software-{version.group(1)}:siri-ai-code", "current-code-disclosure",
                        reason="HomePod Siri AI code disclosure, not activation")
 
-    beta = _compiled_rule(r"\bios\s*(\d+(?:\.\d+)*)\s*beta\s*(\d+)", 0).search(local)
-    if (beta and has(r"运动(?:传感器|数据)|motion\s+(?:sensor\s+)?data", local)
-            and has(r"\b(?:restrict|limit|prevents?|testing)\b|限制|测试", local)
-            and not has(r"客服回应|customer\s+service\s+respond", headline)):
-        return profile(f"ios-{beta.group(1)}-beta-{beta.group(2)}:app-motion-data",
-                       "permission-restriction", reason="current beta motion data permission setting")
 
     # Reports of a measured configuration and of its replaceability are
     # different predicates.  Do not turn the report's comparison into the act.
@@ -12301,7 +12331,8 @@ def build_legacy_reconciliation_profile(
     independent_content_playback = False
     if content_claim:
         content_subject, content_action = content_claim
-        content_service = "apple-arcade-content" if content_action == "arcade-catalog-addition" else "apple-tv-content"
+        content_service = ("apple-arcade-content" if content_action == "arcade-catalog-addition" else
+                           "apple-music-content" if content_action == "performance-lineup-announcement" else "apple-tv-content")
         content_key = f"primary-claim:{content_service}:{content_subject}:{content_action}"
         event_keys.add(content_key)
         boundary_keys.add(f"content-title:{content_subject}")
@@ -13185,6 +13216,9 @@ def build_legacy_reconciliation_profile(
         event_keys.add(os_feature_scope)
         boundary_keys.add(os_feature_scope)
         if os_feature_scope.startswith("apple-os-release-wave:"):
+            if ":final:" in os_feature_scope and is_os_release_announcement(title):
+                for platform in _release_subject_platforms(title, text.partition('. ')[2]):
+                    event_keys.add(os_feature_scope.rsplit(":", 1)[0] + ":" + platform)
             for platform_wave in sorted(
                 component.removeprefix("os-wave-platform:")
                 for component in identity.components
@@ -13419,6 +13453,9 @@ def build_legacy_reconciliation_profile(
     direct_legal_action = bool(
         legal_stage
         and legal_case
+        and ("legal" in identity.title_actions
+             or (_compiled_rule(r'\bcase\b|纠纷案', 0).search(title_text)
+                 and _legal_action_stage_text(title_text)))
         and _contains(title_text, "apple", "苹果")
     )
     if (
@@ -13793,7 +13830,7 @@ def build_legacy_reconciliation_profile(
         # shared service/device alias retains an identified hardware action.
         category_hint = "software_systems"
         separation_keys.add("source-local-category-authority")
-    elif title_owned_versioned_os_feature:
+    elif title_owned_versioned_os_feature or (versioned_os_action and release_announcement_keys):
         category_hint = "software_systems"
         separation_keys.add("source-local-category-authority")
     elif any(

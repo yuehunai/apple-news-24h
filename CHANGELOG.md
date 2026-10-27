@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented here.
 
+## 2.3.2 - 2026-10-27
+
+- Improved source attribution for company statements, customer-service responses, factory employees and suppliers, keeping distinct actions separate; used matching article headings and structured metadata to resolve stale social headlines.
+- Improved same-launch grouping for device configurations, prices and announced future preorder dates, while preserving generation boundaries, actual sales openings and independently reported operating conditions.
+- Improved multilingual binding for independent teardowns, durability tests, device faults and market measurements, preserving the observer, method, device, period and region without borrowing background claims.
+- Improved software-release and built-in capability grouping, retaining platform, version and release stage; kept physical repair documents in hardware and preserved source-specific conditions and differing figures.
+- Added default `collection_warnings` for failed sources or failed primary discovery paths, even when supplementary archives return articles. Made `--output` status compact by removing its repeated `required_final_brief_titles`; the saved JSON retains the full review material and compatibility fields.
+- Improved processing efficiency by reducing repeated identity and event-kind calculations, skipping unused legacy support work after an authoritative action is established, and removing duplicate executive-meeting and motion-permission decisions.
+- Updated the skill to inherit prepared crawler decisions, consume one review queue and keep source reads bounded; added `BriefRecords.cite` to attach equivalent sources directly while preserving distinct facts, coverage checks and final prose review.
+- Added 63 regression tests and captured-source fixtures; all 3,151 offline tests pass, with independent review, fresh live comparison and a complete clean skill invocation. Kept the standard-library runtime, nine primary sources, collection budgets and concurrency, relevance tiers, two brief sections and explicit-only invocation.
+
 ## 2.3.1 - 2026-10-26
 
 - Improved detail admission for reported price movements even when a headline also mentions a subsidy, while keeping retail offers distinct from observed market prices.

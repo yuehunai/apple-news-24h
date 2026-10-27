@@ -128,6 +128,7 @@ from apple_news_core.event_identity import (
     source_market_measurement_frame,
     source_apple_invitation_fact,
     source_executive_visit_frame,
+    source_executive_government_frame,
     source_employee_leave_notice,
     source_local_report_passages,
     organization_action_frame,
@@ -4620,79 +4621,10 @@ def is_iphone_physical_dimension_rumor_story(title: str, text: str) -> bool:
 
 
 def is_apple_executive_government_meeting_story(title: str, text: str) -> bool:
-    lower = f"{title} {text}".lower()
-    if is_siri_ai_eu_dma_regulatory_meeting_story(lower):
+    if is_siri_ai_eu_dma_regulatory_meeting_story(f"{title} {text}".lower()):
         return False
     lead = text[len(title):].lstrip() if text.startswith(title) else text
-    first_statement = _compiled_rule(r"[。！？]|(?<=[.!?])\s+", 0).split(lead, 1)[0]
-    opening = f"{title} {first_statement}".lower()
-    # The executive must own the current reported action; an attendee list in
-    # another company's story cannot turn that story into an Apple meeting.
-    if score_terms(opening, ["tim cook", "john ternus", "apple ceo", "apple executive",
-                            "apple executives", "apple chief", "库克", "苹果高管", "苹果 CEO"]) <= 0:
-        return False
-    if score_terms(
-        lower,
-        [
-            "tim cook",
-            "john ternus",
-            "apple ceo",
-            "apple executive",
-            "apple executives",
-            "apple chief",
-            "库克",
-            "苹果高管",
-            "苹果 CEO",
-        ],
-    ) <= 0:
-        return False
-    if score_terms(
-        lower,
-        [
-            "minister-president",
-            "minister president",
-            "minister",
-            "governor",
-            "government",
-            "state official",
-            "official",
-            "regulator",
-            "european commission",
-            "eu",
-            "bavaria",
-            "munich",
-            "州长",
-            "部长",
-            "政府",
-            "官员",
-            "监管",
-            "巴伐利亚",
-            "慕尼黑",
-        ],
-    ) <= 0:
-        return False
-    return score_terms(
-        lower,
-        [
-            "meeting",
-            "met with",
-            "held a virtual meeting",
-            "discussed",
-            "talks",
-            "investment",
-            "jobs",
-            "data protection",
-            "overregulation",
-            "会面",
-            "会议",
-            "会谈",
-            "讨论",
-            "投资",
-            "就业",
-            "数据保护",
-            "监管",
-        ],
-    ) > 0
+    return source_executive_government_frame(title, lead) is not None
 
 
 def is_apple_executive_event_attendance_story(title: str, text: str) -> bool:
@@ -24249,7 +24181,7 @@ def source_text_profile(title: str, summary: str, key_facts: list[str], source_n
     source_kind = (
         _source_kind_snapshot[3]
         if _source_kind_snapshot is not None and _source_kind_snapshot[:3] == kind_input
-        else detect_event_kind(title, summary, key_facts)
+        else ""
     )
     article = Article(
         source=source_name, url="", title=title, summary=summary,
@@ -24257,7 +24189,7 @@ def source_text_profile(title: str, summary: str, key_facts: list[str], source_n
         published_raw="", published_source="", confidence="", tokens=article_tokens(title, summary),
         event_kind=source_kind, projection_source_title=source_title,
     )
-    return article_reconciliation_profile(article, _source_kind_snapshot=(*kind_input, source_kind))
+    return article_reconciliation_profile(article, _source_kind_snapshot=_source_kind_snapshot)
 
 
 def source_text_outcome(title: str, summary: str, key_facts: list[str], source_name: str, *, source_title: str = "") -> tuple[str, str, str]:
@@ -24298,9 +24230,15 @@ def collect_candidates(
     diagnostics: dict[str, Any], *, window_start_utc: datetime | None = None,
     window_end_utc: datetime | None = None,
 ) -> list[Candidate]:
+    primary_urls = (*source.feeds, *source.wordpress_posts_apis, *source.pages[:1])
+    primary_success = False
+
     def fetch(url, **options):
-        return collection.fetch_discovery_pages([url],
+        nonlocal primary_success
+        text = collection.fetch_discovery_pages([url],
             lambda value: fetch_url(value, cache_dir, diagnostics, **options))[0]
+        primary_success |= text is not None and url in primary_urls
+        return text
 
     candidates: list[Candidate] = []
     source_success = False
@@ -24362,16 +24300,23 @@ def collect_candidates(
                 lambda body, url: parse_html_links(body, url, source),
                 lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics))
 
+    calendar_covered = False
     if (source.name == 'IT之家' and window_start_utc is not None
             and any(w.get('source') == source.name for w in diagnostics.get('collection_warnings', []))):
         candidates.extend(collection.recover_ithome_calendar_candidates(
             window_start_utc, MAX_PAGE_LINKS, lambda url: fetch(url),
             lambda body, url: parse_html_links(body, url, source),
             lambda raw: parse_datetime_value(raw, source.default_tz), diagnostics, window_end=window_end_utc))
-        source_success |= diagnostics.get('ithome_calendar_recovery', {}).get('stop_reason') == 'window-covered'
+        calendar_covered = diagnostics.get('ithome_calendar_recovery', {}).get('stop_reason') == 'window-covered'
+        source_success |= calendar_covered
 
     if not source_success:
         diagnostics.setdefault("failed_sources", []).append(source.name)
+    if (primary_urls and not primary_success and not calendar_covered
+            and not any(w.get('source') == source.name for w in diagnostics.get('collection_warnings', []))):
+        diagnostics.setdefault('collection_warnings', []).append({
+            'source': source.name, 'url': primary_urls[0], 'coverage': 'unconfirmed',
+            'reason': 'primary-discovery-failed' if source_success else 'source-discovery-failed'})
 
     filtered: list[Candidate] = []
 
@@ -24407,11 +24352,10 @@ def candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]
 
 def _candidate_detail_priority(candidate: Candidate) -> tuple[int, int, int, str]:
     text = f"{candidate.title} {candidate.summary} {candidate.context}"
-    kind = detect_event_kind(candidate.title, candidate.summary, [candidate.context])
     profile = source_text_profile(
         candidate.title, candidate.summary, [candidate.context], candidate.source,
-        _source_kind_snapshot=(candidate.title, candidate.summary, (candidate.context,), kind),
     )
+    kind = profile.event_kind_hint or detect_event_kind(candidate.title, candidate.summary, [candidate.context])
     if profile.eligibility is not None:
         tier = profile.eligibility.tier if profile.eligibility.resolved else None
     else:
@@ -25868,7 +25812,7 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         _source_kind_snapshot[3]
         if _source_kind_snapshot is not None
         and _source_kind_snapshot[:3] == (article.title, article.summary, tuple(article.key_facts))
-        else detect_event_kind(article.title, article.summary, article.key_facts)
+        else ""
     )
     title_regions = extract_regions(article.title)
     structured_evidence = " ".join(
@@ -25889,6 +25833,8 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         published_year=published_year, name_aliases=CROSS_LANGUAGE_TOKEN_MAP)
     if profile is not None and "source-local-action-authority" in profile.separation_keys:
         return profile
+    if not source_kind:
+        source_kind = detect_event_kind(article.title, article.summary, article.key_facts)
     exact_facets = effective_topic_facets(
         primary_topic_facets(article.title, article_source_primary_fact(article))
     ) & (
@@ -29696,10 +29642,9 @@ def main(argv: list[str] | None = None) -> int:
                     "ok": True,
                     "events": len(data.get("events", [])),
                     "required_final_brief_events": len(data.get("final_brief_queue", [])),
-                    "required_final_brief_titles": data.get("required_final_brief_titles", []),
                     "format": args.format,
                     "output": str(output_path),
-                    "coverage_source": "Use required_final_brief_titles and brief_output to track review, not publication. Resolve event and fragment eligibility and grouping under the skill policy before drafting from source evidence.",
+                    "coverage_source": "Read events, deferred_events and final_brief_queue in the saved JSON. Use the prepared decisions and fact plans; consult source_evidence for unresolved material or source conflicts under the skill policy.",
                 }
                 if brief_output_path is not None:
                     status["brief_output"] = str(brief_output_path)

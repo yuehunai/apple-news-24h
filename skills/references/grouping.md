@@ -38,7 +38,7 @@ Preserve the defining scope:
 
 ## Narrow shared operations
 
-- A source-established cross-platform beta/RC train of the same version and stage is one release wave. Public beta, developer beta, RC, internal testing and final releases retain their own stages; background references to earlier builds cannot replace the announced channel. Individual stable OS releases or security paths do not merge solely by date.
+- A source-established cross-platform beta/RC train of the same version and stage is one release wave. Public beta, developer beta, RC, internal testing and final releases retain their own stages; background references to earlier builds cannot replace the announced channel. Stable OS releases need explicit joint-release evidence to cross platform boundaries; matching dates or version numbers alone are insufficient. Distinct security paths remain separate.
 - The first publication and direct withdrawal, correction, restoration or replacement of the exact same first-party page/document/configuration may form one chronological lifecycle item. Preserve initial facts, changed status and all sources. This exception does not absorb later product launches, enforcement or independent developments.
 - An explicitly joint product announcement, catalog withdrawal or service selection can cover several named objects. A media outlet's list of unrelated launches is not itself a joint Apple operation. Separate works/actions stay separate unless sources establish that common operation.
 - Localized coverage of the same official campaign can merge when its name/asset and occurrence agree. Adjacent dates need actual timezone evidence; an activity at the event, attendee plan, production report or survey is not the campaign itself.

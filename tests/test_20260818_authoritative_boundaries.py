@@ -536,7 +536,7 @@ class AuthoritativeBoundaryTests(unittest.TestCase):
         release_keys = {
             key for key in profile.event_keys if key.startswith("apple-os-release-wave:")
         }
-        self.assertIn("apple-os-release-wave:26.6.1:final:mobile", release_keys)
+        self.assertIn("apple-os-release-wave:26.6.1:final:ios", release_keys)
         self.assertFalse(any(":rc" in key for key in release_keys), release_keys)
 
     def test_mixed_stable_and_beta_title_does_not_invent_cross_action_release_wave(self):

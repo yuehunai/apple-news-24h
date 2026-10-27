@@ -65,7 +65,7 @@ class BriefRecords:
         self._save()
 
     def add(self, report, text, references):
-        """Save a complete clause before considering a merge; return its stable ID."""
+        """Save a source-supported clause and return its stable ID."""
         target = self._report(report)
         self._required(text, "clause")
         refs = [self._reference(*pair) for pair in dict.fromkeys(map(tuple, references))]
@@ -78,6 +78,21 @@ class BriefRecords:
         target["checked"] = False
         self._save()
         return key
+
+    def cite(self, key, references, reason):
+        """Attach a checked equivalent source without rewriting the saved clause."""
+        clause = self._retained(key)
+        self._required(reason, "equivalence reason")
+        refs = [self._reference(*pair) for pair in dict.fromkeys(map(tuple, references))]
+        if not refs:
+            raise ValueError("an equivalent source needs at least one supporting unit")
+        existing = {(ref["source_id"], ref["unit_id"]) for ref in clause["references"]}
+        clause["references"].extend(ref for ref in refs
+                                    if (ref["source_id"], ref["unit_id"]) not in existing)
+        clause.setdefault("equivalences", []).append({
+            "references": [[ref["source_id"], ref["unit_id"]] for ref in refs], "reason": reason})
+        self._report(clause["report"])["checked"] = False
+        self._save()
 
     def merge(self, keep, remove, reason):
         """Record the caller's equivalence decision without accepting new wording."""

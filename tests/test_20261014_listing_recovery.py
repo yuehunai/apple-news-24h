@@ -112,6 +112,56 @@ class ListingRecoveryTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(json.loads(output.getvalue())['collection_warnings'], [warning])
 
+    def test_output_status_does_not_repeat_saved_review_material(self):
+        queue = [{'id': 'evidence-review:source', 'title': 'Review material',
+                  'required': True, 'source_urls': [], 'evidence_id': 'source', 'reason': 'unassigned',
+                  'unprocessed_evidence': [{'unit_id': 'body', 'text': 'Source evidence. ' * 10000}]}]
+        result = {'events': [], 'final_brief_queue': queue,
+                  'required_final_brief_titles': self.m.required_final_brief_titles(queue)}
+        with TemporaryDirectory() as directory, mock.patch.object(self.m, 'run', return_value=result), mock.patch('sys.stdout', new_callable=io.StringIO) as output:
+            target = Path(directory) / 'latest.json'
+            code = self.m.main(['--cache-dir', str(Path(directory) / 'cache'),
+                                '--format', 'json', '--output', str(target)])
+            self.assertEqual(code, 0)
+            saved = json.loads(target.read_text())
+            self.assertEqual(saved['final_brief_queue'], queue)
+            self.assertEqual(saved['required_final_brief_titles'], result['required_final_brief_titles'])
+            status = json.loads(output.getvalue())
+            self.assertEqual(status['required_final_brief_events'], 1)
+            self.assertFalse('required_final_brief_titles' in status)
+            self.assertNotIn('Source evidence.', output.getvalue())
+            self.assertEqual(status['output'], str(target))
+            self.assertTrue(Path(status['brief_output']).is_file())
+
+    def test_entire_source_discovery_failure_is_visible_by_default(self):
+        source = next(s for s in self.m.build_sources(datetime(2026, 10, 27, tzinfo=timezone.utc)) if s.name == 'AppleInsider')
+        diagnostics = {}
+        with mock.patch.object(self.m, 'fetch_url', return_value=None):
+            self.assertEqual(self.m.collect_candidates(source, Path('/unused-cache'), diagnostics), [])
+        self.assertEqual(diagnostics['failed_sources'], [source.name])
+        warning, = diagnostics['collection_warnings']
+        self.assertEqual((warning['source'], warning['reason'], warning['coverage']),
+                         (source.name, 'source-discovery-failed', 'unconfirmed'))
+
+    def test_archive_success_does_not_hide_primary_discovery_failure(self):
+        source = next(s for s in self.m.build_sources(datetime(2026, 10, 27, tzinfo=timezone.utc)) if s.name == '9to5Mac')
+        candidate = self.m.Candidate(source.name, 'https://9to5mac.com/2026/10/26/apple-update/', 'Apple releases iOS 27.2')
+        primary = [*source.feeds, *source.wordpress_posts_apis, source.pages[0]]
+        for recovered in [None, *primary]:
+            with self.subTest(recovered=recovered):
+                diagnostics = {}
+                def fetch(url, *_args, **_kwargs):
+                    return 'listing' if url in (source.pages[-1], recovered) else None
+                with mock.patch.object(self.m, 'fetch_url', side_effect=fetch), \
+                     mock.patch.object(self.m, 'parse_html_links', return_value=[candidate]), \
+                     mock.patch.object(self.m, 'parse_xml_feed', return_value=[]), \
+                     mock.patch.object(self.m, 'parse_wordpress_posts_api', return_value=[]):
+                    self.assertTrue(self.m.collect_candidates(source, Path('/unused-cache'), diagnostics))
+                self.assertFalse(diagnostics.get('failed_sources'))
+                self.assertEqual(bool(diagnostics.get('collection_warnings')), recovered is None)
+                if recovered is None:
+                    self.assertEqual(diagnostics['collection_warnings'][0]['reason'], 'primary-discovery-failed')
+
     def test_budget_boundary_confirms_only_a_fully_consumed_page(self):
         m = self.m
         start = datetime(2026, 10, 13, tzinfo=timezone.utc)

@@ -57,6 +57,32 @@ class BriefRecordsTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.book.merge(first, second, "不能提供另写的综合句。", text="综合句。")
 
+    def test_equivalent_source_can_support_a_saved_clause_without_duplicate_wording(self):
+        first = self.book.add("test", "铰链积尘少于 A 型号。", [("one", "hinge")])
+        self.book.check("test")
+        self.book.cite(first, [("two", "same"), ("two", "same")], "相同观察、部位、基准及程度。")
+        with self.assertRaises(ValueError):
+            self.book.render()
+        self.book.check("test")
+        loaded = self.BriefRecords(self.record, self.evidence)
+        self.assertEqual(len(loaded.snapshot()["clauses"]), 1)
+        clause = loaded.snapshot()["clauses"][first]
+        self.assertEqual(len(clause["references"]), 2)
+        self.assertEqual(clause["equivalences"][0]["reason"], "相同观察、部位、基准及程度。")
+        self.assertIn("https://example.com/two", loaded.render())
+        self.assertEqual(loaded.render().count("铰链积尘少于 A 型号。"), 1)
+
+    def test_invalid_equivalent_reference_does_not_change_saved_or_live_records(self):
+        first = self.book.add("test", "铰链积尘少于 A 型号。", [("one", "hinge")])
+        before = self.book.snapshot()
+        saved = self.record.read_bytes()
+        for refs, reason in (([("two", "missing")], "同一观察"),
+                             ([("two", "same")], ""), ([], "同一观察")):
+            with self.assertRaises(ValueError):
+                self.book.cite(first, refs, reason)
+            self.assertEqual(self.book.snapshot(), before)
+            self.assertEqual(self.record.read_bytes(), saved)
+
     def test_invalid_reference_and_cross_report_merge_leave_saved_records_unchanged(self):
         first = self.book.add("test", "铰链积尘更少。", [("one", "hinge")])
         self.book.add_report("other", "软件与系统", ["event-two"])

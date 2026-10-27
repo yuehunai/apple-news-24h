@@ -1757,11 +1757,6 @@ def _release_waves_conflict(
     return not all(
         left_stage == right_stage
         and (
-            not left_platform
-            or not right_platform
-            or left_platform == right_platform
-        )
-        and (
             left_version == right_version
             or left_version.startswith(f"{right_version}.")
             or right_version.startswith(f"{left_version}.")
@@ -2695,6 +2690,12 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
                         and len(key.split(":")) >= 5 for key in keys)
     if _profile_release_conflict(left, right) or _projection_scope_conflict(left, right):
         return "conflict"
+    stable_platforms = [{_release_wave_parts(key)[2] for key in profile.event_keys
+                         if key.startswith('apple-os-release-wave:') and _release_wave_parts(key)[1] == 'final'}
+                        for profile in (left, right)]
+    # Separate platform reports need a joint release source to connect them.
+    if all(stable_platforms) and stable_platforms[0].isdisjoint(stable_platforms[1]):
+        return 'unknown'
     if _profiles_conflict(left, right) and not authoritative:
         return "conflict"
     if (_explicit_separation_conflict(left, right) or _seed_profiles_conflict(left, right)) and not (authoritative or exact_measure):

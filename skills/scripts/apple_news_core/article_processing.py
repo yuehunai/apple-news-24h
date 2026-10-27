@@ -175,6 +175,14 @@ def extract_title(text: str, fallback: str) -> str:
     headline = strip_tags(h1.group(1)) if h1 else ""
     if title:
         title = strip_tags(title)
+        if headline and not title.startswith(headline):
+            article_headlines = {strip_tags(node['headline'])
+                for data in json_ld_objects(text) for node in iter_json_ld_nodes(data)
+                if isinstance(node, dict) and json_type_names(node) & {'Article', 'NewsArticle'}
+                and isinstance(node.get('headline'), str)}
+            # A matching article heading corroborates the page over stale social metadata.
+            if article_headlines == {headline}:
+                return headline
         publisher = strip_tags(meta_content(text, ["og:site_name"]))
         # Confirm every suffix with publisher/category markup; an intermediate
         # subtitle may carry facts even when the final segment is the publisher.

@@ -275,11 +275,17 @@ class SourceReportTests(unittest.TestCase):
     def test_software_objects_keep_category_and_same_action_sources(self):
         for ids in (('b437790e4c728561e4146dd0',), ('f478727f825080de0a4e11aa',),
                     ('02b1054307b1a96fcc71d4b8', '8f586d2a94ab418b6cbe4e4c'),
-                    ('10d3344b9b96f2c9811a2168', 'bdd859434fa147f06e65681c'),
-                    ('7e0b6f1530a2bee8fd47af19', 'c3c01af3434bce35777fc167')):
+                    ('10d3344b9b96f2c9811a2168', 'bdd859434fa147f06e65681c')):
             with self.subTest(ids=ids):
                 events, _ = self.cluster_sources(*ids)
                 self.assertEqual([(e.relevance_tier, e.category) for e in events], [('strong', 'software_systems')])
+
+    def test_physical_support_document_keeps_same_action_sources(self):
+        ids = ('7e0b6f1530a2bee8fd47af19', 'c3c01af3434bce35777fc167')
+        for order in (ids, ids[::-1]):
+            events, _ = self.cluster_sources(*order)
+            self.assertEqual([(e.relevance_tier, e.category) for e in events], [('strong', 'hardware_products')])
+            self.assertEqual({a.evidence.article_id for a in events[0].articles}, set(ids))
 
     def test_reported_device_failures_do_not_require_apple_confirmation(self):
         for aid in ('193c6b632c794d6e93707f0e', '0422e927f0e36b688d125632', 'f74ca44cf2b14b88e3c260dc'):

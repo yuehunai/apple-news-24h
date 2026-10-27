@@ -9,22 +9,25 @@ Read this file once before drafting. Eligibility and grouping are decided before
 | `events` | Already decided starting groups. Preserve IDs, tiers, categories and source ownership unless original evidence demonstrates a policy conflict. |
 | `claims` | Source-bound subject, action, object, qualifiers and spans. Binding is not permission to publish a separate story. Missing claims are not proof of weakness or duplication. |
 | `summary`, `key_facts`, `must_include_facts`, `fact_sources` | Read together; the summary may contain unique facts. `origins` identifies sources/spans. `owned` means span ownership, not Apple ownership or eligibility. |
-| `source_evidence` | Ordered original units for context, attribution and omissions. Use `unit_id`, not the ordinal as an array index. |
-| `final_brief_queue`, `required_final_brief_titles` | Coverage obligations. A required title or fragment is not a publication instruction. |
+| `source_evidence` | Original units for checking the prepared facts and unresolved material. Use `unit_id`, not the ordinal as an array index; expand surrounding prose when needed. |
+| `evidence_dispositions` | Existing assigned/excluded spans and reasons. Inherit these decisions unless contradicted by source evidence; assigned does not mean already expressed in Chinese. |
+| `final_brief_queue` | The review index. Link already handled events/fragments to their existing decisions; a required fragment is not a publication instruction. |
 | `deferred_events` | Review candidates. Their factual passages can support retained reports. Creating a new report requires the [eligibility test](eligibility.md#report-subject). |
-| `brief_output`, `final_brief_markdown`, `*.brief.md` | Coverage scaffolds, not final copy. |
+| `required_final_brief_titles`, `brief_output`, `final_brief_markdown`, `*.brief.md` | Alternate coverage views. Do not read or register them as another queue. |
 
 ## Review queue
 
-Give every material required fragment one disposition: a clause in an existing eligible report; a new report that passes the theme and action tests; or a specific exclusion reason. An unassigned fragment does not imply a new story. Do not repeatedly reopen settled decisions.
+Start with each event's summary, planned facts and source references; these are prepared inputs, not a request to redo extraction, eligibility or clustering. Missing `claims` or an `owned: false` field alone does not invalidate an event's decisions. Reopen only the affected decision when a warning, original evidence or substantive unresolved material shows a conflict.
+
+Process the associated `unprocessed_evidence` during the same source read. Give every material fragment a clause, an independently eligible report or a specific exclusion. A fragment already resolved elsewhere links to that decision; do not read, rewrite or decide it again. A reference to the same unit does not cover its other propositions. An unassigned fragment does not imply a new story.
 
 Read the referenced unit and its original neighbors when a pronoun, attribution, scope or report boundary is unclear. Adjacent `unprocessed_evidence` entries need not be adjacent prose. A `capture_status: discovery-only` item contains an excerpt, not verified full text: open the source if missing information could affect the report. Use recovered text only for the affected decisions. If unavailable, keep supported facts and record the remaining gap; do not invent text or promote the item.
 
 ## Fact record
 
-After settling a report's eligibility and boundaries, use the [clause recorder](brief-records.md). For each source, first save its relevant propositions as complete Chinese publication-ready clauses, without comparing them with earlier sources. Then compare the saved entries and merge only complete equivalents. Deciding that a passage is already covered belongs to this second step; it cannot replace saving that source's own clauses. Keep the recorder's evolving list as the authoritative wording. Cross-source reading needed for eligibility or boundaries is unrestricted; reuse shared sources already read.
+Use the [clause recorder](brief-records.md) as the authoritative Chinese wording. Check each source's relevant propositions against the existing clauses for that report. Save new or differing propositions; for a complete equivalent, directly attach the source/unit reference and an equivalence reason to the existing clause. Rewriting and saving a duplicate sentence first is unnecessary. A match must include conditions, degree, negation and attribution, not merely the topic.
 
-Save references and reasons for material omissions beside this run's output. Do not assign a source's entire retained-unit list to every paragraph citing it. If a unit has several material propositions, account for each; an ID, URL or generic “reviewed” reason does not account for its remaining content. No separate validation script is required.
+Keep a compact disposition index beside the clauses: event/queue/fragment ID → report/clause or specific exclusion reason, with source/unit/span where needed. Store boundary evidence for changed groups. Refer to the fixed JSON instead of copying all original units into more ledgers; derive source/URL coverage from the clause references. An ineligible source or repeated non-factual material can share one applicable reason, but mixed material still needs specific treatment of its important propositions. An ID or generic “reviewed” label is not coverage. No extra validation script is required.
 
 ## Establish the propositions
 
@@ -34,7 +37,7 @@ Within an independently eligible report, assess material propositions by their f
 
 - **Retain** direct reports, observations, attributed plans, forecasts, responses and explanations relevant to this action. First-person observations of operation, failure or conditional behavior remain evidence when they accompany a preference or recommendation; separate the observation from that judgment. A reported speaker's technical explanation need not be a measured test; preserve the speaker without calling it measured or independently verified. “Possible”, “reportedly” or “rumor” describes certainty, not whether the statement is a reported claim or the writer's deduction. Neither repetition nor a second source is required.
 - **Exclude first** the secondary writer's estimates or conclusions derived from reported facts or specifications, including added calculations, motives, significance, consequences and advice about what readers should infer. Attribution, calling it a forecast or placing it in a headline does not exempt the writer's deduction. Exclude the whole inferred proposition, not merely its inferential wording. Retain a neighboring baseline or observation only when the source reports it independently.
-- **Reconcile after appending each source's clauses.** Compare the two saved clauses by actor, object, operation, scope, stage, dates, values, directions, conditions and degree, including qualitative quantifiers, negation and uncertainty. When the complete propositions are equivalent, keep one clause's complete wording, combine their references and remove the duplicate entry. Otherwise retain both attributed clauses as written. Do not replace them with a separate merged summary.
+- **Reconcile complete propositions.** Compare actor, object, operation, scope, stage, dates, values, directions, conditions and degree, including qualitative quantifiers, negation and uncertainty. Equivalent propositions share wording and references; differences retain their own attribution. When compound clauses partly overlap, revise them within the same report so the shared proposition appears once and each distinct condition or fact remains with its sources. This is factual deduplication, not a new report boundary or permission to compress away differences.
 - **Check material relevance.** Supporting facts must describe or qualify the retained action's own object and operation. Sharing its device or source is insufficient: do not move an unrelated parameter into the action merely to account for it. Numbers, attribution and required flags do not make unrelated background mandatory. Record a concrete source, ownership or relevance reason for each omitted material fragment; do not reject a mixed paragraph under one “commentary” label.
 
 ## Write and check
@@ -45,9 +48,9 @@ Preserve complete relevant lists and numeric series, attributes, units, per-mode
 
 Omit click paths and API syntax; retain settings, setup states and other prerequisites that determine whether or where a capability works, even in developer instructions. Historical release appendices are not current support matrices, but a relevant prior build or baseline may qualify the current change. Keep every value and condition with its specific operation, model, version and source. Name operations separately when they have different figures or conditions. Name the device containing a component rather than using an ambiguous pronoun.
 
-Compare each relevant source unit with the actual Chinese clauses and omission reasons, then each clause with its supporting passage. A selected unit ID or a matching URL proves neither factual completeness nor agreement between sources. Check actors, operations, conditions and differing observations as well as numbers; do not infer causes or silently resolve contradictions. There is no target sentence count; use the length the material facts require.
+Compare each relevant source proposition with the Chinese clauses or omission reason, then each clause with its passage. Reuse completed checks; a later edit reopens only affected clauses/reports. A selected unit ID or matching URL proves neither completeness nor agreement. Check actors, operations, conditions and differing observations as well as numbers; do not infer causes or silently resolve contradictions. There is no target sentence count.
 
-After the factual checks, mark the action and its queue fragments complete, save the records and checked paragraphs beside this run's output, and continue with the remaining items. Assemble checked paragraphs without compressing their factual content.
+Mark the report and associated queue fragments complete after those checks. Save the records and continue; final assembly uses the checked clauses without another rewrite.
 
 Before returning:
 
@@ -65,6 +68,4 @@ Express each proposition once. Inspect the last sentence **and trailing clauses*
 
 ## Final format
 
-Return the checked paragraphs verbatim under only `**软件与系统**` then `**硬件与产品**`, with one eligible report per bullet. Put every supporting link at that bullet's end: `（来源：[MacRumors](...), [9to5Mac](...)）`. Preserve multiple contributing URLs from the same publisher. A URL can support several independently eligible reports through different passages; it cannot establish their eligibility by itself.
-
-For a truly empty category write `在指定时间窗口内，该分类下没有发现符合条件的新闻。` Do not add a status report, review explanation, cache note, file-only handoff or closing summary.
+Use the entrypoint's two-section format, with one eligible report per bullet. Put links at the end: `（来源：[MacRumors](...), [9to5Mac](...)）`. Preserve all contributing URLs, including multiple URLs from one publisher. A URL may support several independently eligible reports through their own passages; it cannot establish their eligibility.

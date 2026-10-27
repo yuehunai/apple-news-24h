@@ -12,16 +12,16 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.3.1 - 2026-10-26
+### 2.3.2 - 2026-10-27
 
-- Improved detail admission for reported price movements even when a headline also mentions a subsidy, while keeping retail offers distinct from observed market prices.
-- Improved source-bound teardown and durability-test grouping across languages and device names, preserving observers, methods and current actions; prevented legacy repair classifications from overriding an established teardown action.
-- Improved relevance and sections for built-in capabilities, support documents, focused operating observations and device faults, while keeping unrelated hardware ports and general commentary outside independent Apple news.
-- Improved joint prototype identities and roadmap boundaries so concrete actions are not merged through a shared product family; distinguished current disclosures from historical reports, conditional speculation and absent or denied actions.
-- Improved supplier-response attribution to the actual speaker, product and current statement, preventing historical order adjustments from taking over the report and keeping an explicit denial distinct from no response.
-- Added a standard-library clause recorder for source-linked wording, references, revisions and final assembly; updated the skill to save each source's propositions before merging equivalents, without delegating semantic decisions to the tool.
-- Added 34 regression tests and real-source fixtures while preserving existing assertions; all 3,088 offline tests pass, and fresh same-window live comparison showed no collection-time regression.
-- Kept the standard-library runtime, CLI, existing JSON fields, nine primary sources, collection budgets and concurrency, relevance tiers, two brief sections and explicit-only skill invocation.
+- Improved source attribution for company statements, customer-service responses, factory employees and suppliers, keeping distinct actions separate; used matching article headings and structured metadata to resolve stale social headlines.
+- Improved same-launch grouping for device configurations, prices and announced future preorder dates, while preserving generation boundaries, actual sales openings and independently reported operating conditions.
+- Improved multilingual binding for independent teardowns, durability tests, device faults and market measurements, preserving the observer, method, device, period and region without borrowing background claims.
+- Improved software-release and built-in capability grouping, retaining platform, version and release stage; kept physical repair documents in hardware and preserved source-specific conditions and differing figures.
+- Added default `collection_warnings` for failed sources or failed primary discovery paths, even when supplementary archives return articles. Made `--output` status compact by removing its repeated `required_final_brief_titles`; the saved JSON retains the full review material and compatibility fields.
+- Improved processing efficiency by reducing repeated identity and event-kind calculations, skipping unused legacy support work after an authoritative action is established, and removing duplicate executive-meeting and motion-permission decisions.
+- Updated the skill to inherit prepared crawler decisions, consume one review queue and keep source reads bounded; added `BriefRecords.cite` to attach equivalent sources directly while preserving distinct facts, coverage checks and final prose review.
+- Added 63 regression tests and captured-source fixtures; all 3,151 offline tests pass, with independent review, fresh live comparison and a complete clean skill invocation. Kept the standard-library runtime, nine primary sources, collection budgets and concurrency, relevance tiers, two brief sections and explicit-only invocation.
 
 ## What It Does
 
@@ -102,7 +102,7 @@ python3 skills/scripts/apple_news_24h.py --hours 24 --timezone auto --format jso
 
 JSON keeps included brief items in `events`. Weak Apple-adjacent candidates, such as third-party app stories or competitor comparisons that do not describe a direct Apple action, may be kept in `deferred_events` for review. Event objects can include `event_kind`, `relevance_tier`, `relevance_reason`, `regions`, and `merge_warnings`.
 
-If a source listing stops before its window coverage is confirmed, `collection_warnings` appears in JSON and the file-output status even without `--include-diagnostics`. A healthy event count does not resolve that source gap; follow the documented source fallback and retain any unresolved limitation in review notes.
+If a source fails, all its primary discovery paths fail, or a listing stops before its window coverage is confirmed, `collection_warnings` appears in JSON and the file-output status even without `--include-diagnostics`. Articles from a supplementary archive or a healthy total event count do not resolve that source gap; follow the documented source fallback and retain any unresolved limitation in review notes.
 
 JSON also exposes evidence for attribution and coverage review:
 
@@ -114,13 +114,13 @@ JSON also exposes evidence for attribution and coverage review:
 | `evidence_dispositions` | Recorded destinations of projected or unresolved source material. |
 | `final_brief_queue` | Event candidates and unresolved fragments requiring a decision. `capture_status: discovery-only` flags a source for which full text was unavailable; it does not promote the item. |
 
-Required flags ask for a decision, not automatic inclusion. Source-fragment entries in `required_final_brief_titles` now set `separate_bullet_by_default: false`; each fragment still requires review, and a new bullet needs an independently eligible reporting subject. `required_final_brief_titles`, `final_brief_markdown`, and an adjacent `*.brief.md` are coverage scaffolds, not the finished brief. Write from source-supported summaries and facts, checking independent actions, material qualifications and each bullet's supporting URLs.
+Use `events`, `deferred_events` and the single `final_brief_queue` index. Inherit the prepared groups, relevance, categories and fact plans; reopen affected decisions for warnings, source conflicts or material unresolved evidence. Required flags ask for review, not automatic inclusion; a new bullet needs an independently eligible reporting subject. Source-fragment entries in `required_final_brief_titles` retain `separate_bullet_by_default: false`; this field, `final_brief_markdown` and an adjacent `*.brief.md` are alternate coverage views, not additional work queues or the finished brief. Write from source-supported summaries and facts, preserving material qualifications and each bullet's supporting URLs.
 
 For source-bound reports, binding and news eligibility are separate decisions. Migrated report families, including app-publisher charts, device benchmarks, operating-feature inventories, media invitations, regulatory-access proposals and locally bound market or retail actions, preserve unresolved ownership for evidence review instead of assigning a weak tier. A qualified invitation with an unresolved event date remains an event with a specific `merge_warnings` reason; it cannot authorize a same-event merge. Other report families retain their existing processing rules. Grouping uses the source-owned action and its identity qualifiers; generated titles and measurement values alone do not establish a shared event.
 
 Passages in `source_evidence` not covered by displayed summaries, selected facts or explicit exclusions remain available for review, even when their source produces no event or deferred candidate. This can increase review material without adding events; it does not establish complete site coverage. For incomplete IT Home listings, the crawler can traverse public date directories within the existing budget; recovered listing failures remain in diagnostics. Publisher indexes can still omit articles, so successful traversal does not guarantee complete discovery.
 
-Version 2.3.1 retains the existing CLI, JSON fields and relevance tiers. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
+Version 2.3.2 retains the existing CLI options, saved JSON fields and relevance tiers. With `--output`, the compact stdout status no longer repeats `required_final_brief_titles`; read the full review material from the saved JSON. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
 
 Diagnostics for debugging source failures:
 

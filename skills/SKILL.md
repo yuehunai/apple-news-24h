@@ -19,24 +19,22 @@ Use the requested IANA timezone when specified. Every invocation starts a new co
 
 For a completed zero-event or suspiciously sparse first result, rerun the same command with network approval. If still sparse, add `--include-diagnostics`. Check `collection_warnings` even when there are many events. For a coverage failure, timestamp dispute or unavailable crawler, read only the relevant section of [collection](references/collection.md). Healthy sources may legitimately yield little news.
 
-## 2. Establish report boundaries
+## 2. Use the crawler's decisions
 
-The crawler's `events` are the starting groups. Preserve their IDs, decisions and source ownership unless current source evidence shows a specific policy conflict. `claims` bind facts; `required` demands review; `merge_warnings` demands a boundary check. None commands publication, merging or splitting.
+The crawler has selected the time window, captured sources, bound claims, and supplied initial groups, relevance, categories and fact plans. Use these results; do not repeat discovery or reclassify every source from scratch. Reopen a decision only for a coverage warning, `merge_warnings`, a specific source conflict, or material unresolved evidence. Binding a claim does not establish a separate reporting subject.
 
-**A separate bullet needs an independently eligible reporting subject.** A background sentence, incidental related-news mention, or non-theme passage in commentary or a weak third-party article may only supplement another eligible report. Without one, record its exclusion. Current tense, attribution, numbers, a heading or a different action verb do not alone make it news. A genuinely focused short report needs no minimum sentence, word or source count.
+Scan `events`, `deferred_events` and the single `final_brief_queue` index. `required_final_brief_titles` and `*.brief.md` are alternate views, not additional work queues. Preserve event IDs and source ownership. Review each deferred item and required fragment, using the existing decisions where applicable; `required` means review, not publication or splitting.
 
-Before creating a bullet from review material, excluding an event or changing its category, read [eligibility](references/eligibility.md). Before merging or splitting, read [grouping](references/grouping.md). These files own those decisions; do not search the implementation or read unrelated policy files.
-
-One coherent report can contain several observations, products, conditions and attributed positions. Decomposing its facts for checking does not mean publishing a bullet for every fact. Record the source evidence for any changed boundary; publication order, another headline angle or an extra parameter is insufficient.
+On the first need to create a bullet from review material, exclude an event or change its category, read [eligibility](references/eligibility.md); for merging or splitting, read [grouping](references/grouping.md). Reuse those rules, revisiting only a disputed section. A separate bullet needs an independently eligible reporting subject; facts within one coherent report stay within it. Do not search the implementation.
 
 ## 3. Resolve and write
 
-Before drafting, read [evidence and writing](references/evidence-writing.md) once and use its bundled clause recorder. Scan the event and queue index, then finish one to three reports at a time: summaries, facts, relevant source units and deferred support → clause/reference records and omission reasons → checked Chinese paragraphs. Read shared sources once. Narrow reads by ID or field when output is truncated.
+Read [evidence and writing](references/evidence-writing.md) once, then use its clause recorder. Work report by report from the summary, planned facts with source references, and associated unprocessed spans; save checked Chinese clauses. Reuse shared sources and settled decisions. Expand only the original passages needed to check a fact, attribution or boundary, rather than printing every source's full unit list by default. Keep batches within the tool's output limit; after truncation, continue from the last visible ID instead of repeating the batch.
 
-Complete every event ID and every required material fragment. Review can result in support, an independently eligible report or exclusion; it is not a requirement to publish all captured text. Reopen live pages only when captured evidence is insufficient. Preserve important facts, conditions, source differences and all supporting URLs under their own attribution.
+Account for every event ID and required material fragment with a retained clause, justified boundary change or specific exclusion. Keep the clause record and a compact disposition index; refer to source/unit IDs instead of copying original text into additional ledgers. Preserve important facts, conditions, source differences and every supporting URL. Reopen live pages only when captured evidence is insufficient.
 
 ## 4. Deliver
 
-Check each paragraph against its records and source passages, including the last sentence and trailing clauses. Remove repeated reporting-status disclaimers, review reasoning and generic conclusions. A sourced limitation or denial that adds a distinct fact remains.
+Check final boundaries, material facts and source links against the records. Apply the writing guide's final prose pass, including sentence endings; a sourced limitation or denial that adds a distinct fact remains.
 
 Assemble the checked paragraphs verbatim. Return only `**软件与系统**` then `**硬件与产品**`, with source links at the end of each bullet. For an empty category use `在指定时间窗口内，该分类下没有发现符合条件的新闻。` Deliver the full brief itself, not just a file link, completion report or instruction for another agent to finish it.
