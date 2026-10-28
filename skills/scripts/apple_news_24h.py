@@ -25763,7 +25763,9 @@ def is_apple_supplier_capacity_allocation_story(title: str, lead: str, identity)
 def prepare_article_source(article: Article) -> None:
     """Bind a source before any profile or fact consumer uses it."""
     if article.bound_claim is not None:
-        return
+        if article.evidence is not None:
+            return
+        article.bound_claim = None
     evidence = article.evidence or capture_article_title_evidence(
         article.source, article.url, article.title, article.summary, tuple(article.key_facts))
     report = bind_source_report(evidence)

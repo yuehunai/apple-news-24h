@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented here.
 
+## 2.3.3 - 2026-10-28
+
+- Improved source-bound grouping for Mac announcements, sales datasets, design disclosures and legal proceedings, preserving models, configurations, reporting periods and local attribution across languages.
+- Improved relevance and categories for built-in capabilities, software-code discoveries and platform interoperability; kept OS versions, operating conditions, current demonstrations and reported plans distinct.
+- Improved official-video and content-production reporting, retaining software eligibility without assuming a shared publication identity or turning filming completion into a release date; separated education-store price changes from launch-price comparisons.
+- Improved sparse-source projection and evidence reuse, retaining original source units and invalidating stale bindings; kept supporting observations within their investigation instead of creating separate news items.
+- Updated source coverage checks to reconcile every retained event source, including sources with no unprocessed fragments; excluded writers' conditional calculations even when another outlet quotes them.
+- Updated the skill to distinguish an observed Apple operation from third-party tools in its test setup, and to end the final response after the two brief sections without workflow notes or trailing statements.
+- Added 42 regression tests and captured-source fixtures; all 3,193 offline tests pass, with independent review and fresh live comparison. Kept the standard-library runtime, CLI and saved JSON interfaces, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
+
 ## 2.3.2 - 2026-10-27
 
 - Improved source attribution for company statements, customer-service responses, factory employees and suppliers, keeping distinct actions separate; used matching article headings and structured metadata to resolve stale social headlines.

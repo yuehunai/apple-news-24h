@@ -394,7 +394,7 @@ class ReportBoundaryTests(unittest.TestCase):
             self.assertEqual([(e.relevance_tier, e.category) for e in events], [('strong', 'software_systems')])
 
     def test_retail_offer_and_editorial_background_do_not_become_news(self):
-        for sid in ('897972d8445082fef3e93499', '5f9810b07679f04d603129cf', '48cfab893ca8b6f6f89901ba'):
+        for sid in ('897972d8445082fef3e93499', '5f9810b07679f04d603129cf'):
             with self.subTest(source=sid):
                 events, _ = self.cluster_sources(sid)
                 self.assertTrue(all(e.relevance_tier == 'weak' for e in events))

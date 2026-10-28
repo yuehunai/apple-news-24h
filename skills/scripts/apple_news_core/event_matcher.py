@@ -280,9 +280,9 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
             if any(records[0][key] != records[1][key] for key in shared):
                 return 'conflict'
             return 'match' if 'report-party' in shared and shared & {'order-total', 'order-deposit'} else 'unknown'
-        if left.action == 'leadership-report':
+        if left.action in {'leadership-report', 'video-publication'}:
             # The same speaker, publisher and topic do not identify an
-            # interview instance. Keep qualification independent of pairing.
+            # interview or video instance. Keep qualification independent of pairing.
             return 'unknown'
         if left.action == 'media-invitation':
             dates = [{kind: {q[2] for q in claim.qualifiers if q[1] == kind}
@@ -2444,11 +2444,24 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
     for family in lifecycle_years[0].keys() & lifecycle_years[1].keys():
         if lifecycle_years[0][family].isdisjoint(lifecycle_years[1][family]):
             return "conflict"
-    for prefix in ("event-operation-action:", "retail-trade-in-action:", "benchmark-report-action:", "clock-workday-region:", "source-report-period:", "source-report-year:", "source-report-region:", "source-model-generation:", "source-launch-stage:"):
+    for prefix in ("event-operation-action:", "retail-trade-in-action:", "benchmark-report-action:", "clock-workday-region:", "source-report-period:", "source-report-year:", "source-report-region:", "source-model-generation:", "source-model-size:", "source-launch-stage:"):
         left_actions = {key for key in left.separation_keys if key.startswith(prefix)}
         right_actions = {key for key in right.separation_keys if key.startswith(prefix)}
         if left_actions and right_actions and left_actions.isdisjoint(right_actions):
             return "conflict"
+    mac_announcements = all(any(key.startswith(('primary-claim:macbook-pro:', 'primary-claim:macbook-air:'))
+                                    and key.endswith(':device-announcement') for key in profile.event_keys)
+                            for profile in (left, right))
+    if mac_announcements:
+        for prefix in ('source-model-generation:', 'source-model-size:'):
+            values = [{key for key in p.separation_keys if key.startswith(prefix)} for p in (left, right)]
+            if bool(values[0]) != bool(values[1]):
+                return 'unknown'
+    if all(any(key.startswith('primary-claim:apple:device-ad:') for key in p.event_keys)
+           for p in (left, right)):
+        if any(not any(key.startswith('source-report-period:') for key in p.separation_keys)
+               for p in (left, right)):
+            return 'unknown'
     teardown_parts = []
     for profile in (left, right):
         parts = {}

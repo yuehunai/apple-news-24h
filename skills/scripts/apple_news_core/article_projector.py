@@ -43,7 +43,7 @@ _CONTENT_OBJECT = _compiled_rule(r"\b(?:season\s+\d+|episodes?|movie|film|series
 _MULTI_CONTENT_PAGE = _compiled_rule(r"\b(?:two|three|four|five|six|seven|eight|nine|ten|several|multiple|\d{1,2})\b"
     r".{0,60}\b(?:new\s+)?(?:releases?|premieres?|titles?|shows?|films?|movies?|series|specials?|projects?)\b|"
     r"\b(?:new|upcoming|coming|multiple|several)\b.{0,45}"
-    r"\b(?:releases?|premieres?|lineup|titles?|shows?|films?|movies?|series|specials?|projects?)\b|"
+    r"\b(?:releases|premieres|lineup|titles|shows|films|movies|series|specials|projects)\b|"
     r"(?:两|三|四|五|六|七|八|九|十|多)\s*(?:部|档|个|项|款).{0,30}"
     r"(?:新作|内容|剧集|电影|节目|发布|上线|首播|回归)|"
     r"(?:多部|多档|多项|多款|多部作品|内容阵容).{0,30}(?:发布|上线|首播|回归|定档)", re.I)
@@ -423,7 +423,7 @@ def single_article_input_projection(evidence: ArticleEvidence) -> ClaimProjectio
     if any(_compiled_rule(r"\b(?:iOS|iPadOS|macOS|watchOS|visionOS|tvOS)\s*\d", re.I).search(unit.text)
            for unit in evidence.units):
         return None
-    projections, remaining, _ = project_article_evidence(evidence)
+    projections, remaining, _ = project_reportable_evidence(evidence)
     if not projections or remaining:
         return None
     first = projections[0]

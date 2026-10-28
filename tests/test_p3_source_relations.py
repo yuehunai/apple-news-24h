@@ -688,7 +688,7 @@ class PublicSourceRelationTests(unittest.TestCase):
         import copy
         from dataclasses import asdict
         from unittest.mock import patch
-        m=self.m;a=self.natural_claim_articles()['s7']
+        m=self.m;a=self.natural_claim_articles()['s0']
         kind=m.detect_event_kind(a.title,a.summary,a.key_facts)
         base=asdict(a)
         a._source_kind_snapshot=(a.title,a.summary,tuple(a.key_facts),kind)
@@ -980,7 +980,7 @@ class PublicSourceRelationTests(unittest.TestCase):
                 actual = m.profile_pair_decision(profiles[left],profiles[right])
                 if wanted=='match': self.assertEqual(actual,'match')
                 else: self.assertNotEqual(actual,'match')
-        different = replace(articles['teardown_full'],title=articles['teardown_full'].title.replace('iPhone 22','iPhone 20'),summary=articles['teardown_full'].summary.replace('iPhone 22','iPhone 20'),key_facts=[x.replace('iPhone 22','iPhone 20') for x in articles['teardown_full'].key_facts])
+        different = replace(articles['teardown_full'],title=articles['teardown_full'].title.replace('iPhone 22','iPhone 20'),summary=articles['teardown_full'].summary.replace('iPhone 22','iPhone 20'),key_facts=[x.replace('iPhone 22','iPhone 20') for x in articles['teardown_full'].key_facts],evidence=None,bound_claim=None)
         self.assertNotEqual(m.profile_pair_decision(profiles['teardown_camera'],m.article_reconciliation_profile(different)),'match')
 
     def test_platform_version_and_compatibility_do_not_transfer_action_ownership(self):

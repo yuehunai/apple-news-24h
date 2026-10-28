@@ -39,6 +39,7 @@ from .event_identity import (
     build_event_identity,
     source_accessory_category,
     source_device_disclosure,
+    device_operation_subjects,
     source_employee_leave_notice,
     source_store_sales_measure,
     source_device_workload_measure,
@@ -1897,6 +1898,8 @@ def _structured_assertion_keys(
         event_keys.add(f"structured-assertion:apple-silicon:{chip}:chip-release")
         separation |= {f"assertion-subject:apple-silicon:{chip}", "assertion-action:chip-release"}
     host_products = identity.title_products & {"mac-mini", "mac-studio", "macbook", "imac", "mac-pro"}
+    if set(device_operation_subjects(title)) & {'mac-mini', 'mac-studio', 'macbook-pro', 'macbook-air', 'imac'}:
+        host_products -= {'mac-mini', 'mac-studio', 'macbook', 'imac'}
     if len(host_products) == 1 and not _compiled_rule(r"\breviews?\b|评测|测评", re.I).search(title_scope):
         host = next(iter(host_products))
         for clause in _compiled_rule(r"(?<=[.!?。！？])\s*", 0).split(f"{short_lead}. {evidence}", 0):
@@ -3486,8 +3489,8 @@ def _versioned_shared_resource_operation(title: str, lead: str) -> tuple[str, st
 
 def _release_subject_platforms(title: str, lead: str) -> tuple[str, ...]:
     """Read coordinated release objects, not every platform in a sentence."""
-    platform = r'\b(?:ios|ipados|macos|watchos|tvos|visionos|homepod)\b'
-    item = platform + r'(?:\s+\d+(?:\.\d+)*)?'
+    platform = r'(?<![a-z0-9])(?:ios|ipados|macos|watchos|tvos|visionos|homepod)(?![a-z])'
+    item = platform + r'(?:\s*\d+(?:\.\d+)*)?'
     objects = item + r'(?:\s*(?:,\s*(?:and\s+)?|and|/|与|和|及|、)\s*' + item + r')*'
     def names_in(match, text):
         if not match:
@@ -10386,7 +10389,12 @@ _PRECISE_HARDWARE_PRODUCT_LINES = {
 def _lead_asserts_first_party_release(lead: str) -> bool:
     """Return true only when the first lead sentence owns an Apple release."""
     first_lead = _primary_assertion_scope("", lead)[1]
-    return bool(
+    direct_os_release = _compiled_rule(
+        r'^[.\s]*(?:ios|ipados|macos|watchos|tvos|visionos)\s*\d+(?:\.\d+)*'
+        r'(?:\s*(?:beta|rc)\s*\d*)?\s*'
+        r'(?:(?:(?:is|are|has|have|now|officially|been)\s+)*(?:released|launched|available|arrived)\b|'
+        r'(?:现已|已经|正式|已)(?:发布|推送|上线))', re.I).search(first_lead)
+    return bool(direct_os_release or
         _compiled_rule(r"\bapple\b.{0,48}\b(?:is\s+announcing|are\s+announcing|announces|announced|"
             r"introduces|introduced|launches|launched|unveils|unveiled|releases|released)\b|"
             r"苹果.{0,36}(?:发布|推出|揭晓|上线|开售|登场)(?!的)", 0).search(first_lead)
@@ -10740,7 +10748,7 @@ def _source_local_current_action(
     # Publisher selection and subjective evaluation own these source forms.
     # Device specifications and compatibility paragraphs cannot promote them.
     publisher_selection = (bool(_compiled_rule(r"^(?:don[’\']t|do not|never)\s+buy\b|^(?:不要|别|暂缓)购买", re.I).search(headline)) or (identity.content_form == "buying_advice"
-        and has(r"\b(?:our|top)\s+(?:recommendations|picks)|购买推荐|配件推荐", headline + " " + opening[:350])))
+        and has(r"\b(?:our|top)\s+(?:recommendations|picks)|is\s+it\s+worth\s+(?:upgrading|buying)|should\s+(?:you|we)\s+(?:upgrade|buy|choose)|购买推荐|配件推荐", headline + " " + opening[:350])))
     publisher_opinion = (identity.content_form == "analysis"
         and has(r"\bi\s+(?:do\s+)?think\b|我认为|我觉得", opening[:700]))
     quoted_purchase_opinion = (
@@ -10911,7 +10919,11 @@ def _source_local_current_action(
         if operation.action == 'display-specification-report' and operation.subject == 'ipad-mini:oled-refresh':
             result = replace(result, event_keys=result.event_keys | {'canonical-apple-action:ipad-mini:oled-display-adoption'})
         if operation.model_generation:
-            result=replace(result,separation_keys=result.separation_keys | {"source-model-generation:"+operation.model_generation})
+            generation, _, size = operation.model_generation.partition(':')
+            model_keys = {"source-model-generation:" + generation} if generation else set()
+            if size:
+                model_keys.add("source-model-size:" + size)
+            result = replace(result, separation_keys=result.separation_keys | model_keys)
         if operation.year:
             result=replace(result,separation_keys=result.separation_keys | {"source-report-year:"+operation.year})
         if operation.region:
@@ -11068,7 +11080,7 @@ def _source_local_current_action(
     if os_notes and has(r"release\s+notes|更新日志|更新说明", headline):
         publication = current_primary_predicate(
             r"\bapple\s+(?:(?:today|finally|has|now|just)\s+)*(?:shares?|shared|publishes?|published)\b|"
-            r"苹果.{0,20}(?:补发|公布|发布)",
+            r"苹果.{0,20}(?:补发|公布|公开|发布)",
             r"\bapple\s+(?:has\s+)?(?:not|never)\s+(?:shared|published)\b|"
             r"苹果.{0,12}(?:尚未|没有|并未).{0,12}(?:发布|公布)")
         if publication:

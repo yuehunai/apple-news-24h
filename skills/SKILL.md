@@ -37,4 +37,4 @@ Account for every event ID and required material fragment with a retained clause
 
 Check final boundaries, material facts and source links against the records. Apply the writing guide's final prose pass, including sentence endings; a sourced limitation or denial that adds a distinct fact remains.
 
-Assemble the checked paragraphs verbatim. Return only `**软件与系统**` then `**硬件与产品**`, with source links at the end of each bullet. For an empty category use `在指定时间窗口内，该分类下没有发现符合条件的新闻。` Deliver the full brief itself, not just a file link, completion report or instruction for another agent to finish it.
+Assemble the checked paragraphs verbatim. Return only `**软件与系统**` then `**硬件与产品**`, with source links at the end of each bullet. For an empty category use `在指定时间窗口内，该分类下没有发现符合条件的新闻。` Deliver the full brief itself and end after the last news bullet (or empty-category sentence). Keep workflow notes, verification statements and disclaimers out of the final response; do not replace the brief with a file link or completion report.
