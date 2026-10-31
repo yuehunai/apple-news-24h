@@ -12,15 +12,15 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.3.3 - 2026-10-28
+### 2.3.4 - 2026-10-31
 
-- Improved source-bound grouping for Mac announcements, sales datasets, design disclosures and legal proceedings, preserving models, configurations, reporting periods and local attribution across languages.
-- Improved relevance and categories for built-in capabilities, software-code discoveries and platform interoperability; kept OS versions, operating conditions, current demonstrations and reported plans distinct.
-- Improved official-video and content-production reporting, retaining software eligibility without assuming a shared publication identity or turning filming completion into a release date; separated education-store price changes from launch-price comparisons.
-- Improved sparse-source projection and evidence reuse, retaining original source units and invalidating stale bindings; kept supporting observations within their investigation instead of creating separate news items.
-- Updated source coverage checks to reconcile every retained event source, including sources with no unprocessed fragments; excluded writers' conditional calculations even when another outlet quotes them.
-- Updated the skill to distinguish an observed Apple operation from third-party tools in its test setup, and to end the final response after the two brief sections without workflow notes or trailing statements.
-- Added 42 regression tests and captured-source fixtures; all 3,193 offline tests pass, with independent review and fresh live comparison. Kept the standard-library runtime, CLI and saved JSON interfaces, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
+- Improved detail admission for neutral notebook-market headlines and direct Apple company reports, so background references to other companies no longer prevent source-based relevance checks.
+- Improved source-bound grouping for product specifications, benchmarks, battery reports, launch inventory, regional software announcements and repair guidance; preserved distinct actions, models, versions, phases, regions and negation.
+- Improved relevance and categories for official prices, hardware support and regulatory registration; kept promotional roundups, accessory compatibility and background service mentions from taking over the reported action.
+- Improved fact preparation and supporting evidence through shared source-role checks, preventing writers' inferences from returning through numeric or condition supplements; removed duplicate legacy company-action decisions while preserving attributed forecasts, plans and observations.
+- Updated the skill's source-reading and clause workflow to reuse prepared event decisions, preserve distinct propositions and attach all contributing sources; clarified how to handle partially equivalent facts without losing attribution or scope.
+- Updated and shortened the skill references, placing report eligibility before fact selection and consolidating repeated instructions; clarified genuine blockers separately from the completed brief's two-section format.
+- Added 54 regression tests and captured-source fixtures; all 3,247 offline tests pass, with independent review and fresh live comparison. Kept the standard-library runtime, CLI and saved JSON interfaces, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
 
 ## What It Does
 
@@ -119,7 +119,7 @@ For source-bound reports, binding and news eligibility are separate decisions. M
 
 Passages in `source_evidence` not covered by displayed summaries, selected facts or explicit exclusions remain available for review, even when their source produces no event or deferred candidate. This can increase review material without adding events; it does not establish complete site coverage. For incomplete IT Home listings, the crawler can traverse public date directories within the existing budget; recovered listing failures remain in diagnostics. Publisher indexes can still omit articles, so successful traversal does not guarantee complete discovery.
 
-Version 2.3.3 retains the existing CLI options, saved JSON fields and relevance tiers. With `--output`, the compact stdout status no longer repeats `required_final_brief_titles`; read the full review material from the saved JSON. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
+Version 2.3.4 retains the existing CLI options, saved JSON fields and relevance tiers. With `--output`, the compact stdout status no longer repeats `required_final_brief_titles`; read the full review material from the saved JSON. Event IDs incorporate bound action identity so distinct actions sharing a URL or title do not collide. Consumers should tolerate additional fields and changes to event membership, IDs and classifications across versions.
 
 Diagnostics for debugging source failures:
 

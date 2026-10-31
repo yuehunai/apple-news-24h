@@ -10780,15 +10780,15 @@ def _source_local_current_action(
         first_end = next(source_sentence_spans(intro), (0, len(intro)))[1]
         port_claim = intro[:first_end]
         port_target = _compiled_rule(
-            r'在([^。；;，,]{2,65}?)上(?:成功)?运行\s*(?:苹果\s*)?(?:ios|ipados|macos|watchos|tvos|visionos)|'
+            r'在([^。；;，,]{2,65}?)上(?:成功)?(?:运行|启动)\s*(?:苹果\s*)?(?:ios|ipados|macos|watchos|tvos|visionos)|'
             r'\b(?:ios|ipados|macos|watchos|tvos|visionos)\s*(?:\d+(?:\.\d+)*)?\s*'
             r'(?:support\s+)?(?:on\s+|to\s+|移植到|运行在)([^。；;.!?]{2,65})|'
-            r'(?:令|让|为|将(?:一部)?)([^。；;，,]{2,65}?)(?:手机)?(?:刷入|启动|运行)\s*(?:苹果\s*)?'
+            r'(?:令|让|为|将(?:一部)?)([^。；;，,]{2,65}?)(?:手机)?(?:刷入|启动|运行)\s*(?:[^。；;，,]{1,45}专版的\s*)?(?:苹果\s*)?'
             r'(?:ios|ipados|macos|watchos|tvos|visionos)(?:\s*/\s*(?:ios|ipados))?\s*\d', re.I).search(port_claim)
         target = next((v for v in port_target.groups() if v), '') if port_target else ''
         if (target and identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS
                 and not has(r'\b(?:iphone|ipad|mac|macbook|imac|vision\s*pro|apple\s*watch|apple\s*silicon)\b|苹果\s*m\d|苹果硬件', target)
-                and has(r'\b(?:developer|hobbyist|enthusiast)\b|开发者|爱好者|网友', port_claim)
+                and has(r'\b(?:developer|hobbyist|enthusiast)\b|开发者|爱好者|网友|博主', port_claim)
                 and has(r'demonstrat|showcas|展示|演示|成果|成功', port_claim)
                 and not has(r'^(?:apple|苹果).{0,25}(?:releas|launch|发布|推出)', port_claim)):
             return profile(f"third-party:software-port:{headline}", "current-demonstration",

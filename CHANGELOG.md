@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented here.
 
+## 2.3.4 - 2026-10-31
+
+- Improved detail admission for neutral notebook-market headlines and direct Apple company reports, so background references to other companies no longer prevent source-based relevance checks.
+- Improved source-bound grouping for product specifications, benchmarks, battery reports, launch inventory, regional software announcements and repair guidance; preserved distinct actions, models, versions, phases, regions and negation.
+- Improved relevance and categories for official prices, hardware support and regulatory registration; kept promotional roundups, accessory compatibility and background service mentions from taking over the reported action.
+- Improved fact preparation and supporting evidence through shared source-role checks, preventing writers' inferences from returning through numeric or condition supplements; removed duplicate legacy company-action decisions while preserving attributed forecasts, plans and observations.
+- Updated the skill's source-reading and clause workflow to reuse prepared event decisions, preserve distinct propositions and attach all contributing sources; clarified how to handle partially equivalent facts without losing attribution or scope.
+- Updated and shortened the skill references, placing report eligibility before fact selection and consolidating repeated instructions; clarified genuine blockers separately from the completed brief's two-section format.
+- Added 54 regression tests and captured-source fixtures; all 3,247 offline tests pass, with independent review and fresh live comparison. Kept the standard-library runtime, CLI and saved JSON interfaces, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
+
 ## 2.3.3 - 2026-10-28
 
 - Improved source-bound grouping for Mac announcements, sales datasets, design disclosures and legal proceedings, preserving models, configurations, reporting periods and local attribution across languages.

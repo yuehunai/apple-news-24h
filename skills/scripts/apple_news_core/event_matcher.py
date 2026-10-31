@@ -894,6 +894,8 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
     ):
         return "match"
     concrete_components = _high_confidence_components(shared_components)
+    # A model identifies the device, not the action being reported.
+    concrete_components -= {c for c in concrete_components if c.startswith("macbook-model:")}
     if "iphone" in (left.products | right.products):
         # Camera is a product part, not an action. Source-local adoption,
         # preview and imaging-feature claims supply their own pair authority.

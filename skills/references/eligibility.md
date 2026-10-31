@@ -32,7 +32,7 @@ Keep reported plans, forecasts, code discoveries, beta changes and commitments a
 
 Exclude routine retail promotions and affiliate pitches, purchase advice, opinion or wish lists, historical/rumor recaps without current reporting, ordinary independent apps/accessories, competitor marketing and independent hardware modification/repair projects. Judge the source's role, not a keyword alone. A current factual report can contain detachable advice; conversely, facts in a weak article do not automatically change its reporting focus.
 
-Keep a directly reported speaker's statement, forecast or technical explanation when material to an eligible report. Exclude the article writer's added inference, calculations, motives, significance, consequences and advice, even when quoted or reprinted by another outlet. Exclude the whole inferred proposition, not just words such as “means” or “therefore.” Preserve adjacent independent observations when they belong to the retained report.
+Once the reporting subject qualifies, apply the [fact-selection rules](evidence-writing.md#establish-the-propositions) to its material. Those rules govern what supports an eligible report; they do not establish a new report's eligibility.
 
 Same-action rewrites can add source coverage to a retained report; do not discard their URLs merely because their facts repeat another source. Reprints do not make a recalled past action newly occur, or turn commentary into an eligible report.
 

@@ -132,6 +132,7 @@ from apple_news_core.event_identity import (
     source_employee_leave_notice,
     source_local_report_passages,
     organization_action_frame,
+    source_company_org_change_story,
     high_confidence_direct_apple_action,
     is_apple_led_developer_submission_story,
     is_os_release_announcement,
@@ -8785,6 +8786,19 @@ def is_relevant_candidate(
     if url_has_excluded_fragment(candidate.url) and not product_url_collision:
         if not allowed_url_excluded_candidate(candidate, source, text):
             return False
+    exclude_score = score_terms(text, EXCLUDE_TERMS)
+    has_report_evidence = bool(
+        semantic_identity.actions
+        or ((candidate.summary.strip() or key_facts) and exclude_score == 0)
+    )
+    if (is_routine_retail_discount_story(candidate.title, text)
+            and not (key_facts is None and collection.price_observation_needs_detail(candidate.title))):
+        return False
+    if (semantic_identity.scope == "apple-direct"
+            and semantic_identity.content_form == "news" and has_report_evidence):
+        # Detail admission consumes the source identity; incidental words cannot
+        # veto its Apple subject. Final relevance remains a downstream decision.
+        return True
     direct_title_event = (
         is_apple_device_battery_regulation_story(text)
         or is_apple_product_applied_research_story(candidate.title, text)
@@ -8819,22 +8833,9 @@ def is_relevant_candidate(
     if should_hard_exclude_candidate(text) and not (direct_title_event or direct_report):
         return False
     strong_score = score_terms(text, STRONG_NEWS_ACTION_TERMS)
-    exclude_score = score_terms(text, EXCLUDE_TERMS)
-    if (is_routine_retail_discount_story(candidate.title, text)
-            and not (key_facts is None and collection.price_observation_needs_detail(candidate.title))):
-        return False
     if high_confidence_direct_apple_action(semantic_identity):
         return True
-    has_report_evidence = bool(
-        semantic_identity.actions
-        or ((candidate.summary.strip() or key_facts) and exclude_score == 0)
-    )
-    if semantic_identity.scope == "apple-direct" and (
-        has_report_evidence or semantic_identity.content_form != "news"
-    ):
-        # Admission preserves a directly reported Apple subject for detail
-        # verification. Relevance is decided downstream; legacy action words
-        # must not veto it or make a cleaned article depend on feed boilerplate.
+    if semantic_identity.scope == "apple-direct" and semantic_identity.content_form != "news":
         return True
     if collection.current_apple_role_interview_needs_detail(candidate.title, candidate.summary, semantic_identity):
         return True
@@ -11229,194 +11230,7 @@ def is_non_apple_public_response_with_apple_purchase_context(title: str, text: s
 
 
 def is_apple_company_org_change_story(text: str) -> bool:
-    lower = text.lower()
-    if effective_apple_term_score(lower) <= 0:
-        return False
-    opening = " ".join(_compiled_rule(r"[。！？]|(?<=[.!?])\s+", 0).split(lower, 2)[:2])
-    if (_compiled_rule(r"\b(?:former|ex[- ])\s+apple\b.{0,70}\b(?:book|memoir)\b|"
-                  r"\b(?:former|ex[- ])\s+apple\b.{0,70}\b(?:published|released|available)\b.{0,45}\bbook\b", 0).search(opening)
-            and not _compiled_rule(r"\b(?:joins?|leaves?|departs?|appointed|replaced|takes? over|steps? down)\b", 0).search(opening)):
-        # Publishing a former executive's account is the present action;
-        # historical hiring and departures later in it are not a new change.
-        return False
-    org_structure_score = score_terms(
-        lower,
-        [
-            "apple's design team",
-            "apple design team",
-            "apple's product design",
-            "product design organization",
-            "leadership",
-            "organization",
-            "organisational",
-            "organizational",
-            "design department",
-            "苹果设计部门",
-            "苹果设计团队",
-            "设计部门",
-            "设计团队",
-            "管理层",
-            "组织",
-            "组织架构",
-            "管理架构",
-            "组织结构",
-            "产品决策",
-        ],
-    )
-    if _compiled_rule(r"\bapple(?:['’]s)?\s+(?:senior\s+)?management\b|"
-                 r"\bmanagement\s+(?:team\s+)?(?:at|of)\s+apple\b", 0).search(lower):
-        org_structure_score += 1
-    person_role_score = score_terms(
-        lower,
-        [
-            "apple executive",
-            "apple exec",
-            "apple cfo",
-            "ex-apple cfo",
-            "top executive",
-            "another executive",
-            "departing executive",
-            "senior executive",
-            "apple's svp",
-            "apple svp",
-            "senior vice president",
-            "vice president",
-            "苹果高管",
-            "苹果首席财务官",
-            "苹果高级副总裁",
-            "高级副总裁",
-            "高管",
-        ],
-    )
-    movement_score = score_terms(
-        lower,
-        [
-            "loses",
-            "lost",
-            "leave",
-            "leaves",
-            "leaving",
-            "depart",
-            "departs",
-            "departed",
-            "departing",
-            "join",
-            "joins",
-            "joined",
-            "move to",
-            "moves to",
-            "moved to",
-            "poached",
-            "hired",
-            "step down",
-            "steps down",
-            "stepped down",
-            "no longer runs",
-            "isn't running",
-            "recruited",
-            "to openai",
-            "离职",
-            "离开",
-            "转投",
-            "加入",
-            "挖角",
-            "聘请",
-            "卸任",
-            "不再负责",
-            "退出职责",
-        ],
-    )
-    structural_change_score = score_terms(
-        lower,
-        [
-            "change",
-            "changes",
-            "changed",
-            "rebalance",
-            "rebuild",
-            "restore",
-            "lost influence",
-            "decline",
-            "declined",
-            "taking over",
-            "take over",
-            "successor",
-            "succeed",
-            "replace",
-            "调整",
-            "改变",
-            "变化",
-            "重组",
-            "下滑",
-            "弱化",
-            "提升",
-            "接任",
-            "继任",
-            "主导",
-            "权重",
-            "地位",
-        ],
-    )
-    factual_change_score = score_terms(
-        lower,
-        [
-            "report",
-            "reports",
-            "reported",
-            "according to",
-            "says",
-            "said",
-            "loses",
-            "lost",
-            "leave",
-            "leaves",
-            "leaving",
-            "depart",
-            "departs",
-            "departed",
-            "join",
-            "joins",
-            "joined",
-            "hire",
-            "hires",
-            "hired",
-            "recruit",
-            "recruits",
-            "recruited",
-            "move to",
-            "moves to",
-            "moved to",
-            "take over",
-            "taken over",
-            "taking over",
-            "successor",
-            "succeed",
-            "replace",
-            "incoming ceo",
-            "rebalance",
-            "报道称",
-            "报道",
-            "消息称",
-            "古尔曼",
-            "彭博社",
-            "透露",
-            "指出",
-            "称",
-            "梳理",
-            "离职",
-            "离开",
-            "转投",
-            "加入",
-            "接任",
-            "继任",
-            "任命",
-            "聘请",
-            "重组",
-        ],
-    )
-    if person_role_score > 0 and movement_score > 0:
-        return True
-    return org_structure_score > 0 and structural_change_score > 0 and factual_change_score > 0
+    return source_company_org_change_story(text)
 
 
 def is_apple_executive_company_story(text: str) -> bool:
@@ -24242,10 +24056,12 @@ def collect_candidates(
 
     candidates: list[Candidate] = []
     source_success = False
+    failed_feeds = []
 
     for feed_url in source.feeds:
         text = fetch(feed_url)
         if text is None:
+            failed_feeds.append(feed_url)
             continue
         source_success = True
         if feed_url.lower().endswith(".opml") or "<opml" in text[:500].lower():
@@ -24319,6 +24135,7 @@ def collect_candidates(
             'reason': 'primary-discovery-failed' if source_success else 'source-discovery-failed'})
 
     filtered: list[Candidate] = []
+    missing_discovery_context = False
 
     for candidate in merge_duplicate_candidates(candidates):
         if not same_domain(candidate.url, source.domains):
@@ -24330,8 +24147,19 @@ def collect_candidates(
             excluded_counts[source.name] = excluded_counts.get(source.name, 0) + 1
             continue
         if not is_relevant_candidate(candidate, source):
+            missing_discovery_context |= not (candidate.summary or candidate.context)
             continue
         filtered.append(candidate)
+    discovery_covered = calendar_covered or any(
+        diagnostics.get('source_listing_pagination', {}).get(url, {}).get('stop_reason') == 'window-covered'
+        for url in source.pages[:1])
+    if failed_feeds and missing_discovery_context and not discovery_covered:
+        warnings = diagnostics.setdefault('collection_warnings', [])
+        for url in failed_feeds:
+            if not any(w.get('source') == source.name and (w.get('url') == url or
+                    w.get('reason') in {'source-discovery-failed', 'primary-discovery-failed'}) for w in warnings):
+                warnings.append({'source': source.name, 'url': url,
+                    'coverage': 'unconfirmed', 'reason': 'feed-discovery-failed'})
     diagnostics.setdefault("source_candidate_counts", {})[source.name] = len(filtered)
     return filtered
 
@@ -27674,9 +27502,16 @@ def article_source_conditions(article: Article):
 
 
 _SOURCE_QUOTED_PROSE = r'"[^"\n]+"|“[^”\n]+”'
-_SOURCE_AUTHOR_TURN = (r"(?:I|we)(?:\s+(?:think|believe|suspect|expect|guess|(?:may|might|could)\s+see)|"
+_SOURCE_AUTHOR_TURN = (r"(?:I|we)(?:['’]d\s+expect|\s+would\s+expect|\s+(?:think|believe|suspect|expect|guess|(?:may|might|could)\s+see)|"
     r"(?:['’]m|['’]re|\s+am|\s+are)\s+(?:guessing|assuming|hoping))\b|"
                        r"(?:我|我们|笔者|作者)(?:认为|觉得|预计|推测)")
+
+
+_SOURCE_UNVERIFIED_WRITER_TURN = (
+    r"(?:记者|撰稿人|作者)\s*(?:[A-Za-z][A-Za-z.’'-]*(?:\s+[A-Za-z][A-Za-z.’'-]*){0,3}|[\u4e00-\u9fff]{2,4})"
+    r"\s*(?:认为|觉得|预计|推测)|"
+    r"\b(?i:reporter|writer|columnist)\s+(?:[A-Z][A-Za-z.’'-]*\s+){1,4}"
+    r"(?:thinks?|believes?|expects?|speculates?)\b")
 
 
 def source_publisher_turn(publisher: str) -> str:
@@ -27728,6 +27563,19 @@ def source_fact_statement_role(text: str, previous: str = "", *, publisher: str 
     # independently quoted analyst. Keep third-party attribution separate.
     if publisher and _compiled_rule(r"^" + source_publisher_turn(publisher), re.I).search(text):
         return "editorial"
+    if writer := _compiled_rule(_SOURCE_UNVERIFIED_WRITER_TURN, 0).search(text):
+        start, end = next((start, end) for start, end in source_sentence_spans(text)
+            if start <= writer.start() < end)
+        local = text[start:end]
+        # A report citing a writer is not evidence for that writer's forecast.
+        basis = (r"(?:according to|citing)\s+(?:[A-Z][A-Za-z]*\s+){0,3}(?:people|sources?|employees|officials)\b[^,;.!?]*|"
+            r"(?:据|援引)(?:[^，,。；;]{0,30})?(?:知情人士|消息人士|受访员工|受访官员)[^，,。；;]*")
+        attribution = _compiled_rule(r"(?:^(?:" + basis + r")[,，:\s]+|[,，]\s*(?:" + basis + r")[.。]?\s*$)", re.I).search(local)
+        if (attribution is None or _compiled_rule(
+                r"\b(?:declin\w*|refus\w*|not|never)\s+(?:to\s+)?(?:discuss\w*|reveal\w*|confirm\w*|comment\w*)|"
+                r"(?:拒绝|并未|没有|尚未)(?:披露|确认|透露|评论)", re.I).search(attribution.group())):
+            return "unverified-attribution"
+        return "report"
     if source_report.search(text):
         return "report"
     if (attributed_claim.search(text)
@@ -28346,6 +28194,8 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
     editorial_review = []
     def review_editorial(facts):
         def independent_report(text):
+            if _compiled_rule(r"^(?:据[^。！，,;；]*报道|报道(?:称|指出)|according to[^,.!?;]+)[,，:：\s]*$", re.I).fullmatch(text.strip()):
+                return False
             if source_fact_statement_role(text, publisher=article.source) in {"attributed", "report"}:
                 return True
             if _compiled_rule(r"\b(?:may|might|could|probably|likely|expect\w*|if|seems?|sounds?)\b|"
@@ -28362,7 +28212,7 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
             # not at every boundary used to find coordinated event actions.
             quotes = [match.span() for match in _compiled_rule(_SOURCE_QUOTED_PROSE, 0).finditer(fact.text)]
             candidates = {end for _, end in source_clause_spans(fact.text)}
-            author_turn = _SOURCE_AUTHOR_TURN
+            author_turn = _SOURCE_AUTHOR_TURN + "|" + _SOURCE_UNVERIFIED_WRITER_TURN
             if article.source:
                 author_turn += r"|" + source_publisher_turn(article.source)
             candidates.update(match.start() for match in _compiled_rule(
@@ -28378,8 +28228,8 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                 for end in sorted(x for x in candidates if start < x < sentence_end):
                     left, right = fact.text[start:end], fact.text[end:sentence_end]
                     left_role, right_role = source_fact_statement_role(left, publisher=article.source), source_fact_statement_role(right, publisher=article.source)
-                    if ((independent_report(left) or left_role == "editorial")
-                            and (independent_report(right) or (right_role == "editorial" and left_role != "editorial"))):
+                    if ((independent_report(left) or left_role in {"editorial", "unverified-attribution"})
+                            and (independent_report(right) or (right_role in {"editorial", "unverified-attribution"} and left_role != right_role))):
                         limits.add(end)
                         start = end
                 sentence_start = sentence_end
@@ -28387,7 +28237,8 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
             for end in sorted(limits):
                 if end > start:
                     text = fact.text[start:end].strip()
-                    sentences.append((start, end, source_fact_statement_role(text, previous, publisher=article.source) == "editorial"))
+                    role = source_fact_statement_role(text, previous, publisher=article.source)
+                    sentences.append((start, end, role if role in {"editorial", "unverified-attribution"} else ""))
                     previous = text
                 start = end
             if not any(editorial for _, _, editorial in sentences):
@@ -28404,8 +28255,11 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
                 part = replace(fact, text=part.text, key=part.key, origins=part.origins)
                 if editorial:
                     part = replace(part, owned=False,
-                        roles=frozenset({"unprocessed-editorial-condition"}),
-                        reason="Writer interpretation or advice requires source-context review; numeric content does not establish a reported fact")
+                        roles=frozenset({"unverified-attribution" if editorial == "unverified-attribution"
+                            else "unprocessed-editorial-condition"}),
+                        reason=("Verify the original basis of the cited writer's judgment before retention; attribution and numbers do not establish sourced reporting"
+                            if editorial == "unverified-attribution" else
+                            "Writer interpretation or advice requires source-context review; numeric content does not establish a reported fact"))
                     if not any(part.text == old.text and part.origins == old.origins
                                for old in editorial_review):
                         editorial_review.append(part)
@@ -28466,7 +28320,7 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
         # title unit, prepared() honestly records source-text-only provenance.
         normal += (prepared(article.title, roles=frozenset({'source-measurement'}), evidence_only=True),)
     if not owned and not projected_view:
-        normal += source_supporting_facts(article, normal, local_source_identity)
+        normal += review_editorial(source_supporting_facts(article, normal, local_source_identity))
     if projected_view:
         located_texts = {fact.text for fact in owned}
         normal += tuple(replace(prepared(value, roles=frozenset({"source-projection-fact"}), evidence_only=True),
@@ -28480,7 +28334,7 @@ def prepare_source_fact_view(article: Article) -> SourceFactView:
     if historical_response_spans:
         normal = tuple(fact for fact in normal if not any(
             origin[3:] in historical_response_spans for origin in fact.origins))
-    normal = normal + conditions
+    normal = normal + review_editorial(conditions)
     if article.evidence is not None:
         units = {unit.unit_id: unit for unit in article.evidence.units}
         unprocessed += tuple(PreparedFact(units[key].text[start:end], units[key].text[start:end].casefold(),

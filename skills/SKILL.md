@@ -5,7 +5,7 @@ description: Use this skill only when explicitly invoked as $apple-news-24h or b
 
 # Apple 24-Hour News Brief
 
-A bare `$apple-news-24h` requests the complete Chinese brief for the preceding 24 hours, including when another agent invokes it. Collect fresh evidence, resolve its review items and deliver the brief in your final response. Continue while a next step is available; estimated workload is not an execution limit. If an actual blocker prevents completion, preserve progress and identify the blocked step, evidence and what is needed to resume.
+A bare `$apple-news-24h`, including an invocation by another agent, requests the complete Chinese brief for the preceding 24 hours. Collect fresh evidence, resolve review items and deliver the brief. Continue while a next step is available; estimated workload is not an execution limit. If an actual blocker prevents completion, preserve progress and report the blocked step, evidence and what is needed to resume.
 
 ## 1. Collect
 
@@ -29,12 +29,12 @@ On the first need to create a bullet from review material, exclude an event or c
 
 ## 3. Resolve and write
 
-Read [evidence and writing](references/evidence-writing.md) once, then use its clause recorder. Work report by report from the summary, planned facts with source references, and associated unprocessed spans; save checked Chinese clauses. Reuse shared sources and settled decisions. Expand only the original passages needed to check a fact, attribution or boundary, rather than printing every source's full unit list by default. Keep batches within the tool's output limit; after truncation, continue from the last visible ID instead of repeating the batch.
+Read [evidence and writing](references/evidence-writing.md) once, then use its clause recorder. Start the report map from the retained events and inherit their categories. Read each source's summary contributions, planned facts and unprocessed spans together, saving its Chinese propositions under the reports they support. Excluding that source's subject does not finish this source read. Reuse shared sources and settled decisions; expand only the original passages needed to check a fact, attribution or boundary. Keep batches within the tool's output limit; after truncation, continue from the last visible ID instead of repeating the batch.
 
 Account for every event ID and required material fragment with a retained clause, justified boundary change or specific exclusion. Keep the clause record and a compact disposition index; refer to source/unit IDs instead of copying original text into additional ledgers. Preserve important facts, conditions, source differences and every supporting URL. Reopen live pages only when captured evidence is insufficient.
 
 ## 4. Deliver
 
-Check final boundaries, material facts and source links against the records. Apply the writing guide's final prose pass, including sentence endings; a sourced limitation or denial that adds a distinct fact remains.
+After handling the contributing sources, check each report's eligibility, boundaries, category, material facts and source links. Apply the writing guide's final prose pass, including sentence endings.
 
-Assemble the checked paragraphs verbatim. Return only `**软件与系统**` then `**硬件与产品**`, with source links at the end of each bullet. For an empty category use `在指定时间窗口内，该分类下没有发现符合条件的新闻。` Deliver the full brief itself and end after the last news bullet (or empty-category sentence). Keep workflow notes, verification statements and disclaimers out of the final response; do not replace the brief with a file link or completion report.
+Return the completed brief verbatim under only `**软件与系统**` then `**硬件与产品**`, with source links at the end of each bullet. For an empty category use `在指定时间窗口内，该分类下没有发现符合条件的新闻。` End after the last bullet or empty-category sentence. Workflow notes, verification statements, disclaimers and file links do not replace or accompany the completed brief.
