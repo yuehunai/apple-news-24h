@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented here.
 
+## 2.3.5 - 2026-11-07
+
+- Improved source-bound grouping for first-party app updates, return policies, hardware-control plans, app-adaptation statistics, keyboard research and joint deliveries; preserved platform, version, stage, observer and sample boundaries.
+- Improved legal-event ownership and categories by separating verdicts, responses and distinct disclosure or discovery procedures; removed a legacy broad merge override and prevented old support checks from replacing an established category.
+- Improved corporate-financing admission so bond offerings are not mistaken for retail discounts; preserved issuer ownership, planned versus confirmed terms, publication windows and the hardware/company-market category.
+- Improved relevance and categories for platform interoperability, official software controls, image-watermark features and reported output failures; kept accessory updates, promotions, historical recaps and background compatibility from becoming independent Apple news.
+- Added source-local web and YouTube object references alongside existing embedded references, retaining labels and surrounding context so background media cannot identify a new publication; moved an existing hardware-projection eligibility check earlier to avoid redundant work.
+- Updated writing guidance to trace attribution through retellings, exclude the original writer's unsupported expectations and inferences, and preserve independently reported facts, observations and attributed forecasts within mixed passages.
+- Added captured-source regressions; all 3,298 offline tests pass, with independent review, fresh live comparison and a complete clean skill invocation supplemented by focused consumption checks. Kept the standard-library runtime, CLI, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
+
 ## 2.3.4 - 2026-10-31
 
 - Improved detail admission for neutral notebook-market headlines and direct Apple company reports, so background references to other companies no longer prevent source-based relevance checks.

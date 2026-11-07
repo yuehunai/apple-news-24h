@@ -1158,6 +1158,8 @@ def project_hardware_roadmap(
 ) -> list[tuple[str, str, list[str]]]:
     """Project an explicit multi-product roadmap onto its product-level actions."""
     original = [(title, summary, key_facts)]
+    if identity.scope != "apple-direct" or identity.content_form != "news":
+        return original
     title_lower = title.lower()
     device = source_device_operation_frame(title, summary, tuple(key_facts))
     if single_source_disclosure or (device and device.action == "device-announcement"):
@@ -1435,9 +1437,6 @@ def project_hardware_roadmap(
     )
     if not explicit_multi_product:
         return original
-    if identity.scope != "apple-direct" or identity.content_form != "news":
-        return original
-
     generation_groups: dict[str, dict[str, list[str]]] = {}
     for subject, facts in grouped.items():
         for fact in facts:

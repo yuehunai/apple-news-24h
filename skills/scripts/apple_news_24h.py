@@ -97,6 +97,7 @@ from apple_news_core.event_identity import (
     REGION_TERMS,  # noqa: E402
     is_retail_promotion,
     source_retail_invitation,
+    source_financial_offering,
     source_official_accessory_market_action,
     non_apple_price_followup,
     PRODUCT_PATTERNS,
@@ -6436,6 +6437,8 @@ def is_ai_generated_apple_product_image_debunk_without_new_action(title: str, te
 
 
 def is_routine_retail_discount_story(title: str, text: str) -> bool:
+    if source_financial_offering(title, text):
+        return False
     lower = text.lower()
     title_lower = title.lower()
     lead_lower = f"{title} {text[:650]}".lower()
@@ -25869,10 +25872,11 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         }
         software_category = (
             profile.category_hint
-            if profile.category_hint and set(software_support) <= generic_software_support
-            and not (source_kind == "os_app"
-                and identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
-                and not any(key.startswith("primary-claim:") for key in profile.event_keys))
+            if "source-local-category-authority" in profile.separation_keys
+            or (profile.category_hint and set(software_support) <= generic_software_support
+                and not (source_kind == "os_app"
+                    and identity.title_products & {"ios", "ipados", "macos", "watchos", "tvos", "visionos"}
+                    and not any(key.startswith("primary-claim:") for key in profile.event_keys)))
             else "software_systems"
         )
         profile = replace(profile, trusted_direct_action=True, promotion_reason="; ".join(software_support), category_hint=software_category)
@@ -25995,7 +25999,8 @@ def legacy_article_reconciliation_profile(article: Article, *, _source_kind_snap
         # do not discard it and let the host device supply the final category.
         profile = replace(profile, defer_reason="third-party app update on an Apple platform without an Apple action",
                           category_hint="software_systems")
-    if is_apple_health_data_research_candidate(" ".join([article.title, source_text])) and any(
+    if ("source-local-category-authority" not in profile.separation_keys
+            and is_apple_health_data_research_candidate(" ".join([article.title, source_text]))) and any(
         is_apple_health_data_research_candidate(sentence)
         and not _compiled_rule(r"此前|当时|过去|曾经|此前曾|\b(?:previously|historically|earlier|last year)\b", re.I).search(sentence)
         for sentence in _compiled_rule(r"[。！？]|(?<=[.!?])\s+", 0).split(article.title + ". " + article.summary, 0)

@@ -15,6 +15,7 @@ from functools import lru_cache
 import html
 import re
 import unicodedata
+import urllib.parse
 from typing import Iterable
 
 from .models import ArticleEvidence, BoundClaim
@@ -2221,6 +2222,19 @@ def source_editorial_evaluation(title: str, lead: str) -> str:
     """Identify an evaluation's reporting role, not its background launch."""
     h, opening = _normalized(title), _normalized(lead)[:600]
     s = _frame_search
+    if (s(r'^(?:the\s+)?best\b[^.!?]{0,140}\bto\s+(?:buy|download|install)\b', h)
+            and s(r'buying\s+guide|our\s+picks|we\s+recommend', opening)):
+        return 'buying_advice'
+    if (s(r'\b(?:my|our)\s+(?:house|home|desk|setup)\s+needs\b', h)
+            and not s(r'^apple\s+(?:adds?|announces?|releases?)\b', h)):
+        return 'buying_advice'
+    if (s(r'^from\b[^.!?]{1,100}\bto\b[^.!?]{1,100}:\s*\d+\s+years\b', h)
+            and s(r'\bsnapshot\b|retrospective|look\s+back|历史回顾', opening)):
+        return 'analysis'
+    if (s(r'^rip[,，:]|遭(?:集体)?吐槽|直言.{0,12}不想用', h)
+            and s(r'was\s+rumored[^.!?]{0,100}\bname\b|博主|评测', opening)
+            and not s(r'故障|失灵|损坏|实测(?:发现|测得)|测试结果显示', h)):
+        return 'analysis'
     if s(r'^(?:in\s+)?(?:an?\s+)?(?:hypothetical|imagined|conceptual)\s+(?:re)?design\b|^(?:假设|假想|概念)设计', opening):
         return 'analysis'
     if (s(r'\bmy\s+(?:personal\s+)?(?:take|opinion|thoughts|verdict)\b|\bi\s+(?:dislike|hate|love)\b|个人(?:看法|观点)', h)
@@ -2504,6 +2518,12 @@ def source_retail_price_offer(title: str, passages: tuple[str, ...]) -> bool:
         products = _extract_patterns(headline, PRODUCT_PATTERNS)
         for passage in passages[:2]:
             first = _normalized(passage)
+            gift = _frame_search(r"^([a-z][a-z0-9&.' -]{1,45}?)\s+(?:is\s+)?(?:offering|offers|running|kicking\s+off)\b[^.!?]{0,100}\b(?:free|bonus)\s+[$€£]\s*\d[\d,.]*\s+gift\s+card\b", first)
+            if (gift and gift.group(1) not in {'apple', 'apple store', 'the apple store'}
+                    and _frame_search(r'gift\s+card', headline)
+                    and products & _extract_patterns(first, PRODUCT_PATTERNS)
+                    and source_predicate_role(first) == 'current'):
+                return True
             seller = _frame_search(r"^([a-z][a-z0-9&.' -]{1,45}?)\s+is\s+discounting\s+(.+)", first)
             if (seller and seller.group(1) != 'apple' and source_predicate_role(first) == 'current'
                     and products & _extract_patterns(seller.group(2), PRODUCT_PATTERNS)
@@ -2568,6 +2588,15 @@ def source_retail_price_offer(title: str, passages: tuple[str, ...]) -> bool:
                 return True
 
     return False
+
+
+def source_financial_offering(title: str, lead: str) -> bool:
+    """A sale of debt securities is financing, not a retail price promotion."""
+    instrument = _frame_search(r'\bbonds?\s+(?:sale|offering|issuance)|\b(?:issue|issuing|offer)\b.{0,25}\bbonds?\b|债券|债市', title)
+    if instrument is None or _frame_search(r'\b(?:sale|discount|coupon|save)\b|优惠|促销', title[:instrument.start()]):
+        return False
+    return bool(_frame_search(r'\b(?:SEC|investors?|debt|proceeds|matur\w*|prospectus)\b|融资|募集|发行|发债|证券交易委员会|投资者', lead))
+
 
 
 def _content_form(title: str, lead: str = "") -> str:
@@ -3312,8 +3341,8 @@ def _content_form(title: str, lead: str = "") -> str:
     if (_compiled_rule(r"\b(?:hit|hits|drops?\s+to)\s+(?:a\s+)?(?:new\s+)?low\b.{0,16}[$£€¥]\s*\d", 0).search(lower)
             and _compiled_rule(r"\b(?:sale|discount|retailer|amazon|shipped|deal)\b", 0).search(lead_lower)):
         return "deal"
-    if (
-        _compiled_rule(r"\b(?:discounts?|markdowns?|savings?(?!\s+accounts?\b)|sale|lowest price|record low)\b", 0).search(lower)
+    if (not source_financial_offering(title, lead)
+        and _compiled_rule(r"\b(?:discounts?|markdowns?|savings?(?!\s+accounts?\b)|sale|lowest price|record low)\b", 0).search(lower)
         and _compiled_rule(r"[$£€¥]\s*\d|\b\d+(?:\.\d+)?\s*%|\bup to\b|\boff\b|"
             r"\bbelow\s+(?:the\s+)?(?:list|retail)\s+price\b", 0).search(f"{lower} {lead_lower}")
     ):
@@ -3538,6 +3567,11 @@ def is_platform_compatible_accessory_title(title: str) -> bool:
         return True
     if _compiled_rule(r"^(?:apple\b|苹果)").match(lower):
         return False
+    update_subject = _compiled_rule(r'[，,:：]').split(lower, 1)[0]
+    if (_frame_search(r'ota|firmware|固件', update_subject)
+            and source_accessory_category(update_subject)
+            and not _extract_patterns(update_subject, PRODUCT_PATTERNS)):
+        return True
     layout = _frame_search(r"(?<![a-z0-9])(?:macos|mac|ios|ipados)\s*"
         r"(?:(?:key(?:board)?[- ]?)?(?:layout|keycaps?)\b|键位|键帽)", lower)
     if layout:
@@ -4070,6 +4104,7 @@ def source_app_adaptation_frame(title: str, lead: str, passages: tuple[str, ...]
     names = {m.group(1) for text in (h, *texts) for m in _compiled_rule(adaptation).finditer(text)
              if m.group(1) in h or any(m.group(1) == name + kind
                  for name in headline_names for kind in app_types)}
+    names = {name for name in names if not _frame_search(r'^(?:(?:(?:超|超过|约)?\d[\d.]*[万千百]?|[万千百]?)款(?:应用)?|应用)$', name)}
     pending = _frame_search(device + r'\s*[a-z0-9 ]*' + name_pattern + r'(?:不|尚未|未)适配', h)
     if pending:
         names.add(pending.group(1))
@@ -7796,6 +7831,24 @@ def bind_content_updates(evidence: ArticleEvidence) -> tuple[BoundClaim, ...] | 
 
 def bind_device_measurement(evidence: ArticleEvidence) -> BoundClaim | None:
     """Bind a measured dataset and its local continuations, not display models."""
+    devices = named_iphone_models(evidence.title)
+    if (len(devices) == 1 and _frame_search(r'\d+(?:\.\d+)?\s*tokens?/s', evidence.title)
+            and (evidence.content_form or _content_form(evidence.title, evidence.raw_lead)) == 'news'):
+        for unit in evidence.units:
+            measured = _frame_search(r'实测|measur\w*|benchmarked', unit.text)
+            rate = _frame_search(r'\d+(?:\.\d+)?\s*tokens?/s', unit.text)
+            if (unit.kind in {'p', 'text'} and measured and rate
+                    and named_iphone_models(unit.text) == devices
+                    and source_predicate_role(unit.text) == 'current'
+                    and not source_denies_action('', unit.text, r'实测|measur\w*|benchmarked')
+                    and not _frame_search(r'计划|预计|理论|目标|expected|theoretical|\bwill\b', unit.text)):
+                model = _compiled_rule(r'^([A-Za-z][A-Za-z0-9_.-]+)\s+(?:在|on\b)', 0).match(unit.text)
+                if model:
+                    return BoundClaim(next(iter(devices)), 'local-model-measurement', model.group(1).lower(),
+                        ((model.group(1), 'measurement-context', _normalized(unit.text), unit.unit_id, 0, len(unit.text)),
+                         (model.group(1), 'observation-source', evidence.source, unit.unit_id, 0, len(unit.text))),
+                        evidence.article_id, (unit.unit_id,), ((unit.unit_id, 0, len(unit.text)),),
+                        evidence.content_form, 'hardware_products', 'hardware_market', 'apple-direct', 'independent', 'affirmed')
     body=([u for u in evidence.units if u.kind in {'p','text'} and u.container_id!='caption']
           if _frame_search(r'mac\s*(?:studio|mini)|macbook',evidence.title) else [])
     for index,unit in enumerate(body):
@@ -8681,6 +8734,22 @@ def bind_interoperability_report(evidence: ArticleEvidence) -> BoundClaim | None
     # a rollout identity. Unresolved members of this scope cannot fall through
     # to competitor-device or ordinary-app classification.
     opening = body[0].text if body else evidence.raw_lead
+    release = s(r'^([a-z][a-z0-9-]*)\s+(\d+(?:\.\d+)+)(?:\s+(beta\s*\d+))?', title)
+    if release and s(r'cross[- ](?:build|compil)|交叉(?:构建|编译)', title) and s(r'macos', title):
+        for unit in body[:3]:
+            operation = s(r'(?:支持在|(?:adds?\s+)?support\s+for)[^。.!?]{0,45}macos[^。.!?]{0,45}(?:交叉(?:构建|编译)|cross[- ](?:build|compil))', unit.text)
+            stated_stage = s(re.escape(release.group(1)) + r'\s*' + re.escape(release.group(2)) + r'\s*(beta\s*\d+|正式版|stable)', unit.text)
+            if (operation and s(re.escape(release.group(1)) + r'\s*' + re.escape(release.group(2)) + r'(?![\d.])', unit.text)
+                    and (not stated_stage or _subject_slug(stated_stage.group(1)) == _subject_slug(release.group(3) or 'stable'))
+                    and not s(r'不支持|未支持', unit.text)
+                    and source_predicate_role(unit.text) == 'current'
+                    and not s(r'计划|预计|\bwill\b|plans?\s+to', unit.text)
+                    and not source_denies_action('', unit.text, r'support|支持')):
+                version = release.group(2) + (':' + _subject_slug(release.group(3)) if release.group(3) else '')
+                return BoundClaim(_subject_slug(release.group(1)) + ':macos', 'cross-build-host-support',
+                    'system-packages', (('platform', 'code-version', version, unit.unit_id, 0, len(unit.text)),),
+                    evidence.article_id, (unit.unit_id,), ((unit.unit_id, 0, len(unit.text)),), evidence.content_form,
+                    'software_systems', 'ecosystem_interop', 'platform-interop', 'independent', 'affirmed')
     # The source must connect a named client to a concrete first-party endpoint.
     # App availability on a host platform does not establish that relation.
     endpoints = (('icloud', r'icloud', r'mail|calendar|email|邮件|日历|日程|邮箱'),
@@ -9640,12 +9709,189 @@ def bind_court_remedy(evidence: ArticleEvidence) -> BoundClaim | None:
         'software_systems', 'legal_regulatory', 'apple-direct', 'independent', 'affirmed')
 
 
+def bind_keyboard_dictionary_report(evidence: ArticleEvidence) -> BoundClaim | None:
+    if not _frame_search(r'keyboard|autocomplete|键盘|自动补全', evidence.title):
+        return None
+    frame = source_software_capability_frame(evidence.title, evidence.raw_lead,
+        tuple(u.text for u in evidence.units))
+    if frame is None or frame.action != 'software-behavior-research':
+        return None
+    artifacts = set()
+    for ref in evidence.embedded_references:
+        if ref.platform != 'web' or not _frame_search(r'full\s+list|entire\s+list|words\s+and\s+phrases|完整名单|完整词库', ref.context + ' ' + ref.label):
+            continue
+        parts = urllib.parse.urlsplit(ref.url)
+        host = (parts.hostname or '').removeprefix('www.')
+        project = host.split('.')[0]
+        if host and (parts.path in {'', '/'} or _frame_search(r'\b' + re.escape(project) + r'\b', evidence.title)):
+            artifacts.add(host)
+    observers = {m.group(1).strip().lower() for unit in evidence.units[:3]
+        for m in _compiled_rule(r'(?:[Rr]esearcher[,]?\s+|研究人员\s*)([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})', 0).finditer(unit.text)}
+    if len(artifacts) > 1 or len(observers) > 1 or not (artifacts or observers):
+        return None
+    units = [u for u in evidence.units if u.kind in {'p', 'text'} and _frame_search(r'keyboard|autocomplete|phrases|词库|键盘', u.text)]
+    if not units:
+        return None
+    first=units[0]
+    qualifiers=(('ios', 'code-version', frame.model_generation, first.unit_id, 0, len(first.text)),) if frame.model_generation else ()
+    qualifiers += tuple(('dictionary', kind, value, first.unit_id, 0, len(first.text))
+                        for kind, values in (('research-artifact', artifacts), ('research-observer', observers)) for value in values)
+    samples = {m.group(1) for unit in evidence.units[:3]
+               for m in _compiled_rule(r'\b([a-z][a-z-]*)\s+sample\b').finditer(_normalized(unit.text))
+               if m.group(1) not in {'a', 'an', 'the', 'independent', 'collected'}}
+    qualifiers += tuple(('dictionary', 'research-sample', value, first.unit_id, 0, len(first.text)) for value in samples)
+    return BoundClaim('ios:keyboard-dictionary', 'software-behavior-research',
+        'prediction-exclusions', qualifiers, evidence.article_id, tuple(u.unit_id for u in units),
+        tuple((u.unit_id,0,len(u.text)) for u in units), evidence.content_form,
+        'software_systems','os_app','apple-direct','independent','affirmed')
+
+
+def bind_product_delivery_batch(evidence: ArticleEvidence) -> BoundClaim | None:
+    """The current delivery of a named batch is distinct from its earlier announcement."""
+    title = _normalized(evidence.title)
+    devices = device_operation_subjects(title)
+    if (len(devices) < 2 or not _frame_search(r'first\s+deliveries|available\s+from\s+today|正式开售|同步上市', title)
+            or source_denies_action(title, '', r'deliver\w*|available|开售|上市')):
+        return None
+    body = [u for u in evidence.units if u.kind in {'p', 'text'} and u.container_id != 'caption']
+    if not body:
+        return None
+    first = body[0]
+    current = _frame_search(r'\bfrom\s+today\b[^.!?]{0,180}\bare\s+available\s+to\s+buy\b|\band\s+now\s+they[^.!?]{0,65}customers[^.!?]{0,20}doorsteps|正式启动[^。]{0,15}新品销售', first.text)
+    if (not current or not _frame_search(r'apple|苹果', first.text)
+            or source_denies_action('', first.text, r'available|deliver\w*|销售|开售')):
+        return None
+    date = (evidence.published_utc or '')[:10].split('-')
+    if len(date) != 3:
+        return None
+    subject = 'apple:delivery-batch:' + '+'.join(sorted(devices))
+    qualifiers = tuple((subject, 'observation-' + kind, value, first.unit_id, 0, len(first.text))
+                       for kind, value in zip(('year', 'month', 'day'), date))
+    qualifiers += tuple((model, 'code-version', generation, first.unit_id, 0, len(first.text))
+                        for model,generation in devices.items() if generation)
+    return BoundClaim(subject, 'first-retail-delivery', 'product-batch', qualifiers,
+        evidence.article_id, (first.unit_id,), ((first.unit_id, 0, len(first.text)),), evidence.content_form,
+        'hardware_products', 'hardware_market', 'apple-direct', 'independent', 'affirmed')
+
+
+def bind_advertisement_reports(evidence: ArticleEvidence) -> tuple[BoundClaim, ...] | None:
+    """A current official ad release owns the linked asset, not every embedded video."""
+    s = _frame_search
+    if not s(r'\bads?\b|commercial|广告', evidence.title):
+        return None
+    body = [u for u in evidence.units if u.kind in {'p', 'text'} and u.container_id != 'caption']
+    if not body:
+        return None
+    first = body[0].text
+    if (not s(r'^apple\s+(?:(?:today|has|is)\s+)*(?:shared|shares|published|released|pushing)\b', first)
+            or not s(r'\bnew\s+(?:apple\s+[a-z]+\s+)?ads?\b', first)
+            or source_predicate_role(first) != 'current'
+            or source_denies_action('', first, r'shar\w*|publish\w*|releas\w*|push\w*')):
+        return None
+    references = [r for r in evidence.embedded_references if r.platform == 'youtube'
+                  and source_predicate_role(r.context) == 'current'
+                  and not s(r'comparison|last\s+year|previous|historical|此前|去年|对比', r.context)
+                  and (s(r'\bads?\b|spot|commercial|广告', r.context)
+                       or (len(r.label.strip()) > 8 and _normalized(r.label.strip()) in _normalized(evidence.title)))]
+    ids = {r.object_id for r in references}
+    claims = []
+    if len(ids) == 1 and not s(r'\b(?:pair|two|multiple|several)\b|两|多条', first):
+        selections = [(next(iter(ids)), body[0], 0, next(source_sentence_spans(first))[1])]
+    else:
+        selections = []
+        # A named inline link can identify one member of an explicit ad pair;
+        # the other member requires its own embed and an explicit first-ad clause.
+        main = {r.object_id for r in references if not r.html_tag.lower().startswith('<a')}
+        for unit in body:
+            for start, end in source_sentence_spans(unit.text):
+                clause = unit.text[start:end]
+                if not s(r'^the\s+(?:first|second)\b', clause.strip()):
+                    continue
+                named = {r.object_id for r in references if r.label.strip()
+                         and s(r'(?:called|titled|named)\s+["“\x27]' + re.escape(r.label.strip()) + r'["”\x27]', clause)}
+                if len(named) == 1:
+                    selections.append((next(iter(named)), unit, start, end))
+                elif s(r'^the\s+first\b', clause.strip()) and len(main) == 1:
+                    selections.append((next(iter(main)), unit, start, end))
+        if len({item[0] for item in selections}) != 2 or len(ids) != 2:
+            return None
+    for asset, unit, start, end in selections:
+        claims.append(BoundClaim('apple:ad:youtube:' + asset, 'video-publication', 'advertisement',
+            (('video', 'media-object', 'youtube:' + asset, unit.unit_id, start, end),),
+            evidence.article_id, (unit.unit_id,), ((unit.unit_id, start, end),), evidence.content_form,
+            'software_systems', 'service_content', 'apple-direct', 'independent', 'affirmed'))
+    return tuple(claims)
+
+
+def bind_patent_verdict(evidence: ArticleEvidence) -> BoundClaim | None:
+    """Bind the current award to its case; a response's cited verdict is background."""
+    s = _frame_search
+    title = evidence.title
+    if (not s(r'patents?|专利|\bip\s+trial', title)
+            or not s(r'owes|damages|赔偿|赔付|判赔|被判|orders?.{0,30}pay', title)
+            or not s(r'\bapple\s+(?:(?:is|was|has\s+been)\s+)?(?:owes|hit\s+with|ordered\s+to\s+pay)|苹果.{0,30}(?:被判|被裁定)' , title)
+            or s(r'回应|上诉|appeal|respond|challenges?|动议|motion', title)):
+        return None
+    body = [u for u in evidence.units if u.kind in {'p','text','summary','selected_fact'}
+            and u.container_id != 'caption' and u.text != title]
+    verdict = None
+    for unit in body[:4]:
+        for start,end in source_sentence_spans(unit.text):
+            clause = unit.text[start:end]
+            if (s(r'jury[^。!?]{0,60}(?:ruled|awarded|found)|陪审团[^。!?]{0,30}(?:裁定|认定)', clause)
+                    and s(r'apple|苹果', title)
+                    and source_predicate_role(clause) == 'current'
+                    and not source_denies_action('', clause, r'ruled|awarded|found|infringe|裁定|认定|侵犯')
+                    and not s(r'owes?\s+no\s+damages|无需赔偿|未侵权|没有侵权', clause)):
+                verdict = (unit,start,end,clause)
+                break
+        if verdict:
+            break
+    if verdict is None:
+        return None
+    qualifiers = []
+    for unit in body[:4]:
+        for a, b in source_sentence_spans(unit.text):
+            passage = unit.text[a:b]
+            if s(r'unrelated|another\s+case|separate\s+case|last\s+(?:year|week|month)|另一起|无关|另一案件|去年|上周', passage):
+                continue
+            names = _compiled_rule(r'(?:owes|awarded(?:\s+to)?|侵犯)\s*((?-i:[A-Z][A-Za-z0-9-]*))|'
+                r'((?-i:[A-Z][A-Za-z0-9-]*))(?:[’\x27]s)?\s+(?:patents?|科技公司)', re.I)
+            for match in names.finditer(passage):
+                name = next(v for v in match.groups() if v).lower()
+                if name not in {'apple','us'}:
+                    qualifiers.append(('case','case-claimant',name,unit.unit_id,a+match.start(),a+match.end()))
+            for match in _compiled_rule(r'(?:patent\s*(?:nos?\.?|numbers?)|专利号|美国专利)\s*[:：]?\s*([\d,，\s号与和及and]+)', re.I).finditer(passage):
+                numbers = _compiled_rule(r'(?<!\d)(?:\d{1,2},\d{3},\d{3}|\d{7,8})(?!\d)').findall(match.group(1))
+                if numbers:
+                    qualifiers.append(('case','case-patents',','.join(sorted(n.replace(',','') for n in numbers)),unit.unit_id,a+match.start(),a+match.end()))
+    unit,start,end,clause = verdict
+    court = _compiled_rule(r'jury\s+in\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})',0).search(clause)
+    if court:
+        qualifiers.append(('case','court-location',court.group(1).lower(),unit.unit_id,start+court.start(),start+court.end()))
+    if not qualifiers:
+        return None
+    physical = has_haptic_patent_subject(title, ' '.join(u.text for u in body[:4]))
+    return BoundClaim('apple:patent-case','jury-damages-verdict','patent-infringement',tuple(qualifiers),
+        evidence.article_id,(unit.unit_id,),((unit.unit_id,start,end),),evidence.content_form,
+        'hardware_products' if physical else 'software_systems','legal_antitrust','apple-direct','independent','affirmed')
+
+
 def bind_source_report(evidence: ArticleEvidence) -> tuple[BoundClaim, ...] | None:
     """Prepare migrated report families; None means outside their scope only."""
     for binder in (bind_device_review_observations, bind_attributed_device_tests, bind_store_incidents, bind_content_updates, bind_hardware_prototype_testing):
         claims = binder(evidence)
         if claims is not None:
             return claims
+    advertisements = bind_advertisement_reports(evidence)
+    if advertisements is not None:
+        return advertisements
+    dictionary = bind_keyboard_dictionary_report(evidence)
+    if dictionary is not None:
+        return (dictionary,)
+    delivery_batch = bind_product_delivery_batch(evidence)
+    if delivery_batch is not None:
+        return (delivery_batch,)
     channel = bind_channel_stock_operation(evidence)
     if channel is not None:
         return (channel,)
@@ -9955,7 +10201,7 @@ def source_sentence_spans(text):
             start += 1
         while end > start and text[end - 1].isspace():
             end -= 1
-        abbreviation = _compiled_rule(r"\b(?:(?:[A-Z]\.){2,}|(?i:[ap]\.m\.)|(?:St|Mt|Dr|Mr|Mrs|Ms|Prof)\.)$", 0).search(text[start:end].rstrip('\"\'”’'))
+        abbreviation = _compiled_rule(r"\b(?:(?:[A-Z]\.){2,}|(?i:[ap]\.m\.)|(?:St|Mt|Dr|Mr|Mrs|Ms|Prof|No|Nos)\.)$", 0).search(text[start:end].rstrip('\"\'”’'))
         month_date = (text[end:end+4].lstrip()[:1].isdigit()
                       and _compiled_rule(r'\b(?:Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.$', re.I).search(text[start:end]))
         if (abbreviation or month_date) and end < len(text):
@@ -10292,8 +10538,8 @@ def device_operation_subjects(text: str) -> dict[str, str]:
     result = disclosed_device_subjects(text)
     text = _normalized(text)
     patterns = (
-        ('macbook-pro', r'(?<![a-z0-9])macbook\s*pro(?![a-z0-9])'),
-        ('macbook-air', r'(?<![a-z0-9])macbook\s*air(?![a-z0-9])'),
+        ('macbook-pro', r'(?<![a-z0-9])macbook\s*pros?(?![a-z0-9])'),
+        ('macbook-air', r'(?<![a-z0-9])macbook\s*airs?(?![a-z0-9])'),
         ('macbook-neo', r'(?<![a-z0-9])macbook\s*neo(?![a-z0-9])'),
         ('mac-mini', r'(?<![a-z0-9])mac\s*mini(?![a-z0-9])'),
         ('mac-studio', r'(?<![a-z0-9])mac\s*studio(?![a-z0-9])'),
@@ -10784,13 +11030,16 @@ def device_connection_frame(title: str, opening: str, facts: tuple[str, ...]) ->
             r"(launch(?:es|ed)?|releas(?:es|ed)|rolls?\s+out|updat(?:es?|ed)|adds?|improves?|"
             r"denies\s+(?:releasing|launching))\s+(.+)", text)
         if not match:
+            ota = _frame_search(r'^([^，,。:：]{2,45}?)(?:首次|获推第[一二三四五六七八九十\d]+次|迎)?\s*ota\s*[\d.]*\s*(?:开启|正式|开始)?(?:推送)?[：:，,](.+)', text)
+            if ota:
+                return ota.group(1), '推送', 'OTA 软件更新，' + ota.group(2)
             seasonal = _frame_search(
                 r"(?:^|[，,])\s*([^，,。:：]{2,30}?)(?:常用常新[，,]\s*)?"
                 r"迎(?:来)?[^，,。:：]{0,24}版本[^，,。:：]{0,12}升级[：:]?(.+)", text)
             if seasonal:
                 return seasonal.group(1), "更新", "软件更新" + seasonal.group(2)
             match = _frame_search(
-                r"(?:^|[，,])\s*([\u4e00-\u9fff]{2,15}?)(?:正式|现已|已|近期)?"
+                r"(?:^|[，,])\s*([\u4e00-\u9fff]{2,15}?)(?:正式|现已|已|近期|今日|今天)?"
                 r"(推出|推送|发布|更新|新增|改善|否认发布|否认推出)(.+)", text)
         return match.groups() if match else None
 
@@ -10800,9 +11049,13 @@ def device_connection_frame(title: str, opening: str, facts: tuple[str, ...]) ->
     headline_action = publication(title)
     if headline_action and first_party(headline_action[0]):
         return None
-    for value in (opening, *(_normalized(f) for f in facts[:1])):
+    explicit_update = bool(headline_action and _frame_search(r'ota|firmware|software\s+update|固件|软件更新', headline_action[2]))
+    passages = (opening, *(_normalized(f) for f in facts[:1]))
+    if explicit_update and not _blocked_update_assertion(opening):
+        passages = (title, *passages)
+    for value in passages:
         start, end = next(source_sentence_spans(value), (0, len(value)))
-        claim = value[start:end]
+        claim = value if value == title and explicit_update else value[start:end]
         issued = publication(claim)
         if not issued:
             continue
@@ -10819,22 +11072,22 @@ def device_connection_frame(title: str, opening: str, facts: tuple[str, ...]) ->
         owned_scope = _compiled_rule(
             r"[;；]|\b(?:while|whereas|unlike|compared|but)\b|相比|相较|[，,]\s*(?:而|但)", 0).split(released)[0]
         firmware = _frame_search(
-            r"^[^，,;。.!?]{0,45}(?:firmware\b|software\s+update\b)|"
+            r"^[^，,;。.!?]{0,45}(?:firmware\b|software\s+update\b|ota\b)|"
             r"^[^，,;。.!?]{0,20}(?:固件|软件更新)", owned_scope)
         if firmware:
             # The changed operation must modify this firmware, with the same
             # target as the headline; a later issuer cannot supply it.
-            target_object = r"wireless\s+carplay" if carplay else re.escape(casting.group(1)) + r"\s+screen\s+mirroring"
-            chinese_object = r"无线\s*carplay" if carplay else re.escape(casting.group(1)) + r"\s*(?:快捷)?投屏"
+            target_object = r"(?:wireless\s+)?carplay" if carplay else re.escape(casting.group(1)) + r"\s+screen\s+mirroring"
+            chinese_object = r"(?:苹果\s*)?(?:无线\s*)?carplay" if carplay else re.escape(casting.group(1)) + r"\s*(?:快捷)?投屏"
             suffix = owned_scope[firmware.end():]
             change = _frame_search(
                 r"^\s*(?:update\b\s*)?(?:for\s+[^,;.]{1,80})?\s*"
                 r"(?:(?:,|:)\s*|(?:that|which)\s+)?"
                 r"(?:adds?|added|adding|enables?|enabled|enabling|brings?|bringing)\s+(?:new\s+)?" + target_object,
                 suffix) or _frame_search(
-                r"(?:^|[，,:：、])\s*(?:新增|增加|启用|开启|改为)\s*" + chinese_object, suffix)
+                r"(?:^|[，,:：、])\s*(?:部分车型)?(?:新增|增加|启用|开启|改为)\s*" + chinese_object, suffix)
             if change:
-                return SourceActionFrame(subject + ":" + target, "wireless-connection-retrofit" if carplay else "screen-mirroring-rollout",
+                return SourceActionFrame(subject + ":" + target, ("wireless-connection-retrofit" if _frame_search(r'wireless|无线', change.group()) else "platform-connection-rollout") if carplay else "screen-mirroring-rollout",
                                          kind="ecosystem_interop", tier="ecosystem")
             return SourceActionFrame(subject + ":" + target, "compatibility-context",
                                      kind="third_party_ecosystem", tier="weak")
@@ -11110,8 +11363,8 @@ def source_accessory_category(title: str) -> str:
         return 'software_systems'
     physical = _compiled_rule(
         r"\b(?:ethernet\s+adapter|network\s+(?:adapter|card)|game\s*controller|gamepad|"
-        r"headphones?|earbuds?|chargers?|charging\s+stands?|keyboards?|mice|trackers?|smartwatches?|smartphones?|laptops?|tracking\s+tags?)\b|"
-        r"网卡|手柄|耳机|耳塞|充电器|充电支架|键盘|鼠标|转接器|适配器|追踪器|定位标签|手表|手机|平板|笔记本", re.I)
+        r"headphones?|earbuds?|chargers?|charging\s+(?:stands?|stations?)|humidifiers?|keyboards?|mice|trackers?|smartwatches?|smartphones?|laptops?|tracking\s+tags?)\b|"
+        r"网卡|手柄|耳机|耳塞|充电器|充电支架|充电站|电能基站|加湿器|键盘|鼠标|转接器|适配器|追踪器|定位标签|手表|手机|平板|笔记本", re.I)
     if not physical.search(title):
         return ""
     # Compatibility and bundled software qualify the preceding product; a
@@ -11127,9 +11380,13 @@ def source_accessory_category(title: str) -> str:
     return "hardware_products" if hardware else ""
 
 
-def source_first_party_app_frame(title: str, lead: str) -> SourceActionFrame | None:
+def source_first_party_app_frame(title: str, lead: str, facts: tuple[str, ...] = ()) -> SourceActionFrame | None:
     """A typed Apple app update owns its software, not its host device."""
-    h, opening = _normalized(title), _normalized(lead)[:950]
+    h, opening = _normalized(title), _normalized(' '.join((lead, *facts[:3])))[:950]
+    # Localized names still identify the same application, not its parent service.
+    h = h.replace('apple music 古典乐', 'apple music classical')
+    opening = opening.replace('apple music 古典乐', 'apple music classical')
+    h = _compiled_rule(r'^(?:new\s+|苹果\s*(?=apple\b))').sub('', h)
     if _blocked_update_assertion(h):
         return None
     if _frame_search(r'^apple\s+updates?\s+(?:more\s+|its\s+)?apps?\b', h):
@@ -11144,13 +11401,14 @@ def source_first_party_app_frame(title: str, lead: str) -> SourceActionFrame | N
     named = named or _compiled_rule(
         r"^(?:the\s+)?(?:apple\s+|苹果\s*)([a-z][a-z0-9.+-]*"
         r"(?:\s+[a-z0-9.+-]+){0,3}?)(?:\s+v?\d+(?:\.\d+)+)?\s+"
-        r"(app\b|application\b|for\s+(?:iphone|ipad|mac)\b|updat(?:e|es|ed|ing)\b|升至|更新)", re.I).match(h)
+        r"(app\b|application\b|for\s+(?:iphone|ipad|mac)\b|updat(?:e|es|ed|ing)\b|gets?\b|升至|更新)", re.I).match(h)
     if named is None or not _frame_search(r"\bupdat(?:e|es|ed|ing)\b|升至|更新", h):
         return None
     name, marker = named.groups()
     name = name.removeprefix("apple ")
-    if (_extract_patterns(name, PRODUCT_PATTERNS)
-            or _extract_patterns("apple " + name + " app", PRODUCT_PATTERNS)
+    explicit_client = bool(_frame_search(r'(?:apple\s+)' + re.escape(name) + r'\s+(?:app\b|version\s+\d)', opening))
+    if (not explicit_client and (_extract_patterns(name, PRODUCT_PATTERNS)
+            or _extract_patterns("apple " + name + " app", PRODUCT_PATTERNS))
             or _frame_search(r"^(?:updates?|updated|releases?|released|launch(?:es|ed)?|"
                              r"announces?|announced|expands?|expanded)\b", name)):
         return None
@@ -11160,7 +11418,7 @@ def source_first_party_app_frame(title: str, lead: str) -> SourceActionFrame | N
         return None
     app_name = r"(?:apple\s+|苹果\s*)" + re.escape(name)
     if (marker not in {"app", "application"}
-            and not _frame_search(app_name + r"(?:\s+app(?:lication)?\b|[)）]?\s*(?:应用|客户端))|"
+            and not explicit_client and not _frame_search(app_name + r"(?:\s+app(?:lication)?\b|[)）]?\s*(?:应用|客户端))|"
                 r"^an\s+update\s+(?:for|to)\s+" + app_name
                 + r"[^.!?;。！？；]{0,220}\b(?:its|the)\s+(?:iphone|ipad|mac)\s+app\b", opening)):
         return None
@@ -11172,12 +11430,18 @@ def source_first_party_app_frame(title: str, lead: str) -> SourceActionFrame | N
         version = _frame_search(r"^apple\s+(?:(?:has|today)\s+)*(?:released|releases|updated|updates)"
             r"\s+version\s+(\d+(?:\.\d+)+)\s+of\s+(?:its\s+)?(?:apple\s+)?"
             + re.escape(name) + r"\s+app\b", opening)
+    if version is None:
+        version = _frame_search(app_name + r'\s+(?:app\s+)?(?:更新\s*|version\s+)(\d+(?:\.\d+)+)', h + '. ' + opening)
     planned = bool(_frame_search(r"\b(?:will|plans?\s+to|expected\s+to|rumou?red\s+to)\b"
                                 r"[^.!?;]{0,80}\b(?:updat\w*|releas\w*)", h)
         or _frame_search(r"^apple\s+plans?\s+to\s+(?:release|update)\b[^.!?;]{0,60}"
                           + re.escape(name) + r"\s+app\b", opening))
-    return SourceActionFrame("apple-app:apple-" + _subject_slug(name),
-                            "software-update-plan" if planned else "software-update",
+    beta = (_frame_search(r'\bbeta\b|测试版', h)
+            or _frame_search(r'\bversion\s+\d+(?:\.\d+)+\s+beta\b', opening))
+    stage = 'software-update-plan' if planned else 'software-beta-update' if beta else 'software-update'
+    client = _frame_search(r'\bfor\s+(android|windows)\b|安卓(?:版|平台)', h)
+    target = (':client:' + (client.group(1) or 'android')) if client else ''
+    return SourceActionFrame("apple-app:apple-" + _subject_slug(name) + target, stage,
                             "software_systems", "os_app", "strong",
                             "app-version:" + version.group(1) if version else "")
 
@@ -11331,6 +11595,12 @@ def source_named_app_frame(title: str, lead: str, *,
                            bound_subjects: frozenset[str] = frozenset()) -> SourceActionFrame | None:
     """An app's capability belongs to the app, not the device it controls."""
     h, opening = _normalized(title), _normalized(lead)[:950]
+    client = _frame_search(r'(android|安卓|windows)版\s*([a-z][a-z0-9.+-]*)', h)
+    if (client and not _extract_patterns(client.group(2), PRODUCT_PATTERNS)
+            and _frame_search(re.escape(client.group()) + r'[^。.!?]{0,55}(?:设置|界面|应用|浏览器)', opening)
+            and _frame_search(r'升级|改版|更新|新增', opening)):
+        return SourceActionFrame('third-party-app:' + client.group(2) + ':' + client.group(1),
+            'software-update', 'software_systems', 'third_party_ecosystem', 'weak')
     platform_release = _frame_search(r'^([\u4e00-\u9fff]{2,12}|[a-z][a-z0-9.+-]*)\s+'
         r'(?:windows|macos|ios|ipados)(?:\s*[/／、与和]\s*(?:windows|macos|ios|ipados))*'
         r'\s*(?:pc\s*)?版\s*(\d+(?:\.\d+)+)\s*(?:发布|更新)', h)
@@ -11908,6 +12178,43 @@ def source_software_capability_frame(title: str, lead: str, facts: tuple[str, ..
     models = named_iphone_models(title)
     clauses = [text[a:b].strip() for text in (_normalized(lead), *(_normalized(f) for f in facts))
                for a, b in source_sentence_spans(text)]
+    platform = s(r'\b(ios|ipados|macos|tvos|watchos|visionos)\s*(\d+(?:\.\d+)*)', h)
+    if (platform and s(r'watermarks?|水印', h)
+            and s(r'(?:^|[:：]\s*)(?:苹果\s*)?(?:ios|ipados|macos|tvos|watchos|visionos)\s*\d', h)
+            and s(r'support\s+document|官方支持文档', detail)
+            and s(r'apple\s+intelligence', detail)):
+        for clause in clauses:
+            effect = s(r'([a-z][a-z0-9-]*)\s*(?:invisible\s+|隐形)?watermarks?\b|([a-z][a-z0-9-]*)\s*(?:隐形)?水印', clause)
+            owned = s(r'apple\s+(?:(?:now|already)\s+)*(?:uses?|adds?)\b|apple\s+intelligence[^，,。!?]{0,35}(?:引入|加入)', clause)
+            versions = _compiled_rule(r'\b' + re.escape(platform.group(1)) + r'\s*(\d+(?:\.\d+)*)').findall(clause)
+            if (effect and owned and (not versions or set(versions) == {platform.group(2)})
+                    and source_predicate_role(clause) == 'current'
+                    and not source_denies_action('', clause, r'use|引入|add|加入')
+                    and not s(r'计划|预计|\bwill\b|plans?\s+to', clause)):
+                marker = next(v for v in effect.groups() if v)
+                if marker not in {'invisible', 'hidden', 'an', 'a'}:
+                    return SourceActionFrame(platform.group(1) + '-' + platform.group(2)
+                        + ':image-watermark:' + marker, 'software-behavior-report', kind='os_app')
+    if (platform and s(r'hdmi|displayport|外接(?:显示|屏幕)', h)
+            and s(r'锁屏|screen\s+lock', h) and s(r'中断|停止|stops?|interrupt', h)):
+        for clause in clauses[:3]:
+            if (s(r'用户反馈|users?\s+report', clause) and s(r'升级|upgrad|updat', clause)
+                    and s(re.escape(platform.group()) + r'(?![\d.])', clause)
+                    and s(r'hdmi|displayport|外接(?:显示|屏幕)', clause)
+                    and s(r'锁屏|screen\s+lock', clause)
+                    and s(r'播放.{0,30}中断|playback[^.!?]{0,30}stops?', clause)
+                    and source_predicate_role(clause) == 'current'
+                    and not source_denies_action('', clause, r'report|反馈|中断|停止|stop\w*|interrupt\w*')):
+                return SourceActionFrame(platform.group(1) + '-' + platform.group(2)
+                    + ':external-video-output:screen-lock', 'software-behavior-report', kind='os_app')
+    if (s(r'autocomplete|keyboard|键盘|自动补全', h)
+            and s(r'list|phrases?|dictionary|词库|名单|词组', h)
+            and s(r"(?:apple|iphone)(?:'s|’s)?\s+keyboard|ios[^.!?。]{0,60}(?:keyboard|autocomplete)|ios.{0,30}键盘", local + ' ' + detail)
+            and s(r'(?:researcher|research|found)[^.!?。]{0,100}(?:list|words|phrases)|decodes?[^.!?。]{0,80}keyboard[^.!?。]{0,30}data|研究.{0,40}(?:名单|词库)', detail)
+            and s(r'blocked\s+from\s+autocomplete|(?:never|won.t)\s+suggest|预测.{0,20}(?:排除|屏蔽)|不会通过自动补全|自动补全.{0,30}拦截', detail)):
+        version = s(r'\bios\s+(\d+(?:\.\d+)*)\b', local + ' ' + detail)
+        return SourceActionFrame('ios:keyboard:prediction-exclusions:' + h, 'software-behavior-research',
+            kind='os_app', model_generation=version.group(1) if version else '')
     if s(r'color|calibrat|色彩|校准', h) and s(r'mac|laptop|display|显示器', h):
         for clause in clauses:
             if (s(r'mac[^.!?。]{0,60}supports?\s+apple\s+pro\s+display\s+calibrator', clause)
@@ -14986,6 +15293,18 @@ def source_retail_program_frame(title: str, lead: str, source_units: tuple[str, 
     """Identify the operator's own retail program or customer service."""
     h, opening = _normalized(title), _normalized(lead)[:1200]
     s = _frame_search
+    if (s(r'apple|苹果', h) and s(r'return|退货', h)
+            and s(r'holiday|假日|节日', h) and s(r'extend|延长|延展|in\s+effect', h)):
+        for passage in source_units or (lead,):
+            clause = _normalized(passage)
+            if (s(r'apple|苹果', clause) and s(r'return|退货', clause)
+                    and s(r'extended|announced|in\s+effect|put\s+into\s+place|延长|生效', clause)
+                    and source_predicate_role(clause) == 'current'
+                    and not s(r'last\s+year|去年|此前', clause)
+                    and not source_denies_action('', clause, r'extend|announce|延长|生效')):
+                year = s(r'\b20\d{2}\b', h)
+                return SourceActionFrame('apple:holiday-return-policy', 'return-window-extension',
+                    'software_systems', 'service_policy', period=year.group() if year else '')
     if s(r'esim', h) and s(r'激活|办理|开通|activat', h):
         for passage in source_units or (lead,):
             for start, end in source_sentence_spans(passage):
@@ -15877,12 +16196,13 @@ def source_patent_challenge_frame(title: str, lead: str, facts: tuple[str, ...])
             break
     if not current:
         return None
-    party = s(r'(?:brought\s+by|awarded\s+to|awarded)\s+([a-z][a-z0-9-]+)(?:\s+technology)?|'
+    parties = _compiled_rule(r'(?:brought\s+by|awarded\s+to|awarded)\s+([a-z][a-z0-9-]+)(?:\s+technology)?|'
               r'([a-z][a-z0-9-]+)(?:\s+technology)?[’\x27]s\s+patents|'
               r'([a-z][a-z0-9-]+)\s*(?:科技|公司).{0,15}(?:提起|无法证明)|'
-              r'([a-z][a-z0-9-]+)\s+verdict', local)
-    name = next((v for v in party.groups() if v), '') if party else ''
-    if not name or name in {'apple','patent','recent','the','jury'}:
+              r'([a-z][a-z0-9-]+)\s+verdict', re.I).finditer(local)
+    name = next((v for party in parties for v in party.groups()
+                 if v and v not in {'apple','patent','recent','the','jury'}), '')
+    if not name:
         return None
     category = 'hardware_products' if has_haptic_patent_subject(title, lead) else 'software_systems'
     return SourceActionFrame('apple-legal:' + name + ':patent-verdict', 'post-verdict-motion', category, 'legal_antitrust')
@@ -16762,7 +17082,7 @@ def source_device_operation_frame(title: str, lead: str, facts: tuple[str, ...] 
     return None
 
 
-def source_hardware_action_frame(title: str, lead: str, facts: tuple[str, ...], source_units: tuple[str, ...] = ()) -> SourceActionFrame | None:
+def source_hardware_action_frame(title: str, lead: str, facts: tuple[str, ...], source_units: tuple[str, ...] = (), *, published_year: str = '') -> SourceActionFrame | None:
     """Bind hardware reports to the headline action before background calendars.
 
     Body evidence may resolve a named partnership's object, but cannot invent
@@ -16779,6 +17099,36 @@ def source_hardware_action_frame(title: str, lead: str, facts: tuple[str, ...], 
     s = _frame_search
     def frame(subject, action, period=''):
         return SourceActionFrame(subject, action, 'hardware_products', 'hardware_market', 'strong', period)
+
+    if s(r'apple|苹果', h) and s(r'玻璃|屏幕|电池|芯片|glass|display|battery|chip', h):
+        for passage in source_units[:3] or (lead,):
+            clause = _normalized(passage)
+            development = s(r'苹果(?:公司)?(?:正|正在)?(?:与[^，。]{1,12})?(?:合作)?研发(?:一种|新型|新的)*([^，。；]{2,45}?)(?:方案|技术)', clause)
+            if (development and source_predicate_role(clause[:development.end()]) == 'current'
+                    and not source_denies_action('', clause, r'研发')):
+                return frame('apple:component-development:' + _subject_slug(development.group(1)),
+                    'component-development-report')
+
+    action_button = r'action\s*button|(?:自定义)?操作按钮'
+    camera_button = r'camera\s*(?:control|button)|相机(?:控制)?(?:按)?[钮键]'
+    if s(r'iphone', h) and s(action_button + r'|按键|important\s+button', h):
+        for passage in source_units or (lead, *facts):
+            clause = _normalized(passage)
+            integration = s(r'merg\w*|integrat\w*|combin\w*|整合|合并|合二为一|'
+                r'long.press[^.!?]{0,55}action\s*button.like', clause)
+            if (integration and s(action_button, clause) and s(camera_button, clause)
+                    and not s(r'^(?:if\b|如果)|plausible|theoretical|理论上|此前|previously', clause)
+                    and not source_denies_action('', clause, r'merg\w*|integrat\w*|整合|合并')):
+                date_scope = h + ' ' + clause
+                year = s(r'\b20\d{2}\b', date_scope)
+                period = year.group() if year else (str(int(published_year) + 1)
+                    if published_year and s(r'next\s+year|明年', date_scope) else '')
+                generation = s(r'iphone\s*(\d+)', h)
+                completed = s(r'apple\s+(?:has\s+)?(?:merged|integrated|combined)|已(?:经)?(?:整合|合并)', clause)
+                return SourceActionFrame('iphone:action-button:camera-control',
+                    'button-integration' if completed else 'button-integration-plan',
+                    'hardware_products', 'hardware_market', period=period,
+                    model_generation=generation.group(1) if generation else '')
 
     architecture = s(r'([a-z0-9-]+)\s*(?:stacking|堆叠)', h)
     if (architecture and s(r'apple|苹果', h) and s(r'手机芯片|mobile\s+chips?', h)
@@ -17376,6 +17726,39 @@ def source_named_publication_frame(title: str, lead: str, passages: tuple[str, .
         return SourceActionFrame(subject, action, category, kind, **qualifiers)
     if s(r'last\s+year|looking\s+back|recap|旧闻|回顾', h):
         return None
+    financing = bool(s(r'bond|债券|债市', h)
+        and source_financial_offering(title, ' '.join((lead, *passages))))
+    if financing:
+        issuer = s(r'^(?:report:\s*)?(?:apple\s+(?:supplier|partner)\s+)?([a-z][a-z0-9-]+)\s+'
+                   r'(?:confirms?|issues?|offers?|raises?|plans?\s+to\s+issue)\b', h)
+        if issuer and issuer.group(1) != 'apple':
+            return frame('third-party:' + issuer.group(1) + ':corporate-bonds', 'bond-offering',
+                         kind='third_party_ecosystem', tier='weak')
+    if (s(r'^(?:report:\s*)?apple(?:[’\x27]s\s+(?:(?:planned|expected|fresh|new)\s+|[$€£]\s*\d[\d,.]*\s*(?:billion|million)?\s*)*bonds?\b|\s+(?:(?:has|is|now)\s+)*(?:confirm|finaliz|plan|prepar|gear|issu|offer|rais))|苹果(?:公司)?(?:计划|拟|将|已|确认|宣布|重返|发)', h)
+            and financing
+            and any(s(r'sec|证券交易委员会', p) for p in (lead, *passages))):
+        planned = s(r'plans?|planned|prepar|gearing\s+up|拟|将', h)
+        confirmed = s(r'confirm|finaliz|确认|最终定价', h)
+        first_span = next(source_sentence_spans(opening), (0, len(opening)))
+        if (source_predicate_role(opening[first_span[0]:first_span[1]]) == 'current'
+                and not source_denies_action('', opening, r'issu|offer|confirm|发行|发债|确认')):
+            action = 'bond-offering-plan' if planned else 'bond-terms-confirmation' if confirmed else 'bond-issuance'
+            return frame('apple:corporate-bonds', action, category='hardware_products', kind='general_company')
+    # A documented preference is software behavior even when its effect is physical.
+    commands = set()
+    control_report = bool(s(r'control|turn\s+off|dim|关闭|控制', h))
+    for passage in passages if control_report else ():
+        command = s(r'\bdefaults\s+write\s+(com\.apple\.[a-z0-9_.-]+)\s+([a-z][a-z0-9_-]+)\b', passage)
+        if command:
+            commands.add((command.group(1).lower(), command.group(2).lower()))
+    if len(commands) == 1:
+        official = any(s(r'apple\s+(?:has\s+)?(?:shared|published|explains)|'
+            r'apple[’\x27]s\s+support\s+documentation|company[’\x27]s\s+official\s+guide|苹果(?:公司)?[^。]{0,40}(?:更新支持文档|官方.{0,8}(?:说明|文档))', p)
+            for p in (title, *passages))
+        if official:
+            domain, key = next(iter(commands))
+            return frame('macos:preference:' + domain + ':' + key,
+                'documented-software-control', kind='os_app')
     if (_operation_owner(title) != 'apple'
             and s(r'\b(?:app|application)\s+(?:introduc\w*|adds?|updates?|offers?)\b|(?:应用|客户端)(?:新增|更新|推出)', h)):
         return None  # Another app's own operation cannot borrow an Apple announcement.
@@ -17493,6 +17876,24 @@ def source_named_publication_frame(title: str, lead: str, passages: tuple[str, .
     # sale date can qualify that announcement but does not establish it.
     devices = (named_iphone_models(title) if s(r'\b(?:apps?|games?|developers?)\b|应用|游戏|开发者', local) else set())
     if len(devices) == 1:
+        count_pattern = r'(\d[\d,]*(?:\.\d+)?)\s*(万?)\s*(?:款\s*(?:应用|[^，。]{1,50}?的应用)|(?:optimized\s+)?apps?\b)'
+        title_count = s(count_pattern, h)
+        if (title_count and s(r'optimi|built\s+for|适配|优化', local)
+                and not s(r'den(?:y|ies|ied)|not\s+accurate|否认|不准确|不实', local)):
+            expected_count = Decimal(title_count.group(1).replace(',', '')) * (10000 if title_count.group(2) else 1)
+            for passage in passages or (lead,):
+                clause = _normalized(passage)
+                count = s(count_pattern, clause)
+                owns_statement = s(r'apple\s+(?:(?:has|today|now|already)\s+)*(?:says|said|announced|revealed)|'
+                    r'apple[’\x27]s\s+(?:vp|vice\s+president)|苹果(?:公司)?(?:今日|今天|已经|已)?(?:宣布|表示)|'
+                    r'苹果.{0,15}开发者关系.{0,8}(?:副总裁|负责人)', clause)
+                if (count and owns_statement and named_iphone_models(clause) == devices
+                        and Decimal(count.group(1).replace(',', '')) * (10000 if count.group(2) else 1) == expected_count
+                        and s(r'optimi|built\s+for|designed\s+for|适配|优化', clause)
+                        and not s(r'去年|last\s+year|forecast|预测', clause)):
+                    return frame('apple:app-store:app-inventory:' + next(iter(devices)),
+                        'platform-app-inventory-disclosure', kind='developer_program',
+                        period='apps:' + format(expected_count, 'f'))
         for passage in passages or (lead,):
             value = _normalized(passage)
             for left, right in source_clause_spans(value):
@@ -17695,6 +18096,25 @@ def source_named_publication_frame(title: str, lead: str, passages: tuple[str, .
         phone = s(r'iphone\s*(duo|air|\d+(?:\s*pro(?:\s*max)?)?)', h)
         if phone and s(r'heat|thermal|散热|电池布局', opening):
             return frame('iphone-' + name(phone.group(1)) + ':thermal-design', 'engineering-explanation', 'hardware_products', 'hardware_market')
+
+    if (s(r'apple|苹果', h) and s(r'antitrust|反垄断', h)
+            and s(r'subpoenas?|discovery|取证|传票', opening)
+            and s(r'push(?:ing)?\s+back|disput|object|争议|反对|异议', local)
+            and not source_denies_action('', opening, r'disput|object|反对|异议')):
+        primary = opening[:next(source_sentence_spans(opening), (0, len(opening)))[1]]
+        parties = _legal_counterparties('', primary, ())
+        jurisdiction = _compiled_rule(r'\bin\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){0,2})\b').search(title)
+        if parties and source_predicate_role(primary) == 'current':
+            return frame('apple-legal:antitrust:' + ','.join(sorted(parties)),
+                'discovery-objection-report', kind='legal_regulatory',
+                region=_subject_slug(jurisdiction.group(1)) if jurisdiction else '')
+    if (s(r'apple|苹果', h) and s(r'donat|捐款|捐赠', h)
+            and s(r'congress|senator|democrat|议员|国会', local)
+            and s(r'disclose|records|scrutiny|质询|披露|公开|调查', local)
+            and source_predicate_role(opening[:next(source_sentence_spans(opening), (0, len(opening)))[1]]) == 'current'):
+        # A shared donation does not identify the requesting body or proceeding.
+        return frame('apple-legal:disclosure-request:' + name(h),
+            'political-donation-disclosure-request', kind='legal_regulatory')
 
     if (identity.counterparties and s(r'apple|苹果', local)
             and s(r'filing|court|discovery|evidence\s+disclosure|诉|(?:文件|证据)(?:提交|披露|开示)', h)
@@ -18014,7 +18434,7 @@ def source_trade_secret_procedure_frame(title: str, lead: str, facts: tuple[str,
     local = h + ' ' + opening
     if not s(r'trade.?secrets?|confidential|商业(?:机密|秘密)|机密', local):
         return None
-    if not s(r'filing|court|lawsuit|hearing|judge|injunction|诉讼|法院|听证', local):
+    if not s(r'filing|court|lawsuit|hearing|judge|injunction|诉讼|法院|法官|听证', local):
         return None
     # The court is the decision maker; a request still belongs to its applicant.
     if not s(r'\bapple\b|苹果', local):
@@ -18038,7 +18458,7 @@ def source_trade_secret_procedure_frame(title: str, lead: str, facts: tuple[str,
     other = next(iter(parties)) if owner == 'apple' else 'apple'
     case = ':'.join(sorted((owner, other))) + ':trade-secret-case:' + owner
     primary = opening[:next(source_sentence_spans(opening), (0, len(opening)))[1]]
-    if court_request or s(r'expanded\s+access|discovery\s+(?:order|ruling)|证据开示|扩大.*证据', h):
+    if court_request or s(r'expanded\s+access|discovery\s+(?:order|ruling)|证据开示|扩大.*(?:证据|取证)', h):
         party_pattern = '(' + '|'.join(re.escape(p) for p in (owner, other)) + ')'
         for value in (lead, *facts):
             for a, b in source_sentence_spans(value):
@@ -18046,11 +18466,13 @@ def source_trade_secret_procedure_frame(title: str, lead: str, facts: tuple[str,
                 requester = s(party_pattern + r'[’\x27]s\s+(?:request|application)', clause)
                 delivery = s(r'ordered\s+' + party_pattern + r'\s+to\s+(?:provide|give)\s+'
                              + party_pattern + r'\s+(?:with\s+)?(?:details|information|records|documents|discovery)', clause)
+                recipient = s(r'(?:批准|允许)\s*' + party_pattern + r'\s*(?:扩大取证|提前获取|获取)', clause.replace('苹果', 'apple'))
                 if ((requester and requester.group(1).lower() != owner)
+                        or (recipient and recipient.group(1).lower() != owner)
                         or (delivery and tuple(p.lower() for p in delivery.groups()) != (other, owner))):
                     continue
                 ruling = s(r'(?:judge|court)[^.!?]{0,55}(?:has\s+(?:now\s+)?)?(?:adopted|granted|ordered|allowed)|(?:法院|法官)[^。]{0,30}(?:裁定|批准|允许)', clause)
-                requested_material = (s(r'discovery|access\s+to\s+(?:records|evidence)|证据开示|获取证据', clause)
+                requested_material = (s(r'discovery|access\s+to\s+(?:records|evidence)|证据开示|获取证据|扩大取证', clause)
                     or (court_request and s(r'ordered\s+' + re.escape(other) + r'\s+to\s+provide\s+'
                         + re.escape(owner) + r'\s+with\s+(?:details|information|records|documents)\b', clause)))
                 if (ruling and requested_material
@@ -18571,6 +18993,13 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
     market = source_market_measurement_frame(title, lead, source_units or facts, published_year=published_year)
     if market is not None:
         return market
+    if identity.content_form == 'news':
+        service_client = source_service_client_frame(title, lead, identity)
+        if service_client is not None:
+            return service_client
+        app_release = source_first_party_app_frame(title, lead, source_units)
+        if app_release is not None:
+            return app_release
     component_units = tuple(p for p in source_units if _normalized(p) != h)
     component = source_platform_component_frame(
         title, ' '.join(component_units)[:1200] if component_units else lead, component_units or facts)
@@ -18579,6 +19008,11 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
     collection = source_collection_operation_frame(title, lead)
     if collection is not None:
         return collection
+    if _frame_search(r'patent|专利|\bip\s+trial', title):
+        from .article_processing import capture_article_title_evidence
+        verdict = bind_patent_verdict(capture_article_title_evidence('', '', title, lead, source_units or facts))
+        if verdict is not None:
+            return SourceActionFrame(verdict.subject, verdict.action, verdict.category, verdict.event_kind, bound_claim=verdict)
     legal = source_patent_challenge_frame(title, lead, source_units or facts)
     if legal is not None:
         return legal
@@ -18616,14 +19050,13 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
     connection = device_connection_frame(h, opening, facts)
     if connection is not None:
         return connection
-    hardware = source_hardware_action_frame(title, lead, facts, source_units)
+    hardware = source_hardware_action_frame(title, lead, facts, source_units, published_year=published_year)
     if hardware is not None:
         return hardware
 
     report = source_current_report_frame(title, lead, facts, source_units)
     if report is not None:
         return report
-
     capability = source_software_capability_frame(title, lead, source_units or facts)
     if capability is not None:
         return capability
@@ -18637,12 +19070,6 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
         return correspondence
 
     if identity.content_form == "news":
-        first_party_app = source_first_party_app_frame(title, lead)
-        if first_party_app is not None:
-            return first_party_app
-        service_client = source_service_client_frame(title, lead, identity)
-        if service_client is not None:
-            return service_client
         territory = source_service_territory_frame(title, lead, facts, identity)
         if territory is not None:
             return territory

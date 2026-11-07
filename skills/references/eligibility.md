@@ -43,6 +43,6 @@ Classify the actual object and operation, not its host device or a background na
 | Category | Primary objects and operations |
 | --- | --- |
 | `software_systems` / 软件与系统 | OS, firmware, apps, interfaces, authentication and other software behavior; platform interoperability, developer rules, online services/content, billing/support policy and legal/regulatory actions. |
-| `hardware_products` / 硬件与产品 | Physical products/components, design and production, hardware measurements/defects, physical repair, supply and market activity, ordering/delivery and physical retail/facility operations. |
+| `hardware_products` / 硬件与产品 | Physical products/components, design and production, hardware measurements/defects, physical repair, supply and market activity (including company financing), ordering/delivery and physical retail/facility operations. |
 
 Company/personnel reports follow the stated role and operation. A capability running on a phone is not hardware merely because the phone is in the headline; a physical component discovered in code is not necessarily a software release. Preserve the report's actual disclosure/action. A different category alone is not a reason to split an established combined action.

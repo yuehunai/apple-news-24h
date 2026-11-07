@@ -12,15 +12,15 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.3.4 - 2026-10-31
+### 2.3.5 - 2026-11-07
 
-- Improved detail admission for neutral notebook-market headlines and direct Apple company reports, so background references to other companies no longer prevent source-based relevance checks.
-- Improved source-bound grouping for product specifications, benchmarks, battery reports, launch inventory, regional software announcements and repair guidance; preserved distinct actions, models, versions, phases, regions and negation.
-- Improved relevance and categories for official prices, hardware support and regulatory registration; kept promotional roundups, accessory compatibility and background service mentions from taking over the reported action.
-- Improved fact preparation and supporting evidence through shared source-role checks, preventing writers' inferences from returning through numeric or condition supplements; removed duplicate legacy company-action decisions while preserving attributed forecasts, plans and observations.
-- Updated the skill's source-reading and clause workflow to reuse prepared event decisions, preserve distinct propositions and attach all contributing sources; clarified how to handle partially equivalent facts without losing attribution or scope.
-- Updated and shortened the skill references, placing report eligibility before fact selection and consolidating repeated instructions; clarified genuine blockers separately from the completed brief's two-section format.
-- Added 54 regression tests and captured-source fixtures; all 3,247 offline tests pass, with independent review and fresh live comparison. Kept the standard-library runtime, CLI and saved JSON interfaces, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
+- Improved source-bound grouping for first-party app updates, return policies, hardware-control plans, app-adaptation statistics, keyboard research and joint deliveries; preserved platform, version, stage, observer and sample boundaries.
+- Improved legal-event ownership and categories by separating verdicts, responses and distinct disclosure or discovery procedures; removed a legacy broad merge override and prevented old support checks from replacing an established category.
+- Improved corporate-financing admission so bond offerings are not mistaken for retail discounts; preserved issuer ownership, planned versus confirmed terms, publication windows and the hardware/company-market category.
+- Improved relevance and categories for platform interoperability, official software controls, image-watermark features and reported output failures; kept accessory updates, promotions, historical recaps and background compatibility from becoming independent Apple news.
+- Added source-local web and YouTube object references alongside existing embedded references, retaining labels and surrounding context so background media cannot identify a new publication; moved an existing hardware-projection eligibility check earlier to avoid redundant work.
+- Updated writing guidance to trace attribution through retellings, exclude the original writer's unsupported expectations and inferences, and preserve independently reported facts, observations and attributed forecasts within mixed passages.
+- Added captured-source regressions; all 3,298 offline tests pass, with independent review, fresh live comparison and a complete clean skill invocation supplemented by focused consumption checks. Kept the standard-library runtime, CLI, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
 
 ## What It Does
 
@@ -108,7 +108,7 @@ JSON also exposes evidence for attribution and coverage review:
 | Field | Purpose |
 | --- | --- |
 | `events[].claims`, `deferred_events[].claims` | Where present, source-bound subjects, actions, objects, qualifiers and evidence spans; use these before display titles when resolving boundaries. |
-| `source_evidence` | Captured source units and publication evidence, linked by `evidence_id`; retained even when an unresolved source produces no event. |
+| `source_evidence` | Captured source units and publication evidence, linked by `evidence_id`; retained even when an unresolved source produces no event. `embedded_references` preserves selected-body links and X/YouTube object identifiers with their link `label` and preceding `context`, without fetching linked pages. |
 | `fact_sources[].origins` | Source support and, when available, exact unit spans for each event fact. |
 | `evidence_dispositions` | Recorded destinations of projected or unresolved source material. |
 | `final_brief_queue` | Event candidates and unresolved fragments requiring a decision. `capture_status: discovery-only` flags a source for which full text was unavailable; it does not promote the item. |

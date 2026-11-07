@@ -158,7 +158,7 @@ class SourceActionTests(unittest.TestCase):
                 self.assertFalse(any('jury-damages-verdict' in key for key in profile.event_keys))
 
     def test_third_party_ota_and_editorial_items_stay_weak(self):
-        for aid in ['eb265c2df1c8291a83c9adc7','366e199729e66afaaa00b511',
+        for aid in ['366e199729e66afaaa00b511',
                     'c41f3e0605d13e78682544df','92d0620743a6fe0b91f8b64d',
                     'df03be6a96822853fa378681','6e395b0b9be430474fdce80c',
                     'af480081784b8e94b6d93d1d','6c73ea13fd27b4b77fef2362']:
@@ -166,6 +166,12 @@ class SourceActionTests(unittest.TestCase):
                 events,_=self.cluster_sources(aid)
                 self.assertTrue(events)
                 self.assertTrue(all(e.relevance_tier=='weak' for e in events))
+
+    def test_vehicle_ota_new_carplay_is_platform_interoperability(self):
+        events,_=self.cluster_sources('eb265c2df1c8291a83c9adc7')
+        self.assertTrue(events)
+        self.assertEqual({(e.relevance_tier,e.category) for e in events},
+                         {('ecosystem','software_systems')})
 
 
 if __name__=='__main__': unittest.main()

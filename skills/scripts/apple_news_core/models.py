@@ -116,6 +116,8 @@ class EmbeddedReference:
     origin: str
     body_element_index: int
     html_tag: str
+    label: str = ""
+    context: str = ""
 
 
 @dataclass(frozen=True)

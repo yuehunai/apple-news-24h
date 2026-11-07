@@ -1601,7 +1601,7 @@ def _embedded_current_preview_subject(title, lead, references):
                 + r"\s+(?:(?:has|is)\s+)?(?:also\s+)?(?:done|doing|does|did)\s+the same(?:\s+(?:thing|action))?\b",
                 main_clause, re.I))
             active_post = same_owner_action
-    objects = {(ref.platform, ref.object_id) for ref in references}
+    objects = {(ref.platform, ref.object_id) for ref in references if ref.platform == 'x'}
     if current and len(objects) == 1:
         platform, object_id = next(iter(objects))
         return f"embedded-video:{platform}:{object_id}"
@@ -10809,7 +10809,8 @@ def _source_local_current_action(
 
     operation = source_operation_frame(title, lead, source_facts, identity, source_units=source_units, published_year=published_year)
     if operation is not None and operation.bound_claim is not None:
-        return bound_reconciliation_profile(operation.bound_claim)
+        return replace(bound_reconciliation_profile(operation.bound_claim),
+            separation_keys=frozenset({"source-local-action-authority"}))
     if operation is not None:
         if (operation.action in {'launch-date-confirmation', 'launch-date-report'}
                 and not (operation.action == 'launch-date-confirmation' and operation.subject == 'apple:product-launch-campaign'
@@ -11031,20 +11032,6 @@ def _source_local_current_action(
         return profile(f"{product}:project:{project}", "current-roadmap-report",
                        category="hardware_products", kind="hardware_market",
                        reason="current source-owned named hardware development program")
-
-    # A court's action against Apple is direct legal news even when the
-    # rights holder is a third party. Bind the claimant before background.
-    if (has(r"\bapple\b|苹果", headline) and has(r"patent|专利", headline)
-            and has(r"\b(?:jury|court)\b|陪审团|法院", opening[:500])
-            and has(r"damages|赔偿|赔付", headline + " " + opening[:500])):
-        claimant = _compiled_rule(r"(?:侵犯\s*|infringed\s+)([a-z][a-z0-9-]*)(?:['’]s)?(?:\s+patents?|.{0,25}专利)", re.I).search(opening[:500])
-        current_verdict = current_primary_predicate(
-            r"\bfound\s+apple\s+(?:has\s+)?infringed\b|裁定.{0,30}苹果.{0,20}侵犯",
-            r"\b(?:not|never)\s+found\s+apple\b|尚未裁定|没有裁定|并未裁定|并无新裁决")
-        if claimant and current_verdict:
-            return profile(f"apple-patent-case:{claimant.group(1).lower()}", "jury-damages-verdict",
-                           category="hardware_products", kind="legal_antitrust",
-                           reason="current source-attributed patent damages verdict against Apple")
 
     device = source_device_disclosure(title, lead)
     if device:
@@ -13815,7 +13802,7 @@ def build_legacy_reconciliation_profile(
           and _compiled_rule(r"blood.?oxygen|pulse.?oxim|血氧", re.I).search(title + " " + lead[:500])
           and _compiled_rule(r"judge|court|ruling|interest|法官|法院|裁定|利息", re.I).search(title + " " + lead[:500])):
         category_hint = "hardware_products"
-        separation_keys.add("source-local-action-authority")
+        separation_keys.add("source-local-category-authority")
     elif primary_claim_category:
         # A title-led concrete claim owns the event category. Later generic
         # product/background rules may enrich the profile, but must not turn a
@@ -13826,12 +13813,12 @@ def build_legacy_reconciliation_profile(
         category_hint = accessory_category
     elif "patent" in identity.case_topics and has_haptic_patent_subject(title, lead):
         category_hint = "hardware_products"
-        separation_keys.add("source-local-action-authority")
+        separation_keys.add("source-local-category-authority")
     elif "patent" in identity.case_topics and identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS:
         # A device mentioned in background cannot turn a software patent
         # dispute into a physical-product patent disclosure in compatibility callers.
         category_hint = "software_systems"
-        separation_keys.add("source-local-action-authority")
+        separation_keys.add("source-local-category-authority")
     elif (identity.content_form == "news" and identity.scope == "apple-direct"
             and identity.title_products & _SOFTWARE_FIRST_PARTY_PRODUCTS
             and not identity.title_products & _HARDWARE_FIRST_PARTY_PRODUCTS

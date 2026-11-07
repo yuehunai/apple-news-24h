@@ -74,9 +74,17 @@ class SourceBoundaryTests(unittest.TestCase):
             self.assertEqual(self.source_ids(e),{'d555ba83d3628e369029503b'})
 
     def test_unrelated_weak_sources_are_not_promoted(self):
-        for sid in ['395829e1b8630e96c4ad22ed','dbc2fc004b0f9b7b6d013abc','46f69335df2f5290280ec640','07362e0f0b42eb36d76755e5','435a084a57866d73f8dccb02']:
+        for sid in ['395829e1b8630e96c4ad22ed','46f69335df2f5290280ec640','07362e0f0b42eb36d76755e5','435a084a57866d73f8dccb02']:
             events,_=self.cluster_sources(sid)
             self.assertTrue(all(e.relevance_tier=='weak' for e in events),sid)
+
+    def test_vehicle_ota_keeps_model_limited_carplay_rollout(self):
+        articles=self.source_articles('dbc2fc004b0f9b7b6d013abc')
+        events=self.m.cluster_articles(articles)
+        self.assertEqual({(e.relevance_tier,e.category) for e in events},
+                         {('ecosystem','software_systems')})
+        self.assertTrue(any('CarPlay、华为 HiCar 为元境版车型专属配置，其余车型可使用 CarLink' in fact
+                            for e in events for fact in e.key_facts))
 
     def remedy_evidence(self,title,paragraphs):
         from apple_news_core.models import ArticleEvidence,EvidenceUnit

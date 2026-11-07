@@ -283,6 +283,10 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
         if left.action in {'leadership-report', 'video-publication'}:
             # The same speaker, publisher and topic do not identify an
             # interview or video instance. Keep qualification independent of pairing.
+            if left.action == 'video-publication':
+                assets = [{q[2] for q in c.qualifiers if q[1] == 'media-object'} for c in (left, right)]
+                if len(assets[0]) == 1 and assets[0] == assets[1]:
+                    return 'match'
             return 'unknown'
         if left.action == 'media-invitation':
             dates = [{kind: {q[2] for q in claim.qualifiers if q[1] == kind}
@@ -302,6 +306,23 @@ def identity_pair_decision(left: EventIdentity | BoundClaim, right: EventIdentit
         right_values = {(q[0], q[1]): q[2] for q in right.qualifiers if q[1] in {"rollout-time", "rollout-year", "price-amount", "quota-from", "quota-to", "code-version", "appointment-holder", "observation-year", "observation-month", "observation-day", "consultation-year", "consultation-month", "consultation-day", "incident-year", "incident-month", "incident-day", "test-duration"} and q[2] != "unspecified"}
         if any(left_values[key] != right_values[key] for key in left_values.keys() & right_values.keys()):
             return "conflict"
+        if left.action == 'software-behavior-research':
+            anchors = [{kind: {q[2] for q in claim.qualifiers if q[1] == kind}
+                        for kind in ('research-artifact', 'research-observer', 'research-sample')} for claim in (left, right)]
+            shared = [kind for kind in anchors[0] if anchors[0][kind] and anchors[1][kind]]
+            if any(anchors[0][kind] != anchors[1][kind] for kind in shared):
+                return 'conflict'
+            if anchors[0]['research-sample'] != anchors[1]['research-sample']:
+                return 'unknown'
+            return 'match' if set(shared) & {'research-artifact', 'research-observer'} else 'unknown'
+        if left.action == 'jury-damages-verdict':
+            anchors = [{kind: {q[2] for q in claim.qualifiers if q[1] == kind}
+                        for kind in ('case-claimant','case-patents','court-location')} for claim in (left,right)]
+            for kind in ('case-claimant','case-patents','court-location'):
+                if anchors[0][kind] and anchors[1][kind] and anchors[0][kind] != anchors[1][kind]:
+                    return 'conflict'
+            return 'match' if any(anchors[0][kind] and anchors[0][kind] == anchors[1][kind]
+                for kind in ('case-claimant','case-patents')) else 'unknown'
         if left.action == 'local-model-measurement':
             contexts = [{q[:3] for q in claim.qualifiers
                          if q[1] in {'measurement-context', 'observation-source'}}
@@ -2736,10 +2757,6 @@ def profile_pair_decision(left: ReconciliationProfile, right: ReconciliationProf
                 and any(key.startswith("primary-claim:") for key in p.event_keys)
                 for p in (left,right))
             and not (authoritative or exact_measure
-                or (left.identity is not None and right.identity is not None
-                    and not any("primary-claim-predicate:joint-status-filing" in p.separation_keys
-                                for p in (left, right))
-                    and _legal_decision(left.identity,right.identity)=="match")
                 or (evidence and any(
                 not key.startswith(("structured-entity-component:", "structured-component-period:"))
                 and key.startswith(STRUCTURED_EVIDENCE_KEY_PREFIXES) for key in keys)))):

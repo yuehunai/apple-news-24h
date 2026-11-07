@@ -1,6 +1,7 @@
 """Structural article cleanup and lossless source evidence, without news decisions."""
 from __future__ import annotations
 from functools import lru_cache
+from dataclasses import replace
 import hashlib
 import email.utils
 from datetime import datetime, timedelta, timezone
@@ -703,13 +704,18 @@ class EmbeddedReferenceExtractor(HTMLParser):
         self.stack = []
         self.ordinal = 0
         self.references = []
+        self.anchor = None
+        self.paragraph = None
+        self.context = ''
 
     def handle_starttag(self, tag, attrs):
         self.ordinal += 1
         attrs = dict(attrs)
-        raw_url = attrs.get('src' if tag == 'iframe' else 'href', '')
-        embedded = tag == 'iframe' or (tag == 'a' and any(
-            t == 'blockquote' and 'twitter-tweet' in c.split() for t, c in self.stack))
+        if tag == 'p':
+            self.paragraph = []
+        raw_url = (attrs.get('src') or attrs.get('data-src', '') if tag == 'iframe'
+                   else attrs.get('href', '') if tag == 'a' else attrs.get('data-video', ''))
+        embedded = tag in {'iframe', 'a'} or bool(attrs.get('data-video'))
         if embedded and raw_url:
             try:
                 parts = urllib.parse.urlsplit(raw_url)
@@ -718,23 +724,49 @@ class EmbeddedReferenceExtractor(HTMLParser):
                 parts = urllib.parse.urlsplit('')
                 host = ''
             object_id = ''
-            if host in {'x.com', 'www.x.com', 'twitter.com', 'www.twitter.com'}:
+            platform = 'x'
+            if host in {'x.com', 'www.x.com', 'twitter.com', 'www.twitter.com'} and (tag == 'iframe' or any(
+                    t == 'blockquote' and 'twitter-tweet' in c.split() for t, c in self.stack)):
                 match = _compiled_markup_rule(r'/[^/]+/status/(\d+)/?', 0).fullmatch(parts.path)
                 object_id = match.group(1) if match else ''
             elif host == 'platform.twitter.com' and parts.path.lower() == '/embed/tweet.html':
                 value = urllib.parse.parse_qs(parts.query).get('id', [''])[0]
                 object_id = value if value.isdigit() else ''
+            elif host in {'youtube.com', 'www.youtube.com', 'youtube-nocookie.com', 'www.youtube-nocookie.com', 'youtu.be'}:
+                platform = 'youtube'
+                value = (parts.path.removeprefix('/') if host == 'youtu.be' else
+                         parts.path.removeprefix('/embed/') if parts.path.startswith('/embed/') else
+                         urllib.parse.parse_qs(parts.query).get('v', [''])[0] if parts.path == '/watch' else '')
+                object_id = value if _compiled_markup_rule(r'[A-Za-z0-9_-]{11}').fullmatch(value) else ''
+            elif tag == 'a' and parts.scheme.lower() in {'http', 'https'} and host:
+                platform = 'web'
+                object_id = urllib.parse.urlunsplit((parts.scheme.lower(), parts.netloc.lower(), parts.path, parts.query, ''))
             if object_id:
-                self.references.append(EmbeddedReference('x', object_id, raw_url,
-                    self.origin, self.ordinal, self.get_starttag_text()))
+                self.references.append(EmbeddedReference(platform, object_id, raw_url,
+                    self.origin, self.ordinal, self.get_starttag_text(),
+                    context=''.join(self.paragraph) if self.paragraph is not None else self.context))
+                if tag == 'a':
+                    self.anchor = len(self.references) - 1
         if tag not in EvidenceTextExtractor.void_tags:
             self.stack.append((tag, attrs.get('class', '')))
 
     def handle_endtag(self, tag):
+        if tag == 'p' and self.paragraph is not None:
+            self.context = ''.join(self.paragraph)
+            self.paragraph = None
+        if tag == 'a':
+            self.anchor = None
         for index in range(len(self.stack) - 1, -1, -1):
             if self.stack[index][0] == tag:
                 del self.stack[index:]
                 break
+
+    def handle_data(self, data):
+        if self.paragraph is not None:
+            self.paragraph.append(data)
+        if self.anchor is not None:
+            ref = self.references[self.anchor]
+            self.references[self.anchor] = replace(ref, label=ref.label + data)
 
 
 def capture_article_evidence(

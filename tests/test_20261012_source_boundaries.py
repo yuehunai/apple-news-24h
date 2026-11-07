@@ -227,7 +227,11 @@ class SourceBoundariesTests(unittest.TestCase):
     def test_captured_third_party_action_is_not_apple_hardware_result(self):
         for sid in ('ce7d0120e8a6afeefdd6e4b5','8662bf6be59ce394e57465de'):
             with self.subTest(sid=sid):
-                self.assertTrue(all(self.m.article_reconciliation_profile(a).relevance_tier == 'weak' for a in self.source_articles(sid)))
+                profiles=[self.m.article_reconciliation_profile(a) for a in self.source_articles(sid)]
+                expected='ecosystem' if sid=='ce7d0120e8a6afeefdd6e4b5' else 'weak'
+                self.assertTrue(all(p.relevance_tier == expected for p in profiles))
+                if expected=='ecosystem':
+                    self.assertTrue(all(p.category_hint=='software_systems' for p in profiles))
 
     def profile(self, title, lead):
         return self.m.article_reconciliation_profile(article_for(self.m, title, lead))
