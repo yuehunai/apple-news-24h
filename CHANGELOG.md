@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented here.
 
+## 2.3.6 - 2026-11-08
+
+- Improved first-party research ownership and grouping by the authors and named publication, so experimental hardware and model suppliers do not replace Apple's research action.
+- Improved sales-dataset grouping by the named data publisher, device, date range, year and region; preserved source-specific quantities, measurement terms and differing sample periods.
+- Improved software relevance and categories for demonstrated OS adaptations, host-side sensor protocols and emulator compatibility on Apple devices; kept actual implementations distinct from proposed support and unrelated platform examples.
+- Improved classification of focused display-operation tests and device-management surveys as software, and physical failures and repair disputes as hardware; kept survey populations, observed devices and local negation with their own claims.
+- Improved independent-app and editorial exclusions, and preserved concrete measurements ahead of generic utility wording; reused the interoperability decision without letting a test's tools replace its subject.
+- Removed the retired `live.ifanr.com/feed` backup, retaining 爱范儿's primary RSS feed and homepage discovery and all nine primary sources.
+- Added 25 regression tests and captured-source fixtures; all 3,323 offline tests pass, with independent review, fresh live comparison and a complete clean skill invocation. Kept the standard-library runtime, CLI and JSON interfaces, collection budgets and concurrency, relevance tiers and explicit-only invocation.
+
 ## 2.3.5 - 2026-11-07
 
 - Improved source-bound grouping for first-party app updates, return policies, hardware-control plans, app-adaptation statistics, keyboard research and joint deliveries; preserved platform, version, stage, observer and sample boundaries.

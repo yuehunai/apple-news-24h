@@ -31,7 +31,7 @@ Preserve the defining scope:
 | Software releases | Platform/version, release channel, stage and explicitly shared release wave. A version must belong to the named software, not a price or incidental number. |
 | Security | Bulletin/version or the concrete exploit, component and attack path. Shared security/CVE language is insufficient. |
 | Legal/regulatory | Actual parties, procedure, affected object and jurisdiction. A response is not a verdict; a requested order is not an issued order. |
-| Tests/markets | Observer or reporting institution, method/dataset, object, region/period and operation. Different values inside one dataset remain attributed facts; matching values do not identify a shared test or report. |
+| Tests/markets | Observer or data publisher (including an individual), method/dataset, object, region/period and operation. A calendar range and its explicitly equivalent week identify the same period. Different values inside one dataset remain attributed facts; matching values do not identify a shared test or report. |
 | Prices/availability | Official policy versus observed quote/transaction, channel, region, currency, model and actual change. Forecast, offer, observed trade and completed order are distinct roles. |
 | Content/services | Named work/season or service object, action, and any defining territory/plan. Shared Apple TV/Music branding is not a shared action. |
 | Hardware/supply | Product/component, design or procurement/production/availability action and stage. Supplier or device references used only as attribution/context do not define that action. |

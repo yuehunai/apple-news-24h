@@ -1,0 +1,2486 @@
+{
+  "03614a39e99101dd6a012e8c": {
+    "evidence": {
+      "article_id": "03614a39e99101dd6a012e8c",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Apple @ Work is exclusively brought to you by Mosyle, the only Apple Unified Platform. Mosyle is the only solution that integrates in a single professional grade platform all the solutions necessary to seamlessly and automatically deploy, manage, and protect Apple devices at work. Over 45,000 organizations trust Mosyle to make millions of Apple devices work ready with no effort and at an affordable cost. Request your EXTENDED TRIAL today and understand why Mosyle is everything you need to work with Apple. There’s no doubt that AI tools are making IT admins faster at writing code, researching issues, etc. As a Mac admin, I’ve seen slow but steady growth in how I’ve used it in my daily work across all aspects of IT. It’s not perfect, though. I’ve used it to write scripts, troubleshoot networking errors, and more. Mosyle is the only solution…",
+      "discovery_title": "Apple @ Work: Mac admins are shipping AI-written code with mistakes, but fixing the problems is taking days",
+      "embedded_references": [
+        {
+          "body_element_index": 4,
+          "context": "There’s no doubt that AI tools are making IT admins faster at writing code, researching issues, etc. As a Mac admin, I’ve seen slow but steady growth in how I’ve used it in my daily work across all aspects of IT. It’s not perfect, though. I’ve used it to write scripts, troubleshoot networking errors, and more. A new ",
+          "html_tag": "<a href=\"https://fleetdm.com/pdfs/Apple-in-the-enterprise.pdf\">",
+          "label": "report from Fleet",
+          "object_id": "https://fleetdm.com/pdfs/Apple-in-the-enterprise.pdf",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://fleetdm.com/pdfs/Apple-in-the-enterprise.pdf"
+        },
+        {
+          "body_element_index": 9,
+          "context": "About Apple @ Work: Bradley Chambers has been an Apple IT admin since 2009. Through his experience deploying and managing firewalls, switches, a mobile device management system, enterprise grade WiFi, 1000s of Macs, and 1000s of iPads, Bradley will highlight ways in which Apple IT managers deploy Apple devices, build networks to support them, train users, share stories from the trenches of IT management, and ways Apple could improve its products for IT departments.",
+          "html_tag": "<a href=\"https://mosyle.net/3RDn\">",
+          "label": "",
+          "object_id": "https://mosyle.net/3RDn",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://mosyle.net/3RDn"
+        },
+        {
+          "body_element_index": 28,
+          "context": "You can read Fleet’s full ",
+          "html_tag": "<a href=\"https://fleetdm.com/pdfs/Apple-in-the-enterprise.pdf\">",
+          "label": "Apple in the enterprise report",
+          "object_id": "https://fleetdm.com/pdfs/Apple-in-the-enterprise.pdf",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://fleetdm.com/pdfs/Apple-in-the-enterprise.pdf"
+        },
+        {
+          "body_element_index": 30,
+          "context": "You can read Fleet’s full Apple in the enterprise report on its website.",
+          "html_tag": "<a target=\"_blank\" rel=\"nofollow\" href=\"https://google.com/preferences/source?q=https://9to5mac.com\" aria-label=\"Add 9to5Mac as a preferred source on Google\">",
+          "label": "\n\t\t\t\n\t\t\t\n\t\t",
+          "object_id": "https://google.com/preferences/source?q=https://9to5mac.com",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://google.com/preferences/source?q=https://9to5mac.com"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T14:06:00+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T14:06:00+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 14:06:00 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-07T14:06:00+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-11-07T14:06:00+00:00",
+      "raw_lead": "Fleet surveyed 250+ Apple IT admins. Most now push AI written profiles and scripts to production, but 43% need more than a day to roll back.",
+      "source": "9to5Mac",
+      "title": "Apple @ Work: Mac admins are shipping AI-written code with mistakes, but fixing the problems is taking days",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "There’s no doubt that AI tools are making IT admins faster at writing code, researching issues, etc. As a Mac admin, I’ve seen slow but steady growth in how I’ve used it in my daily work across all aspects of IT. It’s not perfect, though. I’ve used it to write scripts, troubleshoot networking errors, and more. A new report from Fleet puts numbers on the problem: it’s easy to ship things, but it’s hard to undo mistakes.",
+          "unit_id": "c475277a2076cd1d3555ce8a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "About Apple @ Work: Bradley Chambers has been an Apple IT admin since 2009. Through his experience deploying and managing firewalls, switches, a mobile device management system, enterprise grade WiFi, 1000s of Macs, and 1000s of iPads, Bradley will highlight ways in which Apple IT managers deploy Apple devices, build networks to support them, train users, share stories from the trenches of IT management, and ways Apple could improve its products for IT departments.",
+          "unit_id": "89173d77f3e5b2ad07b73f3b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "For this report, Fleet surveyed more than 250 enterprise IT folks who manage Apple, all with admin access to their device management systems. The folks responding to the survey manage an average of 2,000 devices, and nearly half have 6 to 10 years of Apple admin experience.",
+          "unit_id": "57b9d94ad2b0d26c8fc0d961"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "AI is already being used",
+          "unit_id": "f19bc8f5bedd9c50d001e982"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "The debate over whether IT teams should use AI day-to-day is over. They already are, and in the past 30 days, 68% of those responding reported using AI for troubleshooting or log analysis, 62% used it to write scripts, and 61% used it to author device management profiles or configurations. The log analysis is something that I use AI for often. 86% allow AI-written output into production after some form of review, and only 14% keep it out of their production environments entirely. There simply is no world where IT can operate at the speed needed without AI tools.",
+          "unit_id": "798d5fb719d2ea445859c16c"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "The rollback delay",
+          "unit_id": "e9b6481cc502440acc730ee9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "69% of respondents can’t roll back a bad configuration change within an hour, and 43% need more than a day. Another 26% of those responding can recover the same day, but only by doing it by hand. This is the biggest red flag of the survey, in my opinion. AI lets you ship anything fast, but AI can ship bugs just like humans can.",
+          "unit_id": "a3a253eccf029653887ee266"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Here’s a real scenario that can happen: an IT admin asks an AI assistant to write a configuration profile, takes a quick pass at it, and pushes it to a few thousand Macs in seconds. If something is wrong with it (a bad network setting, a restriction that locks people out of an app they need), unwinding it could take a while.",
+          "unit_id": "9da234fea592e17a8563a6a5"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Mac admins are engineers now",
+          "unit_id": "651e65f7d53bde7e7c2958a6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Fleet’s CEO, Mike McNeil, said this:",
+          "unit_id": "b0510938cc87404b5cc63d9f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "“Mac admins are basically engineers now, whether their job description calls them that or not.”",
+          "unit_id": "073f726f7375823f2125291c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "I agree with him, and I am somewhat not happy about it. The job of an Apple admin has moved a long way from deploying Macs and iPads and managing through a device management console. Today it’s identity, security, compliance, and app lifecycle, all on top of a macOS release that forces changes every year. IT teams keep getting more and more added to them without additional resources or taking things away.",
+          "unit_id": "ef6f8ec4d374670f6949b0f5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "31% said keeping up with Apple’s release cadence is their single biggest IT challenge, far ahead of everything else on the survey. On the bright side, Apple’s own management architecture is moving in the right direction. 53% already have declarative device management in production.",
+          "unit_id": "aa685e3432bdee7a93910c45"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Apple has done a lot of work here, and it’s not even Apple that is to blame for the frustration. Apple has built the platform for IT to do everything it needs to do. It’s everything else. Security is harder. AI has made it harder. It’s the expectation that IT has to own AI while owning literally everything else.",
+          "unit_id": "266b1e7b58f3ec70caec887e"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "Wrap up",
+          "unit_id": "96a0ba07ac80eb07dbf8d45a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "IT is using AI to help with its work because it’s the only way to survive the onslaught of the AI era. You aren’t getting more help, but you’re expected to do more without anything being taken away from you. Even systems that don’t need as much day-to-day management as they did years ago, you still have to own and secure them. Hosted email is a good example here. Yes, 365 and Workspace have made it easier to keep email running. You aren’t managing servers as you did 20 years ago, but email is still not easy. You traded server management for AI-driven phishing scams, MFA management, and more. It’s two steps forward and one back. We need a period of three steps forward and zero back to get back to where IT needs to be.",
+          "unit_id": "e579d9fbcd48687abd1620f2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "You can read Fleet’s full Apple in the enterprise report on its website.",
+          "unit_id": "2e51f9c17f5c817de3fb1445"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/11/07/mac-admins-are-shipping-ai-written-code-in-seconds-but-undoing-them-is-taking-days/"
+    },
+    "recorded_extraction": [
+      "Apple @ Work: Mac admins are shipping AI-written code with mistakes, but fixing the problems is taking days",
+      "Fleet surveyed 250+ Apple IT admins. Most now push AI written profiles and scripts to production, but 43% need more than a day to roll back. There’s no doubt that AI tools are making IT admins faster at writing code, researching issues, etc. As a Mac admin, I’ve seen slow but steady growth in how I’ve used it in my daily work across all aspects of IT. It’s not perfect, though. I’ve used it to write scripts, troubleshoot networking errors, and more. A new report from Fleet puts numbers on the problem: it’s easy to ship things, but it’s hard to undo mistakes. For this report, Fleet surveyed more than 250 enterprise IT folks who manage Apple, all with admin access to their device management systems. The folks responding to the survey manage an average of 2,000 devices, and nearly half have 6 to 10 years of Apple admin experience. The debate over whether IT teams should use AI day-to-day is over. They already are, and in the past 30 days, 68% of those responding reported using AI for troubleshooting or log analysis, 62% used it to write scripts, and 61% used it to author device management profiles or configurations. The log analysis is something that I use AI for often . 86% allow AI-written output into production after some form of review, and only 14% keep it out of their production environments entirely. There simply is no world where IT can operate at the speed needed without AI tools. 69% of respondents can’t roll back a bad configuration change within an hour, and 43% need more than a day. Another 26% of those responding can recover the same day, but only by doing it by hand. This is the biggest red flag of the survey, in my opinion. AI lets you ship anything fast, but AI can ship bugs just like humans can.",
+      [
+        "There’s no doubt that AI tools are making IT admins faster at writing code, researching issues, etc. As a Mac admin, I’ve seen slow but steady growth in how I’ve used it in my daily work across all aspects of IT. It’s not perfect, though. I’ve used it to write scripts, troubleshoot networking errors, and more. A new report from Fleet puts numbers on the problem: it’s easy to ship things, but it’s hard to undo mistakes.",
+        "For this report, Fleet surveyed more than 250 enterprise IT folks who manage Apple, all with admin access to their device management systems. The folks responding to the survey manage an average of 2,000 devices, and nearly half have 6 to 10 years of Apple admin experience.",
+        "The debate over whether IT teams should use AI day-to-day is over. They already are, and in the past 30 days, 68% of those responding reported using AI for troubleshooting or log analysis, 62% used it to write scripts, and 61% used it to author device management profiles or configurations. The log analysis is something that I use AI for often. 86% allow AI-written output into production after some form of review, and only 14% keep it out of their production environments entirely. There simply is no world where IT can operate at the speed needed without AI tools.",
+        "69% of respondents can’t roll back a bad configuration change within an hour, and 43% need more than a day. Another 26% of those responding can recover the same day, but only by doing it by hand. This is the biggest red flag of the survey, in my opinion. AI lets you ship anything fast, but AI can ship bugs just like humans can.",
+        "I agree with him, and I am somewhat not happy about it. The job of an Apple admin has moved a long way from deploying Macs and iPads and managing through a device management console. Today it’s identity, security, compliance, and app lifecycle, all on top of a macOS release that forces changes every year. IT teams keep getting more and more added to them without additional resources or taking things away.",
+        "31% said keeping up with Apple’s release cadence is their single biggest IT challenge, far ahead of everything else on the survey. On the bright side, Apple’s own management architecture is moving in the right direction. 53% already have declarative device management in production."
+      ]
+    ]
+  },
+  "223a2f9026ac24ef261de0d8": {
+    "evidence": {
+      "article_id": "223a2f9026ac24ef261de0d8",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 11 月 7 日消息，B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了鸿蒙 HarmonyOS 6 系统， 实现在 Mac 物理机上把鸿蒙系统跑了起来 。 视频画面显示，这台苹果 MacBook Pro 刷入的是鸿蒙 HarmonyOS 6 系统，机型显示为华为擎云 L410，应用小窗、全屏等功能正常。网友表示， 还有很多问题没有解决，但嫁接 Linux 内核是非常好做法 。 据IT之家此前报道，今年 10 月，陆续有网友为第三方设备刷入了华为鸿蒙 HarmonyOS 系统，包括一台一加 Ace 5 和一台小米平板 6S Pro。此外，本月初，还有网友成功将华为二合一平板电脑 —— MateBook E Go 2023 刷入了 iOS 16 系统，实现超大屏 iPhone 体验。 相关阅读： 《 第三方设备首开：博主称成功为小米平板 6S Pro 刷入华为鸿蒙 HarmonyOS 7 系统，后续项目将开源 》 《 网友成功将一加 Ace 5 刷入“真”纯血鸿蒙 6 系统：机型显示华为 Mate 80 Pro，实现 GPU 完美修复 》 《 大刷机时代来临：华为 MateBook E Go 2023 二合一平板电脑成功刷入 iOS 16 系统 》",
+      "discovery_title": "又一梦幻组合实现：网友成功将苹果 MacBook Pro 刷入华为鸿蒙 HarmonyOS 6 系统",
+      "embedded_references": [
+        {
+          "body_element_index": 2,
+          "context": "",
+          "html_tag": "<a class=\"s_tag\" href=\"https://www.ithome.com/\" target=\"_blank\">",
+          "label": "IT之家",
+          "object_id": "https://www.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/"
+        },
+        {
+          "body_element_index": 3,
+          "context": "IT之家 11 月 7 日消息，B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了",
+          "html_tag": "<a class=\"s_tag\" href=\"https://hmos.ithome.com/\" target=\"_blank\">",
+          "label": "鸿蒙",
+          "object_id": "https://hmos.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://hmos.ithome.com/"
+        },
+        {
+          "body_element_index": 4,
+          "context": "IT之家 11 月 7 日消息，B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了鸿蒙 ",
+          "html_tag": "<a class=\"s_tag\" href=\"https://hmos.ithome.com/\" target=\"_blank\">",
+          "label": "HarmonyOS",
+          "object_id": "https://hmos.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://hmos.ithome.com/"
+        },
+        {
+          "body_element_index": 13,
+          "context": "据IT之家此前报道，今年 10 月，陆续有网友为第三方设备刷入了华为鸿蒙 HarmonyOS 系统，包括一台一加 Ace 5 和一台小米平板 6S Pro。此外，本月初，还有网友成功将华为二合一平板电脑 —— MateBook E Go 2023 刷入了 iOS 16 系统，实现超大屏 ",
+          "html_tag": "<a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">",
+          "label": "iPhone",
+          "object_id": "https://iphone.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://iphone.ithome.com/"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/7 23:40:44",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/7 23:40:44",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 15:40:44 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/11/7 23:40:44",
+      "published_source": "source publication field",
+      "published_utc": "2026-11-07T15:40:44+00:00",
+      "raw_lead": "B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了鸿蒙 HarmonyOS 6 系统，实现在 Mac 物理机上把鸿蒙系统跑了起来。#鸿蒙系统# #MacBook#",
+      "source": "IT之家",
+      "title": "又一梦幻组合实现：网友成功将苹果 MacBook Pro 刷入华为鸿蒙 HarmonyOS 6 系统",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 11 月 7 日消息，B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了鸿蒙 HarmonyOS 6 系统，实现在 Mac 物理机上把鸿蒙系统跑了起来。",
+          "unit_id": "c264b6a35b432487b64f40a9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "视频画面显示，这台苹果 MacBook Pro 刷入的是鸿蒙 HarmonyOS 6 系统，机型显示为华为擎云 L410，应用小窗、全屏等功能正常。网友表示，还有很多问题没有解决，但嫁接 Linux 内核是非常好做法。",
+          "unit_id": "a63162317ce2811ef3d0955d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "据IT之家此前报道，今年 10 月，陆续有网友为第三方设备刷入了华为鸿蒙 HarmonyOS 系统，包括一台一加 Ace 5 和一台小米平板 6S Pro。此外，本月初，还有网友成功将华为二合一平板电脑 —— MateBook E Go 2023 刷入了 iOS 16 系统，实现超大屏 iPhone 体验。",
+          "unit_id": "2620bdc4efc3fabe6a166a8b"
+        }
+      ],
+      "url": "https://www.ithome.com/1/023/828.htm"
+    },
+    "recorded_extraction": [
+      "又一梦幻组合实现：网友成功将苹果 MacBook Pro 刷入华为鸿蒙 HarmonyOS 6 系统",
+      "B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了鸿蒙 HarmonyOS 6 系统，实现在 Mac 物理机上把鸿蒙系统跑了起来。#鸿蒙系统# #MacBook# IT之家 11 月 7 日消息，B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了 鸿蒙 HarmonyOS 6 系统， 实现在 Mac 物理机上把鸿蒙系统跑了起来 。 视频画面显示，这台苹果 MacBook Pro 刷入的是鸿蒙 HarmonyOS 6 系统，机型显示为华为擎云 L410，应用小窗、全屏等功能正常。网友表示， 还有很多问题没有解决，但嫁接 Linux 内核是非常好做法 。 据IT之家此前报道，今年 10 月，陆续有网友为第三方设备刷入了华为鸿蒙 HarmonyOS 系统，包括一台一加 Ace 5 和一台小米平板 6S Pro。此外，本月初，还有网友成功将华为二合一平板电脑 —— MateBook E Go 2023 刷入了 iOS 16 系统，实现超大屏 iPhone 体验。",
+      [
+        "IT之家 11 月 7 日消息，B站网友 @0x535A 发布视频，分享了自己的最新刷机成果 —— 为一台苹果 MacBook Pro 成功刷入了鸿蒙 HarmonyOS 6 系统，实现在 Mac 物理机上把鸿蒙系统跑了起来。",
+        "视频画面显示，这台苹果 MacBook Pro 刷入的是鸿蒙 HarmonyOS 6 系统，机型显示为华为擎云 L410，应用小窗、全屏等功能正常。网友表示，还有很多问题没有解决，但嫁接 Linux 内核是非常好做法。",
+        "据IT之家此前报道，今年 10 月，陆续有网友为第三方设备刷入了华为鸿蒙 HarmonyOS 系统，包括一台一加 Ace 5 和一台小米平板 6S Pro。此外，本月初，还有网友成功将华为二合一平板电脑 —— MateBook E Go 2023 刷入了 iOS 16 系统，实现超大屏 iPhone 体验。"
+      ]
+    ]
+  },
+  "2567448b94f155ed098968d9": {
+    "evidence": {
+      "article_id": "2567448b94f155ed098968d9",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "长期关注国内手机市场份额的数码博主 @RD观测 今日曝光了苹果 iPhone Duo 折叠屏手机的首周销量数据，10 月 19 日-10 月 25 日期间合计约 12.46 万台。该数据仅包含了 23 日、24 日和 25 日的销量数据。而 iPhone Duo 首销期（首销日 + 后三天）销量接近 20 万台。",
+      "discovery_title": "苹果 iPhone Duo 折叠屏手机首周销量曝光，三天卖出约 12.46 万台",
+      "embedded_references": [
+        {
+          "body_element_index": 2,
+          "context": "",
+          "html_tag": "<a class=\"s_tag\" href=\"https://www.ithome.com/\" target=\"_blank\">",
+          "label": "IT之家",
+          "object_id": "https://www.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/"
+        },
+        {
+          "body_element_index": 3,
+          "context": "IT之家 11 月 7 日消息，长期关注国内手机市场份额的数码博主 @RD观测 今日曝光了苹果 ",
+          "html_tag": "<a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">",
+          "label": "iPhone Duo",
+          "object_id": "https://iphone.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://iphone.ithome.com/"
+        },
+        {
+          "body_element_index": 9,
+          "context": "需要注意的是，苹果 iPhone Duo 是在 10 月 23 日开售，因此该数据仅包含了 23 日、24 日和 25 日的销量数据。",
+          "html_tag": "<a target=\"_blank\" href=\"https://www.ithome.com/1/019/439.htm\">",
+          "label": "该机型首销期（首销日 + 后三天）销量接近 20 万台",
+          "object_id": "https://www.ithome.com/1/019/439.htm",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/1/019/439.htm"
+        },
+        {
+          "body_element_index": 11,
+          "context": "据IT之家此前报道，苹果在 2026 年秋季发布会上",
+          "html_tag": "<a target=\"_blank\" href=\"https://www.ithome.com/1/000/511.htm\">",
+          "label": "发布了旗下首款折叠屏手机 iPhone Duo",
+          "object_id": "https://www.ithome.com/1/000/511.htm",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/1/000/511.htm"
+        },
+        {
+          "body_element_index": 15,
+          "context": "",
+          "html_tag": "<a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">",
+          "label": "iPhone",
+          "object_id": "https://iphone.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://iphone.ithome.com/"
+        },
+        {
+          "body_element_index": 16,
+          "context": "iPhone Duo 采用可折叠设计，配备了苹果迄今面积最大的 iPhone 显示屏。展开状态下，它是迄今最薄的 iPhone，内置显示屏面积比 ",
+          "html_tag": "<a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">",
+          "label": "iPhone 18 Pro Max",
+          "object_id": "https://iphone.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://iphone.ithome.com/"
+        },
+        {
+          "body_element_index": 17,
+          "context": "iPhone Duo 采用可折叠设计，配备了苹果迄今面积最大的 iPhone 显示屏。展开状态下，它是迄今最薄的 iPhone，内置显示屏面积比 iPhone 18 Pro Max 还要大 50%；闭合状态下，5.4 英寸外屏以小巧紧凑的机身设计，提供了相当于 ",
+          "html_tag": "<a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">",
+          "label": "iPhone 18 Pro",
+          "object_id": "https://iphone.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://iphone.ithome.com/"
+        },
+        {
+          "body_element_index": 19,
+          "context": "值得一提的是，市场调查机构集邦咨询（TrendForce）在 10 月 28 日发布博文，",
+          "html_tag": "<a href=\"https://www.ithome.com/1/019/281.htm\" target=\"_blank\">",
+          "label": "预估 2026 年苹果首款折叠 iPhone Duo 出货量约为 500 万部",
+          "object_id": "https://www.ithome.com/1/019/281.htm",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/1/019/281.htm"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/7 20:13:58",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/7 20:13:58",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T20:13:58.3630000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/11/7 20:13:58",
+      "published_source": "source publication field",
+      "published_utc": "2026-11-07T12:13:58+00:00",
+      "raw_lead": "长期关注国内手机市场份额的数码博主 @RD观测 今日曝光了苹果 iPhone Duo 折叠屏手机的首周销量数据，10 月 19 日-10 月 25 日期间合计约 12.46 万台。该数据仅包含了 23 日、24 日和 25 日的销量数据。而 iPhone Duo 首销期（首销日 + 后三天）销量接近 20 万台。",
+      "source": "IT之家",
+      "title": "苹果 iPhone Duo 折叠屏手机首周销量曝光，三天卖出约 12.46 万台",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 11 月 7 日消息，长期关注国内手机市场份额的数码博主 @RD观测 今日曝光了苹果 iPhone Duo 折叠屏手机的首周销量数据，10 月 19 日-10 月 25 日期间合计约 12.46 万台。",
+          "unit_id": "2b408d71ce968273d96ce781"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "需要注意的是，苹果 iPhone Duo 是在 10 月 23 日开售，因此该数据仅包含了 23 日、24 日和 25 日的销量数据。该机型首销期（首销日 + 后三天）销量接近 20 万台。",
+          "unit_id": "661f6b488b7053ec313b9d0d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "据IT之家此前报道，苹果在 2026 年秋季发布会上发布了旗下首款折叠屏手机 iPhone Duo，10 月 23 日正式发售，售价 15,999 元起。",
+          "unit_id": "9a8a7c543148e1fd08736685"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "iPhone Duo 采用可折叠设计，配备了苹果迄今面积最大的 iPhone 显示屏。展开状态下，它是迄今最薄的 iPhone，内置显示屏面积比 iPhone 18 Pro Max 还要大 50%；闭合状态下，5.4 英寸外屏以小巧紧凑的机身设计，提供了相当于 iPhone 18 Pro 90% 的屏幕显示面积。",
+          "unit_id": "7bdeccefe840adaa6b6aea9c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "值得一提的是，市场调查机构集邦咨询（TrendForce）在 10 月 28 日发布博文，预估 2026 年苹果首款折叠 iPhone Duo 出货量约为 500 万部，上市第一年即占据全球折叠手机出货量约 24.8% 市场份额。集邦咨询估计，2026 年全球折叠手机出货量将微幅成长 0.5%。",
+          "unit_id": "8ccb9b8fa59670cadcaeaa90"
+        }
+      ],
+      "url": "https://www.ithome.com/1/023/798.htm"
+    },
+    "recorded_extraction": [
+      "苹果 iPhone Duo 折叠屏手机首周销量曝光，三天卖出约 12.46 万台",
+      "长期关注国内手机市场份额的数码博主 @RD观测 今日曝光了苹果 iPhone Duo 折叠屏手机的首周销量数据，10 月 19 日-10 月 25 日期间合计约 12.46 万台。该数据仅包含了 23 日、24 日和 25 日的销量数据。而 iPhone Duo 首销期（首销日 + 后三天）销量接近 20 万台。 IT之家 11 月 7 日消息，长期关注国内手机市场份额的数码博主 @RD观测 今日曝光了苹果 iPhone Duo 折叠屏手机的首周销量数据， 10 月 19 日-10 月 25 日期间合计约 12.46 万台 。 需要注意的是， 苹果 iPhone Duo 是在 10 月 23 日开售，因此该数据仅包含了 23 日、24 日和 25 日的销量数据。 该机型首销期（首销日 + 后三天）销量接近 20 万台 。 据IT之家此前报道，苹果在 2026 年秋季发布会上 发布了旗下首款折叠屏手机 iPhone Duo ，10 月 23 日正式发售，售价 15,999 元起。 iPhone Duo 采用可折叠设计，配备了苹果迄今面积最大的 iPhone 显示屏。展开状态下，它是迄今最薄的 iPhone，内置显示屏面积比 iPhone 18 Pro Max 还要大 50%；闭合状态下，5.4 英寸外屏以小巧紧凑的机身设计，提供了相当于 iPhone 18 Pro 90% 的屏幕显示面积。",
+      [
+        "IT之家 11 月 7 日消息，长期关注国内手机市场份额的数码博主 @RD观测 今日曝光了苹果 iPhone Duo 折叠屏手机的首周销量数据，10 月 19 日-10 月 25 日期间合计约 12.46 万台。",
+        "需要注意的是，苹果 iPhone Duo 是在 10 月 23 日开售，因此该数据仅包含了 23 日、24 日和 25 日的销量数据。该机型首销期（首销日 + 后三天）销量接近 20 万台。",
+        "据IT之家此前报道，苹果在 2026 年秋季发布会上发布了旗下首款折叠屏手机 iPhone Duo，10 月 23 日正式发售，售价 15,999 元起。",
+        "iPhone Duo 采用可折叠设计，配备了苹果迄今面积最大的 iPhone 显示屏。展开状态下，它是迄今最薄的 iPhone，内置显示屏面积比 iPhone 18 Pro Max 还要大 50%；闭合状态下，5.4 英寸外屏以小巧紧凑的机身设计，提供了相当于 iPhone 18 Pro 90% 的屏幕显示面积。"
+      ]
+    ]
+  },
+  "38db30f356ae0d90abf9ca96": {
+    "evidence": {
+      "article_id": "38db30f356ae0d90abf9ca96",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "A new \"Backglow\" app created by designer Juan Buis lets you customize the illuminated Apple logo on the lid of the new MacBook Pro models. The free version of the app allows you to manually adjust the brightness level of the Apple logo, independent of the MacBook Pro's display brightness level. You can also turn it off entirely with a single click, rather than having to use Terminal. Another free option is a \"Breathe\" mode that makes the logo's light gently pulse similarly to the sleep indicator light on older MacBooks. A one-time payment unlocks the Pro version of the app: $9 for a limited time or $15 later. This gives you two additional modes: \"Music\" mode makes the logo's light move to the beat of the music you play on your Mac, while \"Agents\" mode makes the light pulse while Claude Code is working and blinks when your attention is needed. here's what it can do: - manually set logo brightness (apple doesn't let you) - breathe slowly, like the old mac sleep light - pulse to your music - blink when claude needs you - turn the logo light off with one click try it here: https://t.co/WZTWMq5yAf https://t.co/FI0o9ayKBZ — juan (@juanbuis) November 6, 2026 Apple began phasing out the glowing logo on MacBooks in 2015, but it brought back the feature with the new 14-inch and 16-inch MacBook Pro models with PROLED XDR displays released on Friday. On older MacBooks, the logo was illuminated by the display's backlight, but OLED displays do not have a backlight, so a new method was required.",
+      "discovery_title": "'Backglow' Lets You Customize New MacBook Pro's Glowing Apple Logo",
+      "embedded_references": [
+        {
+          "body_element_index": 6,
+          "context": "A new ",
+          "html_tag": "<a href=\"https://backglow.app/\">",
+          "label": "\"Backglow\" app",
+          "object_id": "https://backglow.app/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://backglow.app/"
+        },
+        {
+          "body_element_index": 7,
+          "context": "A new \"Backglow\" app created by designer ",
+          "html_tag": "<a href=\"https://juanbuis.com/\">",
+          "label": "Juan Buis",
+          "object_id": "https://juanbuis.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://juanbuis.com/"
+        },
+        {
+          "body_element_index": 11,
+          "context": "The free version of the app allows you to manually adjust the brightness level of the Apple logo, independent of the MacBook Pro's display brightness level. You can also turn it off entirely with a single click, rather than ",
+          "html_tag": "<a href=\"https://www.macrumors.com/how-to/turn-glowing-apple-logo-macbook-pro/\">",
+          "label": "having to use Terminal",
+          "object_id": "https://www.macrumors.com/how-to/turn-glowing-apple-logo-macbook-pro/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.macrumors.com/how-to/turn-glowing-apple-logo-macbook-pro/"
+        },
+        {
+          "body_element_index": 22,
+          "context": "here's what it can do:\n- manually set logo brightness (apple doesn't let you)- breathe slowly, like the old mac sleep light- pulse to your music- blink when claude needs you- turn the logo light off with one click\ntry it here: https://t.co/WZTWMq5yAf https://t.co/FI0o9ayKBZ\n— juan (@juanbuis) ",
+          "html_tag": "<a href=\"https://x.com/juanbuis/status/2118825042922332283?ref_src=twsrc%5Etfw\">",
+          "label": "November 6, 2026",
+          "object_id": "2118825042922332283",
+          "origin": "html:body",
+          "platform": "x",
+          "url": "https://x.com/juanbuis/status/2118825042922332283?ref_src=twsrc%5Etfw"
+        },
+        {
+          "body_element_index": 25,
+          "context": "",
+          "html_tag": "<a href=\"https://daringfireball.net/2026/11/touch_and_glow\">",
+          "label": "Daring Fireball's John Gruber was told",
+          "object_id": "https://daringfireball.net/2026/11/touch_and_glow",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://daringfireball.net/2026/11/touch_and_glow"
+        },
+        {
+          "body_element_index": 28,
+          "context": "By default, Apple ",
+          "html_tag": "<a href=\"https://support.apple.com/en-us/149248\">",
+          "label": "says",
+          "object_id": "https://support.apple.com/en-us/149248",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://support.apple.com/en-us/149248"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T20:44:15+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T20:44:15+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T20:44:15+00:00",
+          "source": "time datetime"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Saturday November 7, 2026 12:44 pm PST",
+          "source": "time text"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "November 7, 2026 12:44 pm PST",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 20:44:15 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-07T20:44:15+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-11-07T20:44:15+00:00",
+      "raw_lead": "A new \"Backglow\" app created by designer Juan Buis lets you customize the illuminated Apple logo on the lid of the new MacBook Pro models. The free version of the app allows you to manually adjust the brightness level of the Apple logo, independent of the MacBook Pro's display brightness level. You can also turn it off entirely with a single click, rather than having to use Terminal.",
+      "source": "MacRumors",
+      "title": "'Backglow' Lets You Customize New MacBook Pro's Glowing Apple Logo",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "h1",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "'Backglow' Lets You Customize New MacBook Pro's Glowing Apple Logo",
+          "unit_id": "71299714d8dd1b46a8867a70"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "A new \"Backglow\" app created by designer Juan Buis lets you customize the illuminated Apple logo on the lid of the new MacBook Pro models.",
+          "unit_id": "c08ee067d9b4c0d2aee826b9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "The free version of the app allows you to manually adjust the brightness level of the Apple logo, independent of the MacBook Pro's display brightness level. You can also turn it off entirely with a single click, rather than having to use Terminal.",
+          "unit_id": "fa76c2c0f902c1050efc8408"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Another free option is a \"Breathe\" mode that makes the logo's light gently pulse similarly to the sleep indicator light on older MacBooks.",
+          "unit_id": "8bb4431961b6b6a0e93a7e07"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "A one-time payment unlocks the Pro version of the app: $9 for a limited time or $15 later. This gives you two additional modes: \"Music\" mode makes the logo's light move to the beat of the music you play on your Mac, while \"Agents\" mode makes the light pulse while Claude Code is working and blinks when your attention is needed.",
+          "unit_id": "df2b7d53f78d09e12818353e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "here's what it can do: - manually set logo brightness (apple doesn't let you) - breathe slowly, like the old mac sleep light - pulse to your music - blink when claude needs you - turn the logo light off with one click try it here: https://t.co/WZTWMq5yAf https://t.co/FI0o9ayKBZ — juan (@juanbuis) November 6, 2026",
+          "unit_id": "11abef72811462be994e9903"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "Apple began phasing out the glowing logo on MacBooks in 2015, but it brought back the feature with the new 14-inch and 16-inch MacBook Pro models with PROLED XDR displays released on Friday. On older MacBooks, the logo was illuminated by the display's backlight, but OLED displays do not have a backlight, so a new method was required.",
+          "unit_id": "0f5e832012d27af6eb291969"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Daring Fireball's John Gruber was told that Apple engineered a \"custom light source just to enable the logo to glow once again, without adding any additional thickness to the lid.\" Why? \"Because it's awesome,\" he heard an Apple representative say.",
+          "unit_id": "91b0e6f4fbeda89f0aaf4376"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "By default, Apple says the logo is illuminated whenever the Mac is awake. It automatically brightens or dims based on the screen's brightness level and your environment's lighting conditions detected by the computer's ambient light sensor.",
+          "unit_id": "d66552699d9808364c0559ea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "Buis said the logo is lit by a white LED that does not change colors.",
+          "unit_id": "74dbdc554105663c47c99c36"
+        }
+      ],
+      "url": "https://www.macrumors.com/2026/11/07/backglow-customize-macbook-pro-apple-logo/"
+    },
+    "recorded_extraction": [
+      "'Backglow' Lets You Customize New MacBook Pro's Glowing Apple Logo",
+      "A new \"Backglow\" app created by designer Juan Buis lets you customize the illuminated Apple logo on the lid of the new MacBook Pro models. The free version of the app allows you to manually adjust the brightness level of the Apple logo, independent of the MacBook Pro's display brightness level. You can also turn it off entirely with a single click, rather than having to use Terminal. The free version of the app allows you to manually adjust the brightness level of the Apple logo, independent of the MacBook Pro's display brightness level. You can also turn it off entirely with a single click, rather than having to use Terminal . Another free option is a \"Breathe\" mode that makes the logo's light gently pulse similarly to the sleep indicator light on older MacBooks. A one-time payment unlocks the Pro version of the app: $9 for a limited time or $15 later. This gives you two additional modes: \"Music\" mode makes the logo's light move to the beat of the music you play on your Mac, while \"Agents\" mode makes the light pulse while Claude Code is working and blinks when your attention is needed. here's what it can do: - manually set logo brightness (apple doesn't let you) - breathe slowly, like the old mac sleep light - pulse to your music - blink when claude needs you - turn the logo light off with one click try it here: https://t.co/WZTWMq5yAf https://t.co/FI0o9ayKBZ — juan (@juanbuis) November 6, 2026 Apple began phasing out the glowing logo on MacBooks in 2015, but it brought back the feature with the new 14-inch and 16-inch MacBook Pro models with PROLED XDR displays released on Friday. On older MacBooks, the logo was illuminated by the display's backlight, but OLED displays do not have a backlight, so a new method was required.",
+      [
+        "A one-time payment unlocks the Pro version of the app: $9 for a limited time or $15 later. This gives you two additional modes: \"Music\" mode makes the logo's light move to the beat of the music you play on your Mac, while \"Agents\" mode makes the light pulse while Claude Code is working and blinks when your attention is needed."
+      ]
+    ]
+  },
+  "393bf7d1d8db658fe3cf31d0": {
+    "evidence": {
+      "article_id": "393bf7d1d8db658fe3cf31d0",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技11月8日消息， 由设计师胡安·布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款MacBook Pro笔记本电脑顶盖上的发光苹果Logo。 该应用的免费版本允许用户手动调节苹果Logo的亮度，而且不受MacBook Pro屏幕亮度设置的影响。用户也可以一键彻底关闭Logo灯光，无需通过终端（Terminal）执行命令。 免费版本还提供一种名为“Breathe”的呼吸模式，可以让苹果Logo的灯光缓慢、柔和地明暗交替，效果类似于老款MacBook上的睡眠指示灯。 用户只需一次性付费即可解锁应用的Pro版本，限时售价9美元，之后将涨至15美元（约合100.3元人民币）。快科技注意到Pro版本额外提供两种灯光模式：“Music”模式可以让苹果Logo的灯光跟随Mac上播放的音乐节奏变化；“Agents”模式则会在Claude Code执行任务时让Logo灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。 苹果从2015年开始逐步取消MacBook上的发光Logo设计，不过在新款14英寸和16英寸MacBook Pro上，苹果重新引入了这一设计，两款机型均配备触控PROLED XDR显示屏。 在老款MacBook上，苹果Logo的光线来自屏幕背光。但OLED显示屏本身没有背光，因此苹果需要采用全新的技术方案。 《Daring Fireball》作者约翰·格鲁伯（John Gruber）透露，苹果专门设计了一种定制光源，让Logo重新发光，同时不会增加笔记本电脑顶盖的厚度。至于苹果为何要重新采用这一设计，他听到一位苹果代表给出的回答是：“因为它很酷。” 苹果在官方支持文档中表示， 默认情况下，只要Mac处于唤醒状态，Logo就会亮起。电脑会根据屏幕亮度以及环境光传感器检测到的周围光线条件，自动调节Logo的亮度。 布伊斯表示，苹果Logo使用的是白色LED灯，不支持切换颜色。 快科技11月8日消息，由设计师胡安·布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款MacBook Pro笔记本电脑顶盖上的发光苹果Logo。",
+      "discovery_title": "发光Logo玩法回归！Backglow让MacBook Pro灯效跟着节奏跳动",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-08 08:52:47.020",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-08 08:52:47",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-08 08:52:47.020",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-11-08T00:52:47.020000+00:00",
+      "raw_lead": "快科技11月8日消息，由设计师胡安·布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款MacBook Pro笔记本电脑顶盖上的发光苹果Logo。该应用的免费版",
+      "source": "快科技",
+      "title": "发光Logo玩法回归！Backglow让MacBook Pro灯效跟着节奏跳动",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技11月8日消息，由设计师胡安·布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款MacBook Pro笔记本电脑顶盖上的发光苹果Logo。",
+          "unit_id": "d971e8f67693b778f4768b72"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "该应用的免费版本允许用户手动调节苹果Logo的亮度，而且不受MacBook Pro屏幕亮度设置的影响。用户也可以一键彻底关闭Logo灯光，无需通过终端（Terminal）执行命令。",
+          "unit_id": "faab68a41688011d7b610e0d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "免费版本还提供一种名为“Breathe”的呼吸模式，可以让苹果Logo的灯光缓慢、柔和地明暗交替，效果类似于老款MacBook上的睡眠指示灯。",
+          "unit_id": "42b56e7817bdf5a2a9fb3453"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "用户只需一次性付费即可解锁应用的Pro版本，限时售价9美元，之后将涨至15美元（约合100.3元人民币）。快科技注意到Pro版本额外提供两种灯光模式：“Music”模式可以让苹果Logo的灯光跟随Mac上播放的音乐节奏变化；“Agents”模式则会在Claude Code执行任务时让Logo灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。",
+          "unit_id": "d7fcb82d2ae4d7aae7faa55a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "苹果从2015年开始逐步取消MacBook上的发光Logo设计，不过在新款14英寸和16英寸MacBook Pro上，苹果重新引入了这一设计，两款机型均配备触控PROLED XDR显示屏。",
+          "unit_id": "63ce3f667cfb1e4c62bb9fa1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在老款MacBook上，苹果Logo的光线来自屏幕背光。但OLED显示屏本身没有背光，因此苹果需要采用全新的技术方案。",
+          "unit_id": "87aa048859642394aa9434a9"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "《Daring Fireball》作者约翰·格鲁伯（John Gruber）透露，苹果专门设计了一种定制光源，让Logo重新发光，同时不会增加笔记本电脑顶盖的厚度。至于苹果为何要重新采用这一设计，他听到一位苹果代表给出的回答是：“因为它很酷。”",
+          "unit_id": "e16f7c69ec601d3fd1bc049e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "苹果在官方支持文档中表示，默认情况下，只要Mac处于唤醒状态，Logo就会亮起。电脑会根据屏幕亮度以及环境光传感器检测到的周围光线条件，自动调节Logo的亮度。",
+          "unit_id": "ea59e19339c3f44ce1ce72ad"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "布伊斯表示，苹果Logo使用的是白色LED灯，不支持切换颜色。",
+          "unit_id": "5b26e17072169ffcea917dbe"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1164/1164044.htm"
+    },
+    "recorded_extraction": [
+      "发光Logo玩法回归！Backglow让MacBook Pro灯效跟着节奏跳动",
+      "快科技11月8日消息，由设计师胡安·布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款MacBook Pro笔记本电脑顶盖上的发光苹果Logo。该应用的免费版 快科技11月8日消息， 由设计师胡安·布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款MacBook Pro笔记本电脑顶盖上的发光苹果Logo。 该应用的免费版本允许用户手动调节苹果Logo的亮度，而且不受MacBook Pro屏幕亮度设置的影响。用户也可以一键彻底关闭Logo灯光，无需通过终端（Terminal）执行命令。 免费版本还提供一种名为“Breathe”的呼吸模式，可以让苹果Logo的灯光缓慢、柔和地明暗交替，效果类似于老款MacBook上的睡眠指示灯。 用户只需一次性付费即可解锁应用的Pro版本，限时售价9美元，之后将涨至15美元（约合100.3元人民币）。快科技注意到Pro版本额外提供两种灯光模式：“Music”模式可以让苹果Logo的灯光跟随Mac上播放的音乐节奏变化；“Agents”模式则会在Claude Code执行任务时让Logo灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。",
+      [
+        "快科技11月8日消息，由设计师胡安·布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款MacBook Pro笔记本电脑顶盖上的发光苹果Logo。",
+        "用户只需一次性付费即可解锁应用的Pro版本，限时售价9美元，之后将涨至15美元（约合100.3元人民币）。快科技注意到Pro版本额外提供两种灯光模式：“Music”模式可以让苹果Logo的灯光跟随Mac上播放的音乐节奏变化；“Agents”模式则会在Claude Code执行任务时让Logo灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。",
+        "苹果从2015年开始逐步取消MacBook上的发光Logo设计，不过在新款14英寸和16英寸MacBook Pro上，苹果重新引入了这一设计，两款机型均配备触控PROLED XDR显示屏。",
+        "苹果在官方支持文档中表示，默认情况下，只要Mac处于唤醒状态，Logo就会亮起。电脑会根据屏幕亮度以及环境光传感器检测到的周围光线条件，自动调节Logo的亮度。"
+      ]
+    ]
+  },
+  "5f8eb580eeb3048006550fa7": {
+    "evidence": {
+      "article_id": "5f8eb580eeb3048006550fa7",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技11月7日消息，苹果首款折叠屏手机iPhone Duo上市后迅速引发抢购，尽管15999元的起售价创下苹果手机价格新高，但消费者的购买热情依然不低，首销阶段甚至出现一机难求的情况。 根据博主RD观测公布的数据，截至2026年第43周（10月19日至10月25日），iPhone Duo累计激活量约为12.46万台。值得注意的是，该机直到10月23日才正式开售，统计周期内实际销售时间只有3天。也就是说，iPhone Duo仅用3天时间，激活量便突破12万台，首销表现相当亮眼。 作为苹果首款折叠屏手机，iPhone Duo采用横向书本式折叠设计，铰链使用钛金属材质，展开后厚度仅5.2mm，重量为254g。屏幕方面，新机配备7.6英寸可折叠OLED内屏和5.4英寸OLED外屏，均支持ProMotion自适应刷新率，最高可达120Hz，并支持全天候显示。 核心配置上，iPhone Duo搭载A20 Pro芯片，配备12GB运行内存，提供256GB、512GB、1TB和2TB四种存储版本。影像方面采用4800万像素主摄和4800万像素超广角双摄组合，支持2倍光学品质长焦。 售价方面，iPhone Duo国行起售价为15999元，顶配版本突破2.5万元。此次首销成绩也说明，尽管折叠屏手机价格高昂，但苹果品牌号召力和全新形态依然具有较强吸引力。 目前苹果官网iPhone Duo的发货时间排至明年1月份。 根据博主RD",
+      "discovery_title": "苹果最贵手机依然抢手！iPhone Duo 3天卖出12万台：15999元一机难求",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07 21:06:41.787",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07 21:06:41",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-07 21:06:41.787",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-11-07T13:06:41.787000+00:00",
+      "raw_lead": "快科技11月7日消息，苹果首款折叠屏手机iPhone Duo上市后迅速引发抢购，尽管15999元的起售价创下苹果手机价格新高，但消费者的购买热情依然不低，首销阶段甚至出现一机难求的情况。根据博主RD",
+      "source": "快科技",
+      "title": "苹果最贵手机依然抢手！iPhone Duo 3天卖出12万台：15999元一机难求",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技11月7日消息，苹果首款折叠屏手机iPhone Duo上市后迅速引发抢购，尽管15999元的起售价创下苹果手机价格新高，但消费者的购买热情依然不低，首销阶段甚至出现一机难求的情况。",
+          "unit_id": "8082f5c655bfbfa1818111a4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "根据博主RD观测公布的数据，截至2026年第43周（10月19日至10月25日），iPhone Duo累计激活量约为12.46万台。值得注意的是，该机直到10月23日才正式开售，统计周期内实际销售时间只有3天。也就是说，iPhone Duo仅用3天时间，激活量便突破12万台，首销表现相当亮眼。",
+          "unit_id": "e8b0212e5194f6a664b26694"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "作为苹果首款折叠屏手机，iPhone Duo采用横向书本式折叠设计，铰链使用钛金属材质，展开后厚度仅5.2mm，重量为254g。屏幕方面，新机配备7.6英寸可折叠OLED内屏和5.4英寸OLED外屏，均支持ProMotion自适应刷新率，最高可达120Hz，并支持全天候显示。",
+          "unit_id": "6f7541b56ef5f646933b82df"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "核心配置上，iPhone Duo搭载A20 Pro芯片，配备12GB运行内存，提供256GB、512GB、1TB和2TB四种存储版本。影像方面采用4800万像素主摄和4800万像素超广角双摄组合，支持2倍光学品质长焦。",
+          "unit_id": "4ce894d1c8327ed4955380c6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "售价方面，iPhone Duo国行起售价为15999元，顶配版本突破2.5万元。此次首销成绩也说明，尽管折叠屏手机价格高昂，但苹果品牌号召力和全新形态依然具有较强吸引力。",
+          "unit_id": "9ec011d18e2d32c2386512c8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "目前苹果官网iPhone Duo的发货时间排至明年1月份。",
+          "unit_id": "4fccb86edc92300a32e27447"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1164/1164007.htm"
+    },
+    "recorded_extraction": [
+      "苹果最贵手机依然抢手！iPhone Duo 3天卖出12万台：15999元一机难求",
+      "快科技11月7日消息，苹果首款折叠屏手机iPhone Duo上市后迅速引发抢购，尽管15999元的起售价创下苹果手机价格新高，但消费者的购买热情依然不低，首销阶段甚至出现一机难求的情况。根据博主RD 快科技11月7日消息，苹果首款折叠屏手机iPhone Duo上市后迅速引发抢购，尽管15999元的起售价创下苹果手机价格新高，但消费者的购买热情依然不低，首销阶段甚至出现一机难求的情况。 根据博主RD观测公布的数据，截至2026年第43周（10月19日至10月25日），iPhone Duo累计激活量约为12.46万台。值得注意的是，该机直到10月23日才正式开售，统计周期内实际销售时间只有3天。也就是说，iPhone Duo仅用3天时间，激活量便突破12万台，首销表现相当亮眼。 作为苹果首款折叠屏手机，iPhone Duo采用横向书本式折叠设计，铰链使用钛金属材质，展开后厚度仅5.2mm，重量为254g。屏幕方面，新机配备7.6英寸可折叠OLED内屏和5.4英寸OLED外屏，均支持ProMotion自适应刷新率，最高可达120Hz，并支持全天候显示。 核心配置上，iPhone Duo搭载A20 Pro芯片，配备12GB运行内存，提供256GB、512GB、1TB和2TB四种存储版本。影像方面采用4800万像素主摄和4800万像素超广角双摄组合，支持2倍光学品质长焦。",
+      [
+        "快科技11月7日消息，苹果首款折叠屏手机iPhone Duo上市后迅速引发抢购，尽管15999元的起售价创下苹果手机价格新高，但消费者的购买热情依然不低，首销阶段甚至出现一机难求的情况。",
+        "根据博主RD观测公布的数据，截至2026年第43周（10月19日至10月25日），iPhone Duo累计激活量约为12.46万台。值得注意的是，该机直到10月23日才正式开售，统计周期内实际销售时间只有3天。也就是说，iPhone Duo仅用3天时间，激活量便突破12万台，首销表现相当亮眼。",
+        "作为苹果首款折叠屏手机，iPhone Duo采用横向书本式折叠设计，铰链使用钛金属材质，展开后厚度仅5.2mm，重量为254g。屏幕方面，新机配备7.6英寸可折叠OLED内屏和5.4英寸OLED外屏，均支持ProMotion自适应刷新率，最高可达120Hz，并支持全天候显示。",
+        "核心配置上，iPhone Duo搭载A20 Pro芯片，配备12GB运行内存，提供256GB、512GB、1TB和2TB四种存储版本。影像方面采用4800万像素主摄和4800万像素超广角双摄组合，支持2倍光学品质长焦。",
+        "售价方面，iPhone Duo国行起售价为15999元，顶配版本突破2.5万元。此次首销成绩也说明，尽管折叠屏手机价格高昂，但苹果品牌号召力和全新形态依然具有较强吸引力。"
+      ]
+    ]
+  },
+  "64ccd83423543a8172266904": {
+    "evidence": {
+      "article_id": "64ccd83423543a8172266904",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "快科技11月7日消息，据媒体报道， 张先生称自己花一万八买了一部512G的iPhone Duo ，没磕没碰，用了才四天就黑屏了。他随后找到杭州的苹果直营店，苹果方面认定为人为原因，维修需要1万多元。 不过张先生认为，这台iPhone Duo存在质量问题，因此拒绝付费维修。目前机器已经邮寄给苹果，等待官方检测结果。 作为苹果首款折叠屏，iPhone Duo预售时就一机难求，15999元的起售价不仅刷新苹果手机价格纪录，后续维修费用同样惊人。根据苹果官网公布的价格，iPhone Duo内屏损坏的保外维修费用高达7998元，接近256GB版本整机售价的一半。 外屏损坏需要3198元，更换电池也需要1898元，后置相机维修为1798元，其他损坏项目最高更是达到11998元。这意味着，一旦手机发生意外损坏，维修费用可能抵得上一部高端安卓旗舰。尤其是内屏维修，几乎相当于再买一部中高端手机。 不过，消费者可以考虑购买AppleCare+，在一定程度上降低意外损坏后的维修成本。总而言之，消费者购买iPhone Duo时，除了考虑15999元的售价，日常使用过程中也要小心翼翼，毕竟维修费用同样是一笔高昂的支出。 快科技11月7日消息，据媒体报道，张先生称自己花一万八买了一部512G的iPhone Duo，没磕没碰，用了才四天就黑屏了。他随后找到杭州的苹果直营店，苹果方面认定为人为原因，维修需要1万多元。 不",
+      "discovery_title": "男子称iPhone Duo用了四天黑屏：维修要1万多",
+      "embedded_references": [
+        {
+          "body_element_index": 3,
+          "context": "快科技11月7日消息，据媒体报道，",
+          "html_tag": "<a class=\"f14_link\" href=\"https://weibo.com/2334162530/RqgabFEtP?refer_flag=1001030103_\" target=\"_blank\">",
+          "label": "张先生称自己花一万八买了一部512G的iPhone Duo",
+          "object_id": "https://weibo.com/2334162530/RqgabFEtP?refer_flag=1001030103_",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://weibo.com/2334162530/RqgabFEtP?refer_flag=1001030103_"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07 18:23:29.000",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07 18:23:29",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-07 18:23:29.000",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-11-07T10:23:29+00:00",
+      "raw_lead": "快科技11月7日消息，据媒体报道，张先生称自己花一万八买了一部512G的iPhone Duo，没磕没碰，用了才四天就黑屏了。他随后找到杭州的苹果直营店，苹果方面认定为人为原因，维修需要1万多元。不",
+      "source": "快科技",
+      "title": "男子称iPhone Duo用了四天黑屏：维修要1万多",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "快科技11月7日消息，据媒体报道，张先生称自己花一万八买了一部512G的iPhone Duo，没磕没碰，用了才四天就黑屏了。他随后找到杭州的苹果直营店，苹果方面认定为人为原因，维修需要1万多元。",
+          "unit_id": "d7e989ad57fe094c62cb3df1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "不过张先生认为，这台iPhone Duo存在质量问题，因此拒绝付费维修。目前机器已经邮寄给苹果，等待官方检测结果。",
+          "unit_id": "4ef898abd5256616f36b2b25"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "作为苹果首款折叠屏，iPhone Duo预售时就一机难求，15999元的起售价不仅刷新苹果手机价格纪录，后续维修费用同样惊人。根据苹果官网公布的价格，iPhone Duo内屏损坏的保外维修费用高达7998元，接近256GB版本整机售价的一半。",
+          "unit_id": "b60662ce6dd1efa5981e5d91"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "外屏损坏需要3198元，更换电池也需要1898元，后置相机维修为1798元，其他损坏项目最高更是达到11998元。这意味着，一旦手机发生意外损坏，维修费用可能抵得上一部高端安卓旗舰。尤其是内屏维修，几乎相当于再买一部中高端手机。",
+          "unit_id": "40e7d732f340d8f6070d556e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "不过，消费者可以考虑购买AppleCare+，在一定程度上降低意外损坏后的维修成本。总而言之，消费者购买iPhone Duo时，除了考虑15999元的售价，日常使用过程中也要小心翼翼，毕竟维修费用同样是一笔高昂的支出。",
+          "unit_id": "cd463db46e56195b18f69f16"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1163/1163994.htm"
+    },
+    "recorded_extraction": [
+      "男子称iPhone Duo用了四天黑屏：维修要1万多",
+      "快科技11月7日消息，据媒体报道，张先生称自己花一万八买了一部512G的iPhone Duo，没磕没碰，用了才四天就黑屏了。他随后找到杭州的苹果直营店，苹果方面认定为人为原因，维修需要1万多元。不 快科技11月7日消息，据媒体报道， 张先生称自己花一万八买了一部512G的iPhone Duo ，没磕没碰，用了才四天就黑屏了。他随后找到杭州的苹果直营店，苹果方面认定为人为原因，维修需要1万多元。 作为苹果首款折叠屏，iPhone Duo预售时就一机难求，15999元的起售价不仅刷新苹果手机价格纪录，后续维修费用同样惊人。根据苹果官网公布的价格，iPhone Duo内屏损坏的保外维修费用高达7998元，接近256GB版本整机售价的一半。 外屏损坏需要3198元，更换电池也需要1898元，后置相机维修为1798元，其他损坏项目最高更是达到11998元。这意味着，一旦手机发生意外损坏，维修费用可能抵得上一部高端安卓旗舰。尤其是内屏维修，几乎相当于再买一部中高端手机。 不过，消费者可以考虑购买AppleCare+，在一定程度上降低意外损坏后的维修成本。总而言之，消费者购买iPhone Duo时，除了考虑15999元的售价，日常使用过程中也要小心翼翼，毕竟维修费用同样是一笔高昂的支出。",
+      [
+        "快科技11月7日消息，据媒体报道，张先生称自己花一万八买了一部512G的iPhone Duo，没磕没碰，用了才四天就黑屏了。他随后找到杭州的苹果直营店，苹果方面认定为人为原因，维修需要1万多元。",
+        "作为苹果首款折叠屏，iPhone Duo预售时就一机难求，15999元的起售价不仅刷新苹果手机价格纪录，后续维修费用同样惊人。根据苹果官网公布的价格，iPhone Duo内屏损坏的保外维修费用高达7998元，接近256GB版本整机售价的一半。",
+        "外屏损坏需要3198元，更换电池也需要1898元，后置相机维修为1798元，其他损坏项目最高更是达到11998元。这意味着，一旦手机发生意外损坏，维修费用可能抵得上一部高端安卓旗舰。尤其是内屏维修，几乎相当于再买一部中高端手机。",
+        "不过，消费者可以考虑购买AppleCare+，在一定程度上降低意外损坏后的维修成本。总而言之，消费者购买iPhone Duo时，除了考虑15999元的售价，日常使用过程中也要小心翼翼，毕竟维修费用同样是一笔高昂的支出。"
+      ]
+    ]
+  },
+  "85cec6130da24c2e79dc2ee2": {
+    "evidence": {
+      "article_id": "85cec6130da24c2e79dc2ee2",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "苹果研究团队披露机器人“大脑”研究进展。当地时间11月4日，苹果研究团队在预印本平台arXiv提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统HALO。研究团队将该系统部署在宇树科技的G1人形机器人上进行验证，让机器人将在仿真环境中学到的动作，带到陌生的现实房间中执行。 阅读全文",
+      "discovery_title": "苹果研究团队披露机器人“大脑”进展 调用千问模型在宇树G1上验证",
+      "embedded_references": [
+        {
+          "body_element_index": 3,
+          "context": "",
+          "html_tag": "<a href=\"https://www.cnbeta.com.tw/topics/9.htm\" target=\"_blank\">",
+          "label": "",
+          "object_id": "https://www.cnbeta.com.tw/topics/9.htm",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.cnbeta.com.tw/topics/9.htm"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026年11月08日 00:43",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 16:43:30 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026年11月08日 00:43",
+      "published_source": "body date pattern",
+      "published_utc": "2026-11-07T16:43:00+00:00",
+      "raw_lead": "苹果研究团队披露机器人“大脑”研究进展。当地时间11月4日，苹果研究团队在预印本平台arXiv提交论文《PerceptiveHumanoidMotionfromSimulation》，披露了人形机器人自主控制系统HALO。研究团队将该系统部署在宇树科技的G1人形机器人上进行验证，让机器人将在仿真环境中学到的动作，带到陌生的现实房间中执行。",
+      "source": "cnBeta",
+      "title": "苹果研究团队披露机器人“大脑”进展 调用千问模型在宇树G1上验证",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "苹果研究团队披露机器人“大脑”研究进展。当地时间11月4日，苹果研究团队在预印本平台arXiv提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统HALO。研究团队将该系统部署在宇树科技的G1人形机器人上进行验证，让机器人将在仿真环境中学到的动作，带到陌生的现实房间中执行。",
+          "unit_id": "4b35ba5ba3f835437732b8ea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "研究团队还公开了数据生成、模型训练和部署代码，涵盖动作生成、动作跟踪、任务编排以及仿真和真实机器人运行等环节。",
+          "unit_id": "accd31e71e99efecfe2b866f"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "搭载HALO系统的宇树G1机器人在不同真实环境中演示钻过桌底、坐上沙发和推箱子等任务。图片来源：HALO研究团队",
+          "unit_id": "98f8be0ab97a183cff271ec1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "项目页面展示了机器人听从指令推箱子、跟随人、坐上椅子，以及侧身穿过半开的门、俯身或爬行穿过桌底等动作。这些任务需要机器人理解周围环境，并根据空间条件调整身体姿态。",
+          "unit_id": "04c86c052e8e38c55075c4a1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "执行任务时，HALO由三个层级协同控制。最上层是基于视觉语言模型（VLM）的任务编排模块，默认采用千问Qwen3.6-35B-A3B，在机器人搭载的Mac mini上本地运行，与动作生成器共用模型服务引擎，无需联网即可工作。系统也可选择通过API调用云端模型，以获得更强的推理和规划能力。",
+          "unit_id": "a22df758d6fb2e195afc28d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "这一层需要处理指令中的模糊信息，并根据环境安排动作。例如，“坐下”没有明确指定目标，需要机器人从眼前场景中判断坐在哪里；“坐到椅子上”在路径畅通时可以直接执行，但如果有桌子挡路，就需要拆成俯身通过、接近椅子、坐下等连续子任务。任务编排模块通过机器人视角的视频持续观察环境，判断当前动作是否成功，并据此推进计划或重试，每次向动作生成器下达一个明确的子任务。",
+          "unit_id": "e2a2c3c8b5967b58d84529d4"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "中间的动作生成层采用另一款千问模型Qwen3.5-2B。研究团队将其作为参数冻结的编码器，与负责生成动作的DiT解码器配合，根据机器人看到的画面和当前子任务，规划未来约5秒的全身动作。这一层每秒重新规划约3次，使动作计划能够随环境变化持续更新。",
+          "unit_id": "0c89c14d230cce1345a0ac26"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "底层则是经强化学习、策略蒸馏等步骤训练的动作跟踪器，以每秒50次的频率运行，结合深度图像和机器人自身状态，将动作计划转化为关节控制指令。",
+          "unit_id": "613a09c209b0a9f32e67919e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "三个层级分别承担任务安排、动作规划和身体控制，协同完成从理解指令到执行动作的过程。",
+          "unit_id": "09ad7ac1099f3afdf5f6d179"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "HALO的三层控制架构：视觉语言模型负责任务编排，作生成模块规划全身动作，经强化学习训练的动作跟踪器执行关节控制。图片来源：HALO项目页面截图拼接",
+          "unit_id": "22f91699f36617b33676acfa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "据论文披露，研究团队在6个未预先扫描或建图的真实环境中开展360次单项任务测试，平均成功率为91%。另在一个真实环境中，对3种组合任务分别开展10次测试，平均成功率为70%。其中，“俯身通过障碍—走向目标—推箱子”这一组合的成功率为50%。",
+          "unit_id": "7dc0c610370559d0e760d2b2"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "机器人如何获得完成这些任务所需的数据，是这项研究关注的问题。研究团队在1000个程序生成的模拟家庭环境中，合成了约300小时的主要训练数据，将机器人“看到什么”“接到什么指令”和“如何运动”配对起来。",
+          "unit_id": "33a1d5988c633351ee020d19"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "具体而言，系统先生成动作，再将动作放进虚拟房间，最后从机器人的视角生成画面。项目页面以“坐到扶手椅上”为例，将其拆成向前走、转身和坐下等片段，由动作生成模型根据文字提示、路径点和关键姿态生成动作序列，再通过几何检查筛选动作，减少脚部滑动、身体穿入地面等问题。",
+          "unit_id": "93b8079f7f4181bdf3daf983"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "随后，系统将动作安排到程序生成的房间中，检查机器人与家具的位置关系，寻找没有碰撞的摆放方案，再利用仿真工具渲染机器人执行动作时看到的画面。训练中还会改变光照、色调、画面模糊程度等条件，使视觉输入更加多样。这样，同一套流程就能生成包含指令、视觉画面和全身动作的配套数据。",
+          "unit_id": "cad3563341f2107ad698e282"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "HALO的合成数据生成与训练流程：先生成动作轨迹，将其放入虚拟场景，再渲染机器人视角的画面，形成配套训练数据，用于训练动作生成器和动作跟踪器。图片来源：HALO论文",
+          "unit_id": "c7ba347e864e16317bed2f63"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "据介绍，研究团队使用250张英伟达H100 GPU，耗时约48小时合成主要训练数据。动作生成器通过模仿学习训练，使用64张B200；动作跟踪器经强化学习、策略蒸馏等步骤训练，使用4张H100。",
+          "unit_id": "d7151a080301c02dd4d21a91"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "需要指出的是，仿真生成数据并未完全摆脱人工参与。团队表示，新增物理任务仍需人工编写提示词、设计动作关键帧，部分动作还使用了人类视频或动捕素材。",
+          "unit_id": "c36c9408b87731fb2e822a9e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "研究团队同时指出，目前机器人主要依赖视觉感知，难以直接感知接触情况；当物体离开相机视野或被遮挡时，涉及较多接触的任务表现会下降。加入触觉感知，是后续改进方向之一。",
+          "unit_id": "d0569fa3e20187fb89df816f"
+        }
+      ],
+      "url": "https://www.cnbeta.com.tw/articles/tech/1585390.htm"
+    },
+    "recorded_extraction": [
+      "苹果研究团队披露机器人“大脑”进展 调用千问模型在宇树G1上验证",
+      "苹果研究团队披露机器人“大脑”研究进展。当地时间11月4日，苹果研究团队在预印本平台arXiv提交论文《PerceptiveHumanoidMotionfromSimulation》，披露了人形机器人自主控制系统HALO。研究团队将该系统部署在宇树科技的G1人形机器人上进行验证，让机器人将在仿真环境中学到的动作，带到陌生的现实房间中执行。 苹果研究团队披露机器人“大脑”研究进展。当地时间11月4日，苹果研究团队在预印本平台arXiv提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统HALO。研究团队将该系统部署在宇树科技的G1人形机器人上进行验证，让机器人将在仿真环境中学到的动作，带到陌生的现实房间中执行。 项目页面展示了机器人听从指令推箱子、跟随人、坐上椅子，以及侧身穿过半开的门、俯身或爬行穿过桌底等动作。这些任务需要机器人理解周围环境，并根据空间条件调整身体姿态。 执行任务时，HALO由三个层级协同控制。最上层是基于视觉语言模型（VLM）的任务编排模块，默认采用千问Qwen3.6-35B-A3B，在机器人搭载的Mac mini上本地运行，与动作生成器共用模型服务引擎，无需联网即可工作。系统也可选择通过API调用云端模型，以获得更强的推理和规划能力。 这一层需要处理指令中的模糊信息，并根据环境安排动作。例如，“坐下”没有明确指定目标，需要机器人从眼前场景中判断坐在哪里；“坐到椅子上”在路径畅通时可以直接执行，但如果有桌子挡路，就需要拆成俯身通过、接近椅子、坐下等连续子任务。任务编排模块通过机器人视角的视频持续观察环境，判断当前动作是否成功，并据此推进计划或重试，每次向动作生成器下达一个明确的子任务。",
+      [
+        "苹果研究团队披露机器人“大脑”研究进展。当地时间11月4日，苹果研究团队在预印本平台arXiv提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统HALO。研究团队将该系统部署在宇树科技的G1人形机器人上进行验证，让机器人将在仿真环境中学到的动作，带到陌生的现实房间中执行。",
+        "执行任务时，HALO由三个层级协同控制。最上层是基于视觉语言模型（VLM）的任务编排模块，默认采用千问Qwen3.6-35B-A3B，在机器人搭载的Mac mini上本地运行，与动作生成器共用模型服务引擎，无需联网即可工作。系统也可选择通过API调用云端模型，以获得更强的推理和规划能力。",
+        "中间的动作生成层采用另一款千问模型Qwen3.5-2B。研究团队将其作为参数冻结的编码器，与负责生成动作的DiT解码器配合，根据机器人看到的画面和当前子任务，规划未来约5秒的全身动作。这一层每秒重新规划约3次，使动作计划能够随环境变化持续更新。",
+        "底层则是经强化学习、策略蒸馏等步骤训练的动作跟踪器，以每秒50次的频率运行，结合深度图像和机器人自身状态，将动作计划转化为关节控制指令。",
+        "据论文披露，研究团队在6个未预先扫描或建图的真实环境中开展360次单项任务测试，平均成功率为91%。另在一个真实环境中，对3种组合任务分别开展10次测试，平均成功率为70%。其中，“俯身通过障碍—走向目标—推箱子”这一组合的成功率为50%。",
+        "机器人如何获得完成这些任务所需的数据，是这项研究关注的问题。研究团队在1000个程序生成的模拟家庭环境中，合成了约300小时的主要训练数据，将机器人“看到什么”“接到什么指令”和“如何运动”配对起来。",
+        "随后，系统将动作安排到程序生成的房间中，检查机器人与家具的位置关系，寻找没有碰撞的摆放方案，再利用仿真工具渲染机器人执行动作时看到的画面。训练中还会改变光照、色调、画面模糊程度等条件，使视觉输入更加多样。这样，同一套流程就能生成包含指令、视觉画面和全身动作的配套数据。",
+        "据介绍，研究团队使用250张英伟达H100 GPU，耗时约48小时合成主要训练数据。动作生成器通过模仿学习训练，使用64张B200；动作跟踪器经强化学习、策略蒸馏等步骤训练，使用4张H100。"
+      ]
+    ]
+  },
+  "a53f0502bbd0617cbaea8637": {
+    "evidence": {
+      "article_id": "a53f0502bbd0617cbaea8637",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "Next spring, Apple will take the stage to unveil the second-generation iPhone Air to the world, after taking a bit more time to go back to the drawing board and incorporate a second camera into the design. That said, iPhone Air is no longer the flashy cool phone, now iPhone Duo is. With that being the case, it seems obvious to me that iPhone Air 2 will need to appeal to a wider audience, beyond just the enthusiast crowd. more… Next spring, Apple will take the stage to unveil the second-generation iPhone Air to the world, after taking a bit…",
+      "discovery_title": "iPhone Air 2 is coming next year, here’s why it has more to prove than ever",
+      "embedded_references": [
+        {
+          "body_element_index": 4,
+          "context": "Next spring, Apple will take the stage to unveil the",
+          "html_tag": "<a href=\"https://9to5mac.com/2026/10/12/iphone-air-2-is-coming-heres-everything-we-know-so-far/\">",
+          "label": " second-generation iPhone Air",
+          "object_id": "https://9to5mac.com/2026/10/12/iphone-air-2-is-coming-heres-everything-we-know-so-far/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://9to5mac.com/2026/10/12/iphone-air-2-is-coming-heres-everything-we-know-so-far/"
+        },
+        {
+          "body_element_index": 5,
+          "context": "Next spring, Apple will take the stage to unveil the second-generation iPhone Air to the world, after taking a bit more time to go back to the drawing board and incorporate a second camera into the design. That said, iPhone Air is no longer the flashy cool phone, now ",
+          "html_tag": "<a href=\"https://9to5mac.com/2026/10/21/iphone-duo-review/\">",
+          "label": "iPhone Duo",
+          "object_id": "https://9to5mac.com/2026/10/21/iphone-duo-review/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://9to5mac.com/2026/10/21/iphone-duo-review/"
+        },
+        {
+          "body_element_index": 9,
+          "context": "iPhone Air wasn’t ",
+          "html_tag": "<a href=\"https://9to5mac.com/2025/10/20/cheapest-and-most-expensive-iphone-17-models-reportedly-seeing-strong-sales/\">",
+          "label": "an incredible seller",
+          "object_id": "https://9to5mac.com/2025/10/20/cheapest-and-most-expensive-iphone-17-models-reportedly-seeing-strong-sales/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://9to5mac.com/2025/10/20/cheapest-and-most-expensive-iphone-17-models-reportedly-seeing-strong-sales/"
+        },
+        {
+          "body_element_index": 12,
+          "context": "We already know Apple is going to address two of the biggest ones: adding ",
+          "html_tag": "<a href=\"https://9to5mac.com/2026/06/17/iphone-air-2-coming-next-year-with-two-key-upgrades-report/\">",
+          "label": "a second camera",
+          "object_id": "https://9to5mac.com/2026/06/17/iphone-air-2-coming-next-year-with-two-key-upgrades-report/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://9to5mac.com/2026/06/17/iphone-air-2-coming-next-year-with-two-key-upgrades-report/"
+        },
+        {
+          "body_element_index": 13,
+          "context": "We already know Apple is going to address two of the biggest ones: adding a second camera, as well as a ",
+          "html_tag": "<a href=\"https://9to5mac.com/2026/07/07/leaker-backs-reports-of-two-iphone-air-2-improvements-with-more-detail/\">",
+          "label": "larger battery capacity",
+          "object_id": "https://9to5mac.com/2026/07/07/leaker-backs-reports-of-two-iphone-air-2-improvements-with-more-detail/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://9to5mac.com/2026/07/07/leaker-backs-reports-of-two-iphone-air-2-improvements-with-more-detail/"
+        },
+        {
+          "body_element_index": 16,
+          "context": "iPhone Air has a single mono earpiece speaker. Audio on it isn’t excellent. Luckily, with ",
+          "html_tag": "<a href=\"https://link.amazon/B0c5bA0hE\">",
+          "label": "iPad mini 8",
+          "object_id": "https://link.amazon/B0c5bA0hE",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://link.amazon/B0c5bA0hE"
+        },
+        {
+          "body_element_index": 17,
+          "context": "iPhone Air has a single mono earpiece speaker. Audio on it isn’t excellent. Luckily, with iPad mini 8, Apple introduced ",
+          "html_tag": "<a href=\"https://9to5mac.com/2026/10/29/apple-vp-talks-new-ipad-mini-oled-without-promotion-acoustic-display-more/\">",
+          "label": "acoustic display",
+          "object_id": "https://9to5mac.com/2026/10/29/apple-vp-talks-new-ipad-mini-oled-without-promotion-acoustic-display-more/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://9to5mac.com/2026/10/29/apple-vp-talks-new-ipad-mini-oled-without-promotion-acoustic-display-more/"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T17:45:55+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T17:45:55+00:00",
+          "source": "meta published"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 17:45:55 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-07T17:45:55+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-11-07T17:45:55+00:00",
+      "raw_lead": "Next spring, Apple will take the stage to unveil the second-generation iPhone Air to the world, after taking a bit...",
+      "source": "9to5Mac",
+      "title": "iPhone Air 2 is coming next year, here’s why it has more to prove than ever",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "Next spring, Apple will take the stage to unveil the second-generation iPhone Air to the world, after taking a bit more time to go back to the drawing board and incorporate a second camera into the design. That said, iPhone Air is no longer the flashy cool phone, now iPhone Duo is.",
+          "unit_id": "df7009fc0eab6997cd878c4e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "With that being the case, it seems obvious to me that iPhone Air 2 will need to appeal to a wider audience, beyond just the enthusiast crowd.",
+          "unit_id": "66f72d45bf7215bb2815af7c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "iPhone Air wasn’t an incredible seller. That said, it was still an incredible marvel of engineering – proving that you can still pack a largely flagship smartphone experience in such a thin design. It wasn’t perfect though, and the compromises alongside its higher price tag meant it only appealed to a small audience.",
+          "unit_id": "69c86ca7a96c2de46d634db6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "Now that iPhone Air 2 won’t have the shiny-new-thing factor going for it, it seems almost imperative for Apple to address some of the key shortcomings of the original iPhone Air.",
+          "unit_id": "ee270a968ede5d2eee92215b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "We already know Apple is going to address two of the biggest ones: adding a second camera, as well as a larger battery capacity.",
+          "unit_id": "95b27e03511652fab3ecb3da"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "iPhone Air concerns don’t end there, though. There’s also compromised speakers, a compromised connectivity and charging experience, and a compromised camera experience.",
+          "unit_id": "dc061bf8e029ebdb525a4b5a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "iPhone Air has a single mono earpiece speaker. Audio on it isn’t excellent. Luckily, with iPad mini 8, Apple introduced acoustic display – which allows speakers to play through the display glass. Perhaps some of that tech can be taken for iPhone Air 2 to improve the subpar speaker experience.",
+          "unit_id": "fdea39831e720cbe73bb8c2c"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "Another major drawback is connectivity and charging. iPhone Air only supports USB 2, while the Pro iPhones support USB 3. Does this matter to most consumers? Maybe not. When the iPhone Air fetches very close to Pro pricing though, it should offer it. On the charging front of things, iPhone Air only supports 20W MagSafe and 25W fast charging, compared to 25W MagSafe and 60W fast charging on iPhone 18 Pro.",
+          "unit_id": "4d0d93ba01fe521378a8b1b6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "Lastly, the camera. I expect the camera quality to still be limited as a result of smaller sensors, but there are a few things you miss out on with iPhone Air: RAW support, cinematic mode, and macro mode. The latter is more of a result of the phone lacking an ultrawide camera, so ideally we’ll see macro come to iPhone Air 2.",
+          "unit_id": "a7902d3cebc3aede6d521ef7"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "All in all, iPhone Air 2 needs to have a firm position in the lineup. If it’s going to come within $100 of a Pro iPhone, it should offer an experience close to that. The fact that it’s thin should be just another feature, rather than it being a justification for compromise.",
+          "unit_id": "14eaef3b6f212c2854a4ef29"
+        }
+      ],
+      "url": "https://9to5mac.com/2026/11/07/iphone-air-2-launching-early-next-year/"
+    },
+    "recorded_extraction": [
+      "iPhone Air 2 is coming next year, here’s why it has more to prove than ever",
+      "Next spring, Apple will take the stage to unveil the second-generation iPhone Air to the world, after taking a bit... Next spring, Apple will take the stage to unveil the second-generation iPhone Air to the world, after taking a bit more time to go back to the drawing board and incorporate a second camera into the design. That said, iPhone Air is no longer the flashy cool phone, now iPhone Duo is. With that being the case, it seems obvious to me that iPhone Air 2 will need to appeal to a wider audience, beyond just the enthusiast crowd. iPhone Air wasn’t an incredible seller . That said, it was still an incredible marvel of engineering – proving that you can still pack a largely flagship smartphone experience in such a thin design. It wasn’t perfect though, and the compromises alongside its higher price tag meant it only appealed to a small audience. Now that iPhone Air 2 won’t have the shiny-new-thing factor going for it, it seems almost imperative for Apple to address some of the key shortcomings of the original iPhone Air.",
+      [
+        "With that being the case, it seems obvious to me that iPhone Air 2 will need to appeal to a wider audience, beyond just the enthusiast crowd.",
+        "Now that iPhone Air 2 won’t have the shiny-new-thing factor going for it, it seems almost imperative for Apple to address some of the key shortcomings of the original iPhone Air.",
+        "iPhone Air has a single mono earpiece speaker. Audio on it isn’t excellent. Luckily, with iPad mini 8, Apple introduced acoustic display – which allows speakers to play through the display glass. Perhaps some of that tech can be taken for iPhone Air 2 to improve the subpar speaker experience.",
+        "Another major drawback is connectivity and charging. iPhone Air only supports USB 2, while the Pro iPhones support USB 3. Does this matter to most consumers? Maybe not. When the iPhone Air fetches very close to Pro pricing though, it should offer it. On the charging front of things, iPhone Air only supports 20W MagSafe and 25W fast charging, compared to 25W MagSafe and 60W fast charging on iPhone 18 Pro.",
+        "Lastly, the camera. I expect the camera quality to still be limited as a result of smaller sensors, but there are a few things you miss out on with iPhone Air: RAW support, cinematic mode, and macro mode. The latter is more of a result of the phone lacking an ultrawide camera, so ideally we’ll see macro come to iPhone Air 2.",
+        "All in all, iPhone Air 2 needs to have a firm position in the lineup. If it’s going to come within $100 of a Pro iPhone, it should offer an experience close to that. The fact that it’s thin should be just another feature, rather than it being a justification for compromise."
+      ]
+    ]
+  },
+  "b616ac5738af70c20cc1978f": {
+    "evidence": {
+      "article_id": "b616ac5738af70c20cc1978f",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "AI has been used to find out how to access motion tracking data from AirPods, enabling one Linux user to use head tracking data to produce a software mouse. AirPods 3 AirPods and AirPods Pro have head tracking capabilities thanks to some built-in motion-detecting sensors. While it is currently used for things like Spatial Audio and Siri Interactions, one enterprising user has taken steps to widen their use on Linux. Apple does allow AirPods and other earphones to work on Linux and other platforms by functioning as standard Bluetooth headphones. They can be used for normal listening, but things like head tracking are not available once you leave Apple's ecosystem. Continue Reading on AppleInsider | Discuss on our Forums",
+      "discovery_title": "Claude gets AirPods 3 head tracking working on Linux",
+      "embedded_references": [
+        {
+          "body_element_index": 3,
+          "context": "AI has been used to find out how to access motion tracking data from ",
+          "html_tag": "<a href=\"https://appleinsider.com/inside/airpods\" title=\"AirPods\" data-kpt=\"1\">",
+          "label": "AirPods",
+          "object_id": "https://appleinsider.com/inside/airpods",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/inside/airpods"
+        },
+        {
+          "body_element_index": 5,
+          "context": "AirPods and ",
+          "html_tag": "<a href=\"https://appleinsider.com/inside/airpods-pro\" title=\"AirPods Pro\" data-kpt=\"1\">",
+          "label": "AirPods Pro",
+          "object_id": "https://appleinsider.com/inside/airpods-pro",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/inside/airpods-pro"
+        },
+        {
+          "body_element_index": 6,
+          "context": "AirPods and AirPods Pro have head tracking capabilities thanks to some built-in motion-detecting sensors. While it is currently used for things like Spatial Audio and ",
+          "html_tag": "<a href=\"https://appleinsider.com/articles/24/06/10/airpods-software-update-will-let-you-refuse-a-telemarkers-call-by-shaking-your-head\">",
+          "label": "Siri Interactions",
+          "object_id": "https://appleinsider.com/articles/24/06/10/airpods-software-update-will-let-you-refuse-a-telemarkers-call-by-shaking-your-head",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/articles/24/06/10/airpods-software-update-will-let-you-refuse-a-telemarkers-call-by-shaking-your-head"
+        },
+        {
+          "body_element_index": 9,
+          "context": "In a Reddit ",
+          "html_tag": "<a href=\"https://www.reddit.com/r/ClaudeAI/comments/1xodizg/used_claude_code_to_figure_out_how_airpods_3_send/\">",
+          "label": "post on Friday",
+          "object_id": "https://www.reddit.com/r/ClaudeAI/comments/1xodizg/used_claude_code_to_figure_out_how_airpods_3_send/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.reddit.com/r/ClaudeAI/comments/1xodizg/used_claude_code_to_figure_out_how_airpods_3_send/"
+        },
+        {
+          "body_element_index": 10,
+          "context": "In a Reddit post on Friday, Matteo Guaduisi said they wanted to control their mouse using a pair of ",
+          "html_tag": "<a href=\"https://appleinsider.com/inside/airpods-3\" title=\"AirPods 3\" data-kpt=\"1\">",
+          "label": "AirPods 3",
+          "object_id": "https://appleinsider.com/inside/airpods-3",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/inside/airpods-3"
+        },
+        {
+          "body_element_index": 14,
+          "context": "At one point, AI agents were instructed to check other similar projects in the background for an answer. This turned out to be a good idea, as one agent uncovered the answer in ",
+          "html_tag": "<a href=\"https://appleinsider.com/inside/ios\" title=\"iOS\" data-kpt=\"1\">",
+          "label": "iOS",
+          "object_id": "https://appleinsider.com/inside/ios",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/inside/ios"
+        },
+        {
+          "body_element_index": 19,
+          "context": "The effort eventually led to the creation of the ",
+          "html_tag": "<a href=\"https://starman-tech.github.io/mousepods/\">",
+          "label": "MousePods project",
+          "object_id": "https://starman-tech.github.io/mousepods/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://starman-tech.github.io/mousepods/"
+        },
+        {
+          "body_element_index": 24,
+          "context": "The project is an interesting one, as it shows how AI is evolving in its use. We had the initial phase of AI being ",
+          "html_tag": "<a href=\"https://appleinsider.com/articles/23/02/14/bings-chatgpt-experiment-is-deeply-flawed-and-is-the-future-of-search?utm_medium=social&amp;utm_source=ai_forums\">",
+          "label": "not exactly",
+          "object_id": "https://appleinsider.com/articles/23/02/14/bings-chatgpt-experiment-is-deeply-flawed-and-is-the-future-of-search?utm_medium=social&utm_source=ai_forums",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/articles/23/02/14/bings-chatgpt-experiment-is-deeply-flawed-and-is-the-future-of-search?utm_medium=social&utm_source=ai_forums"
+        },
+        {
+          "body_element_index": 25,
+          "context": "The project is an interesting one, as it shows how AI is evolving in its use. We had the initial phase of AI being not exactly a smart entity then becoming somewhat better, and then the start of the ",
+          "html_tag": "<a href=\"https://appleinsider.com/articles/26/02/03/xcode-263-hands-on-ai-agent-coding-is-astoundingly-fast-smart-and-too-convenient\">",
+          "label": "vibe coding",
+          "object_id": "https://appleinsider.com/articles/26/02/03/xcode-263-hands-on-ai-agent-coding-is-astoundingly-fast-smart-and-too-convenient",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/articles/26/02/03/xcode-263-hands-on-ai-agent-coding-is-astoundingly-fast-smart-and-too-convenient"
+        },
+        {
+          "body_element_index": 28,
+          "context": "Not just people making ",
+          "html_tag": "<a href=\"https://appleinsider.com/articles/26/10/11/theres-a-vibe-coded-adobe-creative-suite-vibecoded-clone-and-its-pretty-good\">",
+          "label": "Adobe product recreations",
+          "object_id": "https://appleinsider.com/articles/26/10/11/theres-a-vibe-coded-adobe-creative-suite-vibecoded-clone-and-its-pretty-good",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/articles/26/10/11/theres-a-vibe-coded-adobe-creative-suite-vibecoded-clone-and-its-pretty-good"
+        },
+        {
+          "body_element_index": 29,
+          "context": "Not just people making Adobe product recreations or ",
+          "html_tag": "<a href=\"https://appleinsider.com/articles/26/08/28/sam-altman-needs-to-put-up-or-shut-up-about-ai-hacking\">",
+          "label": "hackers attacking systems",
+          "object_id": "https://appleinsider.com/articles/26/08/28/sam-altman-needs-to-put-up-or-shut-up-about-ai-hacking",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/articles/26/08/28/sam-altman-needs-to-put-up-or-shut-up-about-ai-hacking"
+        },
+        {
+          "body_element_index": 30,
+          "context": "Not just people making Adobe product recreations or hackers attacking systems. There are some who are using AI to make new firmware for devices, ",
+          "html_tag": "<a href=\"https://www.reddit.com/r/fujifilm/comments/1xmgrd1/vibe_coding_firmware_for_the_fuji_x30_it_doesnt/\">",
+          "label": "like cameras",
+          "object_id": "https://www.reddit.com/r/fujifilm/comments/1xmgrd1/vibe_coding_firmware_for_the_fuji_x30_it_doesnt/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.reddit.com/r/fujifilm/comments/1xmgrd1/vibe_coding_firmware_for_the_fuji_x30_it_doesnt/"
+        },
+        {
+          "body_element_index": 34,
+          "context": "One unusual application of AirPods surfaced ",
+          "html_tag": "<a href=\"https://appleinsider.com/articles/26/07/23/an-airpod-powered-frisbee-tracker-makes-backyard-throws-scientific\">",
+          "label": "in July",
+          "object_id": "https://appleinsider.com/articles/26/07/23/an-airpod-powered-frisbee-tracker-makes-backyard-throws-scientific",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/articles/26/07/23/an-airpod-powered-frisbee-tracker-makes-backyard-throws-scientific"
+        },
+        {
+          "body_element_index": 35,
+          "context": "One unusual application of AirPods surfaced in July, after one developer turned them into a Frisbee stat tracker. After attaching an AirPod to a flying disc, motion data can be sent to the ",
+          "html_tag": "<a href=\"https://kinapod.com/disk\">",
+          "label": "Kinapod Disc",
+          "object_id": "https://kinapod.com/disk",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://kinapod.com/disk"
+        },
+        {
+          "body_element_index": 36,
+          "context": "One unusual application of AirPods surfaced in July, after one developer turned them into a Frisbee stat tracker. After attaching an AirPod to a flying disc, motion data can be sent to the Kinapod Disc app running on an ",
+          "html_tag": "<a href=\"https://appleinsider.com/inside/iphone\" title=\"iPhone\" data-kpt=\"1\">",
+          "label": "iPhone",
+          "object_id": "https://appleinsider.com/inside/iphone",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://appleinsider.com/inside/iphone"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T13:59:36+00:00",
+          "source": "json-ld datePublished"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 13:59:36 +0000",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-07T13:59:36+00:00",
+      "published_source": "json-ld datePublished",
+      "published_utc": "2026-11-07T13:59:36+00:00",
+      "raw_lead": "AI has been used to find out how to access motion tracking data from AirPods, enabling one Linux user to use head tracking data to produce a software mouse.",
+      "source": "AppleInsider",
+      "title": "Claude gets AirPods 3 head tracking working on Linux",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "AI has been used to find out how to access motion tracking data from AirPods, enabling one Linux user to use head tracking data to produce a software mouse.",
+          "unit_id": "5e91b5682c02777c35d396c8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "AirPods and AirPods Pro have head tracking capabilities thanks to some built-in motion-detecting sensors. While it is currently used for things like Spatial Audio and Siri Interactions, one enterprising user has taken steps to widen their use on Linux.",
+          "unit_id": "d3a316148f5624a1efa318d8"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "Apple does allow AirPods and other earphones to work on Linux and other platforms by functioning as standard Bluetooth headphones. They can be used for normal listening, but things like head tracking are not available once you leave Apple's ecosystem.",
+          "unit_id": "a3d7490744568e379d7a8762"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "In a Reddit post on Friday, Matteo Guaduisi said they wanted to control their mouse using a pair of AirPods 3 on Linux. However, they said that every open source project in the same field said that AirPods 3 were not supported.",
+          "unit_id": "26f81b422475c084551a9736"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "AI as hardware hacker",
+          "unit_id": "0b5ba30712c2a92b3f88b1a1"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "Driven by this apparent lack of support, they spent an afternoon using Claude Code to find out how AirPods 3 work when it comes to motion tracking.",
+          "unit_id": "a2b476781f00df84ee121132"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "At one point, AI agents were instructed to check other similar projects in the background for an answer. This turned out to be a good idea, as one agent uncovered the answer in iOS framework code.",
+          "unit_id": "912c68f20ac2430b3a369edf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "It turned out that AirPods 3 uses a different protocol than the Pro models.",
+          "unit_id": "822465fe0c75be6ee88b6374"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "The data also wasn't being sent over due to the use of a restrictive default setting. The default Maximum Transmission Unit (MTU) was too small for both the standard audio data and motion sensor data, so the latter was excluded.",
+          "unit_id": "3d9eb3fe928de5627a3c055a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "After fixing that, the head tracking data was streaming over Bluetooth at 200hz.",
+          "unit_id": "ee7692d7041fcb2a3cd78ccf"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "The effort eventually led to the creation of the MousePods project, which reads the motion sensor data of AirPods 3 and AirPods Pro in Linux. As the name implies, a user's head movements translate into pointer movements on the desktop.",
+          "unit_id": "9ae859da587d4eb9cba5a7ac"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "Crucially for AirPods users, the project relies on changes on the Linux host end, not anything directly affecting the AirPods firmware. If you do experiment with this, you're not going to be left with non-functional AirPods, or anything that breaks a warranty.",
+          "unit_id": "38158244c0cef2b551435894"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "The project has also released the code as \"Open\" and for others to use in their own projects.",
+          "unit_id": "cf63c6e3dac026f64de282e3"
+        },
+        {
+          "container_id": "",
+          "kind": "h2",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "Software but no broken AirPods",
+          "unit_id": "f25123d0fe04eaf5c6e69ae3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "The project is an interesting one, as it shows how AI is evolving in its use. We had the initial phase of AI being not exactly a smart entity then becoming somewhat better, and then the start of the vibe coding era.",
+          "unit_id": "8d1431b6191ecd54687c7e58"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 15,
+          "origin": "html",
+          "text": "As the idea of using AI to handle tough coding tasks has taken hold, the attention has turned to affecting existing software. While games had mods that did the same thing in a relatively non-destructive manner, it's now being used to tackle code in a more direct fashion.",
+          "unit_id": "01d7117a337c31c570b66f2d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 16,
+          "origin": "html",
+          "text": "Not just people making Adobe product recreations or hackers attacking systems. There are some who are using AI to make new firmware for devices, like cameras, changing how they function completely.",
+          "unit_id": "3fa417ebaa4480f831fa7364"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 17,
+          "origin": "html",
+          "text": "To be clear, you really should check your device's warranty before going down this route. Depending on what the warranty states, it may not be acceptable to change the software of a device beyond any official firmware updates.",
+          "unit_id": "77921d35a0327d32f6dd6db6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 18,
+          "origin": "html",
+          "text": "If it breaks when you mess with it, that's your money down the drain.",
+          "unit_id": "b123f5505931e4a62a54d27b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 19,
+          "origin": "html",
+          "text": "One unusual application of AirPods surfaced in July, after one developer turned them into a Frisbee stat tracker. After attaching an AirPod to a flying disc, motion data can be sent to the Kinapod Disc app running on an iPhone, including spin rate, total revolutions, and estimated release speed.",
+          "unit_id": "2cb339161c690e81d55c5d02"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 20,
+          "origin": "html",
+          "text": "While in that case it was an application on Apple hardware, the Kinapod Disc app also preserved the utility of the AirPods without changing any firmware.",
+          "unit_id": "8dfb8d8c167ba1f076273194"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 21,
+          "origin": "html",
+          "text": "That said, the MousePods project is handled in a way that doesn't require any firmware update at all. It is a very non-destructive method of solving the problem, and gives other developers a glimpse into how the technology works.",
+          "unit_id": "78833c4bfb0fef93107dcc6a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 22,
+          "origin": "html",
+          "text": "Even on platforms outside of Apple's ecosystem.",
+          "unit_id": "595675c6dd8e19fcf0131b86"
+        }
+      ],
+      "url": "https://appleinsider.com/articles/26/11/07/claude-gets-airpods-3-head-tracking-working-on-linux?utm_source=rss"
+    },
+    "recorded_extraction": [
+      "Claude gets AirPods 3 head tracking working on Linux",
+      "AI has been used to find out how to access motion tracking data from AirPods, enabling one Linux user to use head tracking data to produce a software mouse. AI has been used to find out how to access motion tracking data from AirPods , enabling one Linux user to use head tracking data to produce a software mouse. AirPods and AirPods Pro have head tracking capabilities thanks to some built-in motion-detecting sensors. While it is currently used for things like Spatial Audio and Siri Interactions , one enterprising user has taken steps to widen their use on Linux. Apple does allow AirPods and other earphones to work on Linux and other platforms by functioning as standard Bluetooth headphones. They can be used for normal listening, but things like head tracking are not available once you leave Apple's ecosystem. In a Reddit post on Friday , Matteo Guaduisi said they wanted to control their mouse using a pair of AirPods 3 on Linux. However, they said that every open source project in the same field said that AirPods 3 were not supported.",
+      [
+        "In a Reddit post on Friday, Matteo Guaduisi said they wanted to control their mouse using a pair of AirPods 3 on Linux. However, they said that every open source project in the same field said that AirPods 3 were not supported.",
+        "Driven by this apparent lack of support, they spent an afternoon using Claude Code to find out how AirPods 3 work when it comes to motion tracking.",
+        "It turned out that AirPods 3 uses a different protocol than the Pro models.",
+        "After fixing that, the head tracking data was streaming over Bluetooth at 200hz.",
+        "The effort eventually led to the creation of the MousePods project, which reads the motion sensor data of AirPods 3 and AirPods Pro in Linux. As the name implies, a user's head movements translate into pointer movements on the desktop.",
+        "One unusual application of AirPods surfaced in July, after one developer turned them into a Frisbee stat tracker. After attaching an AirPod to a flying disc, motion data can be sent to the Kinapod Disc app running on an iPhone, including spin rate, total revolutions, and estimated release speed."
+      ]
+    ]
+  },
+  "c0a191598f45df861bc0e358": {
+    "evidence": {
+      "article_id": "c0a191598f45df861bc0e358",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 11 月 8 日消息，任天堂《塞尔达传说：时之笛》重制版于 11 月 5 日登陆了 Switch 2，但游戏发售后没过多久，就已经有人成功让其在越狱版 PlayStation 5 和 iPhone 上运行。 在 PS5 方面，开发者 Vampinity 在 GitHub 上的 EglantinePS5 项目仓库中公布了测试结果。EglantinePS5 是一款移植到 PS5 平台的 Switch 模拟器，基于 Eden 模拟器开发。 IT之家注意到，测试显示，在 PS5 12.40 版系统固件上，游戏已经能够读取存档，玩家操控林克（Link）走出自己的房子，进入科奇里森林（Kokiri Forest），运行帧率约为 15 至 20 FPS。 不过，游戏运行几分钟后就会因内存不足而崩溃。与此同时，森林场景还存在严重的白色雾效问题，部分场景模型也无法正常显示。Vampinity 直言，目前的版本“距离能够正常游玩还差得很远”，并表示相关补丁是由 Claude 编写的。 据悉，此次移植的大量着色器相关工作借鉴了 Lichii 模拟器的分支代码。此前，Lichii 已在游戏发售当天通过 Switch 2 模拟器成功让这款重制版在 PC 上运行。 iPhone 方面，开发者乔 · 蒋（Joe Jiang）展示了《时之笛》重制版在 iPhone 17 Pro Max 上运行的画面，游戏中的科奇里森林场景已经能够正常显示。 乔 · 蒋表示，移植过程中最棘手的问题是内存限制。游戏运行大约需要 9 GB 内存，而 iOS 对单个应用的内存使用上限为 8192 MB（8 GB）。他声称，自己采用的方案能够在保证画面质量的同时，将场景加载时的内存峰值控制在仅 3.4 GB。 据介绍，这种技术方案并非专门针对《时之笛》重制版开发。乔 · 蒋表示，其有望让任天堂 Switch 和 Switch 2 游戏运行在 iOS、iPadOS、Apple TV、Android 以及鸿蒙操作系统（HarmonyOS）设备上。 目前，乔 · 蒋尚未公开发布这一方案。不过，这也不是第一款成功在 iPhone 上启动的 Switch 2 游戏。此前，任天堂 Switch 2 越狱方案首次公开后不久，《马力欧卡丁车世界》（Mario Kart World）就已经成功在 iPhone 上启动。 至于 PS5 版本，则需要使用 Relapse 越狱方案，该方案支持 PS5 7.00 至 13.60 版系统固件。 当然，无论是 iPhone 还是 PS5，目前都还无法提供真正实用的游戏体验。不过，任天堂恐怕不会乐于看到这款重制版在发售后如此迅速地突破平台限制。",
+      "discovery_title": "《塞尔达传说：时之笛》重制版刚发售，就已可在越狱版 PS5 和 iPhone 上运行",
+      "embedded_references": [
+        {
+          "body_element_index": 2,
+          "context": "",
+          "html_tag": "<a class=\"s_tag\" href=\"https://www.ithome.com/\" target=\"_blank\">",
+          "label": "IT之家",
+          "object_id": "https://www.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/"
+        },
+        {
+          "body_element_index": 3,
+          "context": "IT之家 11 月 8 日消息，任天堂《塞尔达传说：时之笛》重制版于 11 月 5 日登陆了 Switch 2，但游戏发售后没过多久，就已经有人成功让其在越狱版 PlayStation 5 和 ",
+          "html_tag": "<a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">",
+          "label": "iPhone",
+          "object_id": "https://iphone.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://iphone.ithome.com/"
+        },
+        {
+          "body_element_index": 13,
+          "context": "iPhone 方面，开发者乔 · 蒋（Joe Jiang）展示了《时之笛》重制版在 ",
+          "html_tag": "<a class=\"s_tag\" href=\"https://iphone.ithome.com/\" target=\"_blank\">",
+          "label": "iPhone 17 Pro Max",
+          "object_id": "https://iphone.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://iphone.ithome.com/"
+        },
+        {
+          "body_element_index": 18,
+          "context": "据介绍，这种技术方案并非专门针对《时之笛》重制版开发。乔 · 蒋表示，其有望让任天堂 Switch 和 Switch 2 游戏运行在 iOS、",
+          "html_tag": "<a class=\"s_tag\" href=\"https://ipad.ithome.com/\" target=\"_blank\">",
+          "label": "iPad",
+          "object_id": "https://ipad.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://ipad.ithome.com/"
+        },
+        {
+          "body_element_index": 19,
+          "context": "据介绍，这种技术方案并非专门针对《时之笛》重制版开发。乔 · 蒋表示，其有望让任天堂 Switch 和 Switch 2 游戏运行在 iOS、iPadOS、Apple TV、",
+          "html_tag": "<a class=\"s_tag\" href=\"https://android.ithome.com/\" target=\"_blank\">",
+          "label": "Android",
+          "object_id": "https://android.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://android.ithome.com/"
+        },
+        {
+          "body_element_index": 20,
+          "context": "据介绍，这种技术方案并非专门针对《时之笛》重制版开发。乔 · 蒋表示，其有望让任天堂 Switch 和 Switch 2 游戏运行在 iOS、iPadOS、Apple TV、Android 以及",
+          "html_tag": "<a class=\"s_tag\" href=\"https://hmos.ithome.com/\" target=\"_blank\">",
+          "label": "鸿蒙",
+          "object_id": "https://hmos.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://hmos.ithome.com/"
+        },
+        {
+          "body_element_index": 21,
+          "context": "据介绍，这种技术方案并非专门针对《时之笛》重制版开发。乔 · 蒋表示，其有望让任天堂 Switch 和 Switch 2 游戏运行在 iOS、iPadOS、Apple TV、Android 以及鸿蒙操作系统（",
+          "html_tag": "<a class=\"s_tag\" href=\"https://hmos.ithome.com/\" target=\"_blank\">",
+          "label": "HarmonyOS",
+          "object_id": "https://hmos.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://hmos.ithome.com/"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/8 7:36:39",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/8 7:36:39",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 23:36:39 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/11/8 7:36:39",
+      "published_source": "source publication field",
+      "published_utc": "2026-11-07T23:36:39+00:00",
+      "raw_lead": "《塞尔达传说：时之笛》重制版登陆 Switch 2 仅数日，已有开发者成功在越狱 PS5 和 iPhone 上运行该游戏。PS5 版帧率约 15-20 FPS 且频繁崩溃，iPhone 版则通过内存优化技术将峰值控制在 3.4 GB，但两者距离实用仍有距离。#塞尔达传说# #Switch2#",
+      "source": "IT之家",
+      "title": "《塞尔达传说：时之笛》重制版刚发售，就已可在越狱版 PS5 和 iPhone 上运行",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 11 月 8 日消息，任天堂《塞尔达传说：时之笛》重制版于 11 月 5 日登陆了 Switch 2，但游戏发售后没过多久，就已经有人成功让其在越狱版 PlayStation 5 和 iPhone 上运行。",
+          "unit_id": "04287399a0f8ca3c1615b1a3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "在 PS5 方面，开发者 Vampinity 在 GitHub 上的 EglantinePS5 项目仓库中公布了测试结果。EglantinePS5 是一款移植到 PS5 平台的 Switch 模拟器，基于 Eden 模拟器开发。",
+          "unit_id": "b929d34df6effc154427e736"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "IT之家注意到，测试显示，在 PS5 12.40 版系统固件上，游戏已经能够读取存档，玩家操控林克（Link）走出自己的房子，进入科奇里森林（Kokiri Forest），运行帧率约为 15 至 20 FPS。",
+          "unit_id": "a0199f642e14ad31eb9d6b22"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "不过，游戏运行几分钟后就会因内存不足而崩溃。与此同时，森林场景还存在严重的白色雾效问题，部分场景模型也无法正常显示。Vampinity 直言，目前的版本“距离能够正常游玩还差得很远”，并表示相关补丁是由 Claude 编写的。",
+          "unit_id": "44790b836b87a3b9eac1ed16"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "据悉，此次移植的大量着色器相关工作借鉴了 Lichii 模拟器的分支代码。此前，Lichii 已在游戏发售当天通过 Switch 2 模拟器成功让这款重制版在 PC 上运行。",
+          "unit_id": "01d950c76dd08892fc119843"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "iPhone 方面，开发者乔 · 蒋（Joe Jiang）展示了《时之笛》重制版在 iPhone 17 Pro Max 上运行的画面，游戏中的科奇里森林场景已经能够正常显示。",
+          "unit_id": "f4462897218ea0ba35dc1319"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "乔 · 蒋表示，移植过程中最棘手的问题是内存限制。游戏运行大约需要 9 GB 内存，而 iOS 对单个应用的内存使用上限为 8192 MB（8 GB）。他声称，自己采用的方案能够在保证画面质量的同时，将场景加载时的内存峰值控制在仅 3.4 GB。",
+          "unit_id": "41e805f55432cfcd3fa8c1b5"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "据介绍，这种技术方案并非专门针对《时之笛》重制版开发。乔 · 蒋表示，其有望让任天堂 Switch 和 Switch 2 游戏运行在 iOS、iPadOS、Apple TV、Android 以及鸿蒙操作系统（HarmonyOS）设备上。",
+          "unit_id": "70db8cd5d3ce31d3e1fb0445"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "目前，乔 · 蒋尚未公开发布这一方案。不过，这也不是第一款成功在 iPhone 上启动的 Switch 2 游戏。此前，任天堂 Switch 2 越狱方案首次公开后不久，《马力欧卡丁车世界》（Mario Kart World）就已经成功在 iPhone 上启动。",
+          "unit_id": "57669dd9d899af9f3e148b1a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "至于 PS5 版本，则需要使用 Relapse 越狱方案，该方案支持 PS5 7.00 至 13.60 版系统固件。",
+          "unit_id": "9fa4bff74cf228e9a38c3d0e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "当然，无论是 iPhone 还是 PS5，目前都还无法提供真正实用的游戏体验。不过，任天堂恐怕不会乐于看到这款重制版在发售后如此迅速地突破平台限制。",
+          "unit_id": "a387de19739907c7190302cf"
+        }
+      ],
+      "url": "https://www.ithome.com/1/023/841.htm"
+    },
+    "recorded_extraction": [
+      "《塞尔达传说：时之笛》重制版刚发售，就已可在越狱版 PS5 和 iPhone 上运行",
+      "《塞尔达传说：时之笛》重制版登陆 Switch 2 仅数日，已有开发者成功在越狱 PS5 和 iPhone 上运行该游戏。PS5 版帧率约 15-20 FPS 且频繁崩溃，iPhone 版则通过内存优化技术将峰值控制在 3.4 GB，但两者距离实用仍有距离。#塞尔达传说# #Switch2# IT之家 11 月 8 日消息，任天堂《塞尔达传说：时之笛》重制版于 11 月 5 日登陆了 Switch 2，但游戏发售后没过多久，就已经有人成功让其在越狱版 PlayStation 5 和 iPhone 上运行。 在 PS5 方面，开发者 Vampinity 在 GitHub 上的 EglantinePS5 项目仓库中公布了测试结果。EglantinePS5 是一款移植到 PS5 平台的 Switch 模拟器，基于 Eden 模拟器开发。 IT之家注意到，测试显示，在 PS5 12.40 版系统固件上，游戏已经能够读取存档，玩家操控林克（Link）走出自己的房子，进入科奇里森林（Kokiri Forest），运行帧率约为 15 至 20 FPS。 不过，游戏运行几分钟后就会因内存不足而崩溃。与此同时，森林场景还存在严重的白色雾效问题，部分场景模型也无法正常显示。Vampinity 直言，目前的版本“距离能够正常游玩还差得很远”，并表示相关补丁是由 Claude 编写的。",
+      [
+        "IT之家 11 月 8 日消息，任天堂《塞尔达传说：时之笛》重制版于 11 月 5 日登陆了 Switch 2，但游戏发售后没过多久，就已经有人成功让其在越狱版 PlayStation 5 和 iPhone 上运行。",
+        "在 PS5 方面，开发者 Vampinity 在 GitHub 上的 EglantinePS5 项目仓库中公布了测试结果。EglantinePS5 是一款移植到 PS5 平台的 Switch 模拟器，基于 Eden 模拟器开发。",
+        "IT之家注意到，测试显示，在 PS5 12.40 版系统固件上，游戏已经能够读取存档，玩家操控林克（Link）走出自己的房子，进入科奇里森林（Kokiri Forest），运行帧率约为 15 至 20 FPS。",
+        "据悉，此次移植的大量着色器相关工作借鉴了 Lichii 模拟器的分支代码。此前，Lichii 已在游戏发售当天通过 Switch 2 模拟器成功让这款重制版在 PC 上运行。",
+        "iPhone 方面，开发者乔 · 蒋（Joe Jiang）展示了《时之笛》重制版在 iPhone 17 Pro Max 上运行的画面，游戏中的科奇里森林场景已经能够正常显示。",
+        "乔 · 蒋表示，移植过程中最棘手的问题是内存限制。游戏运行大约需要 9 GB 内存，而 iOS 对单个应用的内存使用上限为 8192 MB（8 GB）。他声称，自己采用的方案能够在保证画面质量的同时，将场景加载时的内存峰值控制在仅 3.4 GB。",
+        "据介绍，这种技术方案并非专门针对《时之笛》重制版开发。乔 · 蒋表示，其有望让任天堂 Switch 和 Switch 2 游戏运行在 iOS、iPadOS、Apple TV、Android 以及鸿蒙操作系统（HarmonyOS）设备上。",
+        "目前，乔 · 蒋尚未公开发布这一方案。不过，这也不是第一款成功在 iPhone 上启动的 Switch 2 游戏。此前，任天堂 Switch 2 越狱方案首次公开后不久，《马力欧卡丁车世界》（Mario Kart World）就已经成功在 iPhone 上启动。",
+        "至于 PS5 版本，则需要使用 Relapse 越狱方案，该方案支持 PS5 7.00 至 13.60 版系统固件。",
+        "当然，无论是 iPhone 还是 PS5，目前都还无法提供真正实用的游戏体验。不过，任天堂恐怕不会乐于看到这款重制版在发售后如此迅速地突破平台限制。"
+      ]
+    ]
+  },
+  "db0e14bf852d4a9da74b9683": {
+    "evidence": {
+      "article_id": "db0e14bf852d4a9da74b9683",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "当地时间 11 月 4 日，苹果研究团队在预印本平台 arXiv 提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统 HALO。",
+      "discovery_title": "苹果披露人形机器人 HALO 系统：调用千问模型在宇树 G1 上验证，单项任务平均成功率 91%",
+      "embedded_references": [
+        {
+          "body_element_index": 2,
+          "context": "",
+          "html_tag": "<a class=\"s_tag\" href=\"https://www.ithome.com/\" target=\"_blank\">",
+          "label": "IT之家",
+          "object_id": "https://www.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/"
+        },
+        {
+          "body_element_index": 24,
+          "context": "论文：",
+          "html_tag": "<a href=\"https://arxiv.org/abs/2611.06908\">",
+          "label": "https://arxiv.org/abs/2611.06908",
+          "object_id": "https://arxiv.org/abs/2611.06908",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://arxiv.org/abs/2611.06908"
+        },
+        {
+          "body_element_index": 28,
+          "context": "项目主页：",
+          "html_tag": "<a href=\"https://apple-aiml-research.github.io/ml-halo/\">",
+          "label": "https://apple-aiml-research.github.io/ml-halo/",
+          "object_id": "https://apple-aiml-research.github.io/ml-halo/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://apple-aiml-research.github.io/ml-halo/"
+        },
+        {
+          "body_element_index": 32,
+          "context": "GitHub 仓库：",
+          "html_tag": "<a href=\"https://github.com/apple-aiml-research/ml-halo\">",
+          "label": "https://github.com/apple-aiml-research/ml-halo",
+          "object_id": "https://github.com/apple-aiml-research/ml-halo",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://github.com/apple-aiml-research/ml-halo"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/7 17:40:17",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/7 17:40:17",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07T17:40:17.7370000+08:00",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/11/7 17:40:17",
+      "published_source": "source publication field",
+      "published_utc": "2026-11-07T09:40:17+00:00",
+      "raw_lead": "当地时间 11 月 4 日，苹果研究团队在预印本平台 arXiv 提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统 HALO。",
+      "source": "IT之家",
+      "title": "苹果披露人形机器人 HALO 系统：调用千问模型在宇树 G1 上验证，单项任务平均成功率 91%",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 11 月 7 日消息，当地时间 11 月 4 日，苹果研究团队在预印本平台 arXiv 提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统 HALO。",
+          "unit_id": "fb129a3ff9a7c0a53f6f296a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "研究团队还公开了数据生成、模型训练和部署代码，涵盖动作生成、动作跟踪、任务编排以及仿真和真实机器人运行等环节。",
+          "unit_id": "70e25eb434b63e7e402dbcea"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "在落地阶段，研究团队采用宇树科技 G1 人形机器人，背部加装了专用 3D 打印保护外壳，内置一台 Mac mini（M4 Pro 芯片，64GB 统一内存），Mac mini 负责在机载端实时推理计算开销较大的 Orchestrator（VLM）与 Motion Generator（DiT）；G1 自带的板载芯片则专注高频运行 Tracker（RL 策略网络）。",
+          "unit_id": "3e90af84279a1321d2641d70"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "执行任务时，HALO 由三个层级协同控制。最上层是基于视觉语言模型（VLM）的任务编排模块，默认采用千问 Qwen3.6-35B-A3B，系统也可选择通过 API 调用云端模型；中间的动作生成层采用另一款千问模型 Qwen3.5-2B；底层则是经强化学习、策略蒸馏等步骤训练的动作跟踪器，以每秒 50 次的频率运行。",
+          "unit_id": "2fda1f06063a56f6cc6e702b"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "据论文披露，研究团队在 6 个未预先扫描或建图的真实环境中开展 360 次单项任务测试，平均成功率为 91%。",
+          "unit_id": "1513e8ba12c3588139b4ec2d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "针对长序列复合任务，在单一真实场景，各进行 10 次测试，3 种组合平均成功率为 70%；其中最复杂的“俯身通过障碍 — 走向目标 — 推箱子”10 次测试成功 5 次，成功率为 50%。",
+          "unit_id": "d25b4485f6294fa0ff2fd084"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "据介绍，研究团队使用 250 张英伟达 H100 GPU，耗时约 48 小时合成主要训练数据。动作生成器通过模仿学习训练，使用 64 张 B200；动作跟踪器经强化学习、策略蒸馏等步骤训练，使用 4 张 H100。",
+          "unit_id": "31f23e52a6eaf9f8763e3495"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "不过，仿真生成数据并未完全摆脱人工参与。团队表示新增物理任务仍需人工编写提示词、设计动作关键帧，部分动作还使用了人类视频或动捕素材。",
+          "unit_id": "02ac94b4267e2800e20b6f47"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "研究团队同时指出，目前机器人主要依赖视觉感知，难以直接感知接触情况；当物体离开相机视野或被遮挡时，涉及较多接触的任务表现会下降。加入触觉感知将是后续改进方向之一。",
+          "unit_id": "6daff61ccc8aeeaba03fa1fb"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "IT之家附相关链接：",
+          "unit_id": "fc6bbd63cb09746644492ffd"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "论文：https://arxiv.org/abs/2611.06908",
+          "unit_id": "49cca0cd49104a75a68e18ed"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "项目主页：https://apple-aiml-research.github.io/ml-halo/",
+          "unit_id": "cd8a730927d9d5f90ba41549"
+        },
+        {
+          "container_id": "",
+          "kind": "li",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "GitHub 仓库：https://github.com/apple-aiml-research/ml-halo",
+          "unit_id": "762c5a57d72f17d304a23a60"
+        }
+      ],
+      "url": "https://www.ithome.com/1/023/767.htm"
+    },
+    "recorded_extraction": [
+      "苹果披露人形机器人 HALO 系统：调用千问模型在宇树 G1 上验证，单项任务平均成功率 91%",
+      "当地时间 11 月 4 日，苹果研究团队在预印本平台 arXiv 提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统 HALO。 IT之家 11 月 7 日消息，当地时间 11 月 4 日，苹果研究团队在预印本平台 arXiv 提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统 HALO。 在落地阶段， 研究团队采用宇树科技 G1 人形机器人 ，背部加装了专用 3D 打印保护外壳， 内置一台 Mac mini （M4 Pro 芯片，64GB 统一内存），Mac mini 负责在机载端实时推理计算开销较大的 Orchestrator（VLM）与 Motion Generator（DiT）；G1 自带的板载芯片则专注高频运行 Tracker（RL 策略网络）。 执行任务时，HALO 由三个层级协同控制。最上层是基于视觉语言模型（VLM）的任务编排模块，默认采用千问 Qwen3.6-35B-A3B，系统也可选择通过 API 调用云端模型；中间的动作生成层采用另一款千问模型 Qwen3.5-2B；底层则是经强化学习、策略蒸馏等步骤训练的动作跟踪器，以每秒 50 次的频率运行。 针对长序列复合任务，在单一真实场景，各进行 10 次测试，3 种组合平均成功率为 70%；其中最复杂的“俯身通过障碍 — 走向目标 — 推箱子”10 次测试成功 5 次，成功率为 50%。",
+      [
+        "IT之家 11 月 7 日消息，当地时间 11 月 4 日，苹果研究团队在预印本平台 arXiv 提交论文《Perceptive Humanoid Motion from Simulation》，披露了人形机器人自主控制系统 HALO。",
+        "在落地阶段，研究团队采用宇树科技 G1 人形机器人，背部加装了专用 3D 打印保护外壳，内置一台 Mac mini（M4 Pro 芯片，64GB 统一内存），Mac mini 负责在机载端实时推理计算开销较大的 Orchestrator（VLM）与 Motion Generator（DiT）；G1 自带的板载芯片则专注高频运行 Tracker（RL 策略网络）。",
+        "执行任务时，HALO 由三个层级协同控制。最上层是基于视觉语言模型（VLM）的任务编排模块，默认采用千问 Qwen3.6-35B-A3B，系统也可选择通过 API 调用云端模型；中间的动作生成层采用另一款千问模型 Qwen3.5-2B；底层则是经强化学习、策略蒸馏等步骤训练的动作跟踪器，以每秒 50 次的频率运行。",
+        "据论文披露，研究团队在 6 个未预先扫描或建图的真实环境中开展 360 次单项任务测试，平均成功率为 91%。",
+        "针对长序列复合任务，在单一真实场景，各进行 10 次测试，3 种组合平均成功率为 70%；其中最复杂的“俯身通过障碍 — 走向目标 — 推箱子”10 次测试成功 5 次，成功率为 50%。",
+        "据介绍，研究团队使用 250 张英伟达 H100 GPU，耗时约 48 小时合成主要训练数据。动作生成器通过模仿学习训练，使用 64 张 B200；动作跟踪器经强化学习、策略蒸馏等步骤训练，使用 4 张 H100。",
+        "论文：https://arxiv.org/abs/2611.06908"
+      ]
+    ]
+  },
+  "e48c0866df469b3eac32936e": {
+    "evidence": {
+      "article_id": "e48c0866df469b3eac32936e",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "10月23日，iPhone Duo正式开卖，国行15999元起。作为苹果第一款折叠屏手机，它首发当天的软件生态表现谈不上体面：常用App大面积没适配，游戏更是集体缺席，展开那块7.6英寸内屏想全屏打个游戏，基本都会收获一圈黑边。现在两周过去了，适配情况有进步吗？ 先说说黑边是怎么来的。没做适配的应用在iPhone Duo上会以默认兼容模式运行，系统把画面装进一个安全区域里，四周用黑色背景填满，内屏自然铺不满。 开发者想完整用上这块屏幕，需要基于iOS 27.1的SDK重新编译适配，苹果也已经把工具和规则摆上了桌：2027年4月之后，新上架或者提交更新的App都必须带上iPhone Duo的适配截图，否则无法通过审核。换句话说，适配是迟早的事，差别只在各家排期的先后。 《绝区零》是跑得靠前的一个。其实发售之前它就露过脸，新机发布会上它就是性能演示游戏，米哈游在10月中旬也官宣了适配计划。11月5日，官方发布适配说明：玩家把游戏更新到3.3.1版本，就能在iPhone Duo上体验相关适配功能，开了App自动更新的无需手动操作，直接就能玩。 适配之后，游戏画面可以跟着折叠形态在多种视角间无缝切换，展开机身视野直接拓宽，甚至针对内屏竖屏游玩也做了专门适配，高画质下可以稳定60帧运行。《云·绝区零》的适配则要再等等，官方说法是后续版本更新。 实际体验下来，这套适配不是把画面简单拉大了事。折叠、展开的过程中，游戏画面是跟着机身姿态动态调整视野范围的，没有拉伸变形，也没有撕裂卡顿，操作按键的布局也跟着屏幕形态做了重排。放在首发当天全屏都算是奢侈的环境里，这个完成度确实不像同一时期的东西。 再说《崩坏：星穹铁道》。同样是米哈游的游戏，待遇完全不同。截至我们写这篇稿子，官方还没有公布它针对iPhone Duo的任何适配计划，游戏在内屏上依旧是默认兼容模式：画面缩在中间一块，上下两条明显的黑边；可以手动等比放大，但放大之后上下留白依然存在，战斗界面的UI和按钮也还是按直板机的比例排布，没有为这块宽屏重新布局。能玩，但也就停留在能玩的水平。 这个落差其实不难理解。折叠屏的游戏适配比普通App麻烦得多，画面比例变了，UI要重排，交互逻辑和视野范围都得重新设计，厂商排期必然有先后。 10月23日，iPhone Duo正式开卖，国行15999元起。作为苹果第一款折叠屏手机，它首发当天的软件生态表现谈不上体面：常用App大面积没适配，游戏更是集体缺席，展开那块7.6英寸内屏想全屏打个游戏，",
+      "discovery_title": "首发2周过后 iPhone Duo游戏适配表现有进步吗",
+      "embedded_references": [],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07 17:21:53.123",
+          "source": "source publication metadata"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026-11-07 17:21:53",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026-11-07 17:21:53.123",
+      "published_source": "source publication metadata",
+      "published_utc": "2026-11-07T09:21:53.123000+00:00",
+      "raw_lead": "10月23日，iPhone Duo正式开卖，国行15999元起。作为苹果第一款折叠屏手机，它首发当天的软件生态表现谈不上体面：常用App大面积没适配，游戏更是集体缺席，展开那块7.6英寸内屏想全屏打个游戏，",
+      "source": "快科技",
+      "title": "首发2周过后 iPhone Duo游戏适配表现有进步吗",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "10月23日，iPhone Duo正式开卖，国行15999元起。作为苹果第一款折叠屏手机，它首发当天的软件生态表现谈不上体面：常用App大面积没适配，游戏更是集体缺席，展开那块7.6英寸内屏想全屏打个游戏，基本都会收获一圈黑边。现在两周过去了，适配情况有进步吗？",
+          "unit_id": "c10c09eed39555fec88a00d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "先说说黑边是怎么来的。没做适配的应用在iPhone Duo上会以默认兼容模式运行，系统把画面装进一个安全区域里，四周用黑色背景填满，内屏自然铺不满。",
+          "unit_id": "9a68ed2e4d5bd9e277e1c341"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "开发者想完整用上这块屏幕，需要基于iOS 27.1的SDK重新编译适配，苹果也已经把工具和规则摆上了桌：2027年4月之后，新上架或者提交更新的App都必须带上iPhone Duo的适配截图，否则无法通过审核。换句话说，适配是迟早的事，差别只在各家排期的先后。",
+          "unit_id": "4c00737932860825686242aa"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "《绝区零》是跑得靠前的一个。其实发售之前它就露过脸，新机发布会上它就是性能演示游戏，米哈游在10月中旬也官宣了适配计划。11月5日，官方发布适配说明：玩家把游戏更新到3.3.1版本，就能在iPhone Duo上体验相关适配功能，开了App自动更新的无需手动操作，直接就能玩。",
+          "unit_id": "7bf82502d7fda8789cf3001e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "适配之后，游戏画面可以跟着折叠形态在多种视角间无缝切换，展开机身视野直接拓宽，甚至针对内屏竖屏游玩也做了专门适配，高画质下可以稳定60帧运行。《云·绝区零》的适配则要再等等，官方说法是后续版本更新。",
+          "unit_id": "281d0575f99609d3ba4af421"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "实际体验下来，这套适配不是把画面简单拉大了事。折叠、展开的过程中，游戏画面是跟着机身姿态动态调整视野范围的，没有拉伸变形，也没有撕裂卡顿，操作按键的布局也跟着屏幕形态做了重排。放在首发当天全屏都算是奢侈的环境里，这个完成度确实不像同一时期的东西。",
+          "unit_id": "f2d45551e6d68dccb2874097"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "再说《崩坏：星穹铁道》。同样是米哈游的游戏，待遇完全不同。截至我们写这篇稿子，官方还没有公布它针对iPhone Duo的任何适配计划，游戏在内屏上依旧是默认兼容模式：画面缩在中间一块，上下两条明显的黑边；可以手动等比放大，但放大之后上下留白依然存在，战斗界面的UI和按钮也还是按直板机的比例排布，没有为这块宽屏重新布局。能玩，但也就停留在能玩的水平。",
+          "unit_id": "37d5970439455e6c5b40b737"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "这个落差其实不难理解。折叠屏的游戏适配比普通App麻烦得多，画面比例变了，UI要重排，交互逻辑和视野范围都得重新设计，厂商排期必然有先后。",
+          "unit_id": "390ed1d3f376535cf21764ee"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "《绝区零》是动作游戏，对新硬件的性能展示价值高，又登上过发布会，优先级自然靠前；回合制的星穹铁道排得靠后，符合常理。考虑到它还在持续运营、版本更新没有断过，跟上适配大概率只是时间问题，何况苹果那条2027年4月的审核红线卡在那里，一直不适配就意味着一直不能更新。",
+          "unit_id": "d3cd23fd1fd9c1c3162c851a"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 9,
+          "origin": "html",
+          "text": "回到开头的问题：有进步吗？有，而且比我们预期的快。两周时间，从首发当天游戏集体黑边，到有重度手游交出完整的深度适配方案，这个推进速度放在折叠屏品类里不算慢。",
+          "unit_id": "41980f686fb85ef3e2d320a6"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 10,
+          "origin": "html",
+          "text": "但也就到此为止了，一款游戏适配成功不代表生态成熟，眼下绝大多数游戏在这台机器上仍停留在兼容模式，想把它当大屏游戏机的人，现在能玩爽的名单还太短。",
+          "unit_id": "71ff518b9487a2d0cd257b22"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 11,
+          "origin": "html",
+          "text": "最后说购买建议。如果你买iPhone Duo的核心诉求就是打游戏，我们的建议是先别急着下手：目前只有《绝区零》一款重度游戏给出了完整体验，你常玩的那款要是不在适配名单里，这块内屏在游戏场景里就派不上用场，15999元的投入换不来对应的体验。",
+          "unit_id": "fc5e69e8ce545a8e46c2b7cd"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 12,
+          "origin": "html",
+          "text": "已经买了机器的朋友也不用后悔，审核新规摆在那里，主流游戏跟进适配是大概率事件，只是早几天晚几天的区别。至于预算充足、就想第一时间体验折叠屏的人，硬件本身没什么可挑的，买不买，取决于你能不能接受软件等硬件这段过渡期。",
+          "unit_id": "fd7854b75cb3ab244ba36850"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 13,
+          "origin": "html",
+          "text": "责任编辑：振亭",
+          "unit_id": "e1fde33a7205abee3787eb87"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 14,
+          "origin": "html",
+          "text": "文章内容举报",
+          "unit_id": "fc17db86a9dc0fb378709865"
+        }
+      ],
+      "url": "https://news.mydrivers.com/1/1163/1163960.htm"
+    },
+    "recorded_extraction": [
+      "首发2周过后 iPhone Duo游戏适配表现有进步吗",
+      "10月23日，iPhone Duo正式开卖，国行15999元起。作为苹果第一款折叠屏手机，它首发当天的软件生态表现谈不上体面：常用App大面积没适配，游戏更是集体缺席，展开那块7.6英寸内屏想全屏打个游戏， 10月23日，iPhone Duo正式开卖，国行15999元起。作为苹果第一款折叠屏手机，它首发当天的软件生态表现谈不上体面：常用App大面积没适配，游戏更是集体缺席，展开那块7.6英寸内屏想全屏打个游戏，基本都会收获一圈黑边。现在两周过去了，适配情况有进步吗？ 先说说黑边是怎么来的。没做适配的应用在iPhone Duo上会以默认兼容模式运行，系统把画面装进一个安全区域里，四周用黑色背景填满，内屏自然铺不满。 开发者想完整用上这块屏幕，需要基于iOS 27.1的SDK重新编译适配，苹果也已经把工具和规则摆上了桌：2027年4月之后，新上架或者提交更新的App都必须带上iPhone Duo的适配截图，否则无法通过审核。换句话说，适配是迟早的事，差别只在各家排期的先后。 《绝区零》是跑得靠前的一个。其实发售之前它就露过脸，新机发布会上它就是性能演示游戏，米哈游在10月中旬也官宣了适配计划。11月5日，官方发布适配说明：玩家把游戏更新到3.3.1版本，就能在iPhone Duo上体验相关适配功能，开了App自动更新的无需手动操作，直接就能玩。",
+      [
+        "开发者想完整用上这块屏幕，需要基于iOS 27.1的SDK重新编译适配，苹果也已经把工具和规则摆上了桌：2027年4月之后，新上架或者提交更新的App都必须带上iPhone Duo的适配截图，否则无法通过审核。换句话说，适配是迟早的事，差别只在各家排期的先后。",
+        "《绝区零》是跑得靠前的一个。其实发售之前它就露过脸，新机发布会上它就是性能演示游戏，米哈游在10月中旬也官宣了适配计划。11月5日，官方发布适配说明：玩家把游戏更新到3.3.1版本，就能在iPhone Duo上体验相关适配功能，开了App自动更新的无需手动操作，直接就能玩。",
+        "适配之后，游戏画面可以跟着折叠形态在多种视角间无缝切换，展开机身视野直接拓宽，甚至针对内屏竖屏游玩也做了专门适配，高画质下可以稳定60帧运行。《云·绝区零》的适配则要再等等，官方说法是后续版本更新。",
+        "《绝区零》是动作游戏，对新硬件的性能展示价值高，又登上过发布会，优先级自然靠前；回合制的星穹铁道排得靠后，符合常理。考虑到它还在持续运营、版本更新没有断过，跟上适配大概率只是时间问题，何况苹果那条2027年4月的审核红线卡在那里，一直不适配就意味着一直不能更新。",
+        "最后说购买建议。如果你买iPhone Duo的核心诉求就是打游戏，我们的建议是先别急着下手：目前只有《绝区零》一款重度游戏给出了完整体验，你常玩的那款要是不在适配名单里，这块内屏在游戏场景里就派不上用场，15999元的投入换不来对应的体验。"
+      ]
+    ]
+  },
+  "eac54728207b24964e32af82": {
+    "evidence": {
+      "article_id": "eac54728207b24964e32af82",
+      "confidence": "detail",
+      "content_form": "news",
+      "discovery_lead": "IT之家 11 月 8 日消息，由设计师胡安 · 布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款 MacBook Pro 笔记本电脑顶盖上的发光苹果 Logo。 该应用的免费版本允许用户手动调节苹果 Logo 的亮度，而且不受 MacBook Pro 屏幕亮度设置的影响。用户也可以一键彻底关闭 Logo 灯光，无需通过终端（Terminal）执行命令。 免费版本还提供一种名为“Breathe”的呼吸模式，可以让苹果 Logo 的灯光缓慢、柔和地明暗交替，效果类似于老款 MacBook 上的睡眠指示灯。 用户只需一次性付费即可解锁应用的 Pro 版本，限时售价 9 美元 （IT之家注：现汇率约合 60.2 元人民币） ，之后将涨至 15 美元 （现汇率约合 100.3 元人民币） 。Pro 版本额外提供两种灯光模式：“Music”模式可以让苹果 Logo 的灯光跟随 Mac 上播放的音乐节奏变化；“Agents”模式则会在 Claude Code 执行任务时让 Logo 灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。 苹果从 2015 年开始逐步取消 MacBook 上的发光 Logo 设计，不过在新款 14 英寸和 16 英寸 MacBook Pro 上，苹果重新引入了这一设计，两款机型均配备触控 PROLED XDR 显示屏。 在老款 MacBook 上，苹果 Logo 的光线来自屏幕背光。但 OLED 显示屏本身没有背光，因此苹果需要采用全新的技术方案。 《Daring Fireball》作者约翰 · 格鲁伯（John Gruber）透露，苹果专门设计了一种定制光源，让 Logo 重新发光，同时不会增加笔记本电脑顶盖的厚度。至于苹果为何要重新采用这一设计，他听到一位苹果代表给出的回答是：“因为它很酷。” 苹果在官方支持文档中表示，默认情况下，只要 Mac 处于唤醒状态，Logo 就会亮起。电脑会根据屏幕亮度以及环境光传感器检测到的周围光线条件，自动调节 Logo 的亮度。 布伊斯表示，苹果 Logo 使用的是白色 LED 灯，不支持切换颜色。 设计师胡安 · 布伊斯推出 Backglow 应用，可手动调节新款 MacBook Pro 顶盖发光 Logo 亮度，支持呼吸模式、音乐节奏同步、Claude Code 任务提醒等多种玩法。免费版即可使用基础功能，Pro 版限时售价 9 美元。#MacBookPro# #发光Logo#",
+      "discovery_title": "Backglow 应用上线：可让新款 MacBook Pro 发光苹果 Logo 随音乐律动",
+      "embedded_references": [
+        {
+          "body_element_index": 2,
+          "context": "",
+          "html_tag": "<a class=\"s_tag\" href=\"https://www.ithome.com/\" target=\"_blank\">",
+          "label": "IT之家",
+          "object_id": "https://www.ithome.com/",
+          "origin": "html:body",
+          "platform": "web",
+          "url": "https://www.ithome.com/"
+        }
+      ],
+      "extraction_path": "detail",
+      "publication_candidates": [
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/8 7:25:12",
+          "source": "source publication field"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "2026/11/8 7:25:12",
+          "source": "body date pattern"
+        },
+        {
+          "allows_date_only": false,
+          "raw": "Sat, 07 Nov 2026 23:25:12 GMT",
+          "source": "discovery feed"
+        }
+      ],
+      "published_raw": "2026/11/8 7:25:12",
+      "published_source": "source publication field",
+      "published_utc": "2026-11-07T23:25:12+00:00",
+      "raw_lead": "设计师胡安 · 布伊斯推出 Backglow 应用，可手动调节新款 MacBook Pro 顶盖发光 Logo 亮度，支持呼吸模式、音乐节奏同步、Claude Code 任务提醒等多种玩法。免费版即可使用基础功能，Pro 版限时售价 9 美元。#MacBookPro# #发光Logo#",
+      "source": "IT之家",
+      "title": "Backglow 应用上线：可让新款 MacBook Pro 发光苹果 Logo 随音乐律动",
+      "units": [
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 0,
+          "origin": "html",
+          "text": "IT之家 11 月 8 日消息，由设计师胡安 · 布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款 MacBook Pro 笔记本电脑顶盖上的发光苹果 Logo。",
+          "unit_id": "d7608d22d37b7a9bdcd12a7d"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 1,
+          "origin": "html",
+          "text": "该应用的免费版本允许用户手动调节苹果 Logo 的亮度，而且不受 MacBook Pro 屏幕亮度设置的影响。用户也可以一键彻底关闭 Logo 灯光，无需通过终端（Terminal）执行命令。",
+          "unit_id": "ec0b538c30f568ad0c32df36"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 2,
+          "origin": "html",
+          "text": "免费版本还提供一种名为“Breathe”的呼吸模式，可以让苹果 Logo 的灯光缓慢、柔和地明暗交替，效果类似于老款 MacBook 上的睡眠指示灯。",
+          "unit_id": "9fb00b3d98e2a40ee286a963"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 3,
+          "origin": "html",
+          "text": "用户只需一次性付费即可解锁应用的 Pro 版本，限时售价 9 美元（IT之家注：现汇率约合 60.2 元人民币），之后将涨至 15 美元（现汇率约合 100.3 元人民币）。Pro 版本额外提供两种灯光模式：“Music”模式可以让苹果 Logo 的灯光跟随 Mac 上播放的音乐节奏变化；“Agents”模式则会在 Claude Code 执行任务时让 Logo 灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。",
+          "unit_id": "76130c50633660a35e012f89"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 4,
+          "origin": "html",
+          "text": "苹果从 2015 年开始逐步取消 MacBook 上的发光 Logo 设计，不过在新款 14 英寸和 16 英寸 MacBook Pro 上，苹果重新引入了这一设计，两款机型均配备触控 PROLED XDR 显示屏。",
+          "unit_id": "0f9d3716588b953a028486d3"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 5,
+          "origin": "html",
+          "text": "在老款 MacBook 上，苹果 Logo 的光线来自屏幕背光。但 OLED 显示屏本身没有背光，因此苹果需要采用全新的技术方案。",
+          "unit_id": "0e7532bd6c456520a0684508"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 6,
+          "origin": "html",
+          "text": "《Daring Fireball》作者约翰 · 格鲁伯（John Gruber）透露，苹果专门设计了一种定制光源，让 Logo 重新发光，同时不会增加笔记本电脑顶盖的厚度。至于苹果为何要重新采用这一设计，他听到一位苹果代表给出的回答是：“因为它很酷。”",
+          "unit_id": "ff09e23f1347a4821d6566ec"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 7,
+          "origin": "html",
+          "text": "苹果在官方支持文档中表示，默认情况下，只要 Mac 处于唤醒状态，Logo 就会亮起。电脑会根据屏幕亮度以及环境光传感器检测到的周围光线条件，自动调节 Logo 的亮度。",
+          "unit_id": "f92ba736ffff17647bd03c2e"
+        },
+        {
+          "container_id": "",
+          "kind": "p",
+          "ordinal": 8,
+          "origin": "html",
+          "text": "布伊斯表示，苹果 Logo 使用的是白色 LED 灯，不支持切换颜色。",
+          "unit_id": "a0f2195514a1e16435337e2d"
+        }
+      ],
+      "url": "https://www.ithome.com/1/023/839.htm"
+    },
+    "recorded_extraction": [
+      "Backglow 应用上线：可让新款 MacBook Pro 发光苹果 Logo 随音乐律动",
+      "设计师胡安 · 布伊斯推出 Backglow 应用，可手动调节新款 MacBook Pro 顶盖发光 Logo 亮度，支持呼吸模式、音乐节奏同步、Claude Code 任务提醒等多种玩法。免费版即可使用基础功能，Pro 版限时售价 9 美元。#MacBookPro# #发光Logo# IT之家 11 月 8 日消息，由设计师胡安 · 布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款 MacBook Pro 笔记本电脑顶盖上的发光苹果 Logo。 该应用的免费版本允许用户手动调节苹果 Logo 的亮度，而且不受 MacBook Pro 屏幕亮度设置的影响。用户也可以一键彻底关闭 Logo 灯光，无需通过终端（Terminal）执行命令。 免费版本还提供一种名为“Breathe”的呼吸模式，可以让苹果 Logo 的灯光缓慢、柔和地明暗交替，效果类似于老款 MacBook 上的睡眠指示灯。 用户只需一次性付费即可解锁应用的 Pro 版本，限时售价 9 美元 （IT之家注：现汇率约合 60.2 元人民币） ，之后将涨至 15 美元 （现汇率约合 100.3 元人民币） 。Pro 版本额外提供两种灯光模式：“Music”模式可以让苹果 Logo 的灯光跟随 Mac 上播放的音乐节奏变化；“Agents”模式则会在 Claude Code 执行任务时让 Logo 灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。",
+      [
+        "IT之家 11 月 8 日消息，由设计师胡安 · 布伊斯（Juan Buis）开发的一款名为“Backglow”的新应用，允许用户自定义新款 MacBook Pro 笔记本电脑顶盖上的发光苹果 Logo。",
+        "用户只需一次性付费即可解锁应用的 Pro 版本，限时售价 9 美元（IT之家注：现汇率约合 60.2 元人民币），之后将涨至 15 美元（现汇率约合 100.3 元人民币）。Pro 版本额外提供两种灯光模式：“Music”模式可以让苹果 Logo 的灯光跟随 Mac 上播放的音乐节奏变化；“Agents”模式则会在 Claude Code 执行任务时让 Logo 灯光持续闪烁式呼吸，当需要用户介入时则通过闪烁发出提醒。",
+        "苹果从 2015 年开始逐步取消 MacBook 上的发光 Logo 设计，不过在新款 14 英寸和 16 英寸 MacBook Pro 上，苹果重新引入了这一设计，两款机型均配备触控 PROLED XDR 显示屏。",
+        "苹果在官方支持文档中表示，默认情况下，只要 Mac 处于唤醒状态，Logo 就会亮起。电脑会根据屏幕亮度以及环境光传感器检测到的周围光线条件，自动调节 Logo 的亮度。",
+        "布伊斯表示，苹果 Logo 使用的是白色 LED 灯，不支持切换颜色。"
+      ]
+    ]
+  }
+}

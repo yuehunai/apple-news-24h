@@ -4205,6 +4205,12 @@ def is_third_party_app_action_on_apple_platform(title: str, lead: str, *, named_
     # a physical device rather than an OS. Require that name to own adaptation.
     adaptation = source_app_adaptation_frame(title, lead, passages)
     named_action = adaptation is not None and adaptation.action == 'app-adaptation'
+    app = _frame_search(r'^[\x27“"]?([a-z][a-z0-9 -]{1,40})[\x27”"]?\s+lets?\s+you\b', title_text)
+    if app:
+        name = re.escape(app.group(1).strip())
+        named_action = named_action or bool(_frame_search(
+            r'\b(?:new\s+)?[\x27“"]?' + name + r'[\x27”"]?\s+app\s+created\s+by\s+'
+            r'(?!apple\b)[^.!?]{2,70}\s+lets?\s+you\b', lead_text))
     project = _frame_search(r'\b(?:unofficial|independent)\s+project\s+called\s+([a-z][a-z0-9-]+)', lead_text)
     if (project and _frame_search(r'\b(?:unofficial|third.party)\s+installer\b|非官方安装器', title_text)
             and _frame_search(r'\bmacs?\b|macos|苹果电脑', title_text)):
@@ -12952,6 +12958,38 @@ def source_independent_software_frame(title: str, lead: str, facts: tuple[str, .
     h, opening = _normalized(title), _normalized(lead)[:950]
     s = _frame_search
     local = h + ". " + opening
+    if s(r'linux|(?<![a-z0-9-])[a-z][a-z0-9-]*os(?![a-z0-9-])|鸿蒙|模拟器|emulat|switch', local):
+        passages = tuple(dict.fromkeys((lead, *facts)))
+        # The host and an implemented operation must belong to this report;
+        # a tool name or a future platform list alone proves no compatibility.
+        guest = s(r'(?<![a-z0-9-])([a-z][a-z0-9-]*os)\s*(\d+(?:\.\d+)*)?', h)
+        if guest and s(r'macbook|\bmac\b', h):
+            for passage in passages:
+                boot = s(r'(?:为一台|将|在)\s*(?:苹果\s*)?mac(?:book\s*pro)?\s*'
+                    r'(?:物理机)?(?:上)?\s*(?:成功)?(?:刷入|运行)(?:了)?\s*(?:鸿蒙\s*)?'
+                    + re.escape(guest[1]) + r'\s*' + re.escape(guest[2] or ''), passage)
+                if (boot and _current_observation_action(passage, boot)
+                        and any(s(r'内核|kernel', p) and s(r'嫁接|适配|port|adapt', p) for p in passages[:3])):
+                    return SourceActionFrame('third-party:os-adaptation:' + h, 'os-compatibility-demonstration',
+                        'software_systems', 'ecosystem_interop', 'ecosystem')
+        if s(r'airpods', h) and s(r'linux', h):
+            for passage in passages:
+                protocol = s(r'\b([a-z][a-z0-9-]*)\s+project,?\s+which\s+reads?\s+the\s+'
+                    r'(?:motion\s+)?sensor\s+data\s+of\s+airpods\b[^.!?]{0,45}\bin\s+linux', passage)
+                if protocol and _current_observation_action(passage, protocol):
+                    return SourceActionFrame('airpods:linux-sensor-protocol:' + protocol[1],
+                        'device-protocol-implementation', 'software_systems', 'ecosystem_interop', 'ecosystem')
+        if s(r'iphone|ipad', h) and s(r'运行|runs?', h) and s(r'模拟器|emulat|switch', ' '.join(passages)):
+            for index, passage in enumerate(passages):
+                demonstration = s(r'开发者[^。！？]{2,65}展示(?:了)?[^。！？]{0,70}在\s*'
+                    r'(?:iphone|ipad)\s*[^。！？]{0,35}上运行的画面', passage)
+                detail = passage + ' ' + (passages[index + 1] if index + 1 < len(passages) else '')
+                if (demonstration and _current_observation_action(passage, demonstration)
+                        and s(r'移植|模拟器|emulat', detail)
+                        and not s(r'ps5|playstation|安卓|android', detail)
+                        and not s(r'计划|尚未|未能|没能', passage[:demonstration.end()])):
+                    return SourceActionFrame('apple-platform:emulation:' + h, 'emulator-compatibility-demonstration',
+                        'software_systems', 'ecosystem_interop', 'ecosystem')
     if (s(r"\b(?:patcher|oclp)\b|系统补丁", local)
             and s(r"macos|macs?\b|旧\s*mac", local)
             and s(r"support\s+for\s+the\s+first\s+time|新增.{0,25}(?:系统|支持)|首次.{0,25}支持", opening)
@@ -13171,9 +13209,9 @@ def source_editorial_outlook(title: str, lead: str, passages: tuple[str, ...]) -
     discussion = any(s(r'^\s*on\s+this\s+episode\s+of\b|^(?:本期|这一期).{0,20}(?:节目|播客)', p) for p in passages[:3])
     if discussion and not s(r'^(?:apple|苹果).{0,30}(?:announc|releas|launch|宣布|发布|推出)', h):
         return True
-    evaluation = s(r'\b(?:success|failure|flawless|missed\s+opportunity|catch(?:ing)?\s+up|fall(?:ing)?\s+behind)\b|成功|失败|错失机会|落后|追赶', h)
+    evaluation = s(r'\b(?:success|failure|flawless|missed\s+opportunity|catch(?:ing)?\s+up|fall(?:ing)?\s+behind|(?:more|something)\s+to\s+prove)\b|成功|失败|错失机会|落后|追赶', h)
     if (evaluation and not s(r'(?:apple|苹果)[^.!?。]{0,25}(?:says?|reports?|表示|宣布|回应|称)', h)
-            and any(s(r'\bin\s+my\s+(?:estimation|opinion|view)|\bi\s+(?:think|suspect|believe)\b|在我看来|我认为', p)
+            and any(s(r'\bin\s+my\s+(?:estimation|opinion|view)|\bi\s+(?:think|suspect|believe|expect)\b|\b(?:obvious|clear)\s+to\s+me\b|在我看来|我认为', p)
                     and not s(r'[“"「]|\b(?:said|says|told|according)\b|表示|称|指出', p) for p in passages)
             and not source_current_disclosure_clauses(lead, passages)):
         return True
@@ -13861,6 +13899,33 @@ def source_weekly_device_measurement(title: str, lead: str, passages: tuple[str,
     """One measurement owns its model, period, region, stage and quantity."""
     h = _normalized(title)
     s = _frame_search
+    models = named_iphone_models(h)
+    if len(models) == 1 and s(r'销量|激活|卖出|sales|activations?', h):
+        model = next(iter(models))
+        for passage in tuple(dict.fromkeys((lead, *passages))):
+            for a, b in source_sentence_spans(passage):
+                clause = _normalized(passage[a:b])
+                reporter = s(r'博主\s*@?\s*([a-z0-9\u4e00-\u9fff_-]{2,30}?)\s*(?:今日|今天)?(?:曝光|公布|发布)(?:了|的)?', clause)
+                period = s(r'(\d{1,2})\s*月\s*(\d{1,2})\s*日?\s*[-—–至到]\s*(?:(\d{1,2})\s*月\s*)?(\d{1,2})\s*日', clause)
+                if (reporter and period and named_iphone_models(clause) == {model}
+                        and s(r'数据|销量|激活量', clause) and s(r'\d+(?:\.\d+)?\s*万?\s*台', clause)
+                        and source_predicate_role(clause[:reporter.end()]) == 'current'
+                        and not s(r'预测|预估|预计|计划|尚未|并未|没有', clause)):
+                    dates = tuple(int(v) for v in (period[1], period[2], period[3] or period[1], period[4]))
+                    if not (1 <= dates[0] <= 12 and 1 <= dates[2] <= 12 and 1 <= dates[1] <= 31 and 1 <= dates[3] <= 31):
+                        continue
+                    year = s(r'(20\d{2})\s*年', clause)
+                    regions = _extract_patterns(clause, tuple((region, tuple(t for t in terms if t != 'US'))
+                                                               for region, terms in REGION_TERMS.items()))
+                    if s(r'国内|国行', clause):
+                        regions.add('china')
+                    if s(r'全球|global|worldwide', clause):
+                        regions.add('global')
+                    if len(regions) > 1:
+                        continue
+                    return SourceActionFrame(model + ':sales-dataset:' + reporter[1], 'dated-unit-sales-report',
+                        'hardware_products', 'hardware_market', period='dates:' + ':'.join(map(str, dates)),
+                        year=year[1] if year else '', region=next(iter(regions), ''))
     phone = s(r'iphone\s*\d+', h)
     if (not phone or not s(r'sales|activations?|销量|激活|卖出|狂销|卖不动', h + ' ' + lead[:700])
             or s(r'last year|historical|回顾|去年|超过|outperform|outsell|beats?', h[:phone.start()])):
@@ -14514,7 +14579,8 @@ def source_device_behavior_test_frame(title: str, lead: str, facts: tuple[str, .
         return None
     focus = ('charging' if s(r'充电|快充|charging', h) else
              'camera-exposure' if s(r'快门|曝光|光圈|shutter|exposure|aperture', h) else
-             'thermal-performance' if s(r'散热|thermal', h) and s(r'压力测试|stress\s+test', h) else '')
+             'thermal-performance' if s(r'散热|thermal', h) and s(r'压力测试|stress\s+test', h) else
+             'display-layout' if s(r'游戏|应用|games?|apps?', h) and s(r'适配表现|显示表现|layout|display\s+behavior', h) else '')
     if not focus:
         return None
     # A headline test must concern the Apple device's measured behavior; a
@@ -14525,6 +14591,21 @@ def source_device_behavior_test_frame(title: str, lead: str, facts: tuple[str, .
     def owns_object(text):
         values = source_device_test_objects(text)
         return bool(values & objects or any(value.split(':')[0] in objects for value in values))
+    if focus == 'display-layout':
+        if len(objects) != 1:
+            return None
+        observations = {}
+        for i, a, b in current_device_text_spans(tuple(passages), subject):
+            observations.setdefault(i, []).append(passages[i][a:b])
+        for parts in observations.values():
+            passage = ' '.join(parts)
+            observed = s(r'实际体验|实测|(?:we|i)\s+(?:tested|observed)', passage)
+            if (observed and _current_observation_action(passage, observed)
+                    and not s(r'没有|尚未|并未', passage[:observed.end()])
+                    and s(r'折叠|展开|fold|unfold', passage)
+                    and s(r'布局|视野|拉伸|撕裂|黑边|layout|field\s+of\s+view|letterbox', passage)):
+                return SourceActionFrame(subject + ':tester:' + h, 'device-behavior-test-' + focus, kind='os_app')
+        return None
     if focus == 'thermal-performance':
         for passage in (lead, *facts):
             publication = s(r'发布(?:了)?(?:实验室)?测试(?:博文|报告)', passage)
@@ -16355,30 +16436,34 @@ def source_device_operation_frame(title: str, lead: str, facts: tuple[str, ...] 
                         and not source_denies_action('', clause[:publication.end()], r'publish|releas|发布|上线')):
                     return SourceActionFrame(model + ':support:' + ':'.join(topics),
                                              'document-publication', 'hardware_products', 'hardware_market')
-        if (s(r'crack|开裂|漏液|(?:内屏|外屏|屏幕).{0,18}(?:损坏|故障|绿线|亮线)', h)
+        if (s(r'crack|开裂|漏液|黑屏|black\s+screen|(?:内屏|外屏|屏幕).{0,18}(?:损坏|故障|绿线|亮线)', h)
                 and not s(r'teardown|test|拆解|拆机|测试|客服|回应|驳斥|员工|respond|response|staff|employee', h)):
             display = 'outer' if s(r'外屏|outer\s+(?:screen|display)', h) else 'inner' if s(r'内屏|inner\s+(?:screen|display)', h) else ''
             for passage in source_units[:2] or (lead,):
-                reported = s(r'(?:owners?|users?)\s+are\s+reporting|(?:用户|网友)[^。；]{0,12}(?:反映|反馈|报告|发布视频称)', passage)
+                reported = s(r'(?:owners?|users?)\s+are\s+reporting|(?:用户|网友|先生|女士)[^。；]{0,12}(?:反映|反馈|报告|发布视频称|称自己)', passage)
                 if not reported or source_predicate_role(passage[:reported.end()]) != 'current':
                     continue
                 parts = tuple(_compiled_rule(r'[,，;；]|\b(?:while|whereas|but)\b').split(passage))
                 for i, a, b in current_device_text_spans(parts, model):
                     owned = _normalized(parts[i][a:b])
-                    screens = list(_compiled_rule(r'(?:outer|inner)\s+(?:screens?|display)|screens?|display|内屏|外屏|屏幕').finditer(owned))
+                    screens = list(_compiled_rule(r'(?:outer|inner)\s+(?:screens?|display)|black\s+screen|screens?|display|内屏|外屏|屏幕|黑屏').finditer(owned))
                     for index, screen in enumerate(screens):
                         side = 'outer' if s(r'outer|外屏', screen.group()) else 'inner' if s(r'inner|内屏', screen.group()) else ''
                         if display and side != display:
                             continue
                         end = screens[index + 1].start() if index + 1 < len(screens) else len(owned)
-                        scope = owned[screen.start():end]
-                        issue = s(r'cracked|broken|损坏|开裂|漏液|绿线|亮线', scope)
+                        # A blackout phrase is itself the predicate; retain
+                        # its prefix without importing the previous surface.
+                        start = (screens[index - 1].end() if index else 0) if s(r'黑屏|black\s+screen', screen.group()) else screen.start()
+                        scope = owned[start:end]
+                        issue = s(r'cracked|broken|black\s+screen|损坏|开裂|漏液|绿线|亮线|黑屏', scope)
                         prefix = owned[:screen.start()] + (scope[:issue.end()] if issue else scope)
                         if (not issue or source_predicate_role(prefix) != 'current'
                                 or s(r'将|明年|预计|计划|\b(?:will|might|could)\b', prefix)
-                                or source_denies_action('', scope, r'crack|broken|损坏|开裂|漏液|出现绿线|出现亮线')):
+                                or source_denies_action('', scope, r'crack|broken|black\s+screen|损坏|开裂|漏液|出现绿线|出现亮线|(?:出现|发生)?黑屏')):
                             continue
-                        fault = ('display-leaking' if s(r'漏液', h) else
+                        fault = ('display-blackout' if s(r'黑屏|black\s+screen', h) else
+                                 'display-leaking' if s(r'漏液', h) else
                                  'display-lines' if s(r'绿线|亮线', h) else 'display-cracking')
                         if side == 'outer':
                             fault = 'outer-' + fault
@@ -17726,6 +17811,25 @@ def source_named_publication_frame(title: str, lead: str, passages: tuple[str, .
         return SourceActionFrame(subject, action, category, kind, **qualifiers)
     if s(r'last\s+year|looking\s+back|recap|旧闻|回顾', h):
         return None
+    if s(r'苹果|apple', h) and s(r'研究|research', local):
+        for passage in (lead, *passages):
+            for a, b in source_sentence_spans(passage):
+                clause = passage[a:b]
+                paper = s(r'(?:苹果研究团队|apple\s+researchers?)\s*'
+                    r'(?:在(?:[^。！？，,；;]{1,30}(?:平台|期刊|会议|会上)\s*[a-z0-9 .-]{0,35}|\s*[a-z][a-z0-9 .-]{1,45}))?'
+                    r'(?:提交|发表|发布|submitted|published)\s*(?:论文|a\s+paper)?\s*[《“"]([^》”"]{5,160})[》”"]', clause)
+                if (paper and source_predicate_role(clause[:paper.end()]) == 'current'
+                        and not s(r'计划|准备|拟|将|plans?\s+to|will', clause[:paper.start(1)])
+                        and not source_denies_action('', clause, r'提交|发表|发布|submitted|published')):
+                    paper_name = _compiled_rule(r'[^a-z0-9\u4e00-\u9fff]+', 0).sub('', _normalized(paper[1]))
+                    return frame('apple:research-paper:' + paper_name, 'research-publication')
+    if s(r'mac\s+admins?|apple\s+it|苹果.*(?:管理|配置)', h):
+        survey = s(r'\b([a-z][a-z0-9-]*)\s+surveyed\s+(?:more\s+than\s+|over\s+)?\d+\+?\s+'
+            r'(?:(?:enterprise\s+)?apple\s+it\s+(?:admins?|workers?|staff)|'
+            r'(?:enterprise\s+)?it\s+(?:admins?|workers?|folks)\s+who\s+manage\s+(?:apple|macs?))\b', opening)
+        if (survey and s(r'profiles?|scripts?|configurations?|配置|脚本', local)
+                and source_predicate_role(opening[:survey.end()]) == 'current'):
+            return frame('apple-device-management:survey:' + survey[1] + ':' + h, 'deployment-survey-report')
     financing = bool(s(r'bond|债券|债市', h)
         and source_financial_offering(title, ' '.join((lead, *passages))))
     if financing:
@@ -18266,6 +18370,8 @@ def source_service_fee_frame(title: str, lead: str, facts: tuple[str, ...]) -> S
     if not device or not s(r'repair|applecare|charging|维修|费用', h):
         return None
     if s(r'how\s+to|repair\s+shop|third.party|回顾|第三方|自行维修|my\s+repair|我的维修', h):
+        return None
+    if s(r'黑屏|开裂|碎裂|故障|black\s+screen|crack|broken', h) and s(r'男子|女子|用户|先生|女士|owner|customer', h):
         return None
     fee_clauses = []
     owned_passage = -1
@@ -19044,6 +19150,10 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
     if campaign is not None:
         return campaign
 
+    independent_software = source_independent_software_frame(title, lead, source_units or facts)
+    if independent_software is not None and independent_software.tier == 'ecosystem':
+        return independent_software
+
     device = source_device_operation_frame(title, lead, facts, source_units=source_units)
     if device is not None:
         return device
@@ -19183,7 +19293,8 @@ def source_operation_frame(title: str, lead: str, facts: tuple[str, ...], identi
         owner = next(iter(sorted(identity.title_actors - {"apple"})), "reported-agent")
         return frame(owner + ":apple-messages-data", "unpermitted-data-access-report", tier="ecosystem", kind="ecosystem_interop")
 
-    independent_software = source_independent_software_frame(title, lead, facts)
+    # Generic utility words in a report's setup cannot outrank its measured
+    # operation; only an owned interoperability implementation precedes it.
     if independent_software is not None:
         return independent_software
 

@@ -12,7 +12,7 @@ Evaluate the source's reporting act, not merely the product or event it discusse
 
 ## Eligible actions
 
-Include current factual reporting about Apple-controlled products, operating systems, firmware, built-in apps, services and content; research, development, manufacturing, supply, retail and after-sales operations; corporate decisions, personnel, facilities and transactions; and legal, regulatory or security actions directly involving Apple. Apple need not announce or perform the action: a reported defect, abuse or failure of its own product or service can qualify before Apple responds.
+Include current factual reporting about Apple-controlled products, operating systems, firmware, built-in apps, services and content; research, development, manufacturing, supply, retail and after-sales operations; corporate decisions, personnel, facilities and transactions; and legal, regulatory or security actions directly involving Apple. Research ownership follows the authors and publication, not the vendors of equipment or models used in the experiment. Apple need not announce or perform the action: a reported defect, abuse or failure of its own product or service can qualify before Apple responds.
 
 Use the reliable article publication time and the run's fixed window. An ongoing action, attributed plan, current responsibility, support condition or observed behavior can predate the window. Preserve its actual date and stage, without presenting it as a new launch. Excluding a recap requires evidence that the report merely repeats old material; read beyond a historical opening for a current disclosure or clarification.
 

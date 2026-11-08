@@ -548,7 +548,7 @@ def build_sources(now_local: datetime) -> list[Source]:
         Source(
             name="爱范儿",
             default_tz="Asia/Shanghai",
-            feeds=["https://www.ifanr.com/feed", "http://live.ifanr.com/feed"],
+            feeds=["https://www.ifanr.com/feed"],
             pages=["https://www.ifanr.com/"],
             domains=("ifanr.com", "www.ifanr.com", "live.ifanr.com"),
         ),

@@ -12,15 +12,15 @@ This project is experimental. News sites change markup, feeds can fail, and incl
 
 ## Latest Update
 
-### 2.3.5 - 2026-11-07
+### 2.3.6 - 2026-11-08
 
-- Improved source-bound grouping for first-party app updates, return policies, hardware-control plans, app-adaptation statistics, keyboard research and joint deliveries; preserved platform, version, stage, observer and sample boundaries.
-- Improved legal-event ownership and categories by separating verdicts, responses and distinct disclosure or discovery procedures; removed a legacy broad merge override and prevented old support checks from replacing an established category.
-- Improved corporate-financing admission so bond offerings are not mistaken for retail discounts; preserved issuer ownership, planned versus confirmed terms, publication windows and the hardware/company-market category.
-- Improved relevance and categories for platform interoperability, official software controls, image-watermark features and reported output failures; kept accessory updates, promotions, historical recaps and background compatibility from becoming independent Apple news.
-- Added source-local web and YouTube object references alongside existing embedded references, retaining labels and surrounding context so background media cannot identify a new publication; moved an existing hardware-projection eligibility check earlier to avoid redundant work.
-- Updated writing guidance to trace attribution through retellings, exclude the original writer's unsupported expectations and inferences, and preserve independently reported facts, observations and attributed forecasts within mixed passages.
-- Added captured-source regressions; all 3,298 offline tests pass, with independent review, fresh live comparison and a complete clean skill invocation supplemented by focused consumption checks. Kept the standard-library runtime, CLI, nine primary sources, collection budgets and concurrency, relevance tiers and explicit-only invocation.
+- Improved first-party research ownership and grouping by the authors and named publication, so experimental hardware and model suppliers do not replace Apple's research action.
+- Improved sales-dataset grouping by the named data publisher, device, date range, year and region; preserved source-specific quantities, measurement terms and differing sample periods.
+- Improved software relevance and categories for demonstrated OS adaptations, host-side sensor protocols and emulator compatibility on Apple devices; kept actual implementations distinct from proposed support and unrelated platform examples.
+- Improved classification of focused display-operation tests and device-management surveys as software, and physical failures and repair disputes as hardware; kept survey populations, observed devices and local negation with their own claims.
+- Improved independent-app and editorial exclusions, and preserved concrete measurements ahead of generic utility wording; reused the interoperability decision without letting a test's tools replace its subject.
+- Removed the retired `live.ifanr.com/feed` backup, retaining 爱范儿's primary RSS feed and homepage discovery and all nine primary sources.
+- Added 25 regression tests and captured-source fixtures; all 3,323 offline tests pass, with independent review, fresh live comparison and a complete clean skill invocation. Kept the standard-library runtime, CLI and JSON interfaces, collection budgets and concurrency, relevance tiers and explicit-only invocation.
 
 ## What It Does
 
@@ -148,7 +148,7 @@ Network permission does not prevent a site from returning an access block or bro
 
 ## Sources
 
-Primary sources include MacRumors, 9to5Mac, AppleInsider, The Verge, Apple Newsroom, IT之家, 爱范儿, 快科技, and cnBeta. Supplemental fallback sources include 新浪科技/财经, 网易科技, 36氪, and other mainstream Chinese technology pages when needed.
+Primary sources include MacRumors, 9to5Mac, AppleInsider, The Verge, Apple Newsroom, IT之家, 爱范儿, 快科技, and cnBeta. Supplemental fallback sources include 新浪科技/财经, 网易科技, 36氪, and other mainstream Chinese technology pages when needed. 爱范儿 uses its primary RSS feed and homepage; the retired `live.ifanr.com/feed` backup is no longer requested.
 
 The policy index at `skills/references/news_policy.md` links to four focused references: eligibility and categories, grouping, evidence and writing, and collection recovery. `SKILL.md` routes each stage directly to the needed reference; ordinary drafting does not require reading collection or implementation details. A source-bound fact or required review fragment does not by itself qualify as a separate news item.
 
